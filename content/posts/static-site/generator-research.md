@@ -1,0 +1,138 @@
+---
+title: Finding the right static site generator
+---
+
+Having already described [my ideal static site generator](generator.md), I'm investigating tools that hopefully meet my needs.
+
+# Static site generators in 2021
+Given that I don't want to go back to the [pre-Markdown stone age](generator-history.md) of static site generators, what are my options (that don't involve rolling my own)?
+
+Fortunately, we're living in the golden age of static site generators. A quick web search turned up the following options (most with splashy landing pages, theme repositories, and even had glowing testimonials):
+
+* [Jekyll](https://jekyllrb.com/)
+* [Gatsby](https://www.gatsbyjs.com/)
+* [Hugo](https://gohugo.io/)
+* [NuxtJS](https://nuxtjs.org/)
+* [VuePress](https://vuepress.vuejs.org/)
+* [Eleventy](https://www.11ty.dev/)
+* [Hexo](https://hexo.io/)
+* [Pagic](https://pagic.org/)
+* [Docusaurus](https://docusaurus.io/)
+* [Next.js](https://github.com/vercel/next.js/tree/canary/examples/blog-starter)
+* [Pelican](https://blog.getpelican.com/)
+* [React Static](https://github.com/react-static/react-static)
+* [Metalsmith](https://metalsmith.io/)
+* [Zola](https://www.getzola.org/)
+
+# Preferences
+I'm fairly picky about the software I use ("opinionated" some might say). If a piece of software (or a web site) gets in my way, I usually just give up and move on because that first irritation is usually just the first drip of a cascade of frustration.
+
+For example, am I reading an article on a web site and it asks me to sign up? That tab gets closed. If there's a huge cookie pop-up that doesn't let me easily opt out? Tab closed. If a piece of new software I'm interested in tells me to install the Java runtime? Forget it. A program takes too long to launch? Uninstall. And so on.
+
+With that in mind, what am I looking for in a static site generator's implementation (having [covered the design in a previous post](generator.md))?
+
+* Must be free and open source without any obnoxious upselling
+* Must be simple and quick to install (on Windows, since that's what I'm using)
+* Must not produce complex output (e.g. extraneous JavaScript)
+* Must not be extremely slow (it can be a little slow, since my site is currently small)
+* Must not require a bunch of plugins to do what I need
+* ... and probably some other requirements that will become obvious as I investigate further
+
+# Let the battle royale begin!
+## Jekyll
+First, I'm looking at Jekyll, because it's [supported out of the box on GitHub Pages](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll).
+
+Naturally, I want to test things locally. Fortunately, [testing locally is documented on GitHub's site](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll):
+
+> We recommend using Bundler to install and run Jekyll. Bundler manages Ruby gem dependencies
+
+Wait, I have to manage Ruby gem dependencies? Let's consult the [Jekyll site](https://jekyllrb.com/) to see their "quick-start instructions":
+
+> gem install bundler jekyll
+
+Alright, it looks like I need a full blown Ruby environment. No thanks!
+
+## Gatsby
+[Gatsby requires Node v12+](https://www.gatsbyjs.com/get-started/) for installation. I realize this isn't "fair", but I actually use Node and NPM, so this isn't a deal-breaker for me.
+
+Diving into [how Gatsby works](https://www.gatsbyjs.com/how-it-works/), I see some alarmingly complex boasts:
+
+> Combine Content & Data from Anywhere
+
+This might be overkill. What did they have in mind?
+
+> Content Management Systems like WordPress, or Ecommerce platforms like Shopify
+
+Ok, definitely overkill for my purposes. But maybe I can just ignore those features and be happy?
+
+> If you build your site with Gatsby, your site will be a lightning-fast progressive web app (PWA)
+
+... but I just want plain old HTML.
+
+The alarm bells in my head were deafening at this point and things just kept getting worse. Why can't I copy text from "how it works" page? Why is there a cloud offering for static sites that should just be HTML distributed via a content delivery network?
+
+Cross Gatsby off my list!
+
+## Hugo
+Hugo is written in Go and [distributed as a single executable](https://gohugo.io/getting-started/installing). It doesn't get any simpler than that! In [their quick-start](https://gohugo.io/getting-started/quick-start/), it looks like posts can be stored in markdown files with front matter for title, date, and draft status:
+
+
+```
+---
+title: "My First Post"
+date: 2019-03-26T08:47:11+01:00
+draft: true
+---
+```
+
+Their example output showed a build complete in 11 milliseconds. These are all very good signs so far.
+
+Hugo has emerged as an early front runner.
+
+## NuxtJS
+NuxtJS appears to be a static site generator for people who use [Vue](https://v3.vuejs.org/). While Vue is on my list of frameworks to research, I don't have any experience with it yet. The NuxtJS page mentions server-side rendering which isn't the approach I'm most interested in these days.
+
+I'm going to set aside NuxtJS for now.
+
+## VuePress
+Two strikes from the VuePress landing page:
+
+* "Enjoy the dev experience of Vue + webpack" (since when have I enjoyed webpack?)
+* "VuePress generates pre-rendered static HTML for each page, and runs as an SPA once a page is loaded." (I understand the potential performance benefits, but I don't want JavaScript to be required and I'm sure there is substantial overhead in doing this, even if latency of subsequent page loads is improved)
+
+Moving along.
+
+## Eleventy
+Eleventy requires Node and NPM which, while not optimal, is something I will tolerate since I already need those for a couple of projects. I do wonder if this will eventually become a burden in the future when Node inevitably falls out of favor.
+
+The first few pages of documentation don't discuss themes, which I actually find to be semi-encouraging because that implies that I can just hand-author some minimal HTML templates without having to learn some complex theming system.
+
+[Eleventy's quick tips page](https://www.11ty.dev/docs/quicktips/) boasts some encouraging features:
+
+* "Zero Maintenance Tag Pages for your Blog" (nice for categorization)
+* "Adding a 404 Not Found Page to your Static Site" (something I hadn't considered, but appears to be supported on GitHub Pages)
+
+But there's also a lot of oddly specific integrations:
+
+* "Add Edit on GitHub Links to All Pages" (interesting, I suppose)
+* "Fetch GitHub Stargazers Count (and More) at Build Time" (... why?)
+* "Trigger a Netlify Build Every Day with IFTTT" (ok, now things are getting out of hand)
+
+Eleventy looks interesting; sort of like Jekyll, but using Node/JavaScript. This is my #2 choice at this point.
+
+## Hexo
+Hexo also requires Node and NPM (similar to Eleventy). Fine.
+
+Hexo appears to use the "million plugins" architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like [Parcel](https://parceljs.org/) and not [webpack](https://webpack.js.org/), but I do understand "zero configuration" constraints can come back to bite me later.
+
+Anyway, [Hexo's default](https://hexo.io/docs/setup) includes EJS, Stylus, and Markdown. I'm not familiar with the first two. Is this going to be geared toward web developers?
+
+Looking into their [documentation on writing content](https://hexo.io/docs/writing), it appears you create a new post using a tool that's not your favorite text editor:
+
+```
+$ hexo new [layout] <title>
+```
+
+I'm not a fan of using a tool to manage my content because such a tool was inevitably created to generate boilerplate code or follow strict conventions. This leads to hassles when migrating to a new system and prevents you from authoring content from some place that you don't have a development environment. I should be able to author content using just a text editor.
+
+Hexo looks decent, but certainly not any closer to what I want than Hugo or Eleventy. I'll come back to Hexo, if needed.
