@@ -1,5 +1,6 @@
 ---
 title: Finding the right static site generator
+draft: true
 ---
 
 Having already described [my ideal static site generator](generator.md), I'm investigating tools that hopefully meet my needs.
