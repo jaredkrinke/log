@@ -39,6 +39,28 @@ With that in mind, what am I looking for in a static site generator's implementa
 * ... and probably some other requirements that will become obvious as I investigate further
 
 # Let the battle royale begin!
+Here is a table summarizing what I found (note: by "portable" I mean content is just a collection of Markdown files with few constraints/conventions):
+
+| Tool | Dependencies | Markdown | Output | Configuration | Portable* | Templates |
+| ---- | :---: | :---: | :---: | :---: | :---: | :---:
+| Jekyll | Ruby | ✔ | HTML | Simple | ✔ | [Liquid](https://liquidjs.com/) |
+| Gatsby | Node | ✔ | SPA | Very complicated | ? | [Super complicated](https://www.gatsbyjs.com/tutorial/building-a-theme) |
+| Hugo | *None!* | ✔ | HTML | Simple | ✔ | [Go templates](https://golangdocs.com/templates-in-golang) |
+| NuxtJS | Node, Vue | ✔ | HTML | ? | ✖ | [Vue](https://vuejs.org/) |
+| VuePress | Node, Vue | ✔ | HTML | ? | ✖ | [Vue](https://vuejs.org/) |
+| Eleventy | Node | ✔ | HTML | Simple | ✔ | [Liquid](https://liquidjs.com/), [EJS](https://ejs.co/), more |
+| Hexo | Node | ✔ | HTML | Complicated | ✖ | [EJS](https://ejs.co/) |
+| Pagic | Deno | ✔ | SPA | Simple? | ✔ | [Vue](https://vuejs.org/) |
+| Docusaurus | Node | ✔ | SPA | Complicated? | ✖ | JSX |
+| Next.js | Node | ✔ | HTML | Complicated | ? | JSX |
+| Pelican | Python | ✔ | HTML | Complicated | ✖ | [Jinja](https://jinja.palletsprojects.com/en/3.0.x/) |
+| React Static | Node | ✔ | SPA | Complicated | ✖ | JSX |
+| Metalsmith | Node | ✔ | HTML | Complicated | ✔ | ? |
+| Zola | *None!* |  |  |  |  | [Tera](https://tera.netlify.app/) |
+
+# Research notes
+The table above is probably more useful than my "stream of consciousness" notes below, but if you want to see what I was thinking, go ahead and read it!
+
 ## Jekyll
 First, I'm looking at Jekyll, because it's [supported out of the box on GitHub Pages](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll).
 
