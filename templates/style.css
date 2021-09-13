@@ -1,0 +1,22 @@
+:root {
+    color-scheme: light dark;
+}
+
+html, body {
+    margin: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    font-family: sans-serif;
+}
+
+main {
+    padding: 0.5em;
+    width: 35em;
+}
+
+main > header > h1 {
+    text-align: center;
+}
