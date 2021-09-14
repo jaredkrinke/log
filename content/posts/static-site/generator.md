@@ -1,6 +1,6 @@
 ---
 title: My ideal static site generator
-date: 2021-09-12
+date: 2021-09-11
 ---
 
 In the interest of documenting some of my programming misadventures, I'm creating a developer blog. But first, I need a static site generator.

@@ -1,5 +1,6 @@
 ---
 title: Test-driving Hugo for a simple dev blog
+date: 2021-09-13
 ---
 
 I'm testing out [the most promising static site generators](generator-research.md) to see which is closest to [my ideal setup](generator.md). First up is [Hugo](https://gohugo.io/).

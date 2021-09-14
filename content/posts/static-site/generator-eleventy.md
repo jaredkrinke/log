@@ -1,5 +1,6 @@
 ---
 title: Test-driving Eleventy for a simple dev blog
+date: 2021-09-14
 ---
 
 I'm testing out [the most promising static site generators](generator-research.md) to see which is closest to [my ideal setup](generator.md). Next up is [Eleventy](https://www.11ty.dev/).
