@@ -1,6 +1,5 @@
 ---
 title: Test-driving Hugo for a simple dev blog
-draft: true
 ---
 
 I'm testing out [the most promising static site generators](generator-research.md) to see which is closest to [my ideal setup](generator.md). First up is Hugo.
