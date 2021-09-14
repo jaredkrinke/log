@@ -1,0 +1,4 @@
+baseURL = 'http://blog.schemescape.com/'
+languageCode = 'en-us'
+title = 'Schemescape'
+theme = "bare-minimum" 
