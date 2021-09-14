@@ -2,7 +2,7 @@
 title: Test-driving Hugo for a simple dev blog
 ---
 
-I'm testing out [the most promising static site generators](generator-research.md) to see which is closest to [my ideal setup](generator.md). First up is Hugo.
+I'm testing out [the most promising static site generators](generator-research.md) to see which is closest to [my ideal setup](generator.md). First up is [Hugo](https://gohugo.io/).
 
 # Hugo
 First up is Hugo since it's the easiest to install and ([according to Jamstack](https://jamstack.org/generators/)) is one of the top 3 most loved static site generators.
