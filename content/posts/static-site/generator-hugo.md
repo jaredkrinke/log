@@ -42,7 +42,7 @@ Error: Error building site: TOCSS: failed to transform "ananke/css/main.css" (te
 Built in 213 ms
 ```
 
-Well, that's not encouraging. Apparently there's an extended version that I glossed over and is quietly required for their quick start. I do wonder why there's a separate build when the difference in size is only 8%.
+Well, that's not encouraging. Apparently there's an extended version that I glossed over and is quietly required for their quick start. I do wonder why there's a separate build when the difference in size is only 8%. Maybe it's bundling other non-Go executables that aren't available everywhere?
 
 With *extended* Hugo, the site served up fine and the default theme initially looked adequate, but it had a lot of junk I didn't want. Observations:
 
