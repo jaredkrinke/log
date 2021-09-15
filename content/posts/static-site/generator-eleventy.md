@@ -1,5 +1,7 @@
 ---
 title: Test-driving Eleventy for a simple dev blog
+description: I'm testing out static site generators for my new dev blog. Here's my first experience with Eleventy.
+keywords: [eleventy]
 date: 2021-09-14
 ---
 
