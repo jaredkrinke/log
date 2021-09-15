@@ -69,4 +69,4 @@ A little ways into integrating Zola into this blog, I hit a couple of snags:
 * `zola serve` doesn't seem to serve up all the pages that `zola build` creates -- there was a past Windows-only issue for this, but my problem seems more specific to my particular site
 * Zola doesn't seem to like that I've grouped my posts into subdirectories (that don't represent a new type of content)
 
-If I was persistent, I probably could have solved these problems this evening, but I'm not sure that Zola's opinions are compatible with my own, so I'm ok with setting this experiment aside for later.
+If I was persistent, I probably could have solved these problems this evening, but I'm not sure that Zola's opinions are compatible with my own, so I'm ok with setting this experiment aside for now.
