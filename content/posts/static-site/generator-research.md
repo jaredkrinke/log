@@ -43,7 +43,7 @@ With that in mind, what am I looking for in a static site generator's implementa
 Below is a table summarizing what I found in my research (note: by "portable" I mean content is just a collection of Markdown files with few constraints/conventions):
 
 | Tool | Dependencies | Output | Configuration | Portable | Templates |
-| ---- | :---: | :---: | :---: | :---: | :---: | :---:
+| ---- | :---: | :---: | :---: | :---: | :---: |
 | Jekyll | Ruby | HTML | Simple | ✔ | [Liquid](https://liquidjs.com/) |
 | Gatsby | Node | SPA | Very complicated | ? | [Super complicated](https://www.gatsbyjs.com/tutorial/building-a-theme) |
 | Hugo | *None!* | HTML | Simple | ✔ | [Go templates](https://golangdocs.com/templates-in-golang) |
