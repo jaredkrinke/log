@@ -5,10 +5,10 @@ keywords: [hugo,eleventy,zola]
 date: 2021-09-12
 ---
 
-Having already described [my ideal static site generator](generator.md), I'm investigating tools that hopefully meet my needs.
+Having already described [my ideal static site generator](overview.md), I'm investigating tools that hopefully meet my needs.
 
 # Static site generators in 2021
-Given that I don't want to go back to the [pre-Markdown stone age](generator-history.md) of static site generators, what are my options (that don't involve building my own)?
+Given that I don't want to go back to the [pre-Markdown stone age](pre-markdown.md) of static site generators, what are my options (that don't involve building my own)?
 
 Fortunately, we're living in the golden age of static site generators. A quick web search turned up the following options (most with splashy landing pages, theme repositories, and even glowing testimonials):
 
@@ -32,7 +32,7 @@ I'm fairly picky about the software I use ("opinionated" some might say). If a p
 
 For example, am I reading an article on a web site and it asks me to sign up for something? That tab gets closed. If there's a huge cookie pop-up that doesn't let me easily opt out? Tab closed. If a piece of new software I'm interested in tells me to install the Java runtime? Forget it! Multi-gigabyte install for a compiler? No thank you. A program takes too long to launch? Uninstall. And so on.
 
-With that in mind, what am I looking for in a static site generator's implementation (having [covered the design in a previous post](generator.md))?
+With that in mind, what am I looking for in a static site generator's implementation (having [covered the design in a previous post](overview.md))?
 
 * Must be free and open source without any obnoxious upselling
 * Must be simple and quick to install (on Windows, since that's what I'm using)

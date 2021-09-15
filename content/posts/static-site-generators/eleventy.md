@@ -5,7 +5,7 @@ keywords: [eleventy]
 date: 2021-09-14
 ---
 
-I'm testing out [the most promising static site generators](generator-research.md) to see which is closest to [my ideal setup](generator.md). Next up is [Eleventy](https://www.11ty.dev/).
+I'm testing out [the most promising static site generators](comparison.md) to see which is closest to [my ideal setup](overview.md). Next up is [Eleventy](https://www.11ty.dev/).
 
 # Eleventy
 Eleventy is a Node-based static site generator that seems to be popular with people who would rather use JavaScript instead of Ruby/Jekyll.
