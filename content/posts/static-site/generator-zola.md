@@ -30,7 +30,7 @@ Zola is an opinionated static site generator and sometimes these opinions get in
 
 Additionally, Zola draws a line between the variables it supports and any "extra" variables you want to use. I'm also not sure I like  mixing template input data with content, as Zola does with `_index.md` files in each section (this makes sense for, say, keywords, but not as much for custom data that exists solely to modify behavior in a parent template--I'd like to do that in the child template itself).
 
-Opinions are great for nudging people into good choices when they might not foresee the benefits, but I am starting to wonder if maybe is a little *too* opinionated.
+Opinions are great for nudging people into good choices when they might not foresee the benefits, but I am starting to wonder if maybe Zola is a little *too* opinionated.
 
 ## Templates
 My experience with static site generators until recently was all home-built stuff, so I don't have any experience with standard template languages like Tera, Jinja, or Liquid. I like to think my fresh eyes let me accurately grade the ergonomics of template languages for career developers.
@@ -69,4 +69,4 @@ A little ways into integrating Zola into this blog, I hit a couple of snags:
 * `zola serve` doesn't seem to serve up all the pages that `zola build` creates -- there was a past Windows-only issue for this, but my problem seems more specific to my particular site
 * Zola doesn't seem to like that I've grouped my posts into subdirectories (that don't represent a new type of content)
 
-If I was persistent, I probably could have solved these problems this evening, but I'm not sure that Zola's opinions are compatible with my own.
+If I was persistent, I probably could have solved these problems this evening, but I'm not sure that Zola's opinions are compatible with my own, so I'm ok with setting this experiment aside for later.
