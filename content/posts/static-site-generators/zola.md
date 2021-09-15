@@ -5,7 +5,7 @@ keywords: [zola]
 date: 2021-09-15
 ---
 
-I'm testing out [the most promising static site generators](generator-research.md) to see which is closest to [my ideal setup](generator.md). Next up is [Zola](https://www.getzola.org/).
+I'm testing out [the most promising static site generators](comparison.md) to see which is closest to [my ideal setup](overview.md). Next up is [Zola](https://www.getzola.org/).
 
 # Zola
 Zola is a zero-dependency static site generator, similar to Hugo. Since it's compiled to native code, I expect it to be fast.

@@ -5,7 +5,7 @@ keywords: [hugo]
 date: 2021-09-13
 ---
 
-I'm testing out [the most promising static site generators](generator-research.md) to see which is closest to [my ideal setup](generator.md). First up is [Hugo](https://gohugo.io/).
+I'm testing out [the most promising static site generators](comparison.md) to see which is closest to [my ideal setup](overview.md). First up is [Hugo](https://gohugo.io/).
 
 # Hugo
 First up is Hugo since it's the easiest to install and ([according to Jamstack](https://jamstack.org/generators/)) is one of the top 3 most loved static site generators.

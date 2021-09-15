@@ -5,7 +5,7 @@ keywords: [eleventy]
 date: 2021-09-14
 ---
 
-I'm testing out [the most promising static site generators](generator-research.md) to see which is closest to [my ideal setup](generator.md). Next up is [Eleventy](https://www.11ty.dev/).
+I'm testing out [the most promising static site generators](comparison.md) to see which is closest to [my ideal setup](overview.md). Next up is [Eleventy](https://www.11ty.dev/).
 
 # Eleventy
 Eleventy is a Node-based static site generator that seems to be popular with people who would rather use JavaScript instead of Ruby/Jekyll.
@@ -110,6 +110,21 @@ module.exports = function(data) {
 `
 }
 ```
+
+### Escaping HTML
+Note: when using Eleventy's JavaScript template language, I didn't see a built-in, documented way to escape arbitrary text for inserting into HTML. The [escape-html NPM Package](https://www.npmjs.com/package/escape-html) worked for my purposes, but now I feel like I'm getting close to wanting to build my own template language.
+
+## Issues
+### Relative links don't work
+I'm using relative links to `*.md` files for linking between posts, but (at least with the default configuration), those links aren't being being updated to point to the resulting HTML files. Note: I'm not implying that Eleventy told me this would work -- it's just part of my desired workflow.
+
+### Markdown post-processed by default
+In one of my posts, written in Markdown, I show Liquid/Tera/Jinja syntax (e.g. `{%`) inside a code block. With my mostly-default setup, Eleventy tried to interpret this as template syntax, which is definitely not what I would have expected (it's Markdown, not a template!). Fortunately, you can disable this behavior with the [markdownTemplateEngine: false](https://www.11ty.dev/docs/config/#default-template-engine-for-markdown-files) setting.
+
+### Page URLs aren't relative
+This problem isn't unique to Eleventy (and arguably it's easier to handle in Eleventy's JavaScript template language), but Eleventy doesn't supply relative links to posts -- the `page.url` property starts with `/`. This prevents you from just viewing the HTML files directly from the file system (and it also makes it difficult to host a site in a subdirectory).
+
+In my case, since it's just JavaScript code hosted in Node anyway, I'm using Node's [path.posix API](https://nodejs.org/api/path.html#path_path_relative_from_to) to compute the relative path to the site root.
 
 ## Let's stop there
 That's probably enough for one post.
