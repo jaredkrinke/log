@@ -44,5 +44,7 @@ module.exports = {
         <p>Date: <time>${getPageDateOnly(data)}</time></p>
     </header>
     ${data.content}
-</article>`,
+</article>`
+    // Fragile kludge to make relative links work
+    .replace(/(<a href=")(.*?)\.md"/g, "$1../$2\""),
 }
