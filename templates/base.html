@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {% if section.extra.root %}
+                Schemescape
+            {% else %}
+                Schemescape: {{ section.title }}
+            {% endif %}
+        </title>
+        <meta name="description" content="{{ section.description }}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <!-- TODO: RSS -->
+    </head>
+    <body>
+        <main>
+            <header><h1><a href="{{ config.base_url }}">Schemescape</a></h1></header>
+            {% block content %}{% endblock %}
+        </main>
+    </body>
+</html>
