@@ -27,7 +27,34 @@ Ideally, I'd like to organize content as follows:
 * Each post is stored in a separate, self-contained file (for easy management)
   * One exception: posts should be able to easily reference each other
   * Diagrams and images can be directly embedded into posts
-* File system metadata (e.g. date modified) is used to provide reasonable defaults
+* File system metadata (e.g. topic folder) is used, where useful
+
+My directory structure is going to look like this:
+
+* `content/`: Root directory of all blog content
+  * `posts/`: Root of all blog posts
+    * `topic1/`: Blog posts organized by topics
+      * `post1.md`: Blog post 1
+      * `post2.md`
+      * etc.
+    * `topic2/`
+    * etc.
+* `static/`: Static files (namely CSS)
+* `templates/`: Template/layout files
+
+Blog posts will use YAML front matter (draft and keywords are optional, but date is not since Git doesn't preserve file system dates):
+
+```
+---
+title: Title of blog post
+description: Plain text description of the post (for HTML header, blurbs, etc.)
+keywords: [search,keywords]
+date: Publish date
+draft: true
+---
+```
+
+Note: I'd like to be able to automatically insert keywords into every post within a given topic.
 
 ## Output
 The output should be as simple as possible:
