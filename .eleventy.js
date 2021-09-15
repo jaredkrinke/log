@@ -3,6 +3,7 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy({ "static": "./" });
 
     return {
+        markdownTemplateEngine: false,
         dir: {
             input: "content",
             output: "out",
