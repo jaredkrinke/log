@@ -2,13 +2,10 @@ const path = require("path").posix
 const escapeHTML = require("escape-html")
 
 const getPagePathToRoot = data => (path.relative(data.page.url, "/") || ".")
-const getPageDateOnly = data => data.page.date.toISOString().replace(/T.*$/, "")
+const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" });
+const formatDateAsTimeElement = date => `<time datetime="${date.toISOString().replace(/T.*$/, "")}">${dateFormatter.format(date)}</time>`;
 
 module.exports = {
-    getPagePathToRoot,
-    getPageDateOnly,
-    escapeHTML,
-
     renderPage: (data, content) => `<!DOCTYPE html>
 <html lang="en">
     <head>
@@ -32,7 +29,7 @@ module.exports = {
 <article>
     <header>
         <h1><a href=".${data.page.url}">${data.title}</a></h1>
-        <p>Date: <time>${getPageDateOnly(data)}</time></p>
+        <p>${formatDateAsTimeElement(data.page.date)}</p>
     </header>
     <summary><p>${data.description}</p></summary>
 </article>`,
@@ -41,7 +38,7 @@ module.exports = {
 <article>
     <header>
         <h1><a href="./">${escapeHTML(data.title)}</a></h1>
-        <p>Date: <time>${getPageDateOnly(data)}</time></p>
+        <p>${formatDateAsTimeElement(data.page.date)}</p>
     </header>
     ${data.content}
 </article>`
