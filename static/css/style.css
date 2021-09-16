@@ -1,15 +1,11 @@
-:root {
-    color-scheme: light dark;
-}
-
-html, body {
-    margin: 0;
-}
+:root { color-scheme: light dark; }
+html, body { margin: 0; }
 
 body {
     display: flex;
     justify-content: center;
     font-family: sans-serif;
+    overflow-y: scroll;
 }
 
 main {
@@ -17,6 +13,23 @@ main {
     width: 40em;
 }
 
-main > header > h1 {
-    text-align: center;
+@media screen and (max-width: 40em) {
+    main { width: calc(100% - 1em); }
 }
+
+main > header > h1 { text-align: center; }
+
+main > header > h1 > a {
+    text-decoration: inherit;
+    color: inherit;
+}
+
+article > header > h1 { margin-bottom: 0.25em; }
+article > header > p { margin-top: 0em; }
+
+main { overflow: auto; }
+pre { overflow: auto; }
+table { margin: 0 auto; }
+
+main > ul { padding-left: 0em; }
+main > ul > li { list-style: none; margin-bottom: 2em; }
