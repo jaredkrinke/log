@@ -41,7 +41,5 @@ module.exports = {
         <p>${formatDateAsTimeElement(data.page.date)}</p>
     </header>
     ${data.content}
-</article>`
-    // Fragile kludge to make relative links work
-    .replace(/(<a href=")(.*?)\.md"/g, "$1../$2\""),
+</article>`,
 }
