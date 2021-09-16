@@ -1,7 +1,7 @@
 const path = require("path").posix
 const escapeHTML = require("escape-html")
 
-const getPagePathToRoot = data => path.relative(data.page.url, "/")
+const getPagePathToRoot = data => (path.relative(data.page.url, "/") || ".")
 const getPageDateOnly = data => data.page.date.toISOString().replace(/T.*$/, "")
 
 module.exports = {
@@ -34,7 +34,7 @@ module.exports = {
         <h1><a href=".${data.page.url}">${data.title}</a></h1>
         <p>Date: <time>${getPageDateOnly(data)}</time></p>
     </header>
-    <summary>${data.description}</summary>
+    <summary><p>${data.description}</p></summary>
 </article>`,
 
     renderArticle: data => `
