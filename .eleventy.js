@@ -11,6 +11,9 @@ module.exports = function(eleventyConfig) {
 
     eleventyConfig.setLibrary("md", customMarkdownIt);
 
+    // RSS/Atom feed
+    eleventyConfig.addPlugin(require("@11ty/eleventy-plugin-rss"));
+
     return {
         // Don't process Markdown first with a template language
         markdownTemplateEngine: false,
