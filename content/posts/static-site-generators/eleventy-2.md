@@ -212,6 +212,4 @@ For now, I'm just using a quick and dirty hack that validates Markdown files exi
 # And that's it!
 It took a little while to sort out some of the above details, but since I was able to leverage my existing JavaScript knowledge, Eleventy ended up being pretty easy to integrate. As proof, this page exists, and you're reading it.
 
-All of the actual code used to generate this page is up on GitHub under the "eleventy" branch:
-
-https://github.com/jaredkrinke/log/tree/eleventy
+All of the actual code used to generate this page is [up on GitHub under the "eleventy" branch](https://github.com/jaredkrinke/log/tree/eleventy).
