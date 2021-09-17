@@ -3,10 +3,9 @@ title: Test-driving Eleventy for a simple dev blog, part 2
 description: Here's my experience integrating Eleventy (a static site generator) into my dev blog.
 keywords: [eleventy]
 date: 2021-09-16
-draft: true
 ---
 
-I'm testing out [the most promising static site generators](comparison.md) for my blog. In [part 1](eleventy.md), I recorded my initial impression of Eleventy; in this post, I describe my experience fully integrating Eleventy into my dev blog.
+I'm testing out [the most promising static site generators](comparison.md) for my blog. In [part 1](eleventy.md), I recorded my initial impression of Eleventy; in this post, I describe my experience fully integrating Eleventy into my dev blog ([final code here](https://github.com/jaredkrinke/log/tree/eleventy)).
 
 # Background
 I [already covered my ideal dev blog setup in detail](overview.md), but here's the gist of it:
@@ -131,7 +130,7 @@ With those two simple steps, Eleventy will generate directories with an HTML fil
 For now, I'm just aggregating all my posts in reverse chronological order on the home page. Also pretty simple:
 
 ## 1. Create the HTML template
-Along with my generic page template above, the template is pretty simple (note the `data.collections.post.reverse().map(...)` part):
+Along with my generic page template above, the template is pretty simple (note the `data.collections.post.slice().reverse().map(...)` part):
 
 `templates/index.11ty.js`:
 
@@ -149,9 +148,11 @@ const renderArticleShort = data => `
 
 module.exports = data => renderPage(data,
 `<ul>
-    ${data.collections.post.reverse().map(post => `<li>${renderArticleShort(post.data)}</li>`).join("\n")}
+    ${data.collections.post.slice().reverse().map(post => `<li>${renderArticleShort(post.data)}</li>`).join("\n")}
 </ul>`);
 ```
+
+Note: the `.slice()` is needed because JavaScript's `reverse()` function mutates the array ([as Eleventy's documentation notes](https://www.11ty.dev/docs/collections/#array-reverse)).
 
 ## 2. Add a source file
 The `content\index.md` file just points to the template:
@@ -202,3 +203,15 @@ But if you read the documentation, it becomes apparent that the plugin is just a
 This feels like a shortcoming of Eleventy (and one that probably wouldn't be difficult to fix). I shouldn't have to maintain my own template for a standard format.
 
 # Validating links
+In the interest of catching mistakes before sharing them with the entire Internet, I'd like to at least validate all of the internal links between my pages at build time.
+
+My ideal implementation would be a tool that I unleash on the output HTML files, crawling relative links to ensure they're all valid and that all pages are reachable. It would also ensure that any links to anchors within pages exist. Such a tool probably exists, but I haven't found it yet.
+
+For now, I'm just using a quick and dirty hack that validates Markdown files exist in the process of updating the relative links noted previously. The code is fragile and slow enough that I won't advertise it anymore here, but it is in the repository linked below, if you're curious.
+
+# And that's it!
+It took a little while to sort out some of the above details, but since I was able to leverage my existing JavaScript knowledge, Eleventy ended up being pretty easy to integrate. As proof, this page exists, and you're reading it.
+
+All of the actual code used to generate this page is up on GitHub under the "eleventy" branch:
+
+https://github.com/jaredkrinke/log/tree/eleventy
