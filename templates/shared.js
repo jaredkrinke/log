@@ -15,7 +15,7 @@ module.exports = {
         ${data.keywords?.length > 0 ? `<meta name="keywords" content="${escapeHTML(data.keywords.join(","))}" />` : ""}
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="stylesheet" href="${getPagePathToRoot(data)}/css/style.css" />
-        ${/* TODO: RSS */ ""}
+        <link rel="alternate" type="application/atom+xml" href="${getPagePathToRoot(data)}/feed.xml" />
     </head>
     <body>
         <main>
