@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Schemescape: Test-driving Hugo for a simple dev blog</title>
+        <meta name="description" content="I&#39;m testing out static site generators for my new dev blog. Here&#39;s my first experience with Hugo." />
+        <meta name="keywords" content="hugo" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="stylesheet" href="../../../css/style.css" />
+        <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" />
+    </head>
+    <body>
+        <main>
+            <header><h1><a href="../../../">Schemescape</a></h1></header>
+            
+<article>
+    <header>
+        <h1><a href="./">Test-driving Hugo for a simple dev blog</a></h1>
+        <p><time datetime="2021-09-13">September 12, 2021</time></p>
+    </header>
+    <p>I'm testing out <a href="../comparison">the most promising static site generators</a> to see which is closest to <a href="../overview">my ideal setup</a>. First up is <a href="https://gohugo.io/">Hugo</a>.</p>
+<h1>Hugo</h1>
+<p>First up is Hugo since it's the easiest to install and (<a href="https://jamstack.org/generators/">according to Jamstack</a>) is one of the top 3 most loved static site generators.</p>
+<h2>Installation</h2>
+<p>Installation is just downloading a binary. Great!</p>
+<h2>Setup</h2>
+<p>Going through their <a href="https://gohugo.io/getting-started/quick-start/">quick start guide</a>, I use <code>hugo new site quickstart</code> to create Hugo's desired directory structure. It's a bit more convoluted than I expected (what is <code>archetypes</code> for?). Interesting.</p>
+<h2>Concepts</h2>
+<p>Hugo seems powerful, but, as we all know, power <s>corrupts</s> introduces complexity. This is my best understanding of Hugo's concepts (which map to directories):</p>
+<ul>
+<li>Archetypes: Default file contents for each types of content file
+<ul>
+<li>Since I've only got a simple dev blog, I'll probably only need a single &quot;post&quot; content type, and their default (title, date, draft status) is likely sufficient</li>
+</ul>
+</li>
+<li>Assets: Stores all the files which need be processed by <a href="https://gohugo.io/hugo-pipes/">Hugo Pipes</a>
+<ul>
+<li>This can be used to minify CSS, JavaScript, etc.</li>
+<li>Minifying CSS is a bonus feature I didn't ask for, but it could be worthwhile</li>
+</ul>
+</li>
+<li>Content: Actual content can be separated by type (note: I believe this is how archetypes are matched)</li>
+<li>Data: I'm actually unclear on how this is different from the <code>config</code> directory</li>
+<li>Layout: Templates</li>
+<li>Static: Files that are copied verbatim to the output</li>
+</ul>
+<h2>Templates/theme</h2>
+<p>The next step is to add a theme. Huh, I thought I'd just plop in some HTML with curly brackets and build my own site. In the past, every theme I've used with a static site generator has been fairly bloated (even so-called &quot;minimal&quot; themes).</p>
+<p>I'll eventually try and use my hand-crafted, minimal semantic HTML, but I suppose I can start with their suggested initial theme, &quot;Ananke&quot;. It looks like <a href="https://discourse.gohugo.io/t/whats-the-difference-between-themes-and-layouts/4851">themes mainly exist to allow reuse by other people</a>, so I could perhaps even get away without a theme (using layouts exclusively).</p>
+<h2>First run</h2>
+<p>The directory structure is pretty close to what I already had, so I was already to launch the Hugo server:</p>
+<pre><code>hugo.exe server -D
+Start building sites … 
+...
+Error: Error building site: TOCSS: failed to transform &quot;ananke/css/main.css&quot; (text/css). Check your Hugo installation; you need the extended version to build SCSS/SASS.
+Built in 213 ms
+</code></pre>
+<p>Well, that's not encouraging. Apparently there's an extended version that I glossed over and is quietly required for their quick start. I do wonder why there's a separate build when the difference in size is only 8%. Maybe it's bundling other non-Go executables that aren't available everywhere?</p>
+<p>With <em>extended</em> Hugo, the site served up fine and the default theme initially looked adequate, but it had a lot of junk I didn't want. Observations:</p>
+<ul>
+<li>There were corporate logos on each post's page</li>
+<li>An inaccurate copyright notice was added</li>
+<li>My first post's HTML was 3,957 bytes zipped</li>
+<li>The CSS was 15kb zipped</li>
+<li>Surprisingly, there was also a CSS source map that weighed in at 187kb uncompressed that I see no reason to upload with my site</li>
+</ul>
+<p>I guess I was right to be wary of default themes.</p>
+<p>A few additional Hugo-related notes:</p>
+<ul>
+<li>Supplying &quot;date&quot; metadata appears to be required in Hugo (unless you want the date to be displayed as &quot;January 1, 0001&quot;)</li>
+<li>Viewing the HTML files on disk led to broken links because a &quot;/&quot; prefix is added to all the links (not the end of the world since <code>hugo.exe</code> can run a server, but still not what I'd hoped for)</li>
+<li>Hugo generates an entire directory for each post -- I was expecting one directory per category, with HTML files for each post</li>
+</ul>
+<h2>Using a custom theme</h2>
+<p>Hugo's documentation was surprisingly unhelpful when it comes to creating a theme from scratch. At least Hugo is popular enough that I was able to find a blog article about <a href="https://retrolog.io/blog/creating-a-hugo-theme-from-scratch/">creating a Hugo theme from scratch</a>.</p>
+<p>My first reaction is that <a href="https://gohugo.io/templates/introduction/">Hugo's template language</a> is bizarre. I thought I'd just be writing code with Go syntax, but instead I'm seeing examples like this:</p>
+<pre><code>{{ if (isset .Params &quot;description&quot;) }}
+    {{ index .Params &quot;description&quot; }}
+{{ else }}
+    {{ .Summary }}
+{{ end }}
+</code></pre>
+<p>Learning a new language that looks nothing like the languages I'm used to is not something I wanted to have to do for my simple site. Additionally, <a href="https://gohugo.io/templates/lookup-order/">Hugo's lookup rules</a> are much more complicated than I expected. I'm still not sure if files like <code>layouts/_default/baseof.html</code> are hard-coded names or if there's logic somewhere I could simplify in the configuration.</p>
+<p>Additional notes:</p>
+<ul>
+<li>It looks like the &quot;/&quot; prefix for paths that I saw earlier is just a shortcut for not having to compute the path to the root of the site, e.g. &quot;css/style.css&quot; won't work when in a subdirectory, but &quot;/css/style.css&quot; will work... unless you're viewing directly from the file system (where &quot;/&quot; means the file system root)</li>
+<li>I was unable to get the 404 page to work using <code>hugo.exe server</code></li>
+</ul>
+<h2>Let's stop there for now</h2>
+<p>Although install was simple and the server worked, at this point, I'm not interested in learning Hugo's unintuitive template language. I honestly found <a href="https://www.w3.org/Style/XSL/">XSL</a> to be more intuitive (and that is not a compliment).</p>
+<p>For posterity, I saved my terribly incomplete theme here:</p>
+<p>https://github.com/jaredkrinke/hugo-bare-minimum</p>
+<p>Let's hope the next static site generator I try is more my style!</p>
+
+</article>
+        </main>
+    </body>
+</html>
