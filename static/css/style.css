@@ -17,7 +17,9 @@ main {
     main { width: calc(100% - 1em); }
 }
 
-main > header > h1 { text-align: center; }
+main > header { text-align: center; }
+main > header > h1 { margin-bottom: 0.25em; }
+main > header > p { margin-top: 0.25em; }
 
 main > header > h1 > a {
     text-decoration: inherit;

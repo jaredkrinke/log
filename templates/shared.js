@@ -19,7 +19,10 @@ module.exports = {
     </head>
     <body>
         <main>
-            <header><h1><a href="${getPagePathToRoot(data)}/">Schemescape</a></h1></header>
+            <header>
+                <h1><a href="${getPagePathToRoot(data)}/">Schemescape</a></h1>
+                <p>Development log of a life-long coder</p>
+            </header>
             ${content}
         </main>
     </body>
