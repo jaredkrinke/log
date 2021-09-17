@@ -1,3 +1,7 @@
+const path = require("path").posix;
+const fs = require("fs");
+const relativeLinkRegexp = /^([^/][^:]*)\.md$/;
+
 module.exports = function(eleventyConfig) {
     // Copy everything under "static" to the root of the built site (note: this is relative to this config file)
     eleventyConfig.addPassthroughCopy({ "static": "./" });
@@ -5,7 +9,23 @@ module.exports = function(eleventyConfig) {
     // Convert relative Markdown file links to relative post links
     const customMarkdownIt = require("markdown-it")({
             html: true,
-            replaceLink: link => link.replace(/^([^/][^:]*)\.md$/, "../$1"),
+            replaceLink: function (link, env) {
+                const result = relativeLinkRegexp.exec(link);
+                if (result) {
+                    // Ensure the destination file exists
+                    const sourceDirectory = path.dirname(env.page.inputPath);
+                    const resolvedPath = path.join(sourceDirectory, link);
+                    // TODO: Ideally, these checks would be done asynchronously instead of waiting on the file system every time a relative link is encountered
+                    if (fs.existsSync(resolvedPath)) {
+                        return `../${result[1]}`;
+                    } else {
+                        console.error(`*** Error in "${env.page.inputPath}": relative link target does not exist: ${resolvedPath}`);
+                        return link;
+                    }
+                } else {
+                    return link;
+                }
+            },
         })
         .use(require("markdown-it-replace-link"));
 
