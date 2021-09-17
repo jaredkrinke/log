@@ -148,6 +148,8 @@ Their example output showed a build complete in 11 milliseconds. These are all v
 
 Hugo has emerged as an early front runner.
 
+**Update**: I documented [my initial look at Hugo](hugo.md), but did not want to learn the template language.
+
 ## NuxtJS
 NuxtJS appears to be a static site generator for people who use [Vue](https://v3.vuejs.org/). While Vue is on my list of frameworks to research, I don't have any experience with it yet. The NuxtJS page mentions server-side rendering which isn't the approach I'm most interested in these days.
 
@@ -178,6 +180,8 @@ But there's also a lot of oddly specific integrations:
 * "Trigger a Netlify Build Every Day with IFTTT" (ok, now things are getting out of hand)
 
 Eleventy looks interesting; sort of like Jekyll, but using Node/JavaScript. This is my #2 choice at this point.
+
+**Update**: I took [an initial look at Eleventy](eleventy.md) and ended up [fully integrating it into this site](eleventy-2.md).
 
 ## Hexo
 Hexo also requires Node and NPM (similar to Eleventy). Fine.
@@ -235,5 +239,13 @@ Zola's documentation looks pretty good, and they [explicitly mention support for
 
 Zola makes it onto my short list.
 
+**Update**: I described [my initial experience with Zola](zola.md). Similar to [Hugo](hugo.md), I set it aside because I didn't want to learn a new language just for creating page templates.
+
 # Next steps
 My next step is to test out Hugo, Eleventy, Zola, etc. to see which one can meet my needs with the least amount of hassle. Stay tuned!
+
+**Update**: I tested several static site generators out. My initial reviews are documented below:
+
+* [Hugo](hugo.md) (didn't like the template language)
+* [Eleventy](eleventy.md) (subsequent update: [I'm using Eleventy now](eleventy-2.md))
+* [Zola](zola.md): (didn't like TOML or the template language)
