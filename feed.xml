@@ -338,6 +338,7 @@ draft: true
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Their example output showed a build complete in 11 milliseconds. These are all very good signs so far.&lt;/p&gt;
 &lt;p&gt;Hugo has emerged as an early front runner.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I documented &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/hugo&quot;&gt;my initial look at Hugo&lt;/a&gt;, but did not want to learn the template language.&lt;/p&gt;
 &lt;h2&gt;NuxtJS&lt;/h2&gt;
 &lt;p&gt;NuxtJS appears to be a static site generator for people who use &lt;a href=&quot;https://v3.vuejs.org/&quot;&gt;Vue&lt;/a&gt;. While Vue is on my list of frameworks to research, I don&#39;t have any experience with it yet. The NuxtJS page mentions server-side rendering which isn&#39;t the approach I&#39;m most interested in these days.&lt;/p&gt;
 &lt;p&gt;I&#39;m going to set aside NuxtJS for now.&lt;/p&gt;
@@ -363,6 +364,7 @@ draft: true
 &lt;li&gt;&amp;quot;Trigger a Netlify Build Every Day with IFTTT&amp;quot; (ok, now things are getting out of hand)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Eleventy looks interesting; sort of like Jekyll, but using Node/JavaScript. This is my #2 choice at this point.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I took &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/eleventy&quot;&gt;an initial look at Eleventy&lt;/a&gt; and ended up &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/eleventy-2&quot;&gt;fully integrating it into this site&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;Hexo&lt;/h2&gt;
 &lt;p&gt;Hexo also requires Node and NPM (similar to Eleventy). Fine.&lt;/p&gt;
 &lt;p&gt;Hexo appears to use the &amp;quot;million plugins&amp;quot; architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like &lt;a href=&quot;https://parceljs.org/&quot;&gt;Parcel&lt;/a&gt; and not &lt;a href=&quot;https://webpack.js.org/&quot;&gt;webpack&lt;/a&gt;, but I do understand &amp;quot;zero configuration&amp;quot; constraints can come back to bite me later.&lt;/p&gt;
@@ -397,8 +399,15 @@ draft: true
 &lt;p&gt;Annoyingly (from a portability aspect), Zola wants me to use &lt;code&gt;+++&lt;/code&gt; to demarcate front matter in &lt;a href=&quot;https://toml.io/en/&quot;&gt;TOML&lt;/a&gt; (definitely not my preferred metadata language), but &amp;quot;YAML front matter is also supported to ease porting legacy content&amp;quot; -- hopefully that support doesn&#39;t disappear someday!&lt;/p&gt;
 &lt;p&gt;Zola&#39;s documentation looks pretty good, and they &lt;a href=&quot;https://www.getzola.org/documentation/templates/overview/#built-in-templates&quot;&gt;explicitly mention support for RSS&lt;/a&gt; as a feature.&lt;/p&gt;
 &lt;p&gt;Zola makes it onto my short list.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I described &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/zola&quot;&gt;my initial experience with Zola&lt;/a&gt;. Similar to &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/hugo&quot;&gt;Hugo&lt;/a&gt;, I set it aside because I didn&#39;t want to learn a new language just for creating page templates.&lt;/p&gt;
 &lt;h1&gt;Next steps&lt;/h1&gt;
 &lt;p&gt;My next step is to test out Hugo, Eleventy, Zola, etc. to see which one can meet my needs with the least amount of hassle. Stay tuned!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I tested several static site generators out. My initial reviews are documented below:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/hugo&quot;&gt;Hugo&lt;/a&gt; (didn&#39;t like the template language)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/eleventy&quot;&gt;Eleventy&lt;/a&gt; (subsequent update: &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/eleventy-2&quot;&gt;I&#39;m using Eleventy now&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/zola&quot;&gt;Zola&lt;/a&gt;: (didn&#39;t like TOML or the template language)&lt;/li&gt;
+&lt;/ul&gt;
 </content>
   </entry>
   
@@ -654,7 +663,7 @@ Built in 213 ms
 &lt;h2&gt;Let&#39;s stop there&lt;/h2&gt;
 &lt;p&gt;That&#39;s probably enough for one post.&lt;/p&gt;
 &lt;p&gt;Overall, ramping up on Eleventy was more confusing than I anticipated, but all the pain I felt around Hugo&#39;s template language was partially avoided in Eleventy by the ability to use good old JavaScript code. I&#39;m not a fan of some of the design decisions (namely, drawing content from the root folder), but I feel like I could actually end up choosing Eleventy just because it prevents me from having to learn (and, later, remember) another programming language.&lt;/p&gt;
-&lt;p&gt;For reference, my unfinished attempt at integrating Eleventy into this dev blog is here: https://github.com/jaredkrinke/log/tree/eleventy&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I fully integrated Eleventy into my dev blog, details are in &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/eleventy-2&quot;&gt;part 2&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   

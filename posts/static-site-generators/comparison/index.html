@@ -11,7 +11,10 @@
     </head>
     <body>
         <main>
-            <header><h1><a href="../../../">Schemescape</a></h1></header>
+            <header>
+                <h1><a href="../../../">Schemescape</a></h1>
+                <p>Development log of a life-long coder</p>
+            </header>
             
 <article>
     <header>
@@ -251,6 +254,7 @@ draft: true
 </code></pre>
 <p>Their example output showed a build complete in 11 milliseconds. These are all very good signs so far.</p>
 <p>Hugo has emerged as an early front runner.</p>
+<p><strong>Update</strong>: I documented <a href="../hugo">my initial look at Hugo</a>, but did not want to learn the template language.</p>
 <h2>NuxtJS</h2>
 <p>NuxtJS appears to be a static site generator for people who use <a href="https://v3.vuejs.org/">Vue</a>. While Vue is on my list of frameworks to research, I don't have any experience with it yet. The NuxtJS page mentions server-side rendering which isn't the approach I'm most interested in these days.</p>
 <p>I'm going to set aside NuxtJS for now.</p>
@@ -276,6 +280,7 @@ draft: true
 <li>&quot;Trigger a Netlify Build Every Day with IFTTT&quot; (ok, now things are getting out of hand)</li>
 </ul>
 <p>Eleventy looks interesting; sort of like Jekyll, but using Node/JavaScript. This is my #2 choice at this point.</p>
+<p><strong>Update</strong>: I took <a href="../eleventy">an initial look at Eleventy</a> and ended up <a href="../eleventy-2">fully integrating it into this site</a>.</p>
 <h2>Hexo</h2>
 <p>Hexo also requires Node and NPM (similar to Eleventy). Fine.</p>
 <p>Hexo appears to use the &quot;million plugins&quot; architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like <a href="https://parceljs.org/">Parcel</a> and not <a href="https://webpack.js.org/">webpack</a>, but I do understand &quot;zero configuration&quot; constraints can come back to bite me later.</p>
@@ -310,8 +315,15 @@ draft: true
 <p>Annoyingly (from a portability aspect), Zola wants me to use <code>+++</code> to demarcate front matter in <a href="https://toml.io/en/">TOML</a> (definitely not my preferred metadata language), but &quot;YAML front matter is also supported to ease porting legacy content&quot; -- hopefully that support doesn't disappear someday!</p>
 <p>Zola's documentation looks pretty good, and they <a href="https://www.getzola.org/documentation/templates/overview/#built-in-templates">explicitly mention support for RSS</a> as a feature.</p>
 <p>Zola makes it onto my short list.</p>
+<p><strong>Update</strong>: I described <a href="../zola">my initial experience with Zola</a>. Similar to <a href="../hugo">Hugo</a>, I set it aside because I didn't want to learn a new language just for creating page templates.</p>
 <h1>Next steps</h1>
 <p>My next step is to test out Hugo, Eleventy, Zola, etc. to see which one can meet my needs with the least amount of hassle. Stay tuned!</p>
+<p><strong>Update</strong>: I tested several static site generators out. My initial reviews are documented below:</p>
+<ul>
+<li><a href="../hugo">Hugo</a> (didn't like the template language)</li>
+<li><a href="../eleventy">Eleventy</a> (subsequent update: <a href="../eleventy-2">I'm using Eleventy now</a>)</li>
+<li><a href="../zola">Zola</a>: (didn't like TOML or the template language)</li>
+</ul>
 
 </article>
         </main>
