@@ -131,4 +131,4 @@ That's probably enough for one post.
 
 Overall, ramping up on Eleventy was more confusing than I anticipated, but all the pain I felt around Hugo's template language was partially avoided in Eleventy by the ability to use good old JavaScript code. I'm not a fan of some of the design decisions (namely, drawing content from the root folder), but I feel like I could actually end up choosing Eleventy just because it prevents me from having to learn (and, later, remember) another programming language.
 
-For reference, my unfinished attempt at integrating Eleventy into this dev blog is here: https://github.com/jaredkrinke/log/tree/eleventy
+**Update**: I fully integrated Eleventy into my dev blog, details are in [part 2](eleventy-2.md).
