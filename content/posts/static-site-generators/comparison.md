@@ -47,18 +47,18 @@ Below is a table summarizing what I found in my research (note: by "portable" I 
 | Tool | Dependencies | Output | Configuration | Portable | Templates |
 | ---- | :---: | :---: | :---: | :---: | :---: |
 | Jekyll | Ruby | HTML | Simple | ✔ | [Liquid](https://liquidjs.com/) |
-| Gatsby | Node | SPA | Very complicated | ? | [Super complicated](https://www.gatsbyjs.com/tutorial/building-a-theme) |
-| Hugo | *None!* | HTML | Simple | ✔ | [Go templates](https://golangdocs.com/templates-in-golang) |
-| NuxtJS | Node, Vue | HTML | ? | ✖ | [Vue](https://vuejs.org/) |
-| VuePress | Node, Vue | HTML | ? | ✖ | [Vue](https://vuejs.org/) |
-| Eleventy | Node | HTML | Simple | ✔ | [Liquid](https://liquidjs.com/), [EJS](https://ejs.co/), more |
+| Gatsby | Node | SPA | Very complicated | ? | [JSX](https://reactjs.org/docs/introducing-jsx.html)] |
+| Hugo | *None!* | HTML | Simple | ✔ | [Go templates](https://gohugo.io/templates/introduction/) |
+| NuxtJS | Node, Vue | HTML | ? | ✖ | [Vue](https://vuejs.org/)/[JSX](https://reactjs.org/docs/introducing-jsx.html) |
+| VuePress | Node, Vue | HTML | ? | ✖ | [Vue](https://vuejs.org/)/[JSX](https://reactjs.org/docs/introducing-jsx.html) |
+| Eleventy | Node | HTML | Simple | ✔ | [Liquid](https://liquidjs.com/), [many more](https://www.11ty.dev/docs/languages/) |
 | Hexo | Node | HTML | Complicated | ✖ | [EJS](https://ejs.co/) |
-| Pagic | Deno | SPA | Simple? | ✔ | [Vue](https://vuejs.org/)/JSX |
-| Docusaurus | Node | SPA | Complicated? | ✖ | JSX |
-| Next.js | Node | HTML | Complicated | ? | JSX |
+| Pagic | Deno | SPA | Simple? | ✔ | [Vue](https://vuejs.org/)/[JSX](https://reactjs.org/docs/introducing-jsx.html) |
+| Docusaurus | Node | SPA | Complicated? | ✖ | [JSX](https://reactjs.org/docs/introducing-jsx.html) |
+| Next.js | Node | HTML | Complicated | ? | [JSX](https://reactjs.org/docs/introducing-jsx.html)] |
 | Pelican | Python | HTML | Complicated | ✖ | [Jinja](https://jinja.palletsprojects.com/en/3.0.x/) |
-| React Static | Node | SPA | Complicated | ✖ | JSX |
-| Metalsmith | Node | HTML | Complicated | ✔ | ? |
+| React Static | Node | SPA | Complicated | ✖ | [JSX](https://reactjs.org/docs/introducing-jsx.html)] |
+| Metalsmith | Node | HTML | Complicated | ✔ | [Handlebars](https://handlebarsjs.com/) |
 | Zola | *None!* | HTML | Complicated | ✔ | [Tera](https://tera.netlify.app/) |
 
 Note: all of the generators support Markdown, so I didn't bother adding a column for Markdown support.
