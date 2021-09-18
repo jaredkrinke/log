@@ -47,7 +47,7 @@ Below is a table summarizing what I found in my research (note: by "portable" I 
 | Tool | Dependencies | Output | Configuration | Portable | Templates |
 | ---- | :---: | :---: | :---: | :---: | :---: |
 | Jekyll | Ruby | HTML | Simple | ✔ | [Liquid](https://liquidjs.com/) |
-| Gatsby | Node | SPA | Very complicated | ? | [JSX](https://reactjs.org/docs/introducing-jsx.html)] |
+| Gatsby | Node | SPA | Very complicated | ? | [JSX](https://reactjs.org/docs/introducing-jsx.html) |
 | Hugo | *None!* | HTML | Simple | ✔ | [Go templates](https://gohugo.io/templates/introduction/) |
 | NuxtJS | Node, Vue | HTML | ? | ✖ | [Vue](https://vuejs.org/)/[JSX](https://reactjs.org/docs/introducing-jsx.html) |
 | VuePress | Node, Vue | HTML | ? | ✖ | [Vue](https://vuejs.org/)/[JSX](https://reactjs.org/docs/introducing-jsx.html) |
@@ -55,9 +55,9 @@ Below is a table summarizing what I found in my research (note: by "portable" I 
 | Hexo | Node | HTML | Complicated | ✖ | [EJS](https://ejs.co/) |
 | Pagic | Deno | SPA | Simple? | ✔ | [Vue](https://vuejs.org/)/[JSX](https://reactjs.org/docs/introducing-jsx.html) |
 | Docusaurus | Node | SPA | Complicated? | ✖ | [JSX](https://reactjs.org/docs/introducing-jsx.html) |
-| Next.js | Node | HTML | Complicated | ? | [JSX](https://reactjs.org/docs/introducing-jsx.html)] |
+| Next.js | Node | HTML | Complicated | ? | [JSX](https://reactjs.org/docs/introducing-jsx.html) |
 | Pelican | Python | HTML | Complicated | ✖ | [Jinja](https://jinja.palletsprojects.com/en/3.0.x/) |
-| React Static | Node | SPA | Complicated | ✖ | [JSX](https://reactjs.org/docs/introducing-jsx.html)] |
+| React Static | Node | SPA | Complicated | ✖ | [JSX](https://reactjs.org/docs/introducing-jsx.html) |
 | Metalsmith | Node | HTML | Complicated | ✔ | [Handlebars](https://handlebarsjs.com/) |
 | Zola | *None!* | HTML | Complicated | ✔ | [Tera](https://tera.netlify.app/) |
 
