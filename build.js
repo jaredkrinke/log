@@ -4,6 +4,7 @@ const Metalsmith = require("metalsmith");
 const markdown = require("metalsmith-markdown");
 const layouts = require("metalsmith-layouts");
 const collections = require("metalsmith-collections");
+const permalinks = require("metalsmith-permalinks");
 
 const clean = true;
 
@@ -16,7 +17,7 @@ const markdownRenderer = new marked.Renderer();
 const baseLinkRenderer = markdownRenderer.link;
 markdownRenderer.link = function (href, title, text) {
     return baseLinkRenderer.call(this,
-        href.replace(/^([^/][^:]*)\.md$/, "$1.html"),
+        href.replace(/^([^/][^:]*)\.md$/, "../$1"),
         title,
         text);
 };
@@ -26,7 +27,11 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "nu
 const addCustomProperties = (files, metalsmith, done) => {
     Object.keys(files).forEach(key => {
         const file = files[key];
+
         file.fileName = path.basename(key);
+        file.destinationUrl = key
+            .replace(/\\/g, "/") // Convert slashes...
+            .replace(/[/]index.html$/, ""); // Remove file name
 
         const date = file.date;
         if (date) {
@@ -68,6 +73,7 @@ const addCustomProperties = (files, metalsmith, done) => {
                 }
             }))
             .use(markdown({ renderer: markdownRenderer }))
+            .use(permalinks())
             .use(require("metalsmith-rootpath")())
             .use(addCustomProperties)
             .use(require("metalsmith-discover-partials")({ directory: "templates" }))
