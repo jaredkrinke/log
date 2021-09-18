@@ -6,7 +6,9 @@ const collections = require("metalsmith-collections");
 
 const clean = true;
 
-// TODO: Should output files each have their own directory (similar to what Eleventy does)?
+// TODO: Translate relative *.md links to corresponding HTML output
+// TODO: Add RSS feed
+// TODO: Validate internal links
 
 // Simple plugin to add some custom properties
 const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" });
