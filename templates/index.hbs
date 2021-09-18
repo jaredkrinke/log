@@ -1,0 +1,13 @@
+{{#> basePartial}}
+<ul>
+{{#each posts}}
+<article>
+    <header>
+        <h1><a href="{{path}}">{{title}}</a></h1>
+        {{> datePartial}}
+    </header>
+    <summary><p>{{description}}</p></summary>
+</article>
+{{/each}}
+</ul>
+{{/basePartial}}

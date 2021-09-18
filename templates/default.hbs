@@ -1,27 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>{{siteName}}{{#if title}}: {{title}}{{/if}}</title>
-        {{#if description}}<meta name="description" content="{{description}}" />{{/if}}
-        {{#if keywords}}<meta name="keywords" content="{{#each keywords}}{{this}}{{#unless @last}},{{/unless}}{{/each}}" />{{/if}}
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <link rel="stylesheet" href="{{rootPath}}css/style.css" />
-        <!-- TODO: RSS -->
-    </head>
-    <body>
-        <main>
-            <header>
-                <h1><a href="{{rootPath}}">Schemescape</a></h1>
-                <p>Development log of a life-long coder</p>
-            </header>
-            <article>
-                <header>
-                    <h1><a href="{{fileName}}">{{title}}</a></h1>
-                    <p>Date: <time datetime="{{dateShort}}">{{dateDisplay}}</time></p>
-                </header>
-                {{{contents}}}
-            </article>
-        </main>
-    </body>
-</html>
+{{#> basePartial}}
+<article>
+    <header>
+        <h1><a href="{{fileName}}">{{title}}</a></h1>
+        {{> datePartial}}
+    </header>
+    {{{contents}}}
+</article>
+{{/basePartial}}

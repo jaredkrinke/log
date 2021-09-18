@@ -2,8 +2,11 @@ const path = require("path");
 const Metalsmith = require("metalsmith");
 const markdown = require("metalsmith-markdown");
 const layouts = require("metalsmith-layouts");
+const collections = require("metalsmith-collections");
 
 const clean = true;
+
+// TODO: Should output files each have their own directory (similar to what Eleventy does)?
 
 // Simple plugin to add some custom properties
 const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" });
@@ -13,8 +16,10 @@ const addCustomProperties = (files, metalsmith, done) => {
         file.fileName = path.basename(key);
 
         const date = file.date;
-        file.dateShort = date.toISOString().replace(/T.*$/, "");
-        file.dateDisplay = dateFormatter.format(date);
+        if (date) {
+            file.dateShort = date.toISOString().replace(/T.*$/, "");
+            file.dateDisplay = dateFormatter.format(date);
+        }
     });
     done();
 };
@@ -42,12 +47,17 @@ const addCustomProperties = (files, metalsmith, done) => {
             .clean(false)
             .source("./content")
             .destination("./out")
-            // .use(collections({
-            //     posts: "posts/**/*.md",
-            // }))
+            .use(collections({
+                posts: {
+                    pattern: "posts/**/*.md",
+                    sortBy: "date",
+                    reverse: true,
+                }
+            }))
             .use(markdown())
             .use(require("metalsmith-rootpath")())
             .use(addCustomProperties)
+            .use(require("metalsmith-discover-partials")({ directory: "templates" }))
             .use(layouts({
                 directory: "templates",
                 default: "default.hbs",
