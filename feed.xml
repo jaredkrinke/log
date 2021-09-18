@@ -165,7 +165,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;SPA&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;Very complicated&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;?&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://www.gatsbyjs.com/tutorial/building-a-theme&quot;&gt;Super complicated&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://reactjs.org/docs/introducing-jsx.html&quot;&gt;JSX&lt;/a&gt;]&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Hugo&lt;/td&gt;
@@ -173,7 +173,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;HTML&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;Simple&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://golangdocs.com/templates-in-golang&quot;&gt;Go templates&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://gohugo.io/templates/introduction/&quot;&gt;Go templates&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;NuxtJS&lt;/td&gt;
@@ -181,7 +181,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;HTML&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;?&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;✖&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://vuejs.org/&quot;&gt;Vue&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://vuejs.org/&quot;&gt;Vue&lt;/a&gt;/&lt;a href=&quot;https://reactjs.org/docs/introducing-jsx.html&quot;&gt;JSX&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;VuePress&lt;/td&gt;
@@ -189,7 +189,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;HTML&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;?&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;✖&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://vuejs.org/&quot;&gt;Vue&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://vuejs.org/&quot;&gt;Vue&lt;/a&gt;/&lt;a href=&quot;https://reactjs.org/docs/introducing-jsx.html&quot;&gt;JSX&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Eleventy&lt;/td&gt;
@@ -197,7 +197,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;HTML&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;Simple&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://liquidjs.com/&quot;&gt;Liquid&lt;/a&gt;, &lt;a href=&quot;https://ejs.co/&quot;&gt;EJS&lt;/a&gt;, more&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://liquidjs.com/&quot;&gt;Liquid&lt;/a&gt;, &lt;a href=&quot;https://www.11ty.dev/docs/languages/&quot;&gt;many more&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Hexo&lt;/td&gt;
@@ -213,7 +213,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;SPA&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;Simple?&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://vuejs.org/&quot;&gt;Vue&lt;/a&gt;/JSX&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://vuejs.org/&quot;&gt;Vue&lt;/a&gt;/&lt;a href=&quot;https://reactjs.org/docs/introducing-jsx.html&quot;&gt;JSX&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Docusaurus&lt;/td&gt;
@@ -221,7 +221,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;SPA&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;Complicated?&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;✖&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;JSX&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://reactjs.org/docs/introducing-jsx.html&quot;&gt;JSX&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Next.js&lt;/td&gt;
@@ -229,7 +229,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;HTML&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;Complicated&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;?&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;JSX&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://reactjs.org/docs/introducing-jsx.html&quot;&gt;JSX&lt;/a&gt;]&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Pelican&lt;/td&gt;
@@ -245,7 +245,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;SPA&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;Complicated&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;✖&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;JSX&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://reactjs.org/docs/introducing-jsx.html&quot;&gt;JSX&lt;/a&gt;]&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Metalsmith&lt;/td&gt;
@@ -253,7 +253,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;HTML&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;Complicated&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;?&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://handlebarsjs.com/&quot;&gt;Handlebars&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Zola&lt;/td&gt;
