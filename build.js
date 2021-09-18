@@ -5,10 +5,12 @@ const markdown = require("metalsmith-markdown");
 const layouts = require("metalsmith-layouts");
 const collections = require("metalsmith-collections");
 const permalinks = require("metalsmith-permalinks");
+const rootPath = require("metalsmith-rootpath");
+const discoverPartials = require("metalsmith-discover-partials");
+const assets = require("metalsmith-static");
 
 const clean = true;
 
-// TODO: Consider using metalsmith-static to avoid having to run twice!
 // TODO: Exclude drafts
 // TODO: Add RSS feed
 // TODO: Validate internal links
@@ -43,45 +45,37 @@ const addCustomProperties = (files, metalsmith, done) => {
     done();
 };
 
-(async () => {
-    const createErrorHandler = (resolve, reject) => ((err, result) => err ? reject(err) : resolve(result));
-
-    // Copy static assets first
-    await new Promise((resolve, reject) => {
-        Metalsmith(__dirname)
-            .source("./static")
-            .destination("./out")
-            .clean(clean)
-            .build(createErrorHandler(resolve, reject));
+Metalsmith(__dirname)
+    .metadata({
+        siteName: "Schemescape",
+        siteUrl: "https://log.schemescape.com/",
+        description: "Development log of a life-long coder",
+    })
+    .clean(clean)
+    .source("./content")
+    .destination("./out")
+    .use(assets({
+        src: "static",
+        dest: ".",
+    }))
+    .use(collections({
+        posts: {
+            pattern: "posts/**/*.md",
+            sortBy: "date",
+            reverse: true,
+        }
+    }))
+    .use(markdown({ renderer: markdownRenderer }))
+    .use(permalinks())
+    .use(rootPath())
+    .use(addCustomProperties)
+    .use(discoverPartials({ directory: "templates" }))
+    .use(layouts({
+        directory: "templates",
+        default: "default.hbs",
+    }))
+    .build(err => {
+        if (err) {
+            throw err;
+        }
     });
-
-    // Build site
-    await new Promise((resolve, reject) => {
-        Metalsmith(__dirname)
-            .metadata({
-                siteName: "Schemescape",
-                siteUrl: "https://log.schemescape.com/",
-                description: "Development log of a life-long coder",
-            })
-            .clean(false)
-            .source("./content")
-            .destination("./out")
-            .use(collections({
-                posts: {
-                    pattern: "posts/**/*.md",
-                    sortBy: "date",
-                    reverse: true,
-                }
-            }))
-            .use(markdown({ renderer: markdownRenderer }))
-            .use(permalinks())
-            .use(require("metalsmith-rootpath")())
-            .use(addCustomProperties)
-            .use(require("metalsmith-discover-partials")({ directory: "templates" }))
-            .use(layouts({
-                directory: "templates",
-                default: "default.hbs",
-            }))
-            .build(createErrorHandler(resolve, reject));
-    });
-})();
