@@ -32,7 +32,7 @@ const addCustomProperties = (files, metalsmith, done) => {
         const file = files[key];
 
         file.fileName = path.basename(key);
-        file.destinationUrl = key
+        file.link = key
             .replace(/\\/g, "/") // Convert slashes...
             .replace(/[/]index.html$/, ""); // Remove file name
 
