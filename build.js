@@ -8,6 +8,7 @@ const permalinks = require("metalsmith-permalinks");
 
 const clean = true;
 
+// TODO: Consider using metalsmith-static to avoid having to run twice!
 // TODO: Exclude drafts
 // TODO: Add RSS feed
 // TODO: Validate internal links
