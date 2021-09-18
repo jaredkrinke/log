@@ -58,7 +58,7 @@ Below is a table summarizing what I found in my research (note: by "portable" I 
 | Next.js | Node | HTML | Complicated | ? | [JSX](https://reactjs.org/docs/introducing-jsx.html) |
 | Pelican | Python | HTML | Complicated | ✖ | [Jinja](https://jinja.palletsprojects.com/en/3.0.x/) |
 | React Static | Node | SPA | Complicated | ✖ | [JSX](https://reactjs.org/docs/introducing-jsx.html) |
-| Metalsmith | Node | HTML | Complicated | ✔ | [Handlebars](https://handlebarsjs.com/) |
+| Metalsmith | Node | HTML | Complicated | ✔ | [Handlebars](https://handlebarsjs.com/), [many more](https://github.com/jstransformers/jstransformer) |
 | Zola | *None!* | HTML | Complicated | ✔ | [Tera](https://tera.netlify.app/) |
 
 Note: all of the generators support Markdown, so I didn't bother adding a column for Markdown support.
