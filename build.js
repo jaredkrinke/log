@@ -1,4 +1,5 @@
 const path = require("path");
+const marked = require("marked");
 const Metalsmith = require("metalsmith");
 const markdown = require("metalsmith-markdown");
 const layouts = require("metalsmith-layouts");
@@ -6,9 +7,19 @@ const collections = require("metalsmith-collections");
 
 const clean = true;
 
-// TODO: Translate relative *.md links to corresponding HTML output
+// TODO: Exclude drafts
 // TODO: Add RSS feed
 // TODO: Validate internal links
+
+// Translate relative Markdown links to point to corresponding HTML output files
+const markdownRenderer = new marked.Renderer();
+const baseLinkRenderer = markdownRenderer.link;
+markdownRenderer.link = function (href, title, text) {
+    return baseLinkRenderer.call(this,
+        href.replace(/^([^/][^:]*)\.md$/, "$1.html"),
+        title,
+        text);
+};
 
 // Simple plugin to add some custom properties
 const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" });
@@ -56,7 +67,7 @@ const addCustomProperties = (files, metalsmith, done) => {
                     reverse: true,
                 }
             }))
-            .use(markdown())
+            .use(markdown({ renderer: markdownRenderer }))
             .use(require("metalsmith-rootpath")())
             .use(addCustomProperties)
             .use(require("metalsmith-discover-partials")({ directory: "templates" }))
