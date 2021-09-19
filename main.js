@@ -25,6 +25,8 @@ for (let i = 2; i < process.argv.length; i++) {
     }
 }
 
+// Trivial plugin that does nothing (for toggling on/off plugins)
+const noop = (files, metalsmith, done) => done();
 
 // Translate relative Markdown links to point to corresponding HTML output files
 const markdownRenderer = new marked.Renderer();
@@ -71,7 +73,7 @@ let metalsmith = Metalsmith(__dirname)
         src: "static",
         dest: ".",
     }))
-    .use(drafts())
+    .use(serve ? noop : drafts())
     .use(collections({
         posts: {
             pattern: "posts/**/*.md",
