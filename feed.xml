@@ -1111,7 +1111,7 @@ Metalsmith
 &lt;p&gt;The fix in this case was to run &amp;quot;layouts&amp;quot; after &amp;quot;feed&amp;quot; but tell &amp;quot;layouts&amp;quot; to only process HTML files (and not &amp;quot;feed.xml&amp;quot;).&lt;/p&gt;
 &lt;p&gt;This all makes sense if you think about how Metalsmith plugins receive a set of files, manipulate them, and then pass them on to the next plugin, but other generators do a good job of insulating me from mistakes like this.&lt;/p&gt;
 &lt;h3&gt;Handling internal links&lt;/h3&gt;
-&lt;p&gt;I&#39;m still surprised that using relative links to Markdown files for internal linking between posts isn&#39;t well supported by the static site generators I&#39;ve tried so far (Metalsmith included). I ended up having to extend the Marked renderer to enable internal links:&lt;/p&gt;
+&lt;p&gt;I&#39;m still surprised that using relative links to Markdown files for internal linking between posts isn&#39;t well supported by the static site generators I&#39;ve tried so far (Metalsmith included). I ended up having to extend the &lt;a href=&quot;https://marked.js.org/using_pro#renderer&quot;&gt;Marked renderer&lt;/a&gt; to enable internal links:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;const marked = require(&amp;quot;marked&amp;quot;);
 ...
 // Translate relative Markdown links to point to corresponding HTML output files
@@ -1132,7 +1132,7 @@ Metalsmith
 &lt;h2&gt;Conclusion&lt;/h2&gt;
 &lt;p&gt;Overall, I really liked that Metalsmith just did exactly what I asked, even if I didn&#39;t initially know what, precisely, I wanted. I was able to find plugins for almost everything to get started (including local testing with live reloading). Importantly, I also feel like I fully understand what Metalsmith is doing, so I don&#39;t have to worry about later discovering that it was processing files multiple times (something that did happen with Eleventy).&lt;/p&gt;
 &lt;p&gt;Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that&#39;s part of my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/overview&quot;&gt;my ideal workflow&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;One comment on Handlebars: this isn&#39;t a review of Handlebars, but I did find Handlebars to surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose.&lt;/p&gt;
+&lt;p&gt;One comment on Handlebars: this isn&#39;t a review of Handlebars, but I did find Handlebars to be a surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose.&lt;/p&gt;
 &lt;p&gt;Overall, I&#39;m very happy with Metalsmith, and it&#39;s likely that I will be using it moving forward.&lt;/p&gt;
 &lt;p&gt;For reference, all of my code is here:
 &lt;a href=&quot;https://github.com/jaredkrinke/log/tree/metalsmith&quot;&gt;https://github.com/jaredkrinke/log/tree/metalsmith&lt;/a&gt;&lt;/p&gt;
