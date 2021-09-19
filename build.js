@@ -8,10 +8,10 @@ const permalinks = require("metalsmith-permalinks");
 const rootPath = require("metalsmith-rootpath");
 const discoverPartials = require("metalsmith-discover-partials");
 const assets = require("metalsmith-static");
+const drafts = require("metalsmith-drafts");
 
 const clean = true;
 
-// TODO: Exclude drafts
 // TODO: Add RSS feed
 // TODO: Validate internal links
 
@@ -58,6 +58,7 @@ Metalsmith(__dirname)
         src: "static",
         dest: ".",
     }))
+    .use(drafts())
     .use(collections({
         posts: {
             pattern: "posts/**/*.md",
