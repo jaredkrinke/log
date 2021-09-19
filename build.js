@@ -10,10 +10,9 @@ const discoverPartials = require("metalsmith-discover-partials");
 const assets = require("metalsmith-static");
 const drafts = require("metalsmith-drafts");
 const feed = require("metalsmith-feed");
+const brokenLinkChecker = require("metalsmith-broken-link-checker");
 
 const clean = true;
-
-// TODO: Validate internal links
 
 // Translate relative Markdown links to point to corresponding HTML output files
 const markdownRenderer = new marked.Renderer();
@@ -82,6 +81,7 @@ Metalsmith(__dirname)
         destination: "feed.xml",
         limit: 5,
     }))
+    .use(brokenLinkChecker({ allowRedirects: true }))
     .build(err => {
         if (err) {
             throw err;
