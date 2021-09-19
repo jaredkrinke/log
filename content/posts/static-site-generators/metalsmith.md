@@ -115,7 +115,7 @@ The fix in this case was to run "layouts" after "feed" but tell "layouts" to onl
 This all makes sense if you think about how Metalsmith plugins receive a set of files, manipulate them, and then pass them on to the next plugin, but other generators do a good job of insulating me from mistakes like this.
 
 ### Handling internal links
-I'm still surprised that using relative links to Markdown files for internal linking between posts isn't well supported by the static site generators I've tried so far (Metalsmith included). I ended up having to extend the Marked renderer to enable internal links:
+I'm still surprised that using relative links to Markdown files for internal linking between posts isn't well supported by the static site generators I've tried so far (Metalsmith included). I ended up having to extend the [Marked renderer](https://marked.js.org/using_pro#renderer) to enable internal links:
 
 ```
 const marked = require("marked");
@@ -141,7 +141,7 @@ Overall, I really liked that Metalsmith just did exactly what I asked, even if I
 
 Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that's part of my [my ideal workflow](overview.md)).
 
-One comment on Handlebars: this isn't a review of Handlebars, but I did find Handlebars to surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose.
+One comment on Handlebars: this isn't a review of Handlebars, but I did find Handlebars to be a surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose.
 
 Overall, I'm very happy with Metalsmith, and it's likely that I will be using it moving forward.
 
