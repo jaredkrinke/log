@@ -4,7 +4,7 @@
   <subtitle>Development log of a lifelong coder</subtitle>
   <link href="https://log.schemescape.com/feed.xml" rel="self"/>
   <link href="https://log.schemescape.com/"/>
-  <updated>2021-09-16T00:00:00Z</updated>
+  <updated>2021-09-18T00:00:00Z</updated>
   <id>https://log.schemescape.com/</id>
   <author>
     <name>Schemescape</name>
@@ -253,7 +253,7 @@ draft: true
 &lt;td style=&quot;text-align:center&quot;&gt;HTML&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;Complicated&lt;/td&gt;
 &lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://handlebarsjs.com/&quot;&gt;Handlebars&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://handlebarsjs.com/&quot;&gt;Handlebars&lt;/a&gt;, &lt;a href=&quot;https://github.com/jstransformers/jstransformer&quot;&gt;many more&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Zola&lt;/td&gt;
@@ -394,6 +394,7 @@ draft: true
 &lt;p&gt;While I didn&#39;t really want to have to write code, at least I&#39;d be able to debug the tool when something didn&#39;t behave as expected.&lt;/p&gt;
 &lt;p&gt;Metalsmith&#39;s most interesting aspect for me is that it&#39;s modular and pluggable, similar to &lt;a href=&quot;https://gulpjs.com/&quot;&gt;Gulp&lt;/a&gt;. This could come in handy if I need to extend the existing functionality a little (e.g. to allow embedding of images and diagrams).&lt;/p&gt;
 &lt;p&gt;Similar to Gulp, I think I&#39;d probably end up frustrated with an endless graph of plugins that interact in bizarre ways, but I &lt;em&gt;might&lt;/em&gt; be willing to give Metalsmith a try if I find too many gaps in the other generators I&#39;ve liked so far.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I ended up &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/metalsmith&quot;&gt;fully integrating Metalsmith into my site&lt;/a&gt; because I liked the modular architecture and simple plugins met most of my needs.&lt;/p&gt;
 &lt;h2&gt;Zola&lt;/h2&gt;
 &lt;p&gt;Zola is written in Rust, a language which I&#39;m tired of hearing about (similar to Python), but which I actually think I might one day use (unlike Python). A fast, native binary with no dependencies is certainly a strong start for Zola.&lt;/p&gt;
 &lt;p&gt;Annoyingly (from a portability aspect), Zola wants me to use &lt;code&gt;+++&lt;/code&gt; to demarcate front matter in &lt;a href=&quot;https://toml.io/en/&quot;&gt;TOML&lt;/a&gt; (definitely not my preferred metadata language), but &amp;quot;YAML front matter is also supported to ease porting legacy content&amp;quot; -- hopefully that support doesn&#39;t disappear someday!&lt;/p&gt;
@@ -407,6 +408,7 @@ draft: true
 &lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/hugo&quot;&gt;Hugo&lt;/a&gt; (didn&#39;t like the template language)&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/eleventy&quot;&gt;Eleventy&lt;/a&gt; (subsequent update: &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/eleventy-2&quot;&gt;I&#39;m using Eleventy now&lt;/a&gt;)&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/zola&quot;&gt;Zola&lt;/a&gt;: (didn&#39;t like TOML or the template language)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/metalsmith&quot;&gt;Metalsmith&lt;/a&gt; (I like it a lot and it will probably dethrone Eleventy for my site)&lt;/li&gt;
 &lt;/ul&gt;
 </content>
   </entry>
@@ -901,6 +903,237 @@ layout: index.11ty.js
 &lt;h1&gt;And that&#39;s it!&lt;/h1&gt;
 &lt;p&gt;It took a little while to sort out some of the above details, but since I was able to leverage my existing JavaScript knowledge, Eleventy ended up being pretty easy to integrate. As proof, this page exists, and you&#39;re reading it.&lt;/p&gt;
 &lt;p&gt;All of the actual code used to generate this page is &lt;a href=&quot;https://github.com/jaredkrinke/log/tree/eleventy&quot;&gt;up on GitHub under the &amp;quot;eleventy&amp;quot; branch&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title>How to benchmark disk drives on Windows</title>
+    <link href="https://log.schemescape.com/posts/hardware/benchmarking-drives/"/>
+    <updated>2021-09-17T00:00:00Z</updated>
+    <id>https://log.schemescape.com/posts/hardware/benchmarking-drives/</id>
+    <content type="html">&lt;p&gt;My computer (running Windows) has multiple drives in it and I was wondering which drive is actually the fastest. Fortunately, there&#39;s an app for that.&lt;/p&gt;
+&lt;h1&gt;Background&lt;/h1&gt;
+&lt;p&gt;In the past, I kept up to date on computer hardware (because, let&#39;s be honest, games), but I&#39;ve been lazy for the past decade or so.&lt;/p&gt;
+&lt;p&gt;I recently inherited some new parts and now I&#39;ve got 3 drives:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Cheapo solid state drive I bought off Newegg a few years back&lt;/li&gt;
+&lt;li&gt;1 TB rotational drive I salvaged from a discarded Western Digital My Book&lt;/li&gt;
+&lt;li&gt;Fancy new non-volatile memory (NVMe) drive&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;My limited understanding tells me that the NVMe drive should be the fastest and that the rotational drive should be incredibly slow in comparison.&lt;/p&gt;
+&lt;h1&gt;Benchmarking with DiskSpd&lt;/h1&gt;
+&lt;p&gt;Enter &lt;a href=&quot;https://github.com/Microsoft/diskspd/wiki&quot;&gt;DiskSpd&lt;/a&gt;, an official disk benchmarking tool from Microsoft. It&#39;s just an executable that you download and run (as administrator).&lt;/p&gt;
+&lt;p&gt;It has &lt;a href=&quot;https://github.com/Microsoft/diskspd/wiki/Command-line-and-parameters&quot;&gt;a lot of command line options&lt;/a&gt;, but &lt;a href=&quot;https://www.windowscentral.com/how-test-hard-drive-performance-diskspd-windows-10&quot;&gt;a random article I found directed me to the most relevant ones&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In my case, I&#39;m just interested in read performance, so I ran the following two commands (the first, &lt;code&gt;-s&lt;/code&gt;, is for sequential reads and the second, &lt;code&gt;-r&lt;/code&gt;, is for random reads):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;diskspd -d10 -c128M -t1 -o1 -Sh -w0 -s d:\tmp.dat
+diskspd -d10 -c128M -t1 -o1 -Sh -w0 -r d:\tmp.dat
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;These tests run:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;For 10 seconds&lt;/li&gt;
+&lt;li&gt;On a 128 MB test file (which DiskSpd leaves behind after it finishes)&lt;/li&gt;
+&lt;li&gt;On a single thread&lt;/li&gt;
+&lt;li&gt;With one operation outstanding&lt;/li&gt;
+&lt;li&gt;Without write caching (probably unnecessary for read tests)&lt;/li&gt;
+&lt;li&gt;0% of operations are writes&lt;/li&gt;
+&lt;li&gt;In sequential or random access, as indicated&lt;/li&gt;
+&lt;li&gt;On a file named d:\tmp.dat (I change the drive letter for each drive, obviously)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Results&lt;/h1&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Drive&lt;/th&gt;
+&lt;th style=&quot;text-align:right&quot;&gt;Sequential (MB/s)&lt;/th&gt;
+&lt;th style=&quot;text-align:right&quot;&gt;Random (MB/s)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;SATA SSD&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;190&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;130&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Rotational&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;55&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NVMe&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;550&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;530&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;As expected, the NVMe drive was the fastest and the rotational drive was the slowest (especially for random reads)... but the actual gaps are enormous!&lt;/p&gt;
+&lt;p&gt;I guess if I ever get to a point where I have a project that is big enough that disks become the bottleneck, I can just throw everything over onto the NVMe and enjoy a ~3x speedup. Good to know!&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title>Test-driving Metalsmith for a simple dev blog</title>
+    <link href="https://log.schemescape.com/posts/static-site-generators/metalsmith/"/>
+    <updated>2021-09-18T00:00:00Z</updated>
+    <id>https://log.schemescape.com/posts/static-site-generators/metalsmith/</id>
+    <content type="html">&lt;p&gt;I&#39;m testing out &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/comparison&quot;&gt;the most promising static site generators&lt;/a&gt; to see which is closest to &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/overview&quot;&gt;my ideal setup&lt;/a&gt;. Next up is &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt;.&lt;/p&gt;
+&lt;h1&gt;Metalsmith&lt;/h1&gt;
+&lt;p&gt;Metalsmith is a Node-based static site generator with a modular architecture that relies on many small plugins (similar in style to &lt;a href=&quot;https://gulpjs.com/&quot;&gt;gulp&lt;/a&gt;). Installation is done via NPM (but note that you&#39;ll likely need to track down and install many plugins).&lt;/p&gt;
+&lt;h2&gt;Architecture&lt;/h2&gt;
+&lt;p&gt;Metalsmith is configured using plain old JavaScript code and building the site is just a matter of running your script, which is especially nice for debugging issues. See their &amp;quot;elevator pitch&amp;quot; on the &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith home page&lt;/a&gt; for an example. It&#39;s refreshingly simple and transparent, but you&#39;ll need to install plugins and write some code to get a test server with live reloading (unlike many other modern static site generators that support this out the box).&lt;/p&gt;
+&lt;p&gt;While vetting and adding plugins is tedious, I like the fact that Metalsmith doesn&#39;t install 500+ packages by default (... like Eleventy).&lt;/p&gt;
+&lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/jstransformers/jstransformer&quot;&gt;jstransformer&lt;/a&gt;, Metalsmith supports a wide variety of template languages. I&#39;m not a fan of &lt;a href=&quot;https://liquidjs.com/&quot;&gt;Liquid&lt;/a&gt; or &lt;a href=&quot;https://mozilla.github.io/nunjucks/&quot;&gt;Nunjucks&lt;/a&gt;, but I&#39;m trying out &lt;a href=&quot;https://handlebarsjs.com/&quot;&gt;Handlebars&lt;/a&gt; because I find it more intuitive and less verbose. So far, it seems easier to maintain than the plain JavaScript templates I used with &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/eleventy-2&quot;&gt;Eleventy&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Themes?&lt;/h2&gt;
+&lt;p&gt;If you don&#39;t want to author your own HTML templates, Metalsmith honestly doesn&#39;t seem like a good choice. It&#39;s possible to construct a Metalsmith &amp;quot;theme&amp;quot; by combining plugins, configuration, and templates, but really what you&#39;re providing is an entire skeleton project (with a &lt;code&gt;package.json&lt;/code&gt; file, build scripts, and so on). This means the result is less portable and more difficult to integrate (unless you&#39;re starting from scratch and don&#39;t have any opinions or constraints).&lt;/p&gt;
+&lt;p&gt;Other static site generators (e.g. Hugo) abstract out the concept of a theme (along with standard metadata that themes can leverage), so you don&#39;t have to mix code and configuration together with HTML templates and CSS styling. This seems better for people who don&#39;t want total control of every character in their final HTML output.&lt;/p&gt;
+&lt;h2&gt;Setup&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://metalsmith.io/#introduction&quot;&gt;Metalsmith&#39;s home page&lt;/a&gt; has a sample script right at the top you can look at, but you&#39;ll end up with a bunch of &lt;code&gt;require(...)&lt;/code&gt;s followed by something like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Metalsmith(__dirname)
+    .metadata({
+        site: {
+            title: &amp;quot;Schemescape&amp;quot;,
+            url: &amp;quot;https://log.schemescape.com/&amp;quot;,
+            description: &amp;quot;Development log of a life-long coder&amp;quot;,
+        },
+    })
+    .source(&amp;quot;./content&amp;quot;)
+    .destination(&amp;quot;./out&amp;quot;)
+    .use(collections({
+        posts: {
+            pattern: &amp;quot;posts/**/*.md&amp;quot;,
+            sortBy: &amp;quot;date&amp;quot;,
+            reverse: true,
+        }
+    }))
+    .use(markdown())
+    .use(layouts({
+        directory: &amp;quot;templates&amp;quot;,
+        default: &amp;quot;default.hbs&amp;quot;,
+    }))
+    ...
+    .build(err =&amp;gt; { if (err) throw err; });
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you just want to build a dev blog like everyone else, it does feel like a lot of boilerplate code, but I like that it forces you to consider and understand each step of the process. Some of the other static site generators were too proactive and did things I didn&#39;t expect or understand (or want). With Metalsmith, it only does exactly what you tell it.&lt;/p&gt;
+&lt;p&gt;But there&#39;s a dark side to Metalsmith&#39;s simple model, and that&#39;s that Metalsmith has to be taught to do even the most basic things. For example, I&#39;m building my site on Windows, which has the unfortunate property of using backslashes for path separators. Metalsmith doesn&#39;t seem to know or care about this detail, so I had to actually write code to switch to web-friendly forward slashes when creating links between files in different directories.&lt;/p&gt;
+&lt;h3&gt;Plugins, plugins, plugins&lt;/h3&gt;
+&lt;p&gt;Metalsmith&#39;s modular architecture with a very simple core library means you need plugins--a lot of plugins. Fortunately, most of the functionality I was interested in already existed in the form of published plugins (some official, some third party). Here are the ones I used:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Plugin (* = official)&lt;/th&gt;
+&lt;th&gt;Purpose&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-markdown&quot;&gt;metalsmith-markdown&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;Translates Markdown to HTML (using &lt;a href=&quot;https://marked.js.org/&quot;&gt;Marked&lt;/a&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-drafts&quot;&gt;metalsmith-drafts&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;Excludes files marked &amp;quot;draft: true&amp;quot; in YAML front matter (yep, you need a plugin for this)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-collections&quot;&gt;metalsmith-collections&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;Groups and sorts files by path (e.g. for listing blog posts)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-permalinks&quot;&gt;metalsmith-permalinks&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;Creates a directory for each HTML file (so links only specify directories and not files)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/metalsmith/metalsmith-layouts&quot;&gt;metalsmith-layouts&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;Adds support for templates using &lt;a href=&quot;https://github.com/jstransformers&quot;&gt;jstransformers&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/jstransformers/jstransformer-handlebars&quot;&gt;jstransformer-handlebars&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;Adds support for &lt;a href=&quot;https://handlebarsjs.com/&quot;&gt;Handlebars&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/TheHydroImpulse/metalsmith-static&quot;&gt;metalsmith-static&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Copies static assets (e.g. CSS and my &amp;quot;CNAME&amp;quot; file)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/radiovisual/metalsmith-rootpath&quot;&gt;metalsmith-rootpath&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Computes the path to root of each page (allowing you to use relative links to CSS, etc.)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/timdp/metalsmith-discover-partials&quot;&gt;metalsmith-discover-partials&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Registers &lt;a href=&quot;https://handlebarsjs.com/guide/partials.html&quot;&gt;Handlebar partials&lt;/a&gt; (for reusing/nesting templates)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/hurrymaplelad/metalsmith-feed&quot;&gt;metalsmith-feed&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Creates an RSS feed from a collection&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/davidxmoody/metalsmith-broken-link-checker&quot;&gt;metalsmith-broken-link-checker&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Validates relative links in the final site&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/chiefy/metalsmith-express&quot;&gt;metalsmith-express&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Runs a test server for local testing (with live reloading)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/FWeinb/metalsmith-watch&quot;&gt;metalsmith-watch&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Triggers rebuilds when files are updated (needed for live reloading)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Note that some of the plugins I installed had dependencies flagged by NPM as having vulnerabilities. I reviewed the notices and none seemed concerning for my use case (e.g. all of the input is code/content I wrote and I don&#39;t plan on targeting myself for a regular expression denial of service attack).&lt;/p&gt;
+&lt;h3&gt;Missing plugins&lt;/h3&gt;
+&lt;p&gt;Despite all these great plugins, I did end up needing to add a little extra functionality. Theoretically, these could be packaged into plugins.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Translate relative &lt;code&gt;*.md&lt;/code&gt; links to point to the corresponding output directories&lt;/li&gt;
+&lt;li&gt;Compute relative link paths, with forward slashes only (Metalsmith only provides the source path by default)&lt;/li&gt;
+&lt;li&gt;A &amp;quot;no-op&amp;quot; plugin for conditional inclusion of plugins without breaking up the giant configuration chain&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Issues&lt;/h2&gt;
+&lt;p&gt;Here are a couple of snags I hit while integrating Metalsmith into my site.&lt;/p&gt;
+&lt;h3&gt;Inflexible directory structure&lt;/h3&gt;
+&lt;p&gt;For how simple Metalsmith is, I figured it would allow for a flexible directory structure, but Metalsmith actually only allows a single source directory by default. This is a problem for my directory structure because I separated all of my content (Markdown files) from files needed to build the web site (scripts, templates, but also CSS). Fortunately, the &lt;a href=&quot;https://github.com/TheHydroImpulse/metalsmith-static&quot;&gt;metalsmith-static&lt;/a&gt; plugin handle this scenario:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const assets = require(&amp;quot;metalsmith-static&amp;quot;);
+
+Metalsmith
+...
+    .use(assets({
+        src: &amp;quot;static&amp;quot;,
+        dest: &amp;quot;.&amp;quot;,
+    }))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;Destination paths aren&#39;t available&lt;/h3&gt;
+&lt;p&gt;Somewhere in Metalsmith&#39;s pipeline, it knows where a file is going to end up, but for some inexplicable reason, this information isn&#39;t available to templates or plugins. In my case, it&#39;s easy to infer the destination (although I had to deal with Windows&#39; annoying path-separating backslashes), so it wasn&#39;t a big deal, but this really isn&#39;t something I should have had to think about.&lt;/p&gt;
+&lt;h3&gt;Plugin ordering&lt;/h3&gt;
+&lt;p&gt;Since plugins enrich and mutate files and metadata along the way, the ordering of plugins matters. One annoying interaction was between the &amp;quot;layouts&amp;quot; (templating) and &amp;quot;feed&amp;quot; (RSS) plugins:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;quot;Feed&amp;quot; then &amp;quot;layouts&amp;quot;: the RSS feed gets wrapped in HTML (&amp;quot;layouts&amp;quot; is run on &lt;em&gt;every&lt;/em&gt; file by default)&lt;/li&gt;
+&lt;li&gt;&amp;quot;Layouts&amp;quot; then &amp;quot;feed&amp;quot;: the RSS content for each post is now a full HTML page, because templates were already applied&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The fix in this case was to run &amp;quot;layouts&amp;quot; after &amp;quot;feed&amp;quot; but tell &amp;quot;layouts&amp;quot; to only process HTML files (and not &amp;quot;feed.xml&amp;quot;).&lt;/p&gt;
+&lt;p&gt;This all makes sense if you think about how Metalsmith plugins receive a set of files, manipulate them, and then pass them on to the next plugin, but other generators do a good job of insulating me from mistakes like this.&lt;/p&gt;
+&lt;h3&gt;Handling internal links&lt;/h3&gt;
+&lt;p&gt;I&#39;m still surprised that using relative links to Markdown files for internal linking between posts isn&#39;t well supported by the static site generators I&#39;ve tried so far (Metalsmith included). I ended up having to extend the Marked renderer to enable internal links:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const marked = require(&amp;quot;marked&amp;quot;);
+...
+// Translate relative Markdown links to point to corresponding HTML output files
+const markdownRenderer = new marked.Renderer();
+const baseLinkRenderer = markdownRenderer.link;
+markdownRenderer.link = function (href, title, text) {
+    return baseLinkRenderer.call(this,
+        href.replace(/^([^/][^:]*)\.md$/, &amp;quot;../$1&amp;quot;),
+        title,
+        text);
+};
+...
+Metalsmith
+...
+    .use(markdown({ renderer: markdownRenderer }))
+    .use(permalinks())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Overall, I really liked that Metalsmith just did exactly what I asked, even if I didn&#39;t initially know what, precisely, I wanted. I was able to find plugins for almost everything to get started (including local testing with live reloading). Importantly, I also feel like I fully understand what Metalsmith is doing, so I don&#39;t have to worry about later discovering that it was processing files multiple times (something that did happen with Eleventy).&lt;/p&gt;
+&lt;p&gt;Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that&#39;s part of my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/overview&quot;&gt;my ideal workflow&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;One comment on Handlebars: this isn&#39;t a review of Handlebars, but I did find Handlebars to surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose.&lt;/p&gt;
+&lt;p&gt;Overall, I&#39;m very happy with Metalsmith, and it&#39;s likely that I will be using it moving forward.&lt;/p&gt;
 </content>
   </entry>
 </feed>
