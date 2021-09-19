@@ -9,10 +9,10 @@ const rootPath = require("metalsmith-rootpath");
 const discoverPartials = require("metalsmith-discover-partials");
 const assets = require("metalsmith-static");
 const drafts = require("metalsmith-drafts");
+const feed = require("metalsmith-feed");
 
 const clean = true;
 
-// TODO: Add RSS feed
 // TODO: Validate internal links
 
 // Translate relative Markdown links to point to corresponding HTML output files
@@ -47,9 +47,11 @@ const addCustomProperties = (files, metalsmith, done) => {
 
 Metalsmith(__dirname)
     .metadata({
-        siteName: "Schemescape",
-        siteUrl: "https://log.schemescape.com/",
-        description: "Development log of a life-long coder",
+        site: {
+            title: "Schemescape",
+            url: "https://log.schemescape.com/",
+            description: "Development log of a life-long coder",
+        },
     })
     .clean(clean)
     .source("./content")
@@ -74,6 +76,11 @@ Metalsmith(__dirname)
     .use(layouts({
         directory: "templates",
         default: "default.hbs",
+    }))
+    .use(feed({
+        collection: "posts",
+        destination: "feed.xml",
+        limit: 5,
     }))
     .build(err => {
         if (err) {

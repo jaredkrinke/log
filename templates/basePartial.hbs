@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>{{siteName}}{{#if title}}: {{title}}{{/if}}</title>
+        <title>{{site.title}}{{#if title}}: {{title}}{{/if}}</title>
         {{#if description}}<meta name="description" content="{{description}}" />{{/if}}
         {{#if keywords}}<meta name="keywords" content="{{#each keywords}}{{this}}{{#unless @last}},{{/unless}}{{/each}}" />{{/if}}
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -12,8 +12,8 @@
     <body>
         <main>
             <header>
-                <h1><a href="{{rootPath}}">Schemescape</a></h1>
-                <p>Development log of a life-long coder</p>
+                <h1><a href="{{rootPath}}">{{site.title}}</a></h1>
+                <p>{{site.description}}</p>
             </header>
             {{> @partial-block }}
         </main>
