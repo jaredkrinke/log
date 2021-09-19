@@ -11,6 +11,8 @@ const assets = require("metalsmith-static");
 const drafts = require("metalsmith-drafts");
 const feed = require("metalsmith-feed");
 const brokenLinkChecker = require("metalsmith-broken-link-checker");
+const metalsmithExpress = require("metalsmith-express");
+const metalsmithWatch = require("metalsmith-watch");
 
 // Command line arguments
 let clean = false;
@@ -95,28 +97,13 @@ let metalsmith = Metalsmith(__dirname)
         directory: "templates",
         default: "default.hbs",
         pattern: "**/*.html",
-    }));
-
-if (serve) {
-    const metalsmithExpress = require("metalsmith-express");
-    const metalsmithWatch = require("metalsmith-watch");
-
-    metalsmith = metalsmith
-        .use(metalsmithExpress({ host: "localhost" }))
-        .use(metalsmithWatch({
-            paths: {
-                '${source}/**/*': true
-              },
+    }))
+    .use(serve ? metalsmithExpress({ host: "localhost" }) : noop)
+    .use(serve
+        ? metalsmithWatch({
+            paths: { '${source}/**/*': true },
             livereload: true,
-        }));
-} else {
-    // Note: Link checker doesn't play nicely with metalsmith-watch
-    metalsmith = metalsmith
-        .use(brokenLinkChecker({ allowRedirects: true }));
-}
-
-metalsmith.build(err => {
-        if (err) {
-            throw err;
-        }
-    });
+        })
+        : noop)
+    .use(serve ? noop : brokenLinkChecker({ allowRedirects: true })) // Link checker doesn't play nicely with metalsmith-watch
+    .build(err => { if (err) throw err; });
