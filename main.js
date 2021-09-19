@@ -81,17 +81,18 @@ let metalsmith = Metalsmith(__dirname)
     }))
     .use(markdown({ renderer: markdownRenderer }))
     .use(permalinks())
+    .use(feed({
+        collection: "posts",
+        destination: "feed.xml",
+        limit: 5,
+    }))
     .use(rootPath())
     .use(addCustomProperties)
     .use(discoverPartials({ directory: "templates" }))
     .use(layouts({
         directory: "templates",
         default: "default.hbs",
-    }))
-    .use(feed({
-        collection: "posts",
-        destination: "feed.xml",
-        limit: 5,
+        pattern: "**/*.html",
     }));
 
 if (serve) {
