@@ -1,6 +1,6 @@
 ---
 title: Test-driving Metalsmith for a simple dev blog
-description: I'm testing out static site generators for my new dev blog. Here's my first experience with Metalsmith.
+description: I'm testing out static site generators for my new dev blog. Here's my experience fully integrating Metalsmith.
 keywords: [metalsmith]
 date: 2021-09-18
 ---
@@ -61,12 +61,12 @@ Metalsmith's modular architecture with a very simple core library means you need
 
 | Plugin (* = official) | Purpose |
 | --- | --- |
-| [metalsmith-markdown](https://github.com/segmentio/metalsmith-markdown) * | Translates Markdown to HTML (using [Marked](https://marked.js.org/)) |
-| [metalsmith-drafts](https://github.com/segmentio/metalsmith-drafts) * | Excludes files marked "draft: true" in YAML front matter (yep, you need a plugin for this) |
-| [metalsmith-collections](https://github.com/segmentio/metalsmith-collections) * | Groups and sorts files by path (e.g. for listing blog posts) |
-| [metalsmith-permalinks](https://github.com/segmentio/metalsmith-permalinks) * | Creates a directory for each HTML file (so links only specify directories and not files) |
-| [metalsmith-layouts](https://github.com/metalsmith/metalsmith-layouts) * | Adds support for templates using [jstransformers](https://github.com/jstransformers) |
-| [jstransformer-handlebars](https://github.com/jstransformers/jstransformer-handlebars) * | Adds support for [Handlebars](https://handlebarsjs.com/) |
+| [metalsmith-markdown](https://github.com/segmentio/metalsmith-markdown)* | Translates Markdown to HTML (using [Marked](https://marked.js.org/)) |
+| [metalsmith-drafts](https://github.com/segmentio/metalsmith-drafts)* | Excludes files marked "draft: true" in YAML front matter (yep, you need a plugin for this) |
+| [metalsmith-collections](https://github.com/segmentio/metalsmith-collections)* | Groups and sorts files by path (e.g. for listing blog posts) |
+| [metalsmith-permalinks](https://github.com/segmentio/metalsmith-permalinks)* | Creates a directory for each HTML file (so links only specify directories and not files) |
+| [metalsmith-layouts](https://github.com/metalsmith/metalsmith-layouts)* | Adds support for templates using [jstransformers](https://github.com/jstransformers) |
+| [jstransformer-handlebars](https://github.com/jstransformers/jstransformer-handlebars)* | Adds support for [Handlebars](https://handlebarsjs.com/) |
 | [metalsmith-static](https://github.com/TheHydroImpulse/metalsmith-static) | Copies static assets (e.g. CSS and my "CNAME" file) |
 | [metalsmith-rootpath](https://github.com/radiovisual/metalsmith-rootpath) | Computes the path to root of each page (allowing you to use relative links to CSS, etc.) |
 | [metalsmith-discover-partials](https://github.com/timdp/metalsmith-discover-partials) | Registers [Handlebar partials](https://handlebarsjs.com/guide/partials.html) (for reusing/nesting templates) |
@@ -144,3 +144,6 @@ Additionally, because Metalsmith is so simple to extend, I can actually foresee 
 One comment on Handlebars: this isn't a review of Handlebars, but I did find Handlebars to surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose.
 
 Overall, I'm very happy with Metalsmith, and it's likely that I will be using it moving forward.
+
+For reference, all of my code is here:
+[https://github.com/jaredkrinke/log/tree/metalsmith](https://github.com/jaredkrinke/log/tree/metalsmith)
