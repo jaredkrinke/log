@@ -12,7 +12,19 @@ const drafts = require("metalsmith-drafts");
 const feed = require("metalsmith-feed");
 const brokenLinkChecker = require("metalsmith-broken-link-checker");
 
-const clean = true;
+// Command line arguments
+let clean = false;
+let serve = false;
+
+for (let i = 2; i < process.argv.length; i++) {
+    const arg = process.argv[i];
+    if (arg === "--clean") {
+        clean = true;
+    } else if (arg === "--serve") {
+        serve = true;
+    }
+}
+
 
 // Translate relative Markdown links to point to corresponding HTML output files
 const markdownRenderer = new marked.Renderer();
@@ -44,7 +56,7 @@ const addCustomProperties = (files, metalsmith, done) => {
     done();
 };
 
-Metalsmith(__dirname)
+let metalsmith = Metalsmith(__dirname)
     .metadata({
         site: {
             title: "Schemescape",
@@ -80,9 +92,27 @@ Metalsmith(__dirname)
         collection: "posts",
         destination: "feed.xml",
         limit: 5,
-    }))
-    .use(brokenLinkChecker({ allowRedirects: true }))
-    .build(err => {
+    }));
+
+if (serve) {
+    const metalsmithExpress = require("metalsmith-express");
+    const metalsmithWatch = require("metalsmith-watch");
+
+    metalsmith = metalsmith
+        .use(metalsmithExpress({ host: "localhost" }))
+        .use(metalsmithWatch({
+            paths: {
+                '${source}/**/*': true
+              },
+            livereload: true,
+        }));
+} else {
+    // Note: Link checker doesn't play nicely with metalsmith-watch
+    metalsmith = metalsmith
+        .use(brokenLinkChecker({ allowRedirects: true }));
+}
+
+metalsmith.build(err => {
         if (err) {
             throw err;
         }
