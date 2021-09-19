@@ -1026,27 +1026,27 @@ diskspd -d10 -c128M -t1 -o1 -Sh -w0 -r d:\tmp.dat
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-markdown&quot;&gt;metalsmith-markdown&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-markdown&quot;&gt;metalsmith-markdown&lt;/a&gt;*&lt;/td&gt;
 &lt;td&gt;Translates Markdown to HTML (using &lt;a href=&quot;https://marked.js.org/&quot;&gt;Marked&lt;/a&gt;)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-drafts&quot;&gt;metalsmith-drafts&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-drafts&quot;&gt;metalsmith-drafts&lt;/a&gt;*&lt;/td&gt;
 &lt;td&gt;Excludes files marked &amp;quot;draft: true&amp;quot; in YAML front matter (yep, you need a plugin for this)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-collections&quot;&gt;metalsmith-collections&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-collections&quot;&gt;metalsmith-collections&lt;/a&gt;*&lt;/td&gt;
 &lt;td&gt;Groups and sorts files by path (e.g. for listing blog posts)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-permalinks&quot;&gt;metalsmith-permalinks&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-permalinks&quot;&gt;metalsmith-permalinks&lt;/a&gt;*&lt;/td&gt;
 &lt;td&gt;Creates a directory for each HTML file (so links only specify directories and not files)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;a href=&quot;https://github.com/metalsmith/metalsmith-layouts&quot;&gt;metalsmith-layouts&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/metalsmith/metalsmith-layouts&quot;&gt;metalsmith-layouts&lt;/a&gt;*&lt;/td&gt;
 &lt;td&gt;Adds support for templates using &lt;a href=&quot;https://github.com/jstransformers&quot;&gt;jstransformers&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;a href=&quot;https://github.com/jstransformers/jstransformer-handlebars&quot;&gt;jstransformer-handlebars&lt;/a&gt; *&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/jstransformers/jstransformer-handlebars&quot;&gt;jstransformer-handlebars&lt;/a&gt;*&lt;/td&gt;
 &lt;td&gt;Adds support for &lt;a href=&quot;https://handlebarsjs.com/&quot;&gt;Handlebars&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -1134,6 +1134,8 @@ Metalsmith
 &lt;p&gt;Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that&#39;s part of my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/overview&quot;&gt;my ideal workflow&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;One comment on Handlebars: this isn&#39;t a review of Handlebars, but I did find Handlebars to surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose.&lt;/p&gt;
 &lt;p&gt;Overall, I&#39;m very happy with Metalsmith, and it&#39;s likely that I will be using it moving forward.&lt;/p&gt;
+&lt;p&gt;For reference, all of my code is here:
+&lt;a href=&quot;https://github.com/jaredkrinke/log/tree/metalsmith&quot;&gt;https://github.com/jaredkrinke/log/tree/metalsmith&lt;/a&gt;&lt;/p&gt;
 </content>
   </entry>
 </feed>
