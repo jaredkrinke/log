@@ -230,6 +230,8 @@ Metalsmith's most interesting aspect for me is that it's modular and pluggable, 
 
 Similar to Gulp, I think I'd probably end up frustrated with an endless graph of plugins that interact in bizarre ways, but I *might* be willing to give Metalsmith a try if I find too many gaps in the other generators I've liked so far.
 
+**Update**: I ended up [fully integrating Metalsmith into my site](metalsmith.md) because I liked the modular architecture and simple plugins met most of my needs.
+
 ## Zola
 Zola is written in Rust, a language which I'm tired of hearing about (similar to Python), but which I actually think I might one day use (unlike Python). A fast, native binary with no dependencies is certainly a strong start for Zola.
 
@@ -249,3 +251,4 @@ My next step is to test out Hugo, Eleventy, Zola, etc. to see which one can meet
 * [Hugo](hugo.md) (didn't like the template language)
 * [Eleventy](eleventy.md) (subsequent update: [I'm using Eleventy now](eleventy-2.md))
 * [Zola](zola.md): (didn't like TOML or the template language)
+* [Metalsmith](metalsmith.md) (I like it a lot and it will probably dethrone Eleventy for my site)
