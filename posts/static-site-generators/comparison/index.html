@@ -15,312 +15,312 @@
                 <h1><a href="../../../">Schemescape</a></h1>
                 <p>Development log of a life-long coder</p>
             </header>
-            <article>
-                <header>
-                    <h1><a href=".">Finding the right static site generator</a></h1>
-                    <p><time datetime="2021-09-12">September 12, 2021</time></p>
-                </header>
-                <p>Having already described <a href="../overview">my ideal static site generator</a>, I&#39;m investigating tools that hopefully meet my needs.</p>
-            <h1 id="static-site-generators-in-2021">Static site generators in 2021</h1>
-            <p>Given that I don&#39;t want to go back to the <a href="../pre-markdown">pre-Markdown stone age</a> of static site generators, what are my options (that don&#39;t involve building my own)?</p>
-            <p>Fortunately, we&#39;re living in the golden age of static site generators. A quick web search turned up the following options (most with splashy landing pages, theme repositories, and even glowing testimonials):</p>
-            <ul>
-            <li><a href="https://jekyllrb.com/">Jekyll</a></li>
-            <li><a href="https://www.gatsbyjs.com/">Gatsby</a></li>
-            <li><a href="https://gohugo.io/">Hugo</a></li>
-            <li><a href="https://nuxtjs.org/">NuxtJS</a></li>
-            <li><a href="https://vuepress.vuejs.org/">VuePress</a></li>
-            <li><a href="https://www.11ty.dev/">Eleventy</a></li>
-            <li><a href="https://hexo.io/">Hexo</a></li>
-            <li><a href="https://pagic.org/">Pagic</a></li>
-            <li><a href="https://docusaurus.io/">Docusaurus</a></li>
-            <li><a href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter">Next.js</a></li>
-            <li><a href="https://blog.getpelican.com/">Pelican</a></li>
-            <li><a href="https://github.com/react-static/react-static">React Static</a></li>
-            <li><a href="https://metalsmith.io/">Metalsmith</a></li>
-            <li><a href="https://www.getzola.org/">Zola</a></li>
-            </ul>
-            <h1 id="preferences">Preferences</h1>
-            <p>I&#39;m fairly picky about the software I use (&quot;opinionated&quot; some might say). If a piece of software (or a web site) gets in my way, I usually just give up and move on because that first irritation is usually just the first drip of an approaching cascade of frustration.</p>
-            <p>For example, am I reading an article on a web site and it asks me to sign up for something? That tab gets closed. If there&#39;s a huge cookie pop-up that doesn&#39;t let me easily opt out? Tab closed. If a piece of new software I&#39;m interested in tells me to install the Java runtime? Forget it! Multi-gigabyte install for a compiler? No thank you. A program takes too long to launch? Uninstall. And so on.</p>
-            <p>With that in mind, what am I looking for in a static site generator&#39;s implementation (having <a href="../overview">covered the design in a previous post</a>)?</p>
-            <ul>
-            <li>Must be free and open source without any obnoxious upselling</li>
-            <li>Must be simple and quick to install (on Windows, since that&#39;s what I&#39;m using)</li>
-            <li>Must not produce complex output (e.g. extraneous JavaScript)</li>
-            <li>Must not be extremely slow (it can be a little slow, since my site is currently small)</li>
-            <li>Must not require a vast graph of plugins to do what I need (unless there are sane defaults)</li>
-            <li>... and probably some other requirements that will become obvious as I investigate further</li>
-            </ul>
-            <h1 id="let-the-battle-royale-begin">Let the battle royale begin!</h1>
-            <p>Below is a table summarizing what I found in my research (note: by &quot;portable&quot; I mean content is just a collection of Markdown files with few constraints/conventions):</p>
-            <table>
-            <thead>
-            <tr>
-            <th>Tool</th>
-            <th align="center">Dependencies</th>
-            <th align="center">Output</th>
-            <th align="center">Configuration</th>
-            <th align="center">Portable</th>
-            <th align="center">Templates</th>
-            </tr>
-            </thead>
-            <tbody><tr>
-            <td>Jekyll</td>
-            <td align="center">Ruby</td>
-            <td align="center">HTML</td>
-            <td align="center">Simple</td>
-            <td align="center">✔</td>
-            <td align="center"><a href="https://liquidjs.com/">Liquid</a></td>
-            </tr>
-            <tr>
-            <td>Gatsby</td>
-            <td align="center">Node</td>
-            <td align="center">SPA</td>
-            <td align="center">Very complicated</td>
-            <td align="center">?</td>
-            <td align="center"><a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
-            </tr>
-            <tr>
-            <td>Hugo</td>
-            <td align="center"><em>None!</em></td>
-            <td align="center">HTML</td>
-            <td align="center">Simple</td>
-            <td align="center">✔</td>
-            <td align="center"><a href="https://gohugo.io/templates/introduction/">Go templates</a></td>
-            </tr>
-            <tr>
-            <td>NuxtJS</td>
-            <td align="center">Node, Vue</td>
-            <td align="center">HTML</td>
-            <td align="center">?</td>
-            <td align="center">✖</td>
-            <td align="center"><a href="https://vuejs.org/">Vue</a>/<a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
-            </tr>
-            <tr>
-            <td>VuePress</td>
-            <td align="center">Node, Vue</td>
-            <td align="center">HTML</td>
-            <td align="center">?</td>
-            <td align="center">✖</td>
-            <td align="center"><a href="https://vuejs.org/">Vue</a>/<a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
-            </tr>
-            <tr>
-            <td>Eleventy</td>
-            <td align="center">Node</td>
-            <td align="center">HTML</td>
-            <td align="center">Simple</td>
-            <td align="center">✔</td>
-            <td align="center"><a href="https://liquidjs.com/">Liquid</a>, <a href="https://www.11ty.dev/docs/languages/">many more</a></td>
-            </tr>
-            <tr>
-            <td>Hexo</td>
-            <td align="center">Node</td>
-            <td align="center">HTML</td>
-            <td align="center">Complicated</td>
-            <td align="center">✖</td>
-            <td align="center"><a href="https://ejs.co/">EJS</a></td>
-            </tr>
-            <tr>
-            <td>Pagic</td>
-            <td align="center">Deno</td>
-            <td align="center">SPA</td>
-            <td align="center">Simple?</td>
-            <td align="center">✔</td>
-            <td align="center"><a href="https://vuejs.org/">Vue</a>/<a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
-            </tr>
-            <tr>
-            <td>Docusaurus</td>
-            <td align="center">Node</td>
-            <td align="center">SPA</td>
-            <td align="center">Complicated?</td>
-            <td align="center">✖</td>
-            <td align="center"><a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
-            </tr>
-            <tr>
-            <td>Next.js</td>
-            <td align="center">Node</td>
-            <td align="center">HTML</td>
-            <td align="center">Complicated</td>
-            <td align="center">?</td>
-            <td align="center"><a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
-            </tr>
-            <tr>
-            <td>Pelican</td>
-            <td align="center">Python</td>
-            <td align="center">HTML</td>
-            <td align="center">Complicated</td>
-            <td align="center">✖</td>
-            <td align="center"><a href="https://jinja.palletsprojects.com/en/3.0.x/">Jinja</a></td>
-            </tr>
-            <tr>
-            <td>React Static</td>
-            <td align="center">Node</td>
-            <td align="center">SPA</td>
-            <td align="center">Complicated</td>
-            <td align="center">✖</td>
-            <td align="center"><a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
-            </tr>
-            <tr>
-            <td>Metalsmith</td>
-            <td align="center">Node</td>
-            <td align="center">HTML</td>
-            <td align="center">Complicated</td>
-            <td align="center">✔</td>
-            <td align="center"><a href="https://handlebarsjs.com/">Handlebars</a>, <a href="https://github.com/jstransformers/jstransformer">many more</a></td>
-            </tr>
-            <tr>
-            <td>Zola</td>
-            <td align="center"><em>None!</em></td>
-            <td align="center">HTML</td>
-            <td align="center">Complicated</td>
-            <td align="center">✔</td>
-            <td align="center"><a href="https://tera.netlify.app/">Tera</a></td>
-            </tr>
-            </tbody></table>
-            <p>Note: all of the generators support Markdown, so I didn&#39;t bother adding a column for Markdown support.</p>
-            <h1 id="summary">Summary</h1>
-            <p>After my first pass through all of these static site generators, my top picks to investigate further are (in no particular order):</p>
-            <ul>
-            <li>Hugo</li>
-            <li>Eleventy</li>
-            <li>Zola</li>
-            <li>and maybe Metalsmith</li>
-            </ul>
-            <h2 id="where-did-the-others-fall-short">Where did the others fall short?</h2>
-            <p>A couple of static site generators required installing development environments for languages I&#39;m not interested in:</p>
-            <ul>
-            <li>Jekyll requires Ruby</li>
-            <li>Pelican requires Python</li>
-            </ul>
-            <p>A surprising number of generators wanted to output an over-engineered (for my purposes) single-page app, chock full of JavaScript:</p>
-            <ul>
-            <li>Gatsby</li>
-            <li>Pagic</li>
-            <li>Docusaurus</li>
-            <li>React Static</li>
-            </ul>
-            <p>Several more generators were built to leverage frameworks that I&#39;m not familiar with (and don&#39;t have any plans to learn in the near future):</p>
-            <ul>
-            <li>NuxtJS</li>
-            <li>VuePress</li>
-            <li>Next.js</li>
-            </ul>
-            <p>The final two generators I&#39;m hesitant to use appeared to be victims of trying to cater to every possible use case, leading to complicated configuration and/or voluminous documentation (or plugin registries):</p>
-            <ul>
-            <li>Hexo</li>
-            <li>and probably Metalsmith</li>
-            </ul>
-            <h1 id="research-notes">Research notes</h1>
-            <p>The previous sections are probably more useful than my &quot;stream of consciousness&quot; notes below, but if you want to see what I was thinking, go ahead and read it!</p>
-            <h2 id="jekyll">Jekyll</h2>
-            <p>First, I&#39;m looking at Jekyll, because it&#39;s <a href="https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll">supported out of the box on GitHub Pages</a>.</p>
-            <p>Naturally, I want to test things locally. Fortunately, <a href="https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll">testing locally is documented on GitHub&#39;s site</a>:</p>
-            <blockquote>
-            <p>We recommend using Bundler to install and run Jekyll. Bundler manages Ruby gem dependencies</p>
-            </blockquote>
-            <p>Wait, I have to manage Ruby gem dependencies? Let&#39;s consult the <a href="https://jekyllrb.com/">Jekyll site</a> to see their &quot;quick-start instructions&quot;:</p>
-            <blockquote>
-            <p>gem install bundler jekyll</p>
-            </blockquote>
-            <p>Alright, it looks like I need a full blown Ruby environment. No thanks!</p>
-            <h2 id="gatsby">Gatsby</h2>
-            <p><a href="https://www.gatsbyjs.com/get-started/">Gatsby requires Node v12+</a> for installation. I realize this isn&#39;t &quot;fair&quot;, but I actually use Node and NPM, so this isn&#39;t a deal-breaker for me.</p>
-            <p>Diving into <a href="https://www.gatsbyjs.com/how-it-works/">how Gatsby works</a>, I see some alarmingly complex boasts:</p>
-            <blockquote>
-            <p>Combine Content &amp; Data from Anywhere</p>
-            </blockquote>
-            <p>This might be overkill. What did they have in mind?</p>
-            <blockquote>
-            <p>Content Management Systems like WordPress, or Ecommerce platforms like Shopify</p>
-            </blockquote>
-            <p>Ok, definitely overkill for my purposes. But maybe I can just ignore those features and be happy?</p>
-            <blockquote>
-            <p>If you build your site with Gatsby, your site will be a lightning-fast progressive web app (PWA)</p>
-            </blockquote>
-            <p>... but I just want plain old HTML.</p>
-            <p>The alarm bells in my head were deafening at this point and things just kept getting worse. Why can&#39;t I copy text from &quot;how it works&quot; page? Why is there a cloud offering for static sites that should just be HTML distributed via a content delivery network?</p>
-            <p>Cross Gatsby off my list!</p>
-            <h2 id="hugo">Hugo</h2>
-            <p>Hugo is written in Go and <a href="https://gohugo.io/getting-started/installing">distributed as a single executable</a>. It doesn&#39;t get any simpler than that! In <a href="https://gohugo.io/getting-started/quick-start/">their quick-start</a>, it looks like posts can be stored in markdown files with front matter for title, date, and draft status:</p>
-            <pre><code>---
-            title: &quot;My First Post&quot;
-            date: 2019-03-26T08:47:11+01:00
-            draft: true
-            ---</code></pre><p>Their example output showed a build complete in 11 milliseconds. These are all very good signs so far.</p>
-            <p>Hugo has emerged as an early front runner.</p>
-            <p><strong>Update</strong>: I documented <a href="../hugo">my initial look at Hugo</a>, but did not want to learn the template language.</p>
-            <h2 id="nuxtjs">NuxtJS</h2>
-            <p>NuxtJS appears to be a static site generator for people who use <a href="https://v3.vuejs.org/">Vue</a>. While Vue is on my list of frameworks to research, I don&#39;t have any experience with it yet. The NuxtJS page mentions server-side rendering which isn&#39;t the approach I&#39;m most interested in these days.</p>
-            <p>I&#39;m going to set aside NuxtJS for now.</p>
-            <h2 id="vuepress">VuePress</h2>
-            <p>Two strikes from the VuePress landing page:</p>
-            <ul>
-            <li>&quot;Enjoy the dev experience of Vue + webpack&quot; (since when have I enjoyed webpack?)</li>
-            <li>&quot;VuePress generates pre-rendered static HTML for each page, and runs as an SPA once a page is loaded.&quot; (I understand the potential performance benefits, but I don&#39;t want JavaScript to be required and I&#39;m sure there is substantial overhead in doing this, even if latency of subsequent page loads is improved)</li>
-            </ul>
-            <p>Moving along.</p>
-            <h2 id="eleventy">Eleventy</h2>
-            <p>Eleventy requires Node and NPM which, while not optimal, is something I will tolerate since I already need those for a couple of projects. I do wonder if this will eventually become a burden in the future when Node inevitably falls out of favor.</p>
-            <p>The first few pages of documentation don&#39;t discuss themes, which I actually find to be semi-encouraging because that implies that I can just hand-author some minimal HTML templates without having to learn some complex theming system.</p>
-            <p><a href="https://www.11ty.dev/docs/quicktips/">Eleventy&#39;s quick tips page</a> boasts some encouraging features:</p>
-            <ul>
-            <li>&quot;Zero Maintenance Tag Pages for your Blog&quot; (nice for categorization)</li>
-            <li>&quot;Adding a 404 Not Found Page to your Static Site&quot; (something I hadn&#39;t considered, but appears to be supported on GitHub Pages)</li>
-            </ul>
-            <p>But there&#39;s also a lot of oddly specific integrations:</p>
-            <ul>
-            <li>&quot;Add Edit on GitHub Links to All Pages&quot; (interesting, I suppose)</li>
-            <li>&quot;Fetch GitHub Stargazers Count (and More) at Build Time&quot; (... why?)</li>
-            <li>&quot;Trigger a Netlify Build Every Day with IFTTT&quot; (ok, now things are getting out of hand)</li>
-            </ul>
-            <p>Eleventy looks interesting; sort of like Jekyll, but using Node/JavaScript. This is my #2 choice at this point.</p>
-            <p><strong>Update</strong>: I took <a href="../eleventy">an initial look at Eleventy</a> and ended up <a href="../eleventy-2">fully integrating it into this site</a>.</p>
-            <h2 id="hexo">Hexo</h2>
-            <p>Hexo also requires Node and NPM (similar to Eleventy). Fine.</p>
-            <p>Hexo appears to use the &quot;million plugins&quot; architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like <a href="https://parceljs.org/">Parcel</a> and not <a href="https://webpack.js.org/">webpack</a>, but I do understand &quot;zero configuration&quot; constraints can come back to bite me later.</p>
-            <p>Anyway, <a href="https://hexo.io/docs/setup">Hexo&#39;s default</a> includes EJS, Stylus, and Markdown. I&#39;m not familiar with the first two. Is this going to be geared toward web developers?</p>
-            <p>Looking into their <a href="https://hexo.io/docs/writing">documentation on writing content</a>, it appears you create a new post using a tool that&#39;s not your favorite text editor:</p>
-            <pre><code>$ hexo new [layout] &lt;title&gt;</code></pre><p>I&#39;m not a fan of using a tool to manage my content because such a tool was inevitably created to generate boilerplate code or follow strict conventions. This leads to hassles when migrating to a new system and prevents you from authoring content when you don&#39;t have your usual development environment handy. I should be able to author content using just a text editor.</p>
-            <p>Hexo looks decent, but certainly not any closer to what I want than Hugo or Eleventy. I&#39;ll come back to Hexo, if needed.</p>
-            <h2 id="pagic">Pagic</h2>
-            <p>Pagic uses Deno which, while intriguing, isn&#39;t something I&#39;ve actually installed or played with yet. Maybe this is the motivation I need to try Deno?</p>
-            <p>But unfortunately, Pagic seems to be pushing a Gatsby-like single-page app build which, as noted previously, is not an approach I&#39;m interested in.</p>
-            <h2 id="docusaurus">Docusaurus</h2>
-            <p>Docusaurus seems to be targeting technical documentation with support for translating into multiple languages. This is admirable, but I&#39;m hesitant to use complex software when my needs are so simple.</p>
-            <h2 id="nextjs">Next.js</h2>
-            <p><a href="https://nextjs.org/">Next.js</a> appears to be a framework for server-side rendering using React concepts (e.g. JSX). Even with a <a href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter">skeleton project</a> available, similar to the Vue-based static site generators I already looked at, I feel like I wouldn&#39;t benefit from this tool because I&#39;m not already using Next.js for other purposes.</p>
-            <h2 id="pelican">Pelican</h2>
-            <p>Pelican requires Python. I know that Python is very popular, but I have never really understood the appeal. Sure, having whitespace for identifying blocks looks nice (and is probably more intuitive for people without a C/C++ background), but Python has made too many mistakes in handling compatibility (e.g. <a href="https://www.python.org/dev/peps/pep-0238/">changing the semantics of the division operator</a>), so I&#39;d prefer to just go on pretending Python never existed.</p>
-            <h2 id="react-static">React Static</h2>
-            <p>Yet another static site generator that adds <em>more</em> complexity:</p>
-            <blockquote>
-            <p>React Static gathers your data, and templates together and intelligently splits them into bite-size static files using webpack and javascript. ... Little did you know that when React Static exported your site, it also generated a tiny, optimized, and code-split version of your original React application for every page of your site! After these pages have loaded, React invisibly mounts this application to the existing HTML on the page and...</p>
-            </blockquote>
-            <p>... and I stopped reading.</p>
-            <h2 id="metalsmith">Metalsmith</h2>
-            <p>Metalsmith is built on Node and requires you to write actual JavaScript code to build your site.</p>
-            <p>While I didn&#39;t really want to have to write code, at least I&#39;d be able to debug the tool when something didn&#39;t behave as expected.</p>
-            <p>Metalsmith&#39;s most interesting aspect for me is that it&#39;s modular and pluggable, similar to <a href="https://gulpjs.com/">Gulp</a>. This could come in handy if I need to extend the existing functionality a little (e.g. to allow embedding of images and diagrams).</p>
-            <p>Similar to Gulp, I think I&#39;d probably end up frustrated with an endless graph of plugins that interact in bizarre ways, but I <em>might</em> be willing to give Metalsmith a try if I find too many gaps in the other generators I&#39;ve liked so far.</p>
-            <p><strong>Update</strong>: I ended up <a href="../metalsmith">fully integrating Metalsmith into my site</a> because I liked the modular architecture and simple plugins met most of my needs.</p>
-            <h2 id="zola">Zola</h2>
-            <p>Zola is written in Rust, a language which I&#39;m tired of hearing about (similar to Python), but which I actually think I might one day use (unlike Python). A fast, native binary with no dependencies is certainly a strong start for Zola.</p>
-            <p>Annoyingly (from a portability aspect), Zola wants me to use <code>+++</code> to demarcate front matter in <a href="https://toml.io/en/">TOML</a> (definitely not my preferred metadata language), but &quot;YAML front matter is also supported to ease porting legacy content&quot; -- hopefully that support doesn&#39;t disappear someday!</p>
-            <p>Zola&#39;s documentation looks pretty good, and they <a href="https://www.getzola.org/documentation/templates/overview/#built-in-templates">explicitly mention support for RSS</a> as a feature.</p>
-            <p>Zola makes it onto my short list.</p>
-            <p><strong>Update</strong>: I described <a href="../zola">my initial experience with Zola</a>. Similar to <a href="../hugo">Hugo</a>, I set it aside because I didn&#39;t want to learn a new language just for creating page templates.</p>
-            <h1 id="next-steps">Next steps</h1>
-            <p>My next step is to test out Hugo, Eleventy, Zola, etc. to see which one can meet my needs with the least amount of hassle. Stay tuned!</p>
-            <p><strong>Update</strong>: I tested several static site generators out. My initial reviews are documented below:</p>
-            <ul>
-            <li><a href="../hugo">Hugo</a> (didn&#39;t like the template language)</li>
-            <li><a href="../eleventy">Eleventy</a> (<a href="../eleventy-2">subsequent update</a>)</li>
-            <li><a href="../zola">Zola</a>: (didn&#39;t like TOML or the template language)</li>
-            <li><a href="../metalsmith">Metalsmith</a> (I like Metalsmith a lot and am currently using it)</li>
-            </ul>
-            
-            </article>
+<article>
+    <header>
+        <h1><a href=".">Finding the right static site generator</a></h1>
+        <p><time datetime="2021-09-12">September 12, 2021</time></p>
+    </header>
+<p>Having already described <a href="../overview">my ideal static site generator</a>, I&#39;m investigating tools that hopefully meet my needs.</p>
+<h1 id="static-site-generators-in-2021">Static site generators in 2021</h1>
+<p>Given that I don&#39;t want to go back to the <a href="../pre-markdown">pre-Markdown stone age</a> of static site generators, what are my options (that don&#39;t involve building my own)?</p>
+<p>Fortunately, we&#39;re living in the golden age of static site generators. A quick web search turned up the following options (most with splashy landing pages, theme repositories, and even glowing testimonials):</p>
+<ul>
+<li><a href="https://jekyllrb.com/">Jekyll</a></li>
+<li><a href="https://www.gatsbyjs.com/">Gatsby</a></li>
+<li><a href="https://gohugo.io/">Hugo</a></li>
+<li><a href="https://nuxtjs.org/">NuxtJS</a></li>
+<li><a href="https://vuepress.vuejs.org/">VuePress</a></li>
+<li><a href="https://www.11ty.dev/">Eleventy</a></li>
+<li><a href="https://hexo.io/">Hexo</a></li>
+<li><a href="https://pagic.org/">Pagic</a></li>
+<li><a href="https://docusaurus.io/">Docusaurus</a></li>
+<li><a href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter">Next.js</a></li>
+<li><a href="https://blog.getpelican.com/">Pelican</a></li>
+<li><a href="https://github.com/react-static/react-static">React Static</a></li>
+<li><a href="https://metalsmith.io/">Metalsmith</a></li>
+<li><a href="https://www.getzola.org/">Zola</a></li>
+</ul>
+<h1 id="preferences">Preferences</h1>
+<p>I&#39;m fairly picky about the software I use (&quot;opinionated&quot; some might say). If a piece of software (or a web site) gets in my way, I usually just give up and move on because that first irritation is usually just the first drip of an approaching cascade of frustration.</p>
+<p>For example, am I reading an article on a web site and it asks me to sign up for something? That tab gets closed. If there&#39;s a huge cookie pop-up that doesn&#39;t let me easily opt out? Tab closed. If a piece of new software I&#39;m interested in tells me to install the Java runtime? Forget it! Multi-gigabyte install for a compiler? No thank you. A program takes too long to launch? Uninstall. And so on.</p>
+<p>With that in mind, what am I looking for in a static site generator&#39;s implementation (having <a href="../overview">covered the design in a previous post</a>)?</p>
+<ul>
+<li>Must be free and open source without any obnoxious upselling</li>
+<li>Must be simple and quick to install (on Windows, since that&#39;s what I&#39;m using)</li>
+<li>Must not produce complex output (e.g. extraneous JavaScript)</li>
+<li>Must not be extremely slow (it can be a little slow, since my site is currently small)</li>
+<li>Must not require a vast graph of plugins to do what I need (unless there are sane defaults)</li>
+<li>... and probably some other requirements that will become obvious as I investigate further</li>
+</ul>
+<h1 id="let-the-battle-royale-begin">Let the battle royale begin!</h1>
+<p>Below is a table summarizing what I found in my research (note: by &quot;portable&quot; I mean content is just a collection of Markdown files with few constraints/conventions):</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th align="center">Dependencies</th>
+<th align="center">Output</th>
+<th align="center">Configuration</th>
+<th align="center">Portable</th>
+<th align="center">Templates</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Jekyll</td>
+<td align="center">Ruby</td>
+<td align="center">HTML</td>
+<td align="center">Simple</td>
+<td align="center">✔</td>
+<td align="center"><a href="https://liquidjs.com/">Liquid</a></td>
+</tr>
+<tr>
+<td>Gatsby</td>
+<td align="center">Node</td>
+<td align="center">SPA</td>
+<td align="center">Very complicated</td>
+<td align="center">?</td>
+<td align="center"><a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
+</tr>
+<tr>
+<td>Hugo</td>
+<td align="center"><em>None!</em></td>
+<td align="center">HTML</td>
+<td align="center">Simple</td>
+<td align="center">✔</td>
+<td align="center"><a href="https://gohugo.io/templates/introduction/">Go templates</a></td>
+</tr>
+<tr>
+<td>NuxtJS</td>
+<td align="center">Node, Vue</td>
+<td align="center">HTML</td>
+<td align="center">?</td>
+<td align="center">✖</td>
+<td align="center"><a href="https://vuejs.org/">Vue</a>/<a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
+</tr>
+<tr>
+<td>VuePress</td>
+<td align="center">Node, Vue</td>
+<td align="center">HTML</td>
+<td align="center">?</td>
+<td align="center">✖</td>
+<td align="center"><a href="https://vuejs.org/">Vue</a>/<a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
+</tr>
+<tr>
+<td>Eleventy</td>
+<td align="center">Node</td>
+<td align="center">HTML</td>
+<td align="center">Simple</td>
+<td align="center">✔</td>
+<td align="center"><a href="https://liquidjs.com/">Liquid</a>, <a href="https://www.11ty.dev/docs/languages/">many more</a></td>
+</tr>
+<tr>
+<td>Hexo</td>
+<td align="center">Node</td>
+<td align="center">HTML</td>
+<td align="center">Complicated</td>
+<td align="center">✖</td>
+<td align="center"><a href="https://ejs.co/">EJS</a></td>
+</tr>
+<tr>
+<td>Pagic</td>
+<td align="center">Deno</td>
+<td align="center">SPA</td>
+<td align="center">Simple?</td>
+<td align="center">✔</td>
+<td align="center"><a href="https://vuejs.org/">Vue</a>/<a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
+</tr>
+<tr>
+<td>Docusaurus</td>
+<td align="center">Node</td>
+<td align="center">SPA</td>
+<td align="center">Complicated?</td>
+<td align="center">✖</td>
+<td align="center"><a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
+</tr>
+<tr>
+<td>Next.js</td>
+<td align="center">Node</td>
+<td align="center">HTML</td>
+<td align="center">Complicated</td>
+<td align="center">?</td>
+<td align="center"><a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
+</tr>
+<tr>
+<td>Pelican</td>
+<td align="center">Python</td>
+<td align="center">HTML</td>
+<td align="center">Complicated</td>
+<td align="center">✖</td>
+<td align="center"><a href="https://jinja.palletsprojects.com/en/3.0.x/">Jinja</a></td>
+</tr>
+<tr>
+<td>React Static</td>
+<td align="center">Node</td>
+<td align="center">SPA</td>
+<td align="center">Complicated</td>
+<td align="center">✖</td>
+<td align="center"><a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a></td>
+</tr>
+<tr>
+<td>Metalsmith</td>
+<td align="center">Node</td>
+<td align="center">HTML</td>
+<td align="center">Complicated</td>
+<td align="center">✔</td>
+<td align="center"><a href="https://handlebarsjs.com/">Handlebars</a>, <a href="https://github.com/jstransformers/jstransformer">many more</a></td>
+</tr>
+<tr>
+<td>Zola</td>
+<td align="center"><em>None!</em></td>
+<td align="center">HTML</td>
+<td align="center">Complicated</td>
+<td align="center">✔</td>
+<td align="center"><a href="https://tera.netlify.app/">Tera</a></td>
+</tr>
+</tbody></table>
+<p>Note: all of the generators support Markdown, so I didn&#39;t bother adding a column for Markdown support.</p>
+<h1 id="summary">Summary</h1>
+<p>After my first pass through all of these static site generators, my top picks to investigate further are (in no particular order):</p>
+<ul>
+<li>Hugo</li>
+<li>Eleventy</li>
+<li>Zola</li>
+<li>and maybe Metalsmith</li>
+</ul>
+<h2 id="where-did-the-others-fall-short">Where did the others fall short?</h2>
+<p>A couple of static site generators required installing development environments for languages I&#39;m not interested in:</p>
+<ul>
+<li>Jekyll requires Ruby</li>
+<li>Pelican requires Python</li>
+</ul>
+<p>A surprising number of generators wanted to output an over-engineered (for my purposes) single-page app, chock full of JavaScript:</p>
+<ul>
+<li>Gatsby</li>
+<li>Pagic</li>
+<li>Docusaurus</li>
+<li>React Static</li>
+</ul>
+<p>Several more generators were built to leverage frameworks that I&#39;m not familiar with (and don&#39;t have any plans to learn in the near future):</p>
+<ul>
+<li>NuxtJS</li>
+<li>VuePress</li>
+<li>Next.js</li>
+</ul>
+<p>The final two generators I&#39;m hesitant to use appeared to be victims of trying to cater to every possible use case, leading to complicated configuration and/or voluminous documentation (or plugin registries):</p>
+<ul>
+<li>Hexo</li>
+<li>and probably Metalsmith</li>
+</ul>
+<h1 id="research-notes">Research notes</h1>
+<p>The previous sections are probably more useful than my &quot;stream of consciousness&quot; notes below, but if you want to see what I was thinking, go ahead and read it!</p>
+<h2 id="jekyll">Jekyll</h2>
+<p>First, I&#39;m looking at Jekyll, because it&#39;s <a href="https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll">supported out of the box on GitHub Pages</a>.</p>
+<p>Naturally, I want to test things locally. Fortunately, <a href="https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll">testing locally is documented on GitHub&#39;s site</a>:</p>
+<blockquote>
+<p>We recommend using Bundler to install and run Jekyll. Bundler manages Ruby gem dependencies</p>
+</blockquote>
+<p>Wait, I have to manage Ruby gem dependencies? Let&#39;s consult the <a href="https://jekyllrb.com/">Jekyll site</a> to see their &quot;quick-start instructions&quot;:</p>
+<blockquote>
+<p>gem install bundler jekyll</p>
+</blockquote>
+<p>Alright, it looks like I need a full blown Ruby environment. No thanks!</p>
+<h2 id="gatsby">Gatsby</h2>
+<p><a href="https://www.gatsbyjs.com/get-started/">Gatsby requires Node v12+</a> for installation. I realize this isn&#39;t &quot;fair&quot;, but I actually use Node and NPM, so this isn&#39;t a deal-breaker for me.</p>
+<p>Diving into <a href="https://www.gatsbyjs.com/how-it-works/">how Gatsby works</a>, I see some alarmingly complex boasts:</p>
+<blockquote>
+<p>Combine Content &amp; Data from Anywhere</p>
+</blockquote>
+<p>This might be overkill. What did they have in mind?</p>
+<blockquote>
+<p>Content Management Systems like WordPress, or Ecommerce platforms like Shopify</p>
+</blockquote>
+<p>Ok, definitely overkill for my purposes. But maybe I can just ignore those features and be happy?</p>
+<blockquote>
+<p>If you build your site with Gatsby, your site will be a lightning-fast progressive web app (PWA)</p>
+</blockquote>
+<p>... but I just want plain old HTML.</p>
+<p>The alarm bells in my head were deafening at this point and things just kept getting worse. Why can&#39;t I copy text from &quot;how it works&quot; page? Why is there a cloud offering for static sites that should just be HTML distributed via a content delivery network?</p>
+<p>Cross Gatsby off my list!</p>
+<h2 id="hugo">Hugo</h2>
+<p>Hugo is written in Go and <a href="https://gohugo.io/getting-started/installing">distributed as a single executable</a>. It doesn&#39;t get any simpler than that! In <a href="https://gohugo.io/getting-started/quick-start/">their quick-start</a>, it looks like posts can be stored in markdown files with front matter for title, date, and draft status:</p>
+<pre><code>---
+title: &quot;My First Post&quot;
+date: 2019-03-26T08:47:11+01:00
+draft: true
+---</code></pre><p>Their example output showed a build complete in 11 milliseconds. These are all very good signs so far.</p>
+<p>Hugo has emerged as an early front runner.</p>
+<p><strong>Update</strong>: I documented <a href="../hugo">my initial look at Hugo</a>, but did not want to learn the template language.</p>
+<h2 id="nuxtjs">NuxtJS</h2>
+<p>NuxtJS appears to be a static site generator for people who use <a href="https://v3.vuejs.org/">Vue</a>. While Vue is on my list of frameworks to research, I don&#39;t have any experience with it yet. The NuxtJS page mentions server-side rendering which isn&#39;t the approach I&#39;m most interested in these days.</p>
+<p>I&#39;m going to set aside NuxtJS for now.</p>
+<h2 id="vuepress">VuePress</h2>
+<p>Two strikes from the VuePress landing page:</p>
+<ul>
+<li>&quot;Enjoy the dev experience of Vue + webpack&quot; (since when have I enjoyed webpack?)</li>
+<li>&quot;VuePress generates pre-rendered static HTML for each page, and runs as an SPA once a page is loaded.&quot; (I understand the potential performance benefits, but I don&#39;t want JavaScript to be required and I&#39;m sure there is substantial overhead in doing this, even if latency of subsequent page loads is improved)</li>
+</ul>
+<p>Moving along.</p>
+<h2 id="eleventy">Eleventy</h2>
+<p>Eleventy requires Node and NPM which, while not optimal, is something I will tolerate since I already need those for a couple of projects. I do wonder if this will eventually become a burden in the future when Node inevitably falls out of favor.</p>
+<p>The first few pages of documentation don&#39;t discuss themes, which I actually find to be semi-encouraging because that implies that I can just hand-author some minimal HTML templates without having to learn some complex theming system.</p>
+<p><a href="https://www.11ty.dev/docs/quicktips/">Eleventy&#39;s quick tips page</a> boasts some encouraging features:</p>
+<ul>
+<li>&quot;Zero Maintenance Tag Pages for your Blog&quot; (nice for categorization)</li>
+<li>&quot;Adding a 404 Not Found Page to your Static Site&quot; (something I hadn&#39;t considered, but appears to be supported on GitHub Pages)</li>
+</ul>
+<p>But there&#39;s also a lot of oddly specific integrations:</p>
+<ul>
+<li>&quot;Add Edit on GitHub Links to All Pages&quot; (interesting, I suppose)</li>
+<li>&quot;Fetch GitHub Stargazers Count (and More) at Build Time&quot; (... why?)</li>
+<li>&quot;Trigger a Netlify Build Every Day with IFTTT&quot; (ok, now things are getting out of hand)</li>
+</ul>
+<p>Eleventy looks interesting; sort of like Jekyll, but using Node/JavaScript. This is my #2 choice at this point.</p>
+<p><strong>Update</strong>: I took <a href="../eleventy">an initial look at Eleventy</a> and ended up <a href="../eleventy-2">fully integrating it into this site</a>.</p>
+<h2 id="hexo">Hexo</h2>
+<p>Hexo also requires Node and NPM (similar to Eleventy). Fine.</p>
+<p>Hexo appears to use the &quot;million plugins&quot; architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like <a href="https://parceljs.org/">Parcel</a> and not <a href="https://webpack.js.org/">webpack</a>, but I do understand &quot;zero configuration&quot; constraints can come back to bite me later.</p>
+<p>Anyway, <a href="https://hexo.io/docs/setup">Hexo&#39;s default</a> includes EJS, Stylus, and Markdown. I&#39;m not familiar with the first two. Is this going to be geared toward web developers?</p>
+<p>Looking into their <a href="https://hexo.io/docs/writing">documentation on writing content</a>, it appears you create a new post using a tool that&#39;s not your favorite text editor:</p>
+<pre><code>$ hexo new [layout] &lt;title&gt;</code></pre><p>I&#39;m not a fan of using a tool to manage my content because such a tool was inevitably created to generate boilerplate code or follow strict conventions. This leads to hassles when migrating to a new system and prevents you from authoring content when you don&#39;t have your usual development environment handy. I should be able to author content using just a text editor.</p>
+<p>Hexo looks decent, but certainly not any closer to what I want than Hugo or Eleventy. I&#39;ll come back to Hexo, if needed.</p>
+<h2 id="pagic">Pagic</h2>
+<p>Pagic uses Deno which, while intriguing, isn&#39;t something I&#39;ve actually installed or played with yet. Maybe this is the motivation I need to try Deno?</p>
+<p>But unfortunately, Pagic seems to be pushing a Gatsby-like single-page app build which, as noted previously, is not an approach I&#39;m interested in.</p>
+<h2 id="docusaurus">Docusaurus</h2>
+<p>Docusaurus seems to be targeting technical documentation with support for translating into multiple languages. This is admirable, but I&#39;m hesitant to use complex software when my needs are so simple.</p>
+<h2 id="nextjs">Next.js</h2>
+<p><a href="https://nextjs.org/">Next.js</a> appears to be a framework for server-side rendering using React concepts (e.g. JSX). Even with a <a href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter">skeleton project</a> available, similar to the Vue-based static site generators I already looked at, I feel like I wouldn&#39;t benefit from this tool because I&#39;m not already using Next.js for other purposes.</p>
+<h2 id="pelican">Pelican</h2>
+<p>Pelican requires Python. I know that Python is very popular, but I have never really understood the appeal. Sure, having whitespace for identifying blocks looks nice (and is probably more intuitive for people without a C/C++ background), but Python has made too many mistakes in handling compatibility (e.g. <a href="https://www.python.org/dev/peps/pep-0238/">changing the semantics of the division operator</a>), so I&#39;d prefer to just go on pretending Python never existed.</p>
+<h2 id="react-static">React Static</h2>
+<p>Yet another static site generator that adds <em>more</em> complexity:</p>
+<blockquote>
+<p>React Static gathers your data, and templates together and intelligently splits them into bite-size static files using webpack and javascript. ... Little did you know that when React Static exported your site, it also generated a tiny, optimized, and code-split version of your original React application for every page of your site! After these pages have loaded, React invisibly mounts this application to the existing HTML on the page and...</p>
+</blockquote>
+<p>... and I stopped reading.</p>
+<h2 id="metalsmith">Metalsmith</h2>
+<p>Metalsmith is built on Node and requires you to write actual JavaScript code to build your site.</p>
+<p>While I didn&#39;t really want to have to write code, at least I&#39;d be able to debug the tool when something didn&#39;t behave as expected.</p>
+<p>Metalsmith&#39;s most interesting aspect for me is that it&#39;s modular and pluggable, similar to <a href="https://gulpjs.com/">Gulp</a>. This could come in handy if I need to extend the existing functionality a little (e.g. to allow embedding of images and diagrams).</p>
+<p>Similar to Gulp, I think I&#39;d probably end up frustrated with an endless graph of plugins that interact in bizarre ways, but I <em>might</em> be willing to give Metalsmith a try if I find too many gaps in the other generators I&#39;ve liked so far.</p>
+<p><strong>Update</strong>: I ended up <a href="../metalsmith">fully integrating Metalsmith into my site</a> because I liked the modular architecture and simple plugins met most of my needs.</p>
+<h2 id="zola">Zola</h2>
+<p>Zola is written in Rust, a language which I&#39;m tired of hearing about (similar to Python), but which I actually think I might one day use (unlike Python). A fast, native binary with no dependencies is certainly a strong start for Zola.</p>
+<p>Annoyingly (from a portability aspect), Zola wants me to use <code>+++</code> to demarcate front matter in <a href="https://toml.io/en/">TOML</a> (definitely not my preferred metadata language), but &quot;YAML front matter is also supported to ease porting legacy content&quot; -- hopefully that support doesn&#39;t disappear someday!</p>
+<p>Zola&#39;s documentation looks pretty good, and they <a href="https://www.getzola.org/documentation/templates/overview/#built-in-templates">explicitly mention support for RSS</a> as a feature.</p>
+<p>Zola makes it onto my short list.</p>
+<p><strong>Update</strong>: I described <a href="../zola">my initial experience with Zola</a>. Similar to <a href="../hugo">Hugo</a>, I set it aside because I didn&#39;t want to learn a new language just for creating page templates.</p>
+<h1 id="next-steps">Next steps</h1>
+<p>My next step is to test out Hugo, Eleventy, Zola, etc. to see which one can meet my needs with the least amount of hassle. Stay tuned!</p>
+<p><strong>Update</strong>: I tested several static site generators out. My initial reviews are documented below:</p>
+<ul>
+<li><a href="../hugo">Hugo</a> (didn&#39;t like the template language)</li>
+<li><a href="../eleventy">Eleventy</a> (<a href="../eleventy-2">subsequent update</a>)</li>
+<li><a href="../zola">Zola</a>: (didn&#39;t like TOML or the template language)</li>
+<li><a href="../metalsmith">Metalsmith</a> (I like Metalsmith a lot and am currently using it)</li>
+</ul>
+
+</article>
         </main>
     </body>
 </html>
