@@ -36,7 +36,7 @@ const markdownRenderer = new marked.Renderer();
 const baseLinkRenderer = markdownRenderer.link;
 markdownRenderer.link = function (href, title, text) {
     return baseLinkRenderer.call(this,
-        href.replace(/^([^/][^:]*)\.md$/, "../$1"),
+        href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, "../$1/$2"),
         title,
         text);
 };
@@ -106,5 +106,8 @@ let metalsmith = Metalsmith(__dirname)
             livereload: true,
         })
         : noop)
-    .use(serve ? noop : brokenLinkChecker({ allowRedirects: true })) // Link checker doesn't play nicely with metalsmith-watch
+    .use(serve ? noop : brokenLinkChecker({ // Link checker doesn't play nicely with metalsmith-watch
+        allowRedirects: true,
+        checkAnchors: true,
+    }))
     .build(err => { if (err) throw err; });
