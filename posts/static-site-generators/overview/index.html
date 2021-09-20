@@ -3,11 +3,11 @@
     <head>
         <meta charset="utf-8" />
         <title>Schemescape: My ideal static site generator</title>
-        <meta name="description" content="A static site generator is essential for hosting a fast and free dev blog. Here&#39;s my theoretical ideal setup." />
+        <meta name="description" content="A static site generator is essential for hosting a fast and free dev blog. Here&#x27;s my theoretical ideal setup." />
         <meta name="keywords" content="blog" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="stylesheet" href="../../../css/style.css" />
-        <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" />
+        <link rel="alternate" type="application/rss+xml" href="../../../feed.xml" />
     </head>
     <body>
         <main>
@@ -15,95 +15,86 @@
                 <h1><a href="../../../">Schemescape</a></h1>
                 <p>Development log of a life-long coder</p>
             </header>
+            <article>
+                <header>
+                    <h1><a href=".">My ideal static site generator</a></h1>
+                    <p><time datetime="2021-09-11">September 10, 2021</time></p>
+                </header>
+                <p>In the interest of documenting some of my programming misadventures, I&#39;m creating a developer blog. But first, I need a static site generator.</p>
+            <h1 id="motivation">Motivation</h1>
+            <p>I&#39;m creating a developer blog for a couple of reasons:</p>
+            <ul>
+            <li>Writing helps me organize my thoughts (into bulleted lists)</li>
+            <li>Documenting my progress means I don&#39;t have to rely solely on my (unreliable) memory</li>
+            <li>Someone, somewhere with a similar problem <em>might</em> benefit from me writing down my research and solutions</li>
+            </ul>
+            <p>Now, why do I need a static site generator? Two simple reasons:</p>
+            <ul>
+            <li>Hosting static content is practically free these days and plain old HTML is supported on basically every device</li>
+            <li>Writing HTML by hand becomes painful as soon as you add a second page (<del>something I am hoping to eventually do</del> done!)</li>
+            </ul>
+            <h1 id="the-ideal-setup">The ideal setup</h1>
+            <h2 id="input">Input</h2>
+            <p>Ideally, I&#39;d like to organize content as follows:</p>
+            <ul>
+            <li>Content is written using <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> (because it&#39;s succinct and ubiquitous)</li>
+            <li>Each post is stored in a separate, self-contained file (for easy management)<ul>
+            <li>One exception: posts should be able to easily reference each other</li>
+            <li>Diagrams and images can be directly embedded into posts</li>
+            </ul>
+            </li>
+            <li>File system metadata (e.g. topic folder) is used, where useful</li>
+            </ul>
+            <p>My directory structure is going to look like this:</p>
+            <ul>
+            <li><code>content/</code>: Root directory of all blog content<ul>
+            <li><code>posts/</code>: Root of all blog posts<ul>
+            <li><code>topic1/</code>: Blog posts organized by topics<ul>
+            <li><code>post1.md</code>: Blog post 1</li>
+            <li><code>post2.md</code></li>
+            <li>etc.</li>
+            </ul>
+            </li>
+            <li><code>topic2/</code></li>
+            <li>etc.</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li><code>static/</code>: Static files (namely CSS)</li>
+            <li><code>templates/</code>: Template/layout files</li>
+            </ul>
+            <p>Blog posts will use YAML front matter (draft and keywords are optional, but date is not since Git doesn&#39;t preserve file system dates):</p>
+            <pre><code>---
+            title: Title of blog post
+            description: Plain text description of the post (for HTML header, blurbs, etc.)
+            keywords: [search,keywords]
+            date: Publish date
+            draft: true
+            ---</code></pre><p>Note: I&#39;d like to be able to automatically insert keywords into every post within a given topic.</p>
+            <h2 id="output">Output</h2>
+            <p>The output should be as simple as possible:</p>
+            <ul>
+            <li>Each post should get its own HTML file (and, optimistically, <a href="https://en.wikipedia.org/wiki/Permalink">permalink</a>)<ul>
+            <li>Pages should use plain old HTML, using CSS for styling (no JavaScript required)</li>
+            <li>References to other posts should use relative links (so that links don&#39;t break if the site is moved or viewed directly from the file system)</li>
+            <li>References should be validated at build time</li>
+            <li>Embedded resources should be separated out into unique files (I guess you could call this &quot;no images required&quot;)<ul>
+            <li>Diagrams should use the SVG format (to support high resolution displays)</li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            <li>Index/archive pages should be generated by aggregating content from multiple posts</li>
+            <li>An RSS news feed should be generated</li>
+            <li>Non-markdown files (e.g. CSS files, other assets) should pass through, unmodified</li>
+            <li>Ideally, I&#39;d like to be able to load the HTML files directly from the file system and have all styling and links work normally (no web server required for testing)</li>
+            </ul>
+            <h2 id="hosting">Hosting</h2>
+            <p>I&#39;ll store the content in a <a href="https://git-scm.com/">Git</a> repository on <a href="https://github.com/">GitHub</a> for archival purposes.</p>
+            <p>The pages will be served using <a href="https://pages.github.com/">GitHub Pages</a> (because it&#39;s fast and free, at least for my purposes).</p>
             
-<article>
-    <header>
-        <h1><a href="./">My ideal static site generator</a></h1>
-        <p><time datetime="2021-09-11">September 10, 2021</time></p>
-    </header>
-    <p>In the interest of documenting some of my programming misadventures, I'm creating a developer blog. But first, I need a static site generator.</p>
-<h1>Motivation</h1>
-<p>I'm creating a developer blog for a couple of reasons:</p>
-<ul>
-<li>Writing helps me organize my thoughts (into bulleted lists)</li>
-<li>Documenting my progress means I don't have to rely solely on my (unreliable) memory</li>
-<li>Someone, somewhere with a similar problem <em>might</em> benefit from me writing down my research and solutions</li>
-</ul>
-<p>Now, why do I need a static site generator? Two simple reasons:</p>
-<ul>
-<li>Hosting static content is practically free these days and plain old HTML is supported on basically every device</li>
-<li>Writing HTML by hand becomes painful as soon as you add a second page (<s>something I am hoping to eventually do</s> done!)</li>
-</ul>
-<h1>The ideal setup</h1>
-<h2>Input</h2>
-<p>Ideally, I'd like to organize content as follows:</p>
-<ul>
-<li>Content is written using <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> (because it's succinct and ubiquitous)</li>
-<li>Each post is stored in a separate, self-contained file (for easy management)
-<ul>
-<li>One exception: posts should be able to easily reference each other</li>
-<li>Diagrams and images can be directly embedded into posts</li>
-</ul>
-</li>
-<li>File system metadata (e.g. topic folder) is used, where useful</li>
-</ul>
-<p>My directory structure is going to look like this:</p>
-<ul>
-<li><code>content/</code>: Root directory of all blog content
-<ul>
-<li><code>posts/</code>: Root of all blog posts
-<ul>
-<li><code>topic1/</code>: Blog posts organized by topics
-<ul>
-<li><code>post1.md</code>: Blog post 1</li>
-<li><code>post2.md</code></li>
-<li>etc.</li>
-</ul>
-</li>
-<li><code>topic2/</code></li>
-<li>etc.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><code>static/</code>: Static files (namely CSS)</li>
-<li><code>templates/</code>: Template/layout files</li>
-</ul>
-<p>Blog posts will use YAML front matter (draft and keywords are optional, but date is not since Git doesn't preserve file system dates):</p>
-<pre><code>---
-title: Title of blog post
-description: Plain text description of the post (for HTML header, blurbs, etc.)
-keywords: [search,keywords]
-date: Publish date
-draft: true
----
-</code></pre>
-<p>Note: I'd like to be able to automatically insert keywords into every post within a given topic.</p>
-<h2>Output</h2>
-<p>The output should be as simple as possible:</p>
-<ul>
-<li>Each post should get its own HTML file (and, optimistically, <a href="https://en.wikipedia.org/wiki/Permalink">permalink</a>)
-<ul>
-<li>Pages should use plain old HTML, using CSS for styling (no JavaScript required)</li>
-<li>References to other posts should use relative links (so that links don't break if the site is moved or viewed directly from the file system)</li>
-<li>References should be validated at build time</li>
-<li>Embedded resources should be separated out into unique files (I guess you could call this &quot;no images required&quot;)
-<ul>
-<li>Diagrams should use the SVG format (to support high resolution displays)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Index/archive pages should be generated by aggregating content from multiple posts</li>
-<li>An RSS news feed should be generated</li>
-<li>Non-markdown files (e.g. CSS files, other assets) should pass through, unmodified</li>
-<li>Ideally, I'd like to be able to load the HTML files directly from the file system and have all styling and links work normally (no web server required for testing)</li>
-</ul>
-<h2>Hosting</h2>
-<p>I'll store the content in a <a href="https://git-scm.com/">Git</a> repository on <a href="https://github.com/">GitHub</a> for archival purposes.</p>
-<p>The pages will be served using <a href="https://pages.github.com/">GitHub Pages</a> (because it's fast and free, at least for my purposes).</p>
-
-</article>
+            </article>
         </main>
     </body>
 </html>
