@@ -20,9 +20,9 @@
         <h1><a href=".">Test-driving Eleventy for a simple dev blog, part 2</a></h1>
         <p><time datetime="2021-09-16">September 16, 2021</time></p>
     </header>
-<p>I&#39;m testing out <a href="../comparison">the most promising static site generators</a> for my blog. In <a href="../eleventy">part 1</a>, I recorded my initial impression of Eleventy; in this post, I describe my experience fully integrating Eleventy into my dev blog (<a href="https://github.com/jaredkrinke/log/tree/eleventy">final code here</a>).</p>
+<p>I&#39;m testing out <a href="../comparison/">the most promising static site generators</a> for my blog. In <a href="../eleventy/">part 1</a>, I recorded my initial impression of Eleventy; in this post, I describe my experience fully integrating Eleventy into my dev blog (<a href="https://github.com/jaredkrinke/log/tree/eleventy">final code here</a>).</p>
 <h1 id="background">Background</h1>
-<p>I <a href="../overview">already covered my ideal dev blog setup in detail</a>, but here&#39;s the gist of it:</p>
+<p>I <a href="../overview/">already covered my ideal dev blog setup in detail</a>, but here&#39;s the gist of it:</p>
 <ul>
 <li>Content is written using <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> (because it&#39;s succinct and ubiquitous)</li>
 <li>Each post is a separate file, with YAML front matter for title, date, description, keywords</li>
@@ -149,7 +149,7 @@ module.exports = data =&gt; renderPage(data,
 layout: index.11ty.js
 ---</code></pre><p>Eleventy will now build my <code>index.html</code> file at the root of the output directory.</p>
 <h1 id="enabling-links-between-pages">Enabling links between pages</h1>
-<p>I use relative links between my Markdown files for internal links. For example, the post you&#39;re reading is <a href="../eleventy-2"><code>eleventy-2.md</code></a> and my previous post on Eleventy is <a href="../eleventy"><code>eleventy.md</code></a>. Here&#39;s how I made that second link:</p>
+<p>I use relative links between my Markdown files for internal links. For example, the post you&#39;re reading is <a href="../eleventy-2/"><code>eleventy-2.md</code></a> and my previous post on Eleventy is <a href="../eleventy/"><code>eleventy.md</code></a>. Here&#39;s how I made that second link:</p>
 <pre><code>[`eleventy.md`](eleventy.md)</code></pre><p>This setup feels natural and works great for Markdown, both in <a href="https://code.visualstudio.com/Docs/languages/markdown">Visual Studio Code&#39;s Markdown preview mode</a>, and when <a href="https://github.com/jaredkrinke/log/blob/main/content/posts/static-site-generators/eleventy-2.md">viewing Markdown files in my repository directly on GitHub</a>.</p>
 <p>I was <em>hoping</em> that many static site generators would translate these links into ones that worked on the HTML web site, but so far it&#39;s seeming like that was just wishful thinking.</p>
 <p>Fortunately, since I&#39;m not tweaking output locations, this translation is just a simple mechanical process (prepend &quot;../&quot; and remove the &quot;.md&quot; suffix). Even better, there is a markdown-it plugin named <a href="https://www.npmjs.com/package/markdown-it-replace-link">markdown-it-replace-link</a> for making such changes. This plugin can be integrated into Eleventy&#39;s pipeline via the <code>.eleventy.js</code> config file (after <code>npm install --save-dev markdown-it-replace-link</code>, of course):</p>
@@ -175,7 +175,7 @@ layout: index.11ty.js
 <h1 id="and-thats-it">And that&#39;s it!</h1>
 <p>It took a little while to sort out some of the above details, but since I was able to leverage my existing JavaScript knowledge, Eleventy ended up being pretty easy to integrate. As proof, this page exists, and you&#39;re reading it.</p>
 <p>All of the actual code used to generate this page is <a href="https://github.com/jaredkrinke/log/tree/eleventy">up on GitHub under the &quot;eleventy&quot; branch</a>.</p>
-<p><strong>Update</strong>: I ended up <a href="../metalsmith">switching from Eleventy to Metalsmith</a> because Metalsmith has a simpler design and is easier to extend with plugins.</p>
+<p><strong>Update</strong>: I ended up <a href="../metalsmith/">switching from Eleventy to Metalsmith</a> because Metalsmith has a simpler design and is easier to extend with plugins.</p>
 
 </article>
         </main>

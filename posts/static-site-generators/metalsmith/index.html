@@ -20,14 +20,14 @@
         <h1><a href=".">Test-driving Metalsmith for a simple dev blog</a></h1>
         <p><time datetime="2021-09-18">September 18, 2021</time></p>
     </header>
-<p>I&#39;m testing out <a href="../comparison">the most promising static site generators</a> to see which is closest to <a href="../overview">my ideal setup</a>. Next up is <a href="https://metalsmith.io/">Metalsmith</a>.</p>
+<p>I&#39;m testing out <a href="../comparison/">the most promising static site generators</a> to see which is closest to <a href="../overview/">my ideal setup</a>. Next up is <a href="https://metalsmith.io/">Metalsmith</a>.</p>
 <p>Spoiler: I really like Metalsmith&#39;s modular design, so much so that I&#39;m now using Metalsmith for this blog.</p>
 <h1 id="metalsmith">Metalsmith</h1>
 <p>Metalsmith is a Node-based static site generator with a modular architecture that relies on many small plugins (similar in style to <a href="https://gulpjs.com/">gulp</a>). Installation is done via NPM (but note that you&#39;ll likely need to track down and install many plugins).</p>
 <h2 id="architecture">Architecture</h2>
 <p>Metalsmith is configured using plain old JavaScript code and building the site is just a matter of running your script, which is especially nice for debugging issues. See their &quot;elevator pitch&quot; on the <a href="https://metalsmith.io/">Metalsmith home page</a> for an example. It&#39;s refreshingly simple and transparent, but you&#39;ll need to install plugins and write some code to get a test server with live reloading (unlike many other modern static site generators that support this out the box).</p>
 <p>While vetting and adding plugins is tedious, I like the fact that Metalsmith doesn&#39;t install 500+ packages by default (... like Eleventy).</p>
-<p>Thanks to <a href="https://github.com/jstransformers/jstransformer">jstransformer</a>, Metalsmith supports a wide variety of template languages. I&#39;m not a fan of <a href="https://liquidjs.com/">Liquid</a> or <a href="https://mozilla.github.io/nunjucks/">Nunjucks</a>, but I&#39;m trying out <a href="https://handlebarsjs.com/">Handlebars</a> because I find it more intuitive and less verbose. So far, it seems easier to maintain than the plain JavaScript templates I used with <a href="../eleventy-2">Eleventy</a>.</p>
+<p>Thanks to <a href="https://github.com/jstransformers/jstransformer">jstransformer</a>, Metalsmith supports a wide variety of template languages. I&#39;m not a fan of <a href="https://liquidjs.com/">Liquid</a> or <a href="https://mozilla.github.io/nunjucks/">Nunjucks</a>, but I&#39;m trying out <a href="https://handlebarsjs.com/">Handlebars</a> because I find it more intuitive and less verbose. So far, it seems easier to maintain than the plain JavaScript templates I used with <a href="../eleventy-2/">Eleventy</a>.</p>
 <h2 id="themes">Themes?</h2>
 <p>If you don&#39;t want to author your own HTML templates, Metalsmith honestly doesn&#39;t seem like a good choice. It&#39;s possible to construct a Metalsmith &quot;theme&quot; by combining plugins, configuration, and templates, but really what you&#39;re providing is an entire skeleton project (with a <code>package.json</code> file, build scripts, and so on). This means the result is less portable and more difficult to integrate (unless you&#39;re starting from scratch and don&#39;t have any opinions or constraints).</p>
 <p>Other static site generators (e.g. Hugo) abstract out the concept of a theme (along with standard metadata that themes can leverage), so you don&#39;t have to mix code and configuration together with HTML templates and CSS styling. This seems better for people who don&#39;t want total control of every character in their final HTML output.</p>
@@ -158,7 +158,7 @@ const markdownRenderer = new marked.Renderer();
 const baseLinkRenderer = markdownRenderer.link;
 markdownRenderer.link = function (href, title, text) {
     return baseLinkRenderer.call(this,
-        href.replace(/^([^/][^:]*)\.md$/, &quot;../$1&quot;),
+        href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, &quot;../$1/$2&quot;),
         title,
         text);
 };
@@ -166,9 +166,10 @@ markdownRenderer.link = function (href, title, text) {
 Metalsmith
 ...
     .use(markdown({ renderer: markdownRenderer }))
-    .use(permalinks())</code></pre><h2 id="conclusion">Conclusion</h2>
+    .use(permalinks())</code></pre><p><strong>Update</strong>: I realized I also want to be able to link to a heading <em>within</em> another post (examples: <a href="#architecture">link to Architecture heading in this post</a>; <a href="../comparison/#metalsmith">link to my initial impression of Metalsmith in a different post</a>). The code about has been updated to handle this case.</p>
+<h2 id="conclusion">Conclusion</h2>
 <p>Overall, I really liked that Metalsmith just did exactly what I asked, even if I didn&#39;t initially know what, precisely, I wanted. I was able to find plugins for almost everything to get started (including local testing with live reloading). Importantly, I also feel like I fully understand what Metalsmith is doing, so I don&#39;t have to worry about later discovering that it was processing files multiple times (something that did happen with Eleventy).</p>
-<p>Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that&#39;s part of my <a href="../overview">my ideal workflow</a>).</p>
+<p>Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that&#39;s part of my <a href="../overview/">my ideal workflow</a>).</p>
 <p>One comment on Handlebars: this isn&#39;t a review of Handlebars, but I did find Handlebars to be a surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose. Only annoyance is that the automatic indentation isn&#39;t always what you want (e.g. in the case of <code>&lt;pre&gt;</code> blocks).</p>
 <p>Overall, I&#39;m very happy with Metalsmith, and it&#39;s likely that I will be using it moving forward. <strong>Update</strong>: I switched from Eleventy to Metalsmith.</p>
 <p>For reference, all of my code is here:
