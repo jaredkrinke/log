@@ -143,7 +143,7 @@ Overall, I really liked that Metalsmith just did exactly what I asked, even if I
 
 Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that's part of my [my ideal workflow](overview.md)).
 
-One comment on Handlebars: this isn't a review of Handlebars, but I did find Handlebars to be a surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose.
+One comment on Handlebars: this isn't a review of Handlebars, but I did find Handlebars to be a surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose. Only annoyance is that the automatic indentation isn't always what you want (e.g. in the case of `<pre>` blocks).
 
 Overall, I'm very happy with Metalsmith, and it's likely that I will be using it moving forward. **Update**: I switched from Eleventy to Metalsmith.
 
