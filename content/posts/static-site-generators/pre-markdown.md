@@ -45,6 +45,8 @@ The workflow was quite a doozy, utilizing a long list of tools:
 
 It's a bit convoluted for sure, but (other than not using Markdown, which didn't exist until 2004) it relied solely on standard tools. Maybe XSL isn't everyone's favorite, but at least I didn't invent my own template language this time!
 
+**Update**: [Here's the code](https://github.com/jaredkrinke/flog)
+
 # Now what?
 So what would I do differently today? I already briefly outlined my ideal workflow (using separate files, Markdown, etc.) in the [last post](overview.md), but I didn't delve into implementation details.
 
