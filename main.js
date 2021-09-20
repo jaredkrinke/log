@@ -41,8 +41,8 @@ markdownRenderer.link = function (href, title, text) {
         text);
 };
 
-// Simple plugin to add some custom properties
-const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" });
+// Simple plugin to add some custom properties (note: dates are parsed assuming UTC, so use UTC when formatting)
+const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 const addCustomProperties = (files, metalsmith, done) => {
     Object.keys(files).forEach(key => {
         const file = files[key];
