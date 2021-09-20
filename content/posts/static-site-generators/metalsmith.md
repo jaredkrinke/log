@@ -7,6 +7,8 @@ date: 2021-09-18
 
 I'm testing out [the most promising static site generators](comparison.md) to see which is closest to [my ideal setup](overview.md). Next up is [Metalsmith](https://metalsmith.io/).
 
+Spoiler: I really like Metalsmith's modular design, so much so that I'm now using Metalsmith for this blog.
+
 # Metalsmith
 Metalsmith is a Node-based static site generator with a modular architecture that relies on many small plugins (similar in style to [gulp](https://gulpjs.com/)). Installation is done via NPM (but note that you'll likely need to track down and install many plugins).
 
@@ -143,7 +145,7 @@ Additionally, because Metalsmith is so simple to extend, I can actually foresee 
 
 One comment on Handlebars: this isn't a review of Handlebars, but I did find Handlebars to be a surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose.
 
-Overall, I'm very happy with Metalsmith, and it's likely that I will be using it moving forward.
+Overall, I'm very happy with Metalsmith, and it's likely that I will be using it moving forward. **Update**: I switched from Eleventy to Metalsmith.
 
 For reference, all of my code is here:
-[https://github.com/jaredkrinke/log/tree/metalsmith](https://github.com/jaredkrinke/log/tree/metalsmith)
+[https://github.com/jaredkrinke/log](https://github.com/jaredkrinke/log)
