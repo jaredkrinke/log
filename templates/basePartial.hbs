@@ -7,7 +7,7 @@
         {{#if keywords}}<meta name="keywords" content="{{#each keywords}}{{this}}{{#unless @last}},{{/unless}}{{/each}}" />{{/if}}
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="stylesheet" href="{{rootPath}}css/style.css" />
-        <!-- TODO: RSS -->
+        <link rel="alternate" type="application/rss+xml" href="feed.xml" />
     </head>
     <body>
         <main>
