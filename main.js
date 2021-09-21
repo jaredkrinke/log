@@ -30,8 +30,7 @@ for (let i = 2; i < process.argv.length; i++) {
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
 
-// Translate relative Markdown links to point to corresponding HTML output files
-// TODO: I should be able to support linking to anchors within pages as well -- also need to validate them, if possible!
+// Translate relative Markdown links to point to corresponding HTML output files (with anchor support)
 const markdownRenderer = new marked.Renderer();
 const baseLinkRenderer = markdownRenderer.link;
 markdownRenderer.link = function (href, title, text) {
