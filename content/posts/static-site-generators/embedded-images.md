@@ -92,7 +92,7 @@ Well, the images render fine in Visual Studio Code's Markdown Preview window. Sy
 I've been happily using word-wrapping when editing Markdown files and, unsurprisingly, these enormous strings make word-wrapping pretty much impossible to use. This could end up being fairly annoying. I'll let this issue marinate in the back of my mind for a bit.
 
 ## Observations in GitHub's Markdown viewer
-TODO
+To my surprise, the image did not display at all in GitHub's Markdown viewer--it just showed a "broken image link" icon. That's unfortunate because I'd like my site to be as functional as possible when viewed directly on GitHub.
 
 ## Observations compiling with Marked
 The Markdown appears to have compiled fine using [Marked](https://marked.js.org/) (via [Metalsmith](https://metalsmith.io/)). It wasn't noticeably slow or anything either. Great!
@@ -103,4 +103,5 @@ Note: as I noted earlier, I'm not normally planning on uploading my static site 
 The images display just fine in my site on Chromium-based Edge. Good to know!
 
 # Conclusion
+TODO
 The experiment worked and everything displayed without a hitch... but I'm still stuck on the fact that these huge strings effectively break word-wrapping when I'm editing in VS Code.
