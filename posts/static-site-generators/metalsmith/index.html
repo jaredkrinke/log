@@ -166,7 +166,7 @@ markdownRenderer.link = function (href, title, text) {
 Metalsmith
 ...
     .use(markdown({ renderer: markdownRenderer }))
-    .use(permalinks())</code></pre><p><strong>Update</strong>: I realized I also want to be able to link to a heading <em>within</em> another post (examples: <a href="#architecture">link to Architecture heading in this post</a>; <a href="../comparison/#metalsmith">link to my initial impression of Metalsmith in a different post</a>). The code about has been updated to handle this case.</p>
+    .use(permalinks())</code></pre><p><strong>Update</strong>: I realized I also want to be able to link to a heading <em>within</em> another post (examples: <a href="#architecture">link to Architecture heading in this post</a>; <a href="../comparison/#metalsmith">link to my initial impression of Metalsmith in a different post</a>). The code above has been updated to handle this case.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>Overall, I really liked that Metalsmith just did exactly what I asked, even if I didn&#39;t initially know what, precisely, I wanted. I was able to find plugins for almost everything to get started (including local testing with live reloading). Importantly, I also feel like I fully understand what Metalsmith is doing, so I don&#39;t have to worry about later discovering that it was processing files multiple times (something that did happen with Eleventy).</p>
 <p>Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that&#39;s part of my <a href="../overview/">my ideal workflow</a>).</p>
