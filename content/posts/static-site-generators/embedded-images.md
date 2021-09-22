@@ -1,5 +1,4 @@
 ---
-draft: true
 title: Embedding images directly into Markdown posts -- terrible idea?
 description: How should images be attached to Markdown posts? Let's see how embedding them directly works.
 date: 2021-09-21
@@ -103,5 +102,6 @@ Note: as I noted earlier, I'm not normally planning on uploading my static site 
 The images display just fine in my site on Chromium-based Edge. Good to know!
 
 # Conclusion
-TODO
-The experiment worked and everything displayed without a hitch... but I'm still stuck on the fact that these huge strings effectively break word-wrapping when I'm editing in VS Code.
+Overall, while I like the idea of having completely self-contained Markdown files, the fact that the images don't work on GitHub's Markdown viewer and that the incredibly long text blobs effectively break word-wrapping in VS Code lead me to believe that this was a failed experiment. I don't think I'll pursue this method any further.
+
+I'm still happy that I gave it a shot. You never really know until you try!
