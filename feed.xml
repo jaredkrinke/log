@@ -1,4 +1,95 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Wed, 22 Sep 2021 20:07:21 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Embedding images directly into Markdown posts -- terrible idea?]]></title><description><![CDATA[<p>This might turn out to be a terrible idea, but in pursuit of self-contained Markdown-based blog posts, I&#39;m going to try embedding images (and, maybe later, other assets) directly into my Markdown posts.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Wed, 22 Sep 2021 23:02:41 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Finding the cheapest hosting for my hobby projects]]></title><description><![CDATA[<p>I like playing around with software, so I frequently have hobby projects in development or &quot;production&quot; (scare quotes because they&#39;re hobbies after all). Since I don&#39;t like wasting money, I&#39;m always on the lookout for cheap project hosting.</p>
+<p>Here&#39;s how I went from cheap hosting to free hosting.</p>
+<h1 id="background">Background</h1>
+<p>Just for fun, I made a couple of computer games (best played on a desktop/laptop):</p>
+<ul>
+<li><a href="https://jaredkrinke.itch.io/sic-1">SIC-1</a>: A single-instruction (<a href="https://esolangs.org/wiki/Subleq">subleq</a>) programming game, with a global leader board</li>
+<li><a href="https://jaredkrinke.itch.io/fbgp8">Falling Block Game</a>: Block-stacking game for <a href="https://www.lexaloffle.com/pico-8.php">PICO-8</a> with a global high scores list</li>
+</ul>
+<p>Both of these require services with a small amount of storage. Since there are no ads or monetization, I&#39;d like to run the services as cheaply as possible.</p>
+<h1 id="first-attempt-120month">First attempt: $1.20/month</h1>
+<p>I inherited a first generation <a href="https://www.raspberrypi.org/">Raspberry Pi</a> and already had a $10/year domain, so why not just host my site locally?</p>
+<p>Because I was curious about Node, I decided to use the following very simple tech stack:</p>
+<ul>
+<li>Software<ul>
+<li><a href="https://nodejs.org/en/">Node</a> JavaScript environment</li>
+<li><a href="http://expressjs.com/">Express</a> web server framework</li>
+<li><a href="https://sqlite.org/index.html">SQLite</a> (via <a href="https://www.npmjs.com/package/sqlite3">sqlite3</a>) in-process, single file-based database</li>
+<li><a href="https://github.com/zapty/forever-service">forever-service</a> service monitoring</li>
+<li><a href="https://letsencrypt.org/">Let&#39;s Encrypt</a> certificate service</li>
+</ul>
+</li>
+<li>Hardware/connectivity<ul>
+<li>Raspberry Pi (first generation), running <a href="https://www.raspbian.org/">Raspbian</a></li>
+<li>My home Internet connection and router, with appropriate holes in the firewall</li>
+<li>$10/year .com domain name</li>
+</ul>
+</li>
+</ul>
+<p>There was very little traffic, so the Raspberry Pi could service requests fine and my (cheapest tier) cable Internet was sufficient.</p>
+<h2 id="cost">Cost</h2>
+<p>The Raspberry Pi drew roughly 3 watts, so the electricity plus domain meant I was hosting a service for roughly $1.20 per month. Very affordable! Additionally, as long as I didn&#39;t have a lot of traffic, I could run multiple services without increasing the cost.</p>
+<h2 id="concerns">Concerns</h2>
+<p>I was a bit wary of poking a hole in my firewall and, within a few days, I decided that my concern was justified.</p>
+<p>The log for my web server was almost immediately flooded by TCP scanning requests from <a href="https://github.com/robertdavidgraham/masscan">masscan</a>. I also saw 404 errors to common vulnerable paths (namely phpMyAdmin- and WordPress-related paths).</p>
+<p>I know there are a lot of people who enjoy having their own &quot;<a href="https://haydenjames.io/home-lab-beginners-guide-hardware/">home lab</a>&quot;, and I&#39;m sure many of these people keep up on the latest security recommendations, but I was more interested in hosting a service than attracting unwanted attention to my home network&#39;s external IP address.</p>
+<p>I would strongly advise against hosting any site this way, especially since it turns out to not even be the cheapest option!</p>
+<h1 id="second-attempt-433month">Second attempt: $4.33/month</h1>
+<p>Wait, my hosting cost went up!? Yes, and it was money well spent.</p>
+<p>After getting slightly alarmed at all of the nefarious traffic flowing through my router, I was happy to pay for a virtual private server. This way it&#39;s at least not my own personal network that&#39;s at risk when something goes wrong.</p>
+<p>I selected <a href="https://www.vultr.com/">Vultr</a> as the host because they <a href="https://www.vultr.com/products/cloud-compute/#pricing">offered a decent server for $2.50/month</a>... except that server is <a href="https://en.wikipedia.org/wiki/IPv6">IPv6</a> only, and it turns out that much of the Internet is stuck in the address-constrained dark age of IPv4. So I had to pay a $1/month premium for an IPv4 address.</p>
+<p>The tech stack was the same except for the host. Both the VPS&#39;s Internet connection and CPU were light years beyond what I had with my Raspberry Pi on &quot;cheap&quot; cable Internet.</p>
+<h2 id="cost-1">Cost</h2>
+<p>Adding in the domain name, my total cost was $4.33/month. A little more than I&#39;d like to spend on silly hobby projects, but this setup came with the peace of mind of not broadcasting my home IP address everywhere. Again, I could add more services to my server at no additional cost to me.</p>
+<h2 id="concerns-1">Concerns</h2>
+<p>Other than costing me roughly $50/year, this setup worked great. But it wasn&#39;t as robust as I&#39;d like:</p>
+<ul>
+<li>The database was a single file sitting on the server&#39;s drive, with no backup, so I could theoretically lose it due to hardware failure</li>
+<li>Configuring the server was a manual process, so if there was a crash, I&#39;d have to spend time setting a new server up</li>
+</ul>
+<p>At the time, I wasn&#39;t aware, but there are solutions to both of these problems:</p>
+<ul>
+<li>Use <a href="https://litestream.io/">Litestream</a> to continuously backup the SQLite database to cloud storage</li>
+<li>Use <a href="https://www.docker.com/">Docker</a> to package everything up, enabling rapid recreation of the server</li>
+</ul>
+<p>There are actually many other solutions, but these are two simple approaches I plan on testing out in the future.</p>
+<h1 id="third-attempt-free">Third attempt: FREE!</h1>
+<p>While chatting with a friend who does web development for a living, he told me that I could probably host my site for free. That magic phrase led to several follow-up questions from me, and a lot more information from him.</p>
+<p>It turns out that many cloud providers have free tiers to try and hook you into their ecosystems, in hopes that you&#39;ll eventually become a paying customer. I&#39;m pretty sure all the major cloud providers have free tiers, and some of them are quite generous. My uninformed opinion is that it seems like the less popular the platform, the more generous the free tier.</p>
+<p>The annoying part of all of this is that the best free offers vary substantially, so you&#39;ll likely end up having to use multiple different providers. In my case, the tech stack looks like this:</p>
+<ul>
+<li>Node JavaScript environment</li>
+<li><a href="https://koajs.com/">Koa</a> web framework</li>
+<li><a href="https://cloud.google.com/firestore/">Firestore</a> document database</li>
+<li><a href="https://www.netlify.com/products/functions/">Netlify Functions</a> &quot;<a href="https://en.wikipedia.org/wiki/Serverless_computing">serverless</a>&quot; end point<ul>
+<li>Hosted on the (free) &quot;netlify.app&quot; domain</li>
+</ul>
+</li>
+</ul>
+<p>Since everything is in the cloud, I&#39;m also less concerned about hardware failure. I haven&#39;t thoroughly investigated whether I should backup my Firestore data or if their architecture seems robust enough for my needs.</p>
+<h2 id="cost-2">Cost</h2>
+<p>Zero cost, since I didn&#39;t need to use a custom domain. I didn&#39;t even have to provide a credit card.</p>
+<h2 id="concerns-2">Concerns</h2>
+<p>This setup is free, which is great, but when I last checked, both of the free offerings I&#39;m using were actually fairly expensive if you end up with enough traffic to need to start paying. You&#39;re also locked into their systems unless you want to start rewriting code.</p>
+<p>I also found that Firestore wasn&#39;t a great fit for my needs, since it&#39;s a &quot;<a href="https://en.wikipedia.org/wiki/NoSQL">NoSQL</a>&quot; document database that basically requires me to build and maintain my own aggregations. But I&#39;m not paying anything, so I shouldn&#39;t complain.</p>
+<h1 id="what-about-the-future">What about the future?</h1>
+<p>I succeeded in finding free hosting for my hobby projects. Great! But I&#39;m not perfectly happy being locked into specific vendors and libraries.</p>
+<p>Cloud services are great, but I&#39;d really like something more portable, in case I ever create a project that ends up getting a significant amount of traffic. There may be better approaches, but I think I&#39;d like to use containers hosted on a VPS (with backup to commodity cloud storage), just for portability reasons.</p>
+<p>I have heard that Oracle&#39;s cloud has a <a href="https://www.oracle.com/cloud/free/#always-free">free tier that even includes your own virtual private servers</a>, so I may look into that eventually. Planning to use Oracle is something I never thought I&#39;d be doing as a hobbyist, but these are interesting times.</p>
+<p>The future might look like this:</p>
+<ul>
+<li>Node environment</li>
+<li>Koa web framework</li>
+<li>SQLite database<ul>
+<li>Backed up to commodity store (e.g. <a href="https://www.backblaze.com/">Backblaze</a>) via Litestream</li>
+</ul>
+</li>
+<li>Forever-service monitoring</li>
+<li>Let&#39;s encrypt certificate</li>
+<li>All in a Docker container</li>
+<li>Hosed on Oracle&#39;s free compute VM</li>
+</ul>
+]]></description><link>https://log.schemescape.com/posts/services/cheap-hosting</link><guid isPermaLink="true">https://log.schemescape.com/posts/services/cheap-hosting</guid><pubDate>Wed, 22 Sep 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[Embedding images directly into Markdown posts -- terrible idea?]]></title><description><![CDATA[<p>This might turn out to be a terrible idea, but in pursuit of self-contained Markdown-based blog posts, I&#39;m going to try embedding images (and, maybe later, other assets) directly into my Markdown posts.</p>
 <h1 id="background">Background</h1>
 <p>Most blogging platforms I&#39;ve looked at support inserting images into posts as follows:</p>
 <ul>
@@ -435,43 +526,4 @@ layout: index.11ty.js
 <p>It took a little while to sort out some of the above details, but since I was able to leverage my existing JavaScript knowledge, Eleventy ended up being pretty easy to integrate. As proof, this page exists, and you&#39;re reading it.</p>
 <p>All of the actual code used to generate this page is <a href="https://github.com/jaredkrinke/log/tree/eleventy">up on GitHub under the &quot;eleventy&quot; branch</a>.</p>
 <p><strong>Update</strong>: I ended up <a href="../metalsmith/">switching from Eleventy to Metalsmith</a> because Metalsmith has a simpler design and is easier to extend with plugins.</p>
-]]></description><link>https://log.schemescape.com/posts/static-site-generators/eleventy-2</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/eleventy-2</guid><pubDate>Thu, 16 Sep 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[Test-driving Zola for a simple dev blog]]></title><description><![CDATA[<p>I&#39;m testing out <a href="../comparison/">the most promising static site generators</a> to see which is closest to <a href="../overview/">my ideal setup</a>. Next up is <a href="https://www.getzola.org/">Zola</a>.</p>
-<h1 id="zola">Zola</h1>
-<p>Zola is a zero-dependency static site generator, similar to Hugo. Since it&#39;s compiled to native code, I expect it to be fast.</p>
-<h2 id="installation">Installation</h2>
-<p>I do my development on Windows (despite having been a Linux desktop user in the past), so where do I download the Zola binary? Let&#39;s check the <a href="https://www.getzola.org/documentation/getting-started/installation/">Zola docs</a></p>
-<blockquote>
-<p>Zola is available on Scoop ... and Chocolatey</p>
-</blockquote>
-<p>Hmmm... so I have to install software to install my software? Maybe I can go to the <a href="https://scoop.sh/">Scoop web site</a> and find a zip file? It looks like they just have a huge JSON file that points to Zola&#39;s releases on GitHub. Maybe I&#39;ll just go to the <a href="https://github.com/getzola/zola/releases">Zola release page</a> directly. Ok, found a zip file (only 7.5mb, too!). Time to dig in.</p>
-<h2 id="concepts">Concepts</h2>
-<p>Zola&#39;s <a href="https://www.getzola.org/documentation/getting-started/overview/">overview documentation</a> is excellent. It introduces concepts succinctly in the form of an example, while still making it easy for me to skim and jump around to quickly understand the basics. This is the sort of introduction that I wished Hugo and Eleventy had.</p>
-<p>The documentation is so well organized, that I&#39;m not going to bother trying to explain the concepts here -- just go <a href="https://www.getzola.org/documentation/getting-started/overview/">read the docs</a> instead!</p>
-<p>One note: Zola uses a template language called <a href="https://tera.netlify.app/docs#templates">Tera</a> that is supposed to be similar to what Django uses. That might be helpful to some folks, but I haven&#39;t used Django. I don&#39;t like the looks of the language, but the documentation seems adequate.</p>
-<h2 id="first-run">First run</h2>
-<p>Following the documentation to initialize Zola, it oddly demands that the directory be empty (in my case, I already have content, such as this article). This seems unnecessary given that Zola doesn&#39;t actually do anything other than create empty directories (which happen to match my existing naming scheme) along with a configuration file.</p>
-<h2 id="some-opinions">Some opinions</h2>
-<p>Zola is an opinionated static site generator and sometimes these opinions get in my way. For instance, despite <a href="https://en.wikipedia.org/wiki/YAML">YAML</a> being the standard for front matter, Zola strongly encourages <a href="https://toml.io/en/">TOML</a> (which I find to be unnecessarily verbose for my simple key-string value pairs), and the documentation makes it sound like supporting YAML is a grudging favor for those migrating content out of other systems.</p>
-<p>Additionally, Zola draws a line between the variables it supports and any &quot;extra&quot; variables you want to use. I&#39;m also not sure I like  mixing template input data with content, as Zola does with <code>_index.md</code> files in each section (this makes sense for, say, keywords, but not as much for custom data that exists solely to modify behavior in a parent template--I&#39;d like to do that in the child template itself).</p>
-<p>Opinions are great for nudging people into good choices when they might not foresee the benefits, but I am starting to wonder if maybe Zola is a little <em>too</em> opinionated.</p>
-<h2 id="templates">Templates</h2>
-<p>My experience with static site generators until recently was all home-built stuff, so I don&#39;t have any experience with standard template languages like Tera, Jinja, or Liquid. I like to think my fresh eyes let me accurately grade the ergonomics of template languages for career developers.</p>
-<p>So far, (as with Hugo&#39;s templates) I don&#39;t like what I see. The syntax is incredibly ugly and verbose. Here&#39;s how you mark an input to a template (I was hoping for something more like this JavaScript&#39;s template literal syntax):</p>
-<pre><code>{% block content %}{% endblock %}</code></pre><p>How do I supply an input to the template?</p>
-<pre><code>{% block content %}
-&lt;p&gt;Content goes here&lt;/p&gt;
-{% endblock content %}</code></pre><p>The definition is so similar to the declaration that I&#39;m not sure how you even tell them apart if the definition is empty.</p>
-<p>Conditionals also aren&#39;t just expressions which means lots of <code>{%</code> and <code>%}</code> in my case where I just want my home page title to be &quot;Blog&quot; and all pages to be &quot;Blog: Some page&quot;:</p>
-<pre><code>{% if section.extra.root %}
-    Blog
-{% else %}
-    Blog: {{ section.title }}
-{% endif %}</code></pre><p>Ok, enough griping about standard template languages (even if they do seem ripe for a Markdown-like takeover). Some people are probably perfectly at home with Tera/Jinja.</p>
-<h2 id="i-guess-were-stopping-here-now">I guess we&#39;re stopping here now</h2>
-<p>A little ways into integrating Zola into this blog, I hit a couple of snags:</p>
-<ul>
-<li><code>zola serve</code> doesn&#39;t seem to serve up all the pages that <code>zola build</code> creates -- there was a past Windows-only issue for this, but my problem seems more specific to my particular site</li>
-<li>Zola doesn&#39;t seem to like that I&#39;ve grouped my posts into subdirectories (that don&#39;t represent a new type of content)</li>
-</ul>
-<p>If I was persistent, I probably could have solved these problems this evening, but I&#39;m not sure that Zola&#39;s opinions are compatible with my own, so I&#39;m ok with setting this experiment aside for now.</p>
-]]></description><link>https://log.schemescape.com/posts/static-site-generators/zola</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/zola</guid><pubDate>Wed, 15 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
+]]></description><link>https://log.schemescape.com/posts/static-site-generators/eleventy-2</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/eleventy-2</guid><pubDate>Thu, 16 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
