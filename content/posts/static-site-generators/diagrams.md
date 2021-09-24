@@ -36,7 +36,7 @@ Remember, I want to insert the source code of a diagram directly into my Markdow
 
 Ok, so I can just run that same code in Node at build time, right? Then I can skip all the client-side JavaScript? Not according to [an issue in Mermaid's issue tracker](https://github.com/mermaid-js/mermaid/issues/146)!
 
-From reading that thread, it sounds like Mermaid interacts directly with the web page's DOM when rendering. Someone created a command line tool ([mermaid.cli](https://github.com/mermaidjs/mermaid.cli)) that apparently uses [Puppeteer](https://github.com/puppeteer/puppeteer)'s headless Chromium environment to supply a functioning DOM. I find this implementation slightly appalling.
+From reading that thread, it sounds like Mermaid interacts directly with the web page's DOM when rendering. Someone created a command line tool ([mermaid.cli](https://github.com/mermaidjs/mermaid.cli)) that apparently uses [Puppeteer](https://github.com/puppeteer/puppeteer)'s headless Chromium environment to supply a functioning DOM. Apparently, this is the normal workaround for using D3.js-based graphics on the back end. I find this implementation slightly appalling.
 
 I'm a little bit worried about the performance of building my site when each diagram has to spin up a new process which hosts a headless Chromium browser, just to spit out SVG. I suspect it will *work*, but it seems wasteful.
 
