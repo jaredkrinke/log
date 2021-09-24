@@ -12,26 +12,15 @@ Mermaid is built on top of [D3.js](https://d3js.org/), which is designed to be u
 
 This is a problem for my scenario where I'm building my site outside of any browser in Node.
 
-Mermaid provides a command line interface where you can pass in the text describing a diagram and get SVG back out, but rather than doing something sensible, it uses [Puppeteer](https://github.com/puppeteer/puppeteer) to spin up a headless Chromium browser DOM that D3.js manipulates, and then gets everything back out. I guess this is fine for generating, say, a PNG image file, but for SVG it seems excessively wasteful. You shouldn't need a DOM or browser just to generate XML!
+Mermaid provides a command line interface where you can pass in the text describing a diagram and get SVG back out, but rather than doing something sensible, it uses [Puppeteer](https://github.com/puppeteer/puppeteer) to spin up a headless Chromium browser DOM (enjoy that 200+ MB download!) that D3.js manipulates, and then gets everything back out. I guess this is fine for generating, say, a PNG image file, but for SVG it seems excessively wasteful. You shouldn't need a DOM or browser just to generate XML!
 
 # Sanity check
 Just to make sure I'm not missing something obvious, let's try building a Mermaid diagram in Node without doing anything special.
 
-The first problem I hit is that Mermaid 8.13.0 with D3.js 7.0.3 won't load in either a CommonJS or ES Module environment in Node 14.17.0. If, in CommonJS mode, I try to use `require("mermaid")`, Node rightly points out that D3.js is an ES Module. If, in an ES Module, I try to use `import "mermaid";`, then Mermaid tries to use `require()` on D3.js, which obviously doesn't work. I'm not sure if this is a bug in Mermaid or D3.js or Webpack (or if it's even a bug at all, and I just don't understand the interplay between CommonJS and ES Modules in Node).
+## Module woes...
+The first problem I hit is that Mermaid 8.13.0 with D3.js 7.0.3 won't load in either a CommonJS or ES Module environment in Node 14.17.0. If, in CommonJS mode, I try to use `require("mermaid")`, Node rightly points out that D3.js is an ES Module. If, in an ES Module, I try to use `import "mermaid";`, then Mermaid tries to use `require()` on D3.js, which obviously doesn't work. This seems like a bug in Webpack's "universal module" pattern.
 
-TODO
+## jsdom to the rescue?
+[jsdom](https://github.com/jsdom/jsdom) provides a fake DOM implementation for use in Node. Sounds promising!
 
-# Potential solutions
-I have a couple of solutions in mind that I've ordered in descending order of my preference:
-
-1. Find or write a non-browser based DOM API that I can configure D3.js to use within Mermaid
-1. Find or write a D3.js-compatible library that doesn't require a browser or DOM, then use that from within Mermaid
-1. Use Mermaid's heavy, Chromium-based command line interface
-
-# Non-browser DOM API
-Let's see if I can find a DOM API implementation that doesn't embed a headless browser engine.
-
-## jsdom
-After a few quick searches, I stumbled across [jsdom](https://github.com/jsdom/jsdom), which bills itself as "a pure-JavaScript implementation of many web standards, notably ... DOM ... for use with Node.js".
-
-This sounds like exactly what I've been looking for.
+Unfortunately, Mermaid's dependencies depend on some SVG functionality that jsdom doesn't implement, e.g. [SVGGraphicsElement.getBBox()](https://developer.mozilla.org/en-US/docs/Web/API/SVGGraphicsElement/getBBox). Alright, now it's making more sense why Mermaid has this dependency on a browser--it's using the browser's SVG API to measure text, compute transformations, and so on. I'm still not thrilled with this design, but I can see how one might need to measure text when generating diagrams.
