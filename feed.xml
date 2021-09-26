@@ -1,4 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Sat, 25 Sep 2021 00:49:29 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Generating diagrams when building a static site (part 2)]]></title><description><![CDATA[<p>In the <a href="../diagrams/">last post</a>, I looked at options for generating diagrams from text descriptions at build time for my static site. Here&#39;s my (failed) attempt at integrating <a href="https://mermaid-js.github.io/mermaid/#/">Mermaid</a> into my site.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Sun, 26 Sep 2021 16:30:23 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[WebAssembly overview]]></title><description><![CDATA[<h1 id="background">Background</h1>
+<h1 id="emscripten">Emscripten</h1>
+<p>I first heard of <a href="https://emscripten.org/">Emscripten</a> in the mid-2010s. At the time, you could compile C code to an optimizability-focused subset of JavaScript known as <a href="http://asmjs.org/">asm.js</a>. This meant that, given the source code to a native app and appropriate implementations of system APIs, you could run <em>formerly</em> native-only programs in the browser--convenient, if you don&#39;t want to install anything.</p>
+<h2 id="enter-webassembly">Enter WebAssembly</h2>
+<p>In the intervening years, <a href="https://webassembly.org/">WebAssembly</a> appeared. WebAssembly is a binary format for programs that run on a portable virtual machine. This VM can be hosted in your browser, but non-browser runtimes have also sprung up (e.g. <a href="https://wasmtime.dev/">wasmtime</a>).</p>
+<p>WebAssembly, to me, seems like the <a href="https://en.wikipedia.org/wiki/Holy_Grail">Holy Grail</a> of compilation targets. I wouldn&#39;t be surprised if, thanks to browser support, WebAssembly is <em>the</em> most broadly supported binary program format. What other binary format works on my desktop, phone, <a href="https://www.raspberrypi.org/">Raspberry Pi</a>?</p>
+<p>Note that WebAssembly runtimes seem to be standardizing on an in-development system interface named <a href="https://wasi.dev/">WASI</a>. You probably can&#39;t write a GUI app solely with WebAssembly and WASI today, but I&#39;m sure that day is coming (in the distant future).</p>
+<h2 id="one-note-on-emscripten">One note on Emscripten</h2>
+<p>If you just want to port native programs to the browser, Emscripten is an environment for doing that. It even converts <a href="https://en.wikipedia.org/wiki/OpenGL">OpenGL</a> to <a href="https://www.khronos.org/webgl/">WebGL</a> and handles the <a href="https://www.libsdl.org/">SDL</a> API. Unfortunately, just <em>installing</em> Emscripten requires Python. For now, I refuse to setup bloated software just to <em>install</em> the software I actually want, so I&#39;m skipping Emscripten.</p>
+<h1 id="webassembly-concepts">WebAssembly concepts</h1>
+<p>Mozilla&#39;s documentation has a <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Concepts">great overview of WebAssembly concepts</a>. There&#39;s also an <a href="https://hacks.mozilla.org/2017/07/creating-a-webassembly-module-instance-with-javascript/">approachable series of WebAssembly articles</a> on Mozilla Hacks. I&#39;ll try to summarize:</p>
+<ul>
+<li><strong>Module</strong>: a compiled WebAssembly binary (declaring imports and exports)</li>
+<li><strong>Instance</strong>: a module along with its state (memory, table, imports)</li>
+<li><strong>Memory</strong>: a read/write, resizable buffer provided to the instance</li>
+<li><strong>Table</strong>: array of references that aren&#39;t directly stored in WebAssembly-accessible memory (for security reasons)<ul>
+<li>The example I&#39;ve seen for this is to be able to pass function pointers into C/C++ code</li>
+</ul>
+</li>
+</ul>
+<h1 id="webassembly-formats">WebAssembly formats</h1>
+<p>WebAssembly defines two formats:</p>
+<ul>
+<li><strong>.wasm</strong>: Binary format</li>
+<li><strong>.wat</strong>: Text format (assembly)</li>
+</ul>
+<p>The <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a> contains tools for converting between these formats. Specifically, <code>wat2wasm</code> is analogous to a very simple assembler, and <code>wasm2wat</code> to a disassembler.</p>
+<h1 id="webassembly-browser-interface">WebAssembly browser interface</h1>
+<p>Within the browser, WebAssembly <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Loading_and_running">currently needs to be loaded using JavaScript</a> (it sounds like there are plans to support loading using script tags and import statements in the future). Sadly, as of today, the recommended way to load WebAssembly (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiateStreaming">WebAssembly.instantiateStreaming()</a>) is <a href="https://caniuse.com/?search=instantiateStreaming">only supported by 75% of browsers</a>. The more broadly supported <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiate">WebAssembly.instantiate()</a> seems cumbersome. I&#39;m hopeful that WebAssembly&#39;s ergonomics will improve, but I suppose this is just the price you pay when using new technology.</p>
+<h1 id="next-steps">Next steps</h1>
+<p>Armed with the above information, I think I&#39;m ready to dive in and test out WebAssembly with a trivial example. I&#39;ll report my findings in a subsequent update.</p>
+]]></description><link>https://log.schemescape.com/posts/webassembly/overview</link><guid isPermaLink="true">https://log.schemescape.com/posts/webassembly/overview</guid><pubDate>Sat, 25 Sep 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[Generating diagrams when building a static site (part 2)]]></title><description><![CDATA[<p>In the <a href="../diagrams/">last post</a>, I looked at options for generating diagrams from text descriptions at build time for my static site. Here&#39;s my (failed) attempt at integrating <a href="https://mermaid-js.github.io/mermaid/#/">Mermaid</a> into my site.</p>
 <h1 id="mermaid-is-browser-based">Mermaid is browser-based</h1>
 <p>Mermaid is built on top of <a href="https://d3js.org/">D3.js</a>, which is designed to be used in the browser. It exposes a <a href="https://en.wikipedia.org/wiki/Fluent_interface">fluent</a> API reminiscent of <a href="https://jquery.com/">jQuery</a>. It directly manipulates a DOM, which means you need a browser.</p>
 <p>This is a problem for my scenario where I&#39;m building my site outside of any browser in Node.</p>
@@ -220,158 +251,4 @@ const fileExtensionToMimeType = {
 <h1 id="conclusion">Conclusion</h1>
 <p>Overall, while I like the idea of having completely self-contained Markdown files, the fact that the images don&#39;t work on GitHub&#39;s Markdown viewer and that the incredibly long text blobs effectively break word-wrapping in VS Code lead me to believe that this was a failed experiment. I don&#39;t think I&#39;ll pursue this method any further.</p>
 <p>I&#39;m still happy that I gave it a shot. You never really know until you try!</p>
-]]></description><link>https://log.schemescape.com/posts/static-site-generators/embedded-images</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/embedded-images</guid><pubDate>Tue, 21 Sep 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[Test-driving Metalsmith for a simple dev blog]]></title><description><![CDATA[<p>I&#39;m testing out <a href="../comparison/">the most promising static site generators</a> to see which is closest to <a href="../overview/">my ideal setup</a>. Next up is <a href="https://metalsmith.io/">Metalsmith</a>.</p>
-<p>Spoiler: I really like Metalsmith&#39;s modular design, so much so that I&#39;m now using Metalsmith for this blog.</p>
-<h1 id="metalsmith">Metalsmith</h1>
-<p>Metalsmith is a Node-based static site generator with a modular architecture that relies on many small plugins (similar in style to <a href="https://gulpjs.com/">gulp</a>). Installation is done via NPM (but note that you&#39;ll likely need to track down and install many plugins).</p>
-<h2 id="architecture">Architecture</h2>
-<p>Metalsmith is configured using plain old JavaScript code and building the site is just a matter of running your script, which is especially nice for debugging issues. See their &quot;elevator pitch&quot; on the <a href="https://metalsmith.io/">Metalsmith home page</a> for an example. It&#39;s refreshingly simple and transparent, but you&#39;ll need to install plugins and write some code to get a test server with live reloading (unlike many other modern static site generators that support this out the box).</p>
-<p>While vetting and adding plugins is tedious, I like the fact that Metalsmith doesn&#39;t install 500+ packages by default (... like Eleventy).</p>
-<p>Thanks to <a href="https://github.com/jstransformers/jstransformer">jstransformer</a>, Metalsmith supports a wide variety of template languages. I&#39;m not a fan of <a href="https://liquidjs.com/">Liquid</a> or <a href="https://mozilla.github.io/nunjucks/">Nunjucks</a>, but I&#39;m trying out <a href="https://handlebarsjs.com/">Handlebars</a> because I find it more intuitive and less verbose. So far, it seems easier to maintain than the plain JavaScript templates I used with <a href="../eleventy-2/">Eleventy</a>.</p>
-<h2 id="themes">Themes?</h2>
-<p>If you don&#39;t want to author your own HTML templates, Metalsmith honestly doesn&#39;t seem like a good choice. It&#39;s possible to construct a Metalsmith &quot;theme&quot; by combining plugins, configuration, and templates, but really what you&#39;re providing is an entire skeleton project (with a <code>package.json</code> file, build scripts, and so on). This means the result is less portable and more difficult to integrate (unless you&#39;re starting from scratch and don&#39;t have any opinions or constraints).</p>
-<p>Other static site generators (e.g. Hugo) abstract out the concept of a theme (along with standard metadata that themes can leverage), so you don&#39;t have to mix code and configuration together with HTML templates and CSS styling. This seems better for people who don&#39;t want total control of every character in their final HTML output.</p>
-<h2 id="setup">Setup</h2>
-<p><a href="https://metalsmith.io/#introduction">Metalsmith&#39;s home page</a> has a sample script right at the top you can look at, but you&#39;ll end up with a bunch of <code>require(...)</code>s followed by something like this:</p>
-<pre><code>Metalsmith(__dirname)
-    .metadata({
-        site: {
-            title: &quot;Schemescape&quot;,
-            url: &quot;https://log.schemescape.com/&quot;,
-            description: &quot;Development log of a life-long coder&quot;,
-        },
-    })
-    .source(&quot;./content&quot;)
-    .destination(&quot;./out&quot;)
-    .use(collections({
-        posts: {
-            pattern: &quot;posts/**/*.md&quot;,
-            sortBy: &quot;date&quot;,
-            reverse: true,
-        }
-    }))
-    .use(markdown())
-    .use(layouts({
-        directory: &quot;templates&quot;,
-        default: &quot;default.hbs&quot;,
-    }))
-    ...
-    .build(err =&gt; { if (err) throw err; });</code></pre><p>If you just want to build a dev blog like everyone else, it does feel like a lot of boilerplate code, but I like that it forces you to consider and understand each step of the process. Some of the other static site generators were too proactive and did things I didn&#39;t expect or understand (or want). With Metalsmith, it only does exactly what you tell it.</p>
-<p>But there&#39;s a dark side to Metalsmith&#39;s simple model, and that&#39;s that Metalsmith has to be taught to do even the most basic things. For example, I&#39;m building my site on Windows, which has the unfortunate property of using backslashes for path separators. Metalsmith doesn&#39;t seem to know or care about this detail, so I had to actually write code to switch to web-friendly forward slashes when creating links between files in different directories.</p>
-<h3 id="plugins-plugins-plugins">Plugins, plugins, plugins</h3>
-<p>Metalsmith&#39;s modular architecture with a very simple core library means you need plugins--a lot of plugins. Fortunately, most of the functionality I was interested in already existed in the form of published plugins (some official, some third party). Here are the ones I used:</p>
-<table>
-<thead>
-<tr>
-<th>Plugin (* = official)</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="https://github.com/segmentio/metalsmith-markdown">metalsmith-markdown</a>*</td>
-<td>Translates Markdown to HTML (using <a href="https://marked.js.org/">Marked</a>)</td>
-</tr>
-<tr>
-<td><a href="https://github.com/segmentio/metalsmith-drafts">metalsmith-drafts</a>*</td>
-<td>Excludes files marked &quot;draft: true&quot; in YAML front matter (yep, you need a plugin for this)</td>
-</tr>
-<tr>
-<td><a href="https://github.com/segmentio/metalsmith-collections">metalsmith-collections</a>*</td>
-<td>Groups and sorts files by path (e.g. for listing blog posts)</td>
-</tr>
-<tr>
-<td><a href="https://github.com/segmentio/metalsmith-permalinks">metalsmith-permalinks</a>*</td>
-<td>Creates a directory for each HTML file (so links only specify directories and not files)</td>
-</tr>
-<tr>
-<td><a href="https://github.com/metalsmith/metalsmith-layouts">metalsmith-layouts</a>*</td>
-<td>Adds support for templates using <a href="https://github.com/jstransformers">jstransformers</a></td>
-</tr>
-<tr>
-<td><a href="https://github.com/jstransformers/jstransformer-handlebars">jstransformer-handlebars</a>*</td>
-<td>Adds support for <a href="https://handlebarsjs.com/">Handlebars</a></td>
-</tr>
-<tr>
-<td><a href="https://github.com/TheHydroImpulse/metalsmith-static">metalsmith-static</a></td>
-<td>Copies static assets (e.g. CSS and my &quot;CNAME&quot; file)</td>
-</tr>
-<tr>
-<td><a href="https://github.com/radiovisual/metalsmith-rootpath">metalsmith-rootpath</a></td>
-<td>Computes the path to root of each page (allowing you to use relative links to CSS, etc.)</td>
-</tr>
-<tr>
-<td><a href="https://github.com/timdp/metalsmith-discover-partials">metalsmith-discover-partials</a></td>
-<td>Registers <a href="https://handlebarsjs.com/guide/partials.html">Handlebar partials</a> (for reusing/nesting templates)</td>
-</tr>
-<tr>
-<td><a href="https://github.com/hurrymaplelad/metalsmith-feed">metalsmith-feed</a></td>
-<td>Creates an RSS feed from a collection</td>
-</tr>
-<tr>
-<td><a href="https://github.com/davidxmoody/metalsmith-broken-link-checker">metalsmith-broken-link-checker</a></td>
-<td>Validates relative links in the final site</td>
-</tr>
-<tr>
-<td><a href="https://github.com/chiefy/metalsmith-express">metalsmith-express</a></td>
-<td>Runs a test server for local testing (with live reloading)</td>
-</tr>
-<tr>
-<td><a href="https://github.com/FWeinb/metalsmith-watch">metalsmith-watch</a></td>
-<td>Triggers rebuilds when files are updated (needed for live reloading)</td>
-</tr>
-</tbody></table>
-<p>Note that some of the plugins I installed had dependencies flagged by NPM as having vulnerabilities. I reviewed the notices and none seemed concerning for my use case (e.g. all of the input is code/content I wrote and I don&#39;t plan on targeting myself for a regular expression denial of service attack).</p>
-<h3 id="missing-plugins">Missing plugins</h3>
-<p>Despite all these great plugins, I did end up needing to add a little extra functionality. Theoretically, these could be packaged into plugins.</p>
-<ul>
-<li>Translate relative <code>*.md</code> links to point to the corresponding output directories</li>
-<li>Compute relative link paths, with forward slashes only (Metalsmith only provides the source path by default)</li>
-<li>A &quot;no-op&quot; plugin for conditional inclusion of plugins without breaking up the giant configuration chain</li>
-</ul>
-<h2 id="issues">Issues</h2>
-<p>Here are a couple of snags I hit while integrating Metalsmith into my site.</p>
-<h3 id="inflexible-directory-structure">Inflexible directory structure</h3>
-<p>For how simple Metalsmith is, I figured it would allow for a flexible directory structure, but Metalsmith actually only allows a single source directory by default. This is a problem for my directory structure because I separated all of my content (Markdown files) from files needed to build the web site (scripts, templates, but also CSS). Fortunately, the <a href="https://github.com/TheHydroImpulse/metalsmith-static">metalsmith-static</a> plugin handle this scenario:</p>
-<pre><code>const assets = require(&quot;metalsmith-static&quot;);
-
-Metalsmith
-...
-    .use(assets({
-        src: &quot;static&quot;,
-        dest: &quot;.&quot;,
-    }))</code></pre><h3 id="destination-paths-arent-available">Destination paths aren&#39;t available</h3>
-<p>Somewhere in Metalsmith&#39;s pipeline, it knows where a file is going to end up, but for some inexplicable reason, this information isn&#39;t available to templates or plugins. In my case, it&#39;s easy to infer the destination (although I had to deal with Windows&#39; annoying path-separating backslashes), so it wasn&#39;t a big deal, but this really isn&#39;t something I should have had to think about.</p>
-<h3 id="plugin-ordering">Plugin ordering</h3>
-<p>Since plugins enrich and mutate files and metadata along the way, the ordering of plugins matters. One annoying interaction was between the &quot;layouts&quot; (templating) and &quot;feed&quot; (RSS) plugins:</p>
-<ul>
-<li>&quot;Feed&quot; then &quot;layouts&quot;: the RSS feed gets wrapped in HTML (&quot;layouts&quot; is run on <em>every</em> file by default)</li>
-<li>&quot;Layouts&quot; then &quot;feed&quot;: the RSS content for each post is now a full HTML page, because templates were already applied</li>
-</ul>
-<p>The fix in this case was to run &quot;layouts&quot; after &quot;feed&quot; but tell &quot;layouts&quot; to only process HTML files (and not &quot;feed.xml&quot;).</p>
-<p>This all makes sense if you think about how Metalsmith plugins receive a set of files, manipulate them, and then pass them on to the next plugin, but other generators do a good job of insulating me from mistakes like this.</p>
-<h3 id="handling-internal-links">Handling internal links</h3>
-<p>I&#39;m still surprised that using relative links to Markdown files for internal linking between posts isn&#39;t well supported by the static site generators I&#39;ve tried so far (Metalsmith included). I ended up having to extend the <a href="https://marked.js.org/using_pro#renderer">Marked renderer</a> to enable internal links:</p>
-<pre><code>const marked = require(&quot;marked&quot;);
-...
-// Translate relative Markdown links to point to corresponding HTML output files
-const markdownRenderer = new marked.Renderer();
-const baseLinkRenderer = markdownRenderer.link;
-markdownRenderer.link = function (href, title, text) {
-    return baseLinkRenderer.call(this,
-        href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, &quot;../$1/$2&quot;),
-        title,
-        text);
-};
-...
-Metalsmith
-...
-    .use(markdown({ renderer: markdownRenderer }))
-    .use(permalinks())</code></pre><p><strong>Update</strong>: I realized I also want to be able to link to a heading <em>within</em> another post (examples: <a href="#architecture">link to Architecture heading in this post</a>; <a href="../comparison/#metalsmith">link to my initial impression of Metalsmith in a different post</a>). The code above has been updated to handle this case.</p>
-<h2 id="conclusion">Conclusion</h2>
-<p>Overall, I really liked that Metalsmith just did exactly what I asked, even if I didn&#39;t initially know what, precisely, I wanted. I was able to find plugins for almost everything to get started (including local testing with live reloading). Importantly, I also feel like I fully understand what Metalsmith is doing, so I don&#39;t have to worry about later discovering that it was processing files multiple times (something that did happen with Eleventy).</p>
-<p>Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that&#39;s part of my <a href="../overview/">my ideal workflow</a>).</p>
-<p>One comment on Handlebars: this isn&#39;t a review of Handlebars, but I did find Handlebars to be a surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose. Only annoyance is that the automatic indentation isn&#39;t always what you want (e.g. in the case of <code>&lt;pre&gt;</code> blocks).</p>
-<p>Overall, I&#39;m very happy with Metalsmith, and it&#39;s likely that I will be using it moving forward. <strong>Update</strong>: I switched from Eleventy to Metalsmith.</p>
-<p>For reference, all of my code is here:
-<a href="https://github.com/jaredkrinke/log">https://github.com/jaredkrinke/log</a></p>
-]]></description><link>https://log.schemescape.com/posts/static-site-generators/metalsmith</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/metalsmith</guid><pubDate>Sat, 18 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
+]]></description><link>https://log.schemescape.com/posts/static-site-generators/embedded-images</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/embedded-images</guid><pubDate>Tue, 21 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
