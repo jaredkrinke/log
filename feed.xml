@@ -1,4 +1,189 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Sun, 26 Sep 2021 16:30:23 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[WebAssembly overview]]></title><description><![CDATA[<h1 id="background">Background</h1>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Mon, 27 Sep 2021 17:55:26 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[A trivial WebAssembly example]]></title><description><![CDATA[<p>In the last post, I provided an <a href="../overview/">overview of WebAssembly</a>. In this post, I&#39;m going to build and run a complete (but trivial) WebAssembly module in C using <a href="https://llvm.org/">LLVM</a> and <a href="https://clang.llvm.org/">Clang</a>.</p>
+<p>All of the code is here: <a href="https://github.com/jaredkrinke/webassembly-trivial-example">webassembly-trivial-example</a>.</p>
+<h1 id="aside">Aside</h1>
+<p>It looks like someone else was frustrated with Emscripten in the past, so they wrote a post about <a href="http://schellcode.github.io/webassembly-without-emscripten">WebAssembly without Emscripten</a>. Their guide was helpful, but I&#39;m not sure if it&#39;s up to date. I also found their Makefiles to be excessively complex.</p>
+<h1 id="setup">Setup</h1>
+<p>First, download and install LLVM (I used <a href="https://github.com/llvm/llvm-project/releases/tag/llvmorg-12.0.1">LLVM 12.0.1</a>) from the LLVM GitHub releases page (note: 180 MB download that expands to <em>1.8 GB</em> installed). The programs I&#39;m actually planning to use are <code>clang</code> and <code>wasm-ld</code>.</p>
+<p>I also wanted to inspect the output WebAssembly, so I needed the <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a>, which was a much more reasonable ~2 MB download (note: the Windows version is a gzipped tarball instead of a zip file). I&#39;m going to use <code>wasm2wat</code> for disassembly.</p>
+<h2 id="some-notes-on-c">Some notes on C</h2>
+<p>C compilation is usually done as follows:</p>
+<ol>
+<li>Run the preprocessor (<code>cpp</code>) to expand macros and includes (often on many source files)</li>
+<li>Compile the preprocessed code into object files</li>
+<li>Link everything into a final binary</li>
+</ol>
+<p>A decent overview of the most common command line arguments for a <em>different</em> compiler is <a href="https://www.thegeekstuff.com/2012/10/gcc-compiler-options/">here</a>. Many of the options are identical for most C compilers.</p>
+<h1 id="implementing-a-trivial-function">Implementing a trivial function</h1>
+<p>I&#39;m going to start with a very simple example (just to reduce the number of things that could go wrong).</p>
+<h2 id="source-code">Source code</h2>
+<p>File name: &quot;add.c&quot;:</p>
+<pre><code>int add(int a, int b) {
+    return a + b;
+}</code></pre><h2 id="compiling-the-code">Compiling the code</h2>
+<p>First, I&#39;m just going to compile (but not link) the code, to see what happens.</p>
+<pre><code>clang -target wasm32 -Os -c add.c</code></pre><ul>
+<li><code>-target wasm32</code> tells Clang to tell LLVM to produce 32-bit WebAssembly output (note: as of today, <a href="https://github.com/WebAssembly/proposals">64-bit memory support is in progress</a>)</li>
+<li><code>-Os</code> tells Clang to optimize for size (I did this in hopes of getting simpler, more readable code)</li>
+<li><code>-c</code> tells Clang to compile, but not link</li>
+<li><code>add.c</code> is the source file</li>
+</ul>
+<p>Since I&#39;m compiling and not linking, this command generates an object file named &quot;add.o&quot;.</p>
+<h2 id="disassembling-the-object-file">Disassembling the object file</h2>
+<p>Run the disassembler:</p>
+<pre><code>wasm2wat add.o</code></pre><p>And it produces the following surprisingly readable output:</p>
+<pre><code>(module
+  (type (;0;) (func (param i32 i32) (result i32)))
+  (import &quot;env&quot; &quot;__linear_memory&quot; (memory (;0;) 0))
+  (func $add (type 0) (param i32 i32) (result i32)
+    local.get 1
+    local.get 0
+    i32.add))</code></pre><p>MDN has a great <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format">explanation of the Web Assembly text format</a> (&quot;.wat&quot; files). The syntax is based on <a href="https://en.wikipedia.org/wiki/S-expression">S-expressions</a> (similar to <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>). Note that inline comments are delimited by semicolons (e.g. <code>; comment goes here ;</code>), as noted in <a href="https://github.com/WebAssembly/spec/blob/master/interpreter/README.md#s-expression-syntax">this more detailed look at Web Assembly text format syntax.</a>.</p>
+<p>Breaking down the first two lines:</p>
+<ul>
+<li><code>module</code> is the root and encloses the entire module</li>
+<li><code>type</code> denotes a type that can be later referenced<ul>
+<li><code>(;0;)</code> is an empty list (<code>;0;</code> is just a comment) for the name of the type</li>
+<li><code>func</code> denotes a function type<ul>
+<li><code>param</code> denotes a list of function arguments</li>
+<li><code>i32</code> is a <a href="https://en.wikipedia.org/wiki/Two%27s_complement">two&#39;s complement</a> 32-bit integer<ul>
+<li>Note: there is no corresponding &quot;unsigned&quot; type--instructions themselves indicate the expected sign of operands, as needed (e.g. for division)</li>
+</ul>
+</li>
+<li><code>result</code> is a list of result values (<a href="https://github.com/WebAssembly/multi-value">support for multiple result values</a> was added in April of 2020)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>So far, we have a module and an unnamed type (which can be referenced by index 0) for a function taking two 32-bit integers and returning one 32-bit integer. Moving on:</p>
+<ul>
+<li><code>import</code> is used to indicate data that is passed into the module from the host<ul>
+<li><code>&quot;env&quot; &quot;__linear_memory&quot;</code> indicates the import is from the &quot;env&quot; module and the item being imported is &quot;__linear_memory&quot; (these are arbitrary strings that must match the instantiation code in the host)</li>
+<li><code>(memory (;0;) 0)</code> specifies an unnamed memory, which must have an initial size of at least zero 64 KB pages<ul>
+<li>I believe this could have been omitted from the output in this trivial example</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>The host code would need to pass in a (zero-sized) memory buffer named <code>env.__linear_memory</code>. On to the actual code:</p>
+<ul>
+<li><code>func</code> defines a function<ul>
+<li><code>$add</code> is the name of the function (names are prefixed with <code>$</code>)</li>
+<li><code>(type 0)</code> refers to the type zero, defined previously: (i32, i32) =&gt; (i32)</li>
+<li>The function type/signature/prototype is then specified -- I&#39;m not sure why the type needs to be duplicated here</li>
+<li>The function body follows as a series of instructions (here&#39;s the <a href="https://webassembly.github.io/spec/core/syntax/instructions.html">full list of WebAssembly instructions</a>)</li>
+</ul>
+</li>
+</ul>
+<p>Looking at the function body, note that local values are referenced by a zero-based index that starts with the function arguments and then continues on to any local variables:</p>
+<ul>
+<li><code>local.get 1</code> gets the second argument and pushes it onto the stack</li>
+<li><code>local.get 0</code> gets the first argument and pushes it onto the stack</li>
+<li><code>i32.add</code> pops the two arguments off and pushes their sum onto the stack<ul>
+<li>The return value is just the last argument left on the stack, so no additional instructions are required</li>
+</ul>
+</li>
+</ul>
+<p>It looks like the C code compiled correctly and the output WAT seems reasonable. So far, so good.</p>
+<h2 id="linking">Linking</h2>
+<p>Note that my original Clang command specified <code>-c</code>, so it only compiled the code and never ran the linker. Let&#39;s go all the way this time:</p>
+<pre><code>clang -target wasm32 -Os -nostdlib -Wl,--no-entry add.c -o add.wasm</code></pre><p>I removed <code>-c</code> and added some new arguments:</p>
+<ul>
+<li><code>-nostdlib</code> indicates that the C standard library should not be used (it&#39;s not needed in this case, and I don&#39;t have it available anyway)</li>
+<li><code>-Wl,--no-entry</code> tells the linker that there is no entry point (i.e. no <code>main()</code> or <code>_start()</code> function)</li>
+<li><code>-o add.wasm</code> tells the linker to write the output to &quot;add.wasm&quot; (instead of the default &quot;a.out&quot; file)</li>
+</ul>
+<p>Disassembling &quot;add.wasm&quot; yields the following:</p>
+<pre><code>(module
+  (memory (;0;) 2)
+  (global $__stack_pointer (mut i32) (i32.const 66560))
+  (export &quot;memory&quot; (memory 0)))</code></pre><p>My code disappeared! Of course, this isn&#39;t surprising because my code has no entry point and doesn&#39;t export anything.</p>
+<h3 id="memory-and-a-stack">Memory and a stack</h3>
+<p>Interestingly, this most recent disassembly shows some other changes:</p>
+<ul>
+<li>A block of linear memory that starts at 2 pages long is declared</li>
+<li>There is a stack pointer that is initialized to 1 KB into the second page of memory</li>
+<li>This memory is exported from the module</li>
+<li>The seemingly unnecessary memory <em>import</em> (<code>env.__linear_memory</code>) is no longer present</li>
+</ul>
+<p>I have some questions about this arrangement:</p>
+<ul>
+<li>Why is the memory exported? Can the host code read or even modify the stack? (Spoiler: yes)</li>
+<li>Does this stack solely exist to support C semantics (e.g. taking the address of a variable on the stack)? (Probably)<ul>
+<li>Note that <a href="https://github.com/WebAssembly/design/blob/main/Nondeterminism.md">this WebAssembly note</a> indicates the VM&#39;s stack can&#39;t be accessed by a program (&quot;Note that this stack isn&#39;t located in the program-accessible linear memory&quot;)</li>
+</ul>
+</li>
+</ul>
+<h3 id="aside-a-webassembly-critique">Aside: a WebAssembly critique</h3>
+<p>As an aside: while trying to find answers to some of my questions, I ran across an <a href="http://troubles.md/wasm-is-not-a-stack-machine/">incredibly insightful series of posts</a> that retrospectively critiques some of WebAssembly&#39;s design decisions.</p>
+<h3 id="exports">Exports</h3>
+<p>Back to my trivial experiment.</p>
+<p>How do I tell Clang/LLVM that I want to export a function? Consulting the <a href="https://lld.llvm.org/WebAssembly.html">linker documentation</a>, it looks like I can export everything (not my preferred approach) or specify exports either on the command line or with attributes in the code. In code, the two options appear to be:</p>
+<ul>
+<li>Mark exports with <code>__attribute__((export_name(&quot;nameOfExport&quot;)))</code></li>
+<li>Specify <code>-Wl,--export-dynamic</code> on the Clang command line and mark exports with <code>__attribute__ ((visibility (&quot;default&quot;)))</code></li>
+</ul>
+<p>I kind of wish there was an &quot;always export this symbol by name&quot; option that didn&#39;t require duplicating the name. C preprocessor to the rescue!</p>
+<pre><code>#define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
+#define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
+
+int WASM_EXPORT(add)(int a, int b) {
+    return a + b;
+}</code></pre><p>Output:</p>
+<pre><code>(module
+  (type (;0;) (func (param i32 i32) (result i32)))
+  (func $add (type 0) (param i32 i32) (result i32)
+    local.get 1
+    local.get 0
+    i32.add)
+  (memory (;0;) 2)
+  (global $__stack_pointer (mut i32) (i32.const 66560))
+  (export &quot;memory&quot; (memory 0))
+  (export &quot;add&quot; (func $add)))</code></pre><p>This looks like what I want. I&#39;ve got my function and it&#39;s being exported (along with a memory region that I&#39;m not actually using in my code).</p>
+<h2 id="using-the-module">Using the module</h2>
+<p>Now that I&#39;ve got my finished module (<code>add.wasm</code>), I need to host it somewhere.</p>
+<h3 id="using-the-module-in-node">Using the module in Node</h3>
+<p>Here&#39;s an example of loading the module and calling <code>add</code> in Node:</p>
+<pre><code>const fs = require(&#39;fs&#39;);
+(async () =&gt; {
+    const module = await WebAssembly.instantiate(await fs.promises.readFile(&quot;./add.wasm&quot;));
+    const add = module.instance.exports.add;
+    console.log(add(2, 2));
+})();</code></pre><ul>
+<li><code>await fs.promises.readFile(&quot;./add.wasm&quot;)</code> initiates a file read and resumes upon completion</li>
+<li><code>const module = await WebAssembly.instantiate(...);</code> starts instantiating the module and resumes upon completion</li>
+<li><code>module.instance.exports</code> contains the named exports</li>
+<li><code>add(2, 2)</code> returns 4, as expected</li>
+</ul>
+<h3 id="using-the-module-in-a-web-page">Using the module in a web page</h3>
+<p>Here&#39;s a web page for my trivial example:</p>
+<pre><code>&lt;html&gt;
+    &lt;body&gt;
+        &lt;p&gt;The value of 2 + 2 is &lt;span id=&quot;result&quot;&gt;?&lt;/span&gt;&lt;/p&gt;
+
+        &lt;script&gt;
+            (async () =&gt; {
+                const module = await WebAssembly.instantiateStreaming(fetch(&quot;./add.wasm&quot;));
+                const add = module.instance.exports.add;
+                document.getElementById(&quot;result&quot;).innerText = add(2, 2);
+            })();
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre><p>Note that using <code>fetch</code> isn&#39;t supported from the file system, so I used <a href="https://github.com/http-party/http-server">a trivial HTTP server</a> for local testing.</p>
+<ul>
+<li><code>fetch(&quot;./add.wasm&quot;)</code> initiates a request to load the module by relative path</li>
+<li><code>const module = await WebAssembly.instantiateStreaming(...);</code> starts instantiating the module and resumes upon completion</li>
+<li><code>module.instance.exports</code> contains the named exports</li>
+<li><code>document.getElementById(&quot;result&quot;).innerText = add(2, 2);</code> updates the &quot;result&quot; span with the result of the call to <code>add</code></li>
+</ul>
+<p>To my surprise, everything worked on the first try.</p>
+<p>I was also able to confirm that the module&#39;s memory was exported (<code>module.instance.exports.memory</code>) and could be read from within my browser&#39;s dev tools window. I&#39;m still not clear on why LLVM decided to export the memory by default.</p>
+<h1 id="thats-it">That&#39;s it!</h1>
+<p>The end result of all this was actually pretty simple. You can see all the code and the build commands in this repository: <a href="https://github.com/jaredkrinke/webassembly-trivial-example">webassembly-trivial-example</a>.</p>
+<p>Remembering how to use a C compiler on the command line, and deciphering LLVM&#39;s export semantics took a bit more time than I would have liked, but I learned a lot about WebAssembly in the process.</p>
+<p>Next up, I&#39;ll see if I can get the C standard library working.</p>
+]]></description><link>https://log.schemescape.com/posts/webassembly/trivial-example</link><guid isPermaLink="true">https://log.schemescape.com/posts/webassembly/trivial-example</guid><pubDate>Mon, 27 Sep 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[WebAssembly overview]]></title><description><![CDATA[<h1 id="background">Background</h1>
 <h1 id="emscripten">Emscripten</h1>
 <p>I first heard of <a href="https://emscripten.org/">Emscripten</a> in the mid-2010s. At the time, you could compile C code to an optimizability-focused subset of JavaScript known as <a href="http://asmjs.org/">asm.js</a>. This meant that, given the source code to a native app and appropriate implementations of system APIs, you could run <em>formerly</em> native-only programs in the browser--convenient, if you don&#39;t want to install anything.</p>
 <h2 id="enter-webassembly">Enter WebAssembly</h2>
@@ -176,79 +361,4 @@
 <li>All in a Docker container</li>
 <li>Hosed on Oracle&#39;s free compute VM</li>
 </ul>
-]]></description><link>https://log.schemescape.com/posts/services/cheap-hosting</link><guid isPermaLink="true">https://log.schemescape.com/posts/services/cheap-hosting</guid><pubDate>Wed, 22 Sep 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[Embedding images directly into Markdown posts -- terrible idea?]]></title><description><![CDATA[<p>This might turn out to be a terrible idea, but in pursuit of self-contained Markdown-based blog posts, I&#39;m going to try embedding images (and, maybe later, other assets) directly into my Markdown posts.</p>
-<h1 id="background">Background</h1>
-<p>Most blogging platforms I&#39;ve looked at support inserting images into posts as follows:</p>
-<ul>
-<li>Images are uploaded to a specific location</li>
-<li>Output HTML files reference the images (ideally using relative links)</li>
-</ul>
-<p>This is great if an image needs to be shared between posts, but that&#39;s not the typical use case. In the usual case, I see images used once in a single post.</p>
-<p>As a <em>viewer</em> I like this setup because the images can be loaded lazily, I can open the image link in a new tab, etc.</p>
-<h1 id="gripes">Gripes</h1>
-<p>As an author, however, I have some complaints about this setup because posts and images become coupled:</p>
-<ul>
-<li>I have to add multiple files to build a particular post</li>
-<li>If I want to remove a post, I have to also remove the images it contains</li>
-<li>Probably not common, but if I want to duplicate a post elsewhere, I have to grab the images as well</li>
-</ul>
-<h1 id="my-previous-solution">My previous solution</h1>
-<p>In the past, my solution to this problem was to build a directory for each post and the directory contained both the post content as well as any associated images and files.</p>
-<p>This is, in my opinion, a pretty reasonable solution because now the entire post is contained in a single location. If my crazy new idea doesn&#39;t work, I&#39;ll probably revert to this tried and true solution.</p>
-<h1 id="directly-embedding-images">Directly embedding images</h1>
-<p>So here&#39;s my crazy idea: what if I embed images directly into their source Markdown files using <a href="https://en.wikipedia.org/wiki/Base64">Base64-encoded</a> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs">Data URLs</a>?</p>
-<p>Data URLs are only recommended for small files (ideally &lt; 1 KB), but my research indicates that this recommendation is based on:</p>
-<ol>
-<li>Separating essential HTML/text content from slightly less important image content</li>
-<li>Some HTML/XML implementations arbitrarily limiting the size of an element and its attributes</li>
-</ol>
-<p>I happen to agree with #1, so when compiling my site I do plan to split out images into their own files. But #2 feels like a vestigial limitation from the days of allocating fixed size buffers on the stack in C code. That&#39;s not to say #2 won&#39;t cause me trouble--I just don&#39;t think it&#39;s a good enough reason on its own to discard my idea.</p>
-<h2 id="prototype-encoder">Prototype encoder</h2>
-<p>Here&#39;s the code for my prototype encoder (side note: I don&#39;t know why Node refused to accept the clearly documented &quot;base64url&quot; encoding):</p>
-<pre><code>const path = require(&quot;path&quot;);
-const fs = require(&quot;fs/promises&quot;);
-
-// TODO: Use a more comprehensive library
-const fileExtensionToMimeType = {
-    &quot;.jpg&quot;: &quot;image/jpeg&quot;,
-    &quot;.png&quot;: &quot;image/png&quot;,
-};
-
-(async () =&gt; {
-    try
-    {
-        const filePath = process.argv[2];
-        if (!filePath) throw &quot;No path specified!&quot;;
-
-        const fileExtension = path.extname(filePath);
-        const mimeType = fileExtensionToMimeType[fileExtension];
-        if (!mimeType) throw `Could not determine MIME type for extension &quot;${fileExtension}&quot;!`;
-
-        const buffer = await fs.readFile(filePath);
-        const base64UrlEncoded = encodeURI(buffer.toString(&quot;base64&quot;));
-
-        const dataUrl = `data:${mimeType};base64,${base64UrlEncoded}`;
-        console.log(dataUrl);
-    }
-    catch (err) {
-        console.error(`ERROR: ${err}`);
-    }
-})();</code></pre><h2 id="exhibit-a">Exhibit A</h2>
-<p>Here&#39;s a very small (in terms of number of bytes) PNG file that&#39;s been directly embedded (this is the ~600 byte <a href="https://en.wikipedia.org/wiki/Favicon">Favicon</a> for my site):</p>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TpSpVByuKOGSoThbELxylikWwUNoKrTqYXD+hSUOS4uIouBYc/FisOrg46+rgKgiCHyBubk6KLlLi/5JCixgPjvvx7t7j7h0g1EpMMdrGAUU19XgkLKbSq6LvFZ3oxwB6MC0xQ4smFpNwHV/38PD1LsSz3M/9ObozWYMBHpF4jmm6SbxBPLNpapz3iQOsIGWIz4nHdLog8SPXZYffOOdtFnhmQE/G54kDxGK+heUWZgVdIZ4iDmYUlfKFlMMZzluclVKFNe7JX+jPqisJrtMcRgRLiCIGETIqKKIEEyFaVVIMxGk/7OIfsv0xcsnkKoKRYwFlKJBsP/gf/O7WyE1OOEn+MND+YlkfI4BvF6hXLev72LLqJ4D3GbhSm/5yDZj9JL3a1IJHQO82cHHd1OQ94HIHGHzSJF2yJS9NIZcD3s/om9JA3y3Qteb01tjH6QOQpK6Wb4CDQ2A0T9nrLu/uaO3t3zON/n4AuI1yw2D/uDMAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQflCRUXDwx3zQBcAAAAbElEQVQ4y81TMRLAIAgTjzH8/6E8wE52oBDbY2kmz2gSEQTAGg3oXrj7gzSzIycAlrvfG2+x72hGsATRSDPVKm52ZrKIrD5UILqYWSkyRxM/FYhvZn1SJohFPLZy5vy5kSo3lkD2NLaGqfMLF2xqO0/W9QaIAAAAAElFTkSuQmCC" alt="Small embedded PNG file"></p>
-<p>Here&#39;s what the Markdown input looks like, for reference:</p>
-<pre><code>![Small embedded PNG file](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TpSpVByuKOGSoThbELxylikWwUNoKrTqYXD+hSUOS4uIouBYc/FisOrg46+rgKgiCHyBubk6KLlLi/5JCixgPjvvx7t7j7h0g1EpMMdrGAUU19XgkLKbSq6LvFZ3oxwB6MC0xQ4smFpNwHV/38PD1LsSz3M/9ObozWYMBHpF4jmm6SbxBPLNpapz3iQOsIGWIz4nHdLog8SPXZYffOOdtFnhmQE/G54kDxGK+heUWZgVdIZ4iDmYUlfKFlMMZzluclVKFNe7JX+jPqisJrtMcRgRLiCIGETIqKKIEEyFaVVIMxGk/7OIfsv0xcsnkKoKRYwFlKJBsP/gf/O7WyE1OOEn+MND+YlkfI4BvF6hXLev72LLqJ4D3GbhSm/5yDZj9JL3a1IJHQO82cHHd1OQ94HIHGHzSJF2yJS9NIZcD3s/om9JA3y3Qteb01tjH6QOQpK6Wb4CDQ2A0T9nrLu/uaO3t3zON/n4AuI1yw2D/uDMAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQflCRUXDwx3zQBcAAAAbElEQVQ4y81TMRLAIAgTjzH8/6E8wE52oBDbY2kmz2gSEQTAGg3oXrj7gzSzIycAlrvfG2+x72hGsATRSDPVKm52ZrKIrD5UILqYWSkyRxM/FYhvZn1SJohFPLZy5vy5kSo3lkD2NLaGqfMLF2xqO0/W9QaIAAAAAElFTkSuQmCC)</code></pre><p>I also tested a much larger image file and it worked just as well, but I decided to omit that file from this post because I didn&#39;t want to bloat up this file (and repository) for no good reason.</p>
-<h2 id="observations-in-vs-code">Observations in VS Code</h2>
-<p>Well, the images render fine in Visual Studio Code&#39;s Markdown Preview window. Syntax highlighting in the Markdown file I&#39;m editing is ok, too. But there is one problem.</p>
-<p>I&#39;ve been happily using word-wrapping when editing Markdown files and, unsurprisingly, these enormous strings make word-wrapping pretty much impossible to use. This could end up being fairly annoying. I&#39;ll let this issue marinate in the back of my mind for a bit.</p>
-<h2 id="observations-in-githubs-markdown-viewer">Observations in GitHub&#39;s Markdown viewer</h2>
-<p>To my surprise, the image did not display at all in GitHub&#39;s Markdown viewer--it just showed a &quot;broken image link&quot; icon. That&#39;s unfortunate because I&#39;d like my site to be as functional as possible when viewed directly on GitHub.</p>
-<h2 id="observations-compiling-with-marked">Observations compiling with Marked</h2>
-<p>The Markdown appears to have compiled fine using <a href="https://marked.js.org/">Marked</a> (via <a href="https://metalsmith.io/">Metalsmith</a>). It wasn&#39;t noticeably slow or anything either. Great!</p>
-<h2 id="observations-viewing-the-resulting-html-in-chromium-based-edge">Observations viewing the resulting HTML in Chromium-based Edge</h2>
-<p>Note: as I noted earlier, I&#39;m not normally planning on uploading my static site in this format, but out of sheer curiosity, would this work unmodified?</p>
-<p>The images display just fine in my site on Chromium-based Edge. Good to know!</p>
-<h1 id="conclusion">Conclusion</h1>
-<p>Overall, while I like the idea of having completely self-contained Markdown files, the fact that the images don&#39;t work on GitHub&#39;s Markdown viewer and that the incredibly long text blobs effectively break word-wrapping in VS Code lead me to believe that this was a failed experiment. I don&#39;t think I&#39;ll pursue this method any further.</p>
-<p>I&#39;m still happy that I gave it a shot. You never really know until you try!</p>
-]]></description><link>https://log.schemescape.com/posts/static-site-generators/embedded-images</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/embedded-images</guid><pubDate>Tue, 21 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
+]]></description><link>https://log.schemescape.com/posts/services/cheap-hosting</link><guid isPermaLink="true">https://log.schemescape.com/posts/services/cheap-hosting</guid><pubDate>Wed, 22 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
