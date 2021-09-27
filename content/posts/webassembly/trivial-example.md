@@ -7,7 +7,7 @@ date: 2021-09-26
 ---
 In the last post, I provided an [overview of WebAssembly](overview.md). In this post, I'm going to build and run a complete (but trivial) WebAssembly module in C using [LLVM](https://llvm.org/) and [Clang](https://clang.llvm.org/).
 
-# Side note
+# Aside
 It looks like someone else was frustrated with Emscripten in the past, so they wrote a post about [WebAssembly without Emscripten](http://schellcode.github.io/webassembly-without-emscripten). Their guide was helpful, but I'm not sure if it's up to date. I also found their Makefiles to be excessively complex.
 
 # Setup
@@ -24,7 +24,7 @@ Note that C compilation is usually done as follows:
 
 A decent overview of the most common command line arguments for a *different* compiler is [here](https://www.thegeekstuff.com/2012/10/gcc-compiler-options/). Many of the options are similar for most C compilers.
 
-# A trivial function
+# Implementing a trivial function
 I'm going to start with a very simple example (just to reduce the number of things that could go wrong).
 
 ## Source code
@@ -93,8 +93,8 @@ The host code will need to pass in a (zero-sized) memory buffer named `env.__lin
 
 * `func` defines a function
   * `$add` is the name of the function (names are prefixed with `$`)
-  * `(type 0)` refers to the type zero, defined previously: (i32, i32) => (i32) -- I suspect the declared type and this reference could have been omitted
-  * The function type/signature/prototype is then specified
+  * `(type 0)` refers to the type zero, defined previously: (i32, i32) => (i32)
+  * The function type/signature/prototype is then specified -- I'm not sure why the type is duplicated
   * The function body follows as a series of instructions (here's the [full list of WebAssembly instructions](https://webassembly.github.io/spec/core/syntax/instructions.html))
 
 Looking at the function body, note that local values are referenced by a zero-based index that starts with the function arguments and then continues on to any local variables:
@@ -106,7 +106,7 @@ Looking at the function body, note that local values are referenced by a zero-ba
 
 It looks like the C code compiled correctly and the output WAT seems reasonable. So far, so good.
 
-# Linking
+## Linking
 Note that my original Clang command specified `-c`, so it only compiled the code and never ran the linker. Let's go all the way this time:
 
 ```
@@ -130,13 +130,102 @@ Disassembling "add.wasm" yields the following:
 
 My code disappeared! Of course, this isn't surprising because my code has no entry point and doesn't export anything.
 
-# Exports
-How do I tell Clang/LLVM that I want to export a function? Consulting the [linker documentation](https://lld.llvm.org/WebAssembly.html), it looks like I can export everything (not my preferred approach) or specify exports either on the command line or with attributes in the code. I'd prefer to make exports explicit in my code, so here's what it looks like:
+### Memory and a stack
+Interestingly, this most recent disassembly shows some other changes:
+
+* A block of linear memory that starts at 2 pages long is declared
+* There is a stack pointer that is initialized to 1 KB into the second page of memory
+* This memory is exported from the module
+
+I have some questions about this arrangement:
+
+* Why is the memory exported? Can the host code read or even modify the stack?
+* Does this stack solely exist to support C semantics (e.g. taking the address of a variable on the stack)?
+  * Note that [this WebAssembly note](https://github.com/WebAssembly/design/blob/main/Nondeterminism.md) indicates the VM's stack can't be accessed by a program ("Note that this stack isn't located in the program-accessible linear memory")
+
+### Aside: a WebAssembly critique
+As an aside: while trying to find answers to some of my questions, I ran across an [incredibly insightful series of posts](http://troubles.md/wasm-is-not-a-stack-machine/) that retrospectively critiques some of WebAssembly's design decisions.
+
+### Exports
+Back to my trivial experiment.
+
+How do I tell Clang/LLVM that I want to export a function? Consulting the [linker documentation](https://lld.llvm.org/WebAssembly.html), it looks like I can export everything (not my preferred approach) or specify exports either on the command line or with attributes in the code. In code, the two options appear to be:
+
+* Mark exports with `__attribute__((export_name("nameOfExport")))`
+* Specify `-Wl,--export-dynamic` on the command line and mark exports with `__attribute__ ((visibility ("default")))`
+
+I kind of wish there was an "always export this symbol by name" option that didn't require duplicating the name. C preprocessor to the rescue!
 
 ```
-__attribute__((export_name("add"))) int add(int a, int b) {
+#define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
+#define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
+
+int WASM_EXPORT(add)(int a, int b) {
     return a + b;
 }
 ```
 
-That is a bit verbose and it duplicates the function name, but that's no problem a macro can't fix:
+Output:
+
+```
+(module
+  (type (;0;) (func (param i32 i32) (result i32)))
+  (func $add (type 0) (param i32 i32) (result i32)
+    local.get 1
+    local.get 0
+    i32.add)
+  (memory (;0;) 2)
+  (global $__stack_pointer (mut i32) (i32.const 66560))
+  (export "memory" (memory 0))
+  (export "add" (func $add)))
+```
+
+## Using the module
+Now that I've got my finished module (`add.wasm`), I need to host it somewhere.
+
+### Using the module in Node
+Here's an example of loading the module and calling `add` in Node:
+
+```
+const fs = require('fs');
+(async () => {
+    const module = await WebAssembly.instantiate(await fs.promises.readFile("./add.wasm"));
+    const add = module.instance.exports.add;
+    console.log(add(2, 2));
+})();
+```
+
+* `await fs.promises.readFile("./add.wasm")` initiates a file read and resumes upon completion
+* `const module = await WebAssembly.instantiate(...);` starts instantiating the module and resumes upon completion
+* `module.instance.exports` contains the named exports
+* `add(2, 2)` returns 4, as expected
+
+### Using the module in a web page
+Here's a web page for my trivial example:
+
+```
+<html>
+    <body>
+        <p>The value of 2 + 2 is <span id="result">?</span></p>
+
+        <script>
+            (async () => {
+                const module = await WebAssembly.instantiateStreaming(fetch("./add.wasm"));
+                const add = module.instance.exports.add;
+                document.getElementById("result").innerText = add(2, 2);
+            })();
+        </script>
+    </body>
+</html>
+```
+
+Note that using `fetch` isn't supported from the file system, so I used [a trivial HTTP server](https://github.com/http-party/http-server) for local testing.
+
+* `fetch("./add.wasm")` initiates a request to load the module by relative path
+* `const module = await WebAssembly.instantiateStreaming(...);` starts instantiating the module and resumes upon completion
+* `module.instance.exports` contains the named exports
+* `document.getElementById("result").innerText = add(2, 2);` updates the "result" span with the result of the call to `add`
+
+To my surprise, everything worked on the first try.
+
+I was also able to confirm that the module's memory was exported (`module.instance.exports.memory`) and could be read from within my browser's dev tools window. I'm still not clear on why LLVM decided to export the memory by default.
