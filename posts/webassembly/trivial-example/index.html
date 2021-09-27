@@ -202,7 +202,11 @@ int WASM_EXPORT(add)(int a, int b) {
 <p>To my surprise, everything worked on the first try.</p>
 <p>I was also able to confirm that the module&#39;s memory was exported (<code>module.instance.exports.memory</code>) and could be read from within my browser&#39;s dev tools window. I&#39;m still not clear on why LLVM decided to export the memory by default.</p>
 <h1 id="thats-it">That&#39;s it!</h1>
-<p>The end result of all this was actually pretty simple. You can see all the code and the build commands in this repository: <a href="https://github.com/jaredkrinke/webassembly-trivial-example">webassembly-trivial-example</a>.</p>
+<p>The end result of all this was actually pretty simple. Here are some links for reference:</p>
+<ul>
+<li><a href="https://github.com/jaredkrinke/webassembly-trivial-example">GitHub repository with all the code and build commands</a></li>
+<li><a href="https://jaredkrinke.github.io/webassembly-trivial-example/">Live demo of the module hosted in a web page</a> (using <code>WebAssembly.instantiate()</code> instead of <code>instantiateStreaming()</code> for compatibility with older browsers)</li>
+</ul>
 <p>Remembering how to use a C compiler on the command line, and deciphering LLVM&#39;s export semantics took a bit more time than I would have liked, but I learned a lot about WebAssembly in the process.</p>
 <p>Next up, I&#39;ll see if I can get the C standard library working.</p>
 
