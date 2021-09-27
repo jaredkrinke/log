@@ -235,7 +235,10 @@ To my surprise, everything worked on the first try.
 I was also able to confirm that the module's memory was exported (`module.instance.exports.memory`) and could be read from within my browser's dev tools window. I'm still not clear on why LLVM decided to export the memory by default.
 
 # That's it!
-The end result of all this was actually pretty simple. You can see all the code and the build commands in this repository: [webassembly-trivial-example](https://github.com/jaredkrinke/webassembly-trivial-example).
+The end result of all this was actually pretty simple. Here are some links for reference:
+
+* [GitHub repository with all the code and build commands](https://github.com/jaredkrinke/webassembly-trivial-example)
+* [Live demo of the module hosted in a web page](https://jaredkrinke.github.io/webassembly-trivial-example/) (using `WebAssembly.instantiate()` instead of `instantiateStreaming()` for compatibility with older browsers)
 
 Remembering how to use a C compiler on the command line, and deciphering LLVM's export semantics took a bit more time than I would have liked, but I learned a lot about WebAssembly in the process.
 
