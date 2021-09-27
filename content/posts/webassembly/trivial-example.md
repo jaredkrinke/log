@@ -1,28 +1,29 @@
 ---
-draft: true
 title: A trivial WebAssembly example
 description: This is a complete example of building and running a trivial WebAssembly module
 keywords: [webassembly,wabt,llvm]
-date: 2021-09-26
+date: 2021-09-27
 ---
 In the last post, I provided an [overview of WebAssembly](overview.md). In this post, I'm going to build and run a complete (but trivial) WebAssembly module in C using [LLVM](https://llvm.org/) and [Clang](https://clang.llvm.org/).
+
+All of the code is here: [webassembly-trivial-example](https://github.com/jaredkrinke/webassembly-trivial-example).
 
 # Aside
 It looks like someone else was frustrated with Emscripten in the past, so they wrote a post about [WebAssembly without Emscripten](http://schellcode.github.io/webassembly-without-emscripten). Their guide was helpful, but I'm not sure if it's up to date. I also found their Makefiles to be excessively complex.
 
 # Setup
-First, download and install [LLVM 12.0.1](https://github.com/llvm/llvm-project/releases/tag/llvmorg-12.0.1) from the LLVM GitHub releases page (note: 180 MB download that expands to *1.8 GB* installed). The programs I'm actually planning to use are `clang` and `wasm-ld`.
+First, download and install LLVM (I used [LLVM 12.0.1](https://github.com/llvm/llvm-project/releases/tag/llvmorg-12.0.1)) from the LLVM GitHub releases page (note: 180 MB download that expands to *1.8 GB* installed). The programs I'm actually planning to use are `clang` and `wasm-ld`.
 
-I also wanted to inspect the output WebAssembly, so I needed the [WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt), which was a much more reasonable ~2 MB download (although they compressed the Windows version into a gzipped tarball instead of a zip file--fortunately, I already had `tar.exe` on my system). I'm going to use `wasm2wat` for disassembly.
+I also wanted to inspect the output WebAssembly, so I needed the [WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt), which was a much more reasonable ~2 MB download (note: the Windows version is a gzipped tarball instead of a zip file). I'm going to use `wasm2wat` for disassembly.
 
 ## Some notes on C
-Note that C compilation is usually done as follows:
+C compilation is usually done as follows:
 
 1. Run the preprocessor (`cpp`) to expand macros and includes (often on many source files)
-1. Compile the preprocessed code into (often multiple) object files
+1. Compile the preprocessed code into object files
 1. Link everything into a final binary
 
-A decent overview of the most common command line arguments for a *different* compiler is [here](https://www.thegeekstuff.com/2012/10/gcc-compiler-options/). Many of the options are similar for most C compilers.
+A decent overview of the most common command line arguments for a *different* compiler is [here](https://www.thegeekstuff.com/2012/10/gcc-compiler-options/). Many of the options are identical for most C compilers.
 
 # Implementing a trivial function
 I'm going to start with a very simple example (just to reduce the number of things that could go wrong).
@@ -69,7 +70,7 @@ And it produces the following surprisingly readable output:
     i32.add))
 ```
 
-MDN has a great [explanation of the Web Assembly text format](https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format) (".wat" files). The syntax is based on [S-expressions](https://en.wikipedia.org/wiki/S-expression) (similar to [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language))). Note that inline comments are delimited by semicolons (e.g. `; comment goes here;`), as noted in [this more detailed look at Web Assembly text format syntax.](https://github.com/WebAssembly/spec/blob/master/interpreter/README.md#s-expression-syntax).
+MDN has a great [explanation of the Web Assembly text format](https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format) (".wat" files). The syntax is based on [S-expressions](https://en.wikipedia.org/wiki/S-expression) (similar to [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language))). Note that inline comments are delimited by semicolons (e.g. `; comment goes here ;`), as noted in [this more detailed look at Web Assembly text format syntax.](https://github.com/WebAssembly/spec/blob/master/interpreter/README.md#s-expression-syntax).
 
 Breaking down the first two lines:
 
@@ -89,12 +90,12 @@ So far, we have a module and an unnamed type (which can be referenced by index 0
   * `(memory (;0;) 0)` specifies an unnamed memory, which must have an initial size of at least zero 64 KB pages
     * I believe this could have been omitted from the output in this trivial example
 
-The host code will need to pass in a (zero-sized) memory buffer named `env.__linear_memory`. On to the actual code:
+The host code would need to pass in a (zero-sized) memory buffer named `env.__linear_memory`. On to the actual code:
 
 * `func` defines a function
   * `$add` is the name of the function (names are prefixed with `$`)
   * `(type 0)` refers to the type zero, defined previously: (i32, i32) => (i32)
-  * The function type/signature/prototype is then specified -- I'm not sure why the type is duplicated
+  * The function type/signature/prototype is then specified -- I'm not sure why the type needs to be duplicated here
   * The function body follows as a series of instructions (here's the [full list of WebAssembly instructions](https://webassembly.github.io/spec/core/syntax/instructions.html))
 
 Looking at the function body, note that local values are referenced by a zero-based index that starts with the function arguments and then continues on to any local variables:
@@ -136,11 +137,12 @@ Interestingly, this most recent disassembly shows some other changes:
 * A block of linear memory that starts at 2 pages long is declared
 * There is a stack pointer that is initialized to 1 KB into the second page of memory
 * This memory is exported from the module
+* The seemingly unnecessary memory *import* (`env.__linear_memory`) is no longer present
 
 I have some questions about this arrangement:
 
-* Why is the memory exported? Can the host code read or even modify the stack?
-* Does this stack solely exist to support C semantics (e.g. taking the address of a variable on the stack)?
+* Why is the memory exported? Can the host code read or even modify the stack? (Spoiler: yes)
+* Does this stack solely exist to support C semantics (e.g. taking the address of a variable on the stack)? (Probably)
   * Note that [this WebAssembly note](https://github.com/WebAssembly/design/blob/main/Nondeterminism.md) indicates the VM's stack can't be accessed by a program ("Note that this stack isn't located in the program-accessible linear memory")
 
 ### Aside: a WebAssembly critique
@@ -152,7 +154,7 @@ Back to my trivial experiment.
 How do I tell Clang/LLVM that I want to export a function? Consulting the [linker documentation](https://lld.llvm.org/WebAssembly.html), it looks like I can export everything (not my preferred approach) or specify exports either on the command line or with attributes in the code. In code, the two options appear to be:
 
 * Mark exports with `__attribute__((export_name("nameOfExport")))`
-* Specify `-Wl,--export-dynamic` on the command line and mark exports with `__attribute__ ((visibility ("default")))`
+* Specify `-Wl,--export-dynamic` on the Clang command line and mark exports with `__attribute__ ((visibility ("default")))`
 
 I kind of wish there was an "always export this symbol by name" option that didn't require duplicating the name. C preprocessor to the rescue!
 
@@ -179,6 +181,8 @@ Output:
   (export "memory" (memory 0))
   (export "add" (func $add)))
 ```
+
+This looks like what I want. I've got my function and it's being exported (along with a memory region that I'm not actually using in my code).
 
 ## Using the module
 Now that I've got my finished module (`add.wasm`), I need to host it somewhere.
@@ -229,3 +233,10 @@ Note that using `fetch` isn't supported from the file system, so I used [a trivi
 To my surprise, everything worked on the first try.
 
 I was also able to confirm that the module's memory was exported (`module.instance.exports.memory`) and could be read from within my browser's dev tools window. I'm still not clear on why LLVM decided to export the memory by default.
+
+# That's it!
+The end result of all this was actually pretty simple. You can see all the code and the build commands in this repository: [webassembly-trivial-example](https://github.com/jaredkrinke/webassembly-trivial-example).
+
+Remembering how to use a C compiler on the command line, and deciphering LLVM's export semantics took a bit more time than I would have liked, but I learned a lot about WebAssembly in the process.
+
+Next up, I'll see if I can get the C standard library working.
