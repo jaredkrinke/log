@@ -1,6 +1,6 @@
 ---
 title: A trivial WebAssembly example
-description: This is a complete example of building and running a trivial WebAssembly module
+description: This is a complete example of building and running a trivial WebAssembly module.
 keywords: [webassembly,wabt,llvm]
 date: 2021-09-27
 ---
