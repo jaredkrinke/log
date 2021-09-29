@@ -1,10 +1,10 @@
 ---
-title: WebAssembly and C libraries
-description: In the interest of compiling C code to WebAssembly, I'm investigating how C libraries work with WebAssembly.
+title: WebAssembly and the C standard library
+description: In the interest of compiling C code to WebAssembly, here's an example of using the C standard library.
 keywords: [webassembly]
 date: 2021-09-28
 ---
-In the [last post](trivial-example.md), I compiled a trivial C function to WebAssembly. This was a good learning exercise, but I didn't use the C standard library, so compiling the code was trivial. Let's look into how to use the C standard library when compiling C to WebAssembly with Clang/LLVM.
+In the [last post](trivial-example.md), I compiled a trivial C function to WebAssembly. This was a good learning exercise, but I didn't use the C standard library, so compiling the code was trivial. Let's look into how to use the C standard library when compiling C to WebAssembly with Clang/LLVM. All the code is in this repository: [webassembly-libc-example](https://github.com/jaredkrinke/webassembly-libc-example).
 
 # Is this even a good idea?
 WebAssembly is simple, which is nice for getting started. It's also extremely limited (at least, in the browser). In order to compile typical C code to WebAssembly, you need a C standard library.
@@ -14,7 +14,7 @@ Obviously, the browser doesn't supply a C run time to WebAssembly modules (any l
 How much overhead is including the C library in every module going to add? That's a good question, that I'm hoping to answer eventually.
 
 # Which C library to use?
-In hopes of avoiding writing my own C library, I looked around for existing C libraries (either already compiled to WebAssembly or simple enough that there's hope I could compile to WebAssembly myself). Here's what I found (and I'm sure there are many other options I haven't run across yet):
+Here are a few promising leads on a WebAssembly-friendly C library (either already compiled to WebAssembly or simple enough that there's hope I could compile to WebAssembly myself):
 
 * [Emscripten](https://github.com/emscripten-core/emscripten): Modified version of [musl libc](https://musl.libc.org/) that can run in a browser
 * [WASI libc](https://github.com/WebAssembly/wasi-libc): Also built on musl (I think), but designed to run on top of [WASI](https://wasi.dev/)--I didn't think this would run in the browser, but [this blog post indicates otherwise](https://depth-first.com/articles/2019/10/16/compiling-c-to-webassembly-and-running-it-without-emscripten/)
@@ -64,10 +64,12 @@ Note that in this example, I extracted the WASI SDK into a subfolder of my proje
 Here's the build command (note: I omitted the `-target` option because I'm using the WASI SDK's Clang, which defaults to targeting `wasm32-wasi`):
 
 ```
-wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm && dir sine.wasm
+wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm
 ```
 
 ## Calling from Node
+Almost identical to last time:
+
 ```
 const fs = require('fs');
 (async () => {
@@ -80,6 +82,8 @@ const fs = require('fs');
 Output: 0.9999996829318346 (looks reasonable, since 1.57 is approximately pi/2 and so sine of that angle should be roughly 1).
 
 ## Calling from a browser
+Again, almost identical:
+
 ```
 <html>
     <body>
@@ -105,7 +109,7 @@ The value of sin(1.57) is 0.9999996829318346
 Looks like the WASI libc works in the browser, at least in a case like this where no system calls are needed.
 
 # Overhead
-Earlier, I was wondering how much overhead there is in linking against a C standard library for WebAssembly. My understanding is that linking for C is done a per-function level, so you're only pulling in what you need. Here are some measurements I took (and yes, I linked in `malloc` but not `free`):
+Earlier, I was wondering how much overhead there is in linking against a C standard library for WebAssembly. My understanding is that linking for C is done per-function, so you're only pulling in what you need. Here are some measurements I took (and yes, I linked in `malloc` but not `free`):
 
 | Dependencies | Module size (in bytes) |
 | :--- | ---: |
@@ -123,3 +127,7 @@ Overall, that could have gone a lot worse.
 I'm still not thrilled with the overhead of statically linking *everything*, and the thought of each module essentially having its own allocator is a bit alarming, but I need to remind myself that the alternatives are often worse. For example, if rewriting a C program in JavaScript isn't in the cards, the previous best options were either transpiling the C code to something like asm.js or, even worse, emulating an x86 CPU in the browser (using JavaScript) and running existing binaries.
 
 I will state, however, that I'm not quite as thrilled with the idea of compiling C programs to WebAssembly to support "run anywhere" scenarios as I was before I started this exercise.
+
+# Links
+* Code: [webassembly-libc-example](https://github.com/jaredkrinke/webassembly-libc-example)
+* [Live demo](https://jaredkrinke.github.io/webassembly-libc-example/)
