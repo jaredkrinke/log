@@ -1,4 +1,105 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Mon, 27 Sep 2021 19:10:43 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[A trivial WebAssembly example]]></title><description><![CDATA[<p>In the last post, I provided an <a href="../overview/">overview of WebAssembly</a>. In this post, I&#39;m going to build and run a complete (but trivial) WebAssembly module in C using <a href="https://llvm.org/">LLVM</a> and <a href="https://clang.llvm.org/">Clang</a>.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Wed, 29 Sep 2021 04:57:28 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[WebAssembly and C libraries]]></title><description><![CDATA[<p>In the <a href="../trivial-example/">last post</a>, I compiled a trivial C function to WebAssembly. This was a good learning exercise, but I didn&#39;t use the C standard library, so compiling the code was trivial. Let&#39;s look into how to use the C standard library when compiling C to WebAssembly with Clang/LLVM.</p>
+<h1 id="is-this-even-a-good-idea">Is this even a good idea?</h1>
+<p>WebAssembly is simple, which is nice for getting started. It&#39;s also extremely limited (at least, in the browser). In order to compile typical C code to WebAssembly, you need a C standard library.</p>
+<p>Obviously, the browser doesn&#39;t supply a C run time to WebAssembly modules (any language could be compiled to WebAssembly), so that means that the module itself has to include all the functionality it uses from the C library within itself (or get it from another module). In other words, it&#39;s statically linked.</p>
+<p>How much overhead is including the C library in every module going to add? That&#39;s a good question, that I&#39;m hoping to answer eventually.</p>
+<h1 id="which-c-library-to-use">Which C library to use?</h1>
+<p>In hopes of avoiding writing my own C library, I looked around for existing C libraries (either already compiled to WebAssembly or simple enough that there&#39;s hope I could compile to WebAssembly myself). Here&#39;s what I found (and I&#39;m sure there are many other options I haven&#39;t run across yet):</p>
+<ul>
+<li><a href="https://github.com/emscripten-core/emscripten">Emscripten</a>: Modified version of <a href="https://musl.libc.org/">musl libc</a> that can run in a browser</li>
+<li><a href="https://github.com/WebAssembly/wasi-libc">WASI libc</a>: Also built on musl (I think), but designed to run on top of <a href="https://wasi.dev/">WASI</a>--I didn&#39;t think this would run in the browser, but <a href="https://depth-first.com/articles/2019/10/16/compiling-c-to-webassembly-and-running-it-without-emscripten/">this blog post indicates otherwise</a></li>
+<li><a href="https://github.com/embeddedartistry/libc">Embedded Artistry libc</a>: Designed for embedded applications; I&#39;m hoping this would be easy to bring up on a new platform like WebAssembly</li>
+<li><strong>Build your own!</strong> If you only need a handful of functions, maybe you can implement them yourself (here&#39;s <a href="https://dassur.ma/things/c-to-webassembly/">one great example with a trivial allocator</a>)</li>
+</ul>
+<p>I&#39;m going to continue avoiding Emscripten because a) it wants me to install Python first and b) I&#39;d like to keep things as simple as possible. I didn&#39;t think WASI&#39;s C library would work for me in the browser, but I&#39;m going to try it anyway.</p>
+<h1 id="setup-for-wasi-libc">Setup for WASI libc</h1>
+<p>In order to compile against a C library, you need header files and compiled objects (in an archive) or a shared library (a concept that I don&#39;t think exists for WebAssembly since they use modules for that purpose). Note that we&#39;re basically cross-compiling for a different architecture.</p>
+<p>Fortunately, <a href="https://github.com/WebAssembly/wasi-sdk">WASI provides an SDK for exactly this purpose</a>. I downloaded the latest release (~140 MB) and took a peek at the contents:</p>
+<ul>
+<li><code>bin/</code>: Oh, look, Clang and LLVM -- I guess I should have just started here!</li>
+<li><code>lib/clang/11.0.0/lib/wasi/libclang_rt.builtins-wasm32.a</code>: This archive contains WebAssembly implementations of so-called &quot;builtins&quot; that <a href="https://releases.llvm.org/11.0.0/tools/clang/docs/Toolchain.html">Clang implicitly requires</a></li>
+<li><code>share/wasi-sysroot</code>: System root for the cross compiler, containing all the headers and libraries (all raw objects or archives)</li>
+</ul>
+<p>Note that the version of LLVM that I installed in my last post didn&#39;t come from the WASI SDK and it didn&#39;t contain the &quot;builtins&quot; archive noted above. In order to use that installation of Clang/LLVM, I needed to copy <code>libclang_rt.builtins-wasm32.a</code> into my installation (fortunately the eventual error message you see provides the exact destination path).</p>
+<h1 id="a-slightly-less-trivial-example">A slightly less trivial example</h1>
+<h2 id="source-code">Source code</h2>
+<p>Here&#39;s the C source for my test module that uses the WASI C library (<code>sine.c</code>):</p>
+<pre><code>#include &lt;math.h&gt;
+
+#define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
+#define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
+
+double WASM_EXPORT(sine)(double theta) {
+    return sin(theta);
+}</code></pre><p>All I&#39;m doing is exposing <code>sin</code> from <code>math.h</code> as an export named <code>sine</code>.</p>
+<h2 id="compiling">Compiling</h2>
+<p>The build command is a bit more complicated than <a href="../trivial-example/#compiling-the-code">last time</a>:</p>
+<ul>
+<li><code>-nostdlib</code> is gone since we&#39;re using the C standard library this time</li>
+<li><code>-nostartfiles</code> is present because we don&#39;t need to link in any bootstrapping entry point to call <code>main()</code> (we don&#39;t have a <code>main()</code>)</li>
+<li><code>-target wasm32-wasi</code> could be updated to specify the &quot;operating system&quot; (used loosely here) as WASI</li>
+<li><code>--sysroot wasi-sdk-12.0/share/wasi-sysroot</code> to point to the cross-compiler system root that came from the WASI SDK</li>
+</ul>
+<p>Note that in this example, I extracted the WASI SDK into a subfolder of my project (the <a href="https://github.com/WebAssembly/wasi-sdk">SDK&#39;s README has an example as well</a>).</p>
+<p>Here&#39;s the build command (note: I omitted the <code>-target</code> option because I&#39;m using the WASI SDK&#39;s Clang, which defaults to targeting <code>wasm32-wasi</code>):</p>
+<pre><code>wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm &amp;&amp; dir sine.wasm</code></pre><h2 id="calling-from-node">Calling from Node</h2>
+<pre><code>const fs = require(&#39;fs&#39;);
+(async () =&gt; {
+    const module = await WebAssembly.instantiate(await fs.promises.readFile(&quot;./sine.wasm&quot;));
+    const sine = module.instance.exports.sine;
+    console.log(sine(1.57));
+})();</code></pre><p>Output: 0.9999996829318346 (looks reasonable, since 1.57 is approximately pi/2 and so sine of that angle should be roughly 1).</p>
+<h2 id="calling-from-a-browser">Calling from a browser</h2>
+<pre><code>&lt;html&gt;
+    &lt;body&gt;
+        &lt;p&gt;The value of sin(1.57) is &lt;span id=&quot;result&quot;&gt;?&lt;/span&gt;&lt;/p&gt;
+
+        &lt;script&gt;
+            (async () =&gt; {
+                const module = await WebAssembly.instantiateStreaming(fetch(&quot;./sine.wasm&quot;));
+                const sine = module.instance.exports.sine;
+                document.getElementById(&quot;result&quot;).innerText = sine(1.57);
+            })();
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre><p>Result:</p>
+<pre><code>The value of sin(1.57) is 0.9999996829318346</code></pre><p>Looks like the WASI libc works in the browser, at least in a case like this where no system calls are needed.</p>
+<h1 id="overhead">Overhead</h1>
+<p>Earlier, I was wondering how much overhead there is in linking against a C standard library for WebAssembly. My understanding is that linking for C is done a per-function level, so you&#39;re only pulling in what you need. Here are some measurements I took (and yes, I linked in <code>malloc</code> but not <code>free</code>):</p>
+<table>
+<thead>
+<tr>
+<th align="left">Dependencies</th>
+<th align="right">Module size (in bytes)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">(none)</td>
+<td align="right">207</td>
+</tr>
+<tr>
+<td align="left"><code>sin</code></td>
+<td align="right">7851</td>
+</tr>
+<tr>
+<td align="left"><code>sin</code>, <code>cos</code></td>
+<td align="right">8116</td>
+</tr>
+<tr>
+<td align="left"><code>malloc</code></td>
+<td align="right">7350</td>
+</tr>
+<tr>
+<td align="left"><code>sin</code>, <code>malloc</code></td>
+<td align="right">14995</td>
+</tr>
+</tbody></table>
+<p>Not great, but also not terrible. My hope is that WebAssembly written in C <em>and using the C standard library</em> is uncommon, and generally only used for hosting programs with large C code bases that would be prohibitively time-consuming to rewrite.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Overall, that could have gone a lot worse.</p>
+<p>I&#39;m still not thrilled with the overhead of statically linking <em>everything</em>, and the thought of each module essentially having its own allocator is a bit alarming, but I need to remind myself that the alternatives are often worse. For example, if rewriting a C program in JavaScript isn&#39;t in the cards, the previous best options were either transpiling the C code to something like asm.js or, even worse, emulating an x86 CPU in the browser (using JavaScript) and running existing binaries.</p>
+<p>I will state, however, that I&#39;m not quite as thrilled with the idea of compiling C programs to WebAssembly to support &quot;run anywhere&quot; scenarios as I was before I started this exercise.</p>
+]]></description><link>https://log.schemescape.com/posts/webassembly/c-standard-library-example</link><guid isPermaLink="true">https://log.schemescape.com/posts/webassembly/c-standard-library-example</guid><pubDate>Tue, 28 Sep 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[A trivial WebAssembly example]]></title><description><![CDATA[<p>In the last post, I provided an <a href="../overview/">overview of WebAssembly</a>. In this post, I&#39;m going to build and run a complete (but trivial) WebAssembly module in C using <a href="https://llvm.org/">LLVM</a> and <a href="https://clang.llvm.org/">Clang</a>.</p>
 <p>All of the code is here: <a href="https://github.com/jaredkrinke/webassembly-trivial-example">webassembly-trivial-example</a>.</p>
 <h1 id="aside">Aside</h1>
 <p>It looks like someone else was frustrated with Emscripten in the past, so they wrote a post about <a href="http://schellcode.github.io/webassembly-without-emscripten">WebAssembly without Emscripten</a>. Their guide was helpful, but I&#39;m not sure if it&#39;s up to date. I also found their Makefiles to be excessively complex.</p>
@@ -274,95 +375,4 @@ int WASM_EXPORT(add)(int a, int b) {
 <p>Graphviz doesn&#39;t seem to support as many diagram types, and I&#39;m a little bit worried to take on a Web Assembly dependency, but on the other hand I&#39;ve been meaning to learn more about Web Assembly anyway. This project might be a good way to learn what goes into integrating a Web Assembly module into Node.</p>
 <h1 id="next-steps">Next steps</h1>
 <p>Hopefully I don&#39;t regret this decision, but I think I&#39;m going to first try integrating Mermaid. If I hit any snags or if performance is abysmal, I&#39;ll see if node-graphviz is actually what I&#39;m looking for.</p>
-]]></description><link>https://log.schemescape.com/posts/static-site-generators/diagrams</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/diagrams</guid><pubDate>Thu, 23 Sep 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[Finding the cheapest hosting for my hobby projects]]></title><description><![CDATA[<p>I like playing around with software, so I frequently have hobby projects in development or &quot;production&quot; (scare quotes because they&#39;re hobbies after all). Since I don&#39;t like wasting money, I&#39;m always on the lookout for cheap project hosting.</p>
-<p>Here&#39;s how I went from cheap hosting to free hosting.</p>
-<h1 id="background">Background</h1>
-<p>Just for fun, I made a couple of computer games (best played on a desktop/laptop):</p>
-<ul>
-<li><a href="https://jaredkrinke.itch.io/sic-1">SIC-1</a>: A single-instruction (<a href="https://esolangs.org/wiki/Subleq">subleq</a>) programming game, with a global leader board</li>
-<li><a href="https://jaredkrinke.itch.io/fbgp8">Falling Block Game</a>: Block-stacking game for <a href="https://www.lexaloffle.com/pico-8.php">PICO-8</a> with a global high scores list</li>
-</ul>
-<p>Both of these require services with a small amount of storage. Since there are no ads or monetization, I&#39;d like to run the services as cheaply as possible.</p>
-<h1 id="first-attempt-120month">First attempt: $1.20/month</h1>
-<p>I inherited a first generation <a href="https://www.raspberrypi.org/">Raspberry Pi</a> and already had a $10/year domain, so why not just host my site locally?</p>
-<p>Because I was curious about Node, I decided to use the following very simple tech stack:</p>
-<ul>
-<li>Software<ul>
-<li><a href="https://nodejs.org/en/">Node</a> JavaScript environment</li>
-<li><a href="http://expressjs.com/">Express</a> web server framework</li>
-<li><a href="https://sqlite.org/index.html">SQLite</a> (via <a href="https://www.npmjs.com/package/sqlite3">sqlite3</a>) in-process, single file-based database</li>
-<li><a href="https://github.com/zapty/forever-service">forever-service</a> service monitoring</li>
-<li><a href="https://letsencrypt.org/">Let&#39;s Encrypt</a> certificate service</li>
-</ul>
-</li>
-<li>Hardware/connectivity<ul>
-<li>Raspberry Pi (first generation), running <a href="https://www.raspbian.org/">Raspbian</a></li>
-<li>My home Internet connection and router, with appropriate holes in the firewall</li>
-<li>$10/year .com domain name</li>
-</ul>
-</li>
-</ul>
-<p>There was very little traffic, so the Raspberry Pi could service requests fine and my (cheapest tier) cable Internet was sufficient.</p>
-<h2 id="cost">Cost</h2>
-<p>The Raspberry Pi drew roughly 3 watts, so the electricity plus domain meant I was hosting a service for roughly $1.20 per month. Very affordable! Additionally, as long as I didn&#39;t have a lot of traffic, I could run multiple services without increasing the cost.</p>
-<h2 id="concerns">Concerns</h2>
-<p>I was a bit wary of poking a hole in my firewall and, within a few days, I decided that my concern was justified.</p>
-<p>The log for my web server was almost immediately flooded by TCP scanning requests from <a href="https://github.com/robertdavidgraham/masscan">masscan</a>. I also saw 404 errors to common vulnerable paths (namely phpMyAdmin- and WordPress-related paths).</p>
-<p>I know there are a lot of people who enjoy having their own &quot;<a href="https://haydenjames.io/home-lab-beginners-guide-hardware/">home lab</a>&quot;, and I&#39;m sure many of these people keep up on the latest security recommendations, but I was more interested in hosting a service than attracting unwanted attention to my home network&#39;s external IP address.</p>
-<p>I would strongly advise against hosting any site this way, especially since it turns out to not even be the cheapest option!</p>
-<h1 id="second-attempt-433month">Second attempt: $4.33/month</h1>
-<p>Wait, my hosting cost went up!? Yes, and it was money well spent.</p>
-<p>After getting slightly alarmed at all of the nefarious traffic flowing through my router, I was happy to pay for a virtual private server. This way it&#39;s at least not my own personal network that&#39;s at risk when something goes wrong.</p>
-<p>I selected <a href="https://www.vultr.com/">Vultr</a> as the host because they <a href="https://www.vultr.com/products/cloud-compute/#pricing">offered a decent server for $2.50/month</a>... except that server is <a href="https://en.wikipedia.org/wiki/IPv6">IPv6</a> only, and it turns out that much of the Internet is stuck in the address-constrained dark age of IPv4. So I had to pay a $1/month premium for an IPv4 address.</p>
-<p>The tech stack was the same except for the host. Both the VPS&#39;s Internet connection and CPU were light years beyond what I had with my Raspberry Pi on &quot;cheap&quot; cable Internet.</p>
-<h2 id="cost-1">Cost</h2>
-<p>Adding in the domain name, my total cost was $4.33/month. A little more than I&#39;d like to spend on silly hobby projects, but this setup came with the peace of mind of not broadcasting my home IP address everywhere. Again, I could add more services to my server at no additional cost to me.</p>
-<h2 id="concerns-1">Concerns</h2>
-<p>Other than costing me roughly $50/year, this setup worked great. But it wasn&#39;t as robust as I&#39;d like:</p>
-<ul>
-<li>The database was a single file sitting on the server&#39;s drive, with no backup, so I could theoretically lose it due to hardware failure</li>
-<li>Configuring the server was a manual process, so if there was a crash, I&#39;d have to spend time setting a new server up</li>
-</ul>
-<p>At the time, I wasn&#39;t aware, but there are solutions to both of these problems:</p>
-<ul>
-<li>Use <a href="https://litestream.io/">Litestream</a> to continuously backup the SQLite database to cloud storage</li>
-<li>Use <a href="https://www.docker.com/">Docker</a> to package everything up, enabling rapid recreation of the server</li>
-</ul>
-<p>There are actually many other solutions, but these are two simple approaches I plan on testing out in the future.</p>
-<h1 id="third-attempt-free">Third attempt: FREE!</h1>
-<p>While chatting with a friend who does web development for a living, he told me that I could probably host my site for free. That magic phrase led to several follow-up questions from me, and a lot more information from him.</p>
-<p>It turns out that many cloud providers have free tiers to try and hook you into their ecosystems, in hopes that you&#39;ll eventually become a paying customer. I&#39;m pretty sure all the major cloud providers have free tiers, and some of them are quite generous. My uninformed opinion is that it seems like the less popular the platform, the more generous the free tier.</p>
-<p>The annoying part of all of this is that the best free offers vary substantially, so you&#39;ll likely end up having to use multiple different providers. In my case, the tech stack looks like this:</p>
-<ul>
-<li>Node JavaScript environment</li>
-<li><a href="https://koajs.com/">Koa</a> web framework</li>
-<li><a href="https://cloud.google.com/firestore/">Firestore</a> document database</li>
-<li><a href="https://www.netlify.com/products/functions/">Netlify Functions</a> &quot;<a href="https://en.wikipedia.org/wiki/Serverless_computing">serverless</a>&quot; end point<ul>
-<li>Hosted on the (free) &quot;netlify.app&quot; domain</li>
-</ul>
-</li>
-</ul>
-<p>Since everything is in the cloud, I&#39;m also less concerned about hardware failure. I haven&#39;t thoroughly investigated whether I should backup my Firestore data or if their architecture seems robust enough for my needs.</p>
-<h2 id="cost-2">Cost</h2>
-<p>Zero cost, since I didn&#39;t need to use a custom domain. I didn&#39;t even have to provide a credit card.</p>
-<h2 id="concerns-2">Concerns</h2>
-<p>This setup is free, which is great, but when I last checked, both of the free offerings I&#39;m using were actually fairly expensive if you end up with enough traffic to need to start paying. You&#39;re also locked into their systems unless you want to start rewriting code.</p>
-<p>I also found that Firestore wasn&#39;t a great fit for my needs, since it&#39;s a &quot;<a href="https://en.wikipedia.org/wiki/NoSQL">NoSQL</a>&quot; document database that basically requires me to build and maintain my own aggregations. But I&#39;m not paying anything, so I shouldn&#39;t complain.</p>
-<h1 id="what-about-the-future">What about the future?</h1>
-<p>I succeeded in finding free hosting for my hobby projects. Great! But I&#39;m not perfectly happy being locked into specific vendors and libraries.</p>
-<p>Cloud services are great, but I&#39;d really like something more portable, in case I ever create a project that ends up getting a significant amount of traffic. There may be better approaches, but I think I&#39;d like to use containers hosted on a VPS (with backup to commodity cloud storage), just for portability reasons.</p>
-<p>I have heard that Oracle&#39;s cloud has a <a href="https://www.oracle.com/cloud/free/#always-free">free tier that even includes your own virtual private servers</a>, so I may look into that eventually. Planning to use Oracle is something I never thought I&#39;d be doing as a hobbyist, but these are interesting times.</p>
-<p>The future might look like this:</p>
-<ul>
-<li>Node environment</li>
-<li>Koa web framework</li>
-<li>SQLite database<ul>
-<li>Backed up to commodity store (e.g. <a href="https://www.backblaze.com/">Backblaze</a>) via Litestream</li>
-</ul>
-</li>
-<li>Forever-service monitoring</li>
-<li>Let&#39;s encrypt certificate</li>
-<li>All in a Docker container</li>
-<li>Hosed on Oracle&#39;s free compute VM</li>
-</ul>
-]]></description><link>https://log.schemescape.com/posts/services/cheap-hosting</link><guid isPermaLink="true">https://log.schemescape.com/posts/services/cheap-hosting</guid><pubDate>Wed, 22 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
+]]></description><link>https://log.schemescape.com/posts/static-site-generators/diagrams</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/diagrams</guid><pubDate>Thu, 23 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
