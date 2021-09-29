@@ -34,3 +34,73 @@ Fortunately, [WASI provides an SDK for exactly this purpose](https://github.com/
 * `share/wasi-sysroot`: System root for the cross compiler, containing all the headers and libraries (all raw objects or archives)
 
 Note that the version of LLVM that I installed in my last post didn't come from the WASI SDK and it didn't contain the "builtins" archive noted above. In order to use that installation of Clang/LLVM, I needed to copy `libclang_rt.builtins-wasm32.a` into my installation (fortunately the eventual error message you see provides the exact destination path).
+
+# A slightly less trivial example
+## Source code
+Here's the C source for my test module that uses the WASI C library (`sine.c`):
+
+```
+#include <math.h>
+
+#define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
+#define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
+
+double WASM_EXPORT(sine)(double theta) {
+    return sin(theta);
+}
+```
+
+All I'm doing is exposing `sin` from `math.h` as an export named `sine`.
+
+## Compiling
+The build command is a bit more complicated than [last time](trivial-example.md#compiling-the-code):
+
+* `-nostdlib` is gone since we're using the C standard library this time
+* `-nostartfiles` is present because we don't need to link in any bootstrapping entry point to call `main()` (we don't have a `main()`)
+* `-target wasm32-wasi` could be updated to specify the "operating system" (used loosely here) as WASI
+* `--sysroot wasi-sdk-12.0/share/wasi-sysroot` to point to the cross-compiler system root that came from the WASI SDK
+
+Note that in this example, I extracted the WASI SDK into a subfolder of my project (the [SDK's README has an example as well](https://github.com/WebAssembly/wasi-sdk)).
+
+Here's the build command (note: I omitted the `-target` option because I'm using the WASI SDK's Clang, which defaults to `wasm32-wasi`):
+
+```
+wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm && dir sine.wasm
+```
+
+## Calling from Node
+```
+const fs = require('fs');
+(async () => {
+    const module = await WebAssembly.instantiate(await fs.promises.readFile("./sine.wasm"));
+    const sine = module.instance.exports.sine;
+    console.log(sine(1.57));
+})();
+```
+
+Output: 0.9999996829318346 (looks reasonable, since 1.57 is approximately pi/2 and so sine of that angle should be roughly 1).
+
+## Calling from a browser
+```
+<html>
+    <body>
+        <p>The value of sin(1.57) is <span id="result">?</span></p>
+
+        <script>
+            (async () => {
+                const module = await WebAssembly.instantiateStreaming(fetch("./sine.wasm"));
+                const sine = module.instance.exports.sine;
+                document.getElementById("result").innerText = sine(1.57);
+            })();
+        </script>
+    </body>
+</html>
+```
+
+Result:
+
+```
+The value of sin(1.57) is 0.9999996829318346
+```
+
+Looks like the WASI libc works in the browser, at least in a case like this where no system calls are needed.
