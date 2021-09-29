@@ -1,5 +1,4 @@
 ---
-draft: true
 title: WebAssembly and C libraries
 description: In the interest of compiling C code to WebAssembly, I'm investigating how C libraries work with WebAssembly.
 keywords: [webassembly]
@@ -62,7 +61,7 @@ The build command is a bit more complicated than [last time](trivial-example.md#
 
 Note that in this example, I extracted the WASI SDK into a subfolder of my project (the [SDK's README has an example as well](https://github.com/WebAssembly/wasi-sdk)).
 
-Here's the build command (note: I omitted the `-target` option because I'm using the WASI SDK's Clang, which defaults to `wasm32-wasi`):
+Here's the build command (note: I omitted the `-target` option because I'm using the WASI SDK's Clang, which defaults to targeting `wasm32-wasi`):
 
 ```
 wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm && dir sine.wasm
@@ -104,3 +103,23 @@ The value of sin(1.57) is 0.9999996829318346
 ```
 
 Looks like the WASI libc works in the browser, at least in a case like this where no system calls are needed.
+
+# Overhead
+Earlier, I was wondering how much overhead there is in linking against a C standard library for WebAssembly. My understanding is that linking for C is done a per-function level, so you're only pulling in what you need. Here are some measurements I took (and yes, I linked in `malloc` but not `free`):
+
+| Dependencies | Module size (in bytes) |
+| :--- | ---: |
+| (none) | 207 |
+| `sin` | 7851 |
+| `sin`, `cos` | 8116 |
+| `malloc` | 7350 |
+| `sin`, `malloc` | 14995 |
+
+Not great, but also not terrible. My hope is that WebAssembly written in C *and using the C standard library* is uncommon, and generally only used for hosting programs with large C code bases that would be prohibitively time-consuming to rewrite.
+
+# Conclusion
+Overall, that could have gone a lot worse.
+
+I'm still not thrilled with the overhead of statically linking *everything*, and the thought of each module essentially having its own allocator is a bit alarming, but I need to remind myself that the alternatives are often worse. For example, if rewriting a C program in JavaScript isn't in the cards, the previous best options were either transpiling the C code to something like asm.js or, even worse, emulating an x86 CPU in the browser (using JavaScript) and running existing binaries.
+
+I will state, however, that I'm not quite as thrilled with the idea of compiling C programs to WebAssembly to support "run anywhere" scenarios as I was before I started this exercise.
