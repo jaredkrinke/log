@@ -2,8 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Schemescape: WebAssembly and C libraries</title>
-        <meta name="description" content="In the interest of compiling C code to WebAssembly, I&#x27;m investigating how C libraries work with WebAssembly." />
+        <title>Schemescape: WebAssembly and the C standard library</title>
+        <meta name="description" content="In the interest of compiling C code to WebAssembly, here&#x27;s an example of using the C standard library." />
         <meta name="keywords" content="webassembly" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="stylesheet" href="../../../css/style.css" />
@@ -17,16 +17,16 @@
             </header>
 <article>
     <header>
-        <h1><a href=".">WebAssembly and C libraries</a></h1>
+        <h1><a href=".">WebAssembly and the C standard library</a></h1>
         <p><time datetime="2021-09-28">September 28, 2021</time></p>
     </header>
-<p>In the <a href="../trivial-example/">last post</a>, I compiled a trivial C function to WebAssembly. This was a good learning exercise, but I didn&#39;t use the C standard library, so compiling the code was trivial. Let&#39;s look into how to use the C standard library when compiling C to WebAssembly with Clang/LLVM.</p>
+<p>In the <a href="../trivial-example/">last post</a>, I compiled a trivial C function to WebAssembly. This was a good learning exercise, but I didn&#39;t use the C standard library, so compiling the code was trivial. Let&#39;s look into how to use the C standard library when compiling C to WebAssembly with Clang/LLVM. All the code is in this repository: <a href="https://github.com/jaredkrinke/webassembly-libc-example">webassembly-libc-example</a>.</p>
 <h1 id="is-this-even-a-good-idea">Is this even a good idea?</h1>
 <p>WebAssembly is simple, which is nice for getting started. It&#39;s also extremely limited (at least, in the browser). In order to compile typical C code to WebAssembly, you need a C standard library.</p>
 <p>Obviously, the browser doesn&#39;t supply a C run time to WebAssembly modules (any language could be compiled to WebAssembly), so that means that the module itself has to include all the functionality it uses from the C library within itself (or get it from another module). In other words, it&#39;s statically linked.</p>
 <p>How much overhead is including the C library in every module going to add? That&#39;s a good question, that I&#39;m hoping to answer eventually.</p>
 <h1 id="which-c-library-to-use">Which C library to use?</h1>
-<p>In hopes of avoiding writing my own C library, I looked around for existing C libraries (either already compiled to WebAssembly or simple enough that there&#39;s hope I could compile to WebAssembly myself). Here&#39;s what I found (and I&#39;m sure there are many other options I haven&#39;t run across yet):</p>
+<p>Here are a few promising leads on a WebAssembly-friendly C library (either already compiled to WebAssembly or simple enough that there&#39;s hope I could compile to WebAssembly myself):</p>
 <ul>
 <li><a href="https://github.com/emscripten-core/emscripten">Emscripten</a>: Modified version of <a href="https://musl.libc.org/">musl libc</a> that can run in a browser</li>
 <li><a href="https://github.com/WebAssembly/wasi-libc">WASI libc</a>: Also built on musl (I think), but designed to run on top of <a href="https://wasi.dev/">WASI</a>--I didn&#39;t think this would run in the browser, but <a href="https://depth-first.com/articles/2019/10/16/compiling-c-to-webassembly-and-running-it-without-emscripten/">this blog post indicates otherwise</a></li>
@@ -64,7 +64,8 @@ double WASM_EXPORT(sine)(double theta) {
 </ul>
 <p>Note that in this example, I extracted the WASI SDK into a subfolder of my project (the <a href="https://github.com/WebAssembly/wasi-sdk">SDK&#39;s README has an example as well</a>).</p>
 <p>Here&#39;s the build command (note: I omitted the <code>-target</code> option because I&#39;m using the WASI SDK&#39;s Clang, which defaults to targeting <code>wasm32-wasi</code>):</p>
-<pre><code>wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm &amp;&amp; dir sine.wasm</code></pre><h2 id="calling-from-node">Calling from Node</h2>
+<pre><code>wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm</code></pre><h2 id="calling-from-node">Calling from Node</h2>
+<p>Almost identical to last time:</p>
 <pre><code>const fs = require(&#39;fs&#39;);
 (async () =&gt; {
     const module = await WebAssembly.instantiate(await fs.promises.readFile(&quot;./sine.wasm&quot;));
@@ -72,6 +73,7 @@ double WASM_EXPORT(sine)(double theta) {
     console.log(sine(1.57));
 })();</code></pre><p>Output: 0.9999996829318346 (looks reasonable, since 1.57 is approximately pi/2 and so sine of that angle should be roughly 1).</p>
 <h2 id="calling-from-a-browser">Calling from a browser</h2>
+<p>Again, almost identical:</p>
 <pre><code>&lt;html&gt;
     &lt;body&gt;
         &lt;p&gt;The value of sin(1.57) is &lt;span id=&quot;result&quot;&gt;?&lt;/span&gt;&lt;/p&gt;
@@ -87,7 +89,7 @@ double WASM_EXPORT(sine)(double theta) {
 &lt;/html&gt;</code></pre><p>Result:</p>
 <pre><code>The value of sin(1.57) is 0.9999996829318346</code></pre><p>Looks like the WASI libc works in the browser, at least in a case like this where no system calls are needed.</p>
 <h1 id="overhead">Overhead</h1>
-<p>Earlier, I was wondering how much overhead there is in linking against a C standard library for WebAssembly. My understanding is that linking for C is done a per-function level, so you&#39;re only pulling in what you need. Here are some measurements I took (and yes, I linked in <code>malloc</code> but not <code>free</code>):</p>
+<p>Earlier, I was wondering how much overhead there is in linking against a C standard library for WebAssembly. My understanding is that linking for C is done per-function, so you&#39;re only pulling in what you need. Here are some measurements I took (and yes, I linked in <code>malloc</code> but not <code>free</code>):</p>
 <table>
 <thead>
 <tr>
@@ -121,6 +123,11 @@ double WASM_EXPORT(sine)(double theta) {
 <p>Overall, that could have gone a lot worse.</p>
 <p>I&#39;m still not thrilled with the overhead of statically linking <em>everything</em>, and the thought of each module essentially having its own allocator is a bit alarming, but I need to remind myself that the alternatives are often worse. For example, if rewriting a C program in JavaScript isn&#39;t in the cards, the previous best options were either transpiling the C code to something like asm.js or, even worse, emulating an x86 CPU in the browser (using JavaScript) and running existing binaries.</p>
 <p>I will state, however, that I&#39;m not quite as thrilled with the idea of compiling C programs to WebAssembly to support &quot;run anywhere&quot; scenarios as I was before I started this exercise.</p>
+<h1 id="links">Links</h1>
+<ul>
+<li>Code: <a href="https://github.com/jaredkrinke/webassembly-libc-example">webassembly-libc-example</a></li>
+<li><a href="https://jaredkrinke.github.io/webassembly-libc-example/">Live demo</a></li>
+</ul>
 
 </article>
         </main>
