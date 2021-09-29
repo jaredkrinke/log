@@ -7,7 +7,7 @@ date: 2021-09-29
 # Question
 Is it possible to import a CommonJS module from within an ES module (using `import` syntax)?
 
-I thought a quick web search would answer this question, but instead most of the resources I found were about trying to `require()` ES modules (which you definitely can't do).
+I thought a quick web search would answer this question, but instead most of the resources I found were about trying to `require()` ES modules (which you definitely can't do--use a [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports) instead).
 
 # Background
 JavaScript didn't originally have a module system, so various groups have created their own systems, e.g. [CommonJS](http://www.commonjs.org/), [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api), and the ironically named [Universal Module Definition (UMD)](https://github.com/umdjs/umd).
