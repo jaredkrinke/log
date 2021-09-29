@@ -22,7 +22,7 @@
     </header>
 <h1 id="question">Question</h1>
 <p>Is it possible to import a CommonJS module from within an ES module (using <code>import</code> syntax)?</p>
-<p>I thought a quick web search would answer this question, but instead most of the resources I found were about trying to <code>require()</code> ES modules (which you definitely can&#39;t do).</p>
+<p>I thought a quick web search would answer this question, but instead most of the resources I found were about trying to <code>require()</code> ES modules (which you definitely can&#39;t do--use a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports">dynamic import</a> instead).</p>
 <h1 id="background">Background</h1>
 <p>JavaScript didn&#39;t originally have a module system, so various groups have created their own systems, e.g. <a href="http://www.commonjs.org/">CommonJS</a>, <a href="https://github.com/amdjs/amdjs-api">Asynchronous Module Definition (AMD)</a>, and the ironically named <a href="https://github.com/umdjs/umd">Universal Module Definition (UMD)</a>.</p>
 <p>Predictably, there&#39;s now an official <a href="https://tc39.es/ecma262/#sec-modules">ECMAScript Modules</a> format that <del>everyone uses</del> <del>everyone should use</del> some people have started using (<del>because it&#39;s incompatible and they have no choice</del> because it&#39;s part of the official JavaScript/ECMAScript specification). And I won&#39;t even dig into the ES module file extension dumpster fire.</p>
