@@ -101,7 +101,11 @@ let metalsmith = Metalsmith(__dirname)
     .use(serve ? metalsmithExpress({ host: "localhost" }) : noop)
     .use(serve
         ? metalsmithWatch({
-            paths: { '${source}/**/*': true },
+            paths: {
+                "${source}/**/*": true,
+                "static/**/*": "**/*",
+                "templates/**/*": "**/*",
+            },
             livereload: true,
         })
         : noop)
