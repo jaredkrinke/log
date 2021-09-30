@@ -2,6 +2,7 @@
   "name": "log",
   "type": "module",
   "devDependencies": {
+    "highlight.js": "^11.2.0",
     "jstransformer-handlebars": "^1.1.0",
     "metalsmith": "^2.3.0",
     "metalsmith-broken-link-checker": "^1.0.2",

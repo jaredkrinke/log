@@ -1,5 +1,6 @@
 import path from "path";
 import marked from "marked";
+import highlight from "highlight.js";
 import Metalsmith from "metalsmith";
 import markdown from "metalsmith-markdown";
 import layouts from "metalsmith-layouts";
@@ -28,6 +29,9 @@ for (let i = 2; i < process.argv.length; i++) {
         serve = true;
     }
 }
+
+// Configure syntax highlighting aliases
+highlight.registerAliases("wasm", { languageName: "lisp" });
 
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
@@ -91,7 +95,16 @@ let metalsmith = Metalsmith(__dirname)
             limit: 6,
         },
     }))
-    .use(markdown({ renderer: markdownRenderer }))
+    .use(markdown({
+        renderer: markdownRenderer,
+        highlight: (code, language) => {
+            if (language) {
+                return highlight.highlight(code, { language,  }).value;
+            } else {
+                return highlight.highlightAuto(code).value;
+            }
+        },
+    }))
     .use(permalinks())
     .use(feed({
         collection: "posts",
