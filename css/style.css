@@ -1,4 +1,4 @@
-:root { color-scheme: light dark; }
+:root { color-scheme: dark; }
 html, body { margin: 0; }
 
 body {
@@ -33,5 +33,23 @@ main { overflow: auto; }
 pre { overflow: auto; }
 table { margin: 0 auto; }
 
+th, td { padding: 0.25em; }
+pre { border: solid 1px; padding: 0em 0.25em; }
+table, th, tr, td { border-collapse: collapse; border: solid 1px; }
+
 main > ul { padding-left: 0em; }
 main > ul > li { list-style: none; margin-bottom: 2em; }
+
+:is(h1, h2, h3, h4, h5) :is(a:link, a:visited) { color: inherit; }
+
+body { background-color: #181818; }
+* { color: #d4d4d4; }
+pre, tr:nth-child(even) { background-color: #282828;}
+th { background-color: #444; color: #eee }
+pre, table, th, tr, td { border-color: #777; }
+
+main > header > h1 { color: #e6b95c; }
+h1, h2, h3, h4, h5 { color: #d97c57; }
+a:link { color: #59c5ff; }
+a:visited { color: #66c9fe; }
+/* Also b5cea8 or 7dce52 or 7bbf56 */
