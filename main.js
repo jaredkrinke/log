@@ -83,14 +83,20 @@ let metalsmith = Metalsmith(__dirname)
             pattern: "posts/**/*.md",
             sortBy: "date",
             reverse: true,
-        }
+        },
+        posts_recent: {
+            pattern: "posts/**/*.md",
+            sortBy: "date",
+            reverse: true,
+            limit: 6,
+        },
     }))
     .use(markdown({ renderer: markdownRenderer }))
     .use(permalinks())
     .use(feed({
         collection: "posts",
         destination: "feed.xml",
-        limit: 5,
+        limit: 6,
     }))
     .use(rootPath())
     .use(addCustomProperties)
