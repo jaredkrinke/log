@@ -1,22 +1,24 @@
-const path = require("path");
-const marked = require("marked");
-const Metalsmith = require("metalsmith");
-const markdown = require("metalsmith-markdown");
-const layouts = require("metalsmith-layouts");
-const collections = require("metalsmith-collections");
-const permalinks = require("metalsmith-permalinks");
-const rootPath = require("metalsmith-rootpath");
-const discoverPartials = require("metalsmith-discover-partials");
-const assets = require("metalsmith-static");
-const drafts = require("metalsmith-drafts");
-const feed = require("metalsmith-feed");
-const brokenLinkChecker = require("metalsmith-broken-link-checker");
-const metalsmithExpress = require("metalsmith-express");
-const metalsmithWatch = require("metalsmith-watch");
+import path from "path";
+import marked from "marked";
+import Metalsmith from "metalsmith";
+import markdown from "metalsmith-markdown";
+import layouts from "metalsmith-layouts";
+import collections from "metalsmith-collections";
+import permalinks from "metalsmith-permalinks";
+import rootPath from "metalsmith-rootpath";
+import discoverPartials from "metalsmith-discover-partials";
+import assets from "metalsmith-static";
+import drafts from "metalsmith-drafts";
+import feed from "metalsmith-feed";
+import brokenLinkChecker from "metalsmith-broken-link-checker";
+import metalsmithExpress from "metalsmith-express";
+import metalsmithWatch from "metalsmith-watch";
 
 // Command line arguments
 let clean = false;
 let serve = false;
+
+const __dirname = path.dirname(process.argv[1]);
 
 for (let i = 2; i < process.argv.length; i++) {
     const arg = process.argv[i];

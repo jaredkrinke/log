@@ -1,5 +1,6 @@
 {
   "name": "log",
+  "type": "module",
   "devDependencies": {
     "jstransformer-handlebars": "^1.1.0",
     "metalsmith": "^2.3.0",
