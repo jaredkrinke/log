@@ -42,16 +42,19 @@
 <h2 id="templates">Templates</h2>
 <p>My experience with static site generators until recently was all home-built stuff, so I don&#39;t have any experience with standard template languages like Tera, Jinja, or Liquid. I like to think my fresh eyes let me accurately grade the ergonomics of template languages for career developers.</p>
 <p>So far, (as with Hugo&#39;s templates) I don&#39;t like what I see. The syntax is incredibly ugly and verbose. Here&#39;s how you mark an input to a template (I was hoping for something more like this JavaScript&#39;s template literal syntax):</p>
-<pre><code>{% block content %}{% endblock %}</code></pre><p>How do I supply an input to the template?</p>
-<pre><code>{% block content %}
-&lt;p&gt;Content goes here&lt;/p&gt;
-{% endblock content %}</code></pre><p>The definition is so similar to the declaration that I&#39;m not sure how you even tell them apart if the definition is empty.</p>
+<pre><code class="language-jinja"><span class="hljs-template-tag">{% <span class="hljs-name"><span class="hljs-name">block</span></span> content %}</span><span class="hljs-template-tag">{% <span class="hljs-name"><span class="hljs-name">endblock</span></span> %}</span></code></pre>
+<p>How do I supply an input to the template?</p>
+<pre><code class="language-jinja"><span class="hljs-template-tag">{% <span class="hljs-name"><span class="hljs-name">block</span></span> content %}</span><span class="language-xml">
+<span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Content goes here<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+</span><span class="hljs-template-tag">{% <span class="hljs-name"><span class="hljs-name">endblock</span></span> content %}</span></code></pre>
+<p>The definition is so similar to the declaration that I&#39;m not sure how you even tell them apart if the definition is empty.</p>
 <p>Conditionals also aren&#39;t just expressions which means lots of <code>{%</code> and <code>%}</code> in my case where I just want my home page title to be &quot;Blog&quot; and all pages to be &quot;Blog: Some page&quot;:</p>
-<pre><code>{% if section.extra.root %}
+<pre><code class="language-jinja"><span class="hljs-template-tag">{% <span class="hljs-name"><span class="hljs-name">if</span></span> section.extra.root %}</span><span class="language-xml">
     Blog
-{% else %}
-    Blog: {{ section.title }}
-{% endif %}</code></pre><p>Ok, enough griping about standard template languages (even if they do seem ripe for a Markdown-like takeover). Some people are probably perfectly at home with Tera/Jinja.</p>
+</span><span class="hljs-template-tag">{% <span class="hljs-name"><span class="hljs-name">else</span></span> %}</span><span class="language-xml">
+    Blog: </span><span class="hljs-template-variable">{{ section.title }}</span><span class="language-xml">
+</span><span class="hljs-template-tag">{% <span class="hljs-name"><span class="hljs-name">endif</span></span> %}</span></code></pre>
+<p>Ok, enough griping about standard template languages (even if they do seem ripe for a Markdown-like takeover). Some people are probably perfectly at home with Tera/Jinja.</p>
 <h2 id="i-guess-were-stopping-here-now">I guess we&#39;re stopping here now</h2>
 <p>A little ways into integrating Zola into this blog, I hit a couple of snags:</p>
 <ul>

@@ -48,41 +48,43 @@
 </ul>
 <h1 id="configuration">Configuration</h1>
 <p>My initial <code>.eleventy.js</code> configuration file looked something like this:</p>
-<pre><code>module.exports = function(eleventyConfig) {
-    // Copy everything under &quot;static&quot; to the root of the built site (note: this is relative to this config file)
-    eleventyConfig.addPassthroughCopy({ &quot;static&quot;: &quot;./&quot; });
+<pre><code class="language-javascript"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">eleventyConfig</span>) {
+    <span class="hljs-comment">// Copy everything under &quot;static&quot; to the root of the built site (note: this is relative to this config file)</span>
+    eleventyConfig.<span class="hljs-title function_">addPassthroughCopy</span>({ <span class="hljs-string">&quot;static&quot;</span>: <span class="hljs-string">&quot;./&quot;</span> });
 
-    return {
-        // Don&#39;t process Markdown first with a template language
-        markdownTemplateEngine: false,
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-comment">// Don&#x27;t process Markdown first with a template language</span>
+        <span class="hljs-attr">markdownTemplateEngine</span>: <span class="hljs-literal">false</span>,
 
-        dir: {
-            input: &quot;content&quot;,
-            output: &quot;out&quot;,
-            includes: &quot;../templates&quot; // Note: this is relative to the input directory
+        <span class="hljs-attr">dir</span>: {
+            <span class="hljs-attr">input</span>: <span class="hljs-string">&quot;content&quot;</span>,
+            <span class="hljs-attr">output</span>: <span class="hljs-string">&quot;out&quot;</span>,
+            <span class="hljs-attr">includes</span>: <span class="hljs-string">&quot;../templates&quot;</span> <span class="hljs-comment">// Note: this is relative to the input directory</span>
         }
     }
-};</code></pre><p>Note: the <code>markdownTemplateEngine: false</code> setting is to prevent Eleventy from using Liquid to process my Markdown (I don&#39;t want this step because it tries to process all instances of <code>{%</code>, etc., when I actually want to be able to use those tokens in my blog post content).</p>
+};</code></pre>
+<p>Note: the <code>markdownTemplateEngine: false</code> setting is to prevent Eleventy from using Liquid to process my Markdown (I don&#39;t want this step because it tries to process all instances of <code>{%</code>, etc., when I actually want to be able to use those tokens in my blog post content).</p>
 <h1 id="javascript-templates-easy-to-write-hard-to-maintain">JavaScript templates: easy to write, hard to maintain</h1>
 <p>After spending the last few posts railing against &quot;unintuivie&quot;, &quot;verbose&quot;, and &quot;ugly&quot; template languages like Liquid and EJS, <a href="https://www.11ty.dev/docs/languages/javascript/">Eleventy&#39;s JavaScript templates</a> felt like a shining beacon of familiarity and simplicity -- it&#39;s just JavaScript! Sure, JavaScript used to be a terrible language (what do you expect for a language that was <a href="https://web.archive.org/web/20160305202500/http://www.computer.org/csdl/mags/co/2012/02/mco2012020007.pdf">originally created in 10 days</a>?), but modern JavaScript is pleasant to write, especially with <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">template literals</a>.</p>
 <p>I was able to easily dive in and create a bare bones page template (I put this in a shared library, <code>templates\shared.js</code>):</p>
-<pre><code>    renderPage: (data, content) =&gt; `&lt;!DOCTYPE html&gt;
+<pre><code class="language-javascript">    <span class="hljs-attr">renderPage</span>: <span class="hljs-function">(<span class="hljs-params">data, content</span>) =&gt;</span> <span class="hljs-string">`&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
     &lt;head&gt;
         &lt;meta charset=&quot;utf-8&quot; /&gt;
-        &lt;title&gt;Schemescape${data.title?.length &gt; 0 ? `: ${escapeHTML(data.title)}` : &quot;&quot;}&lt;/title&gt;
-        ${data.description ? `&lt;meta name=&quot;description&quot; content=&quot;${escapeHTML(data.description)}&quot; /&gt;` : &quot;&quot;}
-        ${data.keywords?.length &gt; 0 ? `&lt;meta name=&quot;keywords&quot; content=&quot;${escapeHTML(data.keywords.join(&quot;,&quot;))}&quot; /&gt;` : &quot;&quot;}
+        &lt;title&gt;Schemescape<span class="hljs-subst">${data.title?.length &gt; <span class="hljs-number">0</span> ? <span class="hljs-string">`: <span class="hljs-subst">${escapeHTML(data.title)}</span>`</span> : <span class="hljs-string">&quot;&quot;</span>}</span>&lt;/title&gt;
+        <span class="hljs-subst">${data.description ? <span class="hljs-string">`&lt;meta name=&quot;description&quot; content=&quot;<span class="hljs-subst">${escapeHTML(data.description)}</span>&quot; /&gt;`</span> : <span class="hljs-string">&quot;&quot;</span>}</span>
+        <span class="hljs-subst">${data.keywords?.length &gt; <span class="hljs-number">0</span> ? <span class="hljs-string">`&lt;meta name=&quot;keywords&quot; content=&quot;<span class="hljs-subst">${escapeHTML(data.keywords.join(<span class="hljs-string">&quot;,&quot;</span>))}</span>&quot; /&gt;`</span> : <span class="hljs-string">&quot;&quot;</span>}</span>
         &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot; /&gt;
-        &lt;link rel=&quot;stylesheet&quot; href=&quot;${getPagePathToRoot(data)}/css/style.css&quot; /&gt;
+        &lt;link rel=&quot;stylesheet&quot; href=&quot;<span class="hljs-subst">${getPagePathToRoot(data)}</span>/css/style.css&quot; /&gt;
     &lt;/head&gt;
     &lt;body&gt;
         &lt;main&gt;
-            &lt;header&gt;&lt;h1&gt;&lt;a href=&quot;${getPagePathToRoot(data)}/&quot;&gt;Schemescape&lt;/a&gt;&lt;/h1&gt;&lt;/header&gt;
-            ${content}
+            &lt;header&gt;&lt;h1&gt;&lt;a href=&quot;<span class="hljs-subst">${getPagePathToRoot(data)}</span>/&quot;&gt;Schemescape&lt;/a&gt;&lt;/h1&gt;&lt;/header&gt;
+            <span class="hljs-subst">${content}</span>
         &lt;/main&gt;
     &lt;/body&gt;
-&lt;/html&gt;`,</code></pre><p>This probably took me 10 minutes to create. But there are a few problems I&#39;ve noticed along the way:</p>
+&lt;/html&gt;`</span>,</code></pre>
+<p>This probably took me 10 minutes to create. But there are a few problems I&#39;ve noticed along the way:</p>
 <ul>
 <li>It&#39;s hard to read because it&#39;s constant switching back and forth between strings and code (and the code would balloon if I started pulling code out of the template)</li>
 <li>There&#39;s no syntax validation because it&#39;s just plain text<ul>
@@ -101,67 +103,73 @@
 <p>Setting up blog post pages was pretty simple:</p>
 <h2 id="1-create-the-html-template">1. Create the HTML template</h2>
 <p>I called it <code>templates/post.11ty.js</code>:</p>
-<pre><code>const escapeHTML = require(&quot;escape-html&quot;)
-const { renderPage } = require(&quot;./shared&quot;);
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> escapeHTML = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;escape-html&quot;</span>)
+<span class="hljs-keyword">const</span> { renderPage } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;./shared&quot;</span>);
 
-const formatDateAsTimeElement = date =&gt; `&lt;time datetime=&quot;${date.toISOString().replace(/T.*$/, &quot;&quot;)}&quot;&gt;${dateFormatter.format(date)}&lt;/time&gt;`;
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">formatDateAsTimeElement</span> = date =&gt; <span class="hljs-string">`&lt;time datetime=&quot;<span class="hljs-subst">${date.toISOString().replace(<span class="hljs-regexp">/T.*$/</span>, <span class="hljs-string">&quot;&quot;</span>)}</span>&quot;&gt;<span class="hljs-subst">${dateFormatter.format(date)}</span>&lt;/time&gt;`</span>;
 
-const renderArticle = data =&gt; `
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">renderArticle</span> = data =&gt; <span class="hljs-string">`
 &lt;article&gt;
     &lt;header&gt;
-        &lt;h1&gt;&lt;a href=&quot;./&quot;&gt;${escapeHTML(data.title)}&lt;/a&gt;&lt;/h1&gt;
-        &lt;p&gt;${formatDateAsTimeElement(data.page.date)}&lt;/p&gt;
+        &lt;h1&gt;&lt;a href=&quot;./&quot;&gt;<span class="hljs-subst">${escapeHTML(data.title)}</span>&lt;/a&gt;&lt;/h1&gt;
+        &lt;p&gt;<span class="hljs-subst">${formatDateAsTimeElement(data.page.date)}</span>&lt;/p&gt;
     &lt;/header&gt;
-    ${data.content}
-&lt;/article&gt;`;
+    <span class="hljs-subst">${data.content}</span>
+&lt;/article&gt;`</span>;
 
-module.exports = data =&gt; renderPage(data, renderArticle(data))</code></pre><h2 id="2-inject-data-into-all-posts">2. Inject data into all posts</h2>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-title function_">renderPage</span>(data, <span class="hljs-title function_">renderArticle</span>(data))</code></pre>
+<h2 id="2-inject-data-into-all-posts">2. Inject data into all posts</h2>
 <p>Add <code>content/posts.json</code> to inject data to all files under the <code>content/posts</code> directory:</p>
-<pre><code>{
-    &quot;layout&quot;: &quot;post.11ty.js&quot;,
-    &quot;tags&quot;: &quot;post&quot;
-}</code></pre><p>The first setting selects the template and the second tags all the files as part of the &quot;post&quot; collection (for later iteration).</p>
+<pre><code class="language-json"><span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;layout&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post.11ty.js&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;tags&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post&quot;</span>
+<span class="hljs-punctuation">}</span></code></pre>
+<p>The first setting selects the template and the second tags all the files as part of the &quot;post&quot; collection (for later iteration).</p>
 <p>With those two simple steps, Eleventy will generate directories with an HTML file for each Markdown source file I write.</p>
 <h1 id="adding-a-home-page">Adding a home page</h1>
 <p>For now, I&#39;m just aggregating all my posts in reverse chronological order on the home page. Also pretty simple:</p>
 <h2 id="1-create-the-html-template-1">1. Create the HTML template</h2>
 <p>Along with my generic page template above, the template is pretty simple (note the <code>data.collections.post.slice().reverse().map(...)</code> part):</p>
 <p><code>templates/index.11ty.js</code>:</p>
-<pre><code>const { renderPage } = require(&quot;./shared&quot;);
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> { renderPage } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;./shared&quot;</span>);
 
-const renderArticleShort = data =&gt; `
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">renderArticleShort</span> = data =&gt; <span class="hljs-string">`
 &lt;article&gt;
     &lt;header&gt;
-        &lt;h1&gt;&lt;a href=&quot;.${data.page.url}&quot;&gt;${data.title}&lt;/a&gt;&lt;/h1&gt;
-        &lt;p&gt;${formatDateAsTimeElement(data.page.date)}&lt;/p&gt;
+        &lt;h1&gt;&lt;a href=&quot;.<span class="hljs-subst">${data.page.url}</span>&quot;&gt;<span class="hljs-subst">${data.title}</span>&lt;/a&gt;&lt;/h1&gt;
+        &lt;p&gt;<span class="hljs-subst">${formatDateAsTimeElement(data.page.date)}</span>&lt;/p&gt;
     &lt;/header&gt;
-    &lt;summary&gt;&lt;p&gt;${data.description}&lt;/p&gt;&lt;/summary&gt;
-&lt;/article&gt;`;
+    &lt;summary&gt;&lt;p&gt;<span class="hljs-subst">${data.description}</span>&lt;/p&gt;&lt;/summary&gt;
+&lt;/article&gt;`</span>;
 
-module.exports = data =&gt; renderPage(data,
-`&lt;ul&gt;
-    ${data.collections.post.slice().reverse().map(post =&gt; `&lt;li&gt;${renderArticleShort(post.data)}&lt;/li&gt;`).join(&quot;\n&quot;)}
-&lt;/ul&gt;`);</code></pre><p>Note: the <code>.slice()</code> is needed because JavaScript&#39;s <code>reverse()</code> function mutates the array (<a href="https://www.11ty.dev/docs/collections/#array-reverse">as Eleventy&#39;s documentation notes</a>).</p>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-title function_">renderPage</span>(data,
+<span class="hljs-string">`&lt;ul&gt;
+    <span class="hljs-subst">${data.collections.post.slice().reverse().map(post =&gt; <span class="hljs-string">`&lt;li&gt;<span class="hljs-subst">${renderArticleShort(post.data)}</span>&lt;/li&gt;`</span>).join(<span class="hljs-string">&quot;\n&quot;</span>)}</span>
+&lt;/ul&gt;`</span>);</code></pre>
+<p>Note: the <code>.slice()</code> is needed because JavaScript&#39;s <code>reverse()</code> function mutates the array (<a href="https://www.11ty.dev/docs/collections/#array-reverse">as Eleventy&#39;s documentation notes</a>).</p>
 <h2 id="2-add-a-source-file">2. Add a source file</h2>
 <p>The <code>content\index.md</code> file just points to the template:</p>
-<pre><code>---
-layout: index.11ty.js
----</code></pre><p>Eleventy will now build my <code>index.html</code> file at the root of the output directory.</p>
+<pre><code class="language-yaml"><span class="hljs-meta">---</span>
+<span class="hljs-attr">layout:</span> <span class="hljs-string">index.11ty.js</span>
+<span class="hljs-meta">---</span></code></pre>
+<p>Eleventy will now build my <code>index.html</code> file at the root of the output directory.</p>
 <h1 id="enabling-links-between-pages">Enabling links between pages</h1>
 <p>I use relative links between my Markdown files for internal links. For example, the post you&#39;re reading is <a href="../eleventy-2/"><code>eleventy-2.md</code></a> and my previous post on Eleventy is <a href="../eleventy/"><code>eleventy.md</code></a>. Here&#39;s how I made that second link:</p>
-<pre><code>[`eleventy.md`](eleventy.md)</code></pre><p>This setup feels natural and works great for Markdown, both in <a href="https://code.visualstudio.com/Docs/languages/markdown">Visual Studio Code&#39;s Markdown preview mode</a>, and when <a href="https://github.com/jaredkrinke/log/blob/main/content/posts/static-site-generators/eleventy-2.md">viewing Markdown files in my repository directly on GitHub</a>.</p>
+<pre><code class="language-markdown">[<span class="hljs-string">eleventy.md</span>](<span class="hljs-link">eleventy.md</span>)</code></pre>
+<p>This setup feels natural and works great for Markdown, both in <a href="https://code.visualstudio.com/Docs/languages/markdown">Visual Studio Code&#39;s Markdown preview mode</a>, and when <a href="https://github.com/jaredkrinke/log/blob/main/content/posts/static-site-generators/eleventy-2.md">viewing Markdown files in my repository directly on GitHub</a>.</p>
 <p>I was <em>hoping</em> that many static site generators would translate these links into ones that worked on the HTML web site, but so far it&#39;s seeming like that was just wishful thinking.</p>
 <p>Fortunately, since I&#39;m not tweaking output locations, this translation is just a simple mechanical process (prepend &quot;../&quot; and remove the &quot;.md&quot; suffix). Even better, there is a markdown-it plugin named <a href="https://www.npmjs.com/package/markdown-it-replace-link">markdown-it-replace-link</a> for making such changes. This plugin can be integrated into Eleventy&#39;s pipeline via the <code>.eleventy.js</code> config file (after <code>npm install --save-dev markdown-it-replace-link</code>, of course):</p>
-<pre><code>module.exports = function(eleventyConfig) {
-    // Convert relative Markdown file links to relative post links
-    const customMarkdownIt = require(&quot;markdown-it&quot;)({
-            html: true,
-            replaceLink: link =&gt; link.replace(/^([^/][^:]*)\.md$/, &quot;../$1&quot;),
+<pre><code class="language-javascript"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">eleventyConfig</span>) {
+    <span class="hljs-comment">// Convert relative Markdown file links to relative post links</span>
+    <span class="hljs-keyword">const</span> customMarkdownIt = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;markdown-it&quot;</span>)({
+            <span class="hljs-attr">html</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-attr">replaceLink</span>: <span class="hljs-function"><span class="hljs-params">link</span> =&gt;</span> link.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/^([^/][^:]*)\.md$/</span>, <span class="hljs-string">&quot;../$1&quot;</span>),
         })
-        .use(require(&quot;markdown-it-replace-link&quot;));
+        .<span class="hljs-title function_">use</span>(<span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;markdown-it-replace-link&quot;</span>));
 
-    eleventyConfig.setLibrary(&quot;md&quot;, customMarkdownIt);
-...</code></pre><p>The regular expression just checks for relative links (not starting with &quot;/&quot; or containing a &quot;:&quot;) that end with &quot;.md&quot; and then prepends &quot;../&quot; and omits the &quot;.md&quot; suffix, to instead point to the source Markdown file&#39;s corresponding output directory (which contains an <code>index.html</code>).</p>
+    eleventyConfig.<span class="hljs-title function_">setLibrary</span>(<span class="hljs-string">&quot;md&quot;</span>, customMarkdownIt);
+...</code></pre>
+<p>The regular expression just checks for relative links (not starting with &quot;/&quot; or containing a &quot;:&quot;) that end with &quot;.md&quot; and then prepends &quot;../&quot; and omits the &quot;.md&quot; suffix, to instead point to the source Markdown file&#39;s corresponding output directory (which contains an <code>index.html</code>).</p>
 <h1 id="adding-an-rss-feed">Adding an RSS feed</h1>
 <p>Many of the static site generators I tested out automagically generate an RSS news feed. Eleventy does not do this.</p>
 <p>Eleventy&#39;s documentation points to an <a href="https://www.11ty.dev/docs/plugins/rss/">official plugin</a> for generating an <a href="https://en.wikipedia.org/wiki/Atom_(Web_standard)">Atom</a> feed.</p>

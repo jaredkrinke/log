@@ -243,11 +243,12 @@
 <p>Cross Gatsby off my list!</p>
 <h2 id="hugo">Hugo</h2>
 <p>Hugo is written in Go and <a href="https://gohugo.io/getting-started/installing">distributed as a single executable</a>. It doesn&#39;t get any simpler than that! In <a href="https://gohugo.io/getting-started/quick-start/">their quick-start</a>, it looks like posts can be stored in markdown files with front matter for title, date, and draft status:</p>
-<pre><code>---
-title: &quot;My First Post&quot;
-date: 2019-03-26T08:47:11+01:00
-draft: true
----</code></pre><p>Their example output showed a build complete in 11 milliseconds. These are all very good signs so far.</p>
+<pre><code class="language-yaml"><span class="hljs-meta">---</span>
+<span class="hljs-attr">title:</span> <span class="hljs-string">&quot;My First Post&quot;</span>
+<span class="hljs-attr">date:</span> <span class="hljs-number">2019-03-26T08:47:11+01:00</span>
+<span class="hljs-attr">draft:</span> <span class="hljs-literal">true</span>
+<span class="hljs-meta">---</span></code></pre>
+<p>Their example output showed a build complete in 11 milliseconds. These are all very good signs so far.</p>
 <p>Hugo has emerged as an early front runner.</p>
 <p><strong>Update</strong>: I documented <a href="../hugo/">my initial look at Hugo</a>, but did not want to learn the template language.</p>
 <h2 id="nuxtjs">NuxtJS</h2>
@@ -281,7 +282,8 @@ draft: true
 <p>Hexo appears to use the &quot;million plugins&quot; architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like <a href="https://parceljs.org/">Parcel</a> and not <a href="https://webpack.js.org/">webpack</a>, but I do understand &quot;zero configuration&quot; constraints can come back to bite me later.</p>
 <p>Anyway, <a href="https://hexo.io/docs/setup">Hexo&#39;s default</a> includes EJS, Stylus, and Markdown. I&#39;m not familiar with the first two. Is this going to be geared toward web developers?</p>
 <p>Looking into their <a href="https://hexo.io/docs/writing">documentation on writing content</a>, it appears you create a new post using a tool that&#39;s not your favorite text editor:</p>
-<pre><code>$ hexo new [layout] &lt;title&gt;</code></pre><p>I&#39;m not a fan of using a tool to manage my content because such a tool was inevitably created to generate boilerplate code or follow strict conventions. This leads to hassles when migrating to a new system and prevents you from authoring content when you don&#39;t have your usual development environment handy. I should be able to author content using just a text editor.</p>
+<pre><code class="language-sh">hexo new [layout] &lt;title&gt;</code></pre>
+<p>I&#39;m not a fan of using a tool to manage my content because such a tool was inevitably created to generate boilerplate code or follow strict conventions. This leads to hassles when migrating to a new system and prevents you from authoring content when you don&#39;t have your usual development environment handy. I should be able to author content using just a text editor.</p>
 <p>Hexo looks decent, but certainly not any closer to what I want than Hugo or Eleventy. I&#39;ll come back to Hexo, if needed.</p>
 <h2 id="pagic">Pagic</h2>
 <p>Pagic uses Deno which, while intriguing, isn&#39;t something I&#39;ve actually installed or played with yet. Maybe this is the motivation I need to try Deno?</p>

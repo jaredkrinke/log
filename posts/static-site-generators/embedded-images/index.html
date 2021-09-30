@@ -49,39 +49,41 @@
 <p>I happen to agree with #1, so when compiling my site I do plan to split out images into their own files. But #2 feels like a vestigial limitation from the days of allocating fixed size buffers on the stack in C code. That&#39;s not to say #2 won&#39;t cause me trouble--I just don&#39;t think it&#39;s a good enough reason on its own to discard my idea.</p>
 <h2 id="prototype-encoder">Prototype encoder</h2>
 <p>Here&#39;s the code for my prototype encoder (side note: I don&#39;t know why Node refused to accept the clearly documented &quot;base64url&quot; encoding):</p>
-<pre><code>const path = require(&quot;path&quot;);
-const fs = require(&quot;fs/promises&quot;);
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;path&quot;</span>);
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;fs/promises&quot;</span>);
 
-// TODO: Use a more comprehensive library
-const fileExtensionToMimeType = {
-    &quot;.jpg&quot;: &quot;image/jpeg&quot;,
-    &quot;.png&quot;: &quot;image/png&quot;,
+<span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> Use a more comprehensive library</span>
+<span class="hljs-keyword">const</span> fileExtensionToMimeType = {
+    <span class="hljs-string">&quot;.jpg&quot;</span>: <span class="hljs-string">&quot;image/jpeg&quot;</span>,
+    <span class="hljs-string">&quot;.png&quot;</span>: <span class="hljs-string">&quot;image/png&quot;</span>,
 };
 
-(async () =&gt; {
-    try
+(<span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">try</span>
     {
-        const filePath = process.argv[2];
-        if (!filePath) throw &quot;No path specified!&quot;;
+        <span class="hljs-keyword">const</span> filePath = process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>];
+        <span class="hljs-keyword">if</span> (!filePath) <span class="hljs-keyword">throw</span> <span class="hljs-string">&quot;No path specified!&quot;</span>;
 
-        const fileExtension = path.extname(filePath);
-        const mimeType = fileExtensionToMimeType[fileExtension];
-        if (!mimeType) throw `Could not determine MIME type for extension &quot;${fileExtension}&quot;!`;
+        <span class="hljs-keyword">const</span> fileExtension = path.<span class="hljs-title function_">extname</span>(filePath);
+        <span class="hljs-keyword">const</span> mimeType = fileExtensionToMimeType[fileExtension];
+        <span class="hljs-keyword">if</span> (!mimeType) <span class="hljs-keyword">throw</span> <span class="hljs-string">`Could not determine MIME type for extension &quot;<span class="hljs-subst">${fileExtension}</span>&quot;!`</span>;
 
-        const buffer = await fs.readFile(filePath);
-        const base64UrlEncoded = encodeURI(buffer.toString(&quot;base64&quot;));
+        <span class="hljs-keyword">const</span> buffer = <span class="hljs-keyword">await</span> fs.<span class="hljs-title function_">readFile</span>(filePath);
+        <span class="hljs-keyword">const</span> base64UrlEncoded = <span class="hljs-built_in">encodeURI</span>(buffer.<span class="hljs-title function_">toString</span>(<span class="hljs-string">&quot;base64&quot;</span>));
 
-        const dataUrl = `data:${mimeType};base64,${base64UrlEncoded}`;
-        console.log(dataUrl);
+        <span class="hljs-keyword">const</span> dataUrl = <span class="hljs-string">`data:<span class="hljs-subst">${mimeType}</span>;base64,<span class="hljs-subst">${base64UrlEncoded}</span>`</span>;
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(dataUrl);
     }
-    catch (err) {
-        console.error(`ERROR: ${err}`);
+    <span class="hljs-keyword">catch</span> (err) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">`ERROR: <span class="hljs-subst">${err}</span>`</span>);
     }
-})();</code></pre><h2 id="exhibit-a">Exhibit A</h2>
+})();</code></pre>
+<h2 id="exhibit-a">Exhibit A</h2>
 <p>Here&#39;s a very small (in terms of number of bytes) PNG file that&#39;s been directly embedded (this is the ~600 byte <a href="https://en.wikipedia.org/wiki/Favicon">Favicon</a> for my site):</p>
 <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TpSpVByuKOGSoThbELxylikWwUNoKrTqYXD+hSUOS4uIouBYc/FisOrg46+rgKgiCHyBubk6KLlLi/5JCixgPjvvx7t7j7h0g1EpMMdrGAUU19XgkLKbSq6LvFZ3oxwB6MC0xQ4smFpNwHV/38PD1LsSz3M/9ObozWYMBHpF4jmm6SbxBPLNpapz3iQOsIGWIz4nHdLog8SPXZYffOOdtFnhmQE/G54kDxGK+heUWZgVdIZ4iDmYUlfKFlMMZzluclVKFNe7JX+jPqisJrtMcRgRLiCIGETIqKKIEEyFaVVIMxGk/7OIfsv0xcsnkKoKRYwFlKJBsP/gf/O7WyE1OOEn+MND+YlkfI4BvF6hXLev72LLqJ4D3GbhSm/5yDZj9JL3a1IJHQO82cHHd1OQ94HIHGHzSJF2yJS9NIZcD3s/om9JA3y3Qteb01tjH6QOQpK6Wb4CDQ2A0T9nrLu/uaO3t3zON/n4AuI1yw2D/uDMAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQflCRUXDwx3zQBcAAAAbElEQVQ4y81TMRLAIAgTjzH8/6E8wE52oBDbY2kmz2gSEQTAGg3oXrj7gzSzIycAlrvfG2+x72hGsATRSDPVKm52ZrKIrD5UILqYWSkyRxM/FYhvZn1SJohFPLZy5vy5kSo3lkD2NLaGqfMLF2xqO0/W9QaIAAAAAElFTkSuQmCC" alt="Small embedded PNG file"></p>
 <p>Here&#39;s what the Markdown input looks like, for reference:</p>
-<pre><code>![Small embedded PNG file](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TpSpVByuKOGSoThbELxylikWwUNoKrTqYXD+hSUOS4uIouBYc/FisOrg46+rgKgiCHyBubk6KLlLi/5JCixgPjvvx7t7j7h0g1EpMMdrGAUU19XgkLKbSq6LvFZ3oxwB6MC0xQ4smFpNwHV/38PD1LsSz3M/9ObozWYMBHpF4jmm6SbxBPLNpapz3iQOsIGWIz4nHdLog8SPXZYffOOdtFnhmQE/G54kDxGK+heUWZgVdIZ4iDmYUlfKFlMMZzluclVKFNe7JX+jPqisJrtMcRgRLiCIGETIqKKIEEyFaVVIMxGk/7OIfsv0xcsnkKoKRYwFlKJBsP/gf/O7WyE1OOEn+MND+YlkfI4BvF6hXLev72LLqJ4D3GbhSm/5yDZj9JL3a1IJHQO82cHHd1OQ94HIHGHzSJF2yJS9NIZcD3s/om9JA3y3Qteb01tjH6QOQpK6Wb4CDQ2A0T9nrLu/uaO3t3zON/n4AuI1yw2D/uDMAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQflCRUXDwx3zQBcAAAAbElEQVQ4y81TMRLAIAgTjzH8/6E8wE52oBDbY2kmz2gSEQTAGg3oXrj7gzSzIycAlrvfG2+x72hGsATRSDPVKm52ZrKIrD5UILqYWSkyRxM/FYhvZn1SJohFPLZy5vy5kSo3lkD2NLaGqfMLF2xqO0/W9QaIAAAAAElFTkSuQmCC)</code></pre><p>I also tested a much larger image file and it worked just as well, but I decided to omit that file from this post because I didn&#39;t want to bloat up this file (and repository) for no good reason.</p>
+<pre><code class="language-markdown">![<span class="hljs-string">Small embedded PNG file</span>](<span class="hljs-link">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TpSpVByuKOGSoThbELxylikWwUNoKrTqYXD+hSUOS4uIouBYc/FisOrg46+rgKgiCHyBubk6KLlLi/5JCixgPjvvx7t7j7h0g1EpMMdrGAUU19XgkLKbSq6LvFZ3oxwB6MC0xQ4smFpNwHV/38PD1LsSz3M/9ObozWYMBHpF4jmm6SbxBPLNpapz3iQOsIGWIz4nHdLog8SPXZYffOOdtFnhmQE/G54kDxGK+heUWZgVdIZ4iDmYUlfKFlMMZzluclVKFNe7JX+jPqisJrtMcRgRLiCIGETIqKKIEEyFaVVIMxGk/7OIfsv0xcsnkKoKRYwFlKJBsP/gf/O7WyE1OOEn+MND+YlkfI4BvF6hXLev72LLqJ4D3GbhSm/5yDZj9JL3a1IJHQO82cHHd1OQ94HIHGHzSJF2yJS9NIZcD3s/om9JA3y3Qteb01tjH6QOQpK6Wb4CDQ2A0T9nrLu/uaO3t3zON/n4AuI1yw2D/uDMAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQflCRUXDwx3zQBcAAAAbElEQVQ4y81TMRLAIAgTjzH8/6E8wE52oBDbY2kmz2gSEQTAGg3oXrj7gzSzIycAlrvfG2+x72hGsATRSDPVKm52ZrKIrD5UILqYWSkyRxM/FYhvZn1SJohFPLZy5vy5kSo3lkD2NLaGqfMLF2xqO0/W9QaIAAAAAElFTkSuQmCC</span>)</code></pre>
+<p>I also tested a much larger image file and it worked just as well, but I decided to omit that file from this post because I didn&#39;t want to bloat up this file (and repository) for no good reason.</p>
 <h2 id="observations-in-vs-code">Observations in VS Code</h2>
 <p>Well, the images render fine in Visual Studio Code&#39;s Markdown Preview window. Syntax highlighting in the Markdown file I&#39;m editing is ok, too. But there is one problem.</p>
 <p>I&#39;ve been happily using word-wrapping when editing Markdown files and, unsurprisingly, these enormous strings make word-wrapping pretty much impossible to use. This could end up being fairly annoying. I&#39;ll let this issue marinate in the back of my mind for a bit.</p>

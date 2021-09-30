@@ -65,13 +65,14 @@
 <li><code>templates/</code>: Template/layout files</li>
 </ul>
 <p>Blog posts will use YAML front matter (draft and keywords are optional, but date is not since Git doesn&#39;t preserve file system dates):</p>
-<pre><code>---
-title: Title of blog post
-description: Plain text description of the post (for HTML header, blurbs, etc.)
-keywords: [search,keywords]
-date: Publish date
-draft: true
----</code></pre><p>Note: I&#39;d like to be able to automatically insert keywords into every post within a given topic.</p>
+<pre><code class="language-yaml"><span class="hljs-meta">---</span>
+<span class="hljs-attr">title:</span> <span class="hljs-string">Title</span> <span class="hljs-string">of</span> <span class="hljs-string">blog</span> <span class="hljs-string">post</span>
+<span class="hljs-attr">description:</span> <span class="hljs-string">Plain</span> <span class="hljs-string">text</span> <span class="hljs-string">description</span> <span class="hljs-string">of</span> <span class="hljs-string">the</span> <span class="hljs-string">post</span> <span class="hljs-string">(for</span> <span class="hljs-string">HTML</span> <span class="hljs-string">header,</span> <span class="hljs-string">blurbs,</span> <span class="hljs-string">etc.)</span>
+<span class="hljs-attr">keywords:</span> [<span class="hljs-string">search</span>,<span class="hljs-string">keywords</span>]
+<span class="hljs-attr">date:</span> <span class="hljs-string">Publish</span> <span class="hljs-string">date</span>
+<span class="hljs-attr">draft:</span> <span class="hljs-literal">true</span>
+<span class="hljs-meta">---</span></code></pre>
+<p>Note: I&#39;d like to be able to automatically insert keywords into every post within a given topic.</p>
 <h2 id="output">Output</h2>
 <p>The output should be as simple as possible:</p>
 <ul>

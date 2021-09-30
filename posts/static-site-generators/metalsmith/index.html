@@ -33,30 +33,31 @@
 <p>Other static site generators (e.g. Hugo) abstract out the concept of a theme (along with standard metadata that themes can leverage), so you don&#39;t have to mix code and configuration together with HTML templates and CSS styling. This seems better for people who don&#39;t want total control of every character in their final HTML output.</p>
 <h2 id="setup">Setup</h2>
 <p><a href="https://metalsmith.io/#introduction">Metalsmith&#39;s home page</a> has a sample script right at the top you can look at, but you&#39;ll end up with a bunch of <code>require(...)</code>s followed by something like this:</p>
-<pre><code>Metalsmith(__dirname)
-    .metadata({
-        site: {
-            title: &quot;Schemescape&quot;,
-            url: &quot;https://log.schemescape.com/&quot;,
-            description: &quot;Development log of a life-long coder&quot;,
+<pre><code class="language-javascript"><span class="hljs-title class_">Metalsmith</span>(__dirname)
+    .<span class="hljs-title function_">metadata</span>({
+        <span class="hljs-attr">site</span>: {
+            <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Schemescape&quot;</span>,
+            <span class="hljs-attr">url</span>: <span class="hljs-string">&quot;https://log.schemescape.com/&quot;</span>,
+            <span class="hljs-attr">description</span>: <span class="hljs-string">&quot;Development log of a life-long coder&quot;</span>,
         },
     })
-    .source(&quot;./content&quot;)
-    .destination(&quot;./out&quot;)
-    .use(collections({
-        posts: {
-            pattern: &quot;posts/**/*.md&quot;,
-            sortBy: &quot;date&quot;,
-            reverse: true,
+    .<span class="hljs-title function_">source</span>(<span class="hljs-string">&quot;./content&quot;</span>)
+    .<span class="hljs-title function_">destination</span>(<span class="hljs-string">&quot;./out&quot;</span>)
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">collections</span>({
+        <span class="hljs-attr">posts</span>: {
+            <span class="hljs-attr">pattern</span>: <span class="hljs-string">&quot;posts/**/*.md&quot;</span>,
+            <span class="hljs-attr">sortBy</span>: <span class="hljs-string">&quot;date&quot;</span>,
+            <span class="hljs-attr">reverse</span>: <span class="hljs-literal">true</span>,
         }
     }))
-    .use(markdown())
-    .use(layouts({
-        directory: &quot;templates&quot;,
-        default: &quot;default.hbs&quot;,
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">markdown</span>())
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">layouts</span>({
+        <span class="hljs-attr">directory</span>: <span class="hljs-string">&quot;templates&quot;</span>,
+        <span class="hljs-attr">default</span>: <span class="hljs-string">&quot;default.hbs&quot;</span>,
     }))
     ...
-    .build(err =&gt; { if (err) throw err; });</code></pre><p>If you just want to build a dev blog like everyone else, it does feel like a lot of boilerplate code, but I like that it forces you to consider and understand each step of the process. Some of the other static site generators were too proactive and did things I didn&#39;t expect or understand (or want). With Metalsmith, it only does exactly what you tell it.</p>
+    .<span class="hljs-title function_">build</span>(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> { <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err; });</code></pre>
+<p>If you just want to build a dev blog like everyone else, it does feel like a lot of boilerplate code, but I like that it forces you to consider and understand each step of the process. Some of the other static site generators were too proactive and did things I didn&#39;t expect or understand (or want). With Metalsmith, it only does exactly what you tell it.</p>
 <p>But there&#39;s a dark side to Metalsmith&#39;s simple model, and that&#39;s that Metalsmith has to be taught to do even the most basic things. For example, I&#39;m building my site on Windows, which has the unfortunate property of using backslashes for path separators. Metalsmith doesn&#39;t seem to know or care about this detail, so I had to actually write code to switch to web-friendly forward slashes when creating links between files in different directories.</p>
 <h3 id="plugins-plugins-plugins">Plugins, plugins, plugins</h3>
 <p>Metalsmith&#39;s modular architecture with a very simple core library means you need plugins--a lot of plugins. Fortunately, most of the functionality I was interested in already existed in the form of published plugins (some official, some third party). Here are the ones I used:</p>
@@ -132,14 +133,15 @@
 <p>Here are a couple of snags I hit while integrating Metalsmith into my site.</p>
 <h3 id="inflexible-directory-structure">Inflexible directory structure</h3>
 <p>For how simple Metalsmith is, I figured it would allow for a flexible directory structure, but Metalsmith actually only allows a single source directory by default. This is a problem for my directory structure because I separated all of my content (Markdown files) from files needed to build the web site (scripts, templates, but also CSS). Fortunately, the <a href="https://github.com/TheHydroImpulse/metalsmith-static">metalsmith-static</a> plugin handle this scenario:</p>
-<pre><code>const assets = require(&quot;metalsmith-static&quot;);
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> assets = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;metalsmith-static&quot;</span>);
 
-Metalsmith
+<span class="hljs-title class_">Metalsmith</span>
 ...
-    .use(assets({
-        src: &quot;static&quot;,
-        dest: &quot;.&quot;,
-    }))</code></pre><h3 id="destination-paths-arent-available">Destination paths aren&#39;t available</h3>
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">assets</span>({
+        <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;static&quot;</span>,
+        <span class="hljs-attr">dest</span>: <span class="hljs-string">&quot;.&quot;</span>,
+    }))</code></pre>
+<h3 id="destination-paths-arent-available">Destination paths aren&#39;t available</h3>
 <p>Somewhere in Metalsmith&#39;s pipeline, it knows where a file is going to end up, but for some inexplicable reason, this information isn&#39;t available to templates or plugins. In my case, it&#39;s easy to infer the destination (although I had to deal with Windows&#39; annoying path-separating backslashes), so it wasn&#39;t a big deal, but this really isn&#39;t something I should have had to think about.</p>
 <h3 id="plugin-ordering">Plugin ordering</h3>
 <p>Since plugins enrich and mutate files and metadata along the way, the ordering of plugins matters. One annoying interaction was between the &quot;layouts&quot; (templating) and &quot;feed&quot; (RSS) plugins:</p>
@@ -151,22 +153,23 @@ Metalsmith
 <p>This all makes sense if you think about how Metalsmith plugins receive a set of files, manipulate them, and then pass them on to the next plugin, but other generators do a good job of insulating me from mistakes like this.</p>
 <h3 id="handling-internal-links">Handling internal links</h3>
 <p>I&#39;m still surprised that using relative links to Markdown files for internal linking between posts isn&#39;t well supported by the static site generators I&#39;ve tried so far (Metalsmith included). I ended up having to extend the <a href="https://marked.js.org/using_pro#renderer">Marked renderer</a> to enable internal links:</p>
-<pre><code>const marked = require(&quot;marked&quot;);
-...
-// Translate relative Markdown links to point to corresponding HTML output files
-const markdownRenderer = new marked.Renderer();
-const baseLinkRenderer = markdownRenderer.link;
-markdownRenderer.link = function (href, title, text) {
-    return baseLinkRenderer.call(this,
-        href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, &quot;../$1/$2&quot;),
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> marked = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;marked&quot;</span>);
+<span class="hljs-comment">// ...</span>
+<span class="hljs-comment">// Translate relative Markdown links to point to corresponding HTML output files</span>
+<span class="hljs-keyword">const</span> markdownRenderer = <span class="hljs-keyword">new</span> marked.<span class="hljs-title class_">Renderer</span>();
+<span class="hljs-keyword">const</span> baseLinkRenderer = markdownRenderer.<span class="hljs-property">link</span>;
+markdownRenderer.<span class="hljs-property">link</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">href, title, text</span>) {
+    <span class="hljs-keyword">return</span> baseLinkRenderer.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>,
+        href.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/^([^/][^:]*)\.md(#[^#]+)?$/</span>, <span class="hljs-string">&quot;../$1/$2&quot;</span>),
         title,
         text);
 };
-...
-Metalsmith
-...
-    .use(markdown({ renderer: markdownRenderer }))
-    .use(permalinks())</code></pre><p><strong>Update</strong>: I realized I also want to be able to link to a heading <em>within</em> another post (examples: <a href="#architecture">link to Architecture heading in this post</a>; <a href="../comparison/#metalsmith">link to my initial impression of Metalsmith in a different post</a>). The code above has been updated to handle this case.</p>
+<span class="hljs-comment">// ...</span>
+<span class="hljs-title class_">Metalsmith</span>
+<span class="hljs-comment">// ...</span>
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">markdown</span>({ <span class="hljs-attr">renderer</span>: markdownRenderer }))
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">permalinks</span>())</code></pre>
+<p><strong>Update</strong>: I realized I also want to be able to link to a heading <em>within</em> another post (examples: <a href="#architecture">link to Architecture heading in this post</a>; <a href="../comparison/#metalsmith">link to my initial impression of Metalsmith in a different post</a>). The code above has been updated to handle this case.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>Overall, I really liked that Metalsmith just did exactly what I asked, even if I didn&#39;t initially know what, precisely, I wanted. I was able to find plugins for almost everything to get started (including local testing with live reloading). Importantly, I also feel like I fully understand what Metalsmith is doing, so I don&#39;t have to worry about later discovering that it was processing files multiple times (something that did happen with Eleventy).</p>
 <p>Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that&#39;s part of my <a href="../overview/">my ideal workflow</a>).</p>
