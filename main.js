@@ -82,6 +82,22 @@ markdownRenderer.code = function (code, language, escaped) {
     return baseCodeRenderer.call(this, code, language, escaped);
 };
 
+// Create a collection for each subdirectory
+const addCategory = (files, metalsmith, done) => {
+    Object.keys(files).forEach(key => {
+        const file = files[key];
+
+        // Posts are placed in paths as follows: "posts/[category]/{postName}"
+        // Attach the category as a property here (with "misc" as a fallback)
+        const directory = path.dirname(key);
+        if (directory !== ".") {
+            const directoryParts = directory.split(/[\\/]/g);
+            file.collection = (directoryParts.length > 1) ? directoryParts[1] : "misc";
+        }
+    });
+    done();
+};
+
 // Simple plugin to add some custom properties (note: dates are parsed assuming UTC, so use UTC when formatting)
 const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 const addCustomProperties = (files, metalsmith, done) => {
@@ -118,6 +134,7 @@ Metalsmith(__dirname)
         dest: ".",
     }))
     .use(serve ? noop : drafts())
+    .use(addCategory)
     .use(collections({
         posts: {
             pattern: "posts/**/*.md",
