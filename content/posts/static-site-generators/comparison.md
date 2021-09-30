@@ -136,7 +136,7 @@ Cross Gatsby off my list!
 Hugo is written in Go and [distributed as a single executable](https://gohugo.io/getting-started/installing). It doesn't get any simpler than that! In [their quick-start](https://gohugo.io/getting-started/quick-start/), it looks like posts can be stored in markdown files with front matter for title, date, and draft status:
 
 
-```
+```yaml
 ---
 title: "My First Post"
 date: 2019-03-26T08:47:11+01:00
@@ -192,8 +192,8 @@ Anyway, [Hexo's default](https://hexo.io/docs/setup) includes EJS, Stylus, and M
 
 Looking into their [documentation on writing content](https://hexo.io/docs/writing), it appears you create a new post using a tool that's not your favorite text editor:
 
-```
-$ hexo new [layout] <title>
+```sh
+hexo new [layout] <title>
 ```
 
 I'm not a fan of using a tool to manage my content because such a tool was inevitably created to generate boilerplate code or follow strict conventions. This leads to hassles when migrating to a new system and prevents you from authoring content when you don't have your usual development environment handy. I should be able to author content using just a text editor.

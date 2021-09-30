@@ -27,7 +27,7 @@ Other static site generators (e.g. Hugo) abstract out the concept of a theme (al
 ## Setup
 [Metalsmith's home page](https://metalsmith.io/#introduction) has a sample script right at the top you can look at, but you'll end up with a bunch of `require(...)`s followed by something like this:
 
-```
+```javascript
 Metalsmith(__dirname)
     .metadata({
         site: {
@@ -92,7 +92,7 @@ Here are a couple of snags I hit while integrating Metalsmith into my site.
 ### Inflexible directory structure
 For how simple Metalsmith is, I figured it would allow for a flexible directory structure, but Metalsmith actually only allows a single source directory by default. This is a problem for my directory structure because I separated all of my content (Markdown files) from files needed to build the web site (scripts, templates, but also CSS). Fortunately, the [metalsmith-static](https://github.com/TheHydroImpulse/metalsmith-static) plugin handle this scenario:
 
-```
+```javascript
 const assets = require("metalsmith-static");
 
 Metalsmith
@@ -119,9 +119,9 @@ This all makes sense if you think about how Metalsmith plugins receive a set of 
 ### Handling internal links
 I'm still surprised that using relative links to Markdown files for internal linking between posts isn't well supported by the static site generators I've tried so far (Metalsmith included). I ended up having to extend the [Marked renderer](https://marked.js.org/using_pro#renderer) to enable internal links:
 
-```
+```javascript
 const marked = require("marked");
-...
+// ...
 // Translate relative Markdown links to point to corresponding HTML output files
 const markdownRenderer = new marked.Renderer();
 const baseLinkRenderer = markdownRenderer.link;
@@ -131,9 +131,9 @@ markdownRenderer.link = function (href, title, text) {
         title,
         text);
 };
-...
+// ...
 Metalsmith
-...
+// ...
     .use(markdown({ renderer: markdownRenderer }))
     .use(permalinks())
 ```

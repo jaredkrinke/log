@@ -29,7 +29,7 @@ And the corresponding directory structure:
 # Configuration
 My initial `.eleventy.js` configuration file looked something like this:
 
-```
+```javascript
 module.exports = function(eleventyConfig) {
     // Copy everything under "static" to the root of the built site (note: this is relative to this config file)
     eleventyConfig.addPassthroughCopy({ "static": "./" });
@@ -54,7 +54,7 @@ After spending the last few posts railing against "unintuivie", "verbose", and "
 
 I was able to easily dive in and create a bare bones page template (I put this in a shared library, `templates\shared.js`):
 
-```
+```javascript
     renderPage: (data, content) => `<!DOCTYPE html>
 <html lang="en">
     <head>
@@ -93,7 +93,7 @@ Setting up blog post pages was pretty simple:
 ## 1. Create the HTML template
 I called it `templates/post.11ty.js`:
 
-```
+```javascript
 const escapeHTML = require("escape-html")
 const { renderPage } = require("./shared");
 
@@ -114,7 +114,7 @@ module.exports = data => renderPage(data, renderArticle(data))
 ## 2. Inject data into all posts
 Add `content/posts.json` to inject data to all files under the `content/posts` directory:
 
-```
+```json
 {
     "layout": "post.11ty.js",
     "tags": "post"
@@ -133,7 +133,7 @@ Along with my generic page template above, the template is pretty simple (note t
 
 `templates/index.11ty.js`:
 
-```
+```javascript
 const { renderPage } = require("./shared");
 
 const renderArticleShort = data => `
@@ -156,7 +156,7 @@ Note: the `.slice()` is needed because JavaScript's `reverse()` function mutates
 ## 2. Add a source file
 The `content\index.md` file just points to the template:
 
-```
+```yaml
 ---
 layout: index.11ty.js
 ---
@@ -167,8 +167,8 @@ Eleventy will now build my `index.html` file at the root of the output directory
 # Enabling links between pages
 I use relative links between my Markdown files for internal links. For example, the post you're reading is [`eleventy-2.md`](eleventy-2.md) and my previous post on Eleventy is [`eleventy.md`](eleventy.md). Here's how I made that second link:
 
-```
-[`eleventy.md`](eleventy.md)
+```markdown
+[eleventy.md](eleventy.md)
 ```
 
 This setup feels natural and works great for Markdown, both in [Visual Studio Code's Markdown preview mode](https://code.visualstudio.com/Docs/languages/markdown), and when [viewing Markdown files in my repository directly on GitHub](https://github.com/jaredkrinke/log/blob/main/content/posts/static-site-generators/eleventy-2.md).
@@ -177,7 +177,7 @@ I was *hoping* that many static site generators would translate these links into
 
 Fortunately, since I'm not tweaking output locations, this translation is just a simple mechanical process (prepend "../" and remove the ".md" suffix). Even better, there is a markdown-it plugin named [markdown-it-replace-link](https://www.npmjs.com/package/markdown-it-replace-link) for making such changes. This plugin can be integrated into Eleventy's pipeline via the `.eleventy.js` config file (after `npm install --save-dev markdown-it-replace-link`, of course):
 
-```
+```javascript
 module.exports = function(eleventyConfig) {
     // Convert relative Markdown file links to relative post links
     const customMarkdownIt = require("markdown-it")({

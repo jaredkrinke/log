@@ -44,7 +44,7 @@ My directory structure is going to look like this:
 
 Blog posts will use YAML front matter (draft and keywords are optional, but date is not since Git doesn't preserve file system dates):
 
-```
+```yaml
 ---
 title: Title of blog post
 description: Plain text description of the post (for HTML header, blurbs, etc.)

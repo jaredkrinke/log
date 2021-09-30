@@ -16,7 +16,7 @@ Installation is done via NPM. Obnoxiously, if you don't install globally, [there
 ## Setup
 Configuration of input/output directories, etc. is done on the command line or in a JavaScript config file (yes, it's real JavaScript code). Their [sample](https://www.11ty.dev/docs/config/) feels a bit convoluted for what amounts to JSON:
 
-```
+```javascript
 module.exports = function(eleventyConfig) {
   // Return your Object options:
   return {
@@ -61,7 +61,7 @@ The default directory structure for a blog could look like this:
 ## First run
 Eleventy's directory structure initially seemed simpler than Hugo's, but as I dove in, I found that it muddled distinct concepts and I ended up having to change the configuration quite a bit to give me what I wanted. Because I wanted to separate content from everything else, I ended up with a `.eleventy.js` configuration file that looked like this:
 
-```
+```javascript
 module.exports = function(eleventyConfig) {
     // Copy everything under "static" to the root of the built site (note: this is relative to this config file)
     eleventyConfig.addPassthroughCopy({ "static": "./" });
@@ -86,7 +86,7 @@ Not supporting themes in a safe manner could be a downside for people who don't 
 ## JavaScript templates
 Originally, I planned to use a standard template system because that knowledge would be portable across different static site generators. But as I looked at examples of Hugo's templates or Liquid templates, I came to the conclusion that these template languages are surprisingly ugly and unfamiliar. Eleventy supports plain old JavaScript templates which (security concerns aside, since I'm writing my own templates) is convenient because it's just JavaScript. Sure, it's is a quirky language, but with [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), it's surprisingly readable (although you have to take care to properly escape everything):
 
-```
+```javascript
 module.exports = function(data) {
     return `<!DOCTYPE html>
 <html lang="en">

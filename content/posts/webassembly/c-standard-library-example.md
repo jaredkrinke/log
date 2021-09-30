@@ -38,7 +38,7 @@ Note that the version of LLVM that I installed in my last post didn't come from 
 ## Source code
 Here's the C source for my test module that uses the WASI C library (`sine.c`):
 
-```
+```c
 #include <math.h>
 
 #define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
@@ -63,14 +63,14 @@ Note that in this example, I extracted the WASI SDK into a subfolder of my proje
 
 Here's the build command (note: I omitted the `-target` option because I'm using the WASI SDK's Clang, which defaults to targeting `wasm32-wasi`):
 
-```
+```sh
 wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm
 ```
 
 ## Calling from Node
 Almost identical to last time:
 
-```
+```javascript
 const fs = require('fs');
 (async () => {
     const module = await WebAssembly.instantiate(await fs.promises.readFile("./sine.wasm"));
@@ -84,7 +84,7 @@ Output: 0.9999996829318346 (looks reasonable, since 1.57 is approximately pi/2 a
 ## Calling from a browser
 Again, almost identical:
 
-```
+```html
 <html>
     <body>
         <p>The value of sin(1.57) is <span id="result">?</span></p>

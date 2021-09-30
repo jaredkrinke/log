@@ -19,12 +19,12 @@ Anyway, back to the question: can I import a CommonJS module into my ES module?
 # Let's just try it...
 Here's a CommonJS module:
 
-```
+```javascript
 exports.test = "works!";
 ```
 
 ## Proof that it works from CommonJS (in Node) ✔
-```
+```javascript
 const { test } = require("./test.js");
 console.log(test);
 ```
@@ -32,7 +32,7 @@ console.log(test);
 Output: `works!`
 
 ## How about from an ES module in Node? ✔
-```
+```javascript
 import { test } from "./test.js";
 console.log(test);
 ```
@@ -40,7 +40,7 @@ console.log(test);
 Output: `works!`
 
 ## How about from an ES module in a web page? ✖
-```
+```html
 <html>
     <body>
         <p>Output: <span id="result">?</span></p>

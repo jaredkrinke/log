@@ -31,7 +31,7 @@ I'm going to start with a very simple example (just to reduce the number of thin
 ## Source code
 File name: "add.c":
 
-```
+```c
 int add(int a, int b) {
     return a + b;
 }
@@ -40,7 +40,7 @@ int add(int a, int b) {
 ## Compiling the code
 First, I'm just going to compile (but not link) the code, to see what happens.
 
-```
+```sh
 clang -target wasm32 -Os -c add.c
 ```
 
@@ -54,7 +54,7 @@ Since I'm compiling and not linking, this command generates an object file named
 ## Disassembling the object file
 Run the disassembler:
 
-```
+```sh
 wasm2wat add.o
 ```
 
@@ -110,7 +110,7 @@ It looks like the C code compiled correctly and the output WAT seems reasonable.
 ## Linking
 Note that my original Clang command specified `-c`, so it only compiled the code and never ran the linker. Let's go all the way this time:
 
-```
+```sh
 clang -target wasm32 -Os -nostdlib -Wl,--no-entry add.c -o add.wasm
 ```
 
@@ -122,7 +122,7 @@ I removed `-c` and added some new arguments:
 
 Disassembling "add.wasm" yields the following:
 
-```
+```wat
 (module
   (memory (;0;) 2)
   (global $__stack_pointer (mut i32) (i32.const 66560))
@@ -158,7 +158,7 @@ How do I tell Clang/LLVM that I want to export a function? Consulting the [linke
 
 I kind of wish there was an "always export this symbol by name" option that didn't require duplicating the name. C preprocessor to the rescue!
 
-```
+```c
 #define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
 #define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
 
@@ -169,7 +169,7 @@ int WASM_EXPORT(add)(int a, int b) {
 
 Output:
 
-```
+```wat
 (module
   (type (;0;) (func (param i32 i32) (result i32)))
   (func $add (type 0) (param i32 i32) (result i32)
@@ -190,7 +190,7 @@ Now that I've got my finished module (`add.wasm`), I need to host it somewhere.
 ### Using the module in Node
 Here's an example of loading the module and calling `add` in Node:
 
-```
+```javascript
 const fs = require('fs');
 (async () => {
     const module = await WebAssembly.instantiate(await fs.promises.readFile("./add.wasm"));
@@ -207,7 +207,7 @@ const fs = require('fs');
 ### Using the module in a web page
 Here's a web page for my trivial example:
 
-```
+```html
 <html>
     <body>
         <p>The value of 2 + 2 is <span id="result">?</span></p>

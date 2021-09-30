@@ -39,13 +39,13 @@ My experience with static site generators until recently was all home-built stuf
 
 So far, (as with Hugo's templates) I don't like what I see. The syntax is incredibly ugly and verbose. Here's how you mark an input to a template (I was hoping for something more like this JavaScript's template literal syntax):
 
-```
+```jinja
 {% block content %}{% endblock %}
 ```
 
 How do I supply an input to the template?
 
-```
+```jinja
 {% block content %}
 <p>Content goes here</p>
 {% endblock content %}
@@ -55,7 +55,7 @@ The definition is so similar to the declaration that I'm not sure how you even t
 
 Conditionals also aren't just expressions which means lots of `{%` and `%}` in my case where I just want my home page title to be "Blog" and all pages to be "Blog: Some page":
 
-```
+```jinja
 {% if section.extra.root %}
     Blog
 {% else %}
