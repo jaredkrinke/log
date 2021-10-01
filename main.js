@@ -66,7 +66,7 @@ const addCustomProperties = (files, metalsmith, done) => {
     done();
 };
 
-let metalsmith = Metalsmith(__dirname)
+Metalsmith(__dirname)
     .metadata({
         site: {
             title: "Schemescape",
@@ -99,7 +99,7 @@ let metalsmith = Metalsmith(__dirname)
         renderer: markdownRenderer,
         highlight: (code, language) => {
             if (language) {
-                return highlight.highlight(code, { language,  }).value;
+                return highlight.highlight(code, { language }).value;
             } else {
                 return highlight.highlightAuto(code).value;
             }
