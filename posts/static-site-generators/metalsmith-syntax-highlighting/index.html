@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Schemescape: Syntax highlighting for a static site built with Metalsmith</title>
+        <meta name="description" content="I&#x27;m using Metalsmith to build my static site. Here&#x27;s how I integrated syntax highlighting using highlight.js." />
+        <meta name="keywords" content="metalsmith,highlight.js" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="stylesheet" href="../../../css/style.css" />
+        <link rel="alternate" type="application/rss+xml" href="../../../feed.xml" />
+    </head>
+    <body>
+        <main>
+            <header>
+                <h1><a href="../../../">Schemescape</a></h1>
+                <p>Development log of a life-long coder</p>
+            </header>
+<article>
+    <header>
+        <h1><a href=".">Syntax highlighting for a static site built with Metalsmith</a></h1>
+        <p><time datetime="2021-10-01">October 1, 2021</time></p>
+    </header>
+<p>As <a href="../metalsmith/">described previously</a>, I&#39;m using <a href="https://metalsmith.io/">Metalsmith</a> to build my static site because I like its modular, easy to extend design (even though it required more effort to setup initially).</p>
+<p>Here&#39;s how I integrated <a href="https://highlightjs.org/">highlight.js</a> syntax highlighting into my static builds.</p>
+<h1 id="marked">Marked</h1>
+<p>Metalsmith&#39;s official Markdown plug, <a href="https://github.com/segmentio/metalsmith-markdown">metalsmith-markdown</a> uses <a href="https://marked.js.org/">Marked</a> for converting Markdown into HTML. Note that the plugin uses a fairly old version of Marked: 0.7.0. Fortunately, Marked has <a href="https://marked.js.org/using_advanced#highlight">convenient support for integrating syntax highlighting</a>.</p>
+<h1 id="highlightjs">highlight.js</h1>
+<p>Since I&#39;m working within the Node/NPM ecosystem, I decided to try <a href="https://highlightjs.org/">highlight.js</a>, because it&#39;s conveniently implemented in JavaScript (no manual compilation required). I suspect a native highlighting library would be faster, but I&#39;d rather optimize later, if needed, than waste time upfront.</p>
+<h1 id="build-script-integration">Build script integration</h1>
+<p>First step (after installing highlight.js via NPM: <code>npm install --save highlight.js</code>) is to use the documentation above to integrate highlight.js into my build script. This turned out to be fairly easy:</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> highlight <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;highlight.js&quot;</span>;
+...
+<span class="hljs-comment">// Configure syntax highlighting aliases</span>
+highlight.<span class="hljs-title function_">registerAliases</span>(<span class="hljs-string">&quot;wasm&quot;</span>, { <span class="hljs-attr">languageName</span>: <span class="hljs-string">&quot;lisp&quot;</span> });
+...
+<span class="hljs-title class_">Metalsmith</span>(__dirname)
+...
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">markdown</span>({
+        <span class="hljs-attr">highlight</span>: <span class="hljs-function">(<span class="hljs-params">code, language</span>) =&gt;</span> {
+            <span class="hljs-keyword">if</span> (language) {
+                <span class="hljs-keyword">return</span> highlight.<span class="hljs-title function_">highlight</span>(code, { language }).<span class="hljs-property">value</span>;
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">return</span> highlight.<span class="hljs-title function_">highlightAuto</span>(code).<span class="hljs-property">value</span>;
+            }
+        },
+    }))
+...</code></pre>
+<p>Notes:</p>
+<ul>
+<li>I&#39;m using <code>import</code> instead of <code>require</code> to experiment with ES modules (<a href="../../javascript/using-commonjs-modules-from-es-modules/">Node supports loading CommonJS modules with <code>import</code></a>)</li>
+<li>highlight.js <a href="https://highlightjs.org/static/demo/">supports a lot of languages</a>, but not WebAssembly, so I set up an alias that let&#39;s me mark code blocks as &quot;wasm&quot; and they&#39;ll be highlighted using Lisp s-expression syntax</li>
+<li>highlight.js can auto-detect languages, so I use <code>highlightAuto</code> in cases where no programming language is explicitly specified</li>
+</ul>
+<p>So far, so good.</p>
+<h1 id="theming">Theming</h1>
+<p>Now, on to the annoying part: theming!</p>
+<p>I kind of expected this, but <a href="https://highlightjs.readthedocs.io/en/latest/theme-guide.html#">creating a theme</a> (mostly from scratch) for highlight.js is fairly tedious. The <a href="https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html">list of &quot;scopes&quot;</a> (i.e. classes of tokens) is long, and some are even nested. For example, the name of a function gets the following CSS classes applied: &quot;hljs-title function_&quot;.</p>
+<p>To tweak a theme, the best approach I can recommend here is:</p>
+<ol>
+<li>Run highlight.js on some code</li>
+<li>Inspect the output HTML (specifically the CSS classes)</li>
+<li>Add/update your CSS rules</li>
+<li>Repeat</li>
+</ol>
+<p>I had hoped that I could just take an existing theme and modify it slightly, but I couldn&#39;t find a theme that didn&#39;t group scopes in unappealing ways (e.g. grouping macros/templates with literals).</p>
+<h1 id="my-final-css">My &quot;final&quot; CSS</h1>
+<p>After a lot of trial and error, below is the CSS I came up with, using colors that are mostly already present on my site. I grouped the rules by color.</p>
+<p>I&#39;m sure this theme doesn&#39;t cover all languages well, so I&#39;ll likely need to tweak it a few times in the future, but it seems adequate for all the code I&#39;ve thrown at it thus far.</p>
+<pre><code class="language-css"><span class="hljs-comment">/* Syntax highlighting */</span>
+<span class="hljs-selector-class">.hljs-comment</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#5a8c3f</span>; }
+
+<span class="hljs-selector-class">.hljs-tag</span>,
+<span class="hljs-selector-class">.hljs-punctuation</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#ccc</span>; }
+
+<span class="hljs-selector-class">.hljs-literal</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#66c9fe</span>; }
+
+<span class="hljs-selector-class">.hljs-title</span><span class="hljs-selector-class">.class_</span>,
+<span class="hljs-selector-class">.hljs-tag</span> <span class="hljs-selector-class">.hljs-name</span>,
+<span class="hljs-selector-class">.hljs-tag</span> <span class="hljs-selector-class">.hljs-attr</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#7bbf56</span>; }
+
+<span class="hljs-selector-class">.hljs-attr</span>,
+<span class="hljs-selector-class">.hljs-symbol</span>,
+<span class="hljs-selector-class">.hljs-variable</span>,
+<span class="hljs-selector-class">.hljs-template-variable</span>,
+<span class="hljs-selector-class">.hljs-link</span>,
+<span class="hljs-selector-class">.hljs-selector-attr</span>,
+<span class="hljs-selector-class">.hljs-selector-pseudo</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#59c5ff</span>; }
+
+<span class="hljs-selector-class">.hljs-keyword</span>,
+<span class="hljs-selector-class">.hljs-attribute</span>,
+<span class="hljs-selector-class">.hljs-selector-tag</span>,
+<span class="hljs-selector-class">.hljs-meta</span> <span class="hljs-selector-class">.hljs-keyword</span>,
+<span class="hljs-selector-class">.hljs-doctag</span>,
+<span class="hljs-selector-class">.hljs-name</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#51a1cc</span>; }
+
+<span class="hljs-selector-class">.hljs-type</span>,
+<span class="hljs-selector-class">.hljs-string</span>,
+<span class="hljs-selector-class">.hljs-number</span>,
+<span class="hljs-selector-class">.hljs-quote</span>,
+<span class="hljs-selector-class">.hljs-template-tag</span>,
+<span class="hljs-selector-class">.hljs-deletion</span>,
+<span class="hljs-selector-class">.hljs-title</span>,
+<span class="hljs-selector-class">.hljs-section</span>,
+<span class="hljs-selector-class">.hljs-meta</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#d97c57</span>; }
+
+<span class="hljs-selector-class">.hljs-regexp</span>,
+<span class="hljs-selector-class">.hljs-meta</span> <span class="hljs-selector-class">.hljs-string</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#b25947</span>; }
+
+<span class="hljs-selector-class">.hljs-title</span><span class="hljs-selector-class">.function_</span>,
+<span class="hljs-selector-class">.hljs-built_in</span>,
+<span class="hljs-selector-class">.hljs-bullet</span>,
+<span class="hljs-selector-class">.hljs-code</span>,
+<span class="hljs-selector-class">.hljs-addition</span>,
+<span class="hljs-selector-class">.hljs-selector-id</span>,
+<span class="hljs-selector-class">.hljs-selector-class</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#e6b95c</span>; }</code></pre>
+<h1 id="performance">Performance</h1>
+<p>On my code-heavy, but tiny, site, I measured the following build times with and without syntax highlighting:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Scenario</th>
+<th align="right">Build time (s)</th>
+<th align="right">Avg. time per page (ms)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Without highlighting</td>
+<td align="right">1.4</td>
+<td align="right">67</td>
+</tr>
+<tr>
+<td align="left">With highlighting</td>
+<td align="right">2.2</td>
+<td align="right">105</td>
+</tr>
+</tbody></table>
+<p>For me, on this machine, the overhead of syntax highlighting is roughly 40ms/page. This is certainly tolerable for my small site. I&#39;ll revisit the decision to use a JavaScript-based highlighter in the future, if needed. But for now, this is sufficient.</p>
+<h1 id="the-end">The end</h1>
+<p>Despite griping about theming, I&#39;m impressed with how smoothly everything integrated. Adding working syntax highlighting to a static site in a single sitting shows how productive modern software stacks can be.</p>
+<p>I&#39;ll end the post with some examples of syntax highlighting in a few languages I&#39;ve already used on this site.</p>
+<h2 id="syntax-highlighting-examples">Syntax highlighting examples</h2>
+<h3 id="javascript">JavaScript</h3>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+(<span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./add.wasm&quot;</span>));
+    <span class="hljs-keyword">const</span> add = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">add</span>;
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">add</span>(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>));
+})();</code></pre>
+<h3 id="c">C</h3>
+<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT_AS(name) __attribute__((export_name(name)))</span>
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol</span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(add)</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span> {
+    <span class="hljs-keyword">return</span> a + b;
+}</code></pre>
+<h3 id="webassembly">WebAssembly</h3>
+<pre><code class="language-wasm"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)))</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;__linear_memory&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">0</span><span class="hljs-punctuation">))</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$add</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span>
+    <span class="hljs-keyword">local.get</span> <span class="hljs-number">1</span>
+    <span class="hljs-keyword">local.get</span> <span class="hljs-number">0</span>
+    <span class="hljs-keyword">i32.add</span><span class="hljs-punctuation">))</span></code></pre>
+<h3 id="html">HTML</h3>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>The value of 2 + 2 is <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;result&quot;</span>&gt;</span>?<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+            (<span class="hljs-keyword">async</span> () =&gt; {
+                <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiateStreaming</span>(<span class="hljs-title function_">fetch</span>(<span class="hljs-string">&quot;./add.wasm&quot;</span>));
+                <span class="hljs-keyword">const</span> add = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">add</span>;
+                <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;result&quot;</span>).<span class="hljs-property">innerText</span> = <span class="hljs-title function_">add</span>(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>);
+            })();
+        </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+
+</article>
+        </main>
+    </body>
+</html>
