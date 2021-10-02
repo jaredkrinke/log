@@ -46,7 +46,7 @@ Notes:
 So far, so good.
 
 # Theming
-Now, on to the hard part: theming!
+Now, on to the annoying part: theming!
 
 I kind of expected this, but [creating a theme](https://highlightjs.readthedocs.io/en/latest/theme-guide.html#) (mostly from scratch) for highlight.js is fairly tedious. The [list of "scopes"](https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html) (i.e. classes of tokens) is long, and some are even nested. For example, the name of a function gets the following CSS classes applied: "hljs-title function_".
 
@@ -56,26 +56,61 @@ To tweak a theme, the best approach I can recommend here is:
 1. Add/update your CSS rules
 1. Repeat
 
-I had hoped that I could just take an existing theme and modify it slightly, but I couldn't find a theme that didn't group scopes in confusing ways (e.g. grouping macros/templates with literals).
+I had hoped that I could just take an existing theme and modify it slightly, but I couldn't find a theme that didn't group scopes in unappealing ways (e.g. grouping macros/templates with literals).
 
 # My "final" CSS
-After a lot of trial and error, below is the CSS I came up with, using colors that are mostly already present on my site. I'm sure I'll need to tweak it a few times in the future.
+After a lot of trial and error, below is the CSS I came up with, using colors that are mostly already present on my site. I grouped the rules by color.
+
+I'm sure this theme doesn't cover all languages well, so I'll likely need to tweak it a few times in the future, but it seems adequate for all the code I've thrown at it thus far.
 
 ```css
 /* Syntax highlighting */
 .hljs-comment { color: #5a8c3f; }
+
+.hljs-tag,
+.hljs-punctuation { color: #ccc; }
+
 .hljs-literal { color: #66c9fe; }
-.hljs-tag, .hljs-punctuation { color: #ccc; }
-.hljs-tag .hljs-name, .hljs-tag .hljs-attr { color: #7bbf56; }
-.hljs-keyword, .hljs-attribute, .hljs-selector-tag, .hljs-meta .hljs-keyword, .hljs-doctag, .hljs-name { color: #51a1cc; }
-.hljs-type, .hljs-string, .hljs-number, .hljs-quote, .hljs-template-tag, .hljs-deletion { color: #d97c57; }
-.hljs-title, .hljs-section { color: #d97c57; }
-.hljs-regexp { color: #b25947; }
-.hljs-attr, .hljs-symbol, .hljs-variable, .hljs-template-variable, .hljs-link, .hljs-selector-attr, .hljs-selector-pseudo { color: #59c5ff; }
-.hljs-title.class_ { color: #7bbf56; }
-.hljs-title.function_, .hljs-built_in, .hljs-bullet, .hljs-code, .hljs-addition, .hljs-selector-id, .hljs-selector-class { color: #e6b95c; }
+
+.hljs-title.class_,
+.hljs-tag .hljs-name,
+.hljs-tag .hljs-attr { color: #7bbf56; }
+
+.hljs-attr,
+.hljs-symbol,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-link,
+.hljs-selector-attr,
+.hljs-selector-pseudo { color: #59c5ff; }
+
+.hljs-keyword,
+.hljs-attribute,
+.hljs-selector-tag,
+.hljs-meta .hljs-keyword,
+.hljs-doctag,
+.hljs-name { color: #51a1cc; }
+
+.hljs-type,
+.hljs-string,
+.hljs-number,
+.hljs-quote,
+.hljs-template-tag,
+.hljs-deletion,
+.hljs-title,
+.hljs-section,
 .hljs-meta { color: #d97c57; }
+
+.hljs-regexp,
 .hljs-meta .hljs-string { color: #b25947; }
+
+.hljs-title.function_,
+.hljs-built_in,
+.hljs-bullet,
+.hljs-code,
+.hljs-addition,
+.hljs-selector-id,
+.hljs-selector-class { color: #e6b95c; }
 ```
 
 # Performance
@@ -89,7 +124,7 @@ On my code-heavy, but tiny, site, I measured the following build times with and 
 For me, on this machine, the overhead of syntax highlighting is roughly 40ms/page. This is certainly tolerable for my small site. I'll revisit the decision to use a JavaScript-based highlighter in the future, if needed. But for now, this is sufficient.
 
 # The end
-Despite griping about theming, I'm impressed with how smoothly everything integrated. Adding working syntax highlighting to a static site in a single sitting goes to show how productive modern software stacks can be.
+Despite griping about theming, I'm impressed with how smoothly everything integrated. Adding working syntax highlighting to a static site in a single sitting shows how productive modern software stacks can be.
 
 I'll end the post with some examples of syntax highlighting in a few languages I've already used on this site.
 
