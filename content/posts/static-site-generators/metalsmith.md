@@ -140,6 +140,9 @@ Metalsmith
 
 **Update**: I realized I also want to be able to link to a heading *within* another post (examples: [link to Architecture heading in this post](#architecture); [link to my initial impression of Metalsmith in a different post](comparison.md#metalsmith)). The code above has been updated to handle this case.
 
+### Syntax highlighting
+**Update**: I added a [separate post on adding syntax highlighting](metalsmith-syntax-highlighting.md).
+
 ## Conclusion
 Overall, I really liked that Metalsmith just did exactly what I asked, even if I didn't initially know what, precisely, I wanted. I was able to find plugins for almost everything to get started (including local testing with live reloading). Importantly, I also feel like I fully understand what Metalsmith is doing, so I don't have to worry about later discovering that it was processing files multiple times (something that did happen with Eleventy).
 
