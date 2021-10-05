@@ -10,10 +10,12 @@ As a follow-up to a [trivial WebAssembly example in C](trivial-example.md) and [
 # One approach for strings in WebAssembly
 Recall that WebAssembly [doesn't have a string type](https://webassembly.github.io/spec/core/syntax/types.html). How can a C function receive or return a string when compiled to WebAssembly?
 
-## Pass in via linear memory
+## Pass in by directly populating linear memory
+Also known as: failed attempt #1.
+
 Here's one idea:
 
-1. Passing a string from JavaScript to C
+1. Passing a string from JavaScript to C (attempt #1)
   1. Add a null character onto the end of the string
   1. Use the browser's TextEncoder API to convert a string to a byte sequence
   1. Write the buffer into linear memory
@@ -28,10 +30,90 @@ This means that you don't really have a place to stuff in your encoded string. I
 
 Another annoyance is that the LLVM linker adds a minimum size constraint to linear memory, so even if you got this working, there'd be a dependency between the minimum memory size and what your JavaScript code supplies.
 
-Anyway, this approach ended up being ugly enough that I'm going to look for a better solution.
+The fundamental problem with this approach is that the C-based WebAssembly module needs complete control over its memory, and there doesn't appear to be a way to access a different memory from C code, as compiled with Clang and LLVM's WebAssembly linker. There are likely libraries (probably with hand-written WebAssembly) to enable this, but I'd like a simple solution.
 
-## Pass in via table
+## Pass in via the heap
+Here's a new idea: let the C code control its entire address space, but expose functions to let JavaScript allocate some memory.
 
+1. Passing a string from JavaScript to C (attempt #2)
+  1. Expose `allocate` and `deallocate` functions to let JavaScript allocate and free chunks of the heap
+  1. Add a null character onto the end of the string
+  1. Use the browser's TextEncoder API to convert a string to a byte sequence
+  1. Allocate a buffer (in C address space) for the string (using the exported function `allocate`)
+  1. Write the encoded string into the heap allocation
+  1. Call C code to read the string as a null-terminated UTF-8 string
+  1. Deallocate/free the string (using the exported function `deallocate`)
+  1. C code can read the string as a null-terminated UTF-8 string
+
+### C implementation
+As an example, I've created a function that counts the number of occurrences of the letter "a" in a string. Note that I have to export an allocator and a deallocator.
+
+```c
+#include <malloc.h>
+
+#define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
+#define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
+
+unsigned char* WASM_EXPORT(allocate)(unsigned int size) {
+    return (unsigned char*)malloc(size);
+}
+
+void WASM_EXPORT(deallocate)(unsigned char* allocation) {
+    free(allocation);
+}
+
+unsigned int WASM_EXPORT(countAs)(const char* string) {
+    unsigned int numberOfAs = 0;
+    while (*string != '\0') {
+        if (*string == 'a') {
+            ++numberOfAs;
+        }
+        string++;
+    }
+    return numberOfAs;
+}
+```
+
+### Compiling
+The build command is unchanged from before:
+
+```sh
+wasi-sdk/bin/clang -Os --sysroot wasi-sdk/share/wasi-sysroot -nostartfiles -Wl,--no-entry string-example.c -o string-example.wasm
+```
+
+### JavaScript caller
+The JavaScript wrapper is more involved than I'd like, but it does work:
+
+```javascript
+const fs = require("fs");
+
+(async () => {
+    const module = await WebAssembly.instantiate(await fs.promises.readFile("./string-example.wasm"));
+
+    // String used for testing (from command line or hard-coded)
+    const testString = process.argv[2] ?? "How many letter a's are there in this string? Three!";
+
+    // Encode the string (with null terminator) to get the required size
+    const nullTerminatedString = testString + "\0";
+    const textEncoder = new TextEncoder();
+    const encodedString = textEncoder.encode(nullTerminatedString);
+
+    // Allocate space in linear memory for the encoded string
+    const address = module.instance.exports.allocate(encodedString.length);
+    try {
+        // Copy the string into the buffer
+        const destination = new Uint8Array(module.instance.exports.memory.buffer, address);
+        textEncoder.encodeInto(nullTerminatedString, destination);
+
+        // Call the function
+        const result = module.instance.exports.countAs(address);
+        console.log(result);
+    } finally {
+        // Always free the allocation when done
+        module.instance.exports.deallocate(address);
+    }
+})();
+```
 
 # TODO
 
