@@ -161,7 +161,7 @@
     <span class="hljs-keyword">const</span> encodedString = textEncoder.<span class="hljs-title function_">encode</span>(nullTerminatedString);
 
     <span class="hljs-comment">// Allocate space in linear memory for the encoded string</span>
-    <span class="hljs-title function_">useNewInstanceAllocation</span>(<span class="hljs-variable language_">module</span>, encodedString.<span class="hljs-property">length</span>, <span class="hljs-function">(<span class="hljs-params">address</span>) =&gt;</span> {
+    <span class="hljs-title function_">useNewInstanceAllocation</span>(<span class="hljs-variable language_">module</span>, encodedString.<span class="hljs-property">length</span>, <span class="hljs-function">(<span class="hljs-params">{ address }</span>) =&gt;</span> {
         <span class="hljs-comment">// Copy the string into the buffer</span>
         <span class="hljs-keyword">const</span> destination = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>, address);
         textEncoder.<span class="hljs-title function_">encodeInto</span>(nullTerminatedString, destination);
