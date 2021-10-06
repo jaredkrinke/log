@@ -1,4 +1,144 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Wed, 06 Oct 2021 16:14:06 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Passing strings to and from WebAssembly using C]]></title><description><![CDATA[<p>As a follow-up to a <a href="../trivial-example/">trivial WebAssembly example in C</a> and <a href="../c-standard-library-example/">an example of using the C standard library in WebAssembly</a>, I&#39;m now investigating passing strings back and forth between the JavaScript host and a WebAssembly module written in C (and compiled with Clang/LLVM).</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Wed, 06 Oct 2021 21:03:49 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[WebAssembly objects, libraries, and linking (for C code)]]></title><description><![CDATA[<p>In the interest of reusing <a href="../passing-strings-to-c/">some C string handling code I wrote for use in WebAssembly</a>, I&#39;m researching how object files, libraries, and linking work in WebAssembly.</p>
+<h1 id="background">Background</h1>
+<p>For native C code, the following file types and concepts are used:</p>
+<ul>
+<li>Header files (.h) define the interfaces used between source files</li>
+<li>Source files (.c) implement functionality</li>
+<li>Object files (.o) each represent the compiled (using &quot;-c&quot;) output of a single source file</li>
+<li>Archive files (.a) contain many object files and are used for build-time linking (static libraries)</li>
+<li>Shared objects (.so) or dynamic-link libraries (.dll) support linking at run-time (shared libraries)</li>
+</ul>
+<p>How does the Clang/LLVM toolchain map these concepts to WebAssembly?</p>
+<h1 id="webassembly-object-files">WebAssembly object files</h1>
+<p>To my surprise, WebAssembly actually publishes <a href="https://github.com/WebAssembly/tool-conventions/blob/main/Linking.md">conventions for creating and linking object files</a>.</p>
+<p>I certainly didn&#39;t read that entire document, but I did note that object files are just WebAssembly modules, with custom sections (note: custom sections are only supported in binary &quot;.wasm&quot; format, and not text &quot;.wat&quot; format).</p>
+<h2 id="example">Example</h2>
+<p>My WebAssembly string library is very simple:</p>
+<ul>
+<li>It defines <code>wasm_c_string</code> which represents a string on the heap that will be return to the JavaScript host</li>
+<li>It exports 2 functions:<ul>
+<li><code>allocate_wasm_c_string</code> to allocate a wasm_c_string of a given length</li>
+<li><code>create_wasm_c_string</code> to allocate a wasm_c_string that is a copy of any old C string</li>
+</ul>
+</li>
+</ul>
+<p>Note that this example requires consumers of the library providing <code>malloc()</code> and <code>free()</code> to the JavaScript host. I don&#39;t export these from my library because I want consumers to be able to supply their own allocator.</p>
+<h3 id="c-source-code">C source code</h3>
+<p>Here&#39;s the header file (&quot;wasm-c-string.h&quot;):</p>
+<pre><code class="language-c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> {</span>
+    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> length;
+    <span class="hljs-type">char</span> buffer[];
+} wasm_c_string;
+
+<span class="hljs-comment">// Allocates an empty wasm_c_string. When done, use &quot;free&quot; to release.</span>
+<span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">allocate_wasm_c_string</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> length)</span>;
+
+<span class="hljs-comment">// Creates a new wasm_c_string from an existing C string. When done, use &quot;free&quot; to release.</span>
+<span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">create_wasm_c_string</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* source)</span>;</code></pre>
+<p>And the source file (&quot;wasm-c-string.c&quot;):</p>
+<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;malloc.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;wasm-c-string.h&quot;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT_AS(name) __attribute__((export_name(name)))</span>
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol</span>
+
+wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(allocate_wasm_c_string)</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> length)</span> {
+    wasm_c_string* str = (wasm_c_string*)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>) + length);
+    str-&gt;length = (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)length;
+    <span class="hljs-keyword">return</span> str;
+}
+
+wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(create_wasm_c_string)</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* source)</span> {
+    <span class="hljs-keyword">const</span> <span class="hljs-type">size_t</span> sourceLength = <span class="hljs-built_in">strlen</span>(source);
+    wasm_c_string* str = allocate_wasm_c_string((<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)sourceLength);
+    <span class="hljs-built_in">memcpy</span>(&amp;str-&gt;buffer[<span class="hljs-number">0</span>], source, sourceLength);
+    <span class="hljs-keyword">return</span> str;
+}</code></pre>
+<h3 id="compiling">Compiling</h3>
+<p>Let&#39;s compile this to an object file (using the <a href="https://github.com/WebAssembly/wasi-sdk">WASI SDK</a>--note the &quot;-c&quot; argument that tells Clang to only output an object file and not invoke the linker):</p>
+<pre><code class="language-sh">wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.c</code></pre>
+<h3 id="text-format">Text format</h3>
+<p>The output file defaults to &quot;wasm-c-string.o&quot; and here&#39;s the (abbreviated) corresponding text format (compliments of the <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a>&#39;s <code>wasm2wat</code> tool):</p>
+<pre><code class="language-wasm"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)))</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-comment">(;1;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)))</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;__linear_memory&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">0</span><span class="hljs-punctuation">))</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;__indirect_function_table&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">table</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">0</span> funcref<span class="hljs-punctuation">))</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;malloc&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)))</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;strlen&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-comment">(;1;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)))</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;memcpy&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-comment">(;2;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">1</span><span class="hljs-punctuation">)))</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$allocate_wasm_c_string</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span>
+...
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$create_wasm_c_string</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span>
+...
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;allocate_wasm_c_string&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$allocate_wasm_c_string</span><span class="hljs-punctuation">))</span>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;create_wasm_c_string&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$create_wasm_c_string</span><span class="hljs-punctuation">)))</span>
+</code></pre>
+<p>You can see that it&#39;s importing memory, a function table, and C standard library functions, and that it&#39;s exporting my 2 functions.</p>
+<h3 id="custom-sections">Custom sections</h3>
+<p>But wait, the object file conventions document indicates that there are custom sections that can&#39;t be represented in the text format. So let&#39;s use <code>wasm-objdump</code> (also from WABT):</p>
+<pre><code><span class="hljs-string">$</span> <span class="hljs-string">wasm-objdump</span> <span class="hljs-string">-s</span> <span class="hljs-string">wasm-c-string.o</span>
+
+<span class="hljs-attr">wasm-c-string.o:</span>    <span class="hljs-string">file</span> <span class="hljs-string">format</span> <span class="hljs-string">wasm</span> <span class="hljs-number">0x1</span>
+
+<span class="hljs-string">...</span>
+
+<span class="hljs-attr">Contents of section Custom:</span>
+<span class="hljs-attr">0000119:</span> <span class="hljs-string">076c</span> <span class="hljs-string">696e</span> <span class="hljs-string">6b69</span> <span class="hljs-number">6e67</span> <span class="hljs-number">0208 </span><span class="hljs-string">be80</span> <span class="hljs-number">8080 </span><span class="hljs-number">0005</span>  <span class="hljs-string">.linking........</span>
+<span class="hljs-attr">0000129:</span> <span class="hljs-string">00a4</span> <span class="hljs-number">0103 </span><span class="hljs-number">1661 </span><span class="hljs-string">6c6c</span> <span class="hljs-string">6f63</span> <span class="hljs-number">6174 </span><span class="hljs-string">655f</span> <span class="hljs-number">7761</span>  <span class="hljs-string">.....allocate_wa</span>
+<span class="hljs-attr">0000139:</span> <span class="hljs-string">736d</span> <span class="hljs-string">5f63</span> <span class="hljs-string">5f73</span> <span class="hljs-number">7472 </span><span class="hljs-string">696e</span> <span class="hljs-number">6700 </span><span class="hljs-number">1000 </span><span class="hljs-string">00a4</span>  <span class="hljs-string">sm_c_string.....</span>
+<span class="hljs-attr">0000149:</span> <span class="hljs-number">0104 </span><span class="hljs-number">1463 </span><span class="hljs-number">7265 </span><span class="hljs-number">6174 </span><span class="hljs-string">655f</span> <span class="hljs-number">7761 </span><span class="hljs-string">736d</span> <span class="hljs-string">5f63</span>  <span class="hljs-string">...create_wasm_c</span>
+<span class="hljs-attr">0000159:</span> <span class="hljs-string">5f73</span> <span class="hljs-number">7472 </span><span class="hljs-string">696e</span> <span class="hljs-number">6700 </span><span class="hljs-number">1001 </span><span class="hljs-number">0010 </span><span class="hljs-number">02</span>         <span class="hljs-string">_string......</span>
+
+<span class="hljs-attr">Contents of section Custom:</span>
+<span class="hljs-attr">000016c:</span> <span class="hljs-string">0a72</span> <span class="hljs-string">656c</span> <span class="hljs-string">6f63</span> <span class="hljs-number">2e43</span> <span class="hljs-string">4f44</span> <span class="hljs-number">4504 </span><span class="hljs-number">0400 </span><span class="hljs-string">0b01</span>  <span class="hljs-string">.reloc.CODE.....</span>
+<span class="hljs-attr">000017c:</span> <span class="hljs-number">0021 </span><span class="hljs-number">0300 </span><span class="hljs-string">2c01</span> <span class="hljs-number">0042 </span><span class="hljs-number">04</span>                   <span class="hljs-string">.!..,..B.</span>
+
+<span class="hljs-attr">Contents of section Custom:</span>
+<span class="hljs-attr">000018b:</span> <span class="hljs-number">0970 </span><span class="hljs-string">726f</span> <span class="hljs-number">6475 </span><span class="hljs-number">6365 </span><span class="hljs-number">7273 </span><span class="hljs-string">010c</span> <span class="hljs-number">7072 </span><span class="hljs-string">6f63</span>  <span class="hljs-string">.producers..proc</span>
+<span class="hljs-attr">000019b:</span> <span class="hljs-number">6573 </span><span class="hljs-number">7365 </span><span class="hljs-string">642d</span> <span class="hljs-number">6279 </span><span class="hljs-number">0105 </span><span class="hljs-string">636c</span> <span class="hljs-string">616e</span> <span class="hljs-number">6756  </span><span class="hljs-string">essed-by..clangV</span>
+<span class="hljs-attr">00001ab:</span> <span class="hljs-number">3131 </span><span class="hljs-number">2e30</span> <span class="hljs-number">2e30</span> <span class="hljs-number">2028 </span><span class="hljs-number">6874 </span><span class="hljs-number">7470 </span><span class="hljs-string">733a</span> <span class="hljs-string">2f2f</span>  <span class="hljs-number">11.0</span><span class="hljs-number">.0</span> <span class="hljs-string">(https://</span>
+<span class="hljs-attr">00001bb:</span> <span class="hljs-number">6769 </span><span class="hljs-number">7468 </span><span class="hljs-number">7562 </span><span class="hljs-number">2e63</span> <span class="hljs-string">6f6d</span> <span class="hljs-string">2f6c</span> <span class="hljs-string">6c76</span> <span class="hljs-string">6d2f</span>  <span class="hljs-string">github.com/llvm/</span>
+<span class="hljs-attr">00001cb:</span> <span class="hljs-string">6c6c</span> <span class="hljs-string">766d</span> <span class="hljs-string">2d70</span> <span class="hljs-string">726f</span> <span class="hljs-string">6a65</span> <span class="hljs-number">6374 </span><span class="hljs-number">2031 </span><span class="hljs-number">3736  </span><span class="hljs-string">llvm-project</span> <span class="hljs-number">176</span>
+<span class="hljs-attr">00001db:</span> <span class="hljs-number">3234 </span><span class="hljs-number">3962 </span><span class="hljs-number">6436 </span><span class="hljs-number">3733 </span><span class="hljs-number">3261 </span><span class="hljs-number">3830 </span><span class="hljs-number">3434 </span><span class="hljs-number">6434  </span><span class="hljs-string">249bd6732a8044d4</span>
+<span class="hljs-attr">00001eb:</span> <span class="hljs-number">3537 </span><span class="hljs-number">3039 </span><span class="hljs-number">3265 </span><span class="hljs-number">6439 </span><span class="hljs-number">3332 </span><span class="hljs-number">3736 </span><span class="hljs-number">3837 </span><span class="hljs-number">3234  </span><span class="hljs-string">57092ed932768724</span>
+<span class="hljs-attr">00001fb:</span> <span class="hljs-number">6136 </span><span class="hljs-number">6630 </span><span class="hljs-number">3629                           </span><span class="hljs-string">a6f06)</span>
+</code></pre><p>Sure enough, there are custom sections related to linking, relocation, and even a curious &quot;producers&quot; section (that apparently exists to <a href="https://github.com/WebAssembly/tool-conventions/blob/main/ProducersSection.md">allow analysis of toolchain usage in the wild</a>).</p>
+<h1 id="webassembly-libraries">WebAssembly libraries</h1>
+<p>For something as simple as my 20 line C library, I could probably just distribute the C header and the compiled WebAssembly object file (which is actually a WebAssembly module with custom sections) and be done. What if I have a larger library?</p>
+<h2 id="dynamic-libraries">Dynamic libraries</h2>
+<p>Once again, to my surprise, WebAssembly publishes <a href="https://github.com/WebAssembly/tool-conventions/blob/main/DynamicLinking.md">conventions for dynamically loading libraries</a>, but the document notes there is no stable ABI. That&#39;s ok, I didn&#39;t really need dynamic libraries right now anyway.</p>
+<h2 id="static-libraries">Static libraries</h2>
+<p>Static libraries for native C code are often just archives (using the <a href="https://en.wikipedia.org/wiki/Ar_%28Unix%29"><code>ar</code></a> archiver tool), perhaps with some additional information to describe the library.</p>
+<p>Can I just do the same thing for WebAssembly? It certainly appears so.</p>
+<p>If I inspect the WASI SDK, in the WebAssembly sysroot, I actually see both bare objects and archives for the C standard library and friends:</p>
+<pre><code class="language-sh">$ ls wasi-sdk/share/wasi-sysroot/lib/wasm32-wasi
+crt1-command.o  libc++abi.a                         libdl.a       libutil.a
+crt1.o          libc.imports                        libm.a        libwasi-emulated-mman.a
+crt1-reactor.o  libc-printscan-long-double.a        libpthread.a  libwasi-emulated-signal.a
+libc++.a        libc-printscan-no-floating-point.a  libresolv.a   libxnet.a
+libc.a          libcrypt.a                          librt.a</code></pre>
+<p>What&#39;s in one of these archives? <code>ar -t libc.a</code> shows a bunch of object files. If I extract an object named &quot;ccos.o&quot; with <code>ar -x libc.a ccos.o</code>, I can use <code>wasm-objdump</code> or <code>wasm2wat</code> to see that it&#39;s just a regular WebAssembly object file.</p>
+<p>I&#39;m impressed that the people working on WebAssembly resisted the urge to create entirely new tools, and instead just decided to leverage existing UNIX tools that have been around for a long time.</p>
+<h1 id="linking">Linking</h1>
+<p>The <a href="https://lld.llvm.org/WebAssembly.html">documentation for wasm-ld</a> is brief, but it does have most of the information you need.</p>
+<p>The main tricks are:</p>
+<ul>
+<li>Pass <code>--no-entry</code> on the command line to indicate there is no <code>_start</code> entry point</li>
+<li>By default, only symbols marked with the <code>export-name</code> attribute are exported (see <code>WASM_EXPORT</code> in the C example earlier for a handy macro to add this)</li>
+</ul>
+<h1 id="summary">Summary</h1>
+<p>It turns out that the toolchain for WebAssembly libraries in C is similar to what one would use for native compilation:</p>
+<ul>
+<li>Publish header files (.h) to define the library&#39;s interface</li>
+<li>Compile source files (.c) to object files (.o) using <code>clang</code></li>
+<li>If needed, consolidate multiple object files into an archive (.a) using <code>ar</code></li>
+<li>Publish either a single object file or (more likely) an archive for users to consume</li>
+<li>For an object file, users just add it to the list on their <code>wasm-ld</code> command line</li>
+<li>For an archive, consumers add <code>-l&lt;name of archive without extension&gt;</code> to their <code>wasm-ld</code> command line</li>
+</ul>
+]]></description><link>https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking</link><guid isPermaLink="true">https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking</guid><pubDate>Wed, 06 Oct 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[Passing strings to and from WebAssembly using C]]></title><description><![CDATA[<p>As a follow-up to a <a href="../trivial-example/">trivial WebAssembly example in C</a> and <a href="../c-standard-library-example/">an example of using the C standard library in WebAssembly</a>, I&#39;m now investigating passing strings back and forth between the JavaScript host and a WebAssembly module written in C (and compiled with Clang/LLVM).</p>
 <p>Links to the code and a live demo are at <a href="#links">the end of the post</a>.</p>
 <h1 id="passing-a-string-from-javascript-to-c">Passing a string from JavaScript to C</h1>
 <p>Recall that WebAssembly <a href="https://webassembly.github.io/spec/core/syntax/types.html">doesn&#39;t have a string type</a>. How can a C function receive a string when compiled to WebAssembly?</p>
@@ -754,35 +894,4 @@ highlight.<span class="hljs-title function_">registerAliases</span>(<span class=
 </ul>
 <p>Remembering how to use a C compiler on the command line, and deciphering LLVM&#39;s export semantics took a bit more time than I would have liked, but I learned a lot about WebAssembly in the process.</p>
 <p>Next up, I&#39;ll see if I can get the C standard library working.</p>
-]]></description><link>https://log.schemescape.com/posts/webassembly/trivial-example</link><guid isPermaLink="true">https://log.schemescape.com/posts/webassembly/trivial-example</guid><pubDate>Mon, 27 Sep 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[WebAssembly overview]]></title><description><![CDATA[<h1 id="background">Background</h1>
-<h1 id="emscripten">Emscripten</h1>
-<p>I first heard of <a href="https://emscripten.org/">Emscripten</a> in the mid-2010s. At the time, you could compile C code to an optimizability-focused subset of JavaScript known as <a href="http://asmjs.org/">asm.js</a>. This meant that, given the source code to a native app and appropriate implementations of system APIs, you could run <em>formerly</em> native-only programs in the browser--convenient, if you don&#39;t want to install anything.</p>
-<h2 id="enter-webassembly">Enter WebAssembly</h2>
-<p>In the intervening years, <a href="https://webassembly.org/">WebAssembly</a> appeared. WebAssembly is a binary format for programs that run on a portable virtual machine. This VM can be hosted in your browser, but non-browser runtimes have also sprung up (e.g. <a href="https://wasmtime.dev/">wasmtime</a>).</p>
-<p>WebAssembly, to me, seems like the <a href="https://en.wikipedia.org/wiki/Holy_Grail">Holy Grail</a> of compilation targets. I wouldn&#39;t be surprised if, thanks to browser support, WebAssembly is <em>the</em> most broadly supported binary program format. What other binary format works on my desktop, phone, <a href="https://www.raspberrypi.org/">Raspberry Pi</a>?</p>
-<p>Note that WebAssembly runtimes seem to be standardizing on an in-development system interface named <a href="https://wasi.dev/">WASI</a>. You probably can&#39;t write a GUI app solely with WebAssembly and WASI today, but I&#39;m sure that day is coming (in the distant future).</p>
-<h2 id="one-note-on-emscripten">One note on Emscripten</h2>
-<p>If you just want to port native programs to the browser, Emscripten is an environment for doing that. It even converts <a href="https://en.wikipedia.org/wiki/OpenGL">OpenGL</a> to <a href="https://www.khronos.org/webgl/">WebGL</a> and handles the <a href="https://www.libsdl.org/">SDL</a> API. Unfortunately, just <em>installing</em> Emscripten requires Python. For now, I refuse to setup bloated software just to <em>install</em> the software I actually want, so I&#39;m skipping Emscripten.</p>
-<h1 id="webassembly-concepts">WebAssembly concepts</h1>
-<p>Mozilla&#39;s documentation has a <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Concepts">great overview of WebAssembly concepts</a>. There&#39;s also an <a href="https://hacks.mozilla.org/2017/07/creating-a-webassembly-module-instance-with-javascript/">approachable series of WebAssembly articles</a> on Mozilla Hacks. I&#39;ll try to summarize:</p>
-<ul>
-<li><strong>Module</strong>: a compiled WebAssembly binary (declaring imports and exports)</li>
-<li><strong>Instance</strong>: a module along with its state (memory, table, imports)</li>
-<li><strong>Memory</strong>: a read/write, resizable buffer provided to the instance</li>
-<li><strong>Table</strong>: array of references that aren&#39;t directly stored in WebAssembly-accessible memory (for security reasons)<ul>
-<li>The example I&#39;ve seen for this is to be able to pass function pointers into C/C++ code</li>
-</ul>
-</li>
-</ul>
-<h1 id="webassembly-formats">WebAssembly formats</h1>
-<p>WebAssembly defines two formats:</p>
-<ul>
-<li><strong>.wasm</strong>: Binary format</li>
-<li><strong>.wat</strong>: Text format (assembly)</li>
-</ul>
-<p>The <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a> contains tools for converting between these formats. Specifically, <code>wat2wasm</code> is analogous to a very simple assembler, and <code>wasm2wat</code> to a disassembler.</p>
-<h1 id="webassembly-browser-interface">WebAssembly browser interface</h1>
-<p>Within the browser, WebAssembly <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Loading_and_running">currently needs to be loaded using JavaScript</a> (it sounds like there are plans to support loading using script tags and import statements in the future). Sadly, as of today, the recommended way to load WebAssembly (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiateStreaming">WebAssembly.instantiateStreaming()</a>) is <a href="https://caniuse.com/?search=instantiateStreaming">only supported by 75% of browsers</a>. The more broadly supported <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiate">WebAssembly.instantiate()</a> seems cumbersome. I&#39;m hopeful that WebAssembly&#39;s ergonomics will improve, but I suppose this is just the price you pay when using new technology.</p>
-<h1 id="next-steps">Next steps</h1>
-<p>Armed with the above information, I think I&#39;m ready to dive in and test out WebAssembly with a trivial example. I&#39;ll report my findings in a subsequent update.</p>
-]]></description><link>https://log.schemescape.com/posts/webassembly/overview</link><guid isPermaLink="true">https://log.schemescape.com/posts/webassembly/overview</guid><pubDate>Sat, 25 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
+]]></description><link>https://log.schemescape.com/posts/webassembly/trivial-example</link><guid isPermaLink="true">https://log.schemescape.com/posts/webassembly/trivial-example</guid><pubDate>Mon, 27 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
