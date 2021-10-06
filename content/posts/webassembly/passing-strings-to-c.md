@@ -177,7 +177,7 @@ export const useNewInstanceString = (module, str, run) => {
     const encodedString = textEncoder.encode(nullTerminatedString);
 
     // Allocate space in linear memory for the encoded string
-    useNewInstanceAllocation(module, encodedString.length, (address) => {
+    useNewInstanceAllocation(module, encodedString.length, ({ address }) => {
         // Copy the string into the buffer
         const destination = new Uint8Array(module.instance.exports.memory.buffer, address);
         textEncoder.encodeInto(nullTerminatedString, destination);
