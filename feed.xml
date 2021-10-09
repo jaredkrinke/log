@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Wed, 06 Oct 2021 21:03:49 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[WebAssembly objects, libraries, and linking (for C code)]]></title><description><![CDATA[<p>In the interest of reusing <a href="../passing-strings-to-c/">some C string handling code I wrote for use in WebAssembly</a>, I&#39;m researching how object files, libraries, and linking work in WebAssembly.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Sat, 09 Oct 2021 17:57:25 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[WebAssembly objects, libraries, and linking (for C code)]]></title><description><![CDATA[<p>In the interest of reusing <a href="../passing-strings-to-c/">some C string handling code I wrote for use in WebAssembly</a>, I&#39;m researching how object files, libraries, and linking work in WebAssembly.</p>
 <h1 id="background">Background</h1>
 <p>For native C code, the following file types and concepts are used:</p>
 <ul>
@@ -139,7 +139,7 @@ libc.a          libcrypt.a                          librt.a</code></pre>
 <li>For an archive, consumers add <code>-l&lt;name of archive without extension&gt;</code> to their <code>wasm-ld</code> command line</li>
 </ul>
 ]]></description><link>https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking</link><guid isPermaLink="true">https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking</guid><pubDate>Wed, 06 Oct 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[Passing strings to and from WebAssembly using C]]></title><description><![CDATA[<p>As a follow-up to a <a href="../trivial-example/">trivial WebAssembly example in C</a> and <a href="../c-standard-library-example/">an example of using the C standard library in WebAssembly</a>, I&#39;m now investigating passing strings back and forth between the JavaScript host and a WebAssembly module written in C (and compiled with Clang/LLVM).</p>
-<p>Links to the code and a live demo are at <a href="#links">the end of the post</a>.</p>
+<p>Links to a library (<strong>new</strong>), the sample code, and a live demo are at <a href="#links">the end of the post</a>.</p>
 <h1 id="passing-a-string-from-javascript-to-c">Passing a string from JavaScript to C</h1>
 <p>Recall that WebAssembly <a href="https://webassembly.github.io/spec/core/syntax/types.html">doesn&#39;t have a string type</a>. How can a C function receive a string when compiled to WebAssembly?</p>
 <h2 id="pass-in-by-directly-populating-linear-memory">Pass in by directly populating linear memory</h2>
@@ -164,13 +164,13 @@ libc.a          libcrypt.a                          librt.a</code></pre>
 <p>Also known as: successful attempt #3.</p>
 <p>Here&#39;s a new idea: let the C code control its entire address space, but expose functions to let JavaScript allocate some memory.</p>
 <ol>
-<li>Expose <code>allocate</code> and <code>deallocate</code> functions to let JavaScript allocate and free memory in the heap</li>
+<li>Expose <code>allocate</code> and <code>deallocate</code> functions (and the memory itself) to let JavaScript allocate and free memory in the heap</li>
 <li>Add a null character onto the end of the string</li>
 <li>Use the browser&#39;s TextEncoder API to convert a string to a byte sequence</li>
 <li>Allocate a buffer (in C address space) for the string (using the exported function <code>allocate</code>)</li>
 <li>Write the encoded string into the heap allocation</li>
-<li>Call C code to read the string as a null-terminated UTF-8 string</li>
-<li>Deallocate/free the string (using the exported function <code>deallocate</code>)</li>
+<li>Call C code to read the string as a (normal) null-terminated UTF-8 string</li>
+<li>Deallocate/free the string when it&#39;s no longer needed (using the exported function <code>deallocate</code>)</li>
 </ol>
 <p>This approach adds overhead in the form of allocating for every string passed in, but if the ratio of calls to time spent in each call is low enough, this could be tolerable (and you could always optimize the approach to reuse allocations when possible, if needed). Overall, this seems straight forward and robust, so I&#39;m going to try this out.</p>
 <h3 id="c-implementation">C implementation</h3>
@@ -180,15 +180,17 @@ libc.a          libcrypt.a                          librt.a</code></pre>
 <span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT_AS(name) __attribute__((export_name(name)))</span>
 <span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol</span>
 
-<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(allocate)</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> size)</span> {
-    <span class="hljs-keyword">return</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>*)<span class="hljs-built_in">malloc</span>(size);
+<span class="hljs-comment">// Memory management helpers</span>
+<span class="hljs-type">void</span>* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(allocate)</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> size)</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">malloc</span>(size);
 }
 
-<span class="hljs-type">void</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(deallocate)</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>* allocation)</span> {
+<span class="hljs-type">void</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(deallocate)</span><span class="hljs-params">(<span class="hljs-type">void</span>* allocation)</span> {
     <span class="hljs-built_in">free</span>(allocation);
 }
 
-<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(countAs)</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* <span class="hljs-built_in">string</span>)</span> {
+<span class="hljs-comment">// Example of passing a string in</span>
+<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(count_as)</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* <span class="hljs-built_in">string</span>)</span> {
     <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> numberOfAs = <span class="hljs-number">0</span>;
     <span class="hljs-keyword">while</span> (*<span class="hljs-built_in">string</span> != <span class="hljs-string">&#x27;\0&#x27;</span>) {
         <span class="hljs-keyword">if</span> (*<span class="hljs-built_in">string</span> == <span class="hljs-string">&#x27;a&#x27;</span>) {
@@ -203,89 +205,45 @@ libc.a          libcrypt.a                          librt.a</code></pre>
 <pre><code class="language-sh">wasi-sdk/bin/clang -Os --sysroot wasi-sdk/share/wasi-sysroot -nostartfiles -Wl,--no-entry string-example.c -o string-example.wasm</code></pre>
 <h3 id="javascript-caller">JavaScript caller</h3>
 <p>The JavaScript wrapper is more involved than I&#39;d like, but it does work:</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;fs&quot;</span>);
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;fs&quot;</span>;
 
 (<span class="hljs-keyword">async</span> () =&gt; {
     <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./string-example.wasm&quot;</span>));
 
     <span class="hljs-comment">// String used for testing (from command line or hard-coded)</span>
     <span class="hljs-keyword">const</span> testString = process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>] ?? <span class="hljs-string">&quot;How many letter a&#x27;s are there in this string? Three!&quot;</span>;
-
-    <span class="hljs-comment">// Encode the string (with null terminator) to get the required size</span>
     <span class="hljs-keyword">const</span> nullTerminatedString = testString + <span class="hljs-string">&quot;\0&quot;</span>;
-    <span class="hljs-keyword">const</span> textEncoder = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>();
-    <span class="hljs-keyword">const</span> encodedString = textEncoder.<span class="hljs-title function_">encode</span>(nullTerminatedString);
-
-    <span class="hljs-comment">// Allocate space in linear memory for the encoded string</span>
-    <span class="hljs-keyword">const</span> address = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">allocate</span>(encodedString.<span class="hljs-property">length</span>);
+    <span class="hljs-keyword">const</span> encodedString = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>()).<span class="hljs-title function_">encode</span>(nullTerminatedString);
+    <span class="hljs-keyword">const</span> stringAddress = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">allocate</span>(encodedString.<span class="hljs-property">length</span>);
     <span class="hljs-keyword">try</span> {
-        <span class="hljs-comment">// Copy the string into the buffer</span>
-        <span class="hljs-keyword">const</span> destination = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>, address);
-        textEncoder.<span class="hljs-title function_">encodeInto</span>(nullTerminatedString, destination);
-
-        <span class="hljs-comment">// Call the function</span>
-        <span class="hljs-keyword">const</span> result = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">countAs</span>(address);
+        <span class="hljs-keyword">const</span> destination = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>, stringAddress);
+        destination.<span class="hljs-title function_">set</span>(encodedString);
+        <span class="hljs-keyword">const</span> result = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">count_as</span>(stringAddress);
         <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result);
     } <span class="hljs-keyword">finally</span> {
-        <span class="hljs-comment">// Always free the allocation when done (or on error)</span>
-        <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(address);
+        <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(stringAddress);
     }
 })();</code></pre>
 <h3 id="result">Result</h3>
 <p>Behold the result:</p>
-<pre><code class="language-sh">$ node main.js <span class="hljs-string">&quot;a string that has lots of the letter &#x27;a&#x27; in it&quot;</span> 
+<pre><code class="language-sh">$ node pass-in-string.js <span class="hljs-string">&quot;a string that has lots of the letter &#x27;a&#x27; in it&quot;</span> 
 4</code></pre>
 <p>Looks good!</p>
-<h3 id="improving-memory-management">Improving memory management</h3>
-<p>Having to manually manage memory in JavaScript is error-prone, so I&#39;m going to borrow the idea of a <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-statement"><code>using</code> statement from C#</a>:</p>
+<h3 id="memory-management-helper">Memory management helper</h3>
+<p>Having to manually manage memory in JavaScript is error-prone, so I&#39;m going to wrap this code in a helper:</p>
 <pre><code class="language-javascript"><span class="hljs-keyword">const</span> textEncoder = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>();
 
-<span class="hljs-comment">// Pass in a factory for an object with a &quot;dispose&quot; property and this will</span>
-<span class="hljs-comment">// ensure &quot;dispose&quot; is called on the object after the provided lambda returns</span>
-<span class="hljs-comment">// or throws</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">use</span> = (<span class="hljs-params">create, run</span>) =&gt; {
-    <span class="hljs-keyword">const</span> o = <span class="hljs-title function_">create</span>();
-    <span class="hljs-keyword">try</span> {
-        <span class="hljs-title function_">run</span>(o);
-    } <span class="hljs-keyword">finally</span> {
-        o.<span class="hljs-title function_">dispose</span>();
-    }
-};
-
-<span class="hljs-comment">// Manage the lifetime of an allocation</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useInstanceAllocation</span> = (<span class="hljs-params"><span class="hljs-variable language_">module</span>, create, run</span>) =&gt; {
-    <span class="hljs-title function_">use</span>(<span class="hljs-function">() =&gt;</span> {
-        <span class="hljs-comment">// Create the disposable object first</span>
-        <span class="hljs-keyword">const</span> objectWithDispose = {
-            <span class="hljs-attr">address</span>: <span class="hljs-number">0</span>,
-            <span class="hljs-attr">dispose</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) { <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">address</span>); },
-        };
-
-        <span class="hljs-comment">// Then allocate</span>
-        objectWithDispose.<span class="hljs-property">address</span> = <span class="hljs-title function_">create</span>();
-        <span class="hljs-keyword">return</span> objectWithDispose;
-    }, run);
-};
-
-<span class="hljs-comment">// Manage the lifetime of a *new* allocation (with the given size)</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useNewInstanceAllocation</span> = (<span class="hljs-params"><span class="hljs-variable language_">module</span>, size, run</span>) =&gt; {
-    <span class="hljs-keyword">return</span> <span class="hljs-title function_">useInstanceAllocation</span>(<span class="hljs-variable language_">module</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">allocate</span>(size), run);
-};
-
-<span class="hljs-comment">// Encode a *new* string and manage its lifetime</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useNewInstanceString</span> = (<span class="hljs-params"><span class="hljs-variable language_">module</span>, str, run</span>) =&gt; {
-    <span class="hljs-comment">// Encode the string (with null terminator) to get the required size</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">createCString</span> = (<span class="hljs-params"><span class="hljs-variable language_">module</span>, str, run</span>) =&gt; {
     <span class="hljs-keyword">const</span> nullTerminatedString = str + <span class="hljs-string">&quot;\0&quot;</span>;
     <span class="hljs-keyword">const</span> encodedString = textEncoder.<span class="hljs-title function_">encode</span>(nullTerminatedString);
-
-    <span class="hljs-comment">// Allocate space in linear memory for the encoded string</span>
-    <span class="hljs-title function_">useNewInstanceAllocation</span>(<span class="hljs-variable language_">module</span>, encodedString.<span class="hljs-property">length</span>, <span class="hljs-function">(<span class="hljs-params">{ address }</span>) =&gt;</span> {
-        <span class="hljs-comment">// Copy the string into the buffer</span>
+    <span class="hljs-keyword">const</span> address = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">allocate</span>(encodedString.<span class="hljs-property">length</span>);
+    <span class="hljs-keyword">try</span> {
         <span class="hljs-keyword">const</span> destination = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>, address);
-        textEncoder.<span class="hljs-title function_">encodeInto</span>(nullTerminatedString, destination);
-
-        <span class="hljs-title function_">run</span>(address);
-    });
+        destination.<span class="hljs-title function_">set</span>(encodedString);
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">run</span>(address);
+    } <span class="hljs-keyword">finally</span> {
+        <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(address);
+    }
 };</code></pre>
 <p>Note: it would probably be helpful to extend these helpers to support multiple strings/allocations, but I&#39;m not trying to completely reinvent wrapping/binding libraries like Emscripten right now.</p>
 <p>Now, the final string passing code is simple:</p>
@@ -294,7 +252,7 @@ libc.a          libcrypt.a                          librt.a</code></pre>
 
     <span class="hljs-comment">// String used for testing (from command line or hard-coded)</span>
     <span class="hljs-keyword">const</span> testString = process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>] ?? <span class="hljs-string">&quot;How many letter a&#x27;s are there in this string? Three!&quot;</span>;
-    <span class="hljs-title function_">useNewInstanceString</span>(<span class="hljs-variable language_">module</span>, testString, <span class="hljs-function">(<span class="hljs-params">stringAddress</span>) =&gt;</span> {
+    <span class="hljs-title function_">createCString</span>(<span class="hljs-variable language_">module</span>, testString, <span class="hljs-function">(<span class="hljs-params">stringAddress</span>) =&gt;</span> {
         <span class="hljs-keyword">const</span> result = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">count_as</span>(stringAddress);
         <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result);
     });
@@ -308,36 +266,29 @@ libc.a          libcrypt.a                          librt.a</code></pre>
 <li>JavaScript can decode the string using <code>TextDecoder.decode()</code></li>
 <li>(Also make sure to export a function to free generated strings)</li>
 </ol>
-<p>Given that I&#39;m already exposing allocations to JavaScript, I thought this would work, but there&#39;s one problem: <code>TextDecoder.decode()</code> doesn&#39;t have built-in support for null-terminated strings (nor should it, in my opinion). This means we need to return both the string address <em>and</em> the string&#39;s length (or, worse: export another function to measure the returned string).</p>
+<p>Given that I&#39;m already exposing allocations to JavaScript, I thought this would work, but there&#39;s one problem: <code>TextDecoder.decode()</code> doesn&#39;t have built-in support for null-terminated strings (nor should it, in my opinion). Potential solutions:</p>
+<ol>
+<li>Have JavaScript can for the null terminator</li>
+<li>Return the string and its length, possibly by encoding the length into the top half of a 64-bit return value (note: <a href="https://github.com/WebAssembly/design/blob/main/Portability.md#assumptions-for-efficient-execution">WebAssembly is always little endian</a>)</li>
+</ol>
+<p>I&#39;m going to opt for the first option.</p>
 <p>Note that I&#39;m assuming returned strings will be dynamically allocated, because constant strings should really just be provided directly using JavaScript. If the string <em>must</em> come from C code, all you&#39;d need to do is skip the allocation management steps (and hope that the JavaScript code doesn&#39;t decide to mutate the string!).</p>
 <h2 id="c-implementation-1">C implementation</h2>
-<p>If you&#39;re familiar with C and building on many platforms, brace yourself.</p>
-<p>Given that WebAssembly is a known, uniform target, I&#39;m going to simply return a variable size struct. I&#39;m not worrying about <a href="https://en.wikipedia.org/wiki/Endianness">endianness</a> in the C code because <a href="https://github.com/WebAssembly/design/blob/main/Portability.md#assumptions-for-efficient-execution">WebAssembly is always little endian</a>. Please never do this outside of a WebAssembly context like this.</p>
-<p>Here&#39;s the struct and some simple code that creates a string with the letter &quot;b&quot; repeated a caller-supplied number of times:</p>
-<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;malloc.h&gt;</span></span>
+<p>Here&#39;s some simple code that creates a string with the letter &quot;b&quot; repeated a caller-supplied number of times:</p>
+<pre><code class="language-c"><span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(write_bs)</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> count)</span> {
+    <span class="hljs-comment">// Allocate space for the string, plus a null terminator</span>
+    <span class="hljs-type">char</span>* str = (<span class="hljs-type">char</span>*)<span class="hljs-built_in">malloc</span>(count + <span class="hljs-number">1</span>);
 
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT_AS(name) __attribute__((export_name(name)))</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol</span>
-
-<span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> {</span>
-    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> length;
-    <span class="hljs-type">char</span> buffer[];
-} wasm_string;
-
-wasm_string* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(write_bs)</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> count)</span> {
-    <span class="hljs-comment">// Allocate space for the string length and content (note: no null terminator)</span>
-    wasm_string* str = (wasm_string*)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>) + count);
-    str-&gt;length = count;
-
-    <span class="hljs-comment">// Fill in the string</span>
-    <span class="hljs-type">char</span>* c = &amp;str-&gt;buffer[<span class="hljs-number">0</span>];
+    <span class="hljs-comment">// Fill in the string and null terminator</span>
+    <span class="hljs-type">char</span>* c = str;
     <span class="hljs-keyword">for</span> (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; count; i++) {
         *c = <span class="hljs-string">&#x27;b&#x27;</span>;
         ++c;
     }
+    *c = <span class="hljs-string">&#x27;\0&#x27;</span>;
+
     <span class="hljs-keyword">return</span> str;
 }</code></pre>
-<p>Just what C needs! Another string type.</p>
 <h2 id="javascript-implementation">JavaScript implementation</h2>
 <p>Here&#39;s the corresponding JavaScript on the other side:</p>
 <pre><code class="language-javascript"><span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;fs&quot;</span>;
@@ -347,16 +298,13 @@ wasm_string* <span class="hljs-title function_">WASM_EXPORT</span><span class="h
 
     <span class="hljs-comment">// String used for testing (from command line or hard-coded)</span>
     <span class="hljs-keyword">const</span> count = <span class="hljs-built_in">parseInt</span>(process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>] ?? <span class="hljs-string">&quot;3&quot;</span>);
-    <span class="hljs-keyword">const</span> textDecoder = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoder</span>();
-
-    <span class="hljs-comment">// Call the &quot;create&quot; function and get back the address of a struct: [size (32-bit unsigned int), byte1, byte2, ...]</span>
     <span class="hljs-keyword">const</span> address = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">write_bs</span>(count);
     <span class="hljs-keyword">try</span> {
         <span class="hljs-keyword">const</span> buffer = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>;
-        <span class="hljs-keyword">const</span> encodedStringLength = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">DataView</span>(buffer, address, <span class="hljs-number">4</span>)).<span class="hljs-title function_">getUint32</span>(<span class="hljs-number">0</span>, <span class="hljs-literal">true</span>); <span class="hljs-comment">// WebAssembly is little endian</span>
-        <span class="hljs-keyword">const</span> encodedStringBuffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(buffer, address + <span class="hljs-number">4</span>, encodedStringLength); <span class="hljs-comment">// Skip the 4 byte size</span>
-        <span class="hljs-keyword">const</span> str = textDecoder.<span class="hljs-title function_">decode</span>(encodedStringBuffer);
-        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(str);
+        <span class="hljs-keyword">const</span> encodedStringLength = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(buffer, address)).<span class="hljs-title function_">indexOf</span>(<span class="hljs-number">0</span>);
+        <span class="hljs-keyword">const</span> encodedStringBuffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(buffer, address, encodedStringLength);
+        <span class="hljs-keyword">const</span> result = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoder</span>()).<span class="hljs-title function_">decode</span>(encodedStringBuffer);
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result);
     } <span class="hljs-keyword">finally</span> {
         <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(address);
     }
@@ -365,18 +313,24 @@ wasm_string* <span class="hljs-title function_">WASM_EXPORT</span><span class="h
 <pre><code class="language-sh">$ node return-string.js 5
 bbbbb</code></pre>
 <p>Looks good!</p>
-<h2 id="memory-management-helpers">Memory management helpers</h2>
-<p>Similar to above, I&#39;m going to build on the memory management helpers written previously:</p>
-<pre><code class="language-javascript"><span class="hljs-comment">// Decode a string and manage its lifetime</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useInstanceString</span> = (<span class="hljs-params"><span class="hljs-variable language_">module</span>, create, run</span>) =&gt; {
-    <span class="hljs-comment">// Call the &quot;create&quot; function and get the struct&#x27;s address: [size (32-bit unsigned int), byte1, byte2, ...]</span>
-    <span class="hljs-title function_">useInstanceAllocation</span>(<span class="hljs-variable language_">module</span>, create, <span class="hljs-function">(<span class="hljs-params">{ address }</span>) =&gt;</span> {
-        <span class="hljs-keyword">const</span> buffer = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>;
-        <span class="hljs-keyword">const</span> encodedStringLength = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">DataView</span>(buffer, address, <span class="hljs-number">4</span>)).<span class="hljs-title function_">getUint32</span>(<span class="hljs-number">0</span>, <span class="hljs-literal">true</span>); <span class="hljs-comment">// WebAssembly is little endian</span>
-        <span class="hljs-keyword">const</span> encodedStringBuffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(buffer, address + <span class="hljs-number">4</span>, encodedStringLength); <span class="hljs-comment">// Skip the 4 byte size</span>
-        <span class="hljs-keyword">const</span> str = textDecoder.<span class="hljs-title function_">decode</span>(encodedStringBuffer);
-        <span class="hljs-title function_">run</span>(str);
-    })
+<h2 id="helpers">Helpers</h2>
+<p>Similar to above, I&#39;m going to refactor this logic into helpers (one for static strings, and one for new strings return via the heap):</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> textDecoder = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoder</span>();
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">readStaticCString</span> = (<span class="hljs-params"><span class="hljs-variable language_">module</span>, address</span>) =&gt; {
+    <span class="hljs-keyword">const</span> buffer = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>;
+    <span class="hljs-keyword">const</span> encodedStringLength = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(buffer, address)).<span class="hljs-title function_">indexOf</span>(<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">const</span> encodedStringBuffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(buffer, address, encodedStringLength);
+    <span class="hljs-keyword">return</span> textDecoder.<span class="hljs-title function_">decode</span>(encodedStringBuffer);
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">receiveCString</span> = (<span class="hljs-params"><span class="hljs-variable language_">module</span>, create</span>) =&gt; {
+    <span class="hljs-keyword">const</span> address = <span class="hljs-title function_">create</span>();
+    <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">readStaticCString</span>(<span class="hljs-variable language_">module</span>, address);
+    } <span class="hljs-keyword">finally</span> {
+        <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(address);
+    }
 };</code></pre>
 <p>This simplifies the calling code significantly:</p>
 <pre><code class="language-javascript">(<span class="hljs-keyword">async</span> () =&gt; {
@@ -384,9 +338,8 @@ bbbbb</code></pre>
 
     <span class="hljs-comment">// String used for testing (from command line or hard-coded)</span>
     <span class="hljs-keyword">const</span> count = <span class="hljs-built_in">parseInt</span>(process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>] ?? <span class="hljs-string">&quot;3&quot;</span>);
-    <span class="hljs-title function_">useInstanceString</span>(<span class="hljs-variable language_">module</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">write_bs</span>(count), <span class="hljs-function"><span class="hljs-params">str</span> =&gt;</span> {
-        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(str);
-    })
+    <span class="hljs-keyword">const</span> str = <span class="hljs-title function_">receiveCString</span>(<span class="hljs-variable language_">module</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">write_bs</span>(count));
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(str);
 })();</code></pre>
 <h1 id="strings-✔">Strings: ✔</h1>
 <p>Perhaps that wasn&#39;t the most enjoyable experiment, but it does give one a new appreciation for binding generators that do all this work for you.</p>
@@ -394,7 +347,8 @@ bbbbb</code></pre>
 <p>Have fun manually managing memory with JavaScript!</p>
 <h1 id="links">Links:</h1>
 <ul>
-<li><a href="https://github.com/jaredkrinke/webassembly-c-string-example">Repository with all the example code</a></li>
+<li><a href="https://github.com/jaredkrinke/wasm-c-string">Library for the string handling helpers</a> (with tests)</li>
+<li><a href="https://github.com/jaredkrinke/webassembly-c-string-example">Repository with the test code</a></li>
 <li><a href="https://jaredkrinke.github.io/webassembly-c-string-example/">Live demo</a></li>
 </ul>
 ]]></description><link>https://log.schemescape.com/posts/webassembly/passing-strings-to-c</link><guid isPermaLink="true">https://log.schemescape.com/posts/webassembly/passing-strings-to-c</guid><pubDate>Tue, 05 Oct 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[Syntax highlighting for a static site built with Metalsmith]]></title><description><![CDATA[<p>As <a href="../metalsmith/">described previously</a>, I&#39;m using <a href="https://metalsmith.io/">Metalsmith</a> to build my static site because I like its modular, easy to extend design (even though it required more effort to setup initially).</p>
