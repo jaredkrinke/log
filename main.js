@@ -31,7 +31,10 @@ for (let i = 2; i < process.argv.length; i++) {
 }
 
 // Configure syntax highlighting aliases
-highlight.registerAliases("wasm", { languageName: "lisp" });
+[
+    [ "wasm", "lisp" ],
+    [ "dot", "c" ],
+].forEach(row => highlight.registerAliases(row[0], { languageName: row[1] }));
 
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
