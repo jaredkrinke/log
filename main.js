@@ -71,6 +71,7 @@ markdownRenderer.code = function (code, language, escaped) {
             // Also convert default styles to CSS classes, for custom styling
             return svg
                 .replace(/^.*?<svg /s, "<svg ")
+                .replace(/<!--.*?-->\n?/sg, "")
                 .replace(/fill="([^"]+)" stroke="([^"]+)"/g, "class=\"diagram-$2-$1\"");
         } else {
             // On error, just treat the code block like normal
