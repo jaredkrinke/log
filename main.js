@@ -49,6 +49,15 @@ markdownRenderer.link = function (href, title, text) {
         text);
 };
 
+// The permalinks plugin moves all posts one level deeper, so adjust relative image links appropriately
+const baseImageRenderer = markdownRenderer.image;
+markdownRenderer.image = function (href, title, text) {
+    return baseImageRenderer.call(this,
+        href.replace(/^([^/][^:]+)$/, "../$1"),
+        title,
+        text);
+};
+
 // Simple plugin to add some custom properties (note: dates are parsed assuming UTC, so use UTC when formatting)
 const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 const addCustomProperties = (files, metalsmith, done) => {
