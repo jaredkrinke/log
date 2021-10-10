@@ -346,4 +346,5 @@ Lessons learned:
 * WASI itself might require additional support code (there is a [poorly documented browser polyfill for WASI](https://wasi.dev/polyfill/), but I haven't tested it)
 
 # Resources
-* [Still in-progress repository with my code](https://github.com/jaredkrinke/dot2svg-wasm)
+* [Repository for this code)](https://github.com/jaredkrinke/dot2svg-wasm) (as an ES module)
+* [Example of using this code to generate diagrams automatically for my site](../static-site-generators/metalsmith-diagrams.md)
