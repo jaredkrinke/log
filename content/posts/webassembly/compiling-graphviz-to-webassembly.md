@@ -1,5 +1,4 @@
 ---
-draft: true
 title: Compiling Graphviz to WebAssembly (without Emscripten)
 description: In order to automatically generate diagrams for my site that's built with Node, I compiled Graphviz to WebAssembly. Here's my experience.
 keywords: [webassembly,graphviz]
