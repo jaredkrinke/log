@@ -14,7 +14,9 @@ import feed from "metalsmith-feed";
 import brokenLinkChecker from "metalsmith-broken-link-checker";
 import metalsmithExpress from "metalsmith-express";
 import metalsmithWatch from "metalsmith-watch";
+import { createAsync as createDOTToSVGAsync } from "dot2svg-wasm";
 
+(async () => {
 // Command line arguments
 let clean = false;
 let serve = false;
@@ -56,6 +58,27 @@ markdownRenderer.image = function (href, title, text) {
         href.replace(/^([^/][^:]+)$/, "../$1"),
         title,
         text);
+};
+
+// Generate diagrams with dot2svg
+const baseCodeRenderer = markdownRenderer.code;
+const dotConverter = await createDOTToSVGAsync();
+markdownRenderer.code = function (code, language, escaped) {
+    if (language === "dot2svg") {
+        const svg = dotConverter.dotToSVG(code);
+        if (svg) {
+            // Remove XML prolog, since we're inlining
+            // Also convert default styles to CSS classes, for custom styling
+            return svg
+                .replace(/^.*?<svg /s, "<svg ")
+                .replace(/fill="([^"]+)" stroke="([^"]+)"/g, "class=\"diagram-$2-$1\"");
+        } else {
+            // On error, just treat the code block like normal
+            console.log(dotConverter.getConsoleOutput());
+            language = "";
+        }
+    }
+    return baseCodeRenderer.call(this, code, language, escaped);
 };
 
 // Simple plugin to add some custom properties (note: dates are parsed assuming UTC, so use UTC when formatting)
@@ -147,3 +170,4 @@ Metalsmith(__dirname)
         checkAnchors: true,
     }))
     .build(err => { if (err) throw err; });
+})();

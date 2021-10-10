@@ -32,7 +32,7 @@ article > header > p { margin-top: 0em; }
 main { overflow: auto; }
 pre { overflow: auto; }
 table { margin: 0 auto; }
-article img {
+article img, article svg {
     display: block;
     margin: 0 auto;
 }
@@ -58,8 +58,13 @@ a:link { color: #59c5ff; }
 a:visited { color: #66c9fe; }
 /* Also b5cea8 or 7dce52 or 7bbf56 */
 
+/* Diagrams */
+svg text { fill: #eee; }
+.diagram-transparent-white { stroke: none; fill: none; }
+ellipse.diagram-black-none { stroke: #ccc; fill: #444; }
+.diagram-black-none { stroke: #999; fill:none; }
+.diagram-black-black { stroke: #999; fill: #333; }
 
-/* Syntax highlighting */
 /* Syntax highlighting */
 .hljs-comment { color: #5a8c3f; }
 

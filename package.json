@@ -2,6 +2,7 @@
   "name": "log",
   "type": "module",
   "devDependencies": {
+    "dot2svg-wasm": "git+https://github.com/jaredkrinke/modules.git#dot2svg-wasm-1.0.1",
     "highlight.js": "^11.2.0",
     "jstransformer-handlebars": "^1.1.0",
     "metalsmith": "^2.3.0",
