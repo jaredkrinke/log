@@ -82,7 +82,7 @@ markdownRenderer.code = function (code, language, escaped) {
     return baseCodeRenderer.call(this, code, language, escaped);
 };
 
-// Create a collection for each subdirectory
+// Create a category for each subdirectory
 const addCategory = (files, metalsmith, done) => {
     Object.keys(files).forEach(key => {
         const file = files[key];
@@ -123,6 +123,9 @@ const addCategoryIndexes = (files, metalsmith, done) => {
             title: category,
             mode: "0666",
             permalink: false,
+            category,
+            categoryPath: categoryList[0].categoryPath,
+            isCategoryIndex: true,
             layout: "categoryIndex.hbs",
             contents: new Uint8Array(0),
             postsInCategory: categoryList.sort((a, b) => (b.date - a.date)),
@@ -151,6 +154,9 @@ const addCustomProperties = (files, metalsmith, done) => {
     done();
 };
 
+// Category sorting: sort by most posts, and then most recent post if there's a tie
+const sortCategories = (a, b) => ((b.postsInCategory.length - a.postsInCategory.length) || (b.postsInCategory[0].date - a.postsInCategory[0].date));
+
 Metalsmith(__dirname)
     .metadata({
         site: {
@@ -168,6 +174,7 @@ Metalsmith(__dirname)
     }))
     .use(serve ? noop : drafts())
     .use(addCategory)
+    .use(addCategoryIndexes)
     .use(collections({
         posts: {
             pattern: "posts/**/*.md",
@@ -180,8 +187,18 @@ Metalsmith(__dirname)
             reverse: true,
             limit: 6,
         },
+        categories: {
+            pattern: "posts/**/*.html",
+            filterBy: file => file.isCategoryIndex,
+            sortBy: sortCategories,
+        },
+        categories_top: {
+            pattern: "posts/**/*.html",
+            filterBy: file => file.isCategoryIndex,
+            sortBy: sortCategories,
+            limit: 3,
+        },
     }))
-    .use(addCategoryIndexes)
     .use(markdown({
         renderer: markdownRenderer,
         highlight: (code, language) => {

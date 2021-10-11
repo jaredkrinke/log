@@ -14,6 +14,7 @@
             <header>
                 <h1><a href="{{#if rootPath}}{{rootPath}}{{else}}.{{/if}}">{{site.title}}</a></h1>
                 <p>{{site.description}}</p>
+                {{#if navigationPartialName}}{{> (lookup . "navigationPartialName") }}{{else}}{{> navigationDefaultPartial}}{{/if}}
             </header>
 {{> @partial-block }}
         </main>
