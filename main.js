@@ -17,7 +17,6 @@ import metalsmithExpress from "metalsmith-express";
 import metalsmithWatch from "metalsmith-watch";
 import { createAsync as createDOTToSVGAsync } from "dot2svg-wasm";
 
-(async () => {
 // Command line arguments
 let clean = false;
 let serve = false;
@@ -244,4 +243,3 @@ Metalsmith(__dirname)
         checkAnchors: true,
     }))
     .build(err => { if (err) throw err; });
-})();
