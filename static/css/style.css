@@ -28,6 +28,7 @@ main > header > h1 > a {
 
 article > header > h1 { margin-bottom: 0.25em; }
 article > header > p { margin-top: 0em; }
+article > footer { margin-top: 1em; }
 
 main { overflow: auto; }
 pre { overflow: auto; }
@@ -48,6 +49,7 @@ main > ul > li { list-style: none; margin-bottom: 2em; }
 
 body { background-color: #181818; }
 * { color: #d4d4d4; }
+article > footer { border-top: 1px solid #444; }
 pre, tr:nth-child(even) { background-color: #282828;}
 th { background-color: #444; color: #eee }
 pre, table, th, tr, td { border-color: #777; }

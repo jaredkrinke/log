@@ -94,6 +94,7 @@ const addCategory = (files, metalsmith, done) => {
             const directoryParts = directory.split(/[\\/]/g);
             if (directoryParts[0] === "posts") {
                 file.category = (directoryParts.length > 1) ? directoryParts[1] : "misc";
+                file.categoryPath = `posts/${file.category}`;
             }
         }
     });
