@@ -1,5 +1,6 @@
 import path from "path";
 import marked from "marked";
+import handlebars from "handlebars";
 import highlight from "highlight.js";
 import Metalsmith from "metalsmith";
 import markdown from "metalsmith-markdown";
@@ -31,6 +32,10 @@ for (let i = 2; i < process.argv.length; i++) {
         serve = true;
     }
 }
+
+// Handlebars template custom helpers
+handlebars.registerHelper("and", (a, b) => (a && b));
+handlebars.registerHelper("equal", (a, b) => (a === b));
 
 // Configure syntax highlighting aliases
 [
