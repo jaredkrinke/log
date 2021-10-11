@@ -31,6 +31,7 @@ for (let i = 2; i < process.argv.length; i++) {
         serve = true;
     }
 }
+clean = (clean && !serve);
 
 // Handlebars template custom helpers
 handlebars.registerHelper("and", (a, b) => (a && b));

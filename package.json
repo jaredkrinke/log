@@ -20,7 +20,7 @@
     "metalsmith-watch": "^1.0.3"
   },
   "scripts": {
-    "build": "node main.js",
+    "build": "node main.js --clean",
     "serve": "node main.js --serve"
   }
 }
