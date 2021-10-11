@@ -70,26 +70,6 @@ digraph {
     &quot;Compile Graphviz to WebAssembly&quot; -&gt; &quot;Generate diagrams at build time&quot; -&gt; &quot;???&quot; -&gt; &quot;Profit!&quot;;
 }
 ```</span></code></pre>
-<h1 id="metalsmith-is-synchronous">Metalsmith is synchronous</h1>
-<p>First, I need to read my module from disk and instantiate it. In Node, file system operations are generally asynchronous, but (<a href="https://github.com/segmentio/metalsmith/issues/303">at least for now</a>), so I need to wrap everything in an <code>async</code> lambda (fortunately, everything <em>except initialization</em> in my module is synchronous):</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { createAsync <span class="hljs-keyword">as</span> createDOTToSVGAsync } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;dot2svg-wasm&quot;</span>;
-
-(<span class="hljs-keyword">async</span> () =&gt; {
-    <span class="hljs-keyword">const</span> dotConverter = <span class="hljs-keyword">await</span> <span class="hljs-title function_">createDOTToSVGAsync</span>();
-
-    <span class="hljs-comment">// Other initialization</span>
-    ...
-
-    <span class="hljs-title class_">Metalsmith</span>(__dirname)
-    ...
-        .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">markdown</span>({
-            <span class="hljs-attr">renderer</span>: markdownRenderer,
-    ...
-        }))
-    ...
-        .<span class="hljs-title function_">build</span>(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> { <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err; });
-})();</code></pre>
-<p>Note that I&#39;m already using a <a href="https://marked.js.org/using_pro#renderer">custom Marked renderer</a>.</p>
 <h1 id="extending-the-marked-renderer">Extending the Marked renderer</h1>
 <p>As shown in the example near the top of this post, my plan is to piggyback on Markdown code blocks, using a special language tag <code>dot2svg</code>. For all other code blocks (and on error), I simply defer to the default code block rendering function:</p>
 <pre><code class="language-javascript"><span class="hljs-comment">// Generate diagrams with dot2svg</span>
