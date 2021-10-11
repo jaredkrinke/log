@@ -159,6 +159,24 @@ const addCustomProperties = (files, metalsmith, done) => {
     done();
 };
 
+// Plugin for deleting unnecessary content
+const eraser = options => {
+    const textEncoder = new TextEncoder();
+    const textDecoder = new TextDecoder();
+    return (files, metalsmith, done) => {
+        Object.keys(options).forEach(fileName => {
+            const file = files[fileName];
+            const regExps = options[fileName];
+            let contents = textDecoder.decode(file.contents);
+            regExps.forEach(regExp => {
+                contents = contents.replace(regExp, "");
+            });
+            file.contents = textEncoder.encode(contents);
+        });
+        done();
+    };
+};
+
 // Category sorting: sort by most posts, and then most recent post if there's a tie
 const sortCategories = (a, b) => ((b.postsInCategory.length - a.postsInCategory.length) || (b.postsInCategory[0].date - a.postsInCategory[0].date));
 
@@ -219,6 +237,13 @@ Metalsmith(__dirname)
         collection: "posts",
         destination: "feed.xml",
         limit: 5,
+    }))
+    .use(eraser({
+        // Remove some unnecessary/constantly changing fields
+        "feed.xml": [
+            /<lastBuildDate>.*?<\/lastBuildDate>/,
+            /<generator>.*?<\/generator>/,
+        ],
     }))
     .use(rootPath())
     .use(addCustomProperties)
