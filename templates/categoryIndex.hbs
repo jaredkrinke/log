@@ -1,0 +1,8 @@
+{{#> basePartial}}
+<h1>Category: {{title}}</h1>
+<ul>
+{{#each postsInCategory}}
+<li>{{> articleSummaryPartial linkPrefix=../rootPath}}</li>
+{{/each}}
+</ul>
+{{/basePartial}}

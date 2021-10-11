@@ -92,8 +92,40 @@ const addCategory = (files, metalsmith, done) => {
         const directory = path.dirname(key);
         if (directory !== ".") {
             const directoryParts = directory.split(/[\\/]/g);
-            file.collection = (directoryParts.length > 1) ? directoryParts[1] : "misc";
+            if (directoryParts[0] === "posts") {
+                file.category = (directoryParts.length > 1) ? directoryParts[1] : "misc";
+            }
         }
+    });
+    done();
+};
+
+const addCategoryIndexes = (files, metalsmith, done) => {
+    const categoryMap = {};
+    Object.keys(files).forEach(key => {
+        const file = files[key];
+        const category = file.category;
+        if (category) {
+            let categoryList = categoryMap[category];
+            if (!categoryList) {
+                categoryList = [];
+                categoryMap[category] = categoryList;
+            }
+            categoryList.push(file);
+        }
+    });
+
+    Object.keys(categoryMap).forEach(category => {
+        const categoryList = categoryMap[category];
+        const categoryIndexDestination = path.join("posts", category, "index.html");
+        files[categoryIndexDestination] = {
+            title: category,
+            mode: "0666",
+            permalink: false,
+            layout: "categoryIndex.hbs",
+            contents: new Uint8Array(0),
+            postsInCategory: categoryList.sort((a, b) => (b.date - a.date)),
+        };
     });
     done();
 };
@@ -148,6 +180,7 @@ Metalsmith(__dirname)
             limit: 6,
         },
     }))
+    .use(addCategoryIndexes)
     .use(markdown({
         renderer: markdownRenderer,
         highlight: (code, language) => {
