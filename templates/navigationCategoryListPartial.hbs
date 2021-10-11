@@ -1,0 +1,15 @@
+<nav>
+    <h2>Topics:</h2>
+    <ul>
+        {{#each (lookup . categoryList)}}
+        {{#if (and (lookup .. "isCategoryIndex") (equal category (lookup .. "category")))}}
+        <li>{{category}}</li>
+        {{else}}
+        <li><a href="{{../rootPath}}{{categoryPath}}">{{category}}</a></li>
+        {{/if}}
+        {{/each}}
+        {{#if (equal categoryList "categories_top")}}
+        <li><a href="{{../rootPath}}archive.html">...</a></li>
+        {{/if}}
+    </ul>
+</nav>

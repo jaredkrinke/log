@@ -1,8 +1,10 @@
-{{#> basePartial}}
+{{#> basePartial navigationPartialName="navigationRootPartial"}}
 <ul>
 {{#each posts_recent}}
 <li>{{> articleSummaryPartial}}</li>
 {{/each}}
 </ul>
-<p><a href="archive.html">More articles...</a></p>
+<footer>
+    <p><a href="archive.html">More articles...</a></p>
+</footer>
 {{/basePartial}}

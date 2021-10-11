@@ -21,6 +21,12 @@ main > header { text-align: center; }
 main > header > h1 { margin-bottom: 0.25em; }
 main > header > p { margin-top: 0.25em; }
 
+nav { display: flex; flex-direction: row; justify-content: center; }
+nav > ul { margin: 0; padding: 0 0 0 0.5em; }
+nav > ul > li { display: inline; }
+nav > ul > li + li:before { content: " | "; }
+nav > h2 { font-size: 1rem; margin: 0; }
+
 main > header > h1 > a {
     text-decoration: inherit;
     color: inherit;
@@ -28,6 +34,7 @@ main > header > h1 > a {
 
 article > header > h1 { margin-bottom: 0.25em; }
 article > header > p { margin-top: 0em; }
+main footer { margin-top: 1em; }
 
 main { overflow: auto; }
 pre { overflow: auto; }
@@ -48,6 +55,7 @@ main > ul > li { list-style: none; margin-bottom: 2em; }
 
 body { background-color: #181818; }
 * { color: #d4d4d4; }
+main footer { border-top: 1px solid #444; }
 pre, tr:nth-child(even) { background-color: #282828;}
 th { background-color: #444; color: #eee }
 pre, table, th, tr, td { border-color: #777; }

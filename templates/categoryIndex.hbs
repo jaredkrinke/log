@@ -1,7 +1,7 @@
 {{#> basePartial navigationPartialName="navigationAllCategoriesPartial"}}
 <ul>
-{{#each posts}}
-<li>{{> articleSummaryPartial}}</li>
+{{#each postsInCategory}}
+<li>{{> articleSummaryPartial linkPrefix=../rootPath}}</li>
 {{/each}}
 </ul>
 {{/basePartial}}
