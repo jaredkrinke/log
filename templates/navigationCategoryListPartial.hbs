@@ -1,5 +1,4 @@
 <nav>
-    <h2>Topics:</h2>
     <ul>
         {{#each (lookup . categoryList)}}
         {{#if (and (lookup .. "isCategoryIndex") (equal category (lookup .. "category")))}}

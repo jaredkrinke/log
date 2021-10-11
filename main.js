@@ -190,7 +190,7 @@ Metalsmith(__dirname)
             pattern: "posts/**/*.md",
             sortBy: "date",
             reverse: true,
-            limit: 6,
+            limit: 5,
         },
         categories: {
             pattern: "posts/**/*.html",
@@ -218,7 +218,7 @@ Metalsmith(__dirname)
     .use(feed({
         collection: "posts",
         destination: "feed.xml",
-        limit: 6,
+        limit: 5,
     }))
     .use(rootPath())
     .use(addCustomProperties)
