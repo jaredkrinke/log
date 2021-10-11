@@ -25,31 +25,6 @@ digraph {
 ```
 ````
 
-# Metalsmith is synchronous
-First, I need to read my module from disk and instantiate it. In Node, file system operations are generally asynchronous, but ([at least for now](https://github.com/segmentio/metalsmith/issues/303)), so I need to wrap everything in an `async` lambda (fortunately, everything *except initialization* in my module is synchronous):
-
-```javascript
-import { createAsync as createDOTToSVGAsync } from "dot2svg-wasm";
-
-(async () => {
-    const dotConverter = await createDOTToSVGAsync();
-
-    // Other initialization
-    ...
-
-    Metalsmith(__dirname)
-    ...
-        .use(markdown({
-            renderer: markdownRenderer,
-    ...
-        }))
-    ...
-        .build(err => { if (err) throw err; });
-})();
-```
-
-Note that I'm already using a [custom Marked renderer](https://marked.js.org/using_pro#renderer).
-
 # Extending the Marked renderer
 As shown in the example near the top of this post, my plan is to piggyback on Markdown code blocks, using a special language tag `dot2svg`. For all other code blocks (and on error), I simply defer to the default code block rendering function:
 
