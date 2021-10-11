@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Mon, 11 Oct 2021 19:02:09 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Generating SVG diagrams automatically with Metalsmith]]></title><description><![CDATA[<p>Now that I&#39;ve <a href="../../webassembly/compiling-graphviz-to-webassembly/">compiled Graphviz to a WebAssembly module</a>, I&#39;m going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Schemescape]]></title><description><![CDATA[Development log of a life-long coder]]></description><link>https://log.schemescape.com/</link><generator>metalsmith-feed</generator><lastBuildDate>Mon, 11 Oct 2021 19:25:38 GMT</lastBuildDate><atom:link href="https://log.schemescape.com/feed.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Generating SVG diagrams automatically with Metalsmith]]></title><description><![CDATA[<p>Now that I&#39;ve <a href="../../webassembly/compiling-graphviz-to-webassembly/">compiled Graphviz to a WebAssembly module</a>, I&#39;m going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.</p>
 <h1 id="the-plan">The plan</h1>
 <p>Here&#39;s a flow chart of my general plan:</p>
 <svg width="312pt" height="260pt"
@@ -888,36 +888,4 @@ highlight.<span class="hljs-title function_">registerAliases</span>(<span class=
         </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
-]]></description><link>https://log.schemescape.com/posts/static-site-generators/metalsmith-syntax-highlighting</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/metalsmith-syntax-highlighting</guid><pubDate>Fri, 01 Oct 2021 00:00:00 GMT</pubDate></item><item><title><![CDATA[Can you use CommonJS modules from within an ES module?]]></title><description><![CDATA[<h1 id="question">Question</h1>
-<p>Is it possible to import a CommonJS module from within an ES module (using <code>import</code> syntax)?</p>
-<p>I thought a quick web search would answer this question, but instead most of the resources I found were about trying to <code>require()</code> ES modules (which you definitely can&#39;t do--use a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports">dynamic import</a> instead).</p>
-<h1 id="background">Background</h1>
-<p>JavaScript didn&#39;t originally have a module system, so various groups have created their own systems, e.g. <a href="http://www.commonjs.org/">CommonJS</a>, <a href="https://github.com/amdjs/amdjs-api">Asynchronous Module Definition (AMD)</a>, and the ironically named <a href="https://github.com/umdjs/umd">Universal Module Definition (UMD)</a>.</p>
-<p>Predictably, there&#39;s now an official <a href="https://tc39.es/ecma262/#sec-modules">ECMAScript Modules</a> format that <del>everyone uses</del> <del>everyone should use</del> some people have started using (<del>because it&#39;s incompatible and they have no choice</del> because it&#39;s part of the official JavaScript/ECMAScript specification). And I won&#39;t even dig into the ES module file extension dumpster fire.</p>
-<p>Anyway, back to the question: can I import a CommonJS module into my ES module?</p>
-<h1 id="lets-just-try-it">Let&#39;s just try it...</h1>
-<p>Here&#39;s a CommonJS module:</p>
-<pre><code class="language-javascript"><span class="hljs-built_in">exports</span>.<span class="hljs-property">test</span> = <span class="hljs-string">&quot;works!&quot;</span>;</code></pre>
-<h2 id="proof-that-it-works-from-commonjs-in-node-✔">Proof that it works from CommonJS (in Node) ✔</h2>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> { test } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;./test.js&quot;</span>);
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(test);</code></pre>
-<p>Output: <code>works!</code></p>
-<h2 id="how-about-from-an-es-module-in-node-✔">How about from an ES module in Node? ✔</h2>
-<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { test } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./test.js&quot;</span>;
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(test);</code></pre>
-<p>Output: <code>works!</code></p>
-<h2 id="how-about-from-an-es-module-in-a-web-page-✖">How about from an ES module in a web page? ✖</h2>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Output: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;result&quot;</span>&gt;</span>?<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="language-javascript">
-            <span class="hljs-keyword">import</span> { test } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./test.js&quot;</span>;
-
-            <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;result&quot;</span>).<span class="hljs-property">innerText</span> = test;
-        </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
-<p>Doesn&#39;t work (error: &quot;The requested module &#39;./test.js&#39; does not provide an export named &#39;test&#39;&quot;).</p>
-<h1 id="final-answer">Final answer</h1>
-<p>You can use <code>import</code> to include a CommonJS module <em>when running in Node</em>, but <em>not</em> when running in a web page.</p>
-]]></description><link>https://log.schemescape.com/posts/javascript/using-commonjs-modules-from-es-modules</link><guid isPermaLink="true">https://log.schemescape.com/posts/javascript/using-commonjs-modules-from-es-modules</guid><pubDate>Wed, 29 Sep 2021 00:00:00 GMT</pubDate></item></channel></rss>
+]]></description><link>https://log.schemescape.com/posts/static-site-generators/metalsmith-syntax-highlighting</link><guid isPermaLink="true">https://log.schemescape.com/posts/static-site-generators/metalsmith-syntax-highlighting</guid><pubDate>Fri, 01 Oct 2021 00:00:00 GMT</pubDate></item></channel></rss>
