@@ -146,7 +146,7 @@ I have some questions about this arrangement:
   * Note that [this WebAssembly note](https://github.com/WebAssembly/design/blob/main/Nondeterminism.md) indicates the VM's stack can't be accessed by a program ("Note that this stack isn't located in the program-accessible linear memory")
 
 ### Aside: a WebAssembly critique
-As an aside: while trying to find answers to some of my questions, I ran across an [incredibly insightful series of posts](http://troubles.md/wasm-is-not-a-stack-machine/) that retrospectively critiques some of WebAssembly's design decisions.
+As an aside: while trying to find answers to some of my questions, I ran across an [incredibly insightful series of posts](http://troubles.md/wasm-is-not-a-stack-machine/) that retrospectively critique some of WebAssembly's design decisions.
 
 ### Exports
 Back to my trivial experiment.
