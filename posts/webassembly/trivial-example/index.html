@@ -144,7 +144,7 @@
 </li>
 </ul>
 <h3 id="aside-a-webassembly-critique">Aside: a WebAssembly critique</h3>
-<p>As an aside: while trying to find answers to some of my questions, I ran across an <a href="http://troubles.md/wasm-is-not-a-stack-machine/">incredibly insightful series of posts</a> that retrospectively critiques some of WebAssembly&#39;s design decisions.</p>
+<p>As an aside: while trying to find answers to some of my questions, I ran across an <a href="http://troubles.md/wasm-is-not-a-stack-machine/">incredibly insightful series of posts</a> that retrospectively critique some of WebAssembly&#39;s design decisions.</p>
 <h3 id="exports">Exports</h3>
 <p>Back to my trivial experiment.</p>
 <p>How do I tell Clang/LLVM that I want to export a function? Consulting the <a href="https://lld.llvm.org/WebAssembly.html">linker documentation</a>, it looks like I can export everything (not my preferred approach) or specify exports either on the command line or with attributes in the code. In code, the two options appear to be:</p>
