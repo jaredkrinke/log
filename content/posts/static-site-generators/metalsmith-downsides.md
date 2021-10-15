@@ -45,6 +45,25 @@ If I already used Twitter, that would be an acceptable option here, but I have n
 
 In the end, I created a dummy GitHub account just to access Gitter (which essentially negates any user benefit of using OAuth).
 
+# Plugin ordering and lack of history
+My favorite aspect of Metalsmith is its minimal design that can be easily extended with simple plugins, but I think the design is perhaps *too* minimal.
+
+Internally, Metalsmith manages a mapping of files to properties, and this mapping is handed from one plugin to the next, sequentially (and asynchronously). Each plugin *mutates* the mapping however it wants, and eventually Metalsmith's `build()` function writes out the resulting files.
+
+This is indeed a very simple design, but there is a subtle problem lurking: since each plugin can do whatever it wants, information can be changed or lost along the chain. This leads to numerous problems. Here are some examples:
+
+* [metalsmith-markdown](https://github.com/segmentio/metalsmith-markdown) renames files from "page.md" to "page.html"
+  * Subsequent plugins can no longer distinguish which HTML files were generated from Markdown and which were just static HTML files
+  * This makes supporting relative links (e.g. `./other-page.md`) fragile (e.g. `./static-page.html`, referring to a static HTML page--not generated using Markdown--is ambiguous)
+* [metalsmith-permalinks](https://github.com/segmentio/metalsmith-permalinks) moves files into different directories
+  * This plugin has to come before [metalsmith-rootpath](https://github.com/radiovisual/metalsmith-rootpath) to correctly construct a "relative path to root" property
+  * Replacing paths also makes it essentially impossible to unambiguously link a source file to its destination, without adding additional plugins to the chain
+
+The current behavior is simple to reason over, and can be solved without changing the architecture (using more plugins!), but it is initially surprising, and certainly makes the tool harder to use.
+
+# Configuring Markdown
+One less prominent challenge with Metalsmith's architecture is that there is no mechanism (or convention) for communicating between plugins. Probably an uncommon scenario, but it would be nice to allow plugins to configure Metalsmith's Markdown options (without having to use an entirely separate Markdown plugin).
+
 # So do I hate Metalsmith? No!
 Honestly, this article makes a compelling case for avoiding Metalsmith--yet, I still use it. Why?
 
