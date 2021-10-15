@@ -26,6 +26,25 @@
 </ul>
 <p>If I already used Twitter, that would be an acceptable option here, but I have no interest in donating my personal data to yet another gigantic advertising company. Without a Twitter account, none of the login options seem even remotely reasonable.</p>
 <p>In the end, I created a dummy GitHub account just to access Gitter (which essentially negates any user benefit of using OAuth).</p>
+<h1 id="plugin-ordering-and-lack-of-history">Plugin ordering and lack of history</h1>
+<p>My favorite aspect of Metalsmith is its minimal design that can be easily extended with simple plugins, but I think the design is perhaps <em>too</em> minimal.</p>
+<p>Internally, Metalsmith manages a mapping of files to properties, and this mapping is handed from one plugin to the next, sequentially (and asynchronously). Each plugin <em>mutates</em> the mapping however it wants, and eventually Metalsmith&#39;s <code>build()</code> function writes out the resulting files.</p>
+<p>This is indeed a very simple design, but there is a subtle problem lurking: since each plugin can do whatever it wants, information can be changed or lost along the chain. This leads to numerous problems. Here are some examples:</p>
+<ul>
+<li><a href="https://github.com/segmentio/metalsmith-markdown">metalsmith-markdown</a> renames files from &quot;page.md&quot; to &quot;page.html&quot;<ul>
+<li>Subsequent plugins can no longer distinguish which HTML files were generated from Markdown and which were just static HTML files</li>
+<li>This makes supporting relative links (e.g. <code>./other-page.md</code>) fragile (e.g. <code>./static-page.html</code>, referring to a static HTML page--not generated using Markdown--is ambiguous)</li>
+</ul>
+</li>
+<li><a href="https://github.com/segmentio/metalsmith-permalinks">metalsmith-permalinks</a> moves files into different directories<ul>
+<li>This plugin has to come before <a href="https://github.com/radiovisual/metalsmith-rootpath">metalsmith-rootpath</a> to correctly construct a &quot;relative path to root&quot; property</li>
+<li>Replacing paths also makes it essentially impossible to unambiguously link a source file to its destination, without adding additional plugins to the chain</li>
+</ul>
+</li>
+</ul>
+<p>The current behavior is simple to reason over, and can be solved without changing the architecture (using more plugins!), but it is initially surprising, and certainly makes the tool harder to use.</p>
+<h1 id="configuring-markdown">Configuring Markdown</h1>
+<p>One less prominent challenge with Metalsmith&#39;s architecture is that there is no mechanism (or convention) for communicating between plugins. Probably an uncommon scenario, but it would be nice to allow plugins to configure Metalsmith&#39;s Markdown options (without having to use an entirely separate Markdown plugin).</p>
 <h1 id="so-do-i-hate-metalsmith-no">So do I hate Metalsmith? No!</h1>
 <p>Honestly, this article makes a compelling case for avoiding Metalsmith--yet, I still use it. Why?</p>
 <p>As someone who&#39;s familiar with JavaScript, Node, and HTML/CSS, Metalsmith is simply the easiest static site generator for me to use:</p>
