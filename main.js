@@ -46,46 +46,104 @@ handlebars.registerHelper("equal", (a, b) => (a === b));
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
 
-// Translate relative Markdown links to point to corresponding HTML output files (with anchor support)
-const markdownRenderer = new marked.Renderer();
-const baseLinkRenderer = markdownRenderer.link;
-markdownRenderer.link = function (href, title, text) {
-    return baseLinkRenderer.call(this,
-        href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, "../$1/$2"),
-        title,
-        text);
+// TODO: Find a deep merge library?
+// Recursive merge
+// TODO: How to handle overwritten properties?
+function merge(destination, source) {
+    Object.keys(source).forEach(key => {
+        const value = source[key];
+        if (typeof(value) === "object") {
+            let nestedDestination = destination[key];
+            if (!nestedDestination) {
+                nestedDestination = {};
+                destination[key] = nestedDestination;
+            }
+
+            merge(nestedDestination, value);
+        } else {
+            destination[key] = value;
+        }
+    });
 };
 
-// The permalinks plugin moves all posts one level deeper, so adjust relative image links appropriately
-const baseImageRenderer = markdownRenderer.image;
-markdownRenderer.image = function (href, title, text) {
-    return baseImageRenderer.call(this,
-        href.replace(/^([^/][^:]+)$/, "../$1"),
-        title,
-        text);
+let markedOptionsStatic = {};
+const markedOptions = (options) => {
+    if (options) {
+        merge(markedOptionsStatic, options);
+        return (files, metalsmith, done) => done();
+    } else {
+        const markedOptions = markedOptionsStatic;
+        markedOptionsStatic = {};
+
+        // Merge renderer options onto an actual instance of marked.Renderer
+        if (markedOptions.renderer) {
+            const renderer = new marked.Renderer();
+            merge(renderer, markedOptions.renderer);
+            markedOptions.renderer = renderer;
+        }
+
+        return markdown(markedOptions);
+    }
 };
+
+const baseMarkdownRenderer = new marked.Renderer();
+const baseLinkRenderer = baseMarkdownRenderer.link;
+const baseImageRenderer = baseMarkdownRenderer.image;
+const relativeLinks = () => markedOptions({
+    renderer: {
+        // Translate relative Markdown links to point to corresponding HTML output files (with anchor support)
+        link: function (href, title, text) {
+            return baseLinkRenderer.call(this,
+                href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, "../$1/$2"),
+                title,
+                text);
+        },
+
+        // The permalinks plugin moves all posts one level deeper, so adjust relative image links appropriately
+        image: function (href, title, text) {
+            return baseImageRenderer.call(this,
+                href.replace(/^([^/][^:]+)$/, "../$1"),
+                title,
+                text);
+        },
+    },
+});
+
+const syntaxHighlighting = () => markedOptions({
+    highlight: (code, language) => {
+        if (language) {
+            return highlight.highlight(code, { language }).value;
+        } else {
+            return highlight.highlightAuto(code).value;
+        }
+    },
+});
 
 // Generate diagrams with dot2svg
-const baseCodeRenderer = markdownRenderer.code;
+const baseCodeRenderer = baseMarkdownRenderer.code;
 const dotConverter = await createDOTToSVGAsync();
-markdownRenderer.code = function (code, language, escaped) {
-    if (language === "dot2svg") {
-        const svg = dotConverter.dotToSVG(code);
-        if (svg) {
-            // Remove XML prolog, since we're inlining
-            // Also convert default styles to CSS classes, for custom styling
-            return svg
-                .replace(/^.*?<svg /s, "<svg ")
-                .replace(/<!--.*?-->\n?/sg, "")
-                .replace(/fill="([^"]+)" stroke="([^"]+)"/g, "class=\"diagram-$2-$1\"");
-        } else {
-            // On error, just treat the code block like normal
-            console.log(dotConverter.getConsoleOutput());
-            language = "";
-        }
-    }
-    return baseCodeRenderer.call(this, code, language, escaped);
-};
+const graphvizDiagrams = () => markedOptions({
+    renderer: {
+        code: function (code, language, escaped) {
+            if (language === "dot2svg") {
+                const svg = dotConverter.dotToSVG(code);
+                if (svg) {
+                    // Remove XML prolog, since we're inlining
+                    // Also convert default styles to CSS classes, for custom styling
+                    return svg
+                        .replace(/^.*?<svg /s, "<svg ")
+                        .replace(/<!--.*?-->\n?/sg, "")
+                        .replace(/fill="([^"]+)" stroke="([^"]+)"/g, "class=\"diagram-$2-$1\"");
+                } else {
+                    // On error, just treat the code block like normal
+                    console.log(dotConverter.getConsoleOutput());
+                    language = "";
+                }
+            }
+            return baseCodeRenderer.call(this, code, language, escaped);
+        },
+    },
+});
 
 // Create a category for each subdirectory
 const addCategory = (files, metalsmith, done) => {
@@ -222,16 +280,10 @@ Metalsmith(__dirname)
             limit: 3,
         },
     }))
-    .use(markdown({
-        renderer: markdownRenderer,
-        highlight: (code, language) => {
-            if (language) {
-                return highlight.highlight(code, { language }).value;
-            } else {
-                return highlight.highlightAuto(code).value;
-            }
-        },
-    }))
+    .use(relativeLinks())
+    .use(syntaxHighlighting())
+    .use(graphvizDiagrams())
+    .use(markedOptions())
     .use(permalinks())
     .use(feed({
         collection: "posts",
