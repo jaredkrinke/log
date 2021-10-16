@@ -1,9 +1,8 @@
 import path from "path";
-import marked from "marked";
+import markedJS from "marked";
 import handlebars from "handlebars";
 import highlight from "highlight.js";
 import Metalsmith from "metalsmith";
-import markdown from "metalsmith-markdown";
 import layouts from "metalsmith-layouts";
 import collections from "metalsmith-collections";
 import permalinks from "metalsmith-permalinks";
@@ -67,26 +66,50 @@ function merge(destination, source) {
 };
 
 let markedOptionsStatic = {};
-const markedOptions = (options) => {
+const marked = (options) => {
+    const markedOptions = markedOptionsStatic;
     if (options) {
-        merge(markedOptionsStatic, options);
-        return (files, metalsmith, done) => done();
-    } else {
-        const markedOptions = markedOptionsStatic;
-        markedOptionsStatic = {};
-
-        // Merge renderer options onto an actual instance of marked.Renderer
-        if (markedOptions.renderer) {
-            const renderer = new marked.Renderer();
-            merge(renderer, markedOptions.renderer);
-            markedOptions.renderer = renderer;
-        }
-
-        return markdown(markedOptions);
+        merge(markedOptions, options);
     }
+    markedOptionsStatic = {};
+
+    // Merge renderer options onto an actual instance of marked.Renderer
+    if (markedOptions.renderer) {
+        const renderer = new markedJS.Renderer();
+        merge(renderer, markedOptions.renderer);
+        markedOptions.renderer = renderer;
+    }
+
+    markedJS.setOptions(markedOptions);
+
+    const markdownPattern = /^(.*)\.md$/;
+    const textDecoder = new TextDecoder();
+    return (files, metalsmith, done) => {
+        Object.keys(files).forEach(fileName => {
+            const matchGroups = markdownPattern.exec(fileName);
+            const file = files[fileName];
+            if (matchGroups) {
+                // Process
+                const html = markedJS(textDecoder.decode(file.contents));
+                file.contents = Buffer.from(html);
+
+                // Rename to HTML
+                const htmlFileName = `${matchGroups[1]}.html`;
+                delete files[fileName];
+                files[htmlFileName] = file;
+            }
+        });
+
+        done();
+    };
 };
 
-const baseMarkdownRenderer = new marked.Renderer();
+const markedOptions = (options) => {
+        merge(markedOptionsStatic, options);
+        return noop;
+};
+
+const baseMarkdownRenderer = new markedJS.Renderer();
 const baseLinkRenderer = baseMarkdownRenderer.link;
 const baseImageRenderer = baseMarkdownRenderer.image;
 const relativeLinks = (options) => {
@@ -290,7 +313,7 @@ Metalsmith(__dirname)
     .use(relativeLinks({ prefix: "../" })) // permalinks plugin moves posts into their own directories
     .use(syntaxHighlighting())
     .use(graphvizDiagrams())
-    .use(markedOptions())
+    .use(marked())
     .use(permalinks())
     .use(feed({
         collection: "posts",
