@@ -1,7 +1,10 @@
 import path from "path";
-import markedJS from "marked";
+import markdown from "./metalsmith-marked.js";
+import relativeLinks from "./metalsmith-relative-links.js";
+import graphvizDiagrams from "./metalsmith-graphviz-diagrams.js";
+import syntaxHighlighting from "./metalsmith-syntax-highlighting.js";
+import contentReplace from "./metalsmith-content-replace.js";
 import handlebars from "handlebars";
-import highlight from "highlight.js";
 import Metalsmith from "metalsmith";
 import layouts from "metalsmith-layouts";
 import collections from "metalsmith-collections";
@@ -14,168 +17,21 @@ import feed from "metalsmith-feed";
 import brokenLinkChecker from "metalsmith-broken-link-checker";
 import metalsmithExpress from "metalsmith-express";
 import metalsmithWatch from "metalsmith-watch";
-import { createAsync as createDOTToSVGAsync } from "dot2svg-wasm";
 
 // Command line arguments
-let clean = false;
-let serve = false;
-
-const __dirname = path.dirname(process.argv[1]);
-
-for (let i = 2; i < process.argv.length; i++) {
-    const arg = process.argv[i];
-    if (arg === "--clean") {
-        clean = true;
-    } else if (arg === "--serve") {
-        serve = true;
-    }
-}
-clean = (clean && !serve);
+const serve = process.argv.includes("--serve");
+const clean = !serve && process.argv.includes("--clean");
 
 // Handlebars template custom helpers
+// TODO: Use a standard Handlebars library or switch to a template language that has this functionality built in
 handlebars.registerHelper("and", (a, b) => (a && b));
 handlebars.registerHelper("equal", (a, b) => (a === b));
-
-// Configure syntax highlighting aliases
-[
-    [ "wasm", "lisp" ],
-    [ "dot", "c" ],
-].forEach(row => highlight.registerAliases(row[0], { languageName: row[1] }));
 
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
 
-// TODO: Find a deep merge library?
-// Recursive merge
-// TODO: How to handle overwritten properties?
-function merge(destination, source) {
-    Object.keys(source).forEach(key => {
-        const value = source[key];
-        if (typeof(value) === "object") {
-            let nestedDestination = destination[key];
-            if (!nestedDestination) {
-                nestedDestination = {};
-                destination[key] = nestedDestination;
-            }
-
-            merge(nestedDestination, value);
-        } else {
-            destination[key] = value;
-        }
-    });
-};
-
-let markedOptionsStatic = {};
-const marked = (options) => {
-    const markedOptions = markedOptionsStatic;
-    if (options) {
-        merge(markedOptions, options);
-    }
-    markedOptionsStatic = {};
-
-    // Merge renderer options onto an actual instance of marked.Renderer
-    if (markedOptions.renderer) {
-        const renderer = new markedJS.Renderer();
-        merge(renderer, markedOptions.renderer);
-        markedOptions.renderer = renderer;
-    }
-
-    markedJS.setOptions(markedOptions);
-
-    const markdownPattern = /^(.*)\.md$/;
-    const textDecoder = new TextDecoder();
-    return (files, metalsmith, done) => {
-        Object.keys(files).forEach(fileName => {
-            const matchGroups = markdownPattern.exec(fileName);
-            const file = files[fileName];
-            if (matchGroups) {
-                // Process
-                const html = markedJS(textDecoder.decode(file.contents));
-                file.contents = Buffer.from(html);
-
-                // Rename to HTML
-                const htmlFileName = `${matchGroups[1]}.html`;
-                delete files[fileName];
-                files[htmlFileName] = file;
-            }
-        });
-
-        done();
-    };
-};
-
-const markedOptions = (options) => {
-        merge(markedOptionsStatic, options);
-        return noop;
-};
-
-const baseMarkdownRenderer = new markedJS.Renderer();
-const baseLinkRenderer = baseMarkdownRenderer.link;
-const baseImageRenderer = baseMarkdownRenderer.image;
-const relativeLinks = (options) => {
-    const prefix = options?.prefix ?? "";
-    const o = {
-        renderer: {
-            // Translate relative Markdown links to point to corresponding HTML output files (with anchor support)
-            link: function (href, title, text) {
-                return baseLinkRenderer.call(this,
-                    href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, `${prefix}$1/$2`),
-                    title,
-                    text);
-            },
-        },
-    };
-
-    if (prefix) {
-        // E.g. the permalinks plugin moves all posts one level deeper, so adjust relative image links, if needed
-        o.renderer.image = function (href, title, text) {
-            return baseImageRenderer.call(this,
-                href.replace(/^([^/][^:]+)$/, `${prefix}$1`),
-                title,
-                text);
-        };
-    }
-
-    return markedOptions(o);
-};
-
-const syntaxHighlighting = () => markedOptions({
-    highlight: (code, language) => {
-        if (language) {
-            return highlight.highlight(code, { language }).value;
-        } else {
-            return highlight.highlightAuto(code).value;
-        }
-    },
-});
-
-// Generate diagrams with dot2svg
-const baseCodeRenderer = baseMarkdownRenderer.code;
-const dotConverter = await createDOTToSVGAsync();
-const graphvizDiagrams = () => markedOptions({
-    renderer: {
-        code: function (code, language, escaped) {
-            if (language === "dot2svg") {
-                const svg = dotConverter.dotToSVG(code);
-                if (svg) {
-                    // Remove XML prolog, since we're inlining
-                    // Also convert default styles to CSS classes, for custom styling
-                    return svg
-                        .replace(/^.*?<svg /s, "<svg ")
-                        .replace(/<!--.*?-->\n?/sg, "")
-                        .replace(/fill="([^"]+)" stroke="([^"]+)"/g, "class=\"diagram-$2-$1\"");
-                } else {
-                    // On error, just treat the code block like normal
-                    console.log(dotConverter.getConsoleOutput());
-                    language = "";
-                }
-            }
-            return baseCodeRenderer.call(this, code, language, escaped);
-        },
-    },
-});
-
 // Create a category for each subdirectory
+// TODO: Create a route parsing plugin that adds this automatically from a string like "posts/:category/*.md"
 const addCategory = (files, metalsmith, done) => {
     Object.keys(files).forEach(key => {
         const file = files[key];
@@ -194,6 +50,7 @@ const addCategory = (files, metalsmith, done) => {
     done();
 };
 
+// TODO: Replace this with a plugin that allows querying/grouping over properties?
 const addCategoryIndexes = (files, metalsmith, done) => {
     const categoryMap = {};
     Object.keys(files).forEach(key => {
@@ -228,12 +85,13 @@ const addCategoryIndexes = (files, metalsmith, done) => {
 };
 
 // Simple plugin to add some custom properties (note: dates are parsed assuming UTC, so use UTC when formatting)
+// TODO: Date formatting should be implemented in the template layer
+// TODO: See if there's an existing plugin for creating these links
 const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 const addCustomProperties = (files, metalsmith, done) => {
     Object.keys(files).forEach(key => {
         const file = files[key];
 
-        file.fileName = path.basename(key);
         file.link = key
             .replace(/\\/g, "/") // Convert slashes...
             .replace(/[/]index.html$/, ""); // Remove file name
@@ -247,28 +105,10 @@ const addCustomProperties = (files, metalsmith, done) => {
     done();
 };
 
-// Plugin for deleting unnecessary content
-const eraser = options => {
-    const textEncoder = new TextEncoder();
-    const textDecoder = new TextDecoder();
-    return (files, metalsmith, done) => {
-        Object.keys(options).forEach(fileName => {
-            const file = files[fileName];
-            const regExps = options[fileName];
-            let contents = textDecoder.decode(file.contents);
-            regExps.forEach(regExp => {
-                contents = contents.replace(regExp, "");
-            });
-            file.contents = textEncoder.encode(contents);
-        });
-        done();
-    };
-};
-
 // Category sorting: sort by most posts, and then most recent post if there's a tie
 const sortCategories = (a, b) => ((b.postsInCategory.length - a.postsInCategory.length) || (b.postsInCategory[0].date - a.postsInCategory[0].date));
 
-Metalsmith(__dirname)
+Metalsmith(path.dirname(process.argv[1]))
     .metadata({
         site: {
             title: "Schemescape",
@@ -311,20 +151,24 @@ Metalsmith(__dirname)
         },
     }))
     .use(relativeLinks({ prefix: "../" })) // permalinks plugin moves posts into their own directories
-    .use(syntaxHighlighting())
-    .use(graphvizDiagrams())
-    .use(marked())
+    .use(syntaxHighlighting({
+        aliases: [
+            { tag: "dot", language: "c" },
+        ],
+    }))
+    .use(graphvizDiagrams({ cssClasses: true }))
+    .use(markdown())
     .use(permalinks())
     .use(feed({
         collection: "posts",
         destination: "feed.xml",
         limit: 5,
     }))
-    .use(eraser({
+    .use(contentReplace({
         // Remove some unnecessary/constantly changing fields
         "feed.xml": [
-            /<lastBuildDate>.*?<\/lastBuildDate>/,
-            /<generator>.*?<\/generator>/,
+            [/<lastBuildDate>.*?<\/lastBuildDate>/, ""],
+            [/<generator>.*?<\/generator>/, ""],
         ],
     }))
     .use(rootPath())
