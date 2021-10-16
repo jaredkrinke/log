@@ -1,4 +1,5 @@
 import path from "path";
+import cheerio from "cheerio";
 import marked from "marked";
 import handlebars from "handlebars";
 import highlight from "highlight.js";
@@ -46,6 +47,13 @@ handlebars.registerHelper("equal", (a, b) => (a === b));
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
 
+const originalFileNames = () => ((files, metalsmith, done) => {
+    Object.keys(files).forEach(fileName => {
+        files[fileName].originalFileName = fileName;
+    });
+    done();
+});
+
 // TODO: Find a deep merge library?
 // Recursive merge
 // TODO: How to handle overwritten properties?
@@ -86,27 +94,63 @@ const markedOptions = (options) => {
     }
 };
 
-const baseMarkdownRenderer = new marked.Renderer();
-const baseLinkRenderer = baseMarkdownRenderer.link;
-const baseImageRenderer = baseMarkdownRenderer.image;
-const relativeLinks = () => markedOptions({
-    renderer: {
-        // Translate relative Markdown links to point to corresponding HTML output files (with anchor support)
-        link: function (href, title, text) {
-            return baseLinkRenderer.call(this,
-                href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, "../$1/$2"),
-                title,
-                text);
-        },
+const relativeLinks = () => ((files, metalsmith, done) => {
+    // Map all source files to their destinations (and also normalize slashes)
+    const originalToFinal = {};
+    const normalizeSlashes = str => str.replace(/\\|\//g, "/");
+    Object.keys(files).forEach(destination => {
+        // Ignore files without a originalFileName property
+        const originalFileName = files[destination].originalFileName;
+        if (originalFileName) {
+            originalToFinal[normalizeSlashes(originalFileName)] = normalizeSlashes(destination);
+        }
+    });
 
-        // The permalinks plugin moves all posts one level deeper, so adjust relative image links appropriately
-        image: function (href, title, text) {
-            return baseImageRenderer.call(this,
-                href.replace(/^([^/][^:]+)$/, "../$1"),
-                title,
-                text);
-        },
-    },
+    // Find all relative links and image references and update
+    const textDecoder = new TextDecoder();
+    const htmlPattern = /\.html$/;
+    const relativeLinkPattern = /^([^/#][^#:]+)(#[^#]+)?$/;
+    Object.keys(files).forEach(finalSourceFileName => {
+        // Only process HTML files
+        if (htmlPattern.test(finalSourceFileName)) {
+            const file = files[finalSourceFileName];
+
+            // Only process files that previously existed
+            if (file.originalFileName) {
+                const originalSourceFileName = normalizeSlashes(file.originalFileName);
+                const originalSourceFileDirectory = path.posix.dirname(originalSourceFileName);
+                const finalSourceFileDirectory = path.posix.dirname(normalizeSlashes(finalSourceFileName));
+                const $ = cheerio.load(textDecoder.decode(file.contents));
+
+                // Find relative links to process
+                let modified = false;
+                for (const [ elementName, attributeName ] of [["a", "href"], ["img", "src"]]) {
+                    $(`${elementName}[${attributeName}]`).each(function () {
+                        const href = $(this).attr(attributeName);
+                        const matchGroups = relativeLinkPattern.exec(href);
+                        if (matchGroups) {
+                            // Find the original link target
+                            const originalTargetPath = path.posix.normalize(path.posix.join(originalSourceFileDirectory, matchGroups[1]));
+    
+                            // Only modify if the destination is in the lookup table
+                            if (originalToFinal[originalTargetPath]) {
+                                const anchor = matchGroups[2] ?? "";
+                                const updatedRelativePath = path.posix.relative(finalSourceFileDirectory, originalToFinal[originalTargetPath]).replace(/\/index.html$/, "/") + anchor;
+                                modified = true;
+                                $(this).attr(attributeName, updatedRelativePath);
+                            }
+                        }
+                    });
+                }
+
+                if (modified) {
+                    file.contents = Buffer.from($.html());
+                }
+            }
+        }
+    });
+
+    done();
 });
 
 const syntaxHighlighting = () => markedOptions({
@@ -120,6 +164,7 @@ const syntaxHighlighting = () => markedOptions({
 });
 
 // Generate diagrams with dot2svg
+const baseMarkdownRenderer = new marked.Renderer();
 const baseCodeRenderer = baseMarkdownRenderer.code;
 const dotConverter = await createDOTToSVGAsync();
 const graphvizDiagrams = () => markedOptions({
@@ -253,6 +298,7 @@ Metalsmith(__dirname)
         src: "static",
         dest: ".",
     }))
+    .use(originalFileNames())
     .use(serve ? noop : drafts())
     .use(addCategory)
     .use(addCategoryIndexes)
@@ -280,7 +326,6 @@ Metalsmith(__dirname)
             limit: 3,
         },
     }))
-    .use(relativeLinks())
     .use(syntaxHighlighting())
     .use(graphvizDiagrams())
     .use(markedOptions())
@@ -305,6 +350,7 @@ Metalsmith(__dirname)
         default: "default.hbs",
         pattern: "**/*.html",
     }))
+    .use(relativeLinks())
     .use(serve ? metalsmithExpress({ host: "localhost" }) : noop)
     .use(serve
         ? metalsmithWatch({
