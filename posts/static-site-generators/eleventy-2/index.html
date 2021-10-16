@@ -63,7 +63,8 @@
             <span class="hljs-attr">includes</span>: <span class="hljs-string">&quot;../templates&quot;</span> <span class="hljs-comment">// Note: this is relative to the input directory</span>
         }
     }
-};</code></pre>
+};
+</code></pre>
 <p>Note: the <code>markdownTemplateEngine: false</code> setting is to prevent Eleventy from using Liquid to process my Markdown (I don&#39;t want this step because it tries to process all instances of <code>{%</code>, etc., when I actually want to be able to use those tokens in my blog post content).</p>
 <h1 id="javascript-templates-easy-to-write-hard-to-maintain">JavaScript templates: easy to write, hard to maintain</h1>
 <p>After spending the last few posts railing against &quot;unintuivie&quot;, &quot;verbose&quot;, and &quot;ugly&quot; template languages like Liquid and EJS, <a href="https://www.11ty.dev/docs/languages/javascript/">Eleventy&#39;s JavaScript templates</a> felt like a shining beacon of familiarity and simplicity -- it&#39;s just JavaScript! Sure, JavaScript used to be a terrible language (what do you expect for a language that was <a href="https://web.archive.org/web/20160305202500/http://www.computer.org/csdl/mags/co/2012/02/mco2012020007.pdf">originally created in 10 days</a>?), but modern JavaScript is pleasant to write, especially with <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">template literals</a>.</p>
@@ -84,7 +85,8 @@
             <span class="hljs-subst">${content}</span>
         &lt;/main&gt;
     &lt;/body&gt;
-&lt;/html&gt;`</span>,</code></pre>
+&lt;/html&gt;`</span>,
+</code></pre>
 <p>This probably took me 10 minutes to create. But there are a few problems I&#39;ve noticed along the way:</p>
 <ul>
 <li>It&#39;s hard to read because it&#39;s constant switching back and forth between strings and code (and the code would balloon if I started pulling code out of the template)</li>
@@ -118,13 +120,15 @@
     <span class="hljs-subst">${data.content}</span>
 &lt;/article&gt;`</span>;
 
-<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-title function_">renderPage</span>(data, <span class="hljs-title function_">renderArticle</span>(data))</code></pre>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-title function_">renderPage</span>(data, <span class="hljs-title function_">renderArticle</span>(data))
+</code></pre>
 <h2 id="2-inject-data-into-all-posts">2. Inject data into all posts</h2>
 <p>Add <code>content/posts.json</code> to inject data to all files under the <code>content/posts</code> directory:</p>
 <pre><code class="language-json"><span class="hljs-punctuation">{</span>
     <span class="hljs-attr">&quot;layout&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post.11ty.js&quot;</span><span class="hljs-punctuation">,</span>
     <span class="hljs-attr">&quot;tags&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post&quot;</span>
-<span class="hljs-punctuation">}</span></code></pre>
+<span class="hljs-punctuation">}</span>
+</code></pre>
 <p>The first setting selects the template and the second tags all the files as part of the &quot;post&quot; collection (for later iteration).</p>
 <p>With those two simple steps, Eleventy will generate directories with an HTML file for each Markdown source file I write.</p>
 <h1 id="adding-a-home-page">Adding a home page</h1>
@@ -146,17 +150,20 @@
 <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-title function_">renderPage</span>(data,
 <span class="hljs-string">`&lt;ul&gt;
     <span class="hljs-subst">${data.collections.post.slice().reverse().map(post =&gt; <span class="hljs-string">`&lt;li&gt;<span class="hljs-subst">${renderArticleShort(post.data)}</span>&lt;/li&gt;`</span>).join(<span class="hljs-string">&quot;\n&quot;</span>)}</span>
-&lt;/ul&gt;`</span>);</code></pre>
+&lt;/ul&gt;`</span>);
+</code></pre>
 <p>Note: the <code>.slice()</code> is needed because JavaScript&#39;s <code>reverse()</code> function mutates the array (<a href="https://www.11ty.dev/docs/collections/#array-reverse">as Eleventy&#39;s documentation notes</a>).</p>
 <h2 id="2-add-a-source-file">2. Add a source file</h2>
 <p>The <code>content\index.md</code> file just points to the template:</p>
 <pre><code class="language-yaml"><span class="hljs-meta">---</span>
 <span class="hljs-attr">layout:</span> <span class="hljs-string">index.11ty.js</span>
-<span class="hljs-meta">---</span></code></pre>
+<span class="hljs-meta">---</span>
+</code></pre>
 <p>Eleventy will now build my <code>index.html</code> file at the root of the output directory.</p>
 <h1 id="enabling-links-between-pages">Enabling links between pages</h1>
 <p>I use relative links between my Markdown files for internal links. For example, the post you&#39;re reading is <a href="../eleventy-2/"><code>eleventy-2.md</code></a> and my previous post on Eleventy is <a href="../eleventy/"><code>eleventy.md</code></a>. Here&#39;s how I made that second link:</p>
-<pre><code class="language-markdown">[<span class="hljs-string">eleventy.md</span>](<span class="hljs-link">eleventy.md</span>)</code></pre>
+<pre><code class="language-markdown">[<span class="hljs-string">eleventy.md</span>](<span class="hljs-link">eleventy.md</span>)
+</code></pre>
 <p>This setup feels natural and works great for Markdown, both in <a href="https://code.visualstudio.com/Docs/languages/markdown">Visual Studio Code&#39;s Markdown preview mode</a>, and when <a href="https://github.com/jaredkrinke/log/blob/main/content/posts/static-site-generators/eleventy-2.md">viewing Markdown files in my repository directly on GitHub</a>.</p>
 <p>I was <em>hoping</em> that many static site generators would translate these links into ones that worked on the HTML web site, but so far it&#39;s seeming like that was just wishful thinking.</p>
 <p>Fortunately, since I&#39;m not tweaking output locations, this translation is just a simple mechanical process (prepend &quot;../&quot; and remove the &quot;.md&quot; suffix). Even better, there is a markdown-it plugin named <a href="https://www.npmjs.com/package/markdown-it-replace-link">markdown-it-replace-link</a> for making such changes. This plugin can be integrated into Eleventy&#39;s pipeline via the <code>.eleventy.js</code> config file (after <code>npm install --save-dev markdown-it-replace-link</code>, of course):</p>
@@ -169,7 +176,8 @@
         .<span class="hljs-title function_">use</span>(<span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;markdown-it-replace-link&quot;</span>));
 
     eleventyConfig.<span class="hljs-title function_">setLibrary</span>(<span class="hljs-string">&quot;md&quot;</span>, customMarkdownIt);
-...</code></pre>
+...
+</code></pre>
 <p>The regular expression just checks for relative links (not starting with &quot;/&quot; or containing a &quot;:&quot;) that end with &quot;.md&quot; and then prepends &quot;../&quot; and omits the &quot;.md&quot; suffix, to instead point to the source Markdown file&#39;s corresponding output directory (which contains an <code>index.html</code>).</p>
 <h1 id="adding-an-rss-feed">Adding an RSS feed</h1>
 <p>Many of the static site generators I tested out automagically generate an RSS news feed. Eleventy does not do this.</p>

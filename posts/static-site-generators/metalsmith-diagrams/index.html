@@ -70,7 +70,8 @@
 digraph {
     &quot;Compile Graphviz to WebAssembly&quot; -&gt; &quot;Generate diagrams at build time&quot; -&gt; &quot;???&quot; -&gt; &quot;Profit!&quot;;
 }
-```</span></code></pre>
+```</span>
+</code></pre>
 <h1 id="extending-the-marked-renderer">Extending the Marked renderer</h1>
 <p>As shown in the example near the top of this post, my plan is to piggyback on Markdown code blocks, using a special language tag <code>dot2svg</code>. For all other code blocks (and on error), I simply defer to the default code block rendering function:</p>
 <pre><code class="language-javascript"><span class="hljs-comment">// Generate diagrams with dot2svg</span>
@@ -87,7 +88,8 @@ markdownRenderer.<span class="hljs-property">code</span> = <span class="hljs-key
         }
     }
     <span class="hljs-keyword">return</span> baseCodeRenderer.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>, code, language, escaped);
-};</code></pre>
+};
+</code></pre>
 <h1 id="styling">Styling</h1>
 <p>The above rendering code worked (and didn&#39;t break my <a href="../metalsmith-syntax-highlighting/">syntax highlighting</a>), but there were a few tweaks I had in mind:</p>
 <ul>
@@ -110,14 +112,16 @@ markdownRenderer.<span class="hljs-property">code</span> = <span class="hljs-key
         .<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/^.*?&lt;svg /</span>s, <span class="hljs-string">&quot;&lt;svg &quot;</span>)
         .<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/fill=&quot;([^&quot;]+)&quot; stroke=&quot;([^&quot;]+)&quot;/g</span>, <span class="hljs-string">&quot;class=\&quot;diagram-$2-$1\&quot;&quot;</span>);
 } <span class="hljs-keyword">else</span> {
-...</code></pre>
+...
+</code></pre>
 <p>Now, I can just style everything with CSS:</p>
 <pre><code class="language-css"><span class="hljs-comment">/* Diagrams */</span>
 svg text { fill: <span class="hljs-number">#eee</span>; }
 <span class="hljs-selector-class">.diagram-transparent-white</span> { stroke: none; fill: none; }
 ellipse<span class="hljs-selector-class">.diagram-black-none</span> { stroke: <span class="hljs-number">#ccc</span>; fill: <span class="hljs-number">#444</span>; }
 <span class="hljs-selector-class">.diagram-black-none</span> { stroke: <span class="hljs-number">#999</span>; fill:none; }
-<span class="hljs-selector-class">.diagram-black-black</span> { stroke: <span class="hljs-number">#999</span>; fill: <span class="hljs-number">#333</span>; }</code></pre>
+<span class="hljs-selector-class">.diagram-black-black</span> { stroke: <span class="hljs-number">#999</span>; fill: <span class="hljs-number">#333</span>; }
+</code></pre>
 <h1 id="thats-it">That&#39;s it!</h1>
 <p>To my surprise, this entire integration went smoothly, and only took an hour or so. It remains to be seen how useful these diagrams will be, but at least now if I ever feel the need to insert a superfluous diagram, the functionality will be there.</p>
 <p>For reference, all of the code used to generate this site (along with the content) is in <a href="https://github.com/jaredkrinke/log">this repository</a>.</p>

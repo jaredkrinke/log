@@ -36,7 +36,8 @@
       <span class="hljs-attr">output</span>: <span class="hljs-string">&quot;dist&quot;</span>
     }
   }
-};</code></pre>
+};
+</code></pre>
 <p>I was curious what all might go in an Eleventy configuration file, so I took a peek at their <a href="https://github.com/11ty/eleventy-base-blog">official blog sample</a> and was horrified to see 142 lines of JavaScript code in their <code>.eleventy.js</code> config file. I thought this was supposed to be the simplest static site generator! Looking more closely, there appear to be helper functions defined in this configuration file. I&#39;m not going to question their design yet, but it makes me nervous.</p>
 <h2 id="concepts">Concepts</h2>
 <p><a href="https://www.11ty.dev/docs/">Eleventy&#39;s documentation</a> has lots of details, but there isn&#39;t a great overview of all the concepts and the associated directory structure. For example, I still haven&#39;t found a clear definition for their use of the word &quot;template&quot;.</p>
@@ -87,7 +88,8 @@
             <span class="hljs-attr">includes</span>: <span class="hljs-string">&quot;../templates&quot;</span> <span class="hljs-comment">// Note: this is relative to the input directory</span>
         }
     }
-};</code></pre>
+};
+</code></pre>
 <p>My corresponding directory structure is visible on the <a href="https://github.com/jaredkrinke/log/tree/eleventy">eleventy branch of this repository on GitHub</a>.</p>
 <h2 id="themes">Themes?</h2>
 <p>My experience with Hugo themes wasn&#39;t great because they push hard to make you want to share your theme. Eleventy is basically the opposite. Because configuration is JavaScript code run in Node, you probably don&#39;t want to download others&#39; themes unless you&#39;ve gone through the code to make sure it does only what you want.</p>
@@ -115,7 +117,8 @@
     &lt;/body&gt;
 &lt;/html&gt;
 `</span>
-}</code></pre>
+}
+</code></pre>
 <h3 id="escaping-html">Escaping HTML</h3>
 <p>Note: when using Eleventy&#39;s JavaScript template language, I didn&#39;t see a built-in, documented way to escape arbitrary text for inserting into HTML. The <a href="https://www.npmjs.com/package/escape-html">escape-html NPM Package</a> worked for my purposes, but now I feel like I&#39;m getting close to wanting to build my own template language.</p>
 <h2 id="issues">Issues</h2>

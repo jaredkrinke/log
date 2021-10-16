@@ -54,7 +54,8 @@
 
 <span class="hljs-type">double</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(sine)</span><span class="hljs-params">(<span class="hljs-type">double</span> theta)</span> {
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">sin</span>(theta);
-}</code></pre>
+}
+</code></pre>
 <p>All I&#39;m doing is exposing <code>sin</code> from <code>math.h</code> as an export named <code>sine</code>.</p>
 <h2 id="compiling">Compiling</h2>
 <p>The build command is a bit more complicated than <a href="../trivial-example/#compiling-the-code">last time</a>:</p>
@@ -66,7 +67,8 @@
 </ul>
 <p>Note that in this example, I extracted the WASI SDK into a subfolder of my project (the <a href="https://github.com/WebAssembly/wasi-sdk">SDK&#39;s README has an example as well</a>).</p>
 <p>Here&#39;s the build command (note: I omitted the <code>-target</code> option because I&#39;m using the WASI SDK&#39;s Clang, which defaults to targeting <code>wasm32-wasi</code>):</p>
-<pre><code class="language-sh">wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm</code></pre>
+<pre><code class="language-sh">wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm
+</code></pre>
 <h2 id="calling-from-node">Calling from Node</h2>
 <p>Almost identical to last time:</p>
 <pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
@@ -74,7 +76,8 @@
     <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./sine.wasm&quot;</span>));
     <span class="hljs-keyword">const</span> sine = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">sine</span>;
     <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sine</span>(<span class="hljs-number">1.57</span>));
-})();</code></pre>
+})();
+</code></pre>
 <p>Output: 0.9999996829318346 (looks reasonable, since 1.57 is approximately pi/2 and so sine of that angle should be roughly 1).</p>
 <h2 id="calling-from-a-browser">Calling from a browser</h2>
 <p>Again, almost identical:</p>
@@ -90,9 +93,12 @@
             })();
         </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
 <p>Result:</p>
-<pre><code><span class="hljs-attribute">The</span> value of sin(<span class="hljs-number">1</span>.<span class="hljs-number">57</span>) is <span class="hljs-number">0</span>.<span class="hljs-number">9999996829318346</span></code></pre><p>Looks like the WASI libc works in the browser, at least in a case like this where no system calls are needed.</p>
+<pre><code><span class="hljs-attribute">The</span> value of sin(<span class="hljs-number">1</span>.<span class="hljs-number">57</span>) is <span class="hljs-number">0</span>.<span class="hljs-number">9999996829318346</span>
+</code></pre>
+<p>Looks like the WASI libc works in the browser, at least in a case like this where no system calls are needed.</p>
 <h1 id="overhead">Overhead</h1>
 <p>Earlier, I was wondering how much overhead there is in linking against a C standard library for WebAssembly. My understanding is that linking for C is done per-function, so you&#39;re only pulling in what you need. Here are some measurements I took (and yes, I linked in <code>malloc</code> but not <code>free</code>):</p>
 <table>

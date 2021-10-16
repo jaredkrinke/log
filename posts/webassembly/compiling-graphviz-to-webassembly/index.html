@@ -27,7 +27,8 @@
 <p>Graphviz diagrams are described in a language called <a href="https://graphviz.org/doc/info/lang.html">DOT</a>. Example:</p>
 <pre><code class="language-dot">digraph {
     a -&gt; b;
-}</code></pre>
+}
+</code></pre>
 <p>Graphviz supports multiple layout engines, but I&#39;ve only ever needed to use the default <a href="https://graphviz.org/docs/layouts/dot/">dot</a> engine (yes, it&#39;s the same name, just in lower case).</p>
 <h2 id="prior-ports">Prior ports</h2>
 <p>The Graphviz site <a href="https://graphviz.org/resources/">lists a number of previous ports of Graphviz</a>, including a couple that are relevant for Node:</p>
@@ -107,7 +108,8 @@
 <h2 id="archive-index-error">Archive index error</h2>
 <p>After searching for and finding a <a href="https://github.com/emscripten-core/emscripten/issues/9329">similar issue on GitHub</a>, I learned that that <code>wasm-ld</code> error means that you created the archive with the wrong tool set. In my case, it was using GNU <code>ar</code> instead of LLVM <code>ar</code>. That makes sense because I didn&#39;t tell the build to use a different <code>ar</code>, and GNU <code>ar</code> was on my path.</p>
 <p>I thought that setting the &quot;AR&quot; environment variable would solve this, but it turned out that the Autotools in use didn&#39;t respect that environment variable. My hacky solution to this (and possibly other mismatched tools) was to just move the WASI SDK to the front of my &quot;PATH&quot; variable in my build script:</p>
-<pre><code class="language-sh"><span class="hljs-built_in">export</span> PATH=<span class="hljs-string">&quot;/opt/wasi-sdk/bin:<span class="hljs-variable">$PATH</span>&quot;</span></code></pre>
+<pre><code class="language-sh"><span class="hljs-built_in">export</span> PATH=<span class="hljs-string">&quot;/opt/wasi-sdk/bin:<span class="hljs-variable">$PATH</span>&quot;</span>
+</code></pre>
 <h2 id="more-issues">More issues</h2>
 <p>Now I started to run into more WASI-related issues. WASI is still in development and may not ever support the entire C library. That&#39;s fine, and I knew that going in, but I thought that Graphviz wouldn&#39;t be relying on some of the more obscure parts of the C library (and hopefully very few OS-specific features). Sadly, this is not the case.</p>
 <p>Here are the problems I ran into:</p>
@@ -166,13 +168,15 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
     { <span class="hljs-string">&quot;gvplugin_dot_layout_LTX_library&quot;</span>, (<span class="hljs-type">void</span>*)(&amp;gvplugin_dot_layout_LTX_library) },
     { <span class="hljs-string">&quot;gvplugin_core_LTX_library&quot;</span>, (<span class="hljs-type">void</span>*)(&amp;gvplugin_core_LTX_library) },
     { <span class="hljs-number">0</span>, <span class="hljs-number">0</span> }
-};</code></pre>
+};
+</code></pre>
 <p>This also had the benefit of removing a number of dependencies (including some that weren&#39;t yet building successfully for me yet).</p>
 <h2 id="one-last-link-error">One last link error</h2>
 <p>At this point, I was down to a final error from the linker. It turns out that, somewhere in Graphviz, it uses the <code>tmpfile</code> function. For now, I just decided to add a dummy implementation and hope that it wasn&#39;t being used for anything important:</p>
 <pre><code class="language-c">FILE* <span class="hljs-title function_">tmpfile</span><span class="hljs-params">()</span> {
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}</code></pre>
+}
+</code></pre>
 <h2 id="successful-build">Successful build</h2>
 <p>Finally, I was able to successfully build &quot;dot2svg.wasm&quot;. The uncompressed file size ended up being around 660 KB--a bit larger than I hoped, but not huge.</p>
 <p>Now I just have to run that function... right?</p>
@@ -180,7 +184,9 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
 <p>Given that I already had code to pass strings back and forth, I hoped I could just call the <code>dot2svg</code> export and bask in the glorious result. But I wasn&#39;t quite there yet.</p>
 <h2 id="imports">Imports</h2>
 <p>On the first run, I got the following error:</p>
-<pre><code><span class="hljs-symbol">TypeError:</span> WebAssembly.<span class="hljs-keyword">instantiate(): </span>Imports argument must <span class="hljs-keyword">be </span>present <span class="hljs-keyword">and </span>must <span class="hljs-keyword">be </span>an object</code></pre><p>That&#39;s too bad. I was hoping that my slimmed down Graphviz build wouldn&#39;t expect the host to provide any functions. Let&#39;s see what&#39;s missing:</p>
+<pre><code><span class="hljs-symbol">TypeError:</span> WebAssembly.<span class="hljs-keyword">instantiate(): </span>Imports argument must <span class="hljs-keyword">be </span>present <span class="hljs-keyword">and </span>must <span class="hljs-keyword">be </span>an object
+</code></pre>
+<p>That&#39;s too bad. I was hoping that my slimmed down Graphviz build wouldn&#39;t expect the host to provide any functions. Let&#39;s see what&#39;s missing:</p>
 <pre><code class="language-sh">$ wasm2wat dot2svg.wasm|findstr /i import
   (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;clock_time_get&quot;</span> (func <span class="hljs-variable">$__wasi_clock_time_get</span> (<span class="hljs-built_in">type</span> 16)))
   (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_filestat_get&quot;</span> (func <span class="hljs-variable">$__wasi_fd_filestat_get</span> (<span class="hljs-built_in">type</span> 1)))
@@ -194,7 +200,8 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
   (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_seek&quot;</span> (func <span class="hljs-variable">$__wasi_fd_seek</span> (<span class="hljs-built_in">type</span> 18)))
   (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_write&quot;</span> (func <span class="hljs-variable">$__wasi_fd_write</span> (<span class="hljs-built_in">type</span> 4)))
   (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_read&quot;</span> (func <span class="hljs-variable">$__wasi_fd_read</span> (<span class="hljs-built_in">type</span> 4)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_fdstat_set_flags&quot;</span> (func <span class="hljs-variable">$__wasi_fd_fdstat_set_flags</span> (<span class="hljs-built_in">type</span> 1)))</code></pre>
+  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_fdstat_set_flags&quot;</span> (func <span class="hljs-variable">$__wasi_fd_fdstat_set_flags</span> (<span class="hljs-built_in">type</span> 1)))
+</code></pre>
 <h2 id="do-the-imports-really-matter">Do the imports really matter?</h2>
 <p>That&#39;s a longer list than I expected. Ok, well let&#39;s see if they&#39;re <em>really</em> needed by providing no-op implementations:</p>
 <pre><code class="language-javascript">    <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./dot2svg.wasm&quot;</span>), {
@@ -214,7 +221,8 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
             <span class="hljs-attr">path_open</span>: <span class="hljs-function">() =&gt;</span> {},
             <span class="hljs-attr">proc_exit</span>: <span class="hljs-function">() =&gt;</span> {},
         },
-    });</code></pre>
+    });
+</code></pre>
 <p>Unfortunately, with those no-op functions, my test script just seemed to spin.</p>
 <h2 id="fd_write">fd_write</h2>
 <p>Debugging showed that <code>fd_write</code> was being called repeatedly. That makes me think that WASI actually needs <code>fd_write</code> to do something. With absolutely zero context, the function name sounds like it&#39;s writing to a file descriptor.</p>
@@ -230,7 +238,8 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
 <pre><code class="language-c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iovec</span> {</span>
     <span class="hljs-type">void</span>  *iov_base;    <span class="hljs-comment">/* Starting address */</span>
     <span class="hljs-type">size_t</span> iov_len;     <span class="hljs-comment">/* Number of bytes to transfer */</span>
-};</code></pre>
+};
+</code></pre>
 <p>And the return value is just the number of bytes written.</p>
 <h3 id="javascript-implementation">JavaScript implementation</h3>
 <p>Assuming that <code>fd_write</code> is the same (assuming 32-bit WebAssembly), this isn&#39;t too bad to implement (and I decided to forward to the console for testing purposes). The only remaining trick is that <code>fd_write</code> supplies the memory address for the return value as the third argument and directly returns a status code (zero for success).</p>
@@ -277,14 +286,16 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
     <span class="hljs-comment">// Set return value to total size of writes</span>
     view.<span class="hljs-title function_">setUint32</span>(returnBytesWrittenAddress, totalSizeInBytes, <span class="hljs-literal">true</span>);
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// Success</span>
-},</code></pre>
+},
+</code></pre>
 <h2 id="success">Success!</h2>
 <p>With the above imports, <a href="https://github.com/jaredkrinke/wasm-c-string">my string-passing library</a>, and the following code:</p>
 <pre><code class="language-javascript"><span class="hljs-keyword">const</span> dotString = process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>] ?? <span class="hljs-string">&quot;digraph { a -&gt; b }&quot;</span>;
 <span class="hljs-title function_">createCString</span>(<span class="hljs-variable language_">module</span>, dotString, <span class="hljs-function">(<span class="hljs-params">dotStringAddress</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> svgString = <span class="hljs-title function_">receiveCString</span>(<span class="hljs-variable language_">module</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">dot2svg</span>(dotStringAddress));
     <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(svgString);
-});</code></pre>
+});
+</code></pre>
 <p>I was finally able to generate the following test graph SVG:</p>
 <p><img src="../../../assets/graphviz-test-graph.svg" alt="digraph { a -&gt; b }"></p>
 <p>Additionally, if I deliberately insert a syntax error into the graph, I see the error logged to my console, so output forwarding is even working.</p>

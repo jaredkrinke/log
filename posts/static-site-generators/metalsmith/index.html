@@ -57,7 +57,8 @@
         <span class="hljs-attr">default</span>: <span class="hljs-string">&quot;default.hbs&quot;</span>,
     }))
     ...
-    .<span class="hljs-title function_">build</span>(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> { <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err; });</code></pre>
+    .<span class="hljs-title function_">build</span>(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> { <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err; });
+</code></pre>
 <p>If you just want to build a dev blog like everyone else, it does feel like a lot of boilerplate code, but I like that it forces you to consider and understand each step of the process. Some of the other static site generators were too proactive and did things I didn&#39;t expect or understand (or want). With Metalsmith, it only does exactly what you tell it.</p>
 <p>But there&#39;s a dark side to Metalsmith&#39;s simple model, and that&#39;s that Metalsmith has to be taught to do even the most basic things. For example, I&#39;m building my site on Windows, which has the unfortunate property of using backslashes for path separators. Metalsmith doesn&#39;t seem to know or care about this detail, so I had to actually write code to switch to web-friendly forward slashes when creating links between files in different directories.</p>
 <h3 id="plugins-plugins-plugins">Plugins, plugins, plugins</h3>
@@ -141,7 +142,8 @@
     .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">assets</span>({
         <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;static&quot;</span>,
         <span class="hljs-attr">dest</span>: <span class="hljs-string">&quot;.&quot;</span>,
-    }))</code></pre>
+    }))
+</code></pre>
 <h3 id="destination-paths-arent-available">Destination paths aren&#39;t available</h3>
 <p>Somewhere in Metalsmith&#39;s pipeline, it knows where a file is going to end up, but for some inexplicable reason, this information isn&#39;t available to templates or plugins. In my case, it&#39;s easy to infer the destination (although I had to deal with Windows&#39; annoying path-separating backslashes), so it wasn&#39;t a big deal, but this really isn&#39;t something I should have had to think about.</p>
 <h3 id="plugin-ordering">Plugin ordering</h3>
@@ -169,7 +171,8 @@ markdownRenderer.<span class="hljs-property">link</span> = <span class="hljs-key
 <span class="hljs-title class_">Metalsmith</span>
 <span class="hljs-comment">// ...</span>
     .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">markdown</span>({ <span class="hljs-attr">renderer</span>: markdownRenderer }))
-    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">permalinks</span>())</code></pre>
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">permalinks</span>())
+</code></pre>
 <p><strong>Update</strong>: I realized I also want to be able to link to a heading <em>within</em> another post (examples: <a href="#architecture">link to Architecture heading in this post</a>; <a href="../comparison/#metalsmith">link to my initial impression of Metalsmith in a different post</a>). The code above has been updated to handle this case.</p>
 <h3 id="syntax-highlighting">Syntax highlighting</h3>
 <p><strong>Update</strong>: I added a <a href="../metalsmith-syntax-highlighting/">separate post on adding syntax highlighting</a>.</p>

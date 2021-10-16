@@ -30,14 +30,17 @@
 <p>Anyway, back to the question: can I import a CommonJS module into my ES module?</p>
 <h1 id="lets-just-try-it">Let&#39;s just try it...</h1>
 <p>Here&#39;s a CommonJS module:</p>
-<pre><code class="language-javascript"><span class="hljs-built_in">exports</span>.<span class="hljs-property">test</span> = <span class="hljs-string">&quot;works!&quot;</span>;</code></pre>
+<pre><code class="language-javascript"><span class="hljs-built_in">exports</span>.<span class="hljs-property">test</span> = <span class="hljs-string">&quot;works!&quot;</span>;
+</code></pre>
 <h2 id="proof-that-it-works-from-commonjs-in-node-✔">Proof that it works from CommonJS (in Node) ✔</h2>
 <pre><code class="language-javascript"><span class="hljs-keyword">const</span> { test } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;./test.js&quot;</span>);
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(test);</code></pre>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(test);
+</code></pre>
 <p>Output: <code>works!</code></p>
 <h2 id="how-about-from-an-es-module-in-node-✔">How about from an ES module in Node? ✔</h2>
 <pre><code class="language-javascript"><span class="hljs-keyword">import</span> { test } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./test.js&quot;</span>;
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(test);</code></pre>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(test);
+</code></pre>
 <p>Output: <code>works!</code></p>
 <h2 id="how-about-from-an-es-module-in-a-web-page-✖">How about from an ES module in a web page? ✖</h2>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
@@ -45,11 +48,12 @@
         <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Output: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;result&quot;</span>&gt;</span>?<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="language-javascript">
             <span class="hljs-keyword">import</span> { test } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./test.js&quot;</span>;
-
+            
             <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;result&quot;</span>).<span class="hljs-property">innerText</span> = test;
         </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
 <p>Doesn&#39;t work (error: &quot;The requested module &#39;./test.js&#39; does not provide an export named &#39;test&#39;&quot;).</p>
 <h1 id="final-answer">Final answer</h1>
 <p>You can use <code>import</code> to include a CommonJS module <em>when running in Node</em>, but <em>not</em> when running in a web page.</p>

@@ -42,10 +42,12 @@
 <p>File name: &quot;add.c&quot;:</p>
 <pre><code class="language-c"><span class="hljs-type">int</span> <span class="hljs-title function_">add</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span> {
     <span class="hljs-keyword">return</span> a + b;
-}</code></pre>
+}
+</code></pre>
 <h2 id="compiling-the-code">Compiling the code</h2>
 <p>First, I&#39;m just going to compile (but not link) the code, to see what happens.</p>
-<pre><code class="language-sh">clang -target wasm32 -Os -c add.c</code></pre>
+<pre><code class="language-sh">clang -target wasm32 -Os -c add.c
+</code></pre>
 <ul>
 <li><code>-target wasm32</code> tells Clang to tell LLVM to produce 32-bit WebAssembly output (note: as of today, <a href="https://github.com/WebAssembly/proposals">64-bit memory support is in progress</a>)</li>
 <li><code>-Os</code> tells Clang to optimize for size (I did this in hopes of getting simpler, more readable code)</li>
@@ -55,7 +57,8 @@
 <p>Since I&#39;m compiling and not linking, this command generates an object file named &quot;add.o&quot;.</p>
 <h2 id="disassembling-the-object-file">Disassembling the object file</h2>
 <p>Run the disassembler:</p>
-<pre><code class="language-sh">wasm2wat add.o</code></pre>
+<pre><code class="language-sh">wasm2wat add.o
+</code></pre>
 <p>And it produces the following surprisingly readable output:</p>
 <pre><code><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)))</span>
@@ -63,7 +66,9 @@
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$add</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span>
     <span class="hljs-keyword">local.get</span> <span class="hljs-number">1</span>
     <span class="hljs-keyword">local.get</span> <span class="hljs-number">0</span>
-    <span class="hljs-keyword">i32.add</span><span class="hljs-punctuation">))</span></code></pre><p>MDN has a great <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format">explanation of the Web Assembly text format</a> (&quot;.wat&quot; files). The syntax is based on <a href="https://en.wikipedia.org/wiki/S-expression">S-expressions</a> (similar to <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>). Note that inline comments are delimited by semicolons (e.g. <code>; comment goes here ;</code>), as noted in <a href="https://github.com/WebAssembly/spec/blob/master/interpreter/README.md#s-expression-syntax">this more detailed look at Web Assembly text format syntax.</a>.</p>
+    <span class="hljs-keyword">i32.add</span><span class="hljs-punctuation">))</span>
+</code></pre>
+<p>MDN has a great <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format">explanation of the Web Assembly text format</a> (&quot;.wat&quot; files). The syntax is based on <a href="https://en.wikipedia.org/wiki/S-expression">S-expressions</a> (similar to <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>). Note that inline comments are delimited by semicolons (e.g. <code>; comment goes here ;</code>), as noted in <a href="https://github.com/WebAssembly/spec/blob/master/interpreter/README.md#s-expression-syntax">this more detailed look at Web Assembly text format syntax.</a>.</p>
 <p>Breaking down the first two lines:</p>
 <ul>
 <li><code>module</code> is the root and encloses the entire module</li>
@@ -114,7 +119,8 @@
 <p>It looks like the C code compiled correctly and the output WAT seems reasonable. So far, so good.</p>
 <h2 id="linking">Linking</h2>
 <p>Note that my original Clang command specified <code>-c</code>, so it only compiled the code and never ran the linker. Let&#39;s go all the way this time:</p>
-<pre><code class="language-sh">clang -target wasm32 -Os -nostdlib -Wl,--no-entry add.c -o add.wasm</code></pre>
+<pre><code class="language-sh">clang -target wasm32 -Os -nostdlib -Wl,--no-entry add.c -o add.wasm
+</code></pre>
 <p>I removed <code>-c</code> and added some new arguments:</p>
 <ul>
 <li><code>-nostdlib</code> indicates that the C standard library should not be used (it&#39;s not needed in this case, and I don&#39;t have it available anyway)</li>
@@ -125,7 +131,8 @@
 <pre><code class="language-wasm"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">2</span><span class="hljs-punctuation">)</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">global</span> <span class="hljs-variable">$__stack_pointer</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">mut</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">i32.const</span> <span class="hljs-number">66560</span><span class="hljs-punctuation">))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;memory&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)))</span></code></pre>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;memory&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)))</span>
+</code></pre>
 <p>My code disappeared! Of course, this isn&#39;t surprising because my code has no entry point and doesn&#39;t export anything.</p>
 <h3 id="memory-and-a-stack">Memory and a stack</h3>
 <p>Interestingly, this most recent disassembly shows some other changes:</p>
@@ -158,7 +165,8 @@
 
 <span class="hljs-type">int</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(add)</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span> {
     <span class="hljs-keyword">return</span> a + b;
-}</code></pre>
+}
+</code></pre>
 <p>Output:</p>
 <pre><code class="language-wasm"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)))</span>
@@ -169,7 +177,8 @@
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">2</span><span class="hljs-punctuation">)</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">global</span> <span class="hljs-variable">$__stack_pointer</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">mut</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">i32.const</span> <span class="hljs-number">66560</span><span class="hljs-punctuation">))</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;memory&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-number">0</span><span class="hljs-punctuation">))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;add&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$add</span><span class="hljs-punctuation">)))</span></code></pre>
+  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;add&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$add</span><span class="hljs-punctuation">)))</span>
+</code></pre>
 <p>This looks like what I want. I&#39;ve got my function and it&#39;s being exported (along with a memory region that I&#39;m not actually using in my code).</p>
 <h2 id="using-the-module">Using the module</h2>
 <p>Now that I&#39;ve got my finished module (<code>add.wasm</code>), I need to host it somewhere.</p>
@@ -180,7 +189,8 @@
     <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./add.wasm&quot;</span>));
     <span class="hljs-keyword">const</span> add = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">add</span>;
     <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">add</span>(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>));
-})();</code></pre>
+})();
+</code></pre>
 <ul>
 <li><code>await fs.promises.readFile(&quot;./add.wasm&quot;)</code> initiates a file read and resumes upon completion</li>
 <li><code>const module = await WebAssembly.instantiate(...);</code> starts instantiating the module and resumes upon completion</li>
@@ -201,7 +211,8 @@
             })();
         </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
 <p>Note that using <code>fetch</code> isn&#39;t supported from the file system, so I used <a href="https://github.com/http-party/http-server">a trivial HTTP server</a> for local testing.</p>
 <ul>
 <li><code>fetch(&quot;./add.wasm&quot;)</code> initiates a request to load the module by relative path</li>

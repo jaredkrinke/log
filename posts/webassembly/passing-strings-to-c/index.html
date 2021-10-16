@@ -82,10 +82,12 @@
         <span class="hljs-built_in">string</span>++;
     }
     <span class="hljs-keyword">return</span> numberOfAs;
-}</code></pre>
+}
+</code></pre>
 <h3 id="compiling">Compiling</h3>
 <p>The build command is unchanged <a href="../c-standard-library-example/#compiling">from the last post</a>:</p>
-<pre><code class="language-sh">wasi-sdk/bin/clang -Os --sysroot wasi-sdk/share/wasi-sysroot -nostartfiles -Wl,--no-entry string-example.c -o string-example.wasm</code></pre>
+<pre><code class="language-sh">wasi-sdk/bin/clang -Os --sysroot wasi-sdk/share/wasi-sysroot -nostartfiles -Wl,--no-entry string-example.c -o string-example.wasm
+</code></pre>
 <h3 id="javascript-caller">JavaScript caller</h3>
 <p>The JavaScript wrapper is more involved than I&#39;d like, but it does work:</p>
 <pre><code class="language-javascript"><span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;fs&quot;</span>;
@@ -106,11 +108,13 @@
     } <span class="hljs-keyword">finally</span> {
         <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(stringAddress);
     }
-})();</code></pre>
+})();
+</code></pre>
 <h3 id="result">Result</h3>
 <p>Behold the result:</p>
 <pre><code class="language-sh">$ node pass-in-string.js <span class="hljs-string">&quot;a string that has lots of the letter &#x27;a&#x27; in it&quot;</span> 
-4</code></pre>
+4
+</code></pre>
 <p>Looks good!</p>
 <h3 id="memory-management-helper">Memory management helper</h3>
 <p>Having to manually manage memory in JavaScript is error-prone, so I&#39;m going to wrap this code in a helper:</p>
@@ -127,7 +131,8 @@
     } <span class="hljs-keyword">finally</span> {
         <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(address);
     }
-};</code></pre>
+};
+</code></pre>
 <p>Note: it would probably be helpful to extend these helpers to support multiple strings/allocations, but I&#39;m not trying to completely reinvent wrapping/binding libraries like Emscripten right now.</p>
 <p>Now, the final string passing code is simple:</p>
 <pre><code class="language-javascript">(<span class="hljs-keyword">async</span> () =&gt; {
@@ -139,7 +144,8 @@
         <span class="hljs-keyword">const</span> result = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">count_as</span>(stringAddress);
         <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result);
     });
-})();</code></pre>
+})();
+</code></pre>
 <h1 id="returning-a-string-from-c-to-javascript">Returning a string from C to JavaScript</h1>
 <p>Here was my initial thinking for returning a dynamic string from C to JavaScript (recorded before I completed the example above):</p>
 <ol>
@@ -171,7 +177,8 @@
     *c = <span class="hljs-string">&#x27;\0&#x27;</span>;
 
     <span class="hljs-keyword">return</span> str;
-}</code></pre>
+}
+</code></pre>
 <h2 id="javascript-implementation">JavaScript implementation</h2>
 <p>Here&#39;s the corresponding JavaScript on the other side:</p>
 <pre><code class="language-javascript"><span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;fs&quot;</span>;
@@ -191,10 +198,12 @@
     } <span class="hljs-keyword">finally</span> {
         <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(address);
     }
-})();</code></pre>
+})();
+</code></pre>
 <p>Output:</p>
 <pre><code class="language-sh">$ node return-string.js 5
-bbbbb</code></pre>
+bbbbb
+</code></pre>
 <p>Looks good!</p>
 <h2 id="helpers">Helpers</h2>
 <p>Similar to above, I&#39;m going to refactor this logic into helpers (one for static strings, and one for new strings return via the heap):</p>
@@ -214,7 +223,8 @@ bbbbb</code></pre>
     } <span class="hljs-keyword">finally</span> {
         <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(address);
     }
-};</code></pre>
+};
+</code></pre>
 <p>This simplifies the calling code significantly:</p>
 <pre><code class="language-javascript">(<span class="hljs-keyword">async</span> () =&gt; {
     <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./string-example.wasm&quot;</span>));
@@ -223,7 +233,8 @@ bbbbb</code></pre>
     <span class="hljs-keyword">const</span> count = <span class="hljs-built_in">parseInt</span>(process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>] ?? <span class="hljs-string">&quot;3&quot;</span>);
     <span class="hljs-keyword">const</span> str = <span class="hljs-title function_">receiveCString</span>(<span class="hljs-variable language_">module</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">write_bs</span>(count));
     <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(str);
-})();</code></pre>
+})();
+</code></pre>
 <h1 id="strings-✔">Strings: ✔</h1>
 <p>Perhaps that wasn&#39;t the most enjoyable experiment, but it does give one a new appreciation for binding generators that do all this work for you.</p>
 <p>Armed with a way to pass strings between JavaScript and C, I&#39;m now ready to leverage old C code (that I don&#39;t want to rewrite) by recompiling for WebAssembly and adding appropriate JavaScript glue. Theoretically the final WebAssembly module artifact will be useful for a long time (&quot;compile once, run forever&quot;?). I have one project in mind, but I&#39;m not going to discuss it or commit to anything just yet.</p>

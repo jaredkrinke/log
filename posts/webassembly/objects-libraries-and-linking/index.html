@@ -57,7 +57,8 @@
 <span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">allocate_wasm_c_string</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> length)</span>;
 
 <span class="hljs-comment">// Creates a new wasm_c_string from an existing C string. When done, use &quot;free&quot; to release.</span>
-<span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">create_wasm_c_string</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* source)</span>;</code></pre>
+<span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">create_wasm_c_string</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* source)</span>;
+</code></pre>
 <p>And the source file (&quot;wasm-c-string.c&quot;):</p>
 <pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;malloc.h&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
@@ -77,10 +78,12 @@ wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class=
     wasm_c_string* str = allocate_wasm_c_string((<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)sourceLength);
     <span class="hljs-built_in">memcpy</span>(&amp;str-&gt;buffer[<span class="hljs-number">0</span>], source, sourceLength);
     <span class="hljs-keyword">return</span> str;
-}</code></pre>
+}
+</code></pre>
 <h3 id="compiling">Compiling</h3>
 <p>Let&#39;s compile this to an object file (using the <a href="https://github.com/WebAssembly/wasi-sdk">WASI SDK</a>--note the &quot;-c&quot; argument that tells Clang to only output an object file and not invoke the linker):</p>
-<pre><code class="language-sh">wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.c</code></pre>
+<pre><code class="language-sh">wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.c
+</code></pre>
 <h3 id="text-format">Text format</h3>
 <p>The output file defaults to &quot;wasm-c-string.o&quot; and here&#39;s the (abbreviated) corresponding text format (compliments of the <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a>&#39;s <code>wasm2wat</code> tool):</p>
 <pre><code class="language-wasm"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
@@ -127,7 +130,8 @@ wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class=
 <span class="hljs-attr">00001db:</span> <span class="hljs-number">3234 </span><span class="hljs-number">3962 </span><span class="hljs-number">6436 </span><span class="hljs-number">3733 </span><span class="hljs-number">3261 </span><span class="hljs-number">3830 </span><span class="hljs-number">3434 </span><span class="hljs-number">6434  </span><span class="hljs-string">249bd6732a8044d4</span>
 <span class="hljs-attr">00001eb:</span> <span class="hljs-number">3537 </span><span class="hljs-number">3039 </span><span class="hljs-number">3265 </span><span class="hljs-number">6439 </span><span class="hljs-number">3332 </span><span class="hljs-number">3736 </span><span class="hljs-number">3837 </span><span class="hljs-number">3234  </span><span class="hljs-string">57092ed932768724</span>
 <span class="hljs-attr">00001fb:</span> <span class="hljs-number">6136 </span><span class="hljs-number">6630 </span><span class="hljs-number">3629                           </span><span class="hljs-string">a6f06)</span>
-</code></pre><p>Sure enough, there are custom sections related to linking, relocation, and even a curious &quot;producers&quot; section (that apparently exists to <a href="https://github.com/WebAssembly/tool-conventions/blob/main/ProducersSection.md">allow analysis of toolchain usage in the wild</a>).</p>
+</code></pre>
+<p>Sure enough, there are custom sections related to linking, relocation, and even a curious &quot;producers&quot; section (that apparently exists to <a href="https://github.com/WebAssembly/tool-conventions/blob/main/ProducersSection.md">allow analysis of toolchain usage in the wild</a>).</p>
 <h1 id="webassembly-libraries">WebAssembly libraries</h1>
 <p>For something as simple as my 20 line C library, I could probably just distribute the C header and the compiled WebAssembly object file (which is actually a WebAssembly module with custom sections) and be done. What if I have a larger library?</p>
 <h2 id="dynamic-libraries">Dynamic libraries</h2>
@@ -141,7 +145,8 @@ crt1-command.o  libc++abi.a                         libdl.a       libutil.a
 crt1.o          libc.imports                        libm.a        libwasi-emulated-mman.a
 crt1-reactor.o  libc-printscan-long-double.a        libpthread.a  libwasi-emulated-signal.a
 libc++.a        libc-printscan-no-floating-point.a  libresolv.a   libxnet.a
-libc.a          libcrypt.a                          librt.a</code></pre>
+libc.a          libcrypt.a                          librt.a
+</code></pre>
 <p>What&#39;s in one of these archives? <code>ar -t libc.a</code> shows a bunch of object files. If I extract an object named &quot;ccos.o&quot; with <code>ar -x libc.a ccos.o</code>, I can use <code>wasm-objdump</code> or <code>wasm2wat</code> to see that it&#39;s just a regular WebAssembly object file.</p>
 <p>I&#39;m impressed that the people working on WebAssembly resisted the urge to create entirely new tools, and instead just decided to leverage existing UNIX tools that have been around for a long time.</p>
 <h1 id="linking">Linking</h1>

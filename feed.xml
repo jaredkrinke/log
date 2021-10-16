@@ -105,7 +105,8 @@
 digraph {
     &quot;Compile Graphviz to WebAssembly&quot; -&gt; &quot;Generate diagrams at build time&quot; -&gt; &quot;???&quot; -&gt; &quot;Profit!&quot;;
 }
-```</span></code></pre>
+```</span>
+</code></pre>
 <h1 id="extending-the-marked-renderer">Extending the Marked renderer</h1>
 <p>As shown in the example near the top of this post, my plan is to piggyback on Markdown code blocks, using a special language tag <code>dot2svg</code>. For all other code blocks (and on error), I simply defer to the default code block rendering function:</p>
 <pre><code class="language-javascript"><span class="hljs-comment">// Generate diagrams with dot2svg</span>
@@ -122,7 +123,8 @@ markdownRenderer.<span class="hljs-property">code</span> = <span class="hljs-key
         }
     }
     <span class="hljs-keyword">return</span> baseCodeRenderer.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>, code, language, escaped);
-};</code></pre>
+};
+</code></pre>
 <h1 id="styling">Styling</h1>
 <p>The above rendering code worked (and didn&#39;t break my <a href="../metalsmith-syntax-highlighting/">syntax highlighting</a>), but there were a few tweaks I had in mind:</p>
 <ul>
@@ -145,14 +147,16 @@ markdownRenderer.<span class="hljs-property">code</span> = <span class="hljs-key
         .<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/^.*?&lt;svg /</span>s, <span class="hljs-string">&quot;&lt;svg &quot;</span>)
         .<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/fill=&quot;([^&quot;]+)&quot; stroke=&quot;([^&quot;]+)&quot;/g</span>, <span class="hljs-string">&quot;class=\&quot;diagram-$2-$1\&quot;&quot;</span>);
 } <span class="hljs-keyword">else</span> {
-...</code></pre>
+...
+</code></pre>
 <p>Now, I can just style everything with CSS:</p>
 <pre><code class="language-css"><span class="hljs-comment">/* Diagrams */</span>
 svg text { fill: <span class="hljs-number">#eee</span>; }
 <span class="hljs-selector-class">.diagram-transparent-white</span> { stroke: none; fill: none; }
 ellipse<span class="hljs-selector-class">.diagram-black-none</span> { stroke: <span class="hljs-number">#ccc</span>; fill: <span class="hljs-number">#444</span>; }
 <span class="hljs-selector-class">.diagram-black-none</span> { stroke: <span class="hljs-number">#999</span>; fill:none; }
-<span class="hljs-selector-class">.diagram-black-black</span> { stroke: <span class="hljs-number">#999</span>; fill: <span class="hljs-number">#333</span>; }</code></pre>
+<span class="hljs-selector-class">.diagram-black-black</span> { stroke: <span class="hljs-number">#999</span>; fill: <span class="hljs-number">#333</span>; }
+</code></pre>
 <h1 id="thats-it">That&#39;s it!</h1>
 <p>To my surprise, this entire integration went smoothly, and only took an hour or so. It remains to be seen how useful these diagrams will be, but at least now if I ever feel the need to insert a superfluous diagram, the functionality will be there.</p>
 <p>For reference, all of the code used to generate this site (along with the content) is in <a href="https://github.com/jaredkrinke/log">this repository</a>.</p>
@@ -162,7 +166,8 @@ ellipse<span class="hljs-selector-class">.diagram-black-none</span> { stroke: <s
 <p>Graphviz diagrams are described in a language called <a href="https://graphviz.org/doc/info/lang.html">DOT</a>. Example:</p>
 <pre><code class="language-dot">digraph {
     a -&gt; b;
-}</code></pre>
+}
+</code></pre>
 <p>Graphviz supports multiple layout engines, but I&#39;ve only ever needed to use the default <a href="https://graphviz.org/docs/layouts/dot/">dot</a> engine (yes, it&#39;s the same name, just in lower case).</p>
 <h2 id="prior-ports">Prior ports</h2>
 <p>The Graphviz site <a href="https://graphviz.org/resources/">lists a number of previous ports of Graphviz</a>, including a couple that are relevant for Node:</p>
@@ -242,7 +247,8 @@ ellipse<span class="hljs-selector-class">.diagram-black-none</span> { stroke: <s
 <h2 id="archive-index-error">Archive index error</h2>
 <p>After searching for and finding a <a href="https://github.com/emscripten-core/emscripten/issues/9329">similar issue on GitHub</a>, I learned that that <code>wasm-ld</code> error means that you created the archive with the wrong tool set. In my case, it was using GNU <code>ar</code> instead of LLVM <code>ar</code>. That makes sense because I didn&#39;t tell the build to use a different <code>ar</code>, and GNU <code>ar</code> was on my path.</p>
 <p>I thought that setting the &quot;AR&quot; environment variable would solve this, but it turned out that the Autotools in use didn&#39;t respect that environment variable. My hacky solution to this (and possibly other mismatched tools) was to just move the WASI SDK to the front of my &quot;PATH&quot; variable in my build script:</p>
-<pre><code class="language-sh"><span class="hljs-built_in">export</span> PATH=<span class="hljs-string">&quot;/opt/wasi-sdk/bin:<span class="hljs-variable">$PATH</span>&quot;</span></code></pre>
+<pre><code class="language-sh"><span class="hljs-built_in">export</span> PATH=<span class="hljs-string">&quot;/opt/wasi-sdk/bin:<span class="hljs-variable">$PATH</span>&quot;</span>
+</code></pre>
 <h2 id="more-issues">More issues</h2>
 <p>Now I started to run into more WASI-related issues. WASI is still in development and may not ever support the entire C library. That&#39;s fine, and I knew that going in, but I thought that Graphviz wouldn&#39;t be relying on some of the more obscure parts of the C library (and hopefully very few OS-specific features). Sadly, this is not the case.</p>
 <p>Here are the problems I ran into:</p>
@@ -301,13 +307,15 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
     { <span class="hljs-string">&quot;gvplugin_dot_layout_LTX_library&quot;</span>, (<span class="hljs-type">void</span>*)(&amp;gvplugin_dot_layout_LTX_library) },
     { <span class="hljs-string">&quot;gvplugin_core_LTX_library&quot;</span>, (<span class="hljs-type">void</span>*)(&amp;gvplugin_core_LTX_library) },
     { <span class="hljs-number">0</span>, <span class="hljs-number">0</span> }
-};</code></pre>
+};
+</code></pre>
 <p>This also had the benefit of removing a number of dependencies (including some that weren&#39;t yet building successfully for me yet).</p>
 <h2 id="one-last-link-error">One last link error</h2>
 <p>At this point, I was down to a final error from the linker. It turns out that, somewhere in Graphviz, it uses the <code>tmpfile</code> function. For now, I just decided to add a dummy implementation and hope that it wasn&#39;t being used for anything important:</p>
 <pre><code class="language-c">FILE* <span class="hljs-title function_">tmpfile</span><span class="hljs-params">()</span> {
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}</code></pre>
+}
+</code></pre>
 <h2 id="successful-build">Successful build</h2>
 <p>Finally, I was able to successfully build &quot;dot2svg.wasm&quot;. The uncompressed file size ended up being around 660 KB--a bit larger than I hoped, but not huge.</p>
 <p>Now I just have to run that function... right?</p>
@@ -315,7 +323,9 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
 <p>Given that I already had code to pass strings back and forth, I hoped I could just call the <code>dot2svg</code> export and bask in the glorious result. But I wasn&#39;t quite there yet.</p>
 <h2 id="imports">Imports</h2>
 <p>On the first run, I got the following error:</p>
-<pre><code><span class="hljs-symbol">TypeError:</span> WebAssembly.<span class="hljs-keyword">instantiate(): </span>Imports argument must <span class="hljs-keyword">be </span>present <span class="hljs-keyword">and </span>must <span class="hljs-keyword">be </span>an object</code></pre><p>That&#39;s too bad. I was hoping that my slimmed down Graphviz build wouldn&#39;t expect the host to provide any functions. Let&#39;s see what&#39;s missing:</p>
+<pre><code><span class="hljs-symbol">TypeError:</span> WebAssembly.<span class="hljs-keyword">instantiate(): </span>Imports argument must <span class="hljs-keyword">be </span>present <span class="hljs-keyword">and </span>must <span class="hljs-keyword">be </span>an object
+</code></pre>
+<p>That&#39;s too bad. I was hoping that my slimmed down Graphviz build wouldn&#39;t expect the host to provide any functions. Let&#39;s see what&#39;s missing:</p>
 <pre><code class="language-sh">$ wasm2wat dot2svg.wasm|findstr /i import
   (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;clock_time_get&quot;</span> (func <span class="hljs-variable">$__wasi_clock_time_get</span> (<span class="hljs-built_in">type</span> 16)))
   (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_filestat_get&quot;</span> (func <span class="hljs-variable">$__wasi_fd_filestat_get</span> (<span class="hljs-built_in">type</span> 1)))
@@ -329,7 +339,8 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
   (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_seek&quot;</span> (func <span class="hljs-variable">$__wasi_fd_seek</span> (<span class="hljs-built_in">type</span> 18)))
   (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_write&quot;</span> (func <span class="hljs-variable">$__wasi_fd_write</span> (<span class="hljs-built_in">type</span> 4)))
   (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_read&quot;</span> (func <span class="hljs-variable">$__wasi_fd_read</span> (<span class="hljs-built_in">type</span> 4)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_fdstat_set_flags&quot;</span> (func <span class="hljs-variable">$__wasi_fd_fdstat_set_flags</span> (<span class="hljs-built_in">type</span> 1)))</code></pre>
+  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_fdstat_set_flags&quot;</span> (func <span class="hljs-variable">$__wasi_fd_fdstat_set_flags</span> (<span class="hljs-built_in">type</span> 1)))
+</code></pre>
 <h2 id="do-the-imports-really-matter">Do the imports really matter?</h2>
 <p>That&#39;s a longer list than I expected. Ok, well let&#39;s see if they&#39;re <em>really</em> needed by providing no-op implementations:</p>
 <pre><code class="language-javascript">    <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./dot2svg.wasm&quot;</span>), {
@@ -349,7 +360,8 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
             <span class="hljs-attr">path_open</span>: <span class="hljs-function">() =&gt;</span> {},
             <span class="hljs-attr">proc_exit</span>: <span class="hljs-function">() =&gt;</span> {},
         },
-    });</code></pre>
+    });
+</code></pre>
 <p>Unfortunately, with those no-op functions, my test script just seemed to spin.</p>
 <h2 id="fd_write">fd_write</h2>
 <p>Debugging showed that <code>fd_write</code> was being called repeatedly. That makes me think that WASI actually needs <code>fd_write</code> to do something. With absolutely zero context, the function name sounds like it&#39;s writing to a file descriptor.</p>
@@ -365,7 +377,8 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
 <pre><code class="language-c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iovec</span> {</span>
     <span class="hljs-type">void</span>  *iov_base;    <span class="hljs-comment">/* Starting address */</span>
     <span class="hljs-type">size_t</span> iov_len;     <span class="hljs-comment">/* Number of bytes to transfer */</span>
-};</code></pre>
+};
+</code></pre>
 <p>And the return value is just the number of bytes written.</p>
 <h3 id="javascript-implementation">JavaScript implementation</h3>
 <p>Assuming that <code>fd_write</code> is the same (assuming 32-bit WebAssembly), this isn&#39;t too bad to implement (and I decided to forward to the console for testing purposes). The only remaining trick is that <code>fd_write</code> supplies the memory address for the return value as the third argument and directly returns a status code (zero for success).</p>
@@ -412,14 +425,16 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
     <span class="hljs-comment">// Set return value to total size of writes</span>
     view.<span class="hljs-title function_">setUint32</span>(returnBytesWrittenAddress, totalSizeInBytes, <span class="hljs-literal">true</span>);
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// Success</span>
-},</code></pre>
+},
+</code></pre>
 <h2 id="success">Success!</h2>
 <p>With the above imports, <a href="https://github.com/jaredkrinke/wasm-c-string">my string-passing library</a>, and the following code:</p>
 <pre><code class="language-javascript"><span class="hljs-keyword">const</span> dotString = process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>] ?? <span class="hljs-string">&quot;digraph { a -&gt; b }&quot;</span>;
 <span class="hljs-title function_">createCString</span>(<span class="hljs-variable language_">module</span>, dotString, <span class="hljs-function">(<span class="hljs-params">dotStringAddress</span>) =&gt;</span> {
     <span class="hljs-keyword">const</span> svgString = <span class="hljs-title function_">receiveCString</span>(<span class="hljs-variable language_">module</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">dot2svg</span>(dotStringAddress));
     <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(svgString);
-});</code></pre>
+});
+</code></pre>
 <p>I was finally able to generate the following test graph SVG:</p>
 <p><img src="../../../assets/graphviz-test-graph.svg" alt="digraph { a -&gt; b }"></p>
 <p>Additionally, if I deliberately insert a syntax error into the graph, I see the error logged to my console, so output forwarding is even working.</p>
@@ -474,7 +489,8 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
 <span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">allocate_wasm_c_string</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> length)</span>;
 
 <span class="hljs-comment">// Creates a new wasm_c_string from an existing C string. When done, use &quot;free&quot; to release.</span>
-<span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">create_wasm_c_string</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* source)</span>;</code></pre>
+<span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">create_wasm_c_string</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* source)</span>;
+</code></pre>
 <p>And the source file (&quot;wasm-c-string.c&quot;):</p>
 <pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;malloc.h&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
@@ -494,10 +510,12 @@ wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class=
     wasm_c_string* str = allocate_wasm_c_string((<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)sourceLength);
     <span class="hljs-built_in">memcpy</span>(&amp;str-&gt;buffer[<span class="hljs-number">0</span>], source, sourceLength);
     <span class="hljs-keyword">return</span> str;
-}</code></pre>
+}
+</code></pre>
 <h3 id="compiling">Compiling</h3>
 <p>Let&#39;s compile this to an object file (using the <a href="https://github.com/WebAssembly/wasi-sdk">WASI SDK</a>--note the &quot;-c&quot; argument that tells Clang to only output an object file and not invoke the linker):</p>
-<pre><code class="language-sh">wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.c</code></pre>
+<pre><code class="language-sh">wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.c
+</code></pre>
 <h3 id="text-format">Text format</h3>
 <p>The output file defaults to &quot;wasm-c-string.o&quot; and here&#39;s the (abbreviated) corresponding text format (compliments of the <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a>&#39;s <code>wasm2wat</code> tool):</p>
 <pre><code class="language-wasm"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
@@ -544,7 +562,8 @@ wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class=
 <span class="hljs-attr">00001db:</span> <span class="hljs-number">3234 </span><span class="hljs-number">3962 </span><span class="hljs-number">6436 </span><span class="hljs-number">3733 </span><span class="hljs-number">3261 </span><span class="hljs-number">3830 </span><span class="hljs-number">3434 </span><span class="hljs-number">6434  </span><span class="hljs-string">249bd6732a8044d4</span>
 <span class="hljs-attr">00001eb:</span> <span class="hljs-number">3537 </span><span class="hljs-number">3039 </span><span class="hljs-number">3265 </span><span class="hljs-number">6439 </span><span class="hljs-number">3332 </span><span class="hljs-number">3736 </span><span class="hljs-number">3837 </span><span class="hljs-number">3234  </span><span class="hljs-string">57092ed932768724</span>
 <span class="hljs-attr">00001fb:</span> <span class="hljs-number">6136 </span><span class="hljs-number">6630 </span><span class="hljs-number">3629                           </span><span class="hljs-string">a6f06)</span>
-</code></pre><p>Sure enough, there are custom sections related to linking, relocation, and even a curious &quot;producers&quot; section (that apparently exists to <a href="https://github.com/WebAssembly/tool-conventions/blob/main/ProducersSection.md">allow analysis of toolchain usage in the wild</a>).</p>
+</code></pre>
+<p>Sure enough, there are custom sections related to linking, relocation, and even a curious &quot;producers&quot; section (that apparently exists to <a href="https://github.com/WebAssembly/tool-conventions/blob/main/ProducersSection.md">allow analysis of toolchain usage in the wild</a>).</p>
 <h1 id="webassembly-libraries">WebAssembly libraries</h1>
 <p>For something as simple as my 20 line C library, I could probably just distribute the C header and the compiled WebAssembly object file (which is actually a WebAssembly module with custom sections) and be done. What if I have a larger library?</p>
 <h2 id="dynamic-libraries">Dynamic libraries</h2>
@@ -558,7 +577,8 @@ crt1-command.o  libc++abi.a                         libdl.a       libutil.a
 crt1.o          libc.imports                        libm.a        libwasi-emulated-mman.a
 crt1-reactor.o  libc-printscan-long-double.a        libpthread.a  libwasi-emulated-signal.a
 libc++.a        libc-printscan-no-floating-point.a  libresolv.a   libxnet.a
-libc.a          libcrypt.a                          librt.a</code></pre>
+libc.a          libcrypt.a                          librt.a
+</code></pre>
 <p>What&#39;s in one of these archives? <code>ar -t libc.a</code> shows a bunch of object files. If I extract an object named &quot;ccos.o&quot; with <code>ar -x libc.a ccos.o</code>, I can use <code>wasm-objdump</code> or <code>wasm2wat</code> to see that it&#39;s just a regular WebAssembly object file.</p>
 <p>I&#39;m impressed that the people working on WebAssembly resisted the urge to create entirely new tools, and instead just decided to leverage existing UNIX tools that have been around for a long time.</p>
 <h1 id="linking">Linking</h1>
@@ -639,10 +659,12 @@ libc.a          libcrypt.a                          librt.a</code></pre>
         <span class="hljs-built_in">string</span>++;
     }
     <span class="hljs-keyword">return</span> numberOfAs;
-}</code></pre>
+}
+</code></pre>
 <h3 id="compiling">Compiling</h3>
 <p>The build command is unchanged <a href="../c-standard-library-example/#compiling">from the last post</a>:</p>
-<pre><code class="language-sh">wasi-sdk/bin/clang -Os --sysroot wasi-sdk/share/wasi-sysroot -nostartfiles -Wl,--no-entry string-example.c -o string-example.wasm</code></pre>
+<pre><code class="language-sh">wasi-sdk/bin/clang -Os --sysroot wasi-sdk/share/wasi-sysroot -nostartfiles -Wl,--no-entry string-example.c -o string-example.wasm
+</code></pre>
 <h3 id="javascript-caller">JavaScript caller</h3>
 <p>The JavaScript wrapper is more involved than I&#39;d like, but it does work:</p>
 <pre><code class="language-javascript"><span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;fs&quot;</span>;
@@ -663,11 +685,13 @@ libc.a          libcrypt.a                          librt.a</code></pre>
     } <span class="hljs-keyword">finally</span> {
         <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(stringAddress);
     }
-})();</code></pre>
+})();
+</code></pre>
 <h3 id="result">Result</h3>
 <p>Behold the result:</p>
 <pre><code class="language-sh">$ node pass-in-string.js <span class="hljs-string">&quot;a string that has lots of the letter &#x27;a&#x27; in it&quot;</span> 
-4</code></pre>
+4
+</code></pre>
 <p>Looks good!</p>
 <h3 id="memory-management-helper">Memory management helper</h3>
 <p>Having to manually manage memory in JavaScript is error-prone, so I&#39;m going to wrap this code in a helper:</p>
@@ -684,7 +708,8 @@ libc.a          libcrypt.a                          librt.a</code></pre>
     } <span class="hljs-keyword">finally</span> {
         <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(address);
     }
-};</code></pre>
+};
+</code></pre>
 <p>Note: it would probably be helpful to extend these helpers to support multiple strings/allocations, but I&#39;m not trying to completely reinvent wrapping/binding libraries like Emscripten right now.</p>
 <p>Now, the final string passing code is simple:</p>
 <pre><code class="language-javascript">(<span class="hljs-keyword">async</span> () =&gt; {
@@ -696,7 +721,8 @@ libc.a          libcrypt.a                          librt.a</code></pre>
         <span class="hljs-keyword">const</span> result = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">count_as</span>(stringAddress);
         <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result);
     });
-})();</code></pre>
+})();
+</code></pre>
 <h1 id="returning-a-string-from-c-to-javascript">Returning a string from C to JavaScript</h1>
 <p>Here was my initial thinking for returning a dynamic string from C to JavaScript (recorded before I completed the example above):</p>
 <ol>
@@ -728,7 +754,8 @@ libc.a          libcrypt.a                          librt.a</code></pre>
     *c = <span class="hljs-string">&#x27;\0&#x27;</span>;
 
     <span class="hljs-keyword">return</span> str;
-}</code></pre>
+}
+</code></pre>
 <h2 id="javascript-implementation">JavaScript implementation</h2>
 <p>Here&#39;s the corresponding JavaScript on the other side:</p>
 <pre><code class="language-javascript"><span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;fs&quot;</span>;
@@ -748,10 +775,12 @@ libc.a          libcrypt.a                          librt.a</code></pre>
     } <span class="hljs-keyword">finally</span> {
         <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(address);
     }
-})();</code></pre>
+})();
+</code></pre>
 <p>Output:</p>
 <pre><code class="language-sh">$ node return-string.js 5
-bbbbb</code></pre>
+bbbbb
+</code></pre>
 <p>Looks good!</p>
 <h2 id="helpers">Helpers</h2>
 <p>Similar to above, I&#39;m going to refactor this logic into helpers (one for static strings, and one for new strings return via the heap):</p>
@@ -771,7 +800,8 @@ bbbbb</code></pre>
     } <span class="hljs-keyword">finally</span> {
         <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">deallocate</span>(address);
     }
-};</code></pre>
+};
+</code></pre>
 <p>This simplifies the calling code significantly:</p>
 <pre><code class="language-javascript">(<span class="hljs-keyword">async</span> () =&gt; {
     <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./string-example.wasm&quot;</span>));
@@ -780,7 +810,8 @@ bbbbb</code></pre>
     <span class="hljs-keyword">const</span> count = <span class="hljs-built_in">parseInt</span>(process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>] ?? <span class="hljs-string">&quot;3&quot;</span>);
     <span class="hljs-keyword">const</span> str = <span class="hljs-title function_">receiveCString</span>(<span class="hljs-variable language_">module</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">write_bs</span>(count));
     <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(str);
-})();</code></pre>
+})();
+</code></pre>
 <h1 id="strings-✔">Strings: ✔</h1>
 <p>Perhaps that wasn&#39;t the most enjoyable experiment, but it does give one a new appreciation for binding generators that do all this work for you.</p>
 <p>Armed with a way to pass strings between JavaScript and C, I&#39;m now ready to leverage old C code (that I don&#39;t want to rewrite) by recompiling for WebAssembly and adding appropriate JavaScript glue. Theoretically the final WebAssembly module artifact will be useful for a long time (&quot;compile once, run forever&quot;?). I have one project in mind, but I&#39;m not going to discuss it or commit to anything just yet.</p>
