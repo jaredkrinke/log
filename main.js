@@ -89,25 +89,32 @@ const markedOptions = (options) => {
 const baseMarkdownRenderer = new marked.Renderer();
 const baseLinkRenderer = baseMarkdownRenderer.link;
 const baseImageRenderer = baseMarkdownRenderer.image;
-const relativeLinks = () => markedOptions({
-    renderer: {
-        // Translate relative Markdown links to point to corresponding HTML output files (with anchor support)
-        link: function (href, title, text) {
-            return baseLinkRenderer.call(this,
-                href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, "../$1/$2"),
-                title,
-                text);
+const relativeLinks = (options) => {
+    const prefix = options?.prefix ?? "";
+    const o = {
+        renderer: {
+            // Translate relative Markdown links to point to corresponding HTML output files (with anchor support)
+            link: function (href, title, text) {
+                return baseLinkRenderer.call(this,
+                    href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, `${prefix}$1/$2`),
+                    title,
+                    text);
+            },
         },
+    };
 
-        // The permalinks plugin moves all posts one level deeper, so adjust relative image links appropriately
-        image: function (href, title, text) {
+    if (prefix) {
+        // E.g. the permalinks plugin moves all posts one level deeper, so adjust relative image links, if needed
+        o.renderer.image = function (href, title, text) {
             return baseImageRenderer.call(this,
-                href.replace(/^([^/][^:]+)$/, "../$1"),
+                href.replace(/^([^/][^:]+)$/, `${prefix}$1`),
                 title,
                 text);
-        },
-    },
-});
+        };
+    }
+
+    return markedOptions(o);
+};
 
 const syntaxHighlighting = () => markedOptions({
     highlight: (code, language) => {
@@ -280,7 +287,7 @@ Metalsmith(__dirname)
             limit: 3,
         },
     }))
-    .use(relativeLinks())
+    .use(relativeLinks({ prefix: "../" })) // permalinks plugin moves posts into their own directories
     .use(syntaxHighlighting())
     .use(graphvizDiagrams())
     .use(markedOptions())
