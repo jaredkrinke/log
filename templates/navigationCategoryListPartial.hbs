@@ -4,7 +4,7 @@
         {{#if (and (lookup .. "isCategoryIndex") (equal category (lookup .. "category")))}}
         <li>{{category}}</li>
         {{else}}
-        <li><a href="{{../rootPath}}{{categoryPath}}">{{category}}</a></li>
+        <li><a href="{{../rootPath}}posts/{{category}}">{{category}}</a></li>
         {{/if}}
         {{/each}}
         {{#if (equal categoryList "categories_top")}}

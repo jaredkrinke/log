@@ -4,6 +4,7 @@ import relativeLinks from "./metalsmith-relative-links.js";
 import graphvizDiagrams from "./metalsmith-graphviz-diagrams.js";
 import syntaxHighlighting from "./metalsmith-syntax-highlighting.js";
 import contentReplace from "./metalsmith-content-replace.js";
+import routeProperties from "./metalsmith-route-properties.js";
 import handlebars from "handlebars";
 import Metalsmith from "metalsmith";
 import layouts from "metalsmith-layouts";
@@ -30,26 +31,6 @@ handlebars.registerHelper("equal", (a, b) => (a === b));
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
 
-// Create a category for each subdirectory
-// TODO: Create a route parsing plugin that adds this automatically from a string like "posts/:category/*.md"
-const addCategory = (files, metalsmith, done) => {
-    Object.keys(files).forEach(key => {
-        const file = files[key];
-
-        // Posts are placed in paths as follows: "posts/[category]/{postName}"
-        // Attach the category as a property here (with "misc" as a fallback)
-        const directory = path.dirname(key);
-        if (directory !== ".") {
-            const directoryParts = directory.split(/[\\/]/g);
-            if (directoryParts[0] === "posts") {
-                file.category = (directoryParts.length > 1) ? directoryParts[1] : "misc";
-                file.categoryPath = `posts/${file.category}`;
-            }
-        }
-    });
-    done();
-};
-
 // TODO: Replace this with a plugin that allows querying/grouping over properties?
 const addCategoryIndexes = (files, metalsmith, done) => {
     const categoryMap = {};
@@ -74,7 +55,6 @@ const addCategoryIndexes = (files, metalsmith, done) => {
             mode: "0666",
             permalink: false,
             category,
-            categoryPath: categoryList[0].categoryPath,
             isCategoryIndex: true,
             layout: "categoryIndex.hbs",
             contents: new Uint8Array(0),
@@ -124,7 +104,7 @@ Metalsmith(path.dirname(process.argv[1]))
         dest: ".",
     }))
     .use(serve ? noop : drafts())
-    .use(addCategory)
+    .use(routeProperties({ "posts/(:category/):fileName": { category: "misc" } }))
     .use(addCategoryIndexes)
     .use(collections({
         posts: {
