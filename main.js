@@ -6,6 +6,7 @@ import syntaxHighlighting from "./metalsmith-syntax-highlighting.js";
 import contentReplace from "./metalsmith-content-replace.js";
 import routeProperties from "./metalsmith-route-properties.js";
 import normalizeSlashes from "./metalsmith-normalize-slashes.js";
+import linkify from "./metalsmith-linkify.js";
 import handlebars from "handlebars";
 import Metalsmith from "metalsmith";
 import layouts from "metalsmith-layouts";
@@ -28,32 +29,16 @@ const clean = !serve && process.argv.includes("--clean");
 
 // Handlebars template custom helpers
 // TODO: Use a standard Handlebars library or switch to a template language that has this functionality built in
-handlebars.registerHelper("and", (a, b) => (a && b));
-handlebars.registerHelper("equal", (a, b) => (a === b));
+const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+[
+    [ "and", (a, b) => (a && b) ],
+    [ "equal", (a, b) => (a === b) ],
+    [ "formatDateShort", date => date.toISOString().replace(/T.*$/, "") ],
+    [ "formatDate", date => dateFormatter.format(date) ],
+].forEach(row => handlebars.registerHelper(row[0], row[1]));
 
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
-
-// Simple plugin to add some custom properties (note: dates are parsed assuming UTC, so use UTC when formatting)
-// TODO: Date formatting should be implemented in the template layer
-// TODO: See if there's an existing plugin for creating these links
-const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
-const addCustomProperties = (files, metalsmith, done) => {
-    Object.keys(files).forEach(key => {
-        const file = files[key];
-
-        file.link = key
-            .replace(/\\/g, "/") // Convert slashes...
-            .replace(/[/]index.html$/, ""); // Remove file name
-
-        const date = file.date;
-        if (date) {
-            file.dateShort = date.toISOString().replace(/T.*$/, "");
-            file.dateDisplay = dateFormatter.format(date);
-        }
-    });
-    done();
-};
 
 // Category sorting: sort by most posts, and then most recent post if there's a tie
 const sortCategories = (a, b) => ((b.postsInCategory.length - a.postsInCategory.length) || (b.postsInCategory[0].date - a.postsInCategory[0].date));
@@ -146,8 +131,8 @@ Metalsmith(path.dirname(process.argv[1]))
         ],
     }))
     .use(rootPath())
-    .use(addCustomProperties)
     .use(discoverPartials({ directory: "templates" }))
+    .use(linkify())
     .use(layouts({
         directory: "templates",
         default: "default.hbs",
