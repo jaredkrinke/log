@@ -28,7 +28,6 @@ const serve = process.argv.includes("--serve");
 const clean = !serve && process.argv.includes("--clean");
 
 // Handlebars template custom helpers
-// TODO: Use a standard Handlebars library or switch to a template language that has this functionality built in
 const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 [
     [ "and", (a, b) => (a && b) ],
