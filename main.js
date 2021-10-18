@@ -5,6 +5,7 @@ import graphvizDiagrams from "./metalsmith-graphviz-diagrams.js";
 import syntaxHighlighting from "./metalsmith-syntax-highlighting.js";
 import contentReplace from "./metalsmith-content-replace.js";
 import routeProperties from "./metalsmith-route-properties.js";
+import normalizeSlashes from "./metalsmith-normalize-slashes.js";
 import handlebars from "handlebars";
 import Metalsmith from "metalsmith";
 import layouts from "metalsmith-layouts";
@@ -15,6 +16,8 @@ import discoverPartials from "metalsmith-discover-partials";
 import assets from "metalsmith-static";
 import drafts from "metalsmith-drafts";
 import feed from "metalsmith-feed";
+import taxonomy from "metalsmith-taxonomy";
+import fileMetadata from "metalsmith-filemetadata";
 import brokenLinkChecker from "metalsmith-broken-link-checker";
 import metalsmithExpress from "metalsmith-express";
 import metalsmithWatch from "metalsmith-watch";
@@ -30,39 +33,6 @@ handlebars.registerHelper("equal", (a, b) => (a === b));
 
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
-
-// TODO: Replace this with a plugin that allows querying/grouping over properties?
-const addCategoryIndexes = (files, metalsmith, done) => {
-    const categoryMap = {};
-    Object.keys(files).forEach(key => {
-        const file = files[key];
-        const category = file.category;
-        if (category) {
-            let categoryList = categoryMap[category];
-            if (!categoryList) {
-                categoryList = [];
-                categoryMap[category] = categoryList;
-            }
-            categoryList.push(file);
-        }
-    });
-
-    Object.keys(categoryMap).forEach(category => {
-        const categoryList = categoryMap[category];
-        const categoryIndexDestination = path.join("posts", category, "index.html");
-        files[categoryIndexDestination] = {
-            title: category,
-            mode: "0666",
-            permalink: false,
-            category,
-            isCategoryIndex: true,
-            layout: "categoryIndex.hbs",
-            contents: new Uint8Array(0),
-            postsInCategory: categoryList.sort((a, b) => (b.date - a.date)),
-        };
-    });
-    done();
-};
 
 // Simple plugin to add some custom properties (note: dates are parsed assuming UTC, so use UTC when formatting)
 // TODO: Date formatting should be implemented in the template layer
@@ -103,9 +73,26 @@ Metalsmith(path.dirname(process.argv[1]))
         src: "static",
         dest: ".",
     }))
+    .use(normalizeSlashes())
     .use(serve ? noop : drafts())
     .use(routeProperties({ "posts/(:category/):fileName": { category: "misc" } }))
-    .use(addCategoryIndexes)
+    .use(taxonomy({
+        pattern: "posts/**/*.md",
+        taxonomies: ["category"],
+        pages: ["term"],
+    }))
+    .use(fileMetadata([
+        {
+            pattern: "category/*.html",
+            metadata: (file, metadata) => ({
+                title: file.term,
+                category: file.term,
+                layout: "categoryIndex.hbs",
+                isCategoryIndex: true,
+                postsInCategory: metadata.taxonomies.category[file.term].slice().sort((a, b) => (b.date - a.date)),
+            }),
+        },
+    ]))
     .use(collections({
         posts: {
             pattern: "posts/**/*.md",
@@ -119,12 +106,12 @@ Metalsmith(path.dirname(process.argv[1]))
             limit: 5,
         },
         categories: {
-            pattern: "posts/**/*.html",
+            pattern: "category/*.html",
             filterBy: file => file.isCategoryIndex,
             sortBy: sortCategories,
         },
         categories_top: {
-            pattern: "posts/**/*.html",
+            pattern: "category/*.html",
             filterBy: file => file.isCategoryIndex,
             sortBy: sortCategories,
             limit: 3,
@@ -138,7 +125,14 @@ Metalsmith(path.dirname(process.argv[1]))
     }))
     .use(graphvizDiagrams({ cssClasses: true }))
     .use(markdown())
-    .use(permalinks())
+    .use(permalinks({
+        linksets: [
+            {
+                match: { type: "taxonomy:term" },
+                pattern: "posts/:term",
+            },
+        ],
+    }))
     .use(feed({
         collection: "posts",
         destination: "feed.xml",
