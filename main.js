@@ -60,7 +60,7 @@ Metalsmith(path.dirname(process.argv[1]))
     }))
     .use(normalizeSlashes())
     .use(serve ? noop : drafts())
-    .use(routeProperties({ "posts/(:category/):fileName": { category: "misc" } }))
+    .use(routeProperties({ "posts/(:category/):fileName": { category: "misc" } })) // TODO: Is category required now?
     .use(taxonomy({
         pattern: "posts/**/*.md",
         taxonomies: ["category"],
@@ -120,7 +120,7 @@ Metalsmith(path.dirname(process.argv[1]))
     }))
     .use(feed({
         collection: "posts",
-        destination: "feed.xml",
+        destination: "feed.xml", // TODO: Relative links probably break this output -- how to fix? Rewrite plugin?
         limit: 5,
     }))
     .use(contentReplace({
