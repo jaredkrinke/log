@@ -59,7 +59,7 @@ Metalsmith(path.dirname(process.argv[1]))
     }))
     .use(normalizeSlashes())
     .use(serve ? noop : drafts())
-    .use(routeProperties({ "posts/(:category/):fileName": { category: "misc" } })) // TODO: Is category required now?
+    .use(routeProperties({ "posts/(:category/):fileName.md": { category: "misc" } }))
     .use(taxonomy({
         pattern: "posts/**/*.md",
         taxonomies: ["category"],
@@ -110,6 +110,7 @@ Metalsmith(path.dirname(process.argv[1]))
     .use(graphvizDiagrams({ cssClasses: true }))
     .use(markdown())
     .use(permalinks({
+        pattern: "posts/:category/:fileName",
         linksets: [
             {
                 match: { type: "taxonomy:term" },
