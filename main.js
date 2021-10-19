@@ -97,7 +97,7 @@ Metalsmith(path.dirname(process.argv[1]))
         },
     }))
     .use((files, metalsmith, done) => {
-        // Create index and archive lists
+        // Create index and archive tag lists
         const metadata = metalsmith.metadata();
 
         // Sort "all tags" list alphabetically
