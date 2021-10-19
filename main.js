@@ -95,24 +95,21 @@ Metalsmith(path.dirname(process.argv[1]))
             reverse: true,
             limit: 5,
         },
-        // TODO: These aren't really needed
-        tags: {
-            pattern: "tags/*.html",
-            sortBy: (a, b) => (a.tag < b.tag ? -1 : 1),
-        },
-        tags_top: {
-            pattern: "tags/*.html",
-
-            // Sort by most posts, and then most recent post if there's a tie
-            sortBy: (a, b) => ((b.postsWithTag.length - a.postsWithTag.length) || (b.postsWithTag[0].date - a.postsWithTag[0].date)),
-            limit: 4,
-        },
     }))
     .use((files, metalsmith, done) => {
         // Create index and archive lists
         const metadata = metalsmith.metadata();
-        metadata.tagsTop = metadata.tags_top.map(item => item.tag);
-        metadata.tagsAll = metadata.tags.map(item => item.tag);
+
+        // Sort "all tags" list alphabetically
+        metadata.tagsAll = Object.keys(metadata.taxonomies.tags).sort((a, b) => (a < b ? -1 : 1));
+
+        // Sort "top tags" list by most posts, and then most recent post if there's a tie
+        metadata.tagsTop = Object.keys(metadata.taxonomies.tags).sort((a, b) => {
+            const postsA = metadata.taxonomies.tags[a];
+            const postsB = metadata.taxonomies.tags[b];
+            return (postsB.length - postsA.length) || (postsB[0].date - postsA[0].date);
+        }).slice(0, 4);
+
         done();
     })
     .use(relativeLinks({ prefix: "../" })) // permalinks plugin moves posts into their own directories
