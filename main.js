@@ -95,6 +95,7 @@ Metalsmith(path.dirname(process.argv[1]))
             reverse: true,
             limit: 5,
         },
+        // TODO: These aren't really needed
         tags: {
             pattern: "tags/*.html",
             sortBy: (a, b) => (a.tag < b.tag ? -1 : 1),
