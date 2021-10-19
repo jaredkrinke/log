@@ -1,14 +1,14 @@
 <nav>
     <ul>
-        {{#each (lookup . categoryList)}}
-        {{#if (and (lookup .. "isCategoryIndex") (equal category (lookup .. "category")))}}
-        <li>{{category}}</li>
+        {{#each categories}}
+        {{#if (and (lookup .. "isCategoryIndex") (equal this (lookup .. "category")))}}
+        <li>{{this}}</li>
         {{else}}
-        <li><a href="{{../rootPath}}posts/{{category}}">{{category}}</a></li>
+        <li><a href="{{../rootPath}}posts/{{this}}">{{this}}</a></li>
         {{/if}}
         {{/each}}
-        {{#if (equal categoryList "categories_top")}}
-        <li><a href="{{../rootPath}}archive.html">...</a></li>
+        {{#if incomplete}}
+        <li><a href="{{rootPath}}archive.html">...</a></li>
         {{/if}}
     </ul>
 </nav>

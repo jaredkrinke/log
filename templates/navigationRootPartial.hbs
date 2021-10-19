@@ -1,1 +1,1 @@
-{{> navigationCategoryListPartial categoryList="categories_top" }}
+{{> navigationCategoryListPartial categories=categoryListTop incomplete=(not (equal (lookup categoryListAll "length") (lookup categoryListTop "length"))) }}

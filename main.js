@@ -30,6 +30,7 @@ const clean = !serve && process.argv.includes("--clean");
 // Handlebars template custom helpers
 const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 [
+    [ "not", (a) => (!a) ],
     [ "and", (a, b) => (a && b) ],
     [ "equal", (a, b) => (a === b) ],
     [ "formatDateShort", date => date.toISOString().replace(/T.*$/, "") ],
@@ -38,9 +39,6 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "nu
 
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
-
-// Category sorting: sort by most posts, and then most recent post if there's a tie
-const sortCategories = (a, b) => ((b.postsInCategory.length - a.postsInCategory.length) || (b.postsInCategory[0].date - a.postsInCategory[0].date));
 
 Metalsmith(path.dirname(process.argv[1]))
     .metadata({
@@ -60,20 +58,28 @@ Metalsmith(path.dirname(process.argv[1]))
     .use(normalizeSlashes())
     .use(serve ? noop : drafts())
     .use(routeProperties({ "posts/(:category/):postName.md": { category: "misc" } }))
+    .use(fileMetadata([
+        {
+            pattern: "posts/**/*.md",
+
+            // Set "tags" to be [ category, ...keywords ] (with duplicates removed)
+            metadata: (file) => ({ tags: [...new Set([ file.category, ...(file.keywords ?? []) ])] }),
+        }
+    ]))
     .use(taxonomy({
         pattern: "posts/**/*.md",
-        taxonomies: ["category"],
+        taxonomies: ["tags"],
         pages: ["term"],
     }))
     .use(fileMetadata([
         {
-            pattern: "category/*.html",
+            pattern: "tags/*.html",
             metadata: (file, metadata) => ({
                 title: file.term,
                 category: file.term,
                 layout: "categoryIndex.hbs",
                 isCategoryIndex: true,
-                postsInCategory: metadata.taxonomies.category[file.term].slice().sort((a, b) => (b.date - a.date)),
+                postsInCategory: metadata.taxonomies.tags[file.term].slice().sort((a, b) => (b.date - a.date)),
             }),
         },
     ]))
@@ -90,17 +96,26 @@ Metalsmith(path.dirname(process.argv[1]))
             limit: 5,
         },
         categories: {
-            pattern: "category/*.html",
+            pattern: "tags/*.html",
             filterBy: file => file.isCategoryIndex,
-            sortBy: sortCategories,
+            sortBy: (a, b) => (a.category < b.category ? -1 : 1),
         },
         categories_top: {
-            pattern: "category/*.html",
+            pattern: "tags/*.html",
             filterBy: file => file.isCategoryIndex,
-            sortBy: sortCategories,
-            limit: 3,
+
+            // Sort by most posts, and then most recent post if there's a tie
+            sortBy: (a, b) => ((b.postsInCategory.length - a.postsInCategory.length) || (b.postsInCategory[0].date - a.postsInCategory[0].date)),
+            limit: 4,
         },
     }))
+    .use((files, metalsmith, done) => {
+        // Create index and archive lists
+        const metadata = metalsmith.metadata();
+        metadata.categoryListTop = metadata.categories_top.map(item => item.category);
+        metadata.categoryListAll = metadata.categories.map(item => item.category);
+        done();
+    })
     .use(relativeLinks({ prefix: "../" })) // permalinks plugin moves posts into their own directories
     .use(syntaxHighlighting({
         aliases: [

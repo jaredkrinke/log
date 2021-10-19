@@ -1,4 +1,4 @@
-{{#> basePartial}}
+{{#> basePartial navigationPartialName="navigationPostPartial"}}
 <article>
     <header>
         <h1><a href=".">{{title}}</a></h1>
@@ -6,7 +6,7 @@
     </header>
 {{{contents}}}
 <footer>
-    <p>More articles about topic: <a href="{{rootPath}}posts/{{category}}">{{category}}</a></p>
+    <p><a href="{{rootPath}}">Back to home</a></p>
 </footer>
 </article>
 {{/basePartial}}
