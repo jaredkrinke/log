@@ -76,10 +76,10 @@ Metalsmith(path.dirname(process.argv[1]))
             pattern: "tags/*.html",
             metadata: (file, metadata) => ({
                 title: file.term,
-                category: file.term,
-                layout: "categoryIndex.hbs",
-                isCategoryIndex: true,
-                postsInCategory: metadata.taxonomies.tags[file.term].slice().sort((a, b) => (b.date - a.date)),
+                tag: file.term,
+                layout: "tagIndex.hbs",
+                isTagIndex: true,
+                postsWithTag: metadata.taxonomies.tags[file.term].slice().sort((a, b) => (b.date - a.date)),
             }),
         },
     ]))
@@ -95,25 +95,23 @@ Metalsmith(path.dirname(process.argv[1]))
             reverse: true,
             limit: 5,
         },
-        categories: {
+        tags: {
             pattern: "tags/*.html",
-            filterBy: file => file.isCategoryIndex,
-            sortBy: (a, b) => (a.category < b.category ? -1 : 1),
+            sortBy: (a, b) => (a.tag < b.tag ? -1 : 1),
         },
-        categories_top: {
+        tags_top: {
             pattern: "tags/*.html",
-            filterBy: file => file.isCategoryIndex,
 
             // Sort by most posts, and then most recent post if there's a tie
-            sortBy: (a, b) => ((b.postsInCategory.length - a.postsInCategory.length) || (b.postsInCategory[0].date - a.postsInCategory[0].date)),
+            sortBy: (a, b) => ((b.postsWithTag.length - a.postsWithTag.length) || (b.postsWithTag[0].date - a.postsWithTag[0].date)),
             limit: 4,
         },
     }))
     .use((files, metalsmith, done) => {
         // Create index and archive lists
         const metadata = metalsmith.metadata();
-        metadata.categoryListTop = metadata.categories_top.map(item => item.category);
-        metadata.categoryListAll = metadata.categories.map(item => item.category);
+        metadata.tagsTop = metadata.tags_top.map(item => item.tag);
+        metadata.tagsAll = metadata.tags.map(item => item.tag);
         done();
     })
     .use(relativeLinks({ prefix: "../" })) // permalinks plugin moves posts into their own directories

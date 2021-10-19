@@ -1,7 +1,7 @@
 <nav>
     <ul>
-        {{#each categories}}
-        {{#if (and (lookup .. "isCategoryIndex") (equal this (lookup .. "category")))}}
+        {{#each tags}}
+        {{#if (and (lookup .. "isTagIndex") (equal this (lookup .. "tag")))}}
         <li>{{this}}</li>
         {{else}}
         <li><a href="{{../rootPath}}posts/{{this}}">{{this}}</a></li>
