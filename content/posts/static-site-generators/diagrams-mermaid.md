@@ -1,7 +1,7 @@
 ---
 title: Generating diagrams when building a static site (part 2)
 description: I'd like to use Mermaid to generate SVG diagrams for my static site at build time. Here's my attempt at integrating Mermaid.
-keywords: [mermaid]
+keywords: [diagrams]
 date: 2021-09-24
 ---
 In the [last post](diagrams.md), I looked at options for generating diagrams from text descriptions at build time for my static site. Here's my (failed) attempt at integrating [Mermaid](https://mermaid-js.github.io/mermaid/#/) into my site.

@@ -1,7 +1,7 @@
 ---
 title: Static site generation anecdotes
 description: Tales of static site generators in the pre-Markdown age.
-keywords: [bash,xslt,sed]
+keywords: [linux]
 date: 2021-09-12
 ---
 

@@ -1,7 +1,6 @@
 ---
 title: WebAssembly objects, libraries, and linking (for C code)
 description: In order to reuse C libraries in WebAssembly, here is how object files, libraries, and linking work with Clang and LLVM.
-keywords: [webassembly,clang]
 date: 2021-10-06
 ---
 In the interest of reusing [some C string handling code I wrote for use in WebAssembly](passing-strings-to-c.md), I'm researching how object files, libraries, and linking work in WebAssembly.

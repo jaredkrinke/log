@@ -1,7 +1,7 @@
 ---
 title: Generating diagrams when building a static site (part 1)
 description: I'd like to include diagrams in my static site without requiring any client JavaScript. Here's an overview of the problem.
-keywords: [mermaid]
+keywords: [diagrams]
 date: 2021-09-23
 ---
 # Background

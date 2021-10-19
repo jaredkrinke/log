@@ -1,7 +1,7 @@
 ---
 title: Compiling Graphviz to WebAssembly (without Emscripten)
 description: In order to automatically generate diagrams for my site that's built with Node, I compiled Graphviz to WebAssembly. Here's my experience.
-keywords: [webassembly,graphviz]
+keywords: [diagrams]
 date: 2021-10-09
 ---
 After successfully [passed strings back and forth between WebAssembly and JavaScript](passing-strings-to-c.md), and [linked against a C standard library](c-standard-library-example.md) (all without Emscripten... or Python), I felt ready to try compiling a substantial library to WebAssembly for use in Node.

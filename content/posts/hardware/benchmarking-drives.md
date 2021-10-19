@@ -1,7 +1,6 @@
 ---
 title: How to benchmark disk drives on Windows
 description: Not sure which drive in your computer is the fastest? Here's how to benchmark drives on Windows.
-keywords: [benchmarking]
 date: 2021-09-17
 ---
 

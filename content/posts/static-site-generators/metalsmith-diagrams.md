@@ -1,7 +1,7 @@
 ---
 title: Generating SVG diagrams automatically with Metalsmith
 description: Metalsmith is used to build this static site. Here's how Graphviz was integrated to automatically generate diagrams.
-keywords: [metalsmith,graphviz,webassembly]
+keywords: [metalsmith,diagrams]
 date: 2021-10-10
 ---
 Now that I've [compiled Graphviz to a WebAssembly module](../webassembly/compiling-graphviz-to-webassembly.md), I'm going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.

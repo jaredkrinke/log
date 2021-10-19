@@ -2,7 +2,6 @@
 title: Finding the cheapest hosting for my hobby projects
 description: Hosting services for hobby projects shouldn't be expensive. Here's how I ended up with free hosting.
 date: 2021-09-22
-keywords: [gcp,netlify]
 ---
 
 I like playing around with software, so I frequently have hobby projects in development or "production" (scare quotes because they're hobbies after all). Since I don't like wasting money, I'm always on the lookout for cheap project hosting.

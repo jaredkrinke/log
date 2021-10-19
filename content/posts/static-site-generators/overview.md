@@ -1,7 +1,6 @@
 ---
 title: My ideal static site generator
 description: A static site generator is essential for hosting a fast and free dev blog. Here's my theoretical ideal setup.
-keywords: [blog]
 date: 2021-09-11
 ---
 

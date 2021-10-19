@@ -1,7 +1,6 @@
 ---
 title: Passing strings to and from WebAssembly using C
 description: Here's an example of passing strings to and from a WebAssembly module that is written in C and compiled with Clang and LLVM.
-keywords: [webassembly,clang]
 date: 2021-10-05
 ---
 As a follow-up to a [trivial WebAssembly example in C](trivial-example.md) and [an example of using the C standard library in WebAssembly](c-standard-library-example.md), I'm now investigating passing strings back and forth between the JavaScript host and a WebAssembly module written in C (and compiled with Clang/LLVM).

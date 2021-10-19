@@ -1,7 +1,6 @@
 ---
 title: WebAssembly and the C standard library
 description: In the interest of compiling C code to WebAssembly, here's an example of using the C standard library.
-keywords: [webassembly]
 date: 2021-09-28
 ---
 In the [last post](trivial-example.md), I compiled a trivial C function to WebAssembly. This was a good learning exercise, but I didn't use the C standard library, so compiling the code was trivial. Let's look into how to use the C standard library when compiling C to WebAssembly with Clang/LLVM. All the code is in this repository: [webassembly-libc-example](https://github.com/jaredkrinke/webassembly-libc-example).

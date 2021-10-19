@@ -1,7 +1,6 @@
 ---
 title: A trivial WebAssembly example
 description: This is a complete example of building and running a trivial WebAssembly module.
-keywords: [webassembly,wabt,llvm]
 date: 2021-09-27
 ---
 In the last post, I provided an [overview of WebAssembly](overview.md). In this post, I'm going to build and run a complete (but trivial) WebAssembly module in C using [LLVM](https://llvm.org/) and [Clang](https://clang.llvm.org/).

@@ -1,7 +1,6 @@
 ---
 title: Can you use CommonJS modules from within an ES module?
 description: Is it possible to import a CommonJS module from within an ES module? Only in Node.
-keywords: [commonjs,es-modules,node]
 date: 2021-09-29
 ---
 # Question

@@ -1,7 +1,7 @@
 ---
 title: Syntax highlighting for a static site built with Metalsmith
 description: I'm using Metalsmith to build my static site. Here's how I integrated syntax highlighting using highlight.js.
-keywords: [metalsmith,highlight.js]
+keywords: [metalsmith]
 date: 2021-10-01
 ---
 As [described previously](metalsmith.md), I'm using [Metalsmith](https://metalsmith.io/) to build my static site because I like its modular, easy to extend design (even though it required more effort to setup initially).

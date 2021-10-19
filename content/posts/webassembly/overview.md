@@ -1,7 +1,6 @@
 ---
 title: WebAssembly overview
 description: WebAssembly makes web browsers a compilation target for languages like C. Here's a brief overview of WebAssembly.
-keywords: [webassembly,emscripten,wabt]
 date: 2021-09-25
 ---
 # Background
