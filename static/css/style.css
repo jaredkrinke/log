@@ -3,23 +3,22 @@ html, body { margin: 0; }
 
 body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     font-family: sans-serif;
     overflow-y: scroll;
 }
 
-main {
-    padding: 0.5em;
-    width: 40em;
-}
+body > header, main { width: 40em; }
+main { padding: 0.5em; }
 
 @media screen and (max-width: 40em) {
     main { width: calc(100% - 1em); }
 }
 
-main > header { text-align: center; }
-main > header > h1 { margin-bottom: 0.25em; }
-main > header > p { margin-top: 0.25em; }
+body > header { text-align: center; }
+body > header > h1 { margin-bottom: 0.25em; }
+body > header > p { margin-top: 0.25em; }
 
 nav { display: flex; flex-direction: row; justify-content: center; }
 nav > ul { margin: 0; padding: 0 0 0 0.5em; display: inline; }
@@ -28,7 +27,7 @@ nav > ul > li:first-child:before { content: "Topics: "; }
 nav > ul > li:first-child:before { font-weight: bold; color: #d97c57; }
 nav > ul > li + li:before { content: " | "; }
 
-main > header > h1 > a {
+body > header > h1 > a {
     text-decoration: inherit;
     color: inherit;
 }
@@ -61,7 +60,7 @@ pre, tr:nth-child(even) { background-color: #282828;}
 th { background-color: #444; color: #eee }
 pre, table, th, tr, td { border-color: #777; }
 
-main > header > h1 { color: #e6b95c; }
+body > header > h1 { color: #e6b95c; }
 h1, h2, h3, h4, h5 { color: #d97c57; }
 a:link { color: #59c5ff; }
 a:visited { color: #66c9fe; }

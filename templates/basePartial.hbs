@@ -10,12 +10,12 @@
         <link rel="alternate" type="application/rss+xml" href="{{rootPath}}feed.xml" />
     </head>
     <body>
+        <header>
+            <h1><a href="{{#if rootPath}}{{rootPath}}{{else}}.{{/if}}">{{site.title}}</a></h1>
+            <p>{{site.description}}</p>
+            {{#if navigationPartialName}}{{> (lookup . "navigationPartialName") }}{{/if}}
+        </header>
         <main>
-            <header>
-                <h1><a href="{{#if rootPath}}{{rootPath}}{{else}}.{{/if}}">{{site.title}}</a></h1>
-                <p>{{site.description}}</p>
-                {{#if navigationPartialName}}{{> (lookup . "navigationPartialName") }}{{/if}}
-            </header>
 {{> @partial-block }}
         </main>
     </body>
