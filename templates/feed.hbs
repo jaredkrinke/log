@@ -12,8 +12,8 @@
 {{#each posts_recent}}
 <entry>
 <title>{{title}}</title>
-<id>{{../site.url}}{{link}}</id>
-<link rel="alternate" href="{{../site.url}}{{link}}"/>
+<id>{{linkAbsolute}}</id>
+<link rel="alternate" href="{{linkAbsolute}}"/>
 <updated>{{formatDateISO date}}</updated>
 <summary type="text">{{description}}</summary>
 </entry>
