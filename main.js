@@ -3,7 +3,6 @@ import markdown from "./metalsmith-marked.js";
 import relativeLinks from "./metalsmith-relative-links.js";
 import graphvizDiagrams from "./metalsmith-graphviz-diagrams.js";
 import syntaxHighlighting from "./metalsmith-syntax-highlighting.js";
-import contentReplace from "./metalsmith-content-replace.js";
 import routeProperties from "./metalsmith-route-properties.js";
 import normalizeSlashes from "./metalsmith-normalize-slashes.js";
 import linkify from "./metalsmith-linkify.js";
@@ -16,7 +15,6 @@ import rootPath from "metalsmith-rootpath";
 import discoverPartials from "metalsmith-discover-partials";
 import assets from "metalsmith-static";
 import drafts from "metalsmith-drafts";
-import feed from "metalsmith-feed";
 import taxonomy from "metalsmith-taxonomy";
 import fileMetadata from "metalsmith-filemetadata";
 import brokenLinkChecker from "metalsmith-broken-link-checker";
@@ -33,6 +31,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "nu
     [ "not", (a) => (!a) ],
     [ "and", (a, b) => (a && b) ],
     [ "equal", (a, b) => (a === b) ],
+    [ "formatDateISO", date => date.toISOString() ],
     [ "formatDateShort", date => date.toISOString().replace(/T.*$/, "") ],
     [ "formatDate", date => dateFormatter.format(date) ],
 ].forEach(row => handlebars.registerHelper(row[0], row[1]));
@@ -110,6 +109,9 @@ Metalsmith(path.dirname(process.argv[1]))
             return (postsB.length - postsA.length) || (postsB[0].date - postsA[0].date);
         }).slice(0, 4);
 
+        // Also include the current time
+        metadata.now = new Date();
+
         done();
     })
     .use(relativeLinks({ prefix: "../" })) // permalinks plugin moves posts into their own directories
@@ -129,25 +131,13 @@ Metalsmith(path.dirname(process.argv[1]))
             },
         ],
     }))
-    .use(feed({
-        collection: "posts",
-        destination: "feed.xml", // TODO: Relative links probably break this output -- how to fix? Rewrite plugin?
-        limit: 5,
-    }))
-    .use(contentReplace({
-        // Remove some unnecessary/constantly changing fields
-        "feed.xml": [
-            [/<lastBuildDate>.*?<\/lastBuildDate>/, ""],
-            [/<generator>.*?<\/generator>/, ""],
-        ],
-    }))
     .use(rootPath())
     .use(discoverPartials({ directory: "templates" }))
     .use(linkify())
     .use(layouts({
         directory: "templates",
         default: "default.hbs",
-        pattern: "**/*.html",
+        pattern: ["**/*.html", "feed.xml"],
     }))
     .use(serve ? metalsmithExpress({ host: "localhost" }) : noop)
     .use(serve

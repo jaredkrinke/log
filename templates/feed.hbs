@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<title>{{site.title}}</title>
+<id>{{site.url}}</id>
+<link rel="self" href="{{site.url}}feed.xml"/>
+<link rel="alternate" href="{{site.url}}"/>
+<author>
+    <name>{{site.title}}</name>
+</author>
+<updated>{{formatDateISO now}}</updated>
+
+{{#each posts_recent}}
+<entry>
+<title>{{title}}</title>
+<id>{{../site.url}}{{link}}</id>
+<link rel="alternate" href="{{../site.url}}{{link}}"/>
+<updated>{{formatDateISO date}}</updated>
+<summary type="text">{{description}}</summary>
+</entry>
+{{/each}}
+</feed>
