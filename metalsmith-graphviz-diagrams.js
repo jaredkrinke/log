@@ -10,6 +10,7 @@ export default (options) => {
     const inline = options?.inline ?? true;
     const comments = options?.comments ?? false;
     const cssClasses = options?.cssClasses ?? false;
+    const useDefaultFonts = options?.useDefaultFonts ?? false;
 
     return markdown.options({
         renderer: {
@@ -25,6 +26,9 @@ export default (options) => {
                         }
                         if (cssClasses) {
                             svg = svg.replace(/fill="([^"]+)" stroke="([^"]+)"/g, "class=\"diagram-$2-$1\"");
+                        }
+                        if (useDefaultFonts) {
+                            svg = svg.replace(/ font-family="[^"]+?"/g, "");
                         }
                         return svg;
                     } else {

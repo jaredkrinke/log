@@ -120,7 +120,10 @@ Metalsmith(path.dirname(process.argv[1]))
             { tag: "dot", language: "c" },
         ],
     }))
-    .use(graphvizDiagrams({ cssClasses: true }))
+    .use(graphvizDiagrams({
+        cssClasses: true,
+        useDefaultFonts: true,
+    }))
     .use(markdown())
     .use(permalinks({
         pattern: "posts/:category/:postName",
