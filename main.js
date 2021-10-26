@@ -44,9 +44,7 @@ Metalsmith(path.dirname(process.argv[1]))
     .clean(clean)
     .source("./content")
     .destination("./out")
-    .use(metalsmithMetadata({
-        site: "site.json",
-    }))
+    .use(metalsmithMetadata({ site: "site.json" }))
     .use(assets({
         src: "static",
         dest: ".",
