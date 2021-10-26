@@ -20,7 +20,7 @@ import metalsmithLinkify from "./metalsmith-linkify.js";
 import metalsmithMarked from "./metalsmith-marked.js";
 import metalsmithNormalizeSlashes from "./metalsmith-normalize-slashes.js";
 import metalsmithRelativeLinks from "./metalsmith-relative-links.js";
-import metalsmithRouteProperties from "./metalsmith-route-properties.js";
+import metalsmithRouteMetadata from "./metalsmith-route-metadata.js";
 import metalsmithSyntaxHighlighting from "./metalsmith-syntax-highlighting.js";
 
 // Command line arguments
@@ -52,7 +52,7 @@ Metalsmith(path.dirname(process.argv[1]))
     }))
     .use(metalsmithNormalizeSlashes()) // Only needed due to this metalsmith-taxonomy issue: https://github.com/webketje/metalsmith-taxonomy/issues/14
     .use(serve ? noop : metalsmithDrafts()) // Exclude drafts when building, but include them when serving locally
-    .use(metalsmithRouteProperties({ "posts/(:category/):postName.md": { category: "misc" } }))
+    .use(metalsmithRouteMetadata({ "posts/(:category/):postName.md": { category: "misc" } }))
     .use(metalsmithFileMetadata([
         {
             pattern: "posts/**/*.md",

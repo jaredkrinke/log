@@ -1,7 +1,5 @@
 import Route from "route-parser";
 
-// TODO: Rename to route-metadata
-
 export default options => {
     options = options ?? {};
 
