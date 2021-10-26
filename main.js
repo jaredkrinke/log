@@ -21,6 +21,7 @@ import brokenLinkChecker from "metalsmith-broken-link-checker";
 import metalsmithExpress from "metalsmith-express";
 import metalsmithWatch from "metalsmith-watch";
 import metalsmithMetadata from "metalsmith-metadata";
+import metalsmithInjectFiles from "./metalsmith-inject-files.js";
 
 // Command line arguments
 const serve = process.argv.includes("--serve");
@@ -128,6 +129,12 @@ Metalsmith(path.dirname(process.argv[1]))
                 pattern: "posts/:term",
             },
         ],
+    }))
+    .use(metalsmithInjectFiles({
+        "index.html": { layout: "index.hbs" },
+        "archive.html": { layout: "archive.hbs" },
+        "404.html": { layout: "404.hbs" },
+        "feed.xml": { layout: "feed.hbs" },
     }))
     .use(rootPath())
     .use(discoverPartials({ directory: "templates" }))
