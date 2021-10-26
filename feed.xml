@@ -7,7 +7,7 @@
 <author>
     <name>Schemescape</name>
 </author>
-<updated>2021-10-26T20:42:05.729Z</updated>
+<updated>2021-10-26T20:59:47.448Z</updated>
 
 <entry>
 <title>Metalsmith&#x27;s downsides</title>
@@ -16,34 +16,34 @@
 <updated>2021-10-14T00:00:00.000Z</updated>
 <summary type="text">I&#x27;m using Metalsmith to generate this site and, while I generally like it, it&#x27;s not perfect. Here are some of Metalsmith&#x27;s downsides.</summary>
 <content type="text">
-After testing out a bunch of static site generators, I settled on using Metalsmith for this site. I like that Metalsmith has a simple design that can be easily extended with plugins (either custom or &quot;off the shelf&quot;), but that&#x27;s not to say that Metalsmith is perfect.
+<![CDATA[After testing out a bunch of static site generators, I settled on using Metalsmith for this site. I like that Metalsmith has a simple design that can be easily extended with plugins (either custom or "off the shelf"), but that's not to say that Metalsmith is perfect.
 
-Let&#x27;s dive into the downsides of Metalsmith.
+Let's dive into the downsides of Metalsmith.
 
 Is Metalsmith being maintained?
-There&#x27;s the question of ownership and maintenance. Metalsmith was created by Segment, and the main repository lives under their GitHub account. Maintenance duties were transferred in 2018, but there have been no nontrivial commits since then.
+There's the question of ownership and maintenance. Metalsmith was created by Segment, and the main repository lives under their GitHub account. Maintenance duties were transferred in 2018, but there have been no nontrivial commits since then.
 
 *A pessimistic view is that Metalsmith is a zombie project.*
 
-It&#x27;s possible that Metalsmith is simple enough that it doesn&#x27;t _need_ any updates, but if you do run into a problem with Metalsmith itself, you&#x27;re probably going to have to fix it yourself.
+It's possible that Metalsmith is simple enough that it doesn't _need_ any updates, but if you do run into a problem with Metalsmith itself, you're probably going to have to fix it yourself.
 
 This, to me, is probably the biggest downside of building on top of Metalsmith.
 
 Are the plugins being maintained?
-If you take the optimistic view that Metalsmith&#x27;s core is rock-solid and not in need of updates, how about the plugins? In many cases, *plugins also appear to be unmaintained*.
+If you take the optimistic view that Metalsmith's core is rock-solid and not in need of updates, how about the plugins? In many cases, *plugins also appear to be unmaintained*.
 
-For example, take the metalsmith-collections plugin. Its last commit was 3 years ago, but even worse, the associated NPM package was published 5 years ago. In fact, the published package doesn&#x27;t even contain the most up-to-date version of the plugin. I ran into this particular issue because I wanted to use the plugin&#x27;s &quot;filterBy&quot; option, but that functionality isn&#x27;t actually present in the NPM package&#x27;s version.
+For example, take the metalsmith-collections plugin. Its last commit was 3 years ago, but even worse, the associated NPM package was published 5 years ago. In fact, the published package doesn't even contain the most up-to-date version of the plugin. I ran into this particular issue because I wanted to use the plugin's "filterBy" option, but that functionality isn't actually present in the NPM package's version.
 
-This is unfortunate, but there&#x27;s nothing stopping you from forking and updating plugins yourself.
+This is unfortunate, but there's nothing stopping you from forking and updating plugins yourself.
 
 Official forum sign-up requirements
-Metalsmith&#x27;s home page points to a Gitter community, which I interpret to be the official forum.
+Metalsmith's home page points to a Gitter community, which I interpret to be the official forum.
 
 While I like the _idea_ of an open source Discord alternative, I was very disappointed with my first experience using (well, attemping to use) Gitter.
 
 Gitter was originally created as a way to chat about GitHub projects, so it was naturally tied to GitHub accounts. This was fine then, but even today Gitter requires one of the following accounts for login:
 
-I use GitHub and have a high opinion of both it and GitLab (Twitter, not so much). But Gitter&#x27;s _default, required_ access requests are repulsive:
+I use GitHub and have a high opinion of both it and GitLab (Twitter, not so much). But Gitter's _default, required_ access requests are repulsive:
 
 If I already used Twitter, that would be an acceptable option here, but I have no interest in donating my personal data to yet another gigantic advertising company. Without a Twitter account, none of the login options seem even remotely reasonable.
 
@@ -52,23 +52,23 @@ In the end, I created a dummy GitHub account just to access Gitter (which essent
 Plugin ordering and lack of history
 My favorite aspect of Metalsmith is its minimal design that can be easily extended with simple plugins, but I think the design is perhaps _too_ minimal.
 
-Internally, Metalsmith manages a mapping of files to properties, and this mapping is handed from one plugin to the next, sequentially (and asynchronously). Each plugin _mutates_ the mapping however it wants, and eventually Metalsmith&#x27;s &quot;build()&quot; function writes out the resulting files.
+Internally, Metalsmith manages a mapping of files to properties, and this mapping is handed from one plugin to the next, sequentially (and asynchronously). Each plugin _mutates_ the mapping however it wants, and eventually Metalsmith's "build()" function writes out the resulting files.
 
 This is indeed a very simple design, but there is a subtle problem lurking: since each plugin can do whatever it wants, information can be changed or lost along the chain. This leads to numerous problems. Here are some examples:
 
 The current behavior is simple to reason over, and can be solved without changing the architecture (using more plugins!), but it is initially surprising, and certainly makes the tool harder to use.
 
 Configuring Markdown
-One less prominent challenge with Metalsmith&#x27;s architecture is that there is no mechanism (or convention) for communicating between plugins. Probably an uncommon scenario, but it would be nice to allow plugins to configure Metalsmith&#x27;s Markdown options (without having to use an entirely separate Markdown plugin).
+One less prominent challenge with Metalsmith's architecture is that there is no mechanism (or convention) for communicating between plugins. Probably an uncommon scenario, but it would be nice to allow plugins to configure Metalsmith's Markdown options (without having to use an entirely separate Markdown plugin).
 
 So do I hate Metalsmith? No!
 Honestly, this article makes a compelling case for avoiding Metalsmith--yet, I still use it. Why?
 
-As someone who&#x27;s familiar with JavaScript, Node, and HTML/CSS, Metalsmith is simply the easiest static site generator for me to use:
+As someone who's familiar with JavaScript, Node, and HTML/CSS, Metalsmith is simply the easiest static site generator for me to use:
 
-Metalsmith is really giving me the best of both using a pre-built static site generator and creating my own. It&#x27;s possible that the lack of maintenance will force me to switch to something else eventually, but for now I&#x27;m happy with it.
+Metalsmith is really giving me the best of both using a pre-built static site generator and creating my own. It's possible that the lack of maintenance will force me to switch to something else eventually, but for now I'm happy with it.
 
-
+]]>
 </content>
 </entry>
 <entry>
@@ -78,54 +78,54 @@ Metalsmith is really giving me the best of both using a pre-built static site ge
 <updated>2021-10-10T00:00:00.000Z</updated>
 <summary type="text">Metalsmith is used to build this static site. Here&#x27;s how Graphviz was integrated to automatically generate diagrams.</summary>
 <content type="text">
-Now that I&#x27;ve compiled Graphviz to a WebAssembly module, I&#x27;m going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.
+<![CDATA[Now that I've compiled Graphviz to a WebAssembly module, I'm going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.
 
 The plan
-Here&#x27;s a flow chart of my general plan:
+Here's a flow chart of my general plan:
 
   digraph {
-      &quot;Compile Graphviz to WebAssembly&quot; -&gt; &quot;Generate diagrams at build time&quot; -&gt; &quot;???&quot; -&gt; &quot;Profit!&quot;;
+      "Compile Graphviz to WebAssembly" -> "Generate diagrams at build time" -> "???" -> "Profit!";
   }
 
 That diagram was generated using the following Markdown:
 
-  &#x60;&#x60;&#x60;dot2svg
+  ```dot2svg
   digraph {
-      &quot;Compile Graphviz to WebAssembly&quot; -&gt; &quot;Generate diagrams at build time&quot; -&gt; &quot;???&quot; -&gt; &quot;Profit!&quot;;
+      "Compile Graphviz to WebAssembly" -> "Generate diagrams at build time" -> "???" -> "Profit!";
   }
-  &#x60;&#x60;&#x60;
+  ```
 
 Extending the Marked renderer
-As shown in the example near the top of this post, my plan is to piggyback on Markdown code blocks, using a special language tag &quot;dot2svg&quot;. For all other code blocks (and on error), I simply defer to the default code block rendering function:
+As shown in the example near the top of this post, my plan is to piggyback on Markdown code blocks, using a special language tag "dot2svg". For all other code blocks (and on error), I simply defer to the default code block rendering function:
 
   // Generate diagrams with dot2svg
-  const baseCodeRenderer &#x3D; markdownRenderer.code;
-  const dotConverter &#x3D; await createDOTToSVGAsync();
-  markdownRenderer.code &#x3D; function (code, language, escaped) {
-      if (language &#x3D;&#x3D;&#x3D; &quot;dot2svg&quot;) {
-          const svg &#x3D; dotConverter.dotToSVG(code);
+  const baseCodeRenderer = markdownRenderer.code;
+  const dotConverter = await createDOTToSVGAsync();
+  markdownRenderer.code = function (code, language, escaped) {
+      if (language === "dot2svg") {
+          const svg = dotConverter.dotToSVG(code);
           if (svg) {
               return svg;
           } else {
               // On error, just treat the code block like normal
-              language &#x3D; &quot;&quot;;
+              language = "";
           }
       }
       return baseCodeRenderer.call(this, code, language, escaped);
   };
 
 Styling
-The above rendering code worked (and didn&#x27;t break my syntax highlighting), but there were a few tweaks I had in mind:
+The above rendering code worked (and didn't break my syntax highlighting), but there were a few tweaks I had in mind:
 
 Fortunately, both of these transformations can be done with regular expression replacements:
 
   ...
   if (svg) {
-      // Remove XML prolog, since we&#x27;re inlining
+      // Remove XML prolog, since we're inlining
       // Also convert default styles to CSS classes, for custom styling
       return svg
-          .replace(/^.*?&lt;svg /s, &quot;&lt;svg &quot;)
-          .replace(/fill&#x3D;&quot;([^&quot;]+)&quot; stroke&#x3D;&quot;([^&quot;]+)&quot;/g, &quot;class&#x3D;\&quot;diagram-$2-$1\&quot;&quot;);
+          .replace(/^.*?<svg /s, "<svg ")
+          .replace(/fill="([^"]+)" stroke="([^"]+)"/g, "class=\"diagram-$2-$1\"");
   } else {
   ...
 
@@ -138,12 +138,12 @@ Now, I can just style everything with CSS:
   .diagram-black-none { stroke: #999; fill:none; }
   .diagram-black-black { stroke: #999; fill: #333; }
 
-That&#x27;s it!
+That's it!
 To my surprise, this entire integration went smoothly, and only took an hour or so. It remains to be seen how useful these diagrams will be, but at least now if I ever feel the need to insert a superfluous diagram, the functionality will be there.
 
 For reference, all of the code used to generate this site (along with the content) is in this repository.
 
-
+]]>
 </content>
 </entry>
 <entry>
@@ -153,18 +153,18 @@ For reference, all of the code used to generate this site (along with the conten
 <updated>2021-10-09T00:00:00.000Z</updated>
 <summary type="text">In order to automatically generate diagrams for my site that&#x27;s built with Node, I compiled Graphviz to WebAssembly. Here&#x27;s my experience.</summary>
 <content type="text">
-After successfully passed strings back and forth between WebAssembly and JavaScript, and linked against a C standard library (all without Emscripten... or Python), I felt ready to try compiling a substantial library to WebAssembly for use in Node.
+<![CDATA[After successfully passed strings back and forth between WebAssembly and JavaScript, and linked against a C standard library (all without Emscripten... or Python), I felt ready to try compiling a substantial library to WebAssembly for use in Node.
 
 Graphviz
-Specifically, I wanted to be able to automatically generate diagrams (in SVG format) from text descriptions when building my static site using Metalsmith/Node. Graphviz is an old package of tools and libraries (written in C) that I&#x27;ve successfully used in the past.
+Specifically, I wanted to be able to automatically generate diagrams (in SVG format) from text descriptions when building my static site using Metalsmith/Node. Graphviz is an old package of tools and libraries (written in C) that I've successfully used in the past.
 
 Graphviz diagrams are described in a language called DOT. Example:
 
   digraph {
-      a -&gt; b;
+      a -> b;
   }
 
-Graphviz supports multiple layout engines, but I&#x27;ve only ever needed to use the default dot engine (yes, it&#x27;s the same name, just in lower case).
+Graphviz supports multiple layout engines, but I've only ever needed to use the default dot engine (yes, it's the same name, just in lower case).
 
 Prior ports
 The Graphviz site lists a number of previous ports of Graphviz, including a couple that are relevant for Node:
@@ -172,15 +172,15 @@ The Graphviz site lists a number of previous ports of Graphviz, including a coup
 Honestly, either one of these would have probably worked for my original purpose, but I chose to compile Graphviz myself for a few reasons:
 
 dot2svg.wasm
-Given that I&#x27;m only interested in DOT diagram description to SVG, I decided to export a single function named &quot;dot2svg&quot; (along with exporting &quot;malloc&quot;/&quot;free&quot;/memory). There were a few reasons for this:
+Given that I'm only interested in DOT diagram description to SVG, I decided to export a single function named "dot2svg" (along with exporting "malloc"/"free"/memory). There were a few reasons for this:
 
-The module&#x27;s C code is pretty simple. Other than memory management functions, there&#x27;s only one export and it takes a C string (in DOT format), renders to SVG, and returns a newly allocated string with the SVG content (the JavaScript host is responsible for freeing the string after it&#x27;s been decoded).
+The module's C code is pretty simple. Other than memory management functions, there's only one export and it takes a C string (in DOT format), renders to SVG, and returns a newly allocated string with the SVG content (the JavaScript host is responsible for freeing the string after it's been decoded).
 
-Here&#x27;s the C code for my module:
+Here's the C code for my module:
 
-  #include &lt;malloc.h&gt;
-  #include &lt;string.h&gt;
-  #include &lt;gvc.h&gt;
+  #include <malloc.h>
+  #include <string.h>
+  #include <gvc.h>
   
   #define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
   #define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
@@ -198,17 +198,17 @@ Here&#x27;s the C code for my module:
   // Main export
   const char* WASM_EXPORT(dot2svg)(const char* graphString) {
       // Use Graphviz for converting dot to SVG
-      const char* result &#x3D; NULL;
-      GVC_t* context &#x3D; gvContextPlugins(lt_preloaded_symbols, false);
+      const char* result = NULL;
+      GVC_t* context = gvContextPlugins(lt_preloaded_symbols, false);
       if (context) {
-          Agraph_t* graph &#x3D; agmemread(graphString);
+          Agraph_t* graph = agmemread(graphString);
           if (graph) {
-              if (gvLayout(context, graph, &quot;dot&quot;) &#x3D;&#x3D; 0) {
+              if (gvLayout(context, graph, "dot") == 0) {
                   char *svg;
                   unsigned int svgLength;
-                  gvRenderData(context, graph, &quot;svg&quot;, &amp;svg, &amp;svgLength);
+                  gvRenderData(context, graph, "svg", &svg, &svgLength);
                   if (svg) {
-                      result &#x3D; strdup(svg);
+                      result = strdup(svg);
                       gvFreeRenderData(svg);
                   }
                   gvFreeLayout(context, graph);
@@ -223,23 +223,23 @@ Here&#x27;s the C code for my module:
   
 
 Initial attempt at compiling
-First, I cloned the Graphviz repository (actually, I added it as a submodule--anticipating the need to make changes) and ran it&#x27;s &quot;autogen.sh&quot; script. For the record, I&#x27;m using Debian Stretch on the Windows Subsystem for Linux.
+First, I cloned the Graphviz repository (actually, I added it as a submodule--anticipating the need to make changes) and ran it's "autogen.sh" script. For the record, I'm using Debian Stretch on the Windows Subsystem for Linux.
 
-Being familiar with GNU Autotools, I hoped that I&#x27;d then be able to simply run Graphviz&#x27;s &quot;configure&quot; script with appropriate arguments (&quot;--host&#x3D;wasm32&quot;?) and environment variables (&quot;CC&#x3D;/opt/wasi-sdk/bin/clang&quot;?) and everything would build fine.
+Being familiar with GNU Autotools, I hoped that I'd then be able to simply run Graphviz's "configure" script with appropriate arguments ("--host=wasm32"?) and environment variables ("CC=/opt/wasi-sdk/bin/clang"?) and everything would build fine.
 
 I hit a few snags:
 
 That last one required some investigation.
 
 Archive index error
-After searching for and finding a similar issue on GitHub, I learned that that &quot;wasm-ld&quot; error means that you created the archive with the wrong tool set. In my case, it was using GNU &quot;ar&quot; instead of LLVM &quot;ar&quot;. That makes sense because I didn&#x27;t tell the build to use a different &quot;ar&quot;, and GNU &quot;ar&quot; was on my path.
+After searching for and finding a similar issue on GitHub, I learned that that "wasm-ld" error means that you created the archive with the wrong tool set. In my case, it was using GNU "ar" instead of LLVM "ar". That makes sense because I didn't tell the build to use a different "ar", and GNU "ar" was on my path.
 
-I thought that setting the &quot;AR&quot; environment variable would solve this, but it turned out that the Autotools in use didn&#x27;t respect that environment variable. My hacky solution to this (and possibly other mismatched tools) was to just move the WASI SDK to the front of my &quot;PATH&quot; variable in my build script:
+I thought that setting the "AR" environment variable would solve this, but it turned out that the Autotools in use didn't respect that environment variable. My hacky solution to this (and possibly other mismatched tools) was to just move the WASI SDK to the front of my "PATH" variable in my build script:
 
-  export PATH&#x3D;&quot;/opt/wasi-sdk/bin:$PATH&quot;
+  export PATH="/opt/wasi-sdk/bin:$PATH"
 
 More issues
-Now I started to run into more WASI-related issues. WASI is still in development and may not ever support the entire C library. That&#x27;s fine, and I knew that going in, but I thought that Graphviz wouldn&#x27;t be relying on some of the more obscure parts of the C library (and hopefully very few OS-specific features). Sadly, this is not the case.
+Now I started to run into more WASI-related issues. WASI is still in development and may not ever support the entire C library. That's fine, and I knew that going in, but I thought that Graphviz wouldn't be relying on some of the more obscure parts of the C library (and hopefully very few OS-specific features). Sadly, this is not the case.
 
 Here are the problems I ran into:
 
@@ -248,11 +248,11 @@ At this point, I was (mostly) able to compile the libraries I needed, but not li
 Also, at this point, I was starting to appreciate just how much Emscripten must handle to support building stuff like this without any modifications. Maybe my main takeaway will just be to use Emscripten in the future?
 
 Slimming down Graphviz
-For my purposes, I only needed to be able to parse DOT input, using the &quot;dot&quot; layout engine, and output to SVG. But Graphviz&#x27;s default library has support for many outputs, including Adobe PostScript, which I _definitely_ have no plans to use. These defaults are encoded directly into &quot;graphviz/plugin/core/gvplugin_core.c&quot;.
+For my purposes, I only needed to be able to parse DOT input, using the "dot" layout engine, and output to SVG. But Graphviz's default library has support for many outputs, including Adobe PostScript, which I _definitely_ have no plans to use. These defaults are encoded directly into "graphviz/plugin/core/gvplugin_core.c".
 
-In order to reduce the list down to just SVG, I needed to create my own &quot;plugin&quot; that only supported DOT and SVG. Here&#x27;s what that looked like:
+In order to reduce the list down to just SVG, I needed to create my own "plugin" that only supported DOT and SVG. Here's what that looked like:
 
-  #include &lt;gvplugin.h&gt;
+  #include <gvplugin.h>
   
   extern gvplugin_installed_t gvdevice_dot_types[];
   extern gvplugin_installed_t gvdevice_svg_types[];
@@ -260,7 +260,7 @@ In order to reduce the list down to just SVG, I needed to create my own &quot;pl
   extern gvplugin_installed_t gvrender_svg_types[];
   extern gvplugin_installed_t gvloadimage_core_types[];
   
-  static gvplugin_api_t apis[] &#x3D; {
+  static gvplugin_api_t apis[] = {
       {API_device, gvdevice_dot_types},
       {API_device, gvdevice_svg_types},
       {API_render, gvrender_dot_types},
@@ -269,99 +269,99 @@ In order to reduce the list down to just SVG, I needed to create my own &quot;pl
       {(api_t)0, 0},
   };
   
-  gvplugin_library_t gvplugin_core_LTX_library &#x3D; { &quot;core&quot;, apis };
+  gvplugin_library_t gvplugin_core_LTX_library = { "core", apis };
   
   #define IMPORT /* nothing */
   
   IMPORT extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
   IMPORT extern gvplugin_library_t gvplugin_core_LTX_library;
   
-  lt_symlist_t lt_preloaded_symbols[] &#x3D; {
-      { &quot;gvplugin_dot_layout_LTX_library&quot;, (void*)(&amp;gvplugin_dot_layout_LTX_library) },
-      { &quot;gvplugin_core_LTX_library&quot;, (void*)(&amp;gvplugin_core_LTX_library) },
+  lt_symlist_t lt_preloaded_symbols[] = {
+      { "gvplugin_dot_layout_LTX_library", (void*)(&gvplugin_dot_layout_LTX_library) },
+      { "gvplugin_core_LTX_library", (void*)(&gvplugin_core_LTX_library) },
       { 0, 0 }
   };
 
-This also had the benefit of removing a number of dependencies (including some that weren&#x27;t yet building successfully for me yet).
+This also had the benefit of removing a number of dependencies (including some that weren't yet building successfully for me yet).
 
 One last link error
-At this point, I was down to a final error from the linker. It turns out that, somewhere in Graphviz, it uses the &quot;tmpfile&quot; function. For now, I just decided to add a dummy implementation and hope that it wasn&#x27;t being used for anything important:
+At this point, I was down to a final error from the linker. It turns out that, somewhere in Graphviz, it uses the "tmpfile" function. For now, I just decided to add a dummy implementation and hope that it wasn't being used for anything important:
 
   FILE* tmpfile() {
       return 0;
   }
 
 Successful build
-Finally, I was able to successfully build &quot;dot2svg.wasm&quot;. The uncompressed file size ended up being around 660 KB--a bit larger than I hoped, but not huge.
+Finally, I was able to successfully build "dot2svg.wasm". The uncompressed file size ended up being around 660 KB--a bit larger than I hoped, but not huge.
 
 Now I just have to run that function... right?
 
 JavaScript side
-Given that I already had code to pass strings back and forth, I hoped I could just call the &quot;dot2svg&quot; export and bask in the glorious result. But I wasn&#x27;t quite there yet.
+Given that I already had code to pass strings back and forth, I hoped I could just call the "dot2svg" export and bask in the glorious result. But I wasn't quite there yet.
 
 Imports
 On the first run, I got the following error:
 
   TypeError: WebAssembly.instantiate(): Imports argument must be present and must be an object
 
-That&#x27;s too bad. I was hoping that my slimmed down Graphviz build wouldn&#x27;t expect the host to provide any functions. Let&#x27;s see what&#x27;s missing:
+That's too bad. I was hoping that my slimmed down Graphviz build wouldn't expect the host to provide any functions. Let's see what's missing:
 
   $ wasm2wat dot2svg.wasm|findstr /i import
-    (import &quot;wasi_snapshot_preview1&quot; &quot;clock_time_get&quot; (func $__wasi_clock_time_get (type 16)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;fd_filestat_get&quot; (func $__wasi_fd_filestat_get (type 1)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;proc_exit&quot; (func $__wasi_proc_exit (type 10)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;fd_fdstat_get&quot; (func $__wasi_fd_fdstat_get (type 1)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;path_open&quot; (func $__wasi_path_open (type 17)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;path_filestat_get&quot; (func $__wasi_path_filestat_get (type 7)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;fd_close&quot; (func $__wasi_fd_close (type 0)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;environ_sizes_get&quot; (func $__wasi_environ_sizes_get (type 1)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;environ_get&quot; (func $__wasi_environ_get (type 1)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;fd_seek&quot; (func $__wasi_fd_seek (type 18)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;fd_write&quot; (func $__wasi_fd_write (type 4)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;fd_read&quot; (func $__wasi_fd_read (type 4)))
-    (import &quot;wasi_snapshot_preview1&quot; &quot;fd_fdstat_set_flags&quot; (func $__wasi_fd_fdstat_set_flags (type 1)))
+    (import "wasi_snapshot_preview1" "clock_time_get" (func $__wasi_clock_time_get (type 16)))
+    (import "wasi_snapshot_preview1" "fd_filestat_get" (func $__wasi_fd_filestat_get (type 1)))
+    (import "wasi_snapshot_preview1" "proc_exit" (func $__wasi_proc_exit (type 10)))
+    (import "wasi_snapshot_preview1" "fd_fdstat_get" (func $__wasi_fd_fdstat_get (type 1)))
+    (import "wasi_snapshot_preview1" "path_open" (func $__wasi_path_open (type 17)))
+    (import "wasi_snapshot_preview1" "path_filestat_get" (func $__wasi_path_filestat_get (type 7)))
+    (import "wasi_snapshot_preview1" "fd_close" (func $__wasi_fd_close (type 0)))
+    (import "wasi_snapshot_preview1" "environ_sizes_get" (func $__wasi_environ_sizes_get (type 1)))
+    (import "wasi_snapshot_preview1" "environ_get" (func $__wasi_environ_get (type 1)))
+    (import "wasi_snapshot_preview1" "fd_seek" (func $__wasi_fd_seek (type 18)))
+    (import "wasi_snapshot_preview1" "fd_write" (func $__wasi_fd_write (type 4)))
+    (import "wasi_snapshot_preview1" "fd_read" (func $__wasi_fd_read (type 4)))
+    (import "wasi_snapshot_preview1" "fd_fdstat_set_flags" (func $__wasi_fd_fdstat_set_flags (type 1)))
 
 Do the imports really matter?
-That&#x27;s a longer list than I expected. Ok, well let&#x27;s see if they&#x27;re _really_ needed by providing no-op implementations:
+That's a longer list than I expected. Ok, well let's see if they're _really_ needed by providing no-op implementations:
 
-      const module &#x3D; await WebAssembly.instantiate(await fs.promises.readFile(&quot;./dot2svg.wasm&quot;), {
+      const module = await WebAssembly.instantiate(await fs.promises.readFile("./dot2svg.wasm"), {
           wasi_snapshot_preview1: {
               // Not implemented
-              clock_time_get: () &#x3D;&gt; {},
-              environ_get: () &#x3D;&gt; {},
-              environ_sizes_get: () &#x3D;&gt; {},
-              fd_close: () &#x3D;&gt; {},
-              fd_fdstat_get: () &#x3D;&gt; {},
-              fd_fdstat_set_flags: () &#x3D;&gt; {},
-              fd_filestat_get: () &#x3D;&gt; {},
-              fd_read: () &#x3D;&gt; {},
-              fd_seek: () &#x3D;&gt; {},
-              fd_write: () &#x3D;&gt; {},
-              path_filestat_get: () &#x3D;&gt; {},
-              path_open: () &#x3D;&gt; {},
-              proc_exit: () &#x3D;&gt; {},
+              clock_time_get: () => {},
+              environ_get: () => {},
+              environ_sizes_get: () => {},
+              fd_close: () => {},
+              fd_fdstat_get: () => {},
+              fd_fdstat_set_flags: () => {},
+              fd_filestat_get: () => {},
+              fd_read: () => {},
+              fd_seek: () => {},
+              fd_write: () => {},
+              path_filestat_get: () => {},
+              path_open: () => {},
+              proc_exit: () => {},
           },
       });
 
 Unfortunately, with those no-op functions, my test script just seemed to spin.
 
 fd_write
-Debugging showed that &quot;fd_write&quot; was being called repeatedly. That makes me think that WASI actually needs &quot;fd_write&quot; to do something. With absolutely zero context, the function name sounds like it&#x27;s writing to a file descriptor.
+Debugging showed that "fd_write" was being called repeatedly. That makes me think that WASI actually needs "fd_write" to do something. With absolutely zero context, the function name sounds like it's writing to a file descriptor.
 
 After some digging, I found a helpful note in the (otherwise inscrutable) WASI documentation:
 
-  fd_write(fd: fd, iovs: ciovec_array) -&gt; Result&lt;size, errno&gt;
+  fd_write(fd: fd, iovs: ciovec_array) -> Result<size, errno>
   
   Write to a file descriptor. Note: This is similar to writev in POSIX.
   
   
 
 writev
-Fortunately, &quot;writev(2)&quot; is extensively documented.
+Fortunately, "writev(2)" is extensively documented.
 
-The first argument is indeed a file descriptor. Debugging my test app showed that the function was being called with file descriptor 2, which is Standard Error. It&#x27;s my opinion that libraries shouldn&#x27;t directly write anything to Standard Output or Error, but I didn&#x27;t write Graphviz. A quick scan of the Graphviz source indicated that I couldn&#x27;t easily disable console logging.
+The first argument is indeed a file descriptor. Debugging my test app showed that the function was being called with file descriptor 2, which is Standard Error. It's my opinion that libraries shouldn't directly write anything to Standard Output or Error, but I didn't write Graphviz. A quick scan of the Graphviz source indicated that I couldn't easily disable console logging.
 
-The second argument to &quot;writev&quot; is an array of I/O vectors defined as follows:
+The second argument to "writev" is an array of I/O vectors defined as follows:
 
   struct iovec {
       void  *iov_base;    /* Starting address */
@@ -371,15 +371,15 @@ The second argument to &quot;writev&quot; is an array of I/O vectors defined as 
 And the return value is just the number of bytes written.
 
 JavaScript implementation
-Assuming that &quot;fd_write&quot; is the same (assuming 32-bit WebAssembly), this isn&#x27;t too bad to implement (and I decided to forward to the console for testing purposes). The only remaining trick is that &quot;fd_write&quot; supplies the memory address for the return value as the third argument and directly returns a status code (zero for success).
+Assuming that "fd_write" is the same (assuming 32-bit WebAssembly), this isn't too bad to implement (and I decided to forward to the console for testing purposes). The only remaining trick is that "fd_write" supplies the memory address for the return value as the third argument and directly returns a status code (zero for success).
 
-Here&#x27;s a simple implementation:
+Here's a simple implementation:
 
-  fd_write: (fileDescriptor, ioVectorsBaseAddress, ioVectorsCount, returnBytesWrittenAddress) &#x3D;&gt; {
+  fd_write: (fileDescriptor, ioVectorsBaseAddress, ioVectorsCount, returnBytesWrittenAddress) => {
       // Read IO vectors
-      const view &#x3D; new DataView(memory.buffer);
-      const ioVectors &#x3D; [];
-      for (let i &#x3D; 0, address &#x3D; ioVectorsBaseAddress; i &lt; ioVectorsCount; i++, address +&#x3D; 8) {
+      const view = new DataView(memory.buffer);
+      const ioVectors = [];
+      for (let i = 0, address = ioVectorsBaseAddress; i < ioVectorsCount; i++, address += 8) {
           ioVectors.push({
               sourceAddress: view.getUint32(address, true),
               sizeInBytes: view.getUint32(address + 4, true),
@@ -387,21 +387,21 @@ Here&#x27;s a simple implementation:
       }
   
       // Calculate total size
-      const totalSizeInBytes &#x3D; ioVectors.reduce((sum, ioVector) &#x3D;&gt; sum + ioVector.sizeInBytes, 0);
+      const totalSizeInBytes = ioVectors.reduce((sum, ioVector) => sum + ioVector.sizeInBytes, 0);
   
       // Forward STDOUT and STDERR to console
-      const standardOutput &#x3D; 1;
-      const standardError &#x3D; 2;
+      const standardOutput = 1;
+      const standardError = 2;
       switch (fileDescriptor) {
           case standardOutput:
           case standardError:
               {
                   // Copy to buffer
-                  const buffer &#x3D; new Uint8Array(totalSizeInBytes);
-                  let offset &#x3D; 0;
-                  ioVectors.forEach(ioVector &#x3D;&gt; {
+                  const buffer = new Uint8Array(totalSizeInBytes);
+                  let offset = 0;
+                  ioVectors.forEach(ioVector => {
                       buffer.set(new Uint8Array(memory.buffer, ioVector.sourceAddress, ioVector.sizeInBytes), offset);
-                      offset +&#x3D; ioVector.sizeInBytes;
+                      offset += ioVector.sizeInBytes;
                   });
   
                   // Note: Adds an extra new line...
@@ -422,9 +422,9 @@ Here&#x27;s a simple implementation:
 Success!
 With the above imports, my string-passing library, and the following code:
 
-  const dotString &#x3D; process.argv[2] ?? &quot;digraph { a -&gt; b }&quot;;
-  createCString(module, dotString, (dotStringAddress) &#x3D;&gt; {
-      const svgString &#x3D; receiveCString(module, () &#x3D;&gt; module.instance.exports.dot2svg(dotStringAddress));
+  const dotString = process.argv[2] ?? "digraph { a -> b }";
+  createCString(module, dotString, (dotStringAddress) => {
+      const svgString = receiveCString(module, () => module.instance.exports.dot2svg(dotStringAddress));
       console.log(svgString);
   });
 
@@ -435,12 +435,12 @@ I was finally able to generate the following test graph SVG:
 Additionally, if I deliberately insert a syntax error into the graph, I see the error logged to my console, so output forwarding is even working.
 
 Conclusion
-There&#x27;s still work I need to do around theming, packaging, and more, but as a proof of concept, it looks like compiling a C library to WebAssembly with minimal tooling beyond Clang and LLVM is certainly possible, with some perseverance.
+There's still work I need to do around theming, packaging, and more, but as a proof of concept, it looks like compiling a C library to WebAssembly with minimal tooling beyond Clang and LLVM is certainly possible, with some perseverance.
 
 Lessons learned:
 
 Resources
-
+]]>
 </content>
 </entry>
 <entry>
@@ -450,7 +450,7 @@ Resources
 <updated>2021-10-06T00:00:00.000Z</updated>
 <summary type="text">In order to reuse C libraries in WebAssembly, here is how object files, libraries, and linking work with Clang and LLVM.</summary>
 <content type="text">
-In the interest of reusing some C string handling code I wrote for use in WebAssembly, I&#x27;m researching how object files, libraries, and linking work in WebAssembly.
+<![CDATA[In the interest of reusing some C string handling code I wrote for use in WebAssembly, I'm researching how object files, libraries, and linking work in WebAssembly.
 
 Background
 For native C code, the following file types and concepts are used:
@@ -460,77 +460,77 @@ How does the Clang/LLVM toolchain map these concepts to WebAssembly?
 WebAssembly object files
 To my surprise, WebAssembly actually publishes conventions for creating and linking object files.
 
-I certainly didn&#x27;t read that entire document, but I did note that object files are just WebAssembly modules, with custom sections (note: custom sections are only supported in binary &quot;.wasm&quot; format, and not text &quot;.wat&quot; format).
+I certainly didn't read that entire document, but I did note that object files are just WebAssembly modules, with custom sections (note: custom sections are only supported in binary ".wasm" format, and not text ".wat" format).
 
 Example
 My WebAssembly string library is very simple:
 
-Note that this example requires consumers of the library providing &quot;malloc()&quot; and &quot;free()&quot; to the JavaScript host. I don&#x27;t export these from my library because I want consumers to be able to supply their own allocator.
+Note that this example requires consumers of the library providing "malloc()" and "free()" to the JavaScript host. I don't export these from my library because I want consumers to be able to supply their own allocator.
 
 C source code
-Here&#x27;s the header file (&quot;wasm-c-string.h&quot;):
+Here's the header file ("wasm-c-string.h"):
 
   typedef struct {
       unsigned int length;
       char buffer[];
   } wasm_c_string;
   
-  // Allocates an empty wasm_c_string. When done, use &quot;free&quot; to release.
+  // Allocates an empty wasm_c_string. When done, use "free" to release.
   extern wasm_c_string* allocate_wasm_c_string(unsigned int length);
   
-  // Creates a new wasm_c_string from an existing C string. When done, use &quot;free&quot; to release.
+  // Creates a new wasm_c_string from an existing C string. When done, use "free" to release.
   extern wasm_c_string* create_wasm_c_string(const char* source);
 
-And the source file (&quot;wasm-c-string.c&quot;):
+And the source file ("wasm-c-string.c"):
 
-  #include &lt;malloc.h&gt;
-  #include &lt;string.h&gt;
-  #include &quot;wasm-c-string.h&quot;
+  #include <malloc.h>
+  #include <string.h>
+  #include "wasm-c-string.h"
   
   #define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
   #define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
   
   wasm_c_string* WASM_EXPORT(allocate_wasm_c_string)(unsigned int length) {
-      wasm_c_string* str &#x3D; (wasm_c_string*)malloc(sizeof(unsigned int) + length);
-      str-&gt;length &#x3D; (unsigned int)length;
+      wasm_c_string* str = (wasm_c_string*)malloc(sizeof(unsigned int) + length);
+      str->length = (unsigned int)length;
       return str;
   }
   
   wasm_c_string* WASM_EXPORT(create_wasm_c_string)(const char* source) {
-      const size_t sourceLength &#x3D; strlen(source);
-      wasm_c_string* str &#x3D; allocate_wasm_c_string((unsigned int)sourceLength);
-      memcpy(&amp;str-&gt;buffer[0], source, sourceLength);
+      const size_t sourceLength = strlen(source);
+      wasm_c_string* str = allocate_wasm_c_string((unsigned int)sourceLength);
+      memcpy(&str->buffer[0], source, sourceLength);
       return str;
   }
 
 Compiling
-Let&#x27;s compile this to an object file (using the WASI SDK--note the &quot;-c&quot; argument that tells Clang to only output an object file and not invoke the linker):
+Let's compile this to an object file (using the WASI SDK--note the "-c" argument that tells Clang to only output an object file and not invoke the linker):
 
   wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.c
 
 Text format
-The output file defaults to &quot;wasm-c-string.o&quot; and here&#x27;s the (abbreviated) corresponding text format (compliments of the WebAssembly Binary Toolkit&#x27;s &quot;wasm2wat&quot; tool):
+The output file defaults to "wasm-c-string.o" and here's the (abbreviated) corresponding text format (compliments of the WebAssembly Binary Toolkit's "wasm2wat" tool):
 
   (module
     (type (;0;) (func (param i32) (result i32)))
     (type (;1;) (func (param i32 i32 i32) (result i32)))
-    (import &quot;env&quot; &quot;__linear_memory&quot; (memory (;0;) 0))
-    (import &quot;env&quot; &quot;__indirect_function_table&quot; (table (;0;) 0 funcref))
-    (import &quot;env&quot; &quot;malloc&quot; (func (;0;) (type 0)))
-    (import &quot;env&quot; &quot;strlen&quot; (func (;1;) (type 0)))
-    (import &quot;env&quot; &quot;memcpy&quot; (func (;2;) (type 1)))
+    (import "env" "__linear_memory" (memory (;0;) 0))
+    (import "env" "__indirect_function_table" (table (;0;) 0 funcref))
+    (import "env" "malloc" (func (;0;) (type 0)))
+    (import "env" "strlen" (func (;1;) (type 0)))
+    (import "env" "memcpy" (func (;2;) (type 1)))
     (func $allocate_wasm_c_string (type 0) (param i32) (result i32)
   ...
     (func $create_wasm_c_string (type 0) (param i32) (result i32)
   ...
-    (export &quot;allocate_wasm_c_string&quot; (func $allocate_wasm_c_string))
-    (export &quot;create_wasm_c_string&quot; (func $create_wasm_c_string)))
+    (export "allocate_wasm_c_string" (func $allocate_wasm_c_string))
+    (export "create_wasm_c_string" (func $create_wasm_c_string)))
   
 
-You can see that it&#x27;s importing memory, a function table, and C standard library functions, and that it&#x27;s exporting my 2 functions.
+You can see that it's importing memory, a function table, and C standard library functions, and that it's exporting my 2 functions.
 
 Custom sections
-But wait, the object file conventions document indicates that there are custom sections that can&#x27;t be represented in the text format. So let&#x27;s use &quot;wasm-objdump&quot; (also from WABT):
+But wait, the object file conventions document indicates that there are custom sections that can't be represented in the text format. So let's use "wasm-objdump" (also from WABT):
 
   $ wasm-objdump -s wasm-c-string.o
   
@@ -560,16 +560,16 @@ But wait, the object file conventions document indicates that there are custom s
   00001fb: 6136 6630 3629                           a6f06)
   
 
-Sure enough, there are custom sections related to linking, relocation, and even a curious &quot;producers&quot; section (that apparently exists to allow analysis of toolchain usage in the wild).
+Sure enough, there are custom sections related to linking, relocation, and even a curious "producers" section (that apparently exists to allow analysis of toolchain usage in the wild).
 
 WebAssembly libraries
 For something as simple as my 20 line C library, I could probably just distribute the C header and the compiled WebAssembly object file (which is actually a WebAssembly module with custom sections) and be done. What if I have a larger library?
 
 Dynamic libraries
-Once again, to my surprise, WebAssembly publishes conventions for dynamically loading libraries, but the document notes there is no stable ABI. That&#x27;s ok, I didn&#x27;t really need dynamic libraries right now anyway.
+Once again, to my surprise, WebAssembly publishes conventions for dynamically loading libraries, but the document notes there is no stable ABI. That's ok, I didn't really need dynamic libraries right now anyway.
 
 Static libraries
-Static libraries for native C code are often just archives (using the &quot;ar&quot; archiver tool), perhaps with some additional information to describe the library.
+Static libraries for native C code are often just archives (using the "ar" archiver tool), perhaps with some additional information to describe the library.
 
 Can I just do the same thing for WebAssembly? It certainly appears so.
 
@@ -582,9 +582,9 @@ If I inspect the WASI SDK, in the WebAssembly sysroot, I actually see both bare 
   libc++.a        libc-printscan-no-floating-point.a  libresolv.a   libxnet.a
   libc.a          libcrypt.a                          librt.a
 
-What&#x27;s in one of these archives? &quot;ar -t libc.a&quot; shows a bunch of object files. If I extract an object named &quot;ccos.o&quot; with &quot;ar -x libc.a ccos.o&quot;, I can use &quot;wasm-objdump&quot; or &quot;wasm2wat&quot; to see that it&#x27;s just a regular WebAssembly object file.
+What's in one of these archives? "ar -t libc.a" shows a bunch of object files. If I extract an object named "ccos.o" with "ar -x libc.a ccos.o", I can use "wasm-objdump" or "wasm2wat" to see that it's just a regular WebAssembly object file.
 
-I&#x27;m impressed that the people working on WebAssembly resisted the urge to create entirely new tools, and instead just decided to leverage existing UNIX tools that have been around for a long time.
+I'm impressed that the people working on WebAssembly resisted the urge to create entirely new tools, and instead just decided to leverage existing UNIX tools that have been around for a long time.
 
 Linking
 The documentation for wasm-ld is brief, but it does have most of the information you need.
@@ -594,7 +594,7 @@ The main tricks are:
 Summary
 It turns out that the toolchain for WebAssembly libraries in C is similar to what one would use for native compilation:
 
-
+]]>
 </content>
 </entry>
 <entry>
@@ -604,44 +604,44 @@ It turns out that the toolchain for WebAssembly libraries in C is similar to wha
 <updated>2021-10-05T00:00:00.000Z</updated>
 <summary type="text">Here&#x27;s an example of passing strings to and from a WebAssembly module that is written in C and compiled with Clang and LLVM.</summary>
 <content type="text">
-As a follow-up to a trivial WebAssembly example in C and an example of using the C standard library in WebAssembly, I&#x27;m now investigating passing strings back and forth between the JavaScript host and a WebAssembly module written in C (and compiled with Clang/LLVM).
+<![CDATA[As a follow-up to a trivial WebAssembly example in C and an example of using the C standard library in WebAssembly, I'm now investigating passing strings back and forth between the JavaScript host and a WebAssembly module written in C (and compiled with Clang/LLVM).
 
 Links to a library (*new*), the sample code, and a live demo are at the end of the post.
 
 Passing a string from JavaScript to C
-Recall that WebAssembly doesn&#x27;t have a string type. How can a C function receive a string when compiled to WebAssembly?
+Recall that WebAssembly doesn't have a string type. How can a C function receive a string when compiled to WebAssembly?
 
 Pass in by directly populating linear memory
 Also known as: failed attempt #1.
 
-Obviously, this limits strings to fit in linear memory (where I assume the maximum size is 2^32-1), and requiring a null terminator means embedded nulls aren&#x27;t supported. I don&#x27;t think these will be a problem for me personally.
+Obviously, this limits strings to fit in linear memory (where I assume the maximum size is 2^32-1), and requiring a null terminator means embedded nulls aren't supported. I don't think these will be a problem for me personally.
 
 I gave this approach a try, but there were several problems with it.
 
-The LLVM WebAssembly documentation hints at it, but inspecting the output of a trivial C program compiled to WebAssembly shows that LLVM&#x27;s WebAssembly linker uses linear memory for both the stack and the heap. This makes sense, of course--memory has to come from somewhere. I couldn&#x27;t find LLVM documentation to definitively confirm this, but I&#x27;ve read that the WebAssembly stack grows downward and has a default size of only 64 KB (customizable with the &quot;-z stacksize&#x3D;&lt;value&gt;&quot; option). The heap follows the stack by default.
+The LLVM WebAssembly documentation hints at it, but inspecting the output of a trivial C program compiled to WebAssembly shows that LLVM's WebAssembly linker uses linear memory for both the stack and the heap. This makes sense, of course--memory has to come from somewhere. I couldn't find LLVM documentation to definitively confirm this, but I've read that the WebAssembly stack grows downward and has a default size of only 64 KB (customizable with the "-z stacksize=<value>" option). The heap follows the stack by default.
 
-This means that you don&#x27;t really have a place to stuff in your encoded string. I also didn&#x27;t see a way to use a separate memory for passing in data to C functions.
+This means that you don't really have a place to stuff in your encoded string. I also didn't see a way to use a separate memory for passing in data to C functions.
 
-The fundamental problem with this approach is that the C-based WebAssembly module needs complete control over its memory, and there doesn&#x27;t appear to be a way to access a different memory from C code, as compiled with Clang and LLVM&#x27;s WebAssembly linker. There are likely libraries (probably with hand-written WebAssembly) to enable this, but I&#x27;d like a simple solution.
+The fundamental problem with this approach is that the C-based WebAssembly module needs complete control over its memory, and there doesn't appear to be a way to access a different memory from C code, as compiled with Clang and LLVM's WebAssembly linker. There are likely libraries (probably with hand-written WebAssembly) to enable this, but I'd like a simple solution.
 
 Pass on the stack
 Also known as: very limited approach #2.
 
-Probably not a good idea because you&#x27;re limited based on the maximum stack size (mentioned above), but theoretically you could pass in a string on the stack by having your JavaScript code implement whatever calling convention is used by Clang/LLVM for WebAssembly (modifying the stack pointer as a mutable global). This seems tedious and not worth the effort unless you have strings that you know will be much smaller than the maximum stack size (or you tell LLVM&#x27;s WebAssembly linker to grow the stack upwards (although then you&#x27;re limiting your heap size, which is probably even more unexpected to most non-embedded C code that&#x27;s laying around).
+Probably not a good idea because you're limited based on the maximum stack size (mentioned above), but theoretically you could pass in a string on the stack by having your JavaScript code implement whatever calling convention is used by Clang/LLVM for WebAssembly (modifying the stack pointer as a mutable global). This seems tedious and not worth the effort unless you have strings that you know will be much smaller than the maximum stack size (or you tell LLVM's WebAssembly linker to grow the stack upwards (although then you're limiting your heap size, which is probably even more unexpected to most non-embedded C code that's laying around).
 
-I won&#x27;t dwell on this idea any more since I want to use the default memory layout.
+I won't dwell on this idea any more since I want to use the default memory layout.
 
 Pass in via the heap
 Also known as: successful attempt #3.
 
-Here&#x27;s a new idea: let the C code control its entire address space, but expose functions to let JavaScript allocate some memory.
+Here's a new idea: let the C code control its entire address space, but expose functions to let JavaScript allocate some memory.
 
-This approach adds overhead in the form of allocating for every string passed in, but if the ratio of calls to time spent in each call is low enough, this could be tolerable (and you could always optimize the approach to reuse allocations when possible, if needed). Overall, this seems straight forward and robust, so I&#x27;m going to try this out.
+This approach adds overhead in the form of allocating for every string passed in, but if the ratio of calls to time spent in each call is low enough, this could be tolerable (and you could always optimize the approach to reuse allocations when possible, if needed). Overall, this seems straight forward and robust, so I'm going to try this out.
 
 C implementation
-As an example, I&#x27;ve created a function that counts the number of occurrences of the (lower case) letter &quot;a&quot; in a string. Note that I have to export an allocator and a deallocator.
+As an example, I've created a function that counts the number of occurrences of the (lower case) letter "a" in a string. Note that I have to export an allocator and a deallocator.
 
-  #include &lt;malloc.h&gt;
+  #include <malloc.h>
   
   #define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
   #define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
@@ -657,9 +657,9 @@ As an example, I&#x27;ve created a function that counts the number of occurrence
   
   // Example of passing a string in
   unsigned int WASM_EXPORT(count_as)(const char* string) {
-      unsigned int numberOfAs &#x3D; 0;
-      while (*string !&#x3D; &#x27;\0&#x27;) {
-          if (*string &#x3D;&#x3D; &#x27;a&#x27;) {
+      unsigned int numberOfAs = 0;
+      while (*string != '\0') {
+          if (*string == 'a') {
               ++numberOfAs;
           }
           string++;
@@ -673,22 +673,22 @@ The build command is unchanged from the last post:
   wasi-sdk/bin/clang -Os --sysroot wasi-sdk/share/wasi-sysroot -nostartfiles -Wl,--no-entry string-example.c -o string-example.wasm
 
 JavaScript caller
-The JavaScript wrapper is more involved than I&#x27;d like, but it does work:
+The JavaScript wrapper is more involved than I'd like, but it does work:
 
-  import fs from &quot;fs&quot;;
+  import fs from "fs";
   
-  (async () &#x3D;&gt; {
-      const module &#x3D; await WebAssembly.instantiate(await fs.promises.readFile(&quot;./string-example.wasm&quot;));
+  (async () => {
+      const module = await WebAssembly.instantiate(await fs.promises.readFile("./string-example.wasm"));
   
       // String used for testing (from command line or hard-coded)
-      const testString &#x3D; process.argv[2] ?? &quot;How many letter a&#x27;s are there in this string? Three!&quot;;
-      const nullTerminatedString &#x3D; testString + &quot;\0&quot;;
-      const encodedString &#x3D; (new TextEncoder()).encode(nullTerminatedString);
-      const stringAddress &#x3D; module.instance.exports.allocate(encodedString.length);
+      const testString = process.argv[2] ?? "How many letter a's are there in this string? Three!";
+      const nullTerminatedString = testString + "\0";
+      const encodedString = (new TextEncoder()).encode(nullTerminatedString);
+      const stringAddress = module.instance.exports.allocate(encodedString.length);
       try {
-          const destination &#x3D; new Uint8Array(module.instance.exports.memory.buffer, stringAddress);
+          const destination = new Uint8Array(module.instance.exports.memory.buffer, stringAddress);
           destination.set(encodedString);
-          const result &#x3D; module.instance.exports.count_as(stringAddress);
+          const result = module.instance.exports.count_as(stringAddress);
           console.log(result);
       } finally {
           module.instance.exports.deallocate(stringAddress);
@@ -698,22 +698,22 @@ The JavaScript wrapper is more involved than I&#x27;d like, but it does work:
 Result
 Behold the result:
 
-  $ node pass-in-string.js &quot;a string that has lots of the letter &#x27;a&#x27; in it&quot; 
+  $ node pass-in-string.js "a string that has lots of the letter 'a' in it" 
   4
 
 Looks good!
 
 Memory management helper
-Having to manually manage memory in JavaScript is error-prone, so I&#x27;m going to wrap this code in a helper:
+Having to manually manage memory in JavaScript is error-prone, so I'm going to wrap this code in a helper:
 
-  const textEncoder &#x3D; new TextEncoder();
+  const textEncoder = new TextEncoder();
   
-  export const createCString &#x3D; (module, str, run) &#x3D;&gt; {
-      const nullTerminatedString &#x3D; str + &quot;\0&quot;;
-      const encodedString &#x3D; textEncoder.encode(nullTerminatedString);
-      const address &#x3D; module.instance.exports.allocate(encodedString.length);
+  export const createCString = (module, str, run) => {
+      const nullTerminatedString = str + "\0";
+      const encodedString = textEncoder.encode(nullTerminatedString);
+      const address = module.instance.exports.allocate(encodedString.length);
       try {
-          const destination &#x3D; new Uint8Array(module.instance.exports.memory.buffer, address);
+          const destination = new Uint8Array(module.instance.exports.memory.buffer, address);
           destination.set(encodedString);
           return run(address);
       } finally {
@@ -721,17 +721,17 @@ Having to manually manage memory in JavaScript is error-prone, so I&#x27;m going
       }
   };
 
-Note: it would probably be helpful to extend these helpers to support multiple strings/allocations, but I&#x27;m not trying to completely reinvent wrapping/binding libraries like Emscripten right now.
+Note: it would probably be helpful to extend these helpers to support multiple strings/allocations, but I'm not trying to completely reinvent wrapping/binding libraries like Emscripten right now.
 
 Now, the final string passing code is simple:
 
-  (async () &#x3D;&gt; {
-      const module &#x3D; await WebAssembly.instantiate(await fs.promises.readFile(&quot;./string-example.wasm&quot;));
+  (async () => {
+      const module = await WebAssembly.instantiate(await fs.promises.readFile("./string-example.wasm"));
   
       // String used for testing (from command line or hard-coded)
-      const testString &#x3D; process.argv[2] ?? &quot;How many letter a&#x27;s are there in this string? Three!&quot;;
-      createCString(module, testString, (stringAddress) &#x3D;&gt; {
-          const result &#x3D; module.instance.exports.count_as(stringAddress);
+      const testString = process.argv[2] ?? "How many letter a's are there in this string? Three!";
+      createCString(module, testString, (stringAddress) => {
+          const result = module.instance.exports.count_as(stringAddress);
           console.log(result);
       });
   })();
@@ -739,46 +739,46 @@ Now, the final string passing code is simple:
 Returning a string from C to JavaScript
 Here was my initial thinking for returning a dynamic string from C to JavaScript (recorded before I completed the example above):
 
-Given that I&#x27;m already exposing allocations to JavaScript, I thought this would work, but there&#x27;s one problem: &quot;TextDecoder.decode()&quot; doesn&#x27;t have built-in support for null-terminated strings (nor should it, in my opinion). Potential solutions:
+Given that I'm already exposing allocations to JavaScript, I thought this would work, but there's one problem: "TextDecoder.decode()" doesn't have built-in support for null-terminated strings (nor should it, in my opinion). Potential solutions:
 
-I&#x27;m going to opt for the first option.
+I'm going to opt for the first option.
 
-Note that I&#x27;m assuming returned strings will be dynamically allocated, because constant strings should really just be provided directly using JavaScript. If the string _must_ come from C code, all you&#x27;d need to do is skip the allocation management steps (and hope that the JavaScript code doesn&#x27;t decide to mutate the string!).
+Note that I'm assuming returned strings will be dynamically allocated, because constant strings should really just be provided directly using JavaScript. If the string _must_ come from C code, all you'd need to do is skip the allocation management steps (and hope that the JavaScript code doesn't decide to mutate the string!).
 
 C implementation
-Here&#x27;s some simple code that creates a string with the letter &quot;b&quot; repeated a caller-supplied number of times:
+Here's some simple code that creates a string with the letter "b" repeated a caller-supplied number of times:
 
   const char* WASM_EXPORT(write_bs)(unsigned int count) {
       // Allocate space for the string, plus a null terminator
-      char* str &#x3D; (char*)malloc(count + 1);
+      char* str = (char*)malloc(count + 1);
   
       // Fill in the string and null terminator
-      char* c &#x3D; str;
-      for (unsigned int i &#x3D; 0; i &lt; count; i++) {
-          *c &#x3D; &#x27;b&#x27;;
+      char* c = str;
+      for (unsigned int i = 0; i < count; i++) {
+          *c = 'b';
           ++c;
       }
-      *c &#x3D; &#x27;\0&#x27;;
+      *c = '\0';
   
       return str;
   }
 
 JavaScript implementation
-Here&#x27;s the corresponding JavaScript on the other side:
+Here's the corresponding JavaScript on the other side:
 
-  import fs from &quot;fs&quot;;
+  import fs from "fs";
   
-  (async () &#x3D;&gt; {
-      const module &#x3D; await WebAssembly.instantiate(await fs.promises.readFile(&quot;./string-example.wasm&quot;));
+  (async () => {
+      const module = await WebAssembly.instantiate(await fs.promises.readFile("./string-example.wasm"));
   
       // String used for testing (from command line or hard-coded)
-      const count &#x3D; parseInt(process.argv[2] ?? &quot;3&quot;);
-      const address &#x3D; module.instance.exports.write_bs(count);
+      const count = parseInt(process.argv[2] ?? "3");
+      const address = module.instance.exports.write_bs(count);
       try {
-          const buffer &#x3D; module.instance.exports.memory.buffer;
-          const encodedStringLength &#x3D; (new Uint8Array(buffer, address)).indexOf(0);
-          const encodedStringBuffer &#x3D; new Uint8Array(buffer, address, encodedStringLength);
-          const result &#x3D; (new TextDecoder()).decode(encodedStringBuffer);
+          const buffer = module.instance.exports.memory.buffer;
+          const encodedStringLength = (new Uint8Array(buffer, address)).indexOf(0);
+          const encodedStringBuffer = new Uint8Array(buffer, address, encodedStringLength);
+          const result = (new TextDecoder()).decode(encodedStringBuffer);
           console.log(result);
       } finally {
           module.instance.exports.deallocate(address);
@@ -793,19 +793,19 @@ Output:
 Looks good!
 
 Helpers
-Similar to above, I&#x27;m going to refactor this logic into helpers (one for static strings, and one for new strings return via the heap):
+Similar to above, I'm going to refactor this logic into helpers (one for static strings, and one for new strings return via the heap):
 
-  const textDecoder &#x3D; new TextDecoder();
+  const textDecoder = new TextDecoder();
   
-  export const readStaticCString &#x3D; (module, address) &#x3D;&gt; {
-      const buffer &#x3D; module.instance.exports.memory.buffer;
-      const encodedStringLength &#x3D; (new Uint8Array(buffer, address)).indexOf(0);
-      const encodedStringBuffer &#x3D; new Uint8Array(buffer, address, encodedStringLength);
+  export const readStaticCString = (module, address) => {
+      const buffer = module.instance.exports.memory.buffer;
+      const encodedStringLength = (new Uint8Array(buffer, address)).indexOf(0);
+      const encodedStringBuffer = new Uint8Array(buffer, address, encodedStringLength);
       return textDecoder.decode(encodedStringBuffer);
   };
   
-  export const receiveCString &#x3D; (module, create) &#x3D;&gt; {
-      const address &#x3D; create();
+  export const receiveCString = (module, create) => {
+      const address = create();
       try {
           return readStaticCString(module, address);
       } finally {
@@ -815,24 +815,24 @@ Similar to above, I&#x27;m going to refactor this logic into helpers (one for st
 
 This simplifies the calling code significantly:
 
-  (async () &#x3D;&gt; {
-      const module &#x3D; await WebAssembly.instantiate(await fs.promises.readFile(&quot;./string-example.wasm&quot;));
+  (async () => {
+      const module = await WebAssembly.instantiate(await fs.promises.readFile("./string-example.wasm"));
   
       // String used for testing (from command line or hard-coded)
-      const count &#x3D; parseInt(process.argv[2] ?? &quot;3&quot;);
-      const str &#x3D; receiveCString(module, () &#x3D;&gt; module.instance.exports.write_bs(count));
+      const count = parseInt(process.argv[2] ?? "3");
+      const str = receiveCString(module, () => module.instance.exports.write_bs(count));
       console.log(str);
   })();
 
 Strings: ✔
-Perhaps that wasn&#x27;t the most enjoyable experiment, but it does give one a new appreciation for binding generators that do all this work for you.
+Perhaps that wasn't the most enjoyable experiment, but it does give one a new appreciation for binding generators that do all this work for you.
 
-Armed with a way to pass strings between JavaScript and C, I&#x27;m now ready to leverage old C code (that I don&#x27;t want to rewrite) by recompiling for WebAssembly and adding appropriate JavaScript glue. Theoretically the final WebAssembly module artifact will be useful for a long time (&quot;compile once, run forever&quot;?). I have one project in mind, but I&#x27;m not going to discuss it or commit to anything just yet.
+Armed with a way to pass strings between JavaScript and C, I'm now ready to leverage old C code (that I don't want to rewrite) by recompiling for WebAssembly and adding appropriate JavaScript glue. Theoretically the final WebAssembly module artifact will be useful for a long time ("compile once, run forever"?). I have one project in mind, but I'm not going to discuss it or commit to anything just yet.
 
 Have fun manually managing memory with JavaScript!
 
 Links:
-
+]]>
 </content>
 </entry>
 </feed>
