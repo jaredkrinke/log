@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Schemescape: Compiling Graphviz to WebAssembly (without Emscripten)</title>
-        <meta name="description" content="In order to automatically generate diagrams for my site that&#x27;s built with Node, I compiled Graphviz to WebAssembly. Here&#x27;s my experience." />
-        <meta name="keywords" content="diagrams" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <link rel="stylesheet" href="../../../css/style.css" />
-        <link rel="alternate" type="application/rss+xml" href="../../../feed.xml" />
-    </head>
-    <body>
-        <header>
-            <h1><a href="../../../">Schemescape</a></h1>
-            <p>Development log of a life-long coder</p>
-            <nav>
-    <ul>
-        <li><a href="../../../posts/webassembly">webassembly</a></li>
-        <li><a href="../../../posts/diagrams">diagrams</a></li>
-    </ul>
+<head>
+<meta charset="utf-8" />
+<title>Schemescape: Compiling Graphviz to WebAssembly (without Emscripten)</title>
+<meta name="description" content="In order to automatically generate diagrams for my site that&#x27;s built with Node, I compiled Graphviz to WebAssembly. Here&#x27;s my experience." />
+<meta name="keywords" content="diagrams" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../../css/style.css" />
+<link rel="alternate" type="application/rss+xml" href="../../../feed.xml" />
+</head>
+<body>
+<header>
+<h1><a href="../../../">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+<nav>
+<ul>
+<li><a href="../../../posts/webassembly">webassembly</a></li>
+<li><a href="../../../posts/diagrams">diagrams</a></li>
+</ul>
 </nav>
-        </header>
-        <main>
+</header>
+<main>
 <article>
-    <header>
-        <h1><a href=".">Compiling Graphviz to WebAssembly (without Emscripten)</a></h1>
-        <p><time datetime="2021-10-09">October 9, 2021</time></p>
-    </header>
+<header>
+<h1><a href=".">Compiling Graphviz to WebAssembly (without Emscripten)</a></h1>
+<p><time datetime="2021-10-09">October 9, 2021</time></p>
+</header>
 <p>After successfully <a href="../passing-strings-to-c/">passed strings back and forth between WebAssembly and JavaScript</a>, and <a href="../c-standard-library-example/">linked against a C standard library</a> (all without Emscripten... or Python), I felt ready to try compiling a substantial library to WebAssembly for use in Node.</p>
 <h1 id="graphviz">Graphviz</h1>
 <p>Specifically, I wanted to be able to automatically generate diagrams (in <a href="https://en.wikipedia.org/wiki/Scalable_Vector_Graphics">SVG</a> format) from text descriptions when building my static site using <a href="../../static-site-generators/metalsmith/">Metalsmith/Node</a>. <a href="https://graphviz.org/">Graphviz</a> is an old package of tools and libraries (written in C) that I&#39;ve successfully used in the past.</p>
@@ -321,9 +321,9 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
 </ul>
 
 <footer>
-    <p><a href="../../../">Back to home</a></p>
+<p><a href="../../../">Back to home</a></p>
 </footer>
 </article>
-        </main>
-    </body>
+</main>
+</body>
 </html>

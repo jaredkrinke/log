@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Schemescape: WebAssembly and the C standard library</title>
-        <meta name="description" content="In the interest of compiling C code to WebAssembly, here&#x27;s an example of using the C standard library." />
-        
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <link rel="stylesheet" href="../../../css/style.css" />
-        <link rel="alternate" type="application/rss+xml" href="../../../feed.xml" />
-    </head>
-    <body>
-        <header>
-            <h1><a href="../../../">Schemescape</a></h1>
-            <p>Development log of a life-long coder</p>
-            <nav>
-    <ul>
-        <li><a href="../../../posts/webassembly">webassembly</a></li>
-    </ul>
+<head>
+<meta charset="utf-8" />
+<title>Schemescape: WebAssembly and the C standard library</title>
+<meta name="description" content="In the interest of compiling C code to WebAssembly, here&#x27;s an example of using the C standard library." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../../css/style.css" />
+<link rel="alternate" type="application/rss+xml" href="../../../feed.xml" />
+</head>
+<body>
+<header>
+<h1><a href="../../../">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+<nav>
+<ul>
+<li><a href="../../../posts/webassembly">webassembly</a></li>
+</ul>
 </nav>
-        </header>
-        <main>
+</header>
+<main>
 <article>
-    <header>
-        <h1><a href=".">WebAssembly and the C standard library</a></h1>
-        <p><time datetime="2021-09-28">September 28, 2021</time></p>
-    </header>
+<header>
+<h1><a href=".">WebAssembly and the C standard library</a></h1>
+<p><time datetime="2021-09-28">September 28, 2021</time></p>
+</header>
 <p>In the <a href="../trivial-example/">last post</a>, I compiled a trivial C function to WebAssembly. This was a good learning exercise, but I didn&#39;t use the C standard library, so compiling the code was trivial. Let&#39;s look into how to use the C standard library when compiling C to WebAssembly with Clang/LLVM. All the code is in this repository: <a href="https://github.com/jaredkrinke/webassembly-libc-example">webassembly-libc-example</a>.</p>
 <h1 id="is-this-even-a-good-idea">Is this even a good idea?</h1>
 <p>WebAssembly is simple, which is nice for getting started. It&#39;s also extremely limited (at least, in the browser). In order to compile typical C code to WebAssembly, you need a C standard library.</p>
@@ -145,9 +145,9 @@
 </ul>
 
 <footer>
-    <p><a href="../../../">Back to home</a></p>
+<p><a href="../../../">Back to home</a></p>
 </footer>
 </article>
-        </main>
-    </body>
+</main>
+</body>
 </html>
