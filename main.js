@@ -20,6 +20,7 @@ import fileMetadata from "metalsmith-filemetadata";
 import brokenLinkChecker from "metalsmith-broken-link-checker";
 import metalsmithExpress from "metalsmith-express";
 import metalsmithWatch from "metalsmith-watch";
+import metalsmithMetadata from "metalsmith-metadata";
 
 // Command line arguments
 const serve = process.argv.includes("--serve");
@@ -40,16 +41,12 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "nu
 const noop = (files, metalsmith, done) => done();
 
 Metalsmith(path.dirname(process.argv[1]))
-    .metadata({
-        site: {
-            title: "Schemescape",
-            url: "https://log.schemescape.com/",
-            description: "Development log of a life-long coder",
-        },
-    })
     .clean(clean)
     .source("./content")
     .destination("./out")
+    .use(metalsmithMetadata({
+        site: "site.json",
+    }))
     .use(assets({
         src: "static",
         dest: ".",
