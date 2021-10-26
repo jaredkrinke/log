@@ -1,6 +1,8 @@
 import marked from "marked";
 import markdown from "./metalsmith-marked.js";
 
+// TODO: This should be renamed "link replacer" or something like that -- what it's doing is definitely not robust
+
 const baseMarkdownRenderer = new marked.Renderer();
 const baseLinkRenderer = baseMarkdownRenderer.link;
 const baseImageRenderer = baseMarkdownRenderer.image;
