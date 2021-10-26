@@ -7,40 +7,40 @@
 <author>
     <name>Schemescape</name>
 </author>
-<updated>2021-10-25T17:43:17.877Z</updated>
+<updated>2021-10-26T16:49:14.182Z</updated>
 
 <entry>
 <title>Metalsmith&#x27;s downsides</title>
-<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides"/>
+<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides/</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides/"/>
 <updated>2021-10-14T00:00:00.000Z</updated>
 <summary type="text">I&#x27;m using Metalsmith to generate this site and, while I generally like it, it&#x27;s not perfect. Here are some of Metalsmith&#x27;s downsides.</summary>
 </entry>
 <entry>
 <title>Generating SVG diagrams automatically with Metalsmith</title>
-<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams"/>
+<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams/</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams/"/>
 <updated>2021-10-10T00:00:00.000Z</updated>
 <summary type="text">Metalsmith is used to build this static site. Here&#x27;s how Graphviz was integrated to automatically generate diagrams.</summary>
 </entry>
 <entry>
 <title>Compiling Graphviz to WebAssembly (without Emscripten)</title>
-<id>https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly"/>
+<id>https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly/</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly/"/>
 <updated>2021-10-09T00:00:00.000Z</updated>
 <summary type="text">In order to automatically generate diagrams for my site that&#x27;s built with Node, I compiled Graphviz to WebAssembly. Here&#x27;s my experience.</summary>
 </entry>
 <entry>
 <title>WebAssembly objects, libraries, and linking (for C code)</title>
-<id>https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking"/>
+<id>https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking/</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking/"/>
 <updated>2021-10-06T00:00:00.000Z</updated>
 <summary type="text">In order to reuse C libraries in WebAssembly, here is how object files, libraries, and linking work with Clang and LLVM.</summary>
 </entry>
 <entry>
 <title>Passing strings to and from WebAssembly using C</title>
-<id>https://log.schemescape.com/posts/webassembly/passing-strings-to-c</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/passing-strings-to-c"/>
+<id>https://log.schemescape.com/posts/webassembly/passing-strings-to-c/</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/passing-strings-to-c/"/>
 <updated>2021-10-05T00:00:00.000Z</updated>
 <summary type="text">Here&#x27;s an example of passing strings to and from a WebAssembly module that is written in C and compiled with Clang and LLVM.</summary>
 </entry>
