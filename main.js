@@ -50,8 +50,8 @@ Metalsmith(path.dirname(process.argv[1]))
         src: "static",
         dest: ".",
     }))
-    .use(normalizeSlashes())
-    .use(serve ? noop : drafts())
+    .use(normalizeSlashes()) // Only needed due to this metalsmith-taxonomy issue: https://github.com/webketje/metalsmith-taxonomy/issues/14
+    .use(serve ? noop : drafts()) // Exclude drafts when building, but include them when serving locally
     .use(routeProperties({ "posts/(:category/):postName.md": { category: "misc" } }))
     .use(fileMetadata([
         {
