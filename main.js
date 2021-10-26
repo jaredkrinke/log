@@ -1,27 +1,27 @@
-import path from "path";
-import markdown from "./metalsmith-marked.js";
-import relativeLinks from "./metalsmith-relative-links.js";
-import graphvizDiagrams from "./metalsmith-graphviz-diagrams.js";
-import syntaxHighlighting from "./metalsmith-syntax-highlighting.js";
-import routeProperties from "./metalsmith-route-properties.js";
-import normalizeSlashes from "./metalsmith-normalize-slashes.js";
-import linkify from "./metalsmith-linkify.js";
 import handlebars from "handlebars";
 import Metalsmith from "metalsmith";
-import layouts from "metalsmith-layouts";
-import collections from "metalsmith-collections";
-import permalinks from "metalsmith-permalinks";
-import rootPath from "metalsmith-rootpath";
-import discoverPartials from "metalsmith-discover-partials";
-import assets from "metalsmith-static";
-import drafts from "metalsmith-drafts";
-import taxonomy from "metalsmith-taxonomy";
-import fileMetadata from "metalsmith-filemetadata";
-import brokenLinkChecker from "metalsmith-broken-link-checker";
+import metalsmithBrokenLinkChecker from "metalsmith-broken-link-checker";
+import metalsmithCollections from "metalsmith-collections";
+import metalsmithDiscoverPartials from "metalsmith-discover-partials";
+import metalsmithDrafts from "metalsmith-drafts";
 import metalsmithExpress from "metalsmith-express";
-import metalsmithWatch from "metalsmith-watch";
+import metalsmithFileMetadata from "metalsmith-filemetadata";
+import metalsmithLayouts from "metalsmith-layouts";
 import metalsmithMetadata from "metalsmith-metadata";
+import metalsmithPermalinks from "metalsmith-permalinks";
+import metalsmithRootPath from "metalsmith-rootpath";
+import metalsmithStatic from "metalsmith-static";
+import metalsmithTaxonomy from "metalsmith-taxonomy";
+import metalsmithWatch from "metalsmith-watch";
+import path from "path";
+import metalsmithGraphvizDiagrams from "./metalsmith-graphviz-diagrams.js";
 import metalsmithInjectFiles from "./metalsmith-inject-files.js";
+import metalsmithLinkify from "./metalsmith-linkify.js";
+import metalsmithMarked from "./metalsmith-marked.js";
+import metalsmithNormalizeSlashes from "./metalsmith-normalize-slashes.js";
+import metalsmithRelativeLinks from "./metalsmith-relative-links.js";
+import metalsmithRouteProperties from "./metalsmith-route-properties.js";
+import metalsmithSyntaxHighlighting from "./metalsmith-syntax-highlighting.js";
 
 // Command line arguments
 const serve = process.argv.includes("--serve");
@@ -46,14 +46,14 @@ Metalsmith(path.dirname(process.argv[1]))
     .source("./content")
     .destination("./out")
     .use(metalsmithMetadata({ site: "site.json" }))
-    .use(assets({
+    .use(metalsmithStatic({
         src: "static",
         dest: ".",
     }))
-    .use(normalizeSlashes()) // Only needed due to this metalsmith-taxonomy issue: https://github.com/webketje/metalsmith-taxonomy/issues/14
-    .use(serve ? noop : drafts()) // Exclude drafts when building, but include them when serving locally
-    .use(routeProperties({ "posts/(:category/):postName.md": { category: "misc" } }))
-    .use(fileMetadata([
+    .use(metalsmithNormalizeSlashes()) // Only needed due to this metalsmith-taxonomy issue: https://github.com/webketje/metalsmith-taxonomy/issues/14
+    .use(serve ? noop : metalsmithDrafts()) // Exclude drafts when building, but include them when serving locally
+    .use(metalsmithRouteProperties({ "posts/(:category/):postName.md": { category: "misc" } }))
+    .use(metalsmithFileMetadata([
         {
             pattern: "posts/**/*.md",
 
@@ -61,12 +61,12 @@ Metalsmith(path.dirname(process.argv[1]))
             metadata: (file) => ({ tags: [...new Set([ file.category, ...(file.keywords ?? []) ])] }),
         }
     ]))
-    .use(taxonomy({
+    .use(metalsmithTaxonomy({
         pattern: "posts/**/*.md",
         taxonomies: ["tags"],
         pages: ["term"],
     }))
-    .use(fileMetadata([
+    .use(metalsmithFileMetadata([
         {
             pattern: "tags/*.html",
             metadata: (file, metadata) => ({
@@ -78,7 +78,7 @@ Metalsmith(path.dirname(process.argv[1]))
             }),
         },
     ]))
-    .use(collections({
+    .use(metalsmithCollections({
         posts: {
             pattern: "posts/**/*.md",
             sortBy: "date",
@@ -110,18 +110,18 @@ Metalsmith(path.dirname(process.argv[1]))
 
         done();
     })
-    .use(relativeLinks({ prefix: "../" })) // permalinks plugin moves posts into their own directories
-    .use(syntaxHighlighting({
+    .use(metalsmithRelativeLinks({ prefix: "../" })) // permalinks plugin moves posts into their own directories
+    .use(metalsmithSyntaxHighlighting({
         aliases: [
             { tag: "dot", language: "c" },
         ],
     }))
-    .use(graphvizDiagrams({
+    .use(metalsmithGraphvizDiagrams({
         cssClasses: true,
         useDefaultFonts: true,
     }))
-    .use(markdown())
-    .use(permalinks({
+    .use(metalsmithMarked())
+    .use(metalsmithPermalinks({
         pattern: "posts/:category/:postName",
         linksets: [
             {
@@ -136,10 +136,10 @@ Metalsmith(path.dirname(process.argv[1]))
         "404.html": { layout: "404.hbs" },
         "feed.xml": { layout: "feed.hbs" },
     }))
-    .use(rootPath())
-    .use(discoverPartials({ directory: "templates" }))
-    .use(linkify())
-    .use(layouts({
+    .use(metalsmithRootPath())
+    .use(metalsmithDiscoverPartials({ directory: "templates" }))
+    .use(metalsmithLinkify())
+    .use(metalsmithLayouts({
         directory: "templates",
         default: "default.hbs",
         pattern: ["**/*.html", "feed.xml"],
@@ -155,7 +155,7 @@ Metalsmith(path.dirname(process.argv[1]))
             livereload: true,
         })
         : noop)
-    .use(serve ? noop : brokenLinkChecker({ // Link checker doesn't play nicely with metalsmith-watch
+    .use(serve ? noop : metalsmithBrokenLinkChecker({ // Link checker doesn't play nicely with metalsmith-watch
         allowRedirects: true,
         checkAnchors: true,
     }))
