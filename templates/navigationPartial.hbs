@@ -1,14 +1,14 @@
 <nav>
-    <ul>
-        {{#each tags}}
-        {{#if (and (lookup .. "isTagIndex") (equal this (lookup .. "tag")))}}
-        <li>{{this}}</li>
-        {{else}}
-        <li><a href="{{../rootPath}}posts/{{this}}">{{this}}</a></li>
-        {{/if}}
-        {{/each}}
-        {{#if incomplete}}
-        <li><a href="{{rootPath}}archive.html">&hellip;</a></li>
-        {{/if}}
-    </ul>
+<ul>
+{{#each tags}}
+{{#if (and (lookup .. "isTagIndex") (equal this (lookup .. "tag")))}}
+<li>{{this}}</li>
+{{else}}
+<li><a href="{{../rootPath}}posts/{{this}}">{{this}}</a></li>
+{{/if}}
+{{/each}}
+{{#if incomplete}}
+<li><a href="{{rootPath}}archive.html">&hellip;</a></li>
+{{/if}}
+</ul>
 </nav>
