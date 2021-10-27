@@ -4,7 +4,7 @@
 {{#if (and (lookup .. "isTagIndex") (equal this (lookup .. "tag")))}}
 <li>{{this}}</li>
 {{else}}
-<li><a href="{{../rootPath}}posts/{{this}}">{{this}}</a></li>
+<li><a href="{{../rootPath}}posts/{{this}}/index.html">{{this}}</a></li>
 {{/if}}
 {{/each}}
 {{#if incomplete}}

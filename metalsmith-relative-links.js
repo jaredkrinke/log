@@ -13,7 +13,7 @@ export default (options) => {
             // Translate relative Markdown links to point to corresponding HTML output files (with anchor support)
             link: function (href, title, text) {
                 return baseLinkRenderer.call(this,
-                    href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, `${prefix}$1/$2`),
+                    href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, `${prefix}$1.html$2`),
                     title,
                     text);
             },

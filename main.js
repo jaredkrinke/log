@@ -8,7 +8,6 @@ import metalsmithExpress from "metalsmith-express";
 import metalsmithFileMetadata from "metalsmith-filemetadata";
 import metalsmithLayouts from "metalsmith-layouts";
 import metalsmithMetadata from "metalsmith-metadata";
-import metalsmithPermalinks from "metalsmith-permalinks";
 import metalsmithRootPath from "metalsmith-rootpath";
 import metalsmithStatic from "metalsmith-static";
 import metalsmithTaxonomy from "metalsmith-taxonomy";
@@ -108,9 +107,19 @@ Metalsmith(path.dirname(process.argv[1]))
         // Also include the current time
         metadata.now = new Date();
 
+        // Move tag list pages to "posts/<topic>/index.html"
+        Object.keys(files).forEach(key => {
+            const file = files[key];
+            if (file.type === "taxonomy:term") {
+                const newKey = `posts/${file.term}/index.html`;
+                files[newKey] = file;
+                delete files[key];
+            }
+        });
+        
         done();
     })
-    .use(metalsmithRelativeLinks({ prefix: "../" })) // permalinks plugin moves posts into their own directories
+    .use(metalsmithRelativeLinks())
     .use(metalsmithSyntaxHighlighting({
         aliases: [
             { tag: "dot", language: "c" },
@@ -121,21 +130,13 @@ Metalsmith(path.dirname(process.argv[1]))
         useDefaultFonts: true,
     }))
     .use(metalsmithMarked())
-    .use(metalsmithPermalinks({
-        pattern: "posts/:category/:postName",
-        linksets: [
-            {
-                match: { type: "taxonomy:term" },
-                pattern: "posts/:term",
-            },
-        ],
-    }))
     .use(metalsmithInjectFiles({
         "index.html": { layout: "index.hbs" },
-        [path.join("posts", "index.html")]: { layout: "archive.hbs" },
+        "posts/index.html": { layout: "archive.hbs" },
         "404.html": { layout: "404.hbs" },
         "feed.xml": { layout: "feed.hbs" },
     }))
+    .use(metalsmithNormalizeSlashes({ usePlatformSeparators: true })) // Platform separators are needed to compute rootPath
     .use(metalsmithRootPath())
     .use(metalsmithDiscoverPartials({ directory: "templates" }))
     .use(metalsmithLinkify())
@@ -156,7 +157,6 @@ Metalsmith(path.dirname(process.argv[1]))
         })
         : noop)
     .use(serve ? noop : metalsmithBrokenLinkChecker({ // Link checker doesn't play nicely with metalsmith-watch
-        allowRedirects: true,
         checkAnchors: true,
     }))
     .build(err => { if (err) throw err; });
