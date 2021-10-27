@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Schemescape: WebAssembly overview</title>
+<meta name="description" content="WebAssembly makes web browsers a compilation target for languages like C. Here&#x27;s a brief overview of WebAssembly." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+<link rel="alternate" type="application/rss+xml" href="../../feed.xml" />
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+<nav>
+<ul>
+<li><a href="../../posts/webassembly/index.html">webassembly</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="index.html">WebAssembly overview</a></h1>
+<p><time datetime="2021-09-25">September 25, 2021</time></p>
+</header>
+<h1 id="background">Background</h1>
+<h1 id="emscripten">Emscripten</h1>
+<p>I first heard of <a href="https://emscripten.org/">Emscripten</a> in the mid-2010s. At the time, you could compile C code to an optimizability-focused subset of JavaScript known as <a href="http://asmjs.org/">asm.js</a>. This meant that, given the source code to a native app and appropriate implementations of system APIs, you could run <em>formerly</em> native-only programs in the browser--convenient, if you don&#39;t want to install anything.</p>
+<h2 id="enter-webassembly">Enter WebAssembly</h2>
+<p>In the intervening years, <a href="https://webassembly.org/">WebAssembly</a> appeared. WebAssembly is a binary format for programs that run on a portable virtual machine. This VM can be hosted in your browser, but non-browser runtimes have also sprung up (e.g. <a href="https://wasmtime.dev/">wasmtime</a>).</p>
+<p>WebAssembly, to me, seems like the <a href="https://en.wikipedia.org/wiki/Holy_Grail">Holy Grail</a> of compilation targets. I wouldn&#39;t be surprised if, thanks to browser support, WebAssembly is <em>the</em> most broadly supported binary program format. What other binary format works on my desktop, phone, <a href="https://www.raspberrypi.org/">Raspberry Pi</a>?</p>
+<p>Note that WebAssembly runtimes seem to be standardizing on an in-development system interface named <a href="https://wasi.dev/">WASI</a>. You probably can&#39;t write a GUI app solely with WebAssembly and WASI today, but I&#39;m sure that day is coming (in the distant future).</p>
+<h2 id="one-note-on-emscripten">One note on Emscripten</h2>
+<p>If you just want to port native programs to the browser, Emscripten is an environment for doing that. It even converts <a href="https://en.wikipedia.org/wiki/OpenGL">OpenGL</a> to <a href="https://www.khronos.org/webgl/">WebGL</a> and handles the <a href="https://www.libsdl.org/">SDL</a> API. Unfortunately, just <em>installing</em> Emscripten requires Python. For now, I refuse to setup bloated software just to <em>install</em> the software I actually want, so I&#39;m skipping Emscripten.</p>
+<h1 id="webassembly-concepts">WebAssembly concepts</h1>
+<p>Mozilla&#39;s documentation has a <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Concepts">great overview of WebAssembly concepts</a>. There&#39;s also an <a href="https://hacks.mozilla.org/2017/07/creating-a-webassembly-module-instance-with-javascript/">approachable series of WebAssembly articles</a> on Mozilla Hacks. I&#39;ll try to summarize:</p>
+<ul>
+<li><strong>Module</strong>: a compiled WebAssembly binary (declaring imports and exports)</li>
+<li><strong>Instance</strong>: a module along with its state (memory, table, imports)</li>
+<li><strong>Memory</strong>: a read/write, resizable buffer provided to the instance</li>
+<li><strong>Table</strong>: array of references that aren&#39;t directly stored in WebAssembly-accessible memory (for security reasons)<ul>
+<li>The example I&#39;ve seen for this is to be able to pass function pointers into C/C++ code</li>
+</ul>
+</li>
+</ul>
+<h1 id="webassembly-formats">WebAssembly formats</h1>
+<p>WebAssembly defines two formats:</p>
+<ul>
+<li><strong>.wasm</strong>: Binary format</li>
+<li><strong>.wat</strong>: Text format (assembly)</li>
+</ul>
+<p>The <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a> contains tools for converting between these formats. Specifically, <code>wat2wasm</code> is analogous to a very simple assembler, and <code>wasm2wat</code> to a disassembler.</p>
+<h1 id="webassembly-browser-interface">WebAssembly browser interface</h1>
+<p>Within the browser, WebAssembly <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Loading_and_running">currently needs to be loaded using JavaScript</a> (it sounds like there are plans to support loading using script tags and import statements in the future). Sadly, as of today, the recommended way to load WebAssembly (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiateStreaming">WebAssembly.instantiateStreaming()</a>) is <a href="https://caniuse.com/?search=instantiateStreaming">only supported by 75% of browsers</a>. The more broadly supported <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiate">WebAssembly.instantiate()</a> seems cumbersome. I&#39;m hopeful that WebAssembly&#39;s ergonomics will improve, but I suppose this is just the price you pay when using new technology.</p>
+<h1 id="next-steps">Next steps</h1>
+<p>Armed with the above information, I think I&#39;m ready to dive in and test out WebAssembly with a trivial example. I&#39;ll report my findings in a subsequent update.</p>
+
+<footer>
+<p><a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Schemescape: Generating diagrams when building a static site (part 2)</title>
+<meta name="description" content="I&#x27;d like to use Mermaid to generate SVG diagrams for my static site at build time. Here&#x27;s my attempt at integrating Mermaid." />
+<meta name="keywords" content="diagrams" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+<link rel="alternate" type="application/rss+xml" href="../../feed.xml" />
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+<nav>
+<ul>
+<li><a href="../../posts/static-site-generators/index.html">static-site-generators</a></li>
+<li><a href="../../posts/diagrams/index.html">diagrams</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="index.html">Generating diagrams when building a static site (part 2)</a></h1>
+<p><time datetime="2021-09-24">September 24, 2021</time></p>
+</header>
+<p>In the <a href="diagrams.html">last post</a>, I looked at options for generating diagrams from text descriptions at build time for my static site. Here&#39;s my (failed) attempt at integrating <a href="https://mermaid-js.github.io/mermaid/#/">Mermaid</a> into my site.</p>
+<h1 id="mermaid-is-browser-based">Mermaid is browser-based</h1>
+<p>Mermaid is built on top of <a href="https://d3js.org/">D3.js</a>, which is designed to be used in the browser. It exposes a <a href="https://en.wikipedia.org/wiki/Fluent_interface">fluent</a> API reminiscent of <a href="https://jquery.com/">jQuery</a>. It directly manipulates a DOM, which means you need a browser.</p>
+<p>This is a problem for my scenario where I&#39;m building my site outside of any browser in Node.</p>
+<p>Mermaid provides a command line interface where you can pass in the text describing a diagram and get SVG back out, but rather than doing something sensible, it uses <a href="https://github.com/puppeteer/puppeteer">Puppeteer</a> to spin up a headless Chromium browser DOM (enjoy that 200+ MB download!) that D3.js manipulates, and then gets everything back out. I guess this is fine for generating, say, a PNG image file, but for SVG it seems excessively wasteful. You shouldn&#39;t need a DOM or browser just to generate XML!</p>
+<h1 id="sanity-check">Sanity check</h1>
+<p>Just to make sure I&#39;m not missing something obvious, let&#39;s try building a Mermaid diagram in Node without doing anything special.</p>
+<h2 id="module-woes">Module woes...</h2>
+<p>The first problem I hit is that Mermaid 8.13.0 with D3.js 7.0.3 won&#39;t load in either a CommonJS or ES Module environment in Node 14.17.0. If, in CommonJS mode, I try to use <code>require(&quot;mermaid&quot;)</code>, Node rightly points out that D3.js is an ES Module. If, in an ES Module, I try to use <code>import &quot;mermaid&quot;;</code>, then Mermaid tries to use <code>require()</code> on D3.js, which obviously doesn&#39;t work. This seems like a bug in Webpack&#39;s &quot;universal module&quot; pattern.</p>
+<h2 id="jsdom-to-the-rescue">jsdom to the rescue?</h2>
+<p><a href="https://github.com/jsdom/jsdom">jsdom</a> provides a fake DOM implementation for use in Node. Sounds promising!</p>
+<p>Unfortunately, Mermaid&#39;s dependencies require some SVG functionality that jsdom doesn&#39;t implement, e.g. <a href="https://developer.mozilla.org/en-US/docs/Web/API/SVGGraphicsElement/getBBox">SVGGraphicsElement.getBBox()</a>. Alright, now it&#39;s making more sense why Mermaid has this dependency on a browser--it&#39;s using the browser&#39;s SVG API to measure text, compute transformations, and so on. I&#39;m still not thrilled with this design, but I can see how one might need to measure text when generating diagrams (althoug embedding a full Chromium engine seems like overkill).</p>
+<p>I did a bit of searching to see if anyone has implemented the SVG API for use in Node, but I couldn&#39;t find anything that looked promising. There was a library for the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas">Canvas</a> API that can be used in Node, which probably solved many similar problems (related to CSS and measuring fonts), but implementing SVG just so I can generate diagrams without downloading Chrome is beyond the amount of effort I&#39;m willing to put into this endeavor.</p>
+<h1 id="taking-a-step-back">Taking a step back</h1>
+<p>It&#39;s looking like using Mermaid on the back end is probably going to require either a significant amount of effort or a willingness to settle for using Chromium behind the scenes.</p>
+<p>Rather than start investigating the performance characteristics of mermaid-cli, I think I&#39;m going to take a step back and evaluate which of Mermaid, Graphviz, and <a href="https://github.com/microsoft/automatic-graph-layout">MSAGL</a> (which I just found) has syntax I find most comfortable (while still supporting the features I&#39;m interested in). Honestly, this should have been the first step, but I was hoping that one option would be clearly easier to integrate, at which point I&#39;d probably just make do with whatever syntax and features were available.</p>
+
+<footer>
+<p><a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+</body>
+</html>

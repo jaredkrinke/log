@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Schemescape: Test-driving Eleventy for a simple dev blog</title>
+<meta name="description" content="I&#x27;m testing out static site generators for my new dev blog. Here&#x27;s my first experience with Eleventy." />
+<meta name="keywords" content="eleventy" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+<link rel="alternate" type="application/rss+xml" href="../../feed.xml" />
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+<nav>
+<ul>
+<li><a href="../../posts/static-site-generators/index.html">static-site-generators</a></li>
+<li><a href="../../posts/eleventy/index.html">eleventy</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="index.html">Test-driving Eleventy for a simple dev blog</a></h1>
+<p><time datetime="2021-09-14">September 14, 2021</time></p>
+</header>
+<p>I&#39;m testing out <a href="comparison.html">the most promising static site generators</a> to see which is closest to <a href="overview.html">my ideal setup</a>. Next up is <a href="https://www.11ty.dev/">Eleventy</a>.</p>
+<h1 id="eleventy">Eleventy</h1>
+<p>Eleventy is a Node-based static site generator that seems to be popular with people who would rather use JavaScript instead of Ruby/Jekyll.</p>
+<h2 id="installation">Installation</h2>
+<p>Installation is done via NPM. Obnoxiously, if you don&#39;t install globally, <a href="https://www.11ty.dev/docs/usage/">there is a non-Eleventy NPM package named &quot;eleventy&quot; that is picked up by default</a>, so you have to use <code>npx @11ty/eleventy ...</code> for commands. This is the recommended approach and I find it very awkward to type (NPM scripts seem like a good mitigating practice). At least the other package doesn&#39;t appear to obviously be name squatting malware!</p>
+<h2 id="setup">Setup</h2>
+<p>Configuration of input/output directories, etc. is done on the command line or in a JavaScript config file (yes, it&#39;s real JavaScript code). Their <a href="https://www.11ty.dev/docs/config/">sample</a> feels a bit convoluted for what amounts to JSON:</p>
+<pre><code class="language-javascript"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">eleventyConfig</span>) {
+  <span class="hljs-comment">// Return your Object options:</span>
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">dir</span>: {
+      <span class="hljs-attr">input</span>: <span class="hljs-string">&quot;views&quot;</span>,
+      <span class="hljs-attr">output</span>: <span class="hljs-string">&quot;dist&quot;</span>
+    }
+  }
+};
+</code></pre>
+<p>I was curious what all might go in an Eleventy configuration file, so I took a peek at their <a href="https://github.com/11ty/eleventy-base-blog">official blog sample</a> and was horrified to see 142 lines of JavaScript code in their <code>.eleventy.js</code> config file. I thought this was supposed to be the simplest static site generator! Looking more closely, there appear to be helper functions defined in this configuration file. I&#39;m not going to question their design yet, but it makes me nervous.</p>
+<h2 id="concepts">Concepts</h2>
+<p><a href="https://www.11ty.dev/docs/">Eleventy&#39;s documentation</a> has lots of details, but there isn&#39;t a great overview of all the concepts and the associated directory structure. For example, I still haven&#39;t found a clear definition for their use of the word &quot;template&quot;.</p>
+<p>I&#39;m far from an expert, but here is my understanding of Eleventy&#39;s concepts:</p>
+<ul>
+<li>Input: directory that content is pulled from (defaults to root)<ul>
+<li>Note: Content is opt <em>out</em> not opt in, so you have to tell Eleventy which files you don&#39;t want published (this seems like a risky default to me)</li>
+</ul>
+</li>
+<li>Output: directory where built/rendered/copied content goes (for subsequent uploading/publishing)</li>
+<li>Layouts: templates for rendering content; a wide variety of template engines are supported (including Liquid, EJS, JavaScript, but but <a href="https://github.com/11ty/eleventy/issues/235"><em>not</em> JSX</a>)</li>
+<li>Data: properties that come from several sources and can be used in layouts, including the file system, per-directory JSON files, templates, YAML front matter in content files</li>
+<li>Collection: specified with the &quot;tags&quot; property, collections are used for iterating over multiple pieces of content</li>
+<li>(Pagination, filters, shortcodes, and custom tags are other concepts I haven&#39;t needed yet)</li>
+</ul>
+<p>I found Eleventy&#39;s terminology to be unintuitive (templates vs. layouts vs. includes), but the concepts make sense. The <a href="https://www.11ty.dev/docs/data-cascade/">cascading data model</a> is particularly elegant.</p>
+<p>The default directory structure for a blog could look like this:</p>
+<ul>
+<li>(root): By default, the root is the directory from which Eleventy pulls content (note: content is opt <em>out</em> not opt in)<ul>
+<li><code>index.html</code>: Home page for the blog</li>
+<li><code>_data</code>: Directory for site-wide data<ul>
+<li><code>site.json</code>: Site-wide metadata properties</li>
+</ul>
+</li>
+<li><code>_includes</code>: Directory for storing templates, etc.<ul>
+<li><code>post.ejs</code>: EJS template for blog posts</li>
+</ul>
+</li>
+<li><code>_site</code>: Output directory (yes, the output directory is a subdirectory of the input directory by default)</li>
+<li><code>posts</code>: Directory for storing blog posts<ul>
+<li><code>posts.json</code>: Metadata properties to apply to all posts (namely: <code>layout: post.ejs</code>)</li>
+<li><code>something-interesting.md</code>: A blog post</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="first-run">First run</h2>
+<p>Eleventy&#39;s directory structure initially seemed simpler than Hugo&#39;s, but as I dove in, I found that it muddled distinct concepts and I ended up having to change the configuration quite a bit to give me what I wanted. Because I wanted to separate content from everything else, I ended up with a <code>.eleventy.js</code> configuration file that looked like this:</p>
+<pre><code class="language-javascript"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">eleventyConfig</span>) {
+    <span class="hljs-comment">// Copy everything under &quot;static&quot; to the root of the built site (note: this is relative to this config file)</span>
+    eleventyConfig.<span class="hljs-title function_">addPassthroughCopy</span>({ <span class="hljs-string">&quot;static&quot;</span>: <span class="hljs-string">&quot;./&quot;</span> });
+
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-attr">dir</span>: {
+            <span class="hljs-attr">input</span>: <span class="hljs-string">&quot;content&quot;</span>,
+            <span class="hljs-attr">output</span>: <span class="hljs-string">&quot;out&quot;</span>,
+            <span class="hljs-attr">includes</span>: <span class="hljs-string">&quot;../templates&quot;</span> <span class="hljs-comment">// Note: this is relative to the input directory</span>
+        }
+    }
+};
+</code></pre>
+<p>My corresponding directory structure is visible on the <a href="https://github.com/jaredkrinke/log/tree/eleventy">eleventy branch of this repository on GitHub</a>.</p>
+<h2 id="themes">Themes?</h2>
+<p>My experience with Hugo themes wasn&#39;t great because they push hard to make you want to share your theme. Eleventy is basically the opposite. Because configuration is JavaScript code run in Node, you probably don&#39;t want to download others&#39; themes unless you&#39;ve gone through the code to make sure it does only what you want.</p>
+<p>Not supporting themes in a safe manner could be a downside for people who don&#39;t want to create their own templates, but it&#39;s fine for me because I want to craft the HTML myself to ensure it has only what I want (simple HTML) and nothing that I don&#39;t (e.g. social media icons).</p>
+<h2 id="javascript-templates">JavaScript templates</h2>
+<p>Originally, I planned to use a standard template system because that knowledge would be portable across different static site generators. But as I looked at examples of Hugo&#39;s templates or Liquid templates, I came to the conclusion that these template languages are surprisingly ugly and unfamiliar. Eleventy supports plain old JavaScript templates which (security concerns aside, since I&#39;m writing my own templates) is convenient because it&#39;s just JavaScript. Sure, it&#39;s is a quirky language, but with <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">template literals</a>, it&#39;s surprisingly readable (although you have to take care to properly escape everything):</p>
+<pre><code class="language-javascript"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot; /&gt;
+        &lt;title&gt;Blog: <span class="hljs-subst">${data.title}</span>&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;main&gt;
+            &lt;header&gt;&lt;h1&gt;My Blog&lt;/h1&gt;&lt;/header&gt;
+            &lt;article&gt;
+                &lt;header&gt;
+                    &lt;h1&gt;<span class="hljs-subst">${data.title}</span>&lt;/h1&gt;
+                    &lt;p&gt;Date: &lt;time&gt;<span class="hljs-subst">${data.page.date}</span>&lt;/time&gt;&lt;/p&gt;
+                &lt;/header&gt;
+                <span class="hljs-subst">${data.content}</span>
+            &lt;/article&gt;
+        &lt;/main&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+`</span>
+}
+</code></pre>
+<h3 id="escaping-html">Escaping HTML</h3>
+<p>Note: when using Eleventy&#39;s JavaScript template language, I didn&#39;t see a built-in, documented way to escape arbitrary text for inserting into HTML. The <a href="https://www.npmjs.com/package/escape-html">escape-html NPM Package</a> worked for my purposes, but now I feel like I&#39;m getting close to wanting to build my own template language.</p>
+<h2 id="issues">Issues</h2>
+<h3 id="relative-links-dont-work">Relative links don&#39;t work</h3>
+<p>I&#39;m using relative links to <code>*.md</code> files for linking between posts, but (at least with the default configuration), those links aren&#39;t being being updated to point to the resulting HTML files. Note: I&#39;m not implying that Eleventy told me this would work -- it&#39;s just part of my desired workflow.</p>
+<h3 id="markdown-post-processed-by-default">Markdown post-processed by default</h3>
+<p>In one of my posts, written in Markdown, I show Liquid/Tera/Jinja syntax (e.g. <code>{%</code>) inside a code block. With my mostly-default setup, Eleventy tried to interpret this as template syntax, which is definitely not what I would have expected (it&#39;s Markdown, not a template!). Fortunately, you can disable this behavior with the <a href="https://www.11ty.dev/docs/config/#default-template-engine-for-markdown-files">markdownTemplateEngine: false</a> setting.</p>
+<h3 id="page-urls-arent-relative">Page URLs aren&#39;t relative</h3>
+<p>This problem isn&#39;t unique to Eleventy (and arguably it&#39;s easier to handle in Eleventy&#39;s JavaScript template language), but Eleventy doesn&#39;t supply relative links to posts -- the <code>page.url</code> property starts with <code>/</code>. This prevents you from just viewing the HTML files directly from the file system (and it also makes it difficult to host a site in a subdirectory).</p>
+<p>In my case, since it&#39;s just JavaScript code hosted in Node anyway, I&#39;m using Node&#39;s <a href="https://nodejs.org/api/path.html#path_path_relative_from_to">path.posix API</a> to compute the relative path to the site root.</p>
+<h2 id="lets-stop-there">Let&#39;s stop there</h2>
+<p>That&#39;s probably enough for one post.</p>
+<p>Overall, ramping up on Eleventy was more confusing than I anticipated, but all the pain I felt around Hugo&#39;s template language was partially avoided in Eleventy by the ability to use good old JavaScript code. I&#39;m not a fan of some of the design decisions (namely, drawing content from the root folder), but I feel like I could actually end up choosing Eleventy just because it prevents me from having to learn (and, later, remember) another programming language.</p>
+<p><strong>Update</strong>: I fully integrated Eleventy into my dev blog, details are in <a href="eleventy-2.html">part 2</a>.</p>
+
+<footer>
+<p><a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+</body>
+</html>

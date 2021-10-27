@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Schemescape: WebAssembly and the C standard library</title>
+<meta name="description" content="In the interest of compiling C code to WebAssembly, here&#x27;s an example of using the C standard library." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+<link rel="alternate" type="application/rss+xml" href="../../feed.xml" />
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+<nav>
+<ul>
+<li><a href="../../posts/webassembly/index.html">webassembly</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="index.html">WebAssembly and the C standard library</a></h1>
+<p><time datetime="2021-09-28">September 28, 2021</time></p>
+</header>
+<p>In the <a href="trivial-example.html">last post</a>, I compiled a trivial C function to WebAssembly. This was a good learning exercise, but I didn&#39;t use the C standard library, so compiling the code was trivial. Let&#39;s look into how to use the C standard library when compiling C to WebAssembly with Clang/LLVM. All the code is in this repository: <a href="https://github.com/jaredkrinke/webassembly-libc-example">webassembly-libc-example</a>.</p>
+<h1 id="is-this-even-a-good-idea">Is this even a good idea?</h1>
+<p>WebAssembly is simple, which is nice for getting started. It&#39;s also extremely limited (at least, in the browser). In order to compile typical C code to WebAssembly, you need a C standard library.</p>
+<p>Obviously, the browser doesn&#39;t supply a C run time to WebAssembly modules (any language could be compiled to WebAssembly), so that means that the module itself has to include all the functionality it uses from the C library within itself (or get it from another module). In other words, it&#39;s statically linked.</p>
+<p>How much overhead is including the C library in every module going to add? That&#39;s a good question, that I&#39;m hoping to answer eventually.</p>
+<h1 id="which-c-library-to-use">Which C library to use?</h1>
+<p>Here are a few promising leads on a WebAssembly-friendly C library (either already compiled to WebAssembly or simple enough that there&#39;s hope I could compile to WebAssembly myself):</p>
+<ul>
+<li><a href="https://github.com/emscripten-core/emscripten">Emscripten</a>: Modified version of <a href="https://musl.libc.org/">musl libc</a> that can run in a browser</li>
+<li><a href="https://github.com/WebAssembly/wasi-libc">WASI libc</a>: Also built on musl (I think), but designed to run on top of <a href="https://wasi.dev/">WASI</a>--I didn&#39;t think this would run in the browser, but <a href="https://depth-first.com/articles/2019/10/16/compiling-c-to-webassembly-and-running-it-without-emscripten/">this blog post indicates otherwise</a></li>
+<li><a href="https://github.com/embeddedartistry/libc">Embedded Artistry libc</a>: Designed for embedded applications; I&#39;m hoping this would be easy to bring up on a new platform like WebAssembly</li>
+<li><strong>Build your own!</strong> If you only need a handful of functions, maybe you can implement them yourself (here&#39;s <a href="https://dassur.ma/things/c-to-webassembly/">one great example with a trivial allocator</a>)</li>
+</ul>
+<p>I&#39;m going to continue avoiding Emscripten because a) it wants me to install Python first and b) I&#39;d like to keep things as simple as possible. I didn&#39;t think WASI&#39;s C library would work for me in the browser, but I&#39;m going to try it anyway.</p>
+<h1 id="setup-for-wasi-libc">Setup for WASI libc</h1>
+<p>In order to compile against a C library, you need header files and compiled objects (in an archive) or a shared library (a concept that I don&#39;t think exists for WebAssembly since they use modules for that purpose). Note that we&#39;re basically cross-compiling for a different architecture.</p>
+<p>Fortunately, <a href="https://github.com/WebAssembly/wasi-sdk">WASI provides an SDK for exactly this purpose</a>. I downloaded the latest release (~140 MB) and took a peek at the contents:</p>
+<ul>
+<li><code>bin/</code>: Oh, look, Clang and LLVM -- I guess I should have just started here!</li>
+<li><code>lib/clang/11.0.0/lib/wasi/libclang_rt.builtins-wasm32.a</code>: This archive contains WebAssembly implementations of so-called &quot;builtins&quot; that <a href="https://releases.llvm.org/11.0.0/tools/clang/docs/Toolchain.html">Clang implicitly requires</a></li>
+<li><code>share/wasi-sysroot</code>: System root for the cross compiler, containing all the headers and libraries (all raw objects or archives)</li>
+</ul>
+<p>Note that the version of LLVM that I installed in my last post didn&#39;t come from the WASI SDK and it didn&#39;t contain the &quot;builtins&quot; archive noted above. In order to use that installation of Clang/LLVM, I needed to copy <code>libclang_rt.builtins-wasm32.a</code> into my installation (fortunately the eventual error message you see provides the exact destination path).</p>
+<h1 id="a-slightly-less-trivial-example">A slightly less trivial example</h1>
+<h2 id="source-code">Source code</h2>
+<p>Here&#39;s the C source for my test module that uses the WASI C library (<code>sine.c</code>):</p>
+<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;math.h&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT_AS(name) __attribute__((export_name(name)))</span>
+<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol</span>
+
+<span class="hljs-type">double</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(sine)</span><span class="hljs-params">(<span class="hljs-type">double</span> theta)</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">sin</span>(theta);
+}
+</code></pre>
+<p>All I&#39;m doing is exposing <code>sin</code> from <code>math.h</code> as an export named <code>sine</code>.</p>
+<h2 id="compiling">Compiling</h2>
+<p>The build command is a bit more complicated than <a href="trivial-example.html#compiling-the-code">last time</a>:</p>
+<ul>
+<li><code>-nostdlib</code> is gone since we&#39;re using the C standard library this time</li>
+<li><code>-nostartfiles</code> is present because we don&#39;t need to link in any bootstrapping entry point to call <code>main()</code> (we don&#39;t have a <code>main()</code>)</li>
+<li><code>-target wasm32-wasi</code> could be updated to specify the &quot;operating system&quot; (used loosely here) as WASI</li>
+<li><code>--sysroot wasi-sdk-12.0/share/wasi-sysroot</code> to point to the cross-compiler system root that came from the WASI SDK</li>
+</ul>
+<p>Note that in this example, I extracted the WASI SDK into a subfolder of my project (the <a href="https://github.com/WebAssembly/wasi-sdk">SDK&#39;s README has an example as well</a>).</p>
+<p>Here&#39;s the build command (note: I omitted the <code>-target</code> option because I&#39;m using the WASI SDK&#39;s Clang, which defaults to targeting <code>wasm32-wasi</code>):</p>
+<pre><code class="language-sh">wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm
+</code></pre>
+<h2 id="calling-from-node">Calling from Node</h2>
+<p>Almost identical to last time:</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+(<span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./sine.wasm&quot;</span>));
+    <span class="hljs-keyword">const</span> sine = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">sine</span>;
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sine</span>(<span class="hljs-number">1.57</span>));
+})();
+</code></pre>
+<p>Output: 0.9999996829318346 (looks reasonable, since 1.57 is approximately pi/2 and so sine of that angle should be roughly 1).</p>
+<h2 id="calling-from-a-browser">Calling from a browser</h2>
+<p>Again, almost identical:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>The value of sin(1.57) is <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;result&quot;</span>&gt;</span>?<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+            (<span class="hljs-keyword">async</span> () =&gt; {
+                <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiateStreaming</span>(<span class="hljs-title function_">fetch</span>(<span class="hljs-string">&quot;./sine.wasm&quot;</span>));
+                <span class="hljs-keyword">const</span> sine = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">sine</span>;
+                <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;result&quot;</span>).<span class="hljs-property">innerText</span> = <span class="hljs-title function_">sine</span>(<span class="hljs-number">1.57</span>);
+            })();
+        </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<p>Result:</p>
+<pre><code><span class="hljs-attribute">The</span> value of sin(<span class="hljs-number">1</span>.<span class="hljs-number">57</span>) is <span class="hljs-number">0</span>.<span class="hljs-number">9999996829318346</span>
+</code></pre>
+<p>Looks like the WASI libc works in the browser, at least in a case like this where no system calls are needed.</p>
+<h1 id="overhead">Overhead</h1>
+<p>Earlier, I was wondering how much overhead there is in linking against a C standard library for WebAssembly. My understanding is that linking for C is done per-function, so you&#39;re only pulling in what you need. Here are some measurements I took (and yes, I linked in <code>malloc</code> but not <code>free</code>):</p>
+<table>
+<thead>
+<tr>
+<th align="left">Dependencies</th>
+<th align="right">Module size (in bytes)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">(none)</td>
+<td align="right">207</td>
+</tr>
+<tr>
+<td align="left"><code>sin</code></td>
+<td align="right">7851</td>
+</tr>
+<tr>
+<td align="left"><code>sin</code>, <code>cos</code></td>
+<td align="right">8116</td>
+</tr>
+<tr>
+<td align="left"><code>malloc</code></td>
+<td align="right">7350</td>
+</tr>
+<tr>
+<td align="left"><code>sin</code>, <code>malloc</code></td>
+<td align="right">14995</td>
+</tr>
+</tbody></table>
+<p>Not great, but also not terrible. My hope is that WebAssembly written in C <em>and using the C standard library</em> is uncommon, and generally only used for hosting programs with large C code bases that would be prohibitively time-consuming to rewrite.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Overall, that could have gone a lot worse.</p>
+<p>I&#39;m still not thrilled with the overhead of statically linking <em>everything</em>, and the thought of each module essentially having its own allocator is a bit alarming, but I need to remind myself that the alternatives are often worse. For example, if rewriting a C program in JavaScript isn&#39;t in the cards, the previous best options were either transpiling the C code to something like asm.js or, even worse, emulating an x86 CPU in the browser (using JavaScript) and running existing binaries.</p>
+<p>I will state, however, that I&#39;m not quite as thrilled with the idea of compiling C programs to WebAssembly to support &quot;run anywhere&quot; scenarios as I was before I started this exercise.</p>
+<h1 id="links">Links</h1>
+<ul>
+<li>Code: <a href="https://github.com/jaredkrinke/webassembly-libc-example">webassembly-libc-example</a></li>
+<li><a href="https://jaredkrinke.github.io/webassembly-libc-example/">Live demo</a></li>
+</ul>
+
+<footer>
+<p><a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+</body>
+</html>

@@ -7,40 +7,40 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-10-27T17:31:46.423Z</updated>
+<updated>2021-10-27T19:07:59.454Z</updated>
 
 <entry>
 <title>Designing md2blog, a zero-config static site generator for dev blogs</title>
-<id>https://log.schemescape.com/posts/static-site-generators/md2blog-design/</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-design/"/>
+<id>https://log.schemescape.com/posts/static-site-generators/md2blog-design.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-design.html"/>
 <updated>2021-10-27T00:00:00.000Z</updated>
 <summary type="text">Here&#x27;s the design of my in-progress static site generator, md2blog.</summary>
 </entry>
 <entry>
 <title>Metalsmith&#x27;s downsides</title>
-<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides/</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides/"/>
+<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides.html"/>
 <updated>2021-10-14T00:00:00.000Z</updated>
 <summary type="text">I&#x27;m using Metalsmith to generate this site and, while I generally like it, it&#x27;s not perfect. Here are some of Metalsmith&#x27;s downsides.</summary>
 </entry>
 <entry>
 <title>Generating SVG diagrams automatically with Metalsmith</title>
-<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams/</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams/"/>
+<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams.html"/>
 <updated>2021-10-10T00:00:00.000Z</updated>
 <summary type="text">Metalsmith is used to build this static site. Here&#x27;s how Graphviz was integrated to automatically generate diagrams.</summary>
 </entry>
 <entry>
 <title>Compiling Graphviz to WebAssembly (without Emscripten)</title>
-<id>https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly/</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly/"/>
+<id>https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly.html"/>
 <updated>2021-10-09T00:00:00.000Z</updated>
 <summary type="text">In order to automatically generate diagrams for my site that&#x27;s built with Node, I compiled Graphviz to WebAssembly. Here&#x27;s my experience.</summary>
 </entry>
 <entry>
 <title>WebAssembly objects, libraries, and linking (for C code)</title>
-<id>https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking/</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking/"/>
+<id>https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking.html"/>
 <updated>2021-10-06T00:00:00.000Z</updated>
 <summary type="text">In order to reuse C libraries in WebAssembly, here is how object files, libraries, and linking work with Clang and LLVM.</summary>
 </entry>

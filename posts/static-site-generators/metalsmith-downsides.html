@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Schemescape: Metalsmith&#x27;s downsides</title>
+<meta name="description" content="I&#x27;m using Metalsmith to generate this site and, while I generally like it, it&#x27;s not perfect. Here are some of Metalsmith&#x27;s downsides." />
+<meta name="keywords" content="metalsmith" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+<link rel="alternate" type="application/rss+xml" href="../../feed.xml" />
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+<nav>
+<ul>
+<li><a href="../../posts/static-site-generators/index.html">static-site-generators</a></li>
+<li><a href="../../posts/metalsmith/index.html">metalsmith</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="index.html">Metalsmith&#x27;s downsides</a></h1>
+<p><time datetime="2021-10-14">October 14, 2021</time></p>
+</header>
+<p>After <a href="comparison.html">testing out a bunch of static site generators</a>, I settled on using <a href="metalsmith.html">Metalsmith</a> for this site. I like that Metalsmith has a simple design that can be easily extended with plugins (either custom or &quot;off the shelf&quot;), but that&#39;s not to say that Metalsmith is perfect.</p>
+<p>Let&#39;s dive into the downsides of Metalsmith.</p>
+<h1 id="is-metalsmith-being-maintained">Is Metalsmith being maintained?</h1>
+<p>There&#39;s the question of ownership and maintenance. Metalsmith was created by <a href="https://segment.com/">Segment</a>, and the <a href="https://github.com/segmentio/metalsmith">main repository</a> lives under their GitHub account. Maintenance duties were <a href="https://github.com/segmentio/metalsmith/pull/324/files">transferred in 2018</a>, but there have been no nontrivial commits since then.</p>
+<p><strong>A pessimistic view is that Metalsmith is a zombie project.</strong></p>
+<p>It&#39;s possible that Metalsmith is simple enough that it doesn&#39;t <em>need</em> any updates, but if you do run into a problem with Metalsmith itself, you&#39;re probably going to have to fix it yourself.</p>
+<p>This, to me, is probably the biggest downside of building on top of Metalsmith.</p>
+<h1 id="are-the-plugins-being-maintained">Are the plugins being maintained?</h1>
+<p>If you take the optimistic view that Metalsmith&#39;s core is rock-solid and not in need of updates, how about the plugins? In many cases, <strong>plugins also appear to be unmaintained</strong>.</p>
+<p>For example, take the <a href="https://github.com/segmentio/metalsmith-collections">metalsmith-collections</a> plugin. Its last commit was 3 years ago, but even worse, the <a href="https://github.com/segmentio/metalsmith-collections">associated NPM package</a> was published 5 years ago. In fact, the published package <a href="https://github.com/segmentio/metalsmith-collections/issues/91">doesn&#39;t even contain the most up-to-date version of the plugin</a>. I ran into this particular issue because I wanted to use the plugin&#39;s <code>filterBy</code> option, but that functionality isn&#39;t actually present in the NPM package&#39;s version.</p>
+<p>This is unfortunate, but there&#39;s nothing stopping you from forking and updating plugins yourself.</p>
+<h1 id="official-forum-sign-up-requirements">Official forum sign-up requirements</h1>
+<p><a href="https://metalsmith.io/">Metalsmith&#39;s home page</a> points to a <a href="https://gitter.im/">Gitter</a> community, which I interpret to be the official forum.</p>
+<p>While I like the <em>idea</em> of an open source Discord alternative, I was very disappointed with my first experience using (well, attemping to use) Gitter.</p>
+<p>Gitter was originally created as a way to chat about GitHub projects, so it was naturally tied to GitHub accounts. This was fine then, but even today Gitter requires one of the following accounts for login:</p>
+<ul>
+<li>GitHub</li>
+<li>GitLab</li>
+<li>Twitter</li>
+</ul>
+<p>I use GitHub and have a high opinion of both it and GitLab (Twitter, not so much). But Gitter&#39;s <em>default, required</em> access requests are repulsive:</p>
+<ul>
+<li>GitHub: &quot;This application will be able to read your ... private project boards.&quot;</li>
+<li>GitLab: &quot;Grants complete read/write access ... including all groups and projects ...&quot;</li>
+<li>Twitter: Requires a phone number to sign up (that I assume Twitter turns around and sells to advertisers)</li>
+</ul>
+<p>If I already used Twitter, that would be an acceptable option here, but I have no interest in donating my personal data to yet another gigantic advertising company. Without a Twitter account, none of the login options seem even remotely reasonable.</p>
+<p>In the end, I created a dummy GitHub account just to access Gitter (which essentially negates any user benefit of using OAuth).</p>
+<h1 id="plugin-ordering-and-lack-of-history">Plugin ordering and lack of history</h1>
+<p>My favorite aspect of Metalsmith is its minimal design that can be easily extended with simple plugins, but I think the design is perhaps <em>too</em> minimal.</p>
+<p>Internally, Metalsmith manages a mapping of files to properties, and this mapping is handed from one plugin to the next, sequentially (and asynchronously). Each plugin <em>mutates</em> the mapping however it wants, and eventually Metalsmith&#39;s <code>build()</code> function writes out the resulting files.</p>
+<p>This is indeed a very simple design, but there is a subtle problem lurking: since each plugin can do whatever it wants, information can be changed or lost along the chain. This leads to numerous problems. Here are some examples:</p>
+<ul>
+<li><a href="https://github.com/segmentio/metalsmith-markdown">metalsmith-markdown</a> renames files from &quot;page.md&quot; to &quot;page.html&quot;<ul>
+<li>Subsequent plugins can no longer distinguish which HTML files were generated from Markdown and which were just static HTML files</li>
+<li>This makes supporting relative links (e.g. <code>./other-page.md</code>) fragile (e.g. <code>./static-page.html</code>, referring to a static HTML page--not generated using Markdown--is ambiguous)</li>
+</ul>
+</li>
+<li><a href="https://github.com/segmentio/metalsmith-permalinks">metalsmith-permalinks</a> moves files into different directories<ul>
+<li>This plugin has to come before <a href="https://github.com/radiovisual/metalsmith-rootpath">metalsmith-rootpath</a> to correctly construct a &quot;relative path to root&quot; property</li>
+<li>Replacing paths also makes it essentially impossible to unambiguously link a source file to its destination, without adding additional plugins to the chain</li>
+</ul>
+</li>
+</ul>
+<p>The current behavior is simple to reason over, and can be solved without changing the architecture (using more plugins!), but it is initially surprising, and certainly makes the tool harder to use.</p>
+<h1 id="configuring-markdown">Configuring Markdown</h1>
+<p>One less prominent challenge with Metalsmith&#39;s architecture is that there is no mechanism (or convention) for communicating between plugins. Probably an uncommon scenario, but it would be nice to allow plugins to configure Metalsmith&#39;s Markdown options (without having to use an entirely separate Markdown plugin).</p>
+<h1 id="so-do-i-hate-metalsmith-no">So do I hate Metalsmith? No!</h1>
+<p>Honestly, this article makes a compelling case for avoiding Metalsmith--yet, I still use it. Why?</p>
+<p>As someone who&#39;s familiar with JavaScript, Node, and HTML/CSS, Metalsmith is simply the easiest static site generator for me to use:</p>
+<ul>
+<li>It&#39;s simple enough that I know exactly what it&#39;s doing</li>
+<li>It&#39;s easy to customize and extend</li>
+<li>Simple plugins already exist for most of the things I want to do</li>
+<li>It supports <a href="https://github.com/jstransformers">pretty much any template language</a></li>
+<li>I can even debug it, just by hitting F5 in VS Code</li>
+</ul>
+<p>Metalsmith is really giving me the best of both using a pre-built static site generator and creating my own. It&#39;s possible that the lack of maintenance will force me to switch to something else eventually, but for now I&#39;m happy with it.</p>
+
+<footer>
+<p><a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+</body>
+</html>
