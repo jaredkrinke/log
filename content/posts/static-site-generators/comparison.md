@@ -52,7 +52,7 @@ Below is a table summarizing what I found in my research (note: by "portable" I 
 | NuxtJS | Node, Vue | HTML | ? | ✖ | [Vue](https://vuejs.org/)/[JSX](https://reactjs.org/docs/introducing-jsx.html) |
 | VuePress | Node, Vue | HTML | ? | ✖ | [Vue](https://vuejs.org/)/[JSX](https://reactjs.org/docs/introducing-jsx.html) |
 | Eleventy | Node | HTML | Simple | ✔ | [Liquid](https://liquidjs.com/), [many more](https://www.11ty.dev/docs/languages/) |
-| Hexo | Node | HTML | Complicated | ✖ | [EJS](https://ejs.co/) |
+| Hexo | Node | HTML | Complicated | ✖ | [EJS](https://ejs.co/), [many more](https://hexo.io/plugins/) |
 | Pagic | Deno | SPA | Simple? | ✔ | [Vue](https://vuejs.org/)/[JSX](https://reactjs.org/docs/introducing-jsx.html) |
 | Docusaurus | Node | SPA | Complicated? | ✖ | [JSX](https://reactjs.org/docs/introducing-jsx.html) |
 | Next.js | Node | HTML | Complicated | ? | [JSX](https://reactjs.org/docs/introducing-jsx.html) |
