@@ -18,7 +18,7 @@ import metalsmithInjectFiles from "./metalsmith-inject-files.js";
 import metalsmithLinkify from "./metalsmith-linkify.js";
 import metalsmithMarked from "./metalsmith-marked.js";
 import metalsmithNormalizeSlashes from "./metalsmith-normalize-slashes.js";
-import metalsmithRelativeLinks from "./metalsmith-relative-links.js";
+import metalsmithReplaceLinks from "./metalsmith-replace-links.js";
 import metalsmithRouteMetadata from "./metalsmith-route-metadata.js";
 import metalsmithSyntaxHighlighting from "./metalsmith-syntax-highlighting.js";
 
@@ -121,7 +121,7 @@ Metalsmith(path.dirname(process.argv[1]))
         
         done();
     })
-    .use(metalsmithRelativeLinks())
+    .use(metalsmithReplaceLinks(href => href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, "$1.html$2")))
     .use(metalsmithSyntaxHighlighting({
         aliases: [
             { tag: "dot", language: "c" },
