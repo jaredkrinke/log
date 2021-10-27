@@ -7,8 +7,15 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-10-26T21:23:20.118Z</updated>
+<updated>2021-10-27T17:31:46.423Z</updated>
 
+<entry>
+<title>Designing md2blog, a zero-config static site generator for dev blogs</title>
+<id>https://log.schemescape.com/posts/static-site-generators/md2blog-design/</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-design/"/>
+<updated>2021-10-27T00:00:00.000Z</updated>
+<summary type="text">Here&#x27;s the design of my in-progress static site generator, md2blog.</summary>
+</entry>
 <entry>
 <title>Metalsmith&#x27;s downsides</title>
 <id>https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides/</id>
@@ -36,12 +43,5 @@
 <link rel="alternate" href="https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking/"/>
 <updated>2021-10-06T00:00:00.000Z</updated>
 <summary type="text">In order to reuse C libraries in WebAssembly, here is how object files, libraries, and linking work with Clang and LLVM.</summary>
-</entry>
-<entry>
-<title>Passing strings to and from WebAssembly using C</title>
-<id>https://log.schemescape.com/posts/webassembly/passing-strings-to-c/</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/passing-strings-to-c/"/>
-<updated>2021-10-05T00:00:00.000Z</updated>
-<summary type="text">Here&#x27;s an example of passing strings to and from a WebAssembly module that is written in C and compiled with Clang and LLVM.</summary>
 </entry>
 </feed>
