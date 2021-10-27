@@ -24,6 +24,7 @@ import metalsmithSyntaxHighlighting from "./metalsmith-syntax-highlighting.js";
 
 // Command line arguments
 const serve = process.argv.includes("--serve");
+const drafts = process.argv.includes("--drafts");
 const clean = !serve && process.argv.includes("--clean");
 
 // Handlebars template custom helpers
@@ -51,7 +52,7 @@ Metalsmith(path.dirname(process.argv[1]))
         dest: ".",
     }))
     .use(metalsmithNormalizeSlashes()) // Only needed due to this metalsmith-taxonomy issue: https://github.com/webketje/metalsmith-taxonomy/issues/14
-    .use(serve ? noop : metalsmithDrafts()) // Exclude drafts when building, but include them when serving locally
+    .use((drafts || serve) ? noop : metalsmithDrafts()) // By default, exclude drafts when building, but include them when serving locally
     .use(metalsmithRouteMetadata({ "posts/(:category/):postName.md": { category: "misc" } }))
     .use(metalsmithFileMetadata([
         {
@@ -150,14 +151,13 @@ Metalsmith(path.dirname(process.argv[1]))
     .use(serve
         ? metalsmithWatch({
             paths: {
-                "${source}/**/*": true,
+                // Just rebuild everything (technically only the modified post and all index pages *need* to be rebuilt)
+                "${source}/**/*": "**/*",
                 "static/**/*": "**/*",
                 "templates/**/*": "**/*",
             },
             livereload: true,
         })
         : noop)
-    .use(serve ? noop : metalsmithBrokenLinkChecker({ // Link checker doesn't play nicely with metalsmith-watch
-        checkAnchors: true,
-    }))
+    .use(metalsmithBrokenLinkChecker({ checkAnchors: true }))
     .build(err => { if (err) throw err; });
