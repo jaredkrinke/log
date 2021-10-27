@@ -132,7 +132,7 @@ Metalsmith(path.dirname(process.argv[1]))
     }))
     .use(metalsmithInjectFiles({
         "index.html": { layout: "index.hbs" },
-        "archive.html": { layout: "archive.hbs" },
+        [path.join("posts", "index.html")]: { layout: "archive.hbs" },
         "404.html": { layout: "404.hbs" },
         "feed.xml": { layout: "feed.hbs" },
     }))
