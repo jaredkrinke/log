@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 <title>{{site.title}}</title>
-<id>{{site.url}}</id>
+<id>{{#if site.url}}{{site.url}}{{else}}urn:md2blog:{{{encodeURIComponent site.title}}}{{/if}}</id>
+{{#if site.url}}
 <link rel="self" href="{{site.url}}feed.xml"/>
 <link rel="alternate" href="{{site.url}}"/>
+{{/if}}
 <author>
 <name>{{site.title}}</name>
 </author>
@@ -12,8 +14,8 @@
 {{#each posts_recent}}
 <entry>
 <title>{{title}}</title>
-<id>{{link.absolute}}</id>
-<link rel="alternate" href="{{link.absolute}}"/>
+<id>{{#if link.absolute}}{{link.absolute}}{{else}}urn:md2blog:{{{encodeURIComponent ../site.title}}}:{{{encodeURIComponent title}}}{{/if}}</id>
+{{#if link.absolute}}<link rel="alternate" href="{{link.absolute}}"/>{{/if}}
 <updated>{{formatDateISO date}}</updated>
 <summary type="text">{{description}}</summary>
 </entry>

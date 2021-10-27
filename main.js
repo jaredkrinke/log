@@ -35,6 +35,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "nu
     [ "formatDateISO", date => date.toISOString() ],
     [ "formatDateShort", date => date.toISOString().replace(/T.*$/, "") ],
     [ "formatDate", date => dateFormatter.format(date) ],
+    [ "encodeURIComponent", text => encodeURIComponent(text) ],
 ].forEach(row => handlebars.registerHelper(row[0], row[1]));
 
 // Trivial plugin that does nothing (for toggling on/off plugins)
