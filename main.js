@@ -121,7 +121,7 @@ Metalsmith(path.dirname(process.argv[1]))
         
         done();
     })
-    .use(metalsmithReplaceLinks(href => href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, "$1.html$2")))
+    .use(metalsmithReplaceLinks(href => href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, "$1.html$2"))) // Translate .md links to .html (with anchor support)
     .use(metalsmithSyntaxHighlighting({
         aliases: [
             { tag: "dot", language: "c" },
