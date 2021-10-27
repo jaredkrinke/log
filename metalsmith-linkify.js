@@ -10,9 +10,7 @@ export default () => ((files, metalsmith, done) => {
         // Link relative to the site root
         const link = {};
         files[key].link = link;
-        link.fromRoot = key
-            .replace(/\\/g, "/") // Convert slashes...
-            .replace(/\/index.html$/, "/"); // Remove "index.html"
+        link.fromRoot = key.replace(/\\/g, "/"); // Convert slashes...
         
         // Absolute link (if absolute link to site root provided)
         const siteUrl = metalsmith?.metadata()?.site?.url;
