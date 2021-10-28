@@ -61,7 +61,7 @@
 <span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">allocate_wasm_c_string</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> length)</span>;
 
 <span class="hljs-comment">// Creates a new wasm_c_string from an existing C string. When done, use &quot;free&quot; to release.</span>
-<span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">create_wasm_c_string</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* source)</span>;
+<span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">create_wasm_c_string</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* source)</span>;
 </code></pre>
 <p>And the source file (&quot;wasm-c-string.c&quot;):</p>
 <pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;malloc.h&gt;</span></span>
@@ -77,8 +77,8 @@ wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class=
     <span class="hljs-keyword">return</span> str;
 }
 
-wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(create_wasm_c_string)</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* source)</span> {
-    <span class="hljs-keyword">const</span> <span class="hljs-type">size_t</span> sourceLength = <span class="hljs-built_in">strlen</span>(source);
+wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(create_wasm_c_string)</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* source)</span> {
+    <span class="hljs-type">const</span> <span class="hljs-type">size_t</span> sourceLength = <span class="hljs-built_in">strlen</span>(source);
     wasm_c_string* str = allocate_wasm_c_string((<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)sourceLength);
     <span class="hljs-built_in">memcpy</span>(&amp;str-&gt;buffer[<span class="hljs-number">0</span>], source, sourceLength);
     <span class="hljs-keyword">return</span> str;
@@ -144,7 +144,7 @@ wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class=
 <p>Static libraries for native C code are often just archives (using the <a href="https://en.wikipedia.org/wiki/Ar_%28Unix%29"><code>ar</code></a> archiver tool), perhaps with some additional information to describe the library.</p>
 <p>Can I just do the same thing for WebAssembly? It certainly appears so.</p>
 <p>If I inspect the WASI SDK, in the WebAssembly sysroot, I actually see both bare objects and archives for the C standard library and friends:</p>
-<pre><code class="language-sh">$ ls wasi-sdk/share/wasi-sysroot/lib/wasm32-wasi
+<pre><code class="language-sh">$ <span class="hljs-built_in">ls</span> wasi-sdk/share/wasi-sysroot/lib/wasm32-wasi
 crt1-command.o  libc++abi.a                         libdl.a       libutil.a
 crt1.o          libc.imports                        libm.a        libwasi-emulated-mman.a
 crt1-reactor.o  libc-printscan-long-double.a        libpthread.a  libwasi-emulated-signal.a

@@ -77,7 +77,7 @@
 }
 
 <span class="hljs-comment">// Example of passing a string in</span>
-<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(count_as)</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* <span class="hljs-built_in">string</span>)</span> {
+<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(count_as)</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-built_in">string</span>)</span> {
     <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> numberOfAs = <span class="hljs-number">0</span>;
     <span class="hljs-keyword">while</span> (*<span class="hljs-built_in">string</span> != <span class="hljs-string">&#x27;\0&#x27;</span>) {
         <span class="hljs-keyword">if</span> (*<span class="hljs-built_in">string</span> == <span class="hljs-string">&#x27;a&#x27;</span>) {
@@ -105,7 +105,7 @@
     <span class="hljs-keyword">const</span> encodedString = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>()).<span class="hljs-title function_">encode</span>(nullTerminatedString);
     <span class="hljs-keyword">const</span> stringAddress = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">allocate</span>(encodedString.<span class="hljs-property">length</span>);
     <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">const</span> destination = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>, stringAddress);
+        <span class="hljs-keyword">const</span> destination = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>, stringAddress);
         destination.<span class="hljs-title function_">set</span>(encodedString);
         <span class="hljs-keyword">const</span> result = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">count_as</span>(stringAddress);
         <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result);
@@ -129,7 +129,7 @@
     <span class="hljs-keyword">const</span> encodedString = textEncoder.<span class="hljs-title function_">encode</span>(nullTerminatedString);
     <span class="hljs-keyword">const</span> address = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">allocate</span>(encodedString.<span class="hljs-property">length</span>);
     <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">const</span> destination = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>, address);
+        <span class="hljs-keyword">const</span> destination = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>, address);
         destination.<span class="hljs-title function_">set</span>(encodedString);
         <span class="hljs-keyword">return</span> <span class="hljs-title function_">run</span>(address);
     } <span class="hljs-keyword">finally</span> {
@@ -168,7 +168,7 @@
 <p>Note that I&#39;m assuming returned strings will be dynamically allocated, because constant strings should really just be provided directly using JavaScript. If the string <em>must</em> come from C code, all you&#39;d need to do is skip the allocation management steps (and hope that the JavaScript code doesn&#39;t decide to mutate the string!).</p>
 <h2 id="c-implementation-1">C implementation</h2>
 <p>Here&#39;s some simple code that creates a string with the letter &quot;b&quot; repeated a caller-supplied number of times:</p>
-<pre><code class="language-c"><span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(write_bs)</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> count)</span> {
+<pre><code class="language-c"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(write_bs)</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> count)</span> {
     <span class="hljs-comment">// Allocate space for the string, plus a null terminator</span>
     <span class="hljs-type">char</span>* str = (<span class="hljs-type">char</span>*)<span class="hljs-built_in">malloc</span>(count + <span class="hljs-number">1</span>);
 
@@ -195,8 +195,8 @@
     <span class="hljs-keyword">const</span> address = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">write_bs</span>(count);
     <span class="hljs-keyword">try</span> {
         <span class="hljs-keyword">const</span> buffer = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>;
-        <span class="hljs-keyword">const</span> encodedStringLength = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(buffer, address)).<span class="hljs-title function_">indexOf</span>(<span class="hljs-number">0</span>);
-        <span class="hljs-keyword">const</span> encodedStringBuffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(buffer, address, encodedStringLength);
+        <span class="hljs-keyword">const</span> encodedStringLength = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(buffer, address)).<span class="hljs-title function_">indexOf</span>(<span class="hljs-number">0</span>);
+        <span class="hljs-keyword">const</span> encodedStringBuffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(buffer, address, encodedStringLength);
         <span class="hljs-keyword">const</span> result = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoder</span>()).<span class="hljs-title function_">decode</span>(encodedStringBuffer);
         <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result);
     } <span class="hljs-keyword">finally</span> {
@@ -215,8 +215,8 @@ bbbbb
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">readStaticCString</span> = (<span class="hljs-params"><span class="hljs-variable language_">module</span>, address</span>) =&gt; {
     <span class="hljs-keyword">const</span> buffer = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">memory</span>.<span class="hljs-property">buffer</span>;
-    <span class="hljs-keyword">const</span> encodedStringLength = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(buffer, address)).<span class="hljs-title function_">indexOf</span>(<span class="hljs-number">0</span>);
-    <span class="hljs-keyword">const</span> encodedStringBuffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(buffer, address, encodedStringLength);
+    <span class="hljs-keyword">const</span> encodedStringLength = (<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(buffer, address)).<span class="hljs-title function_">indexOf</span>(<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">const</span> encodedStringBuffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(buffer, address, encodedStringLength);
     <span class="hljs-keyword">return</span> textDecoder.<span class="hljs-title function_">decode</span>(encodedStringBuffer);
 };
 

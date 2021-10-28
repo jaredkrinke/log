@@ -74,9 +74,9 @@
 }
 
 <span class="hljs-comment">// Main export</span>
-<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(dot2svg)</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* graphString)</span> {
+<span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(dot2svg)</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* graphString)</span> {
     <span class="hljs-comment">// Use Graphviz for converting dot to SVG</span>
-    <span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* result = <span class="hljs-literal">NULL</span>;
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* result = <span class="hljs-literal">NULL</span>;
     GVC_t* context = gvContextPlugins(lt_preloaded_symbols, <span class="hljs-literal">false</span>);
     <span class="hljs-keyword">if</span> (context) {
         Agraph_t* graph = agmemread(graphString);
@@ -153,7 +153,7 @@
 <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin_installed_t</span> gvrender_svg_types[];
 <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin_installed_t</span> gvloadimage_core_types[];
 
-<span class="hljs-keyword">static</span> <span class="hljs-type">gvplugin_api_t</span> apis[] = {
+<span class="hljs-type">static</span> <span class="hljs-type">gvplugin_api_t</span> apis[] = {
     {API_device, gvdevice_dot_types},
     {API_device, gvdevice_svg_types},
     {API_render, gvrender_dot_types},
@@ -271,10 +271,10 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
         <span class="hljs-keyword">case</span> <span class="hljs-attr">standardError</span>:
             {
                 <span class="hljs-comment">// Copy to buffer</span>
-                <span class="hljs-keyword">const</span> buffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(totalSizeInBytes);
+                <span class="hljs-keyword">const</span> buffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(totalSizeInBytes);
                 <span class="hljs-keyword">let</span> offset = <span class="hljs-number">0</span>;
                 ioVectors.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">ioVector</span> =&gt;</span> {
-                    buffer.<span class="hljs-title function_">set</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint</span>8<span class="hljs-built_in">Array</span>(memory.<span class="hljs-property">buffer</span>, ioVector.<span class="hljs-property">sourceAddress</span>, ioVector.<span class="hljs-property">sizeInBytes</span>), offset);
+                    buffer.<span class="hljs-title function_">set</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(memory.<span class="hljs-property">buffer</span>, ioVector.<span class="hljs-property">sourceAddress</span>, ioVector.<span class="hljs-property">sizeInBytes</span>), offset);
                     offset += ioVector.<span class="hljs-property">sizeInBytes</span>;
                 });
 

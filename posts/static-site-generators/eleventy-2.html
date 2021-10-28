@@ -114,7 +114,7 @@
 <pre><code class="language-javascript"><span class="hljs-keyword">const</span> escapeHTML = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;escape-html&quot;</span>)
 <span class="hljs-keyword">const</span> { renderPage } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;./shared&quot;</span>);
 
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">formatDateAsTimeElement</span> = date =&gt; <span class="hljs-string">`&lt;time datetime=&quot;<span class="hljs-subst">${date.toISOString().replace(<span class="hljs-regexp">/T.*$/</span>, <span class="hljs-string">&quot;&quot;</span>)}</span>&quot;&gt;<span class="hljs-subst">${dateFormatter.format(date)}</span>&lt;/time&gt;`</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">formatDateAsTimeElement</span> = date =&gt; <span class="hljs-string">`&lt;time datetime=&quot;<span class="hljs-subst">${date.toISOString().replace(/T.*$/, <span class="hljs-string">&quot;&quot;</span>)}</span>&quot;&gt;<span class="hljs-subst">${dateFormatter.format(date)}</span>&lt;/time&gt;`</span>;
 
 <span class="hljs-keyword">const</span> <span class="hljs-title function_">renderArticle</span> = data =&gt; <span class="hljs-string">`
 &lt;article&gt;
