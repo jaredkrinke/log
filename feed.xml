@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-10-27T21:21:58.064Z</updated>
+<updated>2021-10-28T04:33:56.750Z</updated>
 
 <entry>
 <title>Designing md2blog, a zero-config static site generator for dev blogs</title>
@@ -15,6 +15,194 @@
 <link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-design.html"/>
 <updated>2021-10-27T00:00:00.000Z</updated>
 <summary type="text">Here&#x27;s the design of my in-progress static site generator, md2blog.</summary>
+<content type="html">&lt;h1 id&#x3D;&quot;background&quot;&gt;Background&lt;/h1&gt;
+&lt;p&gt;After &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/comparison.md&quot;&gt;investigating many popular static site generators&lt;/a&gt;, I wasn&amp;#39;t able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage &lt;a href&#x3D;&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and numerous plugins) to get what I wanted. I&amp;#39;m calling the resulting tool &lt;strong&gt;md2blog&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;In this post, I&amp;#39;m going to cover the design of md2blog. Note that md2blog is a work in progress that has not been released yet.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;design-goals&quot;&gt;Design goals&lt;/h1&gt;
+&lt;p&gt;Here&amp;#39;s the overarching goal of md2blog:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Convert a &lt;em&gt;self-contained, organized&lt;/em&gt; pile of &lt;a href&#x3D;&quot;https://daringfireball.net/projects/markdown/&quot;&gt;Markdown&lt;/a&gt; posts into a &lt;em&gt;minimal, but fully functional&lt;/em&gt; static blog, requiring &lt;em&gt;zero configuration&lt;/em&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The key differentiator for md2blog is the &amp;quot;self-contained, organized&amp;quot; part. By this, I mean:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Relative links between Markdown files (including anchors) &amp;quot;just work&amp;quot;&lt;/strong&gt; (and are validated at build time)&lt;/li&gt;
+&lt;li&gt;Source Markdown files &lt;strong&gt;can be viewed (with links and images) in any Markdown previewer&lt;/strong&gt; (e.g. VS Code or GitHub)&lt;/li&gt;
+&lt;li&gt;Posts are &lt;strong&gt;implicitly categorized based on directory structure&lt;/strong&gt; (supplemental tags are also supported)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Additionally, the produced site is &amp;quot;minimal, but fully functional&amp;quot; in the following sense:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Page templates use &lt;strong&gt;clean, semantic HTML&lt;/strong&gt; with only a few kilobytes of CSS (and no JavaScript)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Relative links are used wherever possible&lt;/strong&gt;, so the site can be hosted anywhere (or even viewed directly from the file system)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Syntax highlighting&lt;/strong&gt; is automatically added to code blocks&lt;/li&gt;
+&lt;li&gt;An &lt;a href&#x3D;&quot;https://validator.w3.org/feed/docs/atom.html&quot;&gt;Atom&lt;/a&gt;/RSS news feed is automatically generated&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Note that &amp;quot;zero configuration&amp;quot; implies that md2blog is highly opinionated, to the point that there are no options to configure. &lt;strong&gt;Instead of fiddling with options and themes, the user&amp;#39;s focus is strictly on writing and publishing content.&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;input&quot;&gt;Input&lt;/h1&gt;
+&lt;p&gt;Here&amp;#39;s a more detailed look at building a dev blog with md2blog.&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;directory-structure&quot;&gt;Directory structure&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;content/&lt;/code&gt;: Root directory that contains all source content for the site&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;site.json&lt;/code&gt;: Site-wide metadata&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;assets/&lt;/code&gt;: Directory for assets (e.g. images)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;posts/&lt;/code&gt;: Directory for all posts&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;category1/&lt;/code&gt;: Directory for posts related to &amp;quot;category1&amp;quot;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;post1.md&lt;/code&gt;: Post related to &amp;quot;category1&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;post2.md&lt;/code&gt;: Another &amp;quot;category1&amp;quot; post&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;category2/&lt;/code&gt;: Another category&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;post3.md&lt;/code&gt;: &amp;quot;category2&amp;quot; post&lt;/li&gt;
+&lt;li&gt;etc.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id&#x3D;&quot;sitejson&quot;&gt;site.json&lt;/h2&gt;
+&lt;p&gt;Here&amp;#39;s an example &lt;code&gt;site.json&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-json&quot;&gt;{
+    &amp;quot;title&amp;quot;: &amp;quot;My dev blog&amp;quot;,
+    &amp;quot;url&amp;quot;: &amp;quot;https://mydevblog.com/&amp;quot;,
+    &amp;quot;description&amp;quot;: &amp;quot;A very good dev blog indeed&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Schema:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Field&lt;/th&gt;
+&lt;th&gt;Type&lt;/th&gt;
+&lt;th&gt;Required?&lt;/th&gt;
+&lt;th&gt;Note&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;string&lt;/td&gt;
+&lt;td&gt;Required&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;url&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;string&lt;/td&gt;
+&lt;td&gt;Recommended&lt;/td&gt;
+&lt;td&gt;Must end with &amp;quot;/&amp;quot;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;string&lt;/td&gt;
+&lt;td&gt;Optional&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;Note that the site &lt;em&gt;will&lt;/em&gt; work without specifying a URL, but absolute URLs in the generated Atom feed (e.g. links and images) won&amp;#39;t be available.&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;posts&quot;&gt;Posts&lt;/h2&gt;
+&lt;p&gt;Posts are written in Markdown and use YAML for front matter.&lt;/p&gt;
+&lt;h3 id&#x3D;&quot;front-matter&quot;&gt;Front matter&lt;/h3&gt;
+&lt;p&gt;Here&amp;#39;s an example showing all of the supported YAML front matter properties (&lt;code&gt;keywords&lt;/code&gt; and &lt;code&gt;draft&lt;/code&gt; are optional, the rest are required):&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-yaml&quot;&gt;---
+title: First post
+description: First post on my blog, with a relative link.
+date: 2021-10-26
+keywords: [additional-tag]
+draft: true
+---
+(Markdown content follows...)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Schema:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Field&lt;/th&gt;
+&lt;th&gt;Type&lt;/th&gt;
+&lt;th&gt;Required?&lt;/th&gt;
+&lt;th&gt;Note&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;string&lt;/td&gt;
+&lt;td&gt;Required&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;string&lt;/td&gt;
+&lt;td&gt;Required&lt;/td&gt;
+&lt;td&gt;This text is displayed on index pages&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;date&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;YYYY-MM-DD&lt;/td&gt;
+&lt;td&gt;Required&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;keywords&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;string[]&lt;/td&gt;
+&lt;td&gt;Optional&lt;/td&gt;
+&lt;td&gt;Additional tags for categorizing the post&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;draft&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Boolean&lt;/td&gt;
+&lt;td&gt;Optional&lt;/td&gt;
+&lt;td&gt;If &lt;code&gt;true&lt;/code&gt;, the post will only be built when serving locally&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;h3 id&#x3D;&quot;content&quot;&gt;Content&lt;/h3&gt;
+&lt;p&gt;Here&amp;#39;s example Markdown content, demonstrating relative links (these links get translated to the corresponding HTML files and checked at build time; they also work in VS Code&amp;#39;s and GitHub&amp;#39;s Markdown previewers):&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-md&quot;&gt;# Relative links
+Here&amp;#39;s a relative link to another post in this category: [link](post2.md)!
+
+And here&amp;#39;s one to another category, with an anchor: [link 2](../category2/post3.md#some-section).
+
+# Image
+Here&amp;#39;s an image:
+![test](../../assets/test.png)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finally, here is an example of including a code block (specifying the language is recommended, but optional):&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-md&quot;&gt;# Code block
+Here&amp;#39;s some code:
+
+&#x60;&#x60;&#x60;javascript
+const add &#x3D; (a, b) &#x3D;&amp;gt; a + b;
+&#x60;&#x60;&#x60;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id&#x3D;&quot;output&quot;&gt;Output&lt;/h1&gt;
+&lt;p&gt;All output is written to the &lt;code&gt;out/&lt;/code&gt; directory. Here&amp;#39;s what the output might look like for the example above:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: Home page&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;404.html&lt;/code&gt;: Error page&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;feed.xml&lt;/code&gt;: Atom news feed&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;posts/&lt;/code&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: Archive page containing links to all posts&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;category1/&lt;/code&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: Index page for &amp;quot;category1&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;post1.html&lt;/code&gt;: Post 1&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;post2.html&lt;/code&gt;: Post 2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;category2/&lt;/code&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: Index page for &amp;quot;category2&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;post3.html&lt;/code&gt;: Post 3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;assets/&lt;/code&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;test.png&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;css/&lt;/code&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;style.css&lt;/code&gt;: CSS stylesheet&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As noted previously, the entire site can viewed directly from the file system (no web server required).&lt;/p&gt;
+</content>
 </entry>
 <entry>
 <title>Metalsmith&#x27;s downsides</title>
@@ -22,6 +210,65 @@
 <link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides.html"/>
 <updated>2021-10-14T00:00:00.000Z</updated>
 <summary type="text">I&#x27;m using Metalsmith to generate this site and, while I generally like it, it&#x27;s not perfect. Here are some of Metalsmith&#x27;s downsides.</summary>
+<content type="html">&lt;p&gt;After &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/comparison.md&quot;&gt;testing out a bunch of static site generators&lt;/a&gt;, I settled on using &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/metalsmith.md&quot;&gt;Metalsmith&lt;/a&gt; for this site. I like that Metalsmith has a simple design that can be easily extended with plugins (either custom or &amp;quot;off the shelf&amp;quot;), but that&amp;#39;s not to say that Metalsmith is perfect.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s dive into the downsides of Metalsmith.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;is-metalsmith-being-maintained&quot;&gt;Is Metalsmith being maintained?&lt;/h1&gt;
+&lt;p&gt;There&amp;#39;s the question of ownership and maintenance. Metalsmith was created by &lt;a href&#x3D;&quot;https://segment.com/&quot;&gt;Segment&lt;/a&gt;, and the &lt;a href&#x3D;&quot;https://github.com/segmentio/metalsmith&quot;&gt;main repository&lt;/a&gt; lives under their GitHub account. Maintenance duties were &lt;a href&#x3D;&quot;https://github.com/segmentio/metalsmith/pull/324/files&quot;&gt;transferred in 2018&lt;/a&gt;, but there have been no nontrivial commits since then.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A pessimistic view is that Metalsmith is a zombie project.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s possible that Metalsmith is simple enough that it doesn&amp;#39;t &lt;em&gt;need&lt;/em&gt; any updates, but if you do run into a problem with Metalsmith itself, you&amp;#39;re probably going to have to fix it yourself.&lt;/p&gt;
+&lt;p&gt;This, to me, is probably the biggest downside of building on top of Metalsmith.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;are-the-plugins-being-maintained&quot;&gt;Are the plugins being maintained?&lt;/h1&gt;
+&lt;p&gt;If you take the optimistic view that Metalsmith&amp;#39;s core is rock-solid and not in need of updates, how about the plugins? In many cases, &lt;strong&gt;plugins also appear to be unmaintained&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;For example, take the &lt;a href&#x3D;&quot;https://github.com/segmentio/metalsmith-collections&quot;&gt;metalsmith-collections&lt;/a&gt; plugin. Its last commit was 3 years ago, but even worse, the &lt;a href&#x3D;&quot;https://github.com/segmentio/metalsmith-collections&quot;&gt;associated NPM package&lt;/a&gt; was published 5 years ago. In fact, the published package &lt;a href&#x3D;&quot;https://github.com/segmentio/metalsmith-collections/issues/91&quot;&gt;doesn&amp;#39;t even contain the most up-to-date version of the plugin&lt;/a&gt;. I ran into this particular issue because I wanted to use the plugin&amp;#39;s &lt;code&gt;filterBy&lt;/code&gt; option, but that functionality isn&amp;#39;t actually present in the NPM package&amp;#39;s version.&lt;/p&gt;
+&lt;p&gt;This is unfortunate, but there&amp;#39;s nothing stopping you from forking and updating plugins yourself.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;official-forum-sign-up-requirements&quot;&gt;Official forum sign-up requirements&lt;/h1&gt;
+&lt;p&gt;&lt;a href&#x3D;&quot;https://metalsmith.io/&quot;&gt;Metalsmith&amp;#39;s home page&lt;/a&gt; points to a &lt;a href&#x3D;&quot;https://gitter.im/&quot;&gt;Gitter&lt;/a&gt; community, which I interpret to be the official forum.&lt;/p&gt;
+&lt;p&gt;While I like the &lt;em&gt;idea&lt;/em&gt; of an open source Discord alternative, I was very disappointed with my first experience using (well, attemping to use) Gitter.&lt;/p&gt;
+&lt;p&gt;Gitter was originally created as a way to chat about GitHub projects, so it was naturally tied to GitHub accounts. This was fine then, but even today Gitter requires one of the following accounts for login:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GitHub&lt;/li&gt;
+&lt;li&gt;GitLab&lt;/li&gt;
+&lt;li&gt;Twitter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I use GitHub and have a high opinion of both it and GitLab (Twitter, not so much). But Gitter&amp;#39;s &lt;em&gt;default, required&lt;/em&gt; access requests are repulsive:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GitHub: &amp;quot;This application will be able to read your ... private project boards.&amp;quot;&lt;/li&gt;
+&lt;li&gt;GitLab: &amp;quot;Grants complete read/write access ... including all groups and projects ...&amp;quot;&lt;/li&gt;
+&lt;li&gt;Twitter: Requires a phone number to sign up (that I assume Twitter turns around and sells to advertisers)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If I already used Twitter, that would be an acceptable option here, but I have no interest in donating my personal data to yet another gigantic advertising company. Without a Twitter account, none of the login options seem even remotely reasonable.&lt;/p&gt;
+&lt;p&gt;In the end, I created a dummy GitHub account just to access Gitter (which essentially negates any user benefit of using OAuth).&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;plugin-ordering-and-lack-of-history&quot;&gt;Plugin ordering and lack of history&lt;/h1&gt;
+&lt;p&gt;My favorite aspect of Metalsmith is its minimal design that can be easily extended with simple plugins, but I think the design is perhaps &lt;em&gt;too&lt;/em&gt; minimal.&lt;/p&gt;
+&lt;p&gt;Internally, Metalsmith manages a mapping of files to properties, and this mapping is handed from one plugin to the next, sequentially (and asynchronously). Each plugin &lt;em&gt;mutates&lt;/em&gt; the mapping however it wants, and eventually Metalsmith&amp;#39;s &lt;code&gt;build()&lt;/code&gt; function writes out the resulting files.&lt;/p&gt;
+&lt;p&gt;This is indeed a very simple design, but there is a subtle problem lurking: since each plugin can do whatever it wants, information can be changed or lost along the chain. This leads to numerous problems. Here are some examples:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href&#x3D;&quot;https://github.com/segmentio/metalsmith-markdown&quot;&gt;metalsmith-markdown&lt;/a&gt; renames files from &amp;quot;page.md&amp;quot; to &amp;quot;page.html&amp;quot;&lt;ul&gt;
+&lt;li&gt;Subsequent plugins can no longer distinguish which HTML files were generated from Markdown and which were just static HTML files&lt;/li&gt;
+&lt;li&gt;This makes supporting relative links (e.g. &lt;code&gt;./other-page.md&lt;/code&gt;) fragile (e.g. &lt;code&gt;./static-page.html&lt;/code&gt;, referring to a static HTML page--not generated using Markdown--is ambiguous)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href&#x3D;&quot;https://github.com/segmentio/metalsmith-permalinks&quot;&gt;metalsmith-permalinks&lt;/a&gt; moves files into different directories&lt;ul&gt;
+&lt;li&gt;This plugin has to come before &lt;a href&#x3D;&quot;https://github.com/radiovisual/metalsmith-rootpath&quot;&gt;metalsmith-rootpath&lt;/a&gt; to correctly construct a &amp;quot;relative path to root&amp;quot; property&lt;/li&gt;
+&lt;li&gt;Replacing paths also makes it essentially impossible to unambiguously link a source file to its destination, without adding additional plugins to the chain&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The current behavior is simple to reason over, and can be solved without changing the architecture (using more plugins!), but it is initially surprising, and certainly makes the tool harder to use.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;configuring-markdown&quot;&gt;Configuring Markdown&lt;/h1&gt;
+&lt;p&gt;One less prominent challenge with Metalsmith&amp;#39;s architecture is that there is no mechanism (or convention) for communicating between plugins. Probably an uncommon scenario, but it would be nice to allow plugins to configure Metalsmith&amp;#39;s Markdown options (without having to use an entirely separate Markdown plugin).&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;so-do-i-hate-metalsmith-no&quot;&gt;So do I hate Metalsmith? No!&lt;/h1&gt;
+&lt;p&gt;Honestly, this article makes a compelling case for avoiding Metalsmith--yet, I still use it. Why?&lt;/p&gt;
+&lt;p&gt;As someone who&amp;#39;s familiar with JavaScript, Node, and HTML/CSS, Metalsmith is simply the easiest static site generator for me to use:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It&amp;#39;s simple enough that I know exactly what it&amp;#39;s doing&lt;/li&gt;
+&lt;li&gt;It&amp;#39;s easy to customize and extend&lt;/li&gt;
+&lt;li&gt;Simple plugins already exist for most of the things I want to do&lt;/li&gt;
+&lt;li&gt;It supports &lt;a href&#x3D;&quot;https://github.com/jstransformers&quot;&gt;pretty much any template language&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;I can even debug it, just by hitting F5 in VS Code&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Metalsmith is really giving me the best of both using a pre-built static site generator and creating my own. It&amp;#39;s possible that the lack of maintenance will force me to switch to something else eventually, but for now I&amp;#39;m happy with it.&lt;/p&gt;
+</content>
 </entry>
 <entry>
 <title>Generating SVG diagrams automatically with Metalsmith</title>
@@ -29,6 +276,74 @@
 <link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams.html"/>
 <updated>2021-10-10T00:00:00.000Z</updated>
 <summary type="text">Metalsmith is used to build this static site. Here&#x27;s how Graphviz was integrated to automatically generate diagrams.</summary>
+<content type="html">&lt;p&gt;Now that I&amp;#39;ve &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/../webassembly/compiling-graphviz-to-webassembly.md&quot;&gt;compiled Graphviz to a WebAssembly module&lt;/a&gt;, I&amp;#39;m going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;the-plan&quot;&gt;The plan&lt;/h1&gt;
+&lt;p&gt;Here&amp;#39;s a flow chart of my general plan:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-dot2svg&quot;&gt;digraph {
+    &amp;quot;Compile Graphviz to WebAssembly&amp;quot; -&amp;gt; &amp;quot;Generate diagrams at build time&amp;quot; -&amp;gt; &amp;quot;???&amp;quot; -&amp;gt; &amp;quot;Profit!&amp;quot;;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That diagram was generated using the following Markdown:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-md&quot;&gt;&#x60;&#x60;&#x60;dot2svg
+digraph {
+    &amp;quot;Compile Graphviz to WebAssembly&amp;quot; -&amp;gt; &amp;quot;Generate diagrams at build time&amp;quot; -&amp;gt; &amp;quot;???&amp;quot; -&amp;gt; &amp;quot;Profit!&amp;quot;;
+}
+&#x60;&#x60;&#x60;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id&#x3D;&quot;extending-the-marked-renderer&quot;&gt;Extending the Marked renderer&lt;/h1&gt;
+&lt;p&gt;As shown in the example near the top of this post, my plan is to piggyback on Markdown code blocks, using a special language tag &lt;code&gt;dot2svg&lt;/code&gt;. For all other code blocks (and on error), I simply defer to the default code block rendering function:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-javascript&quot;&gt;// Generate diagrams with dot2svg
+const baseCodeRenderer &#x3D; markdownRenderer.code;
+const dotConverter &#x3D; await createDOTToSVGAsync();
+markdownRenderer.code &#x3D; function (code, language, escaped) {
+    if (language &#x3D;&#x3D;&#x3D; &amp;quot;dot2svg&amp;quot;) {
+        const svg &#x3D; dotConverter.dotToSVG(code);
+        if (svg) {
+            return svg;
+        } else {
+            // On error, just treat the code block like normal
+            language &#x3D; &amp;quot;&amp;quot;;
+        }
+    }
+    return baseCodeRenderer.call(this, code, language, escaped);
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id&#x3D;&quot;styling&quot;&gt;Styling&lt;/h1&gt;
+&lt;p&gt;The above rendering code worked (and didn&amp;#39;t break my &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/metalsmith-syntax-highlighting.md&quot;&gt;syntax highlighting&lt;/a&gt;), but there were a few tweaks I had in mind:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Remove the &lt;a href&#x3D;&quot;https://www.w3.org/TR/xml/#sec-prolog-dtd&quot;&gt;XML prolog and document type declaration&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;Since I&amp;#39;m inlining my SVG in HTML, this information is redundant&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Replace Graphviz&amp;#39;s default styling (annoyingly hard-coded via &lt;code&gt;fill&lt;/code&gt; and &lt;code&gt;stroke&lt;/code&gt; attributes on each element) with CSS classes&lt;ul&gt;
+&lt;li&gt;This allows me to style the graphs using my CSS stylesheet&lt;/li&gt;
+&lt;li&gt;In my case, I&amp;#39;m replacing the &lt;code&gt;fill&#x3D;&amp;quot;white&amp;quot; stroke&#x3D;&amp;quot;black&amp;quot;&lt;/code&gt; attributes with a single CSS class: &lt;code&gt;class&#x3D;&amp;quot;diagram-black-white&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Fortunately, both of these transformations can be done with regular expression replacements:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-javascript&quot;&gt;...
+if (svg) {
+    // Remove XML prolog, since we&amp;#39;re inlining
+    // Also convert default styles to CSS classes, for custom styling
+    return svg
+        .replace(/^.*?&amp;lt;svg /s, &amp;quot;&amp;lt;svg &amp;quot;)
+        .replace(/fill&#x3D;&amp;quot;([^&amp;quot;]+)&amp;quot; stroke&#x3D;&amp;quot;([^&amp;quot;]+)&amp;quot;/g, &amp;quot;class&#x3D;\&amp;quot;diagram-$2-$1\&amp;quot;&amp;quot;);
+} else {
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, I can just style everything with CSS:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-css&quot;&gt;/* Diagrams */
+svg text { fill: #eee; }
+.diagram-transparent-white { stroke: none; fill: none; }
+ellipse.diagram-black-none { stroke: #ccc; fill: #444; }
+.diagram-black-none { stroke: #999; fill:none; }
+.diagram-black-black { stroke: #999; fill: #333; }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id&#x3D;&quot;thats-it&quot;&gt;That&amp;#39;s it!&lt;/h1&gt;
+&lt;p&gt;To my surprise, this entire integration went smoothly, and only took an hour or so. It remains to be seen how useful these diagrams will be, but at least now if I ever feel the need to insert a superfluous diagram, the functionality will be there.&lt;/p&gt;
+&lt;p&gt;For reference, all of the code used to generate this site (along with the content) is in &lt;a href&#x3D;&quot;https://github.com/jaredkrinke/log&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
+</content>
 </entry>
 <entry>
 <title>Compiling Graphviz to WebAssembly (without Emscripten)</title>
@@ -36,6 +351,300 @@
 <link rel="alternate" href="https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly.html"/>
 <updated>2021-10-09T00:00:00.000Z</updated>
 <summary type="text">In order to automatically generate diagrams for my site that&#x27;s built with Node, I compiled Graphviz to WebAssembly. Here&#x27;s my experience.</summary>
+<content type="html">&lt;p&gt;After successfully &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/passing-strings-to-c.md&quot;&gt;passed strings back and forth between WebAssembly and JavaScript&lt;/a&gt;, and &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/c-standard-library-example.md&quot;&gt;linked against a C standard library&lt;/a&gt; (all without Emscripten... or Python), I felt ready to try compiling a substantial library to WebAssembly for use in Node.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;graphviz&quot;&gt;Graphviz&lt;/h1&gt;
+&lt;p&gt;Specifically, I wanted to be able to automatically generate diagrams (in &lt;a href&#x3D;&quot;https://en.wikipedia.org/wiki/Scalable_Vector_Graphics&quot;&gt;SVG&lt;/a&gt; format) from text descriptions when building my static site using &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/../static-site-generators/metalsmith.md&quot;&gt;Metalsmith/Node&lt;/a&gt;. &lt;a href&#x3D;&quot;https://graphviz.org/&quot;&gt;Graphviz&lt;/a&gt; is an old package of tools and libraries (written in C) that I&amp;#39;ve successfully used in the past.&lt;/p&gt;
+&lt;p&gt;Graphviz diagrams are described in a language called &lt;a href&#x3D;&quot;https://graphviz.org/doc/info/lang.html&quot;&gt;DOT&lt;/a&gt;. Example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-dot&quot;&gt;digraph {
+    a -&amp;gt; b;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Graphviz supports multiple layout engines, but I&amp;#39;ve only ever needed to use the default &lt;a href&#x3D;&quot;https://graphviz.org/docs/layouts/dot/&quot;&gt;dot&lt;/a&gt; engine (yes, it&amp;#39;s the same name, just in lower case).&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;prior-ports&quot;&gt;Prior ports&lt;/h2&gt;
+&lt;p&gt;The Graphviz site &lt;a href&#x3D;&quot;https://graphviz.org/resources/&quot;&gt;lists a number of previous ports of Graphviz&lt;/a&gt;, including a couple that are relevant for Node:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href&#x3D;&quot;https://github.com/mdaines/viz.js/&quot;&gt;viz.js&lt;/a&gt; (compiled to &lt;a href&#x3D;&quot;http://asmjs.org/&quot;&gt;asm.js&lt;/a&gt; using Emscripten; &lt;a href&#x3D;&quot;http://viz-js.com/&quot;&gt;live editor here&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;a href&#x3D;&quot;https://www.npmjs.com/package/@hpcc-js/wasm&quot;&gt;@hpcc-js/wasm&lt;/a&gt; (compiled to WebAssembly using Emscripten)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Honestly, either one of these would have probably worked for my original purpose, but I chose to compile Graphviz myself for a few reasons:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I wanted to experiment with compiling an existing C library to WebAssembly&lt;/li&gt;
+&lt;li&gt;I hoped that if I ripped out functionality I didn&amp;#39;t need (e.g. export to &lt;em&gt;any format except SVG&lt;/em&gt;), I might end up with a smaller WebAssembly module&lt;/li&gt;
+&lt;li&gt;I thought that a simple DOT-to-SVG function would avoid taking dependencies on &amp;quot;virtual&amp;quot; file I/O, etc. (which I assumed is how Emscripten worked)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id&#x3D;&quot;dot2svgwasm&quot;&gt;dot2svg.wasm&lt;/h1&gt;
+&lt;p&gt;Given that I&amp;#39;m only interested in DOT diagram description to SVG, I decided to export a single function named &lt;code&gt;dot2svg&lt;/code&gt; (along with exporting &lt;code&gt;malloc&lt;/code&gt;/&lt;code&gt;free&lt;/code&gt;/memory). There were a few reasons for this:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The module should be smaller since it only contains the minimum essential code&lt;/li&gt;
+&lt;li&gt;I may be able to avoid dealing with build errors in code that I don&amp;#39;t need&lt;/li&gt;
+&lt;li&gt;Theoretically, I can avoid dealing with file input/output, since everything is just strings in memory (spoiler: this didn&amp;#39;t quite work out)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The module&amp;#39;s C code is pretty simple. Other than memory management functions, there&amp;#39;s only one export and it takes a C string (in DOT format), renders to SVG, and returns a newly allocated string with the SVG content (the JavaScript host is responsible for freeing the string after it&amp;#39;s been decoded).&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s the C code for my module:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;#include &amp;lt;malloc.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;lt;gvc.h&amp;gt;
+
+#define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
+#define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
+
+// WebAssembly exports
+// Memory management helpers
+void* WASM_EXPORT(allocate)(unsigned int size) {
+    return malloc(size);
+}
+
+void WASM_EXPORT(deallocate)(void* allocation) {
+    free(allocation);
+}
+
+// Main export
+const char* WASM_EXPORT(dot2svg)(const char* graphString) {
+    // Use Graphviz for converting dot to SVG
+    const char* result &#x3D; NULL;
+    GVC_t* context &#x3D; gvContextPlugins(lt_preloaded_symbols, false);
+    if (context) {
+        Agraph_t* graph &#x3D; agmemread(graphString);
+        if (graph) {
+            if (gvLayout(context, graph, &amp;quot;dot&amp;quot;) &#x3D;&#x3D; 0) {
+                char *svg;
+                unsigned int svgLength;
+                gvRenderData(context, graph, &amp;quot;svg&amp;quot;, &amp;amp;svg, &amp;amp;svgLength);
+                if (svg) {
+                    result &#x3D; strdup(svg);
+                    gvFreeRenderData(svg);
+                }
+                gvFreeLayout(context, graph);
+            }
+            agfree(graph, NULL);
+        }
+        gvFreeContext(context);
+    }
+
+    return result;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id&#x3D;&quot;initial-attempt-at-compiling&quot;&gt;Initial attempt at compiling&lt;/h2&gt;
+&lt;p&gt;First, I cloned the Graphviz repository (actually, I added it as a submodule--anticipating the need to make changes) and ran it&amp;#39;s &amp;quot;autogen.sh&amp;quot; script. For the record, I&amp;#39;m using Debian &lt;a href&#x3D;&quot;https://www.debian.org/releases/stretch/&quot;&gt;Stretch&lt;/a&gt; on the &lt;a href&#x3D;&quot;https://docs.microsoft.com/en-us/windows/wsl/&quot;&gt;Windows Subsystem for Linux&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Being familiar with &lt;a href&#x3D;&quot;https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html&quot;&gt;GNU Autotools&lt;/a&gt;, I hoped that I&amp;#39;d then be able to simply run Graphviz&amp;#39;s &amp;quot;configure&amp;quot; script with appropriate arguments (&amp;quot;--host&#x3D;wasm32&amp;quot;?) and environment variables (&amp;quot;CC&#x3D;/opt/wasi-sdk/bin/clang&amp;quot;?) and everything would build fine.&lt;/p&gt;
+&lt;p&gt;I hit a few snags:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Some of the Graphviz source code is actually C++, so I needed to set the &amp;quot;CXX&#x3D;/opt/wasi-sdk/bin/clang++&amp;quot; variable as well&lt;/li&gt;
+&lt;li&gt;Graphviz defaults to building a shared library, but I needed a static one (solution: add &amp;quot;--disable-shared&amp;quot; to the &amp;quot;configure&amp;quot; command)&lt;/li&gt;
+&lt;li&gt;Graphviz defaults to loading plugins dynamically by enumerating directories (solution: add &amp;quot;--disable-ltdl&amp;quot; when running &amp;quot;configure&amp;quot;)&lt;/li&gt;
+&lt;li&gt;&amp;quot;wasm-ld: error: ... archive has no index; run ranlib to add one&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;That last one required some investigation.&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;archive-index-error&quot;&gt;Archive index error&lt;/h2&gt;
+&lt;p&gt;After searching for and finding a &lt;a href&#x3D;&quot;https://github.com/emscripten-core/emscripten/issues/9329&quot;&gt;similar issue on GitHub&lt;/a&gt;, I learned that that &lt;code&gt;wasm-ld&lt;/code&gt; error means that you created the archive with the wrong tool set. In my case, it was using GNU &lt;code&gt;ar&lt;/code&gt; instead of LLVM &lt;code&gt;ar&lt;/code&gt;. That makes sense because I didn&amp;#39;t tell the build to use a different &lt;code&gt;ar&lt;/code&gt;, and GNU &lt;code&gt;ar&lt;/code&gt; was on my path.&lt;/p&gt;
+&lt;p&gt;I thought that setting the &amp;quot;AR&amp;quot; environment variable would solve this, but it turned out that the Autotools in use didn&amp;#39;t respect that environment variable. My hacky solution to this (and possibly other mismatched tools) was to just move the WASI SDK to the front of my &amp;quot;PATH&amp;quot; variable in my build script:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-sh&quot;&gt;export PATH&#x3D;&amp;quot;/opt/wasi-sdk/bin:$PATH&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id&#x3D;&quot;more-issues&quot;&gt;More issues&lt;/h2&gt;
+&lt;p&gt;Now I started to run into more WASI-related issues. WASI is still in development and may not ever support the entire C library. That&amp;#39;s fine, and I knew that going in, but I thought that Graphviz wouldn&amp;#39;t be relying on some of the more obscure parts of the C library (and hopefully very few OS-specific features). Sadly, this is not the case.&lt;/p&gt;
+&lt;p&gt;Here are the problems I ran into:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;quot;setjmp.h&amp;quot;: apparently some Graphviz code uses one of my least favorite headers in the entire C standard library: &amp;quot;setjmp.h&amp;quot;&lt;ul&gt;
+&lt;li&gt;This header provides non-local jumps that are sometimes used as an ugly substitute for exceptions&lt;/li&gt;
+&lt;li&gt;Unsurprisingly, WASI doesn&amp;#39;t support this (I don&amp;#39;t even think it &lt;em&gt;should&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;My solution was to just hope that &lt;code&gt;longjmp&lt;/code&gt; never gets called and link in my own no-op versions of &lt;code&gt;setjmp&lt;/code&gt; and &lt;code&gt;longjmp&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&amp;quot;sys/wait.h&amp;quot;: this is a POSIX header that Graphviz doesn&amp;#39;t need (e.g. on Windows)&lt;ul&gt;
+&lt;li&gt;My work-around was to create a dummy header that tricked Graphviz into thinking the one file including this header was on Windows&lt;/li&gt;
+&lt;li&gt;The contents of my dummy header: &lt;code&gt;#define _WIN32&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&amp;quot;signal.h&amp;quot;: WASI contains a header for this, but it annoyingly just reports an error&lt;ul&gt;
+&lt;li&gt;My awful solution to this was to trick WASI into going into the &amp;quot;no error&amp;quot; fork, but without actually doing anything useful&lt;/li&gt;
+&lt;li&gt;All I did was add &amp;quot;-D_WASI_EMULATED_SIGNAL -D_SIGNAL_H&amp;quot; to my &amp;quot;CFLAGS&amp;quot; environment variable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&amp;quot;pwd.h&amp;quot;: Another (missing, for me) POSIX header&lt;ul&gt;
+&lt;li&gt;Hack: add a dummy header that defines &lt;code&gt;R_OK&lt;/code&gt; and &lt;code&gt;SIGUSR1&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;At this point, I was (mostly) able to compile the libraries I needed, but not link.&lt;/p&gt;
+&lt;p&gt;Also, at this point, I was starting to appreciate just how much Emscripten must handle to support building stuff like this without any modifications. Maybe my main takeaway will just be to use Emscripten in the future?&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;slimming-down-graphviz&quot;&gt;Slimming down Graphviz&lt;/h2&gt;
+&lt;p&gt;For my purposes, I only needed to be able to parse DOT input, using the &amp;quot;dot&amp;quot; layout engine, and output to SVG. But Graphviz&amp;#39;s default library has support for many outputs, including &lt;a href&#x3D;&quot;https://www.adobe.com/products/postscript.html&quot;&gt;Adobe PostScript&lt;/a&gt;, which I &lt;em&gt;definitely&lt;/em&gt; have no plans to use. These defaults are encoded directly into &amp;quot;graphviz/plugin/core/gvplugin_core.c&amp;quot;.&lt;/p&gt;
+&lt;p&gt;In order to reduce the list down to just SVG, I needed to create my own &amp;quot;plugin&amp;quot; that only supported DOT and SVG. Here&amp;#39;s what that looked like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;#include &amp;lt;gvplugin.h&amp;gt;
+
+extern gvplugin_installed_t gvdevice_dot_types[];
+extern gvplugin_installed_t gvdevice_svg_types[];
+extern gvplugin_installed_t gvrender_dot_types[];
+extern gvplugin_installed_t gvrender_svg_types[];
+extern gvplugin_installed_t gvloadimage_core_types[];
+
+static gvplugin_api_t apis[] &#x3D; {
+    {API_device, gvdevice_dot_types},
+    {API_device, gvdevice_svg_types},
+    {API_render, gvrender_dot_types},
+    {API_render, gvrender_svg_types},
+
+    {(api_t)0, 0},
+};
+
+gvplugin_library_t gvplugin_core_LTX_library &#x3D; { &amp;quot;core&amp;quot;, apis };
+
+#define IMPORT /* nothing */
+
+IMPORT extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
+IMPORT extern gvplugin_library_t gvplugin_core_LTX_library;
+
+lt_symlist_t lt_preloaded_symbols[] &#x3D; {
+    { &amp;quot;gvplugin_dot_layout_LTX_library&amp;quot;, (void*)(&amp;amp;gvplugin_dot_layout_LTX_library) },
+    { &amp;quot;gvplugin_core_LTX_library&amp;quot;, (void*)(&amp;amp;gvplugin_core_LTX_library) },
+    { 0, 0 }
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This also had the benefit of removing a number of dependencies (including some that weren&amp;#39;t yet building successfully for me yet).&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;one-last-link-error&quot;&gt;One last link error&lt;/h2&gt;
+&lt;p&gt;At this point, I was down to a final error from the linker. It turns out that, somewhere in Graphviz, it uses the &lt;code&gt;tmpfile&lt;/code&gt; function. For now, I just decided to add a dummy implementation and hope that it wasn&amp;#39;t being used for anything important:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;FILE* tmpfile() {
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id&#x3D;&quot;successful-build&quot;&gt;Successful build&lt;/h2&gt;
+&lt;p&gt;Finally, I was able to successfully build &amp;quot;dot2svg.wasm&amp;quot;. The uncompressed file size ended up being around 660 KB--a bit larger than I hoped, but not huge.&lt;/p&gt;
+&lt;p&gt;Now I just have to run that function... right?&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;javascript-side&quot;&gt;JavaScript side&lt;/h1&gt;
+&lt;p&gt;Given that I already had code to pass strings back and forth, I hoped I could just call the &lt;code&gt;dot2svg&lt;/code&gt; export and bask in the glorious result. But I wasn&amp;#39;t quite there yet.&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;imports&quot;&gt;Imports&lt;/h2&gt;
+&lt;p&gt;On the first run, I got the following error:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;TypeError: WebAssembly.instantiate(): Imports argument must be present and must be an object
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That&amp;#39;s too bad. I was hoping that my slimmed down Graphviz build wouldn&amp;#39;t expect the host to provide any functions. Let&amp;#39;s see what&amp;#39;s missing:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-sh&quot;&gt;$ wasm2wat dot2svg.wasm|findstr /i import
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;clock_time_get&amp;quot; (func $__wasi_clock_time_get (type 16)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_filestat_get&amp;quot; (func $__wasi_fd_filestat_get (type 1)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;proc_exit&amp;quot; (func $__wasi_proc_exit (type 10)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_fdstat_get&amp;quot; (func $__wasi_fd_fdstat_get (type 1)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;path_open&amp;quot; (func $__wasi_path_open (type 17)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;path_filestat_get&amp;quot; (func $__wasi_path_filestat_get (type 7)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_close&amp;quot; (func $__wasi_fd_close (type 0)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;environ_sizes_get&amp;quot; (func $__wasi_environ_sizes_get (type 1)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;environ_get&amp;quot; (func $__wasi_environ_get (type 1)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_seek&amp;quot; (func $__wasi_fd_seek (type 18)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_write&amp;quot; (func $__wasi_fd_write (type 4)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_read&amp;quot; (func $__wasi_fd_read (type 4)))
+  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_fdstat_set_flags&amp;quot; (func $__wasi_fd_fdstat_set_flags (type 1)))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id&#x3D;&quot;do-the-imports-really-matter&quot;&gt;Do the imports really matter?&lt;/h2&gt;
+&lt;p&gt;That&amp;#39;s a longer list than I expected. Ok, well let&amp;#39;s see if they&amp;#39;re &lt;em&gt;really&lt;/em&gt; needed by providing no-op implementations:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-javascript&quot;&gt;    const module &#x3D; await WebAssembly.instantiate(await fs.promises.readFile(&amp;quot;./dot2svg.wasm&amp;quot;), {
+        wasi_snapshot_preview1: {
+            // Not implemented
+            clock_time_get: () &#x3D;&amp;gt; {},
+            environ_get: () &#x3D;&amp;gt; {},
+            environ_sizes_get: () &#x3D;&amp;gt; {},
+            fd_close: () &#x3D;&amp;gt; {},
+            fd_fdstat_get: () &#x3D;&amp;gt; {},
+            fd_fdstat_set_flags: () &#x3D;&amp;gt; {},
+            fd_filestat_get: () &#x3D;&amp;gt; {},
+            fd_read: () &#x3D;&amp;gt; {},
+            fd_seek: () &#x3D;&amp;gt; {},
+            fd_write: () &#x3D;&amp;gt; {},
+            path_filestat_get: () &#x3D;&amp;gt; {},
+            path_open: () &#x3D;&amp;gt; {},
+            proc_exit: () &#x3D;&amp;gt; {},
+        },
+    });
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Unfortunately, with those no-op functions, my test script just seemed to spin.&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;fd_write&quot;&gt;fd_write&lt;/h2&gt;
+&lt;p&gt;Debugging showed that &lt;code&gt;fd_write&lt;/code&gt; was being called repeatedly. That makes me think that WASI actually needs &lt;code&gt;fd_write&lt;/code&gt; to do something. With absolutely zero context, the function name sounds like it&amp;#39;s writing to a file descriptor.&lt;/p&gt;
+&lt;p&gt;After some digging, I found a helpful note in the (otherwise inscrutable) &lt;a href&#x3D;&quot;https://github.com/WebAssembly/WASI/blob/main/phases/snapshot/docs.md#-fd_writefd-fd-iovs-ciovec_array---resultsize-errno&quot;&gt;WASI documentation&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;fd_write(fd: fd, iovs: ciovec_array) -&amp;gt; Result&amp;lt;size, errno&amp;gt;&lt;/p&gt;
+&lt;p&gt;Write to a file descriptor. Note: This is similar to writev in POSIX.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id&#x3D;&quot;writev&quot;&gt;writev&lt;/h3&gt;
+&lt;p&gt;Fortunately, &lt;code&gt;writev(2)&lt;/code&gt; is &lt;a href&#x3D;&quot;https://linux.die.net/man/2/writev&quot;&gt;extensively documented&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The first argument is indeed a file descriptor. Debugging my test app showed that the function was being called with file descriptor 2, which is Standard Error. It&amp;#39;s my opinion that libraries shouldn&amp;#39;t directly write anything to Standard Output or Error, but I didn&amp;#39;t write Graphviz. A quick scan of the Graphviz source indicated that I couldn&amp;#39;t easily disable console logging.&lt;/p&gt;
+&lt;p&gt;The second argument to &lt;code&gt;writev&lt;/code&gt; is an array of I/O vectors defined as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;struct iovec {
+    void  *iov_base;    /* Starting address */
+    size_t iov_len;     /* Number of bytes to transfer */
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And the return value is just the number of bytes written.&lt;/p&gt;
+&lt;h3 id&#x3D;&quot;javascript-implementation&quot;&gt;JavaScript implementation&lt;/h3&gt;
+&lt;p&gt;Assuming that &lt;code&gt;fd_write&lt;/code&gt; is the same (assuming 32-bit WebAssembly), this isn&amp;#39;t too bad to implement (and I decided to forward to the console for testing purposes). The only remaining trick is that &lt;code&gt;fd_write&lt;/code&gt; supplies the memory address for the return value as the third argument and directly returns a status code (zero for success).&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s a simple implementation:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-javascript&quot;&gt;fd_write: (fileDescriptor, ioVectorsBaseAddress, ioVectorsCount, returnBytesWrittenAddress) &#x3D;&amp;gt; {
+    // Read IO vectors
+    const view &#x3D; new DataView(memory.buffer);
+    const ioVectors &#x3D; [];
+    for (let i &#x3D; 0, address &#x3D; ioVectorsBaseAddress; i &amp;lt; ioVectorsCount; i++, address +&#x3D; 8) {
+        ioVectors.push({
+            sourceAddress: view.getUint32(address, true),
+            sizeInBytes: view.getUint32(address + 4, true),
+        });
+    }
+
+    // Calculate total size
+    const totalSizeInBytes &#x3D; ioVectors.reduce((sum, ioVector) &#x3D;&amp;gt; sum + ioVector.sizeInBytes, 0);
+
+    // Forward STDOUT and STDERR to console
+    const standardOutput &#x3D; 1;
+    const standardError &#x3D; 2;
+    switch (fileDescriptor) {
+        case standardOutput:
+        case standardError:
+            {
+                // Copy to buffer
+                const buffer &#x3D; new Uint8Array(totalSizeInBytes);
+                let offset &#x3D; 0;
+                ioVectors.forEach(ioVector &#x3D;&amp;gt; {
+                    buffer.set(new Uint8Array(memory.buffer, ioVector.sourceAddress, ioVector.sizeInBytes), offset);
+                    offset +&#x3D; ioVector.sizeInBytes;
+                });
+
+                // Note: Adds an extra new line...
+                console.log(textDecoder.decode(buffer));
+            }
+            break;
+
+        default:
+            // Do nothing
+            break;
+    }
+
+    // Set return value to total size of writes
+    view.setUint32(returnBytesWrittenAddress, totalSizeInBytes, true);
+    return 0; // Success
+},
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id&#x3D;&quot;success&quot;&gt;Success!&lt;/h2&gt;
+&lt;p&gt;With the above imports, &lt;a href&#x3D;&quot;https://github.com/jaredkrinke/wasm-c-string&quot;&gt;my string-passing library&lt;/a&gt;, and the following code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-javascript&quot;&gt;const dotString &#x3D; process.argv[2] ?? &amp;quot;digraph { a -&amp;gt; b }&amp;quot;;
+createCString(module, dotString, (dotStringAddress) &#x3D;&amp;gt; {
+    const svgString &#x3D; receiveCString(module, () &#x3D;&amp;gt; module.instance.exports.dot2svg(dotStringAddress));
+    console.log(svgString);
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I was finally able to generate the following test graph SVG:&lt;/p&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;https://log.schemescape.com/posts/webassembly/../../assets/graphviz-test-graph.svg&quot; alt&#x3D;&quot;digraph { a -&amp;gt; b }&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Additionally, if I deliberately insert a syntax error into the graph, I see the error logged to my console, so output forwarding is even working.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;There&amp;#39;s still work I need to do around theming, packaging, and more, but as a proof of concept, it looks like compiling a C library to WebAssembly with minimal tooling beyond Clang and LLVM is certainly possible, with some perseverance.&lt;/p&gt;
+&lt;p&gt;Lessons learned:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Always first check to see if someone has already ported the library you&amp;#39;re interested in--if they have, and you can tolerate their dependencies, you&amp;#39;ll save significant effort&lt;/li&gt;
+&lt;li&gt;You can&amp;#39;t assume that a &amp;quot;simple&amp;quot; C library won&amp;#39;t have surprising dependencies (e.g. Graphviz depending on PostScript headers by default)&lt;/li&gt;
+&lt;li&gt;Compiling typical C libraries to WebAssembly on Windows is painful (not discussed here, but I actually did that first, before moving to Linux for a more compiler-friendly environment)&lt;/li&gt;
+&lt;li&gt;Emscripten will probably save you time dealing with obscure or unsupported-by-WASI headers&lt;/li&gt;
+&lt;li&gt;WASI itself might require additional support code (there is a &lt;a href&#x3D;&quot;https://wasi.dev/polyfill/&quot;&gt;poorly documented browser polyfill for WASI&lt;/a&gt;, but I haven&amp;#39;t tested it)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id&#x3D;&quot;resources&quot;&gt;Resources&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href&#x3D;&quot;https://github.com/jaredkrinke/dot2svg-wasm&quot;&gt;Repository for this code)&lt;/a&gt; (as an ES module)&lt;/li&gt;
+&lt;li&gt;&lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/../static-site-generators/metalsmith-diagrams.md&quot;&gt;Example of using this code to generate diagrams automatically for my site&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
 </entry>
 <entry>
 <title>WebAssembly objects, libraries, and linking (for C code)</title>
@@ -43,5 +652,151 @@
 <link rel="alternate" href="https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking.html"/>
 <updated>2021-10-06T00:00:00.000Z</updated>
 <summary type="text">In order to reuse C libraries in WebAssembly, here is how object files, libraries, and linking work with Clang and LLVM.</summary>
+<content type="html">&lt;p&gt;In the interest of reusing &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/passing-strings-to-c.md&quot;&gt;some C string handling code I wrote for use in WebAssembly&lt;/a&gt;, I&amp;#39;m researching how object files, libraries, and linking work in WebAssembly.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;background&quot;&gt;Background&lt;/h1&gt;
+&lt;p&gt;For native C code, the following file types and concepts are used:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Header files (.h) define the interfaces used between source files&lt;/li&gt;
+&lt;li&gt;Source files (.c) implement functionality&lt;/li&gt;
+&lt;li&gt;Object files (.o) each represent the compiled (using &amp;quot;-c&amp;quot;) output of a single source file&lt;/li&gt;
+&lt;li&gt;Archive files (.a) contain many object files and are used for build-time linking (static libraries)&lt;/li&gt;
+&lt;li&gt;Shared objects (.so) or dynamic-link libraries (.dll) support linking at run-time (shared libraries)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;How does the Clang/LLVM toolchain map these concepts to WebAssembly?&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;webassembly-object-files&quot;&gt;WebAssembly object files&lt;/h1&gt;
+&lt;p&gt;To my surprise, WebAssembly actually publishes &lt;a href&#x3D;&quot;https://github.com/WebAssembly/tool-conventions/blob/main/Linking.md&quot;&gt;conventions for creating and linking object files&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I certainly didn&amp;#39;t read that entire document, but I did note that object files are just WebAssembly modules, with custom sections (note: custom sections are only supported in binary &amp;quot;.wasm&amp;quot; format, and not text &amp;quot;.wat&amp;quot; format).&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;example&quot;&gt;Example&lt;/h2&gt;
+&lt;p&gt;My WebAssembly string library is very simple:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It defines &lt;code&gt;wasm_c_string&lt;/code&gt; which represents a string on the heap that will be return to the JavaScript host&lt;/li&gt;
+&lt;li&gt;It exports 2 functions:&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;allocate_wasm_c_string&lt;/code&gt; to allocate a wasm_c_string of a given length&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;create_wasm_c_string&lt;/code&gt; to allocate a wasm_c_string that is a copy of any old C string&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Note that this example requires consumers of the library providing &lt;code&gt;malloc()&lt;/code&gt; and &lt;code&gt;free()&lt;/code&gt; to the JavaScript host. I don&amp;#39;t export these from my library because I want consumers to be able to supply their own allocator.&lt;/p&gt;
+&lt;h3 id&#x3D;&quot;c-source-code&quot;&gt;C source code&lt;/h3&gt;
+&lt;p&gt;Here&amp;#39;s the header file (&amp;quot;wasm-c-string.h&amp;quot;):&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;typedef struct {
+    unsigned int length;
+    char buffer[];
+} wasm_c_string;
+
+// Allocates an empty wasm_c_string. When done, use &amp;quot;free&amp;quot; to release.
+extern wasm_c_string* allocate_wasm_c_string(unsigned int length);
+
+// Creates a new wasm_c_string from an existing C string. When done, use &amp;quot;free&amp;quot; to release.
+extern wasm_c_string* create_wasm_c_string(const char* source);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And the source file (&amp;quot;wasm-c-string.c&amp;quot;):&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;#include &amp;lt;malloc.h&amp;gt;
+#include &amp;lt;string.h&amp;gt;
+#include &amp;quot;wasm-c-string.h&amp;quot;
+
+#define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
+#define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
+
+wasm_c_string* WASM_EXPORT(allocate_wasm_c_string)(unsigned int length) {
+    wasm_c_string* str &#x3D; (wasm_c_string*)malloc(sizeof(unsigned int) + length);
+    str-&amp;gt;length &#x3D; (unsigned int)length;
+    return str;
+}
+
+wasm_c_string* WASM_EXPORT(create_wasm_c_string)(const char* source) {
+    const size_t sourceLength &#x3D; strlen(source);
+    wasm_c_string* str &#x3D; allocate_wasm_c_string((unsigned int)sourceLength);
+    memcpy(&amp;amp;str-&amp;gt;buffer[0], source, sourceLength);
+    return str;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id&#x3D;&quot;compiling&quot;&gt;Compiling&lt;/h3&gt;
+&lt;p&gt;Let&amp;#39;s compile this to an object file (using the &lt;a href&#x3D;&quot;https://github.com/WebAssembly/wasi-sdk&quot;&gt;WASI SDK&lt;/a&gt;--note the &amp;quot;-c&amp;quot; argument that tells Clang to only output an object file and not invoke the linker):&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-sh&quot;&gt;wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.c
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id&#x3D;&quot;text-format&quot;&gt;Text format&lt;/h3&gt;
+&lt;p&gt;The output file defaults to &amp;quot;wasm-c-string.o&amp;quot; and here&amp;#39;s the (abbreviated) corresponding text format (compliments of the &lt;a href&#x3D;&quot;https://github.com/WebAssembly/wabt&quot;&gt;WebAssembly Binary Toolkit&lt;/a&gt;&amp;#39;s &lt;code&gt;wasm2wat&lt;/code&gt; tool):&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-wasm&quot;&gt;(module
+  (type (;0;) (func (param i32) (result i32)))
+  (type (;1;) (func (param i32 i32 i32) (result i32)))
+  (import &amp;quot;env&amp;quot; &amp;quot;__linear_memory&amp;quot; (memory (;0;) 0))
+  (import &amp;quot;env&amp;quot; &amp;quot;__indirect_function_table&amp;quot; (table (;0;) 0 funcref))
+  (import &amp;quot;env&amp;quot; &amp;quot;malloc&amp;quot; (func (;0;) (type 0)))
+  (import &amp;quot;env&amp;quot; &amp;quot;strlen&amp;quot; (func (;1;) (type 0)))
+  (import &amp;quot;env&amp;quot; &amp;quot;memcpy&amp;quot; (func (;2;) (type 1)))
+  (func $allocate_wasm_c_string (type 0) (param i32) (result i32)
+...
+  (func $create_wasm_c_string (type 0) (param i32) (result i32)
+...
+  (export &amp;quot;allocate_wasm_c_string&amp;quot; (func $allocate_wasm_c_string))
+  (export &amp;quot;create_wasm_c_string&amp;quot; (func $create_wasm_c_string)))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can see that it&amp;#39;s importing memory, a function table, and C standard library functions, and that it&amp;#39;s exporting my 2 functions.&lt;/p&gt;
+&lt;h3 id&#x3D;&quot;custom-sections&quot;&gt;Custom sections&lt;/h3&gt;
+&lt;p&gt;But wait, the object file conventions document indicates that there are custom sections that can&amp;#39;t be represented in the text format. So let&amp;#39;s use &lt;code&gt;wasm-objdump&lt;/code&gt; (also from WABT):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ wasm-objdump -s wasm-c-string.o
+
+wasm-c-string.o:    file format wasm 0x1
+
+...
+
+Contents of section Custom:
+0000119: 076c 696e 6b69 6e67 0208 be80 8080 0005  .linking........
+0000129: 00a4 0103 1661 6c6c 6f63 6174 655f 7761  .....allocate_wa
+0000139: 736d 5f63 5f73 7472 696e 6700 1000 00a4  sm_c_string.....
+0000149: 0104 1463 7265 6174 655f 7761 736d 5f63  ...create_wasm_c
+0000159: 5f73 7472 696e 6700 1001 0010 02         _string......
+
+Contents of section Custom:
+000016c: 0a72 656c 6f63 2e43 4f44 4504 0400 0b01  .reloc.CODE.....
+000017c: 0021 0300 2c01 0042 04                   .!..,..B.
+
+Contents of section Custom:
+000018b: 0970 726f 6475 6365 7273 010c 7072 6f63  .producers..proc
+000019b: 6573 7365 642d 6279 0105 636c 616e 6756  essed-by..clangV
+00001ab: 3131 2e30 2e30 2028 6874 7470 733a 2f2f  11.0.0 (https://
+00001bb: 6769 7468 7562 2e63 6f6d 2f6c 6c76 6d2f  github.com/llvm/
+00001cb: 6c6c 766d 2d70 726f 6a65 6374 2031 3736  llvm-project 176
+00001db: 3234 3962 6436 3733 3261 3830 3434 6434  249bd6732a8044d4
+00001eb: 3537 3039 3265 6439 3332 3736 3837 3234  57092ed932768724
+00001fb: 6136 6630 3629                           a6f06)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Sure enough, there are custom sections related to linking, relocation, and even a curious &amp;quot;producers&amp;quot; section (that apparently exists to &lt;a href&#x3D;&quot;https://github.com/WebAssembly/tool-conventions/blob/main/ProducersSection.md&quot;&gt;allow analysis of toolchain usage in the wild&lt;/a&gt;).&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;webassembly-libraries&quot;&gt;WebAssembly libraries&lt;/h1&gt;
+&lt;p&gt;For something as simple as my 20 line C library, I could probably just distribute the C header and the compiled WebAssembly object file (which is actually a WebAssembly module with custom sections) and be done. What if I have a larger library?&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;dynamic-libraries&quot;&gt;Dynamic libraries&lt;/h2&gt;
+&lt;p&gt;Once again, to my surprise, WebAssembly publishes &lt;a href&#x3D;&quot;https://github.com/WebAssembly/tool-conventions/blob/main/DynamicLinking.md&quot;&gt;conventions for dynamically loading libraries&lt;/a&gt;, but the document notes there is no stable ABI. That&amp;#39;s ok, I didn&amp;#39;t really need dynamic libraries right now anyway.&lt;/p&gt;
+&lt;h2 id&#x3D;&quot;static-libraries&quot;&gt;Static libraries&lt;/h2&gt;
+&lt;p&gt;Static libraries for native C code are often just archives (using the &lt;a href&#x3D;&quot;https://en.wikipedia.org/wiki/Ar_%28Unix%29&quot;&gt;&lt;code&gt;ar&lt;/code&gt;&lt;/a&gt; archiver tool), perhaps with some additional information to describe the library.&lt;/p&gt;
+&lt;p&gt;Can I just do the same thing for WebAssembly? It certainly appears so.&lt;/p&gt;
+&lt;p&gt;If I inspect the WASI SDK, in the WebAssembly sysroot, I actually see both bare objects and archives for the C standard library and friends:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-sh&quot;&gt;$ ls wasi-sdk/share/wasi-sysroot/lib/wasm32-wasi
+crt1-command.o  libc++abi.a                         libdl.a       libutil.a
+crt1.o          libc.imports                        libm.a        libwasi-emulated-mman.a
+crt1-reactor.o  libc-printscan-long-double.a        libpthread.a  libwasi-emulated-signal.a
+libc++.a        libc-printscan-no-floating-point.a  libresolv.a   libxnet.a
+libc.a          libcrypt.a                          librt.a
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What&amp;#39;s in one of these archives? &lt;code&gt;ar -t libc.a&lt;/code&gt; shows a bunch of object files. If I extract an object named &amp;quot;ccos.o&amp;quot; with &lt;code&gt;ar -x libc.a ccos.o&lt;/code&gt;, I can use &lt;code&gt;wasm-objdump&lt;/code&gt; or &lt;code&gt;wasm2wat&lt;/code&gt; to see that it&amp;#39;s just a regular WebAssembly object file.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m impressed that the people working on WebAssembly resisted the urge to create entirely new tools, and instead just decided to leverage existing UNIX tools that have been around for a long time.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;linking&quot;&gt;Linking&lt;/h1&gt;
+&lt;p&gt;The &lt;a href&#x3D;&quot;https://lld.llvm.org/WebAssembly.html&quot;&gt;documentation for wasm-ld&lt;/a&gt; is brief, but it does have most of the information you need.&lt;/p&gt;
+&lt;p&gt;The main tricks are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Pass &lt;code&gt;--no-entry&lt;/code&gt; on the command line to indicate there is no &lt;code&gt;_start&lt;/code&gt; entry point&lt;/li&gt;
+&lt;li&gt;By default, only symbols marked with the &lt;code&gt;export-name&lt;/code&gt; attribute are exported (see &lt;code&gt;WASM_EXPORT&lt;/code&gt; in the C example earlier for a handy macro to add this)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id&#x3D;&quot;summary&quot;&gt;Summary&lt;/h1&gt;
+&lt;p&gt;It turns out that the toolchain for WebAssembly libraries in C is similar to what one would use for native compilation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Publish header files (.h) to define the library&amp;#39;s interface&lt;/li&gt;
+&lt;li&gt;Compile source files (.c) to object files (.o) using &lt;code&gt;clang&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;If needed, consolidate multiple object files into an archive (.a) using &lt;code&gt;ar&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Publish either a single object file or (more likely) an archive for users to consume&lt;/li&gt;
+&lt;li&gt;For an object file, users just add it to the list on their &lt;code&gt;wasm-ld&lt;/code&gt; command line&lt;/li&gt;
+&lt;li&gt;For an archive, consumers add &lt;code&gt;-l&amp;lt;name of archive without extension&amp;gt;&lt;/code&gt; to their &lt;code&gt;wasm-ld&lt;/code&gt; command line&lt;/li&gt;
+&lt;/ul&gt;
+</content>
 </entry>
 </feed>
