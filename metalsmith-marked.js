@@ -36,11 +36,12 @@ const markdown = function (options) {
         markedOptions.renderer = renderer;
     }
 
-    marked.setOptions(markedOptions);
 
     const markdownPattern = /^(.*)\.md$/;
     const textDecoder = new TextDecoder();
     return (files, metalsmith, done) => {
+        marked.setOptions(marked.getDefaults());
+        marked.use(markedOptions);
         Object.keys(files).forEach(fileName => {
             const matchGroups = markdownPattern.exec(fileName);
             const file = files[fileName];

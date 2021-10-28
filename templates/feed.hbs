@@ -18,6 +18,7 @@
 {{#if link.absolute}}<link rel="alternate" href="{{link.absolute}}"/>{{/if}}
 <updated>{{formatDateISO date}}</updated>
 <summary type="text">{{description}}</summary>
+<content type="html">{{htmlWithAbsoluteLinks}}</content>
 </entry>
 {{/each}}
 </feed>

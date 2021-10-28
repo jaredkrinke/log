@@ -1,4 +1,6 @@
 import handlebars from "handlebars";
+import marked from "marked";
+import { createReplaceLinksOptions } from "./marked-replace-links.js";
 import Metalsmith from "metalsmith";
 import metalsmithBrokenLinkChecker from "metalsmith-broken-link-checker";
 import metalsmithCollections from "metalsmith-collections";
@@ -41,6 +43,9 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", { month: "long", day: "nu
 
 // Trivial plugin that does nothing (for toggling on/off plugins)
 const noop = (files, metalsmith, done) => done();
+
+// Translate .md links to .html (with anchor support)
+const translateLink = link => link.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, "$1.html$2");
 
 Metalsmith(path.dirname(process.argv[1]))
     .clean(clean)
@@ -118,10 +123,36 @@ Metalsmith(path.dirname(process.argv[1]))
                 delete files[key];
             }
         });
+
+        // Use absolute links for content in the Atom feed
+        const siteUrl = metadata?.site?.url;
+        const recentPosts = metadata.posts_recent;
+        const textDecoder = new TextDecoder();
+        const relativeLinkRegExp = /^([^/][^:]*)$/
+        recentPosts.forEach(file => {
+            marked.setOptions(marked.getDefaults());
+            marked.use(createReplaceLinksOptions((href, title, text) => {
+                // Special handling for relative links
+                const matches = relativeLinkRegExp.exec(href);
+                if (matches) {
+                    // Relative link; convert to absolute (or remove if no site URL is provided)
+                    if (siteUrl) {
+                        return `${siteUrl}${path.dirname(file.path)}/${translateLink(href)}`;
+                    } else {
+                        return { raw: text };
+                    }
+                } else {
+                    // Not a relative link; return unmodified link
+                    return href;
+                }
+            }));
+    
+            file.htmlWithAbsoluteLinks = marked(textDecoder.decode(file.contents));
+        });
         
         done();
     })
-    .use(metalsmithReplaceLinks(href => href.replace(/^([^/][^:]*)\.md(#[^#]+)?$/, "$1.html$2"))) // Translate .md links to .html (with anchor support)
+    .use(metalsmithReplaceLinks(translateLink))
     .use(metalsmithSyntaxHighlighting({
         aliases: [
             { tag: "dot", language: "c" },
