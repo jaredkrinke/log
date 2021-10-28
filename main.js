@@ -1,6 +1,5 @@
 import handlebars from "handlebars";
 import marked from "marked";
-import { createReplaceLinksOptions } from "./marked-replace-links.js";
 import Metalsmith from "metalsmith";
 import metalsmithBrokenLinkChecker from "metalsmith-broken-link-checker";
 import metalsmithCollections from "metalsmith-collections";
@@ -15,6 +14,7 @@ import metalsmithStatic from "metalsmith-static";
 import metalsmithTaxonomy from "metalsmith-taxonomy";
 import metalsmithWatch from "metalsmith-watch";
 import path from "path";
+import { createReplaceLinksOptions } from "./marked-replace-links.js";
 import metalsmithGraphvizDiagrams from "./metalsmith-graphviz-diagrams.js";
 import metalsmithInjectFiles from "./metalsmith-inject-files.js";
 import metalsmithLinkify from "./metalsmith-linkify.js";
