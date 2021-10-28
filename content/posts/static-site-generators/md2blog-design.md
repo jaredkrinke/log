@@ -63,7 +63,7 @@ Schema:
 | `url` | string | Recommended | Must end with "/" |
 | `description` | string | Optional | |
 
-Note that the site *will* work without specifying a URL, but absolute URLs in the generated Atom feed (e.g. links and images) won't be available.
+Note that the site *will* generally work without specifying a URL, but the Atom feed will be forced to use relative links instead of absolute URLs.
 
 ## Posts
 Posts are written in Markdown and use YAML for front matter.

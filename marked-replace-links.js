@@ -2,18 +2,8 @@ import marked from "marked";
 
 export const createReplaceLinksOptions = (replace) => {
     const createHandler = baseHandler => {
-        return function (originalHref, originalTitle, originalText) {
-            const result = replace(originalHref, originalTitle, originalText);
-            let href, title, text, raw;
-            if (typeof(result) === "string") {
-                href = result;
-                title = originalTitle;
-                text = originalText;
-            } else {
-                ({ href, title, text, raw } = result);
-            }
-
-            return raw ?? baseHandler.call(this, href, title, text);
+        return function (href, title, text) {
+            return baseHandler.call(this, replace(href), title, text);
         };
     }
 

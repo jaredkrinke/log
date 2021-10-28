@@ -128,19 +128,14 @@ Metalsmith(path.dirname(process.argv[1]))
         const siteUrl = metadata?.site?.url;
         const recentPosts = metadata.posts_recent;
         const textDecoder = new TextDecoder();
-        const relativeLinkRegExp = /^([^/][^:]*)$/
+        const relativeLinkRegExp = /^([^/][^:]*)$/;
         recentPosts.forEach(file => {
             marked.setOptions(marked.getDefaults());
-            marked.use(createReplaceLinksOptions((href, title, text) => {
+            marked.use(createReplaceLinksOptions(href => {
                 // Special handling for relative links
-                const matches = relativeLinkRegExp.exec(href);
-                if (matches) {
-                    // Relative link; convert to absolute (or remove if no site URL is provided)
-                    if (siteUrl) {
-                        return `${siteUrl}${path.dirname(file.path)}/${translateLink(href)}`;
-                    } else {
-                        return { raw: text };
-                    }
+                if (relativeLinkRegExp.exec(href)) {
+                    // Relative link; convert to absolute (if possible)
+                    return `${siteUrl ?? ""}${path.dirname(file.path)}/${translateLink(href)}`;
                 } else {
                     // Not a relative link; return unmodified link
                     return href;
