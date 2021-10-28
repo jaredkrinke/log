@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 <title>Schemescape</title>
-<id>urn:md2blog:Schemescape</id>
+<id>https://log.schemescape.com/</id>
+<link rel="self" href="https://log.schemescape.com/feed.xml"/>
+<link rel="alternate" href="https://log.schemescape.com/"/>
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-10-28T04:54:41.512Z</updated>
+<updated>2021-10-28T05:04:38.494Z</updated>
 
 <entry>
 <title>Designing md2blog, a zero-config static site generator for dev blogs</title>
-<id>urn:md2blog:Schemescape:Designing%20md2blog%2C%20a%20zero-config%20static%20site%20generator%20for%20dev%20blogs</id>
-
+<id>https://log.schemescape.com/posts/static-site-generators/md2blog-design.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-design.html"/>
 <updated>2021-10-27T00:00:00.000Z</updated>
 <summary type="text">Here&#x27;s the design of my in-progress static site generator, md2blog.</summary>
 <content type="html">&lt;h1 id&#x3D;&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;After &lt;a href&#x3D;&quot;posts/static-site-generators/comparison.html&quot;&gt;investigating many popular static site generators&lt;/a&gt;, I wasn&amp;#39;t able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage &lt;a href&#x3D;&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and numerous plugins) to get what I wanted. I&amp;#39;m calling the resulting tool &lt;strong&gt;md2blog&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;After &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/comparison.html&quot;&gt;investigating many popular static site generators&lt;/a&gt;, I wasn&amp;#39;t able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage &lt;a href&#x3D;&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and numerous plugins) to get what I wanted. I&amp;#39;m calling the resulting tool &lt;strong&gt;md2blog&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;In this post, I&amp;#39;m going to cover the design of md2blog. Note that md2blog is a work in progress that has not been released yet.&lt;/p&gt;
 &lt;h1 id&#x3D;&quot;design-goals&quot;&gt;Design goals&lt;/h1&gt;
 &lt;p&gt;Here&amp;#39;s the overarching goal of md2blog:&lt;/p&gt;
@@ -95,7 +97,7 @@
 &lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;Note that the site &lt;em&gt;will&lt;/em&gt; work without specifying a URL, but absolute URLs in the generated Atom feed (e.g. links and images) won&amp;#39;t be available.&lt;/p&gt;
+&lt;p&gt;Note that the site &lt;em&gt;will&lt;/em&gt; generally work without specifying a URL, but the Atom feed will be forced to use relative links instead of absolute URLs.&lt;/p&gt;
 &lt;h2 id&#x3D;&quot;posts&quot;&gt;Posts&lt;/h2&gt;
 &lt;p&gt;Posts are written in Markdown and use YAML for front matter.&lt;/p&gt;
 &lt;h3 id&#x3D;&quot;front-matter&quot;&gt;Front matter&lt;/h3&gt;
@@ -204,11 +206,11 @@ const add &#x3D; (a, b) &#x3D;&amp;gt; a + b;
 </entry>
 <entry>
 <title>Metalsmith&#x27;s downsides</title>
-<id>urn:md2blog:Schemescape:Metalsmith's%20downsides</id>
-
+<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides.html"/>
 <updated>2021-10-14T00:00:00.000Z</updated>
 <summary type="text">I&#x27;m using Metalsmith to generate this site and, while I generally like it, it&#x27;s not perfect. Here are some of Metalsmith&#x27;s downsides.</summary>
-<content type="html">&lt;p&gt;After &lt;a href&#x3D;&quot;posts/static-site-generators/comparison.html&quot;&gt;testing out a bunch of static site generators&lt;/a&gt;, I settled on using &lt;a href&#x3D;&quot;posts/static-site-generators/metalsmith.html&quot;&gt;Metalsmith&lt;/a&gt; for this site. I like that Metalsmith has a simple design that can be easily extended with plugins (either custom or &amp;quot;off the shelf&amp;quot;), but that&amp;#39;s not to say that Metalsmith is perfect.&lt;/p&gt;
+<content type="html">&lt;p&gt;After &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/comparison.html&quot;&gt;testing out a bunch of static site generators&lt;/a&gt;, I settled on using &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/metalsmith.html&quot;&gt;Metalsmith&lt;/a&gt; for this site. I like that Metalsmith has a simple design that can be easily extended with plugins (either custom or &amp;quot;off the shelf&amp;quot;), but that&amp;#39;s not to say that Metalsmith is perfect.&lt;/p&gt;
 &lt;p&gt;Let&amp;#39;s dive into the downsides of Metalsmith.&lt;/p&gt;
 &lt;h1 id&#x3D;&quot;is-metalsmith-being-maintained&quot;&gt;Is Metalsmith being maintained?&lt;/h1&gt;
 &lt;p&gt;There&amp;#39;s the question of ownership and maintenance. Metalsmith was created by &lt;a href&#x3D;&quot;https://segment.com/&quot;&gt;Segment&lt;/a&gt;, and the &lt;a href&#x3D;&quot;https://github.com/segmentio/metalsmith&quot;&gt;main repository&lt;/a&gt; lives under their GitHub account. Maintenance duties were &lt;a href&#x3D;&quot;https://github.com/segmentio/metalsmith/pull/324/files&quot;&gt;transferred in 2018&lt;/a&gt;, but there have been no nontrivial commits since then.&lt;/p&gt;
@@ -270,11 +272,11 @@ const add &#x3D; (a, b) &#x3D;&amp;gt; a + b;
 </entry>
 <entry>
 <title>Generating SVG diagrams automatically with Metalsmith</title>
-<id>urn:md2blog:Schemescape:Generating%20SVG%20diagrams%20automatically%20with%20Metalsmith</id>
-
+<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-diagrams.html"/>
 <updated>2021-10-10T00:00:00.000Z</updated>
 <summary type="text">Metalsmith is used to build this static site. Here&#x27;s how Graphviz was integrated to automatically generate diagrams.</summary>
-<content type="html">&lt;p&gt;Now that I&amp;#39;ve &lt;a href&#x3D;&quot;posts/static-site-generators/../webassembly/compiling-graphviz-to-webassembly.html&quot;&gt;compiled Graphviz to a WebAssembly module&lt;/a&gt;, I&amp;#39;m going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.&lt;/p&gt;
+<content type="html">&lt;p&gt;Now that I&amp;#39;ve &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/../webassembly/compiling-graphviz-to-webassembly.html&quot;&gt;compiled Graphviz to a WebAssembly module&lt;/a&gt;, I&amp;#39;m going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.&lt;/p&gt;
 &lt;h1 id&#x3D;&quot;the-plan&quot;&gt;The plan&lt;/h1&gt;
 &lt;p&gt;Here&amp;#39;s a flow chart of my general plan:&lt;/p&gt;
 &lt;pre&gt;&lt;code class&#x3D;&quot;language-dot2svg&quot;&gt;digraph {
@@ -307,7 +309,7 @@ markdownRenderer.code &#x3D; function (code, language, escaped) {
 };
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id&#x3D;&quot;styling&quot;&gt;Styling&lt;/h1&gt;
-&lt;p&gt;The above rendering code worked (and didn&amp;#39;t break my &lt;a href&#x3D;&quot;posts/static-site-generators/metalsmith-syntax-highlighting.html&quot;&gt;syntax highlighting&lt;/a&gt;), but there were a few tweaks I had in mind:&lt;/p&gt;
+&lt;p&gt;The above rendering code worked (and didn&amp;#39;t break my &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/metalsmith-syntax-highlighting.html&quot;&gt;syntax highlighting&lt;/a&gt;), but there were a few tweaks I had in mind:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Remove the &lt;a href&#x3D;&quot;https://www.w3.org/TR/xml/#sec-prolog-dtd&quot;&gt;XML prolog and document type declaration&lt;/a&gt;&lt;ul&gt;
 &lt;li&gt;Since I&amp;#39;m inlining my SVG in HTML, this information is redundant&lt;/li&gt;
@@ -345,13 +347,13 @@ ellipse.diagram-black-none { stroke: #ccc; fill: #444; }
 </entry>
 <entry>
 <title>Compiling Graphviz to WebAssembly (without Emscripten)</title>
-<id>urn:md2blog:Schemescape:Compiling%20Graphviz%20to%20WebAssembly%20(without%20Emscripten)</id>
-
+<id>https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly.html"/>
 <updated>2021-10-09T00:00:00.000Z</updated>
 <summary type="text">In order to automatically generate diagrams for my site that&#x27;s built with Node, I compiled Graphviz to WebAssembly. Here&#x27;s my experience.</summary>
-<content type="html">&lt;p&gt;After successfully &lt;a href&#x3D;&quot;posts/webassembly/passing-strings-to-c.html&quot;&gt;passed strings back and forth between WebAssembly and JavaScript&lt;/a&gt;, and &lt;a href&#x3D;&quot;posts/webassembly/c-standard-library-example.html&quot;&gt;linked against a C standard library&lt;/a&gt; (all without Emscripten... or Python), I felt ready to try compiling a substantial library to WebAssembly for use in Node.&lt;/p&gt;
+<content type="html">&lt;p&gt;After successfully &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/passing-strings-to-c.html&quot;&gt;passed strings back and forth between WebAssembly and JavaScript&lt;/a&gt;, and &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/c-standard-library-example.html&quot;&gt;linked against a C standard library&lt;/a&gt; (all without Emscripten... or Python), I felt ready to try compiling a substantial library to WebAssembly for use in Node.&lt;/p&gt;
 &lt;h1 id&#x3D;&quot;graphviz&quot;&gt;Graphviz&lt;/h1&gt;
-&lt;p&gt;Specifically, I wanted to be able to automatically generate diagrams (in &lt;a href&#x3D;&quot;https://en.wikipedia.org/wiki/Scalable_Vector_Graphics&quot;&gt;SVG&lt;/a&gt; format) from text descriptions when building my static site using &lt;a href&#x3D;&quot;posts/webassembly/../static-site-generators/metalsmith.html&quot;&gt;Metalsmith/Node&lt;/a&gt;. &lt;a href&#x3D;&quot;https://graphviz.org/&quot;&gt;Graphviz&lt;/a&gt; is an old package of tools and libraries (written in C) that I&amp;#39;ve successfully used in the past.&lt;/p&gt;
+&lt;p&gt;Specifically, I wanted to be able to automatically generate diagrams (in &lt;a href&#x3D;&quot;https://en.wikipedia.org/wiki/Scalable_Vector_Graphics&quot;&gt;SVG&lt;/a&gt; format) from text descriptions when building my static site using &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/../static-site-generators/metalsmith.html&quot;&gt;Metalsmith/Node&lt;/a&gt;. &lt;a href&#x3D;&quot;https://graphviz.org/&quot;&gt;Graphviz&lt;/a&gt; is an old package of tools and libraries (written in C) that I&amp;#39;ve successfully used in the past.&lt;/p&gt;
 &lt;p&gt;Graphviz diagrams are described in a language called &lt;a href&#x3D;&quot;https://graphviz.org/doc/info/lang.html&quot;&gt;DOT&lt;/a&gt;. Example:&lt;/p&gt;
 &lt;pre&gt;&lt;code class&#x3D;&quot;language-dot&quot;&gt;digraph {
     a -&amp;gt; b;
@@ -625,7 +627,7 @@ createCString(module, dotString, (dotStringAddress) &#x3D;&amp;gt; {
 });
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;I was finally able to generate the following test graph SVG:&lt;/p&gt;
-&lt;p&gt;&lt;img src&#x3D;&quot;posts/webassembly/../../assets/graphviz-test-graph.svg&quot; alt&#x3D;&quot;digraph { a -&amp;gt; b }&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src&#x3D;&quot;https://log.schemescape.com/posts/webassembly/../../assets/graphviz-test-graph.svg&quot; alt&#x3D;&quot;digraph { a -&amp;gt; b }&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Additionally, if I deliberately insert a syntax error into the graph, I see the error logged to my console, so output forwarding is even working.&lt;/p&gt;
 &lt;h1 id&#x3D;&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
 &lt;p&gt;There&amp;#39;s still work I need to do around theming, packaging, and more, but as a proof of concept, it looks like compiling a C library to WebAssembly with minimal tooling beyond Clang and LLVM is certainly possible, with some perseverance.&lt;/p&gt;
@@ -640,17 +642,17 @@ createCString(module, dotString, (dotStringAddress) &#x3D;&amp;gt; {
 &lt;h1 id&#x3D;&quot;resources&quot;&gt;Resources&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href&#x3D;&quot;https://github.com/jaredkrinke/dot2svg-wasm&quot;&gt;Repository for this code)&lt;/a&gt; (as an ES module)&lt;/li&gt;
-&lt;li&gt;&lt;a href&#x3D;&quot;posts/webassembly/../static-site-generators/metalsmith-diagrams.html&quot;&gt;Example of using this code to generate diagrams automatically for my site&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/../static-site-generators/metalsmith-diagrams.html&quot;&gt;Example of using this code to generate diagrams automatically for my site&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </content>
 </entry>
 <entry>
 <title>WebAssembly objects, libraries, and linking (for C code)</title>
-<id>urn:md2blog:Schemescape:WebAssembly%20objects%2C%20libraries%2C%20and%20linking%20(for%20C%20code)</id>
-
+<id>https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking.html"/>
 <updated>2021-10-06T00:00:00.000Z</updated>
 <summary type="text">In order to reuse C libraries in WebAssembly, here is how object files, libraries, and linking work with Clang and LLVM.</summary>
-<content type="html">&lt;p&gt;In the interest of reusing &lt;a href&#x3D;&quot;posts/webassembly/passing-strings-to-c.html&quot;&gt;some C string handling code I wrote for use in WebAssembly&lt;/a&gt;, I&amp;#39;m researching how object files, libraries, and linking work in WebAssembly.&lt;/p&gt;
+<content type="html">&lt;p&gt;In the interest of reusing &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/passing-strings-to-c.html&quot;&gt;some C string handling code I wrote for use in WebAssembly&lt;/a&gt;, I&amp;#39;m researching how object files, libraries, and linking work in WebAssembly.&lt;/p&gt;
 &lt;h1 id&#x3D;&quot;background&quot;&gt;Background&lt;/h1&gt;
 &lt;p&gt;For native C code, the following file types and concepts are used:&lt;/p&gt;
 &lt;ul&gt;
