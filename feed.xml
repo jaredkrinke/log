@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-10-29T21:58:57.716Z</updated>
+<updated>2021-10-30T03:33:29.345Z</updated>
 
 <entry>
 <title>Designing md2blog, a zero-config static site generator for dev blogs</title>
@@ -154,7 +154,7 @@ draft: true
 &lt;/tbody&gt;&lt;/table&gt;
 &lt;h3 id&#x3D;&quot;content&quot;&gt;Content&lt;/h3&gt;
 &lt;p&gt;Here&amp;#39;s example Markdown content, demonstrating relative links (these links get translated to the corresponding HTML files and checked at build time; they also work in VS Code&amp;#39;s and GitHub&amp;#39;s Markdown previewers):&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-md&quot;&gt;# Relative links
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-markdown&quot;&gt;# Relative links
 Here&amp;#39;s a relative link to another post in this category: [link](post2.md)!
 
 And here&amp;#39;s one to another category, with an anchor: [link 2](../category2/post3.md#some-section).
@@ -164,7 +164,7 @@ Here&amp;#39;s an image:
 ![test](../../assets/test.png)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Finally, here is an example of including a code block (specifying the language is recommended, but optional):&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-md&quot;&gt;# Code block
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-markdown&quot;&gt;# Code block
 Here&amp;#39;s some code:
 
 &#x60;&#x60;&#x60;javascript
