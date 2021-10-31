@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "build": "npx md2blog --clean",
-    "serve": "npx md2blog --serve"
+    "serve": "npx md2blog --serve --drafts"
   },
   "dependencies": {
     "md2blog": "file:../md2blog"
