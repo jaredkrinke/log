@@ -39,7 +39,7 @@ Metalsmith(__dirname)
 
 Notes:
 
-* I'm using `import` instead of `require` to experiment with ES modules ([Node supports loading CommonJS modules with `import`](../javascript/using-commonjs-modules-from-es-modules.md))
+* I'm using `import` instead of `require` to experiment with ES modules ([Node supports loading CommonJS modules with `import`](../web-development/using-commonjs-modules-from-es-modules.md))
 * highlight.js [supports a lot of languages](https://highlightjs.org/static/demo/), but not WebAssembly, so I set up an alias that let's me mark code blocks as "wasm" and they'll be highlighted using Lisp s-expression syntax
 * highlight.js can auto-detect languages, so I use `highlightAuto` in cases where no programming language is explicitly specified
 
