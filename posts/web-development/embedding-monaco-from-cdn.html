@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Schemescape: Embedding VS Code&#x27;s Monaco Editor using a CDN</title>
+<meta name="description" content="Here&#x27;s how to load VS Code&#x27;s Monaco Editor from a CDN and embed it in a regular web page" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+<nav>
+<ul>
+<li><a href="../../posts/web-development/index.html">web-development</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/web-development/embedding-monaco-from-cdn.html">Embedding VS Code&#x27;s Monaco Editor using a CDN</a></h1>
+<p><time datetime="2021-11-02">November 2, 2021</time></p>
+</header>
+<h1 id="monaco-editor">Monaco Editor</h1>
+<p><a href="https://code.visualstudio.com/">Visual Studio Code</a> unseated <a href="https://www.vim.org/">Vim</a> as my favorite text editor a few years ago.</p>
+<p>Surprisingly, VS Code manages to have acceptable performance (even on my very old laptop) despite being built on JavaScript. The (MIT-licensed) editor component is called <a href="https://microsoft.github.io/monaco-editor/index.html">Monaco Editor</a>, and it runs in most desktop browsers.</p>
+<h1 id="samples">Samples</h1>
+<p>So what&#39;s the easiest way to embed Monaco Editor in a web page for building simple tools?</p>
+<p>There&#39;s an official repository for <a href="https://github.com/Microsoft/monaco-editor-samples/">Monaco Editor samples</a>, but they all seem to assume you&#39;re using NPM, WebPack, etc., and hosting the scripts yourself. <strong>What if you just want to throw together a quick web page with an editor component, hosted as a single static HTML page?</strong></p>
+<h1 id="loading-from-a-cdn">Loading from a CDN</h1>
+<p>Fortunately, there is a (very well hidden) page discussing <a href="https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md">integrating the AMD version of the Monaco Editor in a cross-domain setup</a>:</p>
+<blockquote>
+<p>If you are hosting your .js on a different domain <strong>(e.g. on a CDN)</strong> than the HTML, you should know that the Monaco Editor creates web workers for smart language features. Cross-domain web workers are not allowed, but here is how you can proxy their loading and get them to work</p>
+</blockquote>
+<p>That sounds like what I&#39;m looking for!</p>
+<p>Specifically, I&#39;m going to combine one of the <a href="https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html">browser-amd-editor</a> official samples with <a href="https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html">Option 1</a> from the page above.</p>
+<h1 id="automatic-resizing">Automatic resizing</h1>
+<p>There&#39;s one line in the sample I find irritating:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;container&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width: 800px; height: 600px; border: 1px solid grey&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p><strong>Why is the size being manually specified in pixels?</strong> Is that necessary?</p>
+<p>There&#39;s a <a href="https://github.com/Microsoft/monaco-editor/issues/28">long thread in a Monaco Editor issue</a> that goes into the details, but basically the editor component needs to be notified of size changes (no idea why) and, at least in 2016, there was no way for the editor to subscribe to size updates.</p>
+<p>But it&#39;s 2021 as of this post, so can we use <a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">ResizeObserver</a> (global support is at <a href="https://caniuse.com/resizeobserver">92%</a> as of this post)? Apparently not, because the implementations of ResizeObserver use inconsistent property names (insert facepalm here).</p>
+<p>Fortunately, the trusty old <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event">resize</a> event is sufficient for my purposes:</p>
+<pre><code class="language-html">const editorElement = document.getElementById(&quot;editor&quot;);
+window.addEventListener(&quot;resize&quot;, () =&gt; editor.layout({
+    width: editorElement.offsetWidth,
+    height: editorElement.offsetHeight
+}));
+</code></pre>
+<h1 id="complete-example">Complete example</h1>
+<p>The full code is in this repository: <a href="https://github.com/jaredkrinke/monaco-editor-from-cdn">monaco-editor-from-cdn</a>.</p>
+<p>Here&#39;s a copy-paste of the code:</p>
+<pre><code class="language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Monaco Editor from CDN example, with automatic resizing<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css">
+<span class="hljs-comment">/* Flex column layout, with the editor taking up all available screen space */</span>
+<span class="hljs-selector-tag">html</span>, <span class="hljs-selector-tag">body</span> {
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
+    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">overflow</span>: hidden;
+}
+
+<span class="hljs-selector-tag">body</span> {
+    <span class="hljs-attribute">display</span>: flex;
+    <span class="hljs-attribute">flex-direction</span>: column;
+}
+
+<span class="hljs-selector-id">#editor</span> {
+    <span class="hljs-attribute">flex-grow</span>: <span class="hljs-number">1</span>;
+    <span class="hljs-attribute">border</span>: solid <span class="hljs-number">1px</span> gray;
+    <span class="hljs-attribute">overflow</span>: hidden;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Monaco Editor, loaded via CDN<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;editor&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/loader.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+<span class="hljs-comment">// Proxy Monaco Editor workers using a data URL (adapted from: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md)</span>
+<span class="hljs-built_in">require</span>.<span class="hljs-title function_">config</span>({ <span class="hljs-attr">paths</span>: { <span class="hljs-string">&quot;vs&quot;</span>: <span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/&quot;</span> }});
+
+<span class="hljs-variable language_">window</span>.<span class="hljs-property">MonacoEnvironment</span> = {
+    <span class="hljs-attr">getWorkerUrl</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">workerId, label</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">`data:text/javascript;charset=utf-8,<span class="hljs-subst">${<span class="hljs-built_in">encodeURIComponent</span>(<span class="hljs-string">`
+            self.MonacoEnvironment = { baseUrl: &quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/&quot; };
+            importScripts(&quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/base/worker/workerMain.min.js&quot;);`</span>
+        )}</span>`</span>;
+    }
+};
+
+<span class="hljs-built_in">require</span>([<span class="hljs-string">&quot;vs/editor/editor.main&quot;</span>], <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// Create the editor with some sample JavaScript code</span>
+    <span class="hljs-keyword">var</span> editor = monaco.<span class="hljs-property">editor</span>.<span class="hljs-title function_">create</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;editor&quot;</span>), {
+        <span class="hljs-attr">value</span>: <span class="hljs-string">&quot;// code goes here\n&quot;</span>,
+        <span class="hljs-attr">language</span>: <span class="hljs-string">&quot;javascript&quot;</span>
+    });
+
+    <span class="hljs-comment">// Resize the editor when the window size changes</span>
+    <span class="hljs-keyword">const</span> editorElement = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;editor&quot;</span>);
+    <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;resize&quot;</span>, <span class="hljs-function">() =&gt;</span> editor.<span class="hljs-title function_">layout</span>({
+        <span class="hljs-attr">width</span>: editorElement.<span class="hljs-property">offsetWidth</span>,
+        <span class="hljs-attr">height</span>: editorElement.<span class="hljs-property">offsetHeight</span>
+    }));
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+
+<footer>
+<p><a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+</body>
+</html>

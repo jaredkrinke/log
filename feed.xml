@@ -7,8 +7,108 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-02T04:37:55.008Z</updated>
+<updated>2021-11-02T23:06:07.194Z</updated>
 
+<entry>
+<title>Embedding VS Code&#x27;s Monaco Editor using a CDN</title>
+<id>https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html"/>
+<updated>2021-11-02T00:00:00.000Z</updated>
+<summary type="text">Here&#x27;s how to load VS Code&#x27;s Monaco Editor from a CDN and embed it in a regular web page</summary>
+<content type="html">&lt;h1 id&#x3D;&quot;monaco-editor&quot;&gt;Monaco Editor&lt;/h1&gt;
+&lt;p&gt;&lt;a href&#x3D;&quot;https://code.visualstudio.com/&quot;&gt;Visual Studio Code&lt;/a&gt; unseated &lt;a href&#x3D;&quot;https://www.vim.org/&quot;&gt;Vim&lt;/a&gt; as my favorite text editor a few years ago.&lt;/p&gt;
+&lt;p&gt;Surprisingly, VS Code manages to have acceptable performance (even on my very old laptop) despite being built on JavaScript. The (MIT-licensed) editor component is called &lt;a href&#x3D;&quot;https://microsoft.github.io/monaco-editor/index.html&quot;&gt;Monaco Editor&lt;/a&gt;, and it runs in most desktop browsers.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;samples&quot;&gt;Samples&lt;/h1&gt;
+&lt;p&gt;So what&amp;#39;s the easiest way to embed Monaco Editor in a web page for building simple tools?&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s an official repository for &lt;a href&#x3D;&quot;https://github.com/Microsoft/monaco-editor-samples/&quot;&gt;Monaco Editor samples&lt;/a&gt;, but they all seem to assume you&amp;#39;re using NPM, WebPack, etc., and hosting the scripts yourself. &lt;strong&gt;What if you just want to throw together a quick web page with an editor component, hosted as a single static HTML page?&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;loading-from-a-cdn&quot;&gt;Loading from a CDN&lt;/h1&gt;
+&lt;p&gt;Fortunately, there is a (very well hidden) page discussing &lt;a href&#x3D;&quot;https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md&quot;&gt;integrating the AMD version of the Monaco Editor in a cross-domain setup&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If you are hosting your .js on a different domain &lt;strong&gt;(e.g. on a CDN)&lt;/strong&gt; than the HTML, you should know that the Monaco Editor creates web workers for smart language features. Cross-domain web workers are not allowed, but here is how you can proxy their loading and get them to work&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;That sounds like what I&amp;#39;m looking for!&lt;/p&gt;
+&lt;p&gt;Specifically, I&amp;#39;m going to combine one of the &lt;a href&#x3D;&quot;https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html&quot;&gt;browser-amd-editor&lt;/a&gt; official samples with &lt;a href&#x3D;&quot;https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html&quot;&gt;Option 1&lt;/a&gt; from the page above.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;automatic-resizing&quot;&gt;Automatic resizing&lt;/h1&gt;
+&lt;p&gt;There&amp;#39;s one line in the sample I find irritating:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-html&quot;&gt;&amp;lt;div id&#x3D;&amp;quot;container&amp;quot; style&#x3D;&amp;quot;width: 800px; height: 600px; border: 1px solid grey&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Why is the size being manually specified in pixels?&lt;/strong&gt; Is that necessary?&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s a &lt;a href&#x3D;&quot;https://github.com/Microsoft/monaco-editor/issues/28&quot;&gt;long thread in a Monaco Editor issue&lt;/a&gt; that goes into the details, but basically the editor component needs to be notified of size changes (no idea why) and, at least in 2016, there was no way for the editor to subscribe to size updates.&lt;/p&gt;
+&lt;p&gt;But it&amp;#39;s 2021 as of this post, so can we use &lt;a href&#x3D;&quot;https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver&quot;&gt;ResizeObserver&lt;/a&gt; (global support is at &lt;a href&#x3D;&quot;https://caniuse.com/resizeobserver&quot;&gt;92%&lt;/a&gt; as of this post)? Apparently not, because the implementations of ResizeObserver use inconsistent property names (insert facepalm here).&lt;/p&gt;
+&lt;p&gt;Fortunately, the trusty old &lt;a href&#x3D;&quot;https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event&quot;&gt;resize&lt;/a&gt; event is sufficient for my purposes:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-html&quot;&gt;const editorElement &#x3D; document.getElementById(&amp;quot;editor&amp;quot;);
+window.addEventListener(&amp;quot;resize&amp;quot;, () &#x3D;&amp;gt; editor.layout({
+    width: editorElement.offsetWidth,
+    height: editorElement.offsetHeight
+}));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id&#x3D;&quot;complete-example&quot;&gt;Complete example&lt;/h1&gt;
+&lt;p&gt;The full code is in this repository: &lt;a href&#x3D;&quot;https://github.com/jaredkrinke/monaco-editor-from-cdn&quot;&gt;monaco-editor-from-cdn&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s a copy-paste of the code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-html&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang&#x3D;&amp;quot;en&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset&#x3D;&amp;quot;utf-8&amp;quot; /&amp;gt;
+&amp;lt;title&amp;gt;Monaco Editor from CDN example, with automatic resizing&amp;lt;/title&amp;gt;
+&amp;lt;style&amp;gt;
+/* Flex column layout, with the editor taking up all available screen space */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+#editor {
+    flex-grow: 1;
+    border: solid 1px gray;
+    overflow: hidden;
+}
+&amp;lt;/style&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;h1&amp;gt;Monaco Editor, loaded via CDN&amp;lt;/h1&amp;gt;
+
+&amp;lt;div id&#x3D;&amp;quot;editor&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+
+&amp;lt;script src&#x3D;&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/loader.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script&amp;gt;
+// Proxy Monaco Editor workers using a data URL (adapted from: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md)
+require.config({ paths: { &amp;quot;vs&amp;quot;: &amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/&amp;quot; }});
+
+window.MonacoEnvironment &#x3D; {
+    getWorkerUrl: function(workerId, label) {
+        return &#x60;data:text/javascript;charset&#x3D;utf-8,${encodeURIComponent(&#x60;
+            self.MonacoEnvironment &#x3D; { baseUrl: &amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/&amp;quot; };
+            importScripts(&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/base/worker/workerMain.min.js&amp;quot;);&#x60;
+        )}&#x60;;
+    }
+};
+
+require([&amp;quot;vs/editor/editor.main&amp;quot;], function () {
+    // Create the editor with some sample JavaScript code
+    var editor &#x3D; monaco.editor.create(document.getElementById(&amp;quot;editor&amp;quot;), {
+        value: &amp;quot;// code goes here\n&amp;quot;,
+        language: &amp;quot;javascript&amp;quot;
+    });
+
+    // Resize the editor when the window size changes
+    const editorElement &#x3D; document.getElementById(&amp;quot;editor&amp;quot;);
+    window.addEventListener(&amp;quot;resize&amp;quot;, () &#x3D;&amp;gt; editor.layout({
+        width: editorElement.offsetWidth,
+        height: editorElement.offsetHeight
+    }));
+});
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry>
 <entry>
 <title>Designing md2blog, a zero-config static site generator for dev blogs</title>
 <id>https://log.schemescape.com/posts/static-site-generators/md2blog-design.html</id>
@@ -643,159 +743,6 @@ createCString(module, dotString, (dotStringAddress) &#x3D;&amp;gt; {
 &lt;ul&gt;
 &lt;li&gt;&lt;a href&#x3D;&quot;https://github.com/jaredkrinke/dot2svg-wasm&quot;&gt;Repository for this code)&lt;/a&gt; (as an ES module)&lt;/li&gt;
 &lt;li&gt;&lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/../static-site-generators/metalsmith-diagrams.html&quot;&gt;Example of using this code to generate diagrams automatically for my site&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>WebAssembly objects, libraries, and linking (for C code)</title>
-<id>https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/objects-libraries-and-linking.html"/>
-<updated>2021-10-06T00:00:00.000Z</updated>
-<summary type="text">In order to reuse C libraries in WebAssembly, here is how object files, libraries, and linking work with Clang and LLVM.</summary>
-<content type="html">&lt;p&gt;In the interest of reusing &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/passing-strings-to-c.html&quot;&gt;some C string handling code I wrote for use in WebAssembly&lt;/a&gt;, I&amp;#39;m researching how object files, libraries, and linking work in WebAssembly.&lt;/p&gt;
-&lt;h1 id&#x3D;&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;For native C code, the following file types and concepts are used:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Header files (.h) define the interfaces used between source files&lt;/li&gt;
-&lt;li&gt;Source files (.c) implement functionality&lt;/li&gt;
-&lt;li&gt;Object files (.o) each represent the compiled (using &amp;quot;-c&amp;quot;) output of a single source file&lt;/li&gt;
-&lt;li&gt;Archive files (.a) contain many object files and are used for build-time linking (static libraries)&lt;/li&gt;
-&lt;li&gt;Shared objects (.so) or dynamic-link libraries (.dll) support linking at run-time (shared libraries)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;How does the Clang/LLVM toolchain map these concepts to WebAssembly?&lt;/p&gt;
-&lt;h1 id&#x3D;&quot;webassembly-object-files&quot;&gt;WebAssembly object files&lt;/h1&gt;
-&lt;p&gt;To my surprise, WebAssembly actually publishes &lt;a href&#x3D;&quot;https://github.com/WebAssembly/tool-conventions/blob/main/Linking.md&quot;&gt;conventions for creating and linking object files&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I certainly didn&amp;#39;t read that entire document, but I did note that object files are just WebAssembly modules, with custom sections (note: custom sections are only supported in binary &amp;quot;.wasm&amp;quot; format, and not text &amp;quot;.wat&amp;quot; format).&lt;/p&gt;
-&lt;h2 id&#x3D;&quot;example&quot;&gt;Example&lt;/h2&gt;
-&lt;p&gt;My WebAssembly string library is very simple:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;It defines &lt;code&gt;wasm_c_string&lt;/code&gt; which represents a string on the heap that will be return to the JavaScript host&lt;/li&gt;
-&lt;li&gt;It exports 2 functions:&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;allocate_wasm_c_string&lt;/code&gt; to allocate a wasm_c_string of a given length&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;create_wasm_c_string&lt;/code&gt; to allocate a wasm_c_string that is a copy of any old C string&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Note that this example requires consumers of the library providing &lt;code&gt;malloc()&lt;/code&gt; and &lt;code&gt;free()&lt;/code&gt; to the JavaScript host. I don&amp;#39;t export these from my library because I want consumers to be able to supply their own allocator.&lt;/p&gt;
-&lt;h3 id&#x3D;&quot;c-source-code&quot;&gt;C source code&lt;/h3&gt;
-&lt;p&gt;Here&amp;#39;s the header file (&amp;quot;wasm-c-string.h&amp;quot;):&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;typedef struct {
-    unsigned int length;
-    char buffer[];
-} wasm_c_string;
-
-// Allocates an empty wasm_c_string. When done, use &amp;quot;free&amp;quot; to release.
-extern wasm_c_string* allocate_wasm_c_string(unsigned int length);
-
-// Creates a new wasm_c_string from an existing C string. When done, use &amp;quot;free&amp;quot; to release.
-extern wasm_c_string* create_wasm_c_string(const char* source);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;And the source file (&amp;quot;wasm-c-string.c&amp;quot;):&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;#include &amp;lt;malloc.h&amp;gt;
-#include &amp;lt;string.h&amp;gt;
-#include &amp;quot;wasm-c-string.h&amp;quot;
-
-#define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
-#define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
-
-wasm_c_string* WASM_EXPORT(allocate_wasm_c_string)(unsigned int length) {
-    wasm_c_string* str &#x3D; (wasm_c_string*)malloc(sizeof(unsigned int) + length);
-    str-&amp;gt;length &#x3D; (unsigned int)length;
-    return str;
-}
-
-wasm_c_string* WASM_EXPORT(create_wasm_c_string)(const char* source) {
-    const size_t sourceLength &#x3D; strlen(source);
-    wasm_c_string* str &#x3D; allocate_wasm_c_string((unsigned int)sourceLength);
-    memcpy(&amp;amp;str-&amp;gt;buffer[0], source, sourceLength);
-    return str;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id&#x3D;&quot;compiling&quot;&gt;Compiling&lt;/h3&gt;
-&lt;p&gt;Let&amp;#39;s compile this to an object file (using the &lt;a href&#x3D;&quot;https://github.com/WebAssembly/wasi-sdk&quot;&gt;WASI SDK&lt;/a&gt;--note the &amp;quot;-c&amp;quot; argument that tells Clang to only output an object file and not invoke the linker):&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-sh&quot;&gt;wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.c
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id&#x3D;&quot;text-format&quot;&gt;Text format&lt;/h3&gt;
-&lt;p&gt;The output file defaults to &amp;quot;wasm-c-string.o&amp;quot; and here&amp;#39;s the (abbreviated) corresponding text format (compliments of the &lt;a href&#x3D;&quot;https://github.com/WebAssembly/wabt&quot;&gt;WebAssembly Binary Toolkit&lt;/a&gt;&amp;#39;s &lt;code&gt;wasm2wat&lt;/code&gt; tool):&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-wasm&quot;&gt;(module
-  (type (;0;) (func (param i32) (result i32)))
-  (type (;1;) (func (param i32 i32 i32) (result i32)))
-  (import &amp;quot;env&amp;quot; &amp;quot;__linear_memory&amp;quot; (memory (;0;) 0))
-  (import &amp;quot;env&amp;quot; &amp;quot;__indirect_function_table&amp;quot; (table (;0;) 0 funcref))
-  (import &amp;quot;env&amp;quot; &amp;quot;malloc&amp;quot; (func (;0;) (type 0)))
-  (import &amp;quot;env&amp;quot; &amp;quot;strlen&amp;quot; (func (;1;) (type 0)))
-  (import &amp;quot;env&amp;quot; &amp;quot;memcpy&amp;quot; (func (;2;) (type 1)))
-  (func $allocate_wasm_c_string (type 0) (param i32) (result i32)
-...
-  (func $create_wasm_c_string (type 0) (param i32) (result i32)
-...
-  (export &amp;quot;allocate_wasm_c_string&amp;quot; (func $allocate_wasm_c_string))
-  (export &amp;quot;create_wasm_c_string&amp;quot; (func $create_wasm_c_string)))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;You can see that it&amp;#39;s importing memory, a function table, and C standard library functions, and that it&amp;#39;s exporting my 2 functions.&lt;/p&gt;
-&lt;h3 id&#x3D;&quot;custom-sections&quot;&gt;Custom sections&lt;/h3&gt;
-&lt;p&gt;But wait, the object file conventions document indicates that there are custom sections that can&amp;#39;t be represented in the text format. So let&amp;#39;s use &lt;code&gt;wasm-objdump&lt;/code&gt; (also from WABT):&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ wasm-objdump -s wasm-c-string.o
-
-wasm-c-string.o:    file format wasm 0x1
-
-...
-
-Contents of section Custom:
-0000119: 076c 696e 6b69 6e67 0208 be80 8080 0005  .linking........
-0000129: 00a4 0103 1661 6c6c 6f63 6174 655f 7761  .....allocate_wa
-0000139: 736d 5f63 5f73 7472 696e 6700 1000 00a4  sm_c_string.....
-0000149: 0104 1463 7265 6174 655f 7761 736d 5f63  ...create_wasm_c
-0000159: 5f73 7472 696e 6700 1001 0010 02         _string......
-
-Contents of section Custom:
-000016c: 0a72 656c 6f63 2e43 4f44 4504 0400 0b01  .reloc.CODE.....
-000017c: 0021 0300 2c01 0042 04                   .!..,..B.
-
-Contents of section Custom:
-000018b: 0970 726f 6475 6365 7273 010c 7072 6f63  .producers..proc
-000019b: 6573 7365 642d 6279 0105 636c 616e 6756  essed-by..clangV
-00001ab: 3131 2e30 2e30 2028 6874 7470 733a 2f2f  11.0.0 (https://
-00001bb: 6769 7468 7562 2e63 6f6d 2f6c 6c76 6d2f  github.com/llvm/
-00001cb: 6c6c 766d 2d70 726f 6a65 6374 2031 3736  llvm-project 176
-00001db: 3234 3962 6436 3733 3261 3830 3434 6434  249bd6732a8044d4
-00001eb: 3537 3039 3265 6439 3332 3736 3837 3234  57092ed932768724
-00001fb: 6136 6630 3629                           a6f06)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Sure enough, there are custom sections related to linking, relocation, and even a curious &amp;quot;producers&amp;quot; section (that apparently exists to &lt;a href&#x3D;&quot;https://github.com/WebAssembly/tool-conventions/blob/main/ProducersSection.md&quot;&gt;allow analysis of toolchain usage in the wild&lt;/a&gt;).&lt;/p&gt;
-&lt;h1 id&#x3D;&quot;webassembly-libraries&quot;&gt;WebAssembly libraries&lt;/h1&gt;
-&lt;p&gt;For something as simple as my 20 line C library, I could probably just distribute the C header and the compiled WebAssembly object file (which is actually a WebAssembly module with custom sections) and be done. What if I have a larger library?&lt;/p&gt;
-&lt;h2 id&#x3D;&quot;dynamic-libraries&quot;&gt;Dynamic libraries&lt;/h2&gt;
-&lt;p&gt;Once again, to my surprise, WebAssembly publishes &lt;a href&#x3D;&quot;https://github.com/WebAssembly/tool-conventions/blob/main/DynamicLinking.md&quot;&gt;conventions for dynamically loading libraries&lt;/a&gt;, but the document notes there is no stable ABI. That&amp;#39;s ok, I didn&amp;#39;t really need dynamic libraries right now anyway.&lt;/p&gt;
-&lt;h2 id&#x3D;&quot;static-libraries&quot;&gt;Static libraries&lt;/h2&gt;
-&lt;p&gt;Static libraries for native C code are often just archives (using the &lt;a href&#x3D;&quot;https://en.wikipedia.org/wiki/Ar_%28Unix%29&quot;&gt;&lt;code&gt;ar&lt;/code&gt;&lt;/a&gt; archiver tool), perhaps with some additional information to describe the library.&lt;/p&gt;
-&lt;p&gt;Can I just do the same thing for WebAssembly? It certainly appears so.&lt;/p&gt;
-&lt;p&gt;If I inspect the WASI SDK, in the WebAssembly sysroot, I actually see both bare objects and archives for the C standard library and friends:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-sh&quot;&gt;$ ls wasi-sdk/share/wasi-sysroot/lib/wasm32-wasi
-crt1-command.o  libc++abi.a                         libdl.a       libutil.a
-crt1.o          libc.imports                        libm.a        libwasi-emulated-mman.a
-crt1-reactor.o  libc-printscan-long-double.a        libpthread.a  libwasi-emulated-signal.a
-libc++.a        libc-printscan-no-floating-point.a  libresolv.a   libxnet.a
-libc.a          libcrypt.a                          librt.a
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;What&amp;#39;s in one of these archives? &lt;code&gt;ar -t libc.a&lt;/code&gt; shows a bunch of object files. If I extract an object named &amp;quot;ccos.o&amp;quot; with &lt;code&gt;ar -x libc.a ccos.o&lt;/code&gt;, I can use &lt;code&gt;wasm-objdump&lt;/code&gt; or &lt;code&gt;wasm2wat&lt;/code&gt; to see that it&amp;#39;s just a regular WebAssembly object file.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m impressed that the people working on WebAssembly resisted the urge to create entirely new tools, and instead just decided to leverage existing UNIX tools that have been around for a long time.&lt;/p&gt;
-&lt;h1 id&#x3D;&quot;linking&quot;&gt;Linking&lt;/h1&gt;
-&lt;p&gt;The &lt;a href&#x3D;&quot;https://lld.llvm.org/WebAssembly.html&quot;&gt;documentation for wasm-ld&lt;/a&gt; is brief, but it does have most of the information you need.&lt;/p&gt;
-&lt;p&gt;The main tricks are:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Pass &lt;code&gt;--no-entry&lt;/code&gt; on the command line to indicate there is no &lt;code&gt;_start&lt;/code&gt; entry point&lt;/li&gt;
-&lt;li&gt;By default, only symbols marked with the &lt;code&gt;export-name&lt;/code&gt; attribute are exported (see &lt;code&gt;WASM_EXPORT&lt;/code&gt; in the C example earlier for a handy macro to add this)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id&#x3D;&quot;summary&quot;&gt;Summary&lt;/h1&gt;
-&lt;p&gt;It turns out that the toolchain for WebAssembly libraries in C is similar to what one would use for native compilation:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Publish header files (.h) to define the library&amp;#39;s interface&lt;/li&gt;
-&lt;li&gt;Compile source files (.c) to object files (.o) using &lt;code&gt;clang&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;If needed, consolidate multiple object files into an archive (.a) using &lt;code&gt;ar&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Publish either a single object file or (more likely) an archive for users to consume&lt;/li&gt;
-&lt;li&gt;For an object file, users just add it to the list on their &lt;code&gt;wasm-ld&lt;/code&gt; command line&lt;/li&gt;
-&lt;li&gt;For an archive, consumers add &lt;code&gt;-l&amp;lt;name of archive without extension&amp;gt;&lt;/code&gt; to their &lt;code&gt;wasm-ld&lt;/code&gt; command line&lt;/li&gt;
 &lt;/ul&gt;
 </content>
 </entry>
