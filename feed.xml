@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-02T23:06:07.194Z</updated>
+<updated>2021-11-02T23:13:19.740Z</updated>
 
 <entry>
 <title>Embedding VS Code&#x27;s Monaco Editor using a CDN</title>
@@ -15,7 +15,12 @@
 <link rel="alternate" href="https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html"/>
 <updated>2021-11-02T00:00:00.000Z</updated>
 <summary type="text">Here&#x27;s how to load VS Code&#x27;s Monaco Editor from a CDN and embed it in a regular web page</summary>
-<content type="html">&lt;h1 id&#x3D;&quot;monaco-editor&quot;&gt;Monaco Editor&lt;/h1&gt;
+<content type="html">&lt;p&gt;Here&amp;#39;s how to load Visual Studio Code&amp;#39;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing of the editor component:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href&#x3D;&quot;https://github.com/jaredkrinke/monaco-editor-from-cdn&quot;&gt;Source code&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href&#x3D;&quot;https://jaredkrinke.github.io/monaco-editor-from-cdn/&quot;&gt;Live demo&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id&#x3D;&quot;monaco-editor&quot;&gt;Monaco Editor&lt;/h1&gt;
 &lt;p&gt;&lt;a href&#x3D;&quot;https://code.visualstudio.com/&quot;&gt;Visual Studio Code&lt;/a&gt; unseated &lt;a href&#x3D;&quot;https://www.vim.org/&quot;&gt;Vim&lt;/a&gt; as my favorite text editor a few years ago.&lt;/p&gt;
 &lt;p&gt;Surprisingly, VS Code manages to have acceptable performance (even on my very old laptop) despite being built on JavaScript. The (MIT-licensed) editor component is called &lt;a href&#x3D;&quot;https://microsoft.github.io/monaco-editor/index.html&quot;&gt;Monaco Editor&lt;/a&gt;, and it runs in most desktop browsers.&lt;/p&gt;
 &lt;h1 id&#x3D;&quot;samples&quot;&gt;Samples&lt;/h1&gt;
@@ -44,6 +49,7 @@ window.addEventListener(&amp;quot;resize&amp;quot;, () &#x3D;&amp;gt; editor.lay
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id&#x3D;&quot;complete-example&quot;&gt;Complete example&lt;/h1&gt;
 &lt;p&gt;The full code is in this repository: &lt;a href&#x3D;&quot;https://github.com/jaredkrinke/monaco-editor-from-cdn&quot;&gt;monaco-editor-from-cdn&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s a &lt;a href&#x3D;&quot;https://jaredkrinke.github.io/monaco-editor-from-cdn/&quot;&gt;live demo&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Here&amp;#39;s a copy-paste of the code:&lt;/p&gt;
 &lt;pre&gt;&lt;code class&#x3D;&quot;language-html&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
 &amp;lt;html lang&#x3D;&amp;quot;en&amp;quot;&amp;gt;

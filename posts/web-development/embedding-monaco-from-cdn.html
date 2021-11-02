@@ -25,6 +25,11 @@
 <h1><a href="../../posts/web-development/embedding-monaco-from-cdn.html">Embedding VS Code&#x27;s Monaco Editor using a CDN</a></h1>
 <p><time datetime="2021-11-02">November 2, 2021</time></p>
 </header>
+<p>Here&#39;s how to load Visual Studio Code&#39;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing of the editor component:</p>
+<ul>
+<li><a href="https://github.com/jaredkrinke/monaco-editor-from-cdn">Source code</a></li>
+<li><a href="https://jaredkrinke.github.io/monaco-editor-from-cdn/">Live demo</a></li>
+</ul>
 <h1 id="monaco-editor">Monaco Editor</h1>
 <p><a href="https://code.visualstudio.com/">Visual Studio Code</a> unseated <a href="https://www.vim.org/">Vim</a> as my favorite text editor a few years ago.</p>
 <p>Surprisingly, VS Code manages to have acceptable performance (even on my very old laptop) despite being built on JavaScript. The (MIT-licensed) editor component is called <a href="https://microsoft.github.io/monaco-editor/index.html">Monaco Editor</a>, and it runs in most desktop browsers.</p>
@@ -54,6 +59,7 @@ window.addEventListener(&quot;resize&quot;, () =&gt; editor.layout({
 </code></pre>
 <h1 id="complete-example">Complete example</h1>
 <p>The full code is in this repository: <a href="https://github.com/jaredkrinke/monaco-editor-from-cdn">monaco-editor-from-cdn</a>.</p>
+<p>Here&#39;s a <a href="https://jaredkrinke.github.io/monaco-editor-from-cdn/">live demo</a>.</p>
 <p>Here&#39;s a copy-paste of the code:</p>
 <pre><code class="language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
