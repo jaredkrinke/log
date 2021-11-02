@@ -83,4 +83,4 @@ ellipse.diagram-black-none { stroke: #ccc; fill: #444; }
 # That's it!
 To my surprise, this entire integration went smoothly, and only took an hour or so. It remains to be seen how useful these diagrams will be, but at least now if I ever feel the need to insert a superfluous diagram, the functionality will be there.
 
-For reference, all of the code used to generate this site (along with the content) is in [this repository](https://github.com/jaredkrinke/log).
+For reference, all of the code used to generate this site (along with the content) is in [this repository](https://github.com/jaredkrinke/md2blog).

@@ -153,4 +153,4 @@ One comment on Handlebars: this isn't a review of Handlebars, but I did find Han
 Overall, I'm very happy with Metalsmith, and it's likely that I will be using it moving forward. **Update**: I switched from Eleventy to Metalsmith.
 
 For reference, all of my code is here:
-[https://github.com/jaredkrinke/log](https://github.com/jaredkrinke/log)
+[https://github.com/jaredkrinke/md2blog](https://github.com/jaredkrinke/md2blog)
