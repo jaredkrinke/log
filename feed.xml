@@ -7,14 +7,14 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-02T23:16:33.853Z</updated>
+<updated>2021-11-02T23:21:41.480Z</updated>
 
 <entry>
 <title>Embedding VS Code&#x27;s Monaco Editor using a CDN</title>
 <id>https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html</id>
 <link rel="alternate" href="https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html"/>
 <updated>2021-11-02T00:00:00.000Z</updated>
-<summary type="text">Here&#x27;s how to load VS Code&#x27;s Monaco Editor from a CDN and embed it in a regular web page</summary>
+<summary type="text">Here&#x27;s how to load VS Code&#x27;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing.</summary>
 <content type="html">&lt;p&gt;Here&amp;#39;s how to load Visual Studio Code&amp;#39;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing of the editor component:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href&#x3D;&quot;https://github.com/jaredkrinke/monaco-editor-from-cdn&quot;&gt;Source code&lt;/a&gt;&lt;/li&gt;
