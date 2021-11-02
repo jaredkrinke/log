@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-02T04:29:52.335Z</updated>
+<updated>2021-11-02T04:37:55.008Z</updated>
 
 <entry>
 <title>Designing md2blog, a zero-config static site generator for dev blogs</title>
@@ -342,7 +342,7 @@ ellipse.diagram-black-none { stroke: #ccc; fill: #444; }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id&#x3D;&quot;thats-it&quot;&gt;That&amp;#39;s it!&lt;/h1&gt;
 &lt;p&gt;To my surprise, this entire integration went smoothly, and only took an hour or so. It remains to be seen how useful these diagrams will be, but at least now if I ever feel the need to insert a superfluous diagram, the functionality will be there.&lt;/p&gt;
-&lt;p&gt;For reference, all of the code used to generate this site (along with the content) is in &lt;a href&#x3D;&quot;https://github.com/jaredkrinke/log&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For reference, all of the code used to generate this site (along with the content) is in &lt;a href&#x3D;&quot;https://github.com/jaredkrinke/md2blog&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
 </content>
 </entry>
 <entry>
