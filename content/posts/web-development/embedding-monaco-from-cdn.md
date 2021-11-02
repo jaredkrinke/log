@@ -1,6 +1,6 @@
 ---
 title: Embedding VS Code's Monaco Editor using a CDN
-description: Here's how to load VS Code's Monaco Editor from a CDN and embed it in a regular web page
+description: Here's how to load VS Code's Monaco Editor from a CDN and embed it in a static web page, with automatic resizing.
 date: 2021-11-02
 ---
 Here's how to load Visual Studio Code's Monaco Editor from a CDN and embed it in a static web page, with automatic resizing of the editor component:
