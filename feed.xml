@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-02T23:13:19.740Z</updated>
+<updated>2021-11-02T23:16:33.853Z</updated>
 
 <entry>
 <title>Embedding VS Code&#x27;s Monaco Editor using a CDN</title>
@@ -41,7 +41,7 @@
 &lt;p&gt;There&amp;#39;s a &lt;a href&#x3D;&quot;https://github.com/Microsoft/monaco-editor/issues/28&quot;&gt;long thread in a Monaco Editor issue&lt;/a&gt; that goes into the details, but basically the editor component needs to be notified of size changes (no idea why) and, at least in 2016, there was no way for the editor to subscribe to size updates.&lt;/p&gt;
 &lt;p&gt;But it&amp;#39;s 2021 as of this post, so can we use &lt;a href&#x3D;&quot;https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver&quot;&gt;ResizeObserver&lt;/a&gt; (global support is at &lt;a href&#x3D;&quot;https://caniuse.com/resizeobserver&quot;&gt;92%&lt;/a&gt; as of this post)? Apparently not, because the implementations of ResizeObserver use inconsistent property names (insert facepalm here).&lt;/p&gt;
 &lt;p&gt;Fortunately, the trusty old &lt;a href&#x3D;&quot;https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event&quot;&gt;resize&lt;/a&gt; event is sufficient for my purposes:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-html&quot;&gt;const editorElement &#x3D; document.getElementById(&amp;quot;editor&amp;quot;);
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-javascript&quot;&gt;const editorElement &#x3D; document.getElementById(&amp;quot;editor&amp;quot;);
 window.addEventListener(&amp;quot;resize&amp;quot;, () &#x3D;&amp;gt; editor.layout({
     width: editorElement.offsetWidth,
     height: editorElement.offsetHeight

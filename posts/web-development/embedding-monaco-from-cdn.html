@@ -51,10 +51,10 @@
 <p>There&#39;s a <a href="https://github.com/Microsoft/monaco-editor/issues/28">long thread in a Monaco Editor issue</a> that goes into the details, but basically the editor component needs to be notified of size changes (no idea why) and, at least in 2016, there was no way for the editor to subscribe to size updates.</p>
 <p>But it&#39;s 2021 as of this post, so can we use <a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">ResizeObserver</a> (global support is at <a href="https://caniuse.com/resizeobserver">92%</a> as of this post)? Apparently not, because the implementations of ResizeObserver use inconsistent property names (insert facepalm here).</p>
 <p>Fortunately, the trusty old <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event">resize</a> event is sufficient for my purposes:</p>
-<pre><code class="language-html">const editorElement = document.getElementById(&quot;editor&quot;);
-window.addEventListener(&quot;resize&quot;, () =&gt; editor.layout({
-    width: editorElement.offsetWidth,
-    height: editorElement.offsetHeight
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> editorElement = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;editor&quot;</span>);
+<span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;resize&quot;</span>, <span class="hljs-function">() =&gt;</span> editor.<span class="hljs-title function_">layout</span>({
+    <span class="hljs-attr">width</span>: editorElement.<span class="hljs-property">offsetWidth</span>,
+    <span class="hljs-attr">height</span>: editorElement.<span class="hljs-property">offsetHeight</span>
 }));
 </code></pre>
 <h1 id="complete-example">Complete example</h1>
