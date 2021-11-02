@@ -42,7 +42,7 @@ But it's 2021 as of this post, so can we use [ResizeObserver](https://developer.
 
 Fortunately, the trusty old [resize](https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event) event is sufficient for my purposes:
 
-```html
+```javascript
 const editorElement = document.getElementById("editor");
 window.addEventListener("resize", () => editor.layout({
     width: editorElement.offsetWidth,
