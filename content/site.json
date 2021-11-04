@@ -1,5 +1,11 @@
 {
     "title": "Schemescape",
     "url": "https://log.schemescape.com/",
-    "description": "Development log of a life-long coder"
+    "description": "Development log of a life-long coder",
+    "colors": {
+        "title": "#ffffff",
+        "heading": "#ff80ff",
+        "link": "#55ffff",
+        "comment": "#4d4"
+    }
 }
