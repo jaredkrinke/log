@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-04T16:19:26.135Z</updated>
+<updated>2021-11-05T19:16:23.520Z</updated>
 
 <entry>
 <title>Embedding VS Code&#x27;s Monaco Editor using a CDN</title>
@@ -385,10 +385,50 @@ const add &#x3D; (a, b) &#x3D;&amp;gt; a + b;
 <content type="html">&lt;p&gt;Now that I&amp;#39;ve &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/static-site-generators/../webassembly/compiling-graphviz-to-webassembly.html&quot;&gt;compiled Graphviz to a WebAssembly module&lt;/a&gt;, I&amp;#39;m going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.&lt;/p&gt;
 &lt;h1 id&#x3D;&quot;the-plan&quot;&gt;The plan&lt;/h1&gt;
 &lt;p&gt;Here&amp;#39;s a flow chart of my general plan:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-dot2svg&quot;&gt;digraph {
-    &amp;quot;Compile Graphviz to WebAssembly&amp;quot; -&amp;gt; &amp;quot;Generate diagrams at build time&amp;quot; -&amp;gt; &amp;quot;???&amp;quot; -&amp;gt; &amp;quot;Profit!&amp;quot;;
-}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div&gt;
+&lt;svg width&#x3D;&quot;312pt&quot; height&#x3D;&quot;260pt&quot;
+ viewBox&#x3D;&quot;0.00 0.00 311.67 260.00&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink&#x3D;&quot;http://www.w3.org/1999/xlink&quot;&gt;
+&lt;g id&#x3D;&quot;graph0&quot; class&#x3D;&quot;graph&quot; transform&#x3D;&quot;scale(1 1) rotate(0) translate(4 256)&quot;&gt;
+&lt;polygon class&#x3D;&quot;diagram-transparent-white&quot; points&#x3D;&quot;-4,4 -4,-256 307.67,-256 307.67,4 -4,4&quot;/&gt;
+&lt;g id&#x3D;&quot;node1&quot; class&#x3D;&quot;node&quot;&gt;
+&lt;title&gt;Compile Graphviz to WebAssembly&lt;/title&gt;
+&lt;ellipse class&#x3D;&quot;diagram-black-none&quot; cx&#x3D;&quot;151.84&quot; cy&#x3D;&quot;-234&quot; rx&#x3D;&quot;151.67&quot; ry&#x3D;&quot;18&quot;/&gt;
+&lt;text text-anchor&#x3D;&quot;middle&quot; x&#x3D;&quot;151.84&quot; y&#x3D;&quot;-229.8&quot; font-size&#x3D;&quot;14.00&quot;&gt;Compile Graphviz to WebAssembly&lt;/text&gt;
+&lt;/g&gt;
+&lt;g id&#x3D;&quot;node2&quot; class&#x3D;&quot;node&quot;&gt;
+&lt;title&gt;Generate diagrams at build time&lt;/title&gt;
+&lt;ellipse class&#x3D;&quot;diagram-black-none&quot; cx&#x3D;&quot;151.84&quot; cy&#x3D;&quot;-162&quot; rx&#x3D;&quot;134.85&quot; ry&#x3D;&quot;18&quot;/&gt;
+&lt;text text-anchor&#x3D;&quot;middle&quot; x&#x3D;&quot;151.84&quot; y&#x3D;&quot;-157.8&quot; font-size&#x3D;&quot;14.00&quot;&gt;Generate diagrams at build time&lt;/text&gt;
+&lt;/g&gt;
+&lt;g id&#x3D;&quot;edge1&quot; class&#x3D;&quot;edge&quot;&gt;
+&lt;title&gt;Compile Graphviz to WebAssembly&amp;#45;&amp;gt;Generate diagrams at build time&lt;/title&gt;
+&lt;path class&#x3D;&quot;diagram-black-none&quot; d&#x3D;&quot;M151.84,-215.7C151.84,-207.98 151.84,-198.71 151.84,-190.11&quot;/&gt;
+&lt;polygon class&#x3D;&quot;diagram-black-black&quot; points&#x3D;&quot;155.34,-190.1 151.84,-180.1 148.34,-190.1 155.34,-190.1&quot;/&gt;
+&lt;/g&gt;
+&lt;g id&#x3D;&quot;node3&quot; class&#x3D;&quot;node&quot;&gt;
+&lt;title&gt;???&lt;/title&gt;
+&lt;ellipse class&#x3D;&quot;diagram-black-none&quot; cx&#x3D;&quot;151.84&quot; cy&#x3D;&quot;-90&quot; rx&#x3D;&quot;27&quot; ry&#x3D;&quot;18&quot;/&gt;
+&lt;text text-anchor&#x3D;&quot;middle&quot; x&#x3D;&quot;151.84&quot; y&#x3D;&quot;-85.8&quot; font-size&#x3D;&quot;14.00&quot;&gt;???&lt;/text&gt;
+&lt;/g&gt;
+&lt;g id&#x3D;&quot;edge2&quot; class&#x3D;&quot;edge&quot;&gt;
+&lt;title&gt;Generate diagrams at build time&amp;#45;&amp;gt;???&lt;/title&gt;
+&lt;path class&#x3D;&quot;diagram-black-none&quot; d&#x3D;&quot;M151.84,-143.7C151.84,-135.98 151.84,-126.71 151.84,-118.11&quot;/&gt;
+&lt;polygon class&#x3D;&quot;diagram-black-black&quot; points&#x3D;&quot;155.34,-118.1 151.84,-108.1 148.34,-118.1 155.34,-118.1&quot;/&gt;
+&lt;/g&gt;
+&lt;g id&#x3D;&quot;node4&quot; class&#x3D;&quot;node&quot;&gt;
+&lt;title&gt;Profit!&lt;/title&gt;
+&lt;ellipse class&#x3D;&quot;diagram-black-none&quot; cx&#x3D;&quot;151.84&quot; cy&#x3D;&quot;-18&quot; rx&#x3D;&quot;36.49&quot; ry&#x3D;&quot;18&quot;/&gt;
+&lt;text text-anchor&#x3D;&quot;middle&quot; x&#x3D;&quot;151.84&quot; y&#x3D;&quot;-13.8&quot; font-size&#x3D;&quot;14.00&quot;&gt;Profit!&lt;/text&gt;
+&lt;/g&gt;
+&lt;g id&#x3D;&quot;edge3&quot; class&#x3D;&quot;edge&quot;&gt;
+&lt;title&gt;???&amp;#45;&amp;gt;Profit!&lt;/title&gt;
+&lt;path class&#x3D;&quot;diagram-black-none&quot; d&#x3D;&quot;M151.84,-71.7C151.84,-63.98 151.84,-54.71 151.84,-46.11&quot;/&gt;
+&lt;polygon class&#x3D;&quot;diagram-black-black&quot; points&#x3D;&quot;155.34,-46.1 151.84,-36.1 148.34,-46.1 155.34,-46.1&quot;/&gt;
+&lt;/g&gt;
+&lt;/g&gt;
+&lt;/svg&gt;
+&lt;/div&gt;
+
 &lt;p&gt;That diagram was generated using the following Markdown:&lt;/p&gt;
 &lt;pre&gt;&lt;code class&#x3D;&quot;language-md&quot;&gt;&#x60;&#x60;&#x60;dot2svg
 digraph {
@@ -449,6 +489,7 @@ ellipse.diagram-black-none { stroke: #ccc; fill: #444; }
 &lt;h1 id&#x3D;&quot;thats-it&quot;&gt;That&amp;#39;s it!&lt;/h1&gt;
 &lt;p&gt;To my surprise, this entire integration went smoothly, and only took an hour or so. It remains to be seen how useful these diagrams will be, but at least now if I ever feel the need to insert a superfluous diagram, the functionality will be there.&lt;/p&gt;
 &lt;p&gt;For reference, all of the code used to generate this site (along with the content) is in &lt;a href&#x3D;&quot;https://github.com/jaredkrinke/md2blog&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I&amp;#39;ve removed this feature from my static site generator for the time being because it&amp;#39;s unclear what license covers Graphviz (the web site and source code are not in sync).&lt;/p&gt;
 </content>
 </entry>
 <entry>

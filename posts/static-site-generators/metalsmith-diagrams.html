@@ -30,6 +30,7 @@
 <p>Now that I&#39;ve <a href="../webassembly/compiling-graphviz-to-webassembly.html">compiled Graphviz to a WebAssembly module</a>, I&#39;m going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.</p>
 <h1 id="the-plan">The plan</h1>
 <p>Here&#39;s a flow chart of my general plan:</p>
+<div>
 <svg width="312pt" height="260pt"
  viewBox="0.00 0.00 311.67 260.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 256)">
@@ -71,6 +72,8 @@
 </g>
 </g>
 </svg>
+</div>
+
 <p>That diagram was generated using the following Markdown:</p>
 <pre><code class="language-md"><span class="hljs-code">```dot2svg
 digraph {
@@ -131,6 +134,7 @@ ellipse<span class="hljs-selector-class">.diagram-black-none</span> { stroke: <s
 <h1 id="thats-it">That&#39;s it!</h1>
 <p>To my surprise, this entire integration went smoothly, and only took an hour or so. It remains to be seen how useful these diagrams will be, but at least now if I ever feel the need to insert a superfluous diagram, the functionality will be there.</p>
 <p>For reference, all of the code used to generate this site (along with the content) is in <a href="https://github.com/jaredkrinke/md2blog">this repository</a>.</p>
+<p><strong>Update</strong>: I&#39;ve removed this feature from my static site generator for the time being because it&#39;s unclear what license covers Graphviz (the web site and source code are not in sync).</p>
 
 <footer>
 <p><a href="../../index.html">Back to home</a></p>
