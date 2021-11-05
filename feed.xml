@@ -7,8 +7,62 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-05T19:16:23.520Z</updated>
+<updated>2021-11-05T21:03:25.284Z</updated>
 
+<entry>
+<title>NPM requires X11 on Debian. Wait, what?</title>
+<id>https://log.schemescape.com/posts/linux/debian-npm-requires-x11.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/linux/debian-npm-requires-x11.html"/>
+<updated>2021-11-04T00:00:00.000Z</updated>
+<summary type="text">Here&#x27;s a rant about that time I tried to install NPM on Debian.</summary>
+<content type="html">&lt;h1 id&#x3D;&quot;debian&quot;&gt;Debian&lt;/h1&gt;
+&lt;p&gt;&lt;a href&#x3D;&quot;https://www.debian.org/&quot;&gt;Debian&lt;/a&gt; has been my preferred Linux distribution for a long time (longer than &lt;a href&#x3D;&quot;https://ubuntu.com/&quot;&gt;Ubuntu&lt;/a&gt; has even existed).&lt;/p&gt;
+&lt;p&gt;The main reason I like Debian is that its &lt;a href&#x3D;&quot;https://manpages.debian.org/buster/apt/apt.8.en.html&quot;&gt;apt&lt;/a&gt; package manager has been the most reliable package manager I&amp;#39;ve ever dealt with, especially when it comes to removing and/or upgrading packages.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;npm&quot;&gt;NPM&lt;/h1&gt;
+&lt;p&gt;Since I&amp;#39;ve been playing around with Node and NPM on Windows, I decided I should see if one of my tools works on Linux. Fortunately, I was on Debian 11, which ships with a not-&lt;em&gt;completely&lt;/em&gt;-out-of-date Node v12 runtime.&lt;/p&gt;
+&lt;p&gt;Great, I&amp;#39;ll just run &lt;code&gt;sudo apt install nodejs npm&lt;/code&gt; and get started! I was immediately greeted with the following wall of packages:&lt;/p&gt;
+&lt;pre&gt;&lt;code class&#x3D;&quot;language-txt&quot;&gt;$ sudo apt install nodejs npm
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  at-spi2-core dbus-user-session dconf-gsettings-backend dconf-service glib-networking glib-networking-common glib-networking-services gsettings-desktop-schemas gyp javascript-common libatk-bridge2.0-0 libatspi2.0-0 libauthen-sasl-perl
+  libc-ares2 libclone-perl libcolord2 libdata-dump-perl libdconf1 libdrm-amdgpu1 libdrm-common libdrm-intel1 libdrm-nouveau2 libdrm-radeon1 libdrm2 libencode-locale-perl libepoxy0 libfile-basedir-perl libfile-desktopentry-perl
+  libfile-listing-perl libfile-mimeinfo-perl libfont-afm-perl libfontenc1 libgl1 libgl1-mesa-dri libglapi-mesa libglvnd0 libglx-mesa0 libglx0 libgtk-3-0 libgtk-3-bin libgtk-3-common libhtml-form-perl libhtml-format-perl
+  libhtml-parser-perl libhtml-tagset-perl libhtml-tree-perl libhttp-cookies-perl libhttp-daemon-perl libhttp-date-perl libhttp-message-perl libhttp-negotiate-perl libice6 libio-html-perl libio-socket-ssl-perl libio-stringy-perl
+  libipc-system-simple-perl libjs-highlight.js libjs-inherits libjs-is-typedarray libjs-psl libjs-typedarray-to-buffer libjson-glib-1.0-0 libjson-glib-1.0-common liblcms2-2 libllvm11 liblua5.3-0 liblwp-mediatypes-perl
+  liblwp-protocol-https-perl libmailtools-perl libnet-dbus-perl libnet-http-perl libnet-smtp-ssl-perl libnet-ssleay-perl libnode-dev libnode72 libpciaccess0 libproxy1v5 librest-0.7-0 libsensors-config libsensors5 libsm6
+  libsoup-gnome2.4-1 libsoup2.4-1 libssl-dev libtie-ixhash-perl libtimedate-perl libtry-tiny-perl liburi-perl libuv1 libuv1-dev libvte-2.91-0 libvte-2.91-common libvulkan1 libwayland-client0 libwayland-cursor0 libwayland-egl1
+  libwww-perl libwww-robotrules-perl libx11-protocol-perl libx11-xcb1 libxaw7 libxcb-dri2-0 libxcb-dri3-0 libxcb-glx0 libxcb-present0 libxcb-randr0 libxcb-shape0 libxcb-sync1 libxcb-xfixes0 libxft2 libxkbcommon0 libxkbfile1
+  libxml-parser-perl libxml-twig-perl libxml-xpathengine-perl libxmu6 libxshmfence1 libxt6 libxtst6 libxv1 libxxf86dga1 libxxf86vm1 libz3-4 mesa-vulkan-drivers node-abbrev node-agent-base node-ajv node-ansi node-ansi-regex
+  node-ansi-styles node-ansistyles node-aproba node-archy node-are-we-there-yet node-asap node-asn1 node-assert-plus node-asynckit node-aws-sign2 node-aws4 node-balanced-match node-bcrypt-pbkdf node-brace-expansion node-builtins
+  node-cacache node-caseless node-chalk node-chownr node-clone node-color-convert node-color-name node-colors node-columnify node-combined-stream node-concat-map node-console-control-strings node-copy-concurrently node-core-util-is
+  node-dashdash node-debug node-defaults node-delayed-stream node-delegates node-depd node-ecc-jsbn node-encoding node-err-code node-escape-string-regexp node-extend node-extsprintf node-fast-deep-equal node-forever-agent
+  node-form-data node-fs-write-stream-atomic node-fs.realpath node-function-bind node-gauge node-getpass node-glob node-graceful-fs node-gyp node-har-schema node-har-validator node-has-flag node-has-unicode node-hosted-git-info
+  node-http-signature node-https-proxy-agent node-iconv-lite node-iferr node-imurmurhash node-indent-string node-inflight node-inherits node-ini node-ip node-ip-regex node-is-typedarray node-isarray node-isexe node-isstream node-jsbn
+  node-json-parse-better-errors node-json-schema node-json-schema-traverse node-json-stable-stringify node-json-stringify-safe node-jsonify node-jsonparse node-jsonstream node-jsprim node-leven node-lockfile node-lru-cache node-mime
+  node-mime-types node-minimatch node-mkdirp node-move-concurrently node-ms node-mute-stream node-nopt node-normalize-package-data node-npm-bundled node-npm-package-arg node-npmlog node-number-is-nan node-oauth-sign node-object-assign
+  node-once node-opener node-osenv node-p-map node-path-is-absolute node-performance-now node-process-nextick-args node-promise-inflight node-promise-retry node-promzard node-psl node-puka node-punycode node-qs node-read
+  node-read-package-json node-readable-stream node-request node-resolve node-resolve-from node-retry node-rimraf node-run-queue node-safe-buffer node-semver node-set-blocking node-signal-exit node-slash node-spdx-correct
+  node-spdx-exceptions node-spdx-expression-parse node-spdx-license-ids node-sshpk node-ssri node-string-decoder node-string-width node-strip-ansi node-supports-color node-tar node-text-table node-through node-tough-cookie
+  node-tunnel-agent node-tweetnacl node-typedarray-to-buffer node-unique-filename node-universalify node-uri-js node-util-deprecate node-uuid node-validate-npm-package-license node-validate-npm-package-name node-verror node-wcwidth.js
+  node-which node-wide-align node-wrappy node-write-file-atomic node-yallist nodejs-doc perl-openssl-defaults python3-pkg-resources termit x11-common x11-utils x11-xserver-utils xdg-utils xkb-data
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id&#x3D;&quot;why&quot;&gt;Why?&lt;/h1&gt;
+&lt;p&gt;That&amp;#39;s a lot more packages than I was expecting. Wait, &lt;code&gt;x11-common&lt;/code&gt;? &lt;code&gt;x11-xserver-utils&lt;/code&gt;? What&amp;#39;s going on here?&lt;/p&gt;
+&lt;p&gt;It turns out that &lt;a href&#x3D;&quot;https://packages.debian.org/bullseye/npm&quot;&gt;Debian&amp;#39;s package for NPM&lt;/a&gt; depends on something called &lt;a href&#x3D;&quot;https://packages.debian.org/bullseye/node-opener&quot;&gt;node-opener&lt;/a&gt;, which depends on &lt;a href&#x3D;&quot;https://packages.debian.org/bullseye/xdg-utils&quot;&gt;xdg-utils&lt;/a&gt;, which is described as &amp;quot;desktop integration utilities from freedesktop.org&amp;quot;. Uh oh. Yeah, that depends on X11.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why in the world does a command line package manager depend on a GUI environment?&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;node-opener&quot;&gt;node-opener&lt;/h1&gt;
+&lt;p&gt;So what is this &lt;code&gt;node-opener&lt;/code&gt; thing, and does NPM really require it?&lt;/p&gt;
+&lt;p&gt;The &lt;a href&#x3D;&quot;https://github.com/domenic/opener&quot;&gt;package&amp;#39;s web site&lt;/a&gt; describes it as &amp;quot;Opens stuff, like webpages and files and executables, cross-platform&amp;quot;. I&amp;#39;m still not seeing the relation to NPM. Looking at the code, it&amp;#39;s just a script that calls &lt;code&gt;xdg-open&lt;/code&gt; on Linux (and other commands on Windows and Mac).&lt;/p&gt;
+&lt;p&gt;&lt;a href&#x3D;&quot;https://github.com/npm/cli/blob/04eb43f2b2a387987b61a7318908cf18f03d97e0/lib/utils/open-url.js&quot;&gt;Peering into NPM&amp;#39;s source code&lt;/a&gt;, I see that it does in fact seem to &lt;code&gt;require(&amp;#39;opener&amp;#39;)&lt;/code&gt;. That&amp;#39;s disappointing.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;nodesource-to-the-rescue&quot;&gt;NodeSource to the rescue?&lt;/h1&gt;
+&lt;p&gt;The official nodejs.org site &lt;a href&#x3D;&quot;https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions&quot;&gt;mentions&lt;/a&gt; binary distributions &lt;a href&#x3D;&quot;https://github.com/nodesource/distributions/blob/master/README.md&quot;&gt;from NodeSource&lt;/a&gt;. NodeSource helpfully suggests downloading and running their setup script as root.&lt;/p&gt;
+&lt;p&gt;The script appears to mostly do reasonable things like checking for required packages and then updating apt&amp;#39;s &lt;code&gt;sources.list&lt;/code&gt; file, and I guess I&amp;#39;m trusting them with the binaries they&amp;#39;re providing, so I&amp;#39;ll give it a try. They do provide manual install instructions as well.&lt;/p&gt;
+&lt;h1 id&#x3D;&quot;success&quot;&gt;Success&lt;/h1&gt;
+&lt;p&gt;I can&amp;#39;t say I&amp;#39;m pleased with this setup, but NodeSource&amp;#39;s Node package did in fact work and now I&amp;#39;ve got &lt;code&gt;node&lt;/code&gt; and &lt;code&gt;npm&lt;/code&gt; commands running fine without an X11 installation.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Embedding VS Code&#x27;s Monaco Editor using a CDN</title>
 <id>https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html</id>
@@ -490,307 +544,6 @@ ellipse.diagram-black-none { stroke: #ccc; fill: #444; }
 &lt;p&gt;To my surprise, this entire integration went smoothly, and only took an hour or so. It remains to be seen how useful these diagrams will be, but at least now if I ever feel the need to insert a superfluous diagram, the functionality will be there.&lt;/p&gt;
 &lt;p&gt;For reference, all of the code used to generate this site (along with the content) is in &lt;a href&#x3D;&quot;https://github.com/jaredkrinke/md2blog&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I&amp;#39;ve removed this feature from my static site generator for the time being because it&amp;#39;s unclear what license covers Graphviz (the web site and source code are not in sync).&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Compiling Graphviz to WebAssembly (without Emscripten)</title>
-<id>https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/webassembly/compiling-graphviz-to-webassembly.html"/>
-<updated>2021-10-09T00:00:00.000Z</updated>
-<summary type="text">In order to automatically generate diagrams for my site that&#x27;s built with Node, I compiled Graphviz to WebAssembly. Here&#x27;s my experience.</summary>
-<content type="html">&lt;p&gt;After successfully &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/passing-strings-to-c.html&quot;&gt;passed strings back and forth between WebAssembly and JavaScript&lt;/a&gt;, and &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/c-standard-library-example.html&quot;&gt;linked against a C standard library&lt;/a&gt; (all without Emscripten... or Python), I felt ready to try compiling a substantial library to WebAssembly for use in Node.&lt;/p&gt;
-&lt;h1 id&#x3D;&quot;graphviz&quot;&gt;Graphviz&lt;/h1&gt;
-&lt;p&gt;Specifically, I wanted to be able to automatically generate diagrams (in &lt;a href&#x3D;&quot;https://en.wikipedia.org/wiki/Scalable_Vector_Graphics&quot;&gt;SVG&lt;/a&gt; format) from text descriptions when building my static site using &lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/../static-site-generators/metalsmith.html&quot;&gt;Metalsmith/Node&lt;/a&gt;. &lt;a href&#x3D;&quot;https://graphviz.org/&quot;&gt;Graphviz&lt;/a&gt; is an old package of tools and libraries (written in C) that I&amp;#39;ve successfully used in the past.&lt;/p&gt;
-&lt;p&gt;Graphviz diagrams are described in a language called &lt;a href&#x3D;&quot;https://graphviz.org/doc/info/lang.html&quot;&gt;DOT&lt;/a&gt;. Example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-dot&quot;&gt;digraph {
-    a -&amp;gt; b;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Graphviz supports multiple layout engines, but I&amp;#39;ve only ever needed to use the default &lt;a href&#x3D;&quot;https://graphviz.org/docs/layouts/dot/&quot;&gt;dot&lt;/a&gt; engine (yes, it&amp;#39;s the same name, just in lower case).&lt;/p&gt;
-&lt;h2 id&#x3D;&quot;prior-ports&quot;&gt;Prior ports&lt;/h2&gt;
-&lt;p&gt;The Graphviz site &lt;a href&#x3D;&quot;https://graphviz.org/resources/&quot;&gt;lists a number of previous ports of Graphviz&lt;/a&gt;, including a couple that are relevant for Node:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href&#x3D;&quot;https://github.com/mdaines/viz.js/&quot;&gt;viz.js&lt;/a&gt; (compiled to &lt;a href&#x3D;&quot;http://asmjs.org/&quot;&gt;asm.js&lt;/a&gt; using Emscripten; &lt;a href&#x3D;&quot;http://viz-js.com/&quot;&gt;live editor here&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;a href&#x3D;&quot;https://www.npmjs.com/package/@hpcc-js/wasm&quot;&gt;@hpcc-js/wasm&lt;/a&gt; (compiled to WebAssembly using Emscripten)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Honestly, either one of these would have probably worked for my original purpose, but I chose to compile Graphviz myself for a few reasons:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;I wanted to experiment with compiling an existing C library to WebAssembly&lt;/li&gt;
-&lt;li&gt;I hoped that if I ripped out functionality I didn&amp;#39;t need (e.g. export to &lt;em&gt;any format except SVG&lt;/em&gt;), I might end up with a smaller WebAssembly module&lt;/li&gt;
-&lt;li&gt;I thought that a simple DOT-to-SVG function would avoid taking dependencies on &amp;quot;virtual&amp;quot; file I/O, etc. (which I assumed is how Emscripten worked)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id&#x3D;&quot;dot2svgwasm&quot;&gt;dot2svg.wasm&lt;/h1&gt;
-&lt;p&gt;Given that I&amp;#39;m only interested in DOT diagram description to SVG, I decided to export a single function named &lt;code&gt;dot2svg&lt;/code&gt; (along with exporting &lt;code&gt;malloc&lt;/code&gt;/&lt;code&gt;free&lt;/code&gt;/memory). There were a few reasons for this:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The module should be smaller since it only contains the minimum essential code&lt;/li&gt;
-&lt;li&gt;I may be able to avoid dealing with build errors in code that I don&amp;#39;t need&lt;/li&gt;
-&lt;li&gt;Theoretically, I can avoid dealing with file input/output, since everything is just strings in memory (spoiler: this didn&amp;#39;t quite work out)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The module&amp;#39;s C code is pretty simple. Other than memory management functions, there&amp;#39;s only one export and it takes a C string (in DOT format), renders to SVG, and returns a newly allocated string with the SVG content (the JavaScript host is responsible for freeing the string after it&amp;#39;s been decoded).&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s the C code for my module:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;#include &amp;lt;malloc.h&amp;gt;
-#include &amp;lt;string.h&amp;gt;
-#include &amp;lt;gvc.h&amp;gt;
-
-#define WASM_EXPORT_AS(name) __attribute__((export_name(name)))
-#define WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol
-
-// WebAssembly exports
-// Memory management helpers
-void* WASM_EXPORT(allocate)(unsigned int size) {
-    return malloc(size);
-}
-
-void WASM_EXPORT(deallocate)(void* allocation) {
-    free(allocation);
-}
-
-// Main export
-const char* WASM_EXPORT(dot2svg)(const char* graphString) {
-    // Use Graphviz for converting dot to SVG
-    const char* result &#x3D; NULL;
-    GVC_t* context &#x3D; gvContextPlugins(lt_preloaded_symbols, false);
-    if (context) {
-        Agraph_t* graph &#x3D; agmemread(graphString);
-        if (graph) {
-            if (gvLayout(context, graph, &amp;quot;dot&amp;quot;) &#x3D;&#x3D; 0) {
-                char *svg;
-                unsigned int svgLength;
-                gvRenderData(context, graph, &amp;quot;svg&amp;quot;, &amp;amp;svg, &amp;amp;svgLength);
-                if (svg) {
-                    result &#x3D; strdup(svg);
-                    gvFreeRenderData(svg);
-                }
-                gvFreeLayout(context, graph);
-            }
-            agfree(graph, NULL);
-        }
-        gvFreeContext(context);
-    }
-
-    return result;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id&#x3D;&quot;initial-attempt-at-compiling&quot;&gt;Initial attempt at compiling&lt;/h2&gt;
-&lt;p&gt;First, I cloned the Graphviz repository (actually, I added it as a submodule--anticipating the need to make changes) and ran it&amp;#39;s &amp;quot;autogen.sh&amp;quot; script. For the record, I&amp;#39;m using Debian &lt;a href&#x3D;&quot;https://www.debian.org/releases/stretch/&quot;&gt;Stretch&lt;/a&gt; on the &lt;a href&#x3D;&quot;https://docs.microsoft.com/en-us/windows/wsl/&quot;&gt;Windows Subsystem for Linux&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Being familiar with &lt;a href&#x3D;&quot;https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html&quot;&gt;GNU Autotools&lt;/a&gt;, I hoped that I&amp;#39;d then be able to simply run Graphviz&amp;#39;s &amp;quot;configure&amp;quot; script with appropriate arguments (&amp;quot;--host&#x3D;wasm32&amp;quot;?) and environment variables (&amp;quot;CC&#x3D;/opt/wasi-sdk/bin/clang&amp;quot;?) and everything would build fine.&lt;/p&gt;
-&lt;p&gt;I hit a few snags:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Some of the Graphviz source code is actually C++, so I needed to set the &amp;quot;CXX&#x3D;/opt/wasi-sdk/bin/clang++&amp;quot; variable as well&lt;/li&gt;
-&lt;li&gt;Graphviz defaults to building a shared library, but I needed a static one (solution: add &amp;quot;--disable-shared&amp;quot; to the &amp;quot;configure&amp;quot; command)&lt;/li&gt;
-&lt;li&gt;Graphviz defaults to loading plugins dynamically by enumerating directories (solution: add &amp;quot;--disable-ltdl&amp;quot; when running &amp;quot;configure&amp;quot;)&lt;/li&gt;
-&lt;li&gt;&amp;quot;wasm-ld: error: ... archive has no index; run ranlib to add one&amp;quot;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;That last one required some investigation.&lt;/p&gt;
-&lt;h2 id&#x3D;&quot;archive-index-error&quot;&gt;Archive index error&lt;/h2&gt;
-&lt;p&gt;After searching for and finding a &lt;a href&#x3D;&quot;https://github.com/emscripten-core/emscripten/issues/9329&quot;&gt;similar issue on GitHub&lt;/a&gt;, I learned that that &lt;code&gt;wasm-ld&lt;/code&gt; error means that you created the archive with the wrong tool set. In my case, it was using GNU &lt;code&gt;ar&lt;/code&gt; instead of LLVM &lt;code&gt;ar&lt;/code&gt;. That makes sense because I didn&amp;#39;t tell the build to use a different &lt;code&gt;ar&lt;/code&gt;, and GNU &lt;code&gt;ar&lt;/code&gt; was on my path.&lt;/p&gt;
-&lt;p&gt;I thought that setting the &amp;quot;AR&amp;quot; environment variable would solve this, but it turned out that the Autotools in use didn&amp;#39;t respect that environment variable. My hacky solution to this (and possibly other mismatched tools) was to just move the WASI SDK to the front of my &amp;quot;PATH&amp;quot; variable in my build script:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-sh&quot;&gt;export PATH&#x3D;&amp;quot;/opt/wasi-sdk/bin:$PATH&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id&#x3D;&quot;more-issues&quot;&gt;More issues&lt;/h2&gt;
-&lt;p&gt;Now I started to run into more WASI-related issues. WASI is still in development and may not ever support the entire C library. That&amp;#39;s fine, and I knew that going in, but I thought that Graphviz wouldn&amp;#39;t be relying on some of the more obscure parts of the C library (and hopefully very few OS-specific features). Sadly, this is not the case.&lt;/p&gt;
-&lt;p&gt;Here are the problems I ran into:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&amp;quot;setjmp.h&amp;quot;: apparently some Graphviz code uses one of my least favorite headers in the entire C standard library: &amp;quot;setjmp.h&amp;quot;&lt;ul&gt;
-&lt;li&gt;This header provides non-local jumps that are sometimes used as an ugly substitute for exceptions&lt;/li&gt;
-&lt;li&gt;Unsurprisingly, WASI doesn&amp;#39;t support this (I don&amp;#39;t even think it &lt;em&gt;should&lt;/em&gt;)&lt;/li&gt;
-&lt;li&gt;My solution was to just hope that &lt;code&gt;longjmp&lt;/code&gt; never gets called and link in my own no-op versions of &lt;code&gt;setjmp&lt;/code&gt; and &lt;code&gt;longjmp&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&amp;quot;sys/wait.h&amp;quot;: this is a POSIX header that Graphviz doesn&amp;#39;t need (e.g. on Windows)&lt;ul&gt;
-&lt;li&gt;My work-around was to create a dummy header that tricked Graphviz into thinking the one file including this header was on Windows&lt;/li&gt;
-&lt;li&gt;The contents of my dummy header: &lt;code&gt;#define _WIN32&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&amp;quot;signal.h&amp;quot;: WASI contains a header for this, but it annoyingly just reports an error&lt;ul&gt;
-&lt;li&gt;My awful solution to this was to trick WASI into going into the &amp;quot;no error&amp;quot; fork, but without actually doing anything useful&lt;/li&gt;
-&lt;li&gt;All I did was add &amp;quot;-D_WASI_EMULATED_SIGNAL -D_SIGNAL_H&amp;quot; to my &amp;quot;CFLAGS&amp;quot; environment variable&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&amp;quot;pwd.h&amp;quot;: Another (missing, for me) POSIX header&lt;ul&gt;
-&lt;li&gt;Hack: add a dummy header that defines &lt;code&gt;R_OK&lt;/code&gt; and &lt;code&gt;SIGUSR1&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;At this point, I was (mostly) able to compile the libraries I needed, but not link.&lt;/p&gt;
-&lt;p&gt;Also, at this point, I was starting to appreciate just how much Emscripten must handle to support building stuff like this without any modifications. Maybe my main takeaway will just be to use Emscripten in the future?&lt;/p&gt;
-&lt;h2 id&#x3D;&quot;slimming-down-graphviz&quot;&gt;Slimming down Graphviz&lt;/h2&gt;
-&lt;p&gt;For my purposes, I only needed to be able to parse DOT input, using the &amp;quot;dot&amp;quot; layout engine, and output to SVG. But Graphviz&amp;#39;s default library has support for many outputs, including &lt;a href&#x3D;&quot;https://www.adobe.com/products/postscript.html&quot;&gt;Adobe PostScript&lt;/a&gt;, which I &lt;em&gt;definitely&lt;/em&gt; have no plans to use. These defaults are encoded directly into &amp;quot;graphviz/plugin/core/gvplugin_core.c&amp;quot;.&lt;/p&gt;
-&lt;p&gt;In order to reduce the list down to just SVG, I needed to create my own &amp;quot;plugin&amp;quot; that only supported DOT and SVG. Here&amp;#39;s what that looked like:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;#include &amp;lt;gvplugin.h&amp;gt;
-
-extern gvplugin_installed_t gvdevice_dot_types[];
-extern gvplugin_installed_t gvdevice_svg_types[];
-extern gvplugin_installed_t gvrender_dot_types[];
-extern gvplugin_installed_t gvrender_svg_types[];
-extern gvplugin_installed_t gvloadimage_core_types[];
-
-static gvplugin_api_t apis[] &#x3D; {
-    {API_device, gvdevice_dot_types},
-    {API_device, gvdevice_svg_types},
-    {API_render, gvrender_dot_types},
-    {API_render, gvrender_svg_types},
-
-    {(api_t)0, 0},
-};
-
-gvplugin_library_t gvplugin_core_LTX_library &#x3D; { &amp;quot;core&amp;quot;, apis };
-
-#define IMPORT /* nothing */
-
-IMPORT extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
-IMPORT extern gvplugin_library_t gvplugin_core_LTX_library;
-
-lt_symlist_t lt_preloaded_symbols[] &#x3D; {
-    { &amp;quot;gvplugin_dot_layout_LTX_library&amp;quot;, (void*)(&amp;amp;gvplugin_dot_layout_LTX_library) },
-    { &amp;quot;gvplugin_core_LTX_library&amp;quot;, (void*)(&amp;amp;gvplugin_core_LTX_library) },
-    { 0, 0 }
-};
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This also had the benefit of removing a number of dependencies (including some that weren&amp;#39;t yet building successfully for me yet).&lt;/p&gt;
-&lt;h2 id&#x3D;&quot;one-last-link-error&quot;&gt;One last link error&lt;/h2&gt;
-&lt;p&gt;At this point, I was down to a final error from the linker. It turns out that, somewhere in Graphviz, it uses the &lt;code&gt;tmpfile&lt;/code&gt; function. For now, I just decided to add a dummy implementation and hope that it wasn&amp;#39;t being used for anything important:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;FILE* tmpfile() {
-    return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id&#x3D;&quot;successful-build&quot;&gt;Successful build&lt;/h2&gt;
-&lt;p&gt;Finally, I was able to successfully build &amp;quot;dot2svg.wasm&amp;quot;. The uncompressed file size ended up being around 660 KB--a bit larger than I hoped, but not huge.&lt;/p&gt;
-&lt;p&gt;Now I just have to run that function... right?&lt;/p&gt;
-&lt;h1 id&#x3D;&quot;javascript-side&quot;&gt;JavaScript side&lt;/h1&gt;
-&lt;p&gt;Given that I already had code to pass strings back and forth, I hoped I could just call the &lt;code&gt;dot2svg&lt;/code&gt; export and bask in the glorious result. But I wasn&amp;#39;t quite there yet.&lt;/p&gt;
-&lt;h2 id&#x3D;&quot;imports&quot;&gt;Imports&lt;/h2&gt;
-&lt;p&gt;On the first run, I got the following error:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;TypeError: WebAssembly.instantiate(): Imports argument must be present and must be an object
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;That&amp;#39;s too bad. I was hoping that my slimmed down Graphviz build wouldn&amp;#39;t expect the host to provide any functions. Let&amp;#39;s see what&amp;#39;s missing:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-sh&quot;&gt;$ wasm2wat dot2svg.wasm|findstr /i import
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;clock_time_get&amp;quot; (func $__wasi_clock_time_get (type 16)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_filestat_get&amp;quot; (func $__wasi_fd_filestat_get (type 1)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;proc_exit&amp;quot; (func $__wasi_proc_exit (type 10)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_fdstat_get&amp;quot; (func $__wasi_fd_fdstat_get (type 1)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;path_open&amp;quot; (func $__wasi_path_open (type 17)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;path_filestat_get&amp;quot; (func $__wasi_path_filestat_get (type 7)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_close&amp;quot; (func $__wasi_fd_close (type 0)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;environ_sizes_get&amp;quot; (func $__wasi_environ_sizes_get (type 1)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;environ_get&amp;quot; (func $__wasi_environ_get (type 1)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_seek&amp;quot; (func $__wasi_fd_seek (type 18)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_write&amp;quot; (func $__wasi_fd_write (type 4)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_read&amp;quot; (func $__wasi_fd_read (type 4)))
-  (import &amp;quot;wasi_snapshot_preview1&amp;quot; &amp;quot;fd_fdstat_set_flags&amp;quot; (func $__wasi_fd_fdstat_set_flags (type 1)))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id&#x3D;&quot;do-the-imports-really-matter&quot;&gt;Do the imports really matter?&lt;/h2&gt;
-&lt;p&gt;That&amp;#39;s a longer list than I expected. Ok, well let&amp;#39;s see if they&amp;#39;re &lt;em&gt;really&lt;/em&gt; needed by providing no-op implementations:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-javascript&quot;&gt;    const module &#x3D; await WebAssembly.instantiate(await fs.promises.readFile(&amp;quot;./dot2svg.wasm&amp;quot;), {
-        wasi_snapshot_preview1: {
-            // Not implemented
-            clock_time_get: () &#x3D;&amp;gt; {},
-            environ_get: () &#x3D;&amp;gt; {},
-            environ_sizes_get: () &#x3D;&amp;gt; {},
-            fd_close: () &#x3D;&amp;gt; {},
-            fd_fdstat_get: () &#x3D;&amp;gt; {},
-            fd_fdstat_set_flags: () &#x3D;&amp;gt; {},
-            fd_filestat_get: () &#x3D;&amp;gt; {},
-            fd_read: () &#x3D;&amp;gt; {},
-            fd_seek: () &#x3D;&amp;gt; {},
-            fd_write: () &#x3D;&amp;gt; {},
-            path_filestat_get: () &#x3D;&amp;gt; {},
-            path_open: () &#x3D;&amp;gt; {},
-            proc_exit: () &#x3D;&amp;gt; {},
-        },
-    });
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Unfortunately, with those no-op functions, my test script just seemed to spin.&lt;/p&gt;
-&lt;h2 id&#x3D;&quot;fd_write&quot;&gt;fd_write&lt;/h2&gt;
-&lt;p&gt;Debugging showed that &lt;code&gt;fd_write&lt;/code&gt; was being called repeatedly. That makes me think that WASI actually needs &lt;code&gt;fd_write&lt;/code&gt; to do something. With absolutely zero context, the function name sounds like it&amp;#39;s writing to a file descriptor.&lt;/p&gt;
-&lt;p&gt;After some digging, I found a helpful note in the (otherwise inscrutable) &lt;a href&#x3D;&quot;https://github.com/WebAssembly/WASI/blob/main/phases/snapshot/docs.md#-fd_writefd-fd-iovs-ciovec_array---resultsize-errno&quot;&gt;WASI documentation&lt;/a&gt;:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;fd_write(fd: fd, iovs: ciovec_array) -&amp;gt; Result&amp;lt;size, errno&amp;gt;&lt;/p&gt;
-&lt;p&gt;Write to a file descriptor. Note: This is similar to writev in POSIX.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id&#x3D;&quot;writev&quot;&gt;writev&lt;/h3&gt;
-&lt;p&gt;Fortunately, &lt;code&gt;writev(2)&lt;/code&gt; is &lt;a href&#x3D;&quot;https://linux.die.net/man/2/writev&quot;&gt;extensively documented&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The first argument is indeed a file descriptor. Debugging my test app showed that the function was being called with file descriptor 2, which is Standard Error. It&amp;#39;s my opinion that libraries shouldn&amp;#39;t directly write anything to Standard Output or Error, but I didn&amp;#39;t write Graphviz. A quick scan of the Graphviz source indicated that I couldn&amp;#39;t easily disable console logging.&lt;/p&gt;
-&lt;p&gt;The second argument to &lt;code&gt;writev&lt;/code&gt; is an array of I/O vectors defined as follows:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-c&quot;&gt;struct iovec {
-    void  *iov_base;    /* Starting address */
-    size_t iov_len;     /* Number of bytes to transfer */
-};
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;And the return value is just the number of bytes written.&lt;/p&gt;
-&lt;h3 id&#x3D;&quot;javascript-implementation&quot;&gt;JavaScript implementation&lt;/h3&gt;
-&lt;p&gt;Assuming that &lt;code&gt;fd_write&lt;/code&gt; is the same (assuming 32-bit WebAssembly), this isn&amp;#39;t too bad to implement (and I decided to forward to the console for testing purposes). The only remaining trick is that &lt;code&gt;fd_write&lt;/code&gt; supplies the memory address for the return value as the third argument and directly returns a status code (zero for success).&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s a simple implementation:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-javascript&quot;&gt;fd_write: (fileDescriptor, ioVectorsBaseAddress, ioVectorsCount, returnBytesWrittenAddress) &#x3D;&amp;gt; {
-    // Read IO vectors
-    const view &#x3D; new DataView(memory.buffer);
-    const ioVectors &#x3D; [];
-    for (let i &#x3D; 0, address &#x3D; ioVectorsBaseAddress; i &amp;lt; ioVectorsCount; i++, address +&#x3D; 8) {
-        ioVectors.push({
-            sourceAddress: view.getUint32(address, true),
-            sizeInBytes: view.getUint32(address + 4, true),
-        });
-    }
-
-    // Calculate total size
-    const totalSizeInBytes &#x3D; ioVectors.reduce((sum, ioVector) &#x3D;&amp;gt; sum + ioVector.sizeInBytes, 0);
-
-    // Forward STDOUT and STDERR to console
-    const standardOutput &#x3D; 1;
-    const standardError &#x3D; 2;
-    switch (fileDescriptor) {
-        case standardOutput:
-        case standardError:
-            {
-                // Copy to buffer
-                const buffer &#x3D; new Uint8Array(totalSizeInBytes);
-                let offset &#x3D; 0;
-                ioVectors.forEach(ioVector &#x3D;&amp;gt; {
-                    buffer.set(new Uint8Array(memory.buffer, ioVector.sourceAddress, ioVector.sizeInBytes), offset);
-                    offset +&#x3D; ioVector.sizeInBytes;
-                });
-
-                // Note: Adds an extra new line...
-                console.log(textDecoder.decode(buffer));
-            }
-            break;
-
-        default:
-            // Do nothing
-            break;
-    }
-
-    // Set return value to total size of writes
-    view.setUint32(returnBytesWrittenAddress, totalSizeInBytes, true);
-    return 0; // Success
-},
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id&#x3D;&quot;success&quot;&gt;Success!&lt;/h2&gt;
-&lt;p&gt;With the above imports, &lt;a href&#x3D;&quot;https://github.com/jaredkrinke/wasm-c-string&quot;&gt;my string-passing library&lt;/a&gt;, and the following code:&lt;/p&gt;
-&lt;pre&gt;&lt;code class&#x3D;&quot;language-javascript&quot;&gt;const dotString &#x3D; process.argv[2] ?? &amp;quot;digraph { a -&amp;gt; b }&amp;quot;;
-createCString(module, dotString, (dotStringAddress) &#x3D;&amp;gt; {
-    const svgString &#x3D; receiveCString(module, () &#x3D;&amp;gt; module.instance.exports.dot2svg(dotStringAddress));
-    console.log(svgString);
-});
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;I was finally able to generate the following test graph SVG:&lt;/p&gt;
-&lt;p&gt;&lt;img src&#x3D;&quot;https://log.schemescape.com/posts/webassembly/../../assets/graphviz-test-graph.svg&quot; alt&#x3D;&quot;digraph { a -&amp;gt; b }&quot;&gt;&lt;/p&gt;
-&lt;p&gt;Additionally, if I deliberately insert a syntax error into the graph, I see the error logged to my console, so output forwarding is even working.&lt;/p&gt;
-&lt;h1 id&#x3D;&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
-&lt;p&gt;There&amp;#39;s still work I need to do around theming, packaging, and more, but as a proof of concept, it looks like compiling a C library to WebAssembly with minimal tooling beyond Clang and LLVM is certainly possible, with some perseverance.&lt;/p&gt;
-&lt;p&gt;Lessons learned:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Always first check to see if someone has already ported the library you&amp;#39;re interested in--if they have, and you can tolerate their dependencies, you&amp;#39;ll save significant effort&lt;/li&gt;
-&lt;li&gt;You can&amp;#39;t assume that a &amp;quot;simple&amp;quot; C library won&amp;#39;t have surprising dependencies (e.g. Graphviz depending on PostScript headers by default)&lt;/li&gt;
-&lt;li&gt;Compiling typical C libraries to WebAssembly on Windows is painful (not discussed here, but I actually did that first, before moving to Linux for a more compiler-friendly environment)&lt;/li&gt;
-&lt;li&gt;Emscripten will probably save you time dealing with obscure or unsupported-by-WASI headers&lt;/li&gt;
-&lt;li&gt;WASI itself might require additional support code (there is a &lt;a href&#x3D;&quot;https://wasi.dev/polyfill/&quot;&gt;poorly documented browser polyfill for WASI&lt;/a&gt;, but I haven&amp;#39;t tested it)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id&#x3D;&quot;resources&quot;&gt;Resources&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href&#x3D;&quot;https://github.com/jaredkrinke/dot2svg-wasm&quot;&gt;Repository for this code)&lt;/a&gt; (as an ES module)&lt;/li&gt;
-&lt;li&gt;&lt;a href&#x3D;&quot;https://log.schemescape.com/posts/webassembly/../static-site-generators/metalsmith-diagrams.html&quot;&gt;Example of using this code to generate diagrams automatically for my site&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>
