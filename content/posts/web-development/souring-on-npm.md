@@ -2,7 +2,6 @@
 title: Why I'm starting to sour on Node and NPM
 description: Node made programming fun for me again, but security concerns might drive me away.
 date: 2021-11-05
-draft: true
 ---
 # Node
 When I first heard about [Node](https://nodejs.org/en/) back in 2013, I thought it was a silly idea.
@@ -18,7 +17,7 @@ Of course, my initial reaction ignored some pertinent factors:
 After giving it a try, I found that Node, and the [NPM](https://www.npmjs.com/) ecosystem, were pretty enjoyable to work with. And things only improved from there, not least because most of the annoying problems of JavaScript had already been solved in one way or another (NPM for managing dependencies, TypeScript for statically checking types, `async` and `await` for asynchronous programming, etc.).
 
 # Fast-forward to today
-Recently, I've been happily building my static site generator on top of [Metalsmith](https://metalsmith.io/), although one thing always troubled me. Every time I saw a problem that needed solving, I checked NPM to see if someone had already solved that problem (with an MIT-licensed) package--usually someone had.
+Recently, I've been happily building my static site generator on top of [Metalsmith](https://metalsmith.io/), although one thing always troubled me. Every time I saw a problem that needed solving, I checked NPM to see if someone had already solved that problem with an (MIT-licensed) package--usually someone had.
 
 But when I went to install that package, NPM would happily report that it had downloaded quite a few transitive dependencies from some large pool of contributors.
 
@@ -128,7 +127,7 @@ Wow. **Roughly 7,000 lines of code just for parsing arguments**. And it could be
 ## Malware
 As I read in [an article](https://therecord.media/malware-found-in-coa-and-rc-two-npm-packages-with-23m-weekly-downloads/) today (and similar articles in the recent past), NPM has the questionable default behavior of allowing packages to run arbitrary scripts at install time. Ideally, this would be for life cycle management operations such as building caches or compiling native code, but this is also an easy target for hackers to hijack a commonly-installed package's maintainer's account and push out an update with malware that is triggered on install.
 
-Obviously, there's no perfect solution for NPM to stop such attacks, but right now the default behavior of NPM (no version pinning, running scripts on install, not making it easy to inspect the contents of a package before downloading) means that if you want to install a package that solves a problem, now you need to:
+Obviously, there's no perfect solution for NPM to stop such attacks, but right now the default behavior of NPM (no version specification required, running scripts on install, not making it easy to inspect the contents of a package before downloading) means that if you want to install a package that solves a problem, now you need to:
 
 * Vet the maintainers of the package *and all its dependencies*
 * Install the package with `--ignore-scripts` to download the code
@@ -141,7 +140,7 @@ And, of course, this should ideally be done with each update to any of the packa
 # Now what?
 At this point, you should be able to picture the joy of programming in 2021 rapidly fading from my face. What can be done about this?
 
-I'm not holding out hope for NPM to make a breaking change that turns install scripts from *opt out* to *opt in* (not that this would solve the problem anyway, although I'd consider it a welcome concession to security). I'm also not expecting all the packages on NPM to start weeding out unnecessary dependencies just to make my life easier (although kudos to the author of Chokidar [reducing that package's dependencies down to just the essentials](https://paulmillr.com/posts/chokidar-3-save-32tb-of-traffic/)).
+I'm not holding out hope for NPM to make a breaking change that turns install scripts from *opt out* to *opt in* (not that this would solve the problem anyway, although I'd consider it a welcome concession to security). I'm also not expecting all the packages on NPM to start weeding out unnecessary dependencies just to make my life easier (although kudos to the author of Chokidar for [reducing that package's dependencies down to just the essentials](https://paulmillr.com/posts/chokidar-3-save-32tb-of-traffic/)).
 
 Honestly, I think the solution is probably going to be for me to move to a more security-focused ecosystem.
 
@@ -163,4 +162,4 @@ Deno also has support for [building a self-contained executable](https://deno.la
 # What does this mean for my current project?
 I was getting close to publishing my first sizable package to NPM, possibly even today, but now that I've stepped back and let the reality of its long list of dependencies sink in, I'm not sure if publishing my project is even a good idea. I originally picked up Node and Metalsmith to speed up the development process (with no plan to eventually release the tool), but along the way I thought it might be a useful thing to share.
 
-I'll think it over a bit more and decide if I want to be a hypocrite and push out a package with (ahem) 200+ transitive dependencies, or if I should start over (or abandon the idea entirely).
+I'll think it over a bit more and decide if I want to be a hypocrite and push out a package with 18 direct dependencies and (ahem) *200+ transitive dependencies*, or if I should start over (or abandon the idea of releasing the tool entirely).
