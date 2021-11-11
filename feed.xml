@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-11T16:42:20.382Z</updated>
+<updated>2021-11-11T20:03:10.632Z</updated>
 
 <entry>
 <title>Designing md2blog 2.0}</title>
@@ -18,10 +18,10 @@
 <content type="html">&lt;p&gt;I really didn&amp;#39;t want to do this. I probably shouldn&amp;#39;t have done this. But I did it anyway.&lt;/p&gt;
 &lt;p&gt;I created yet another static site generator.&lt;/p&gt;
 &lt;h1 id=&quot;the-recent-past&quot;&gt;The recent past&lt;/h1&gt;
-&lt;p&gt;After &lt;a href=&quot;comparison.html&quot;&gt;investigating a bunch of existing static site generators&lt;/a&gt;, I eventually settled on using &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and various plugins) to build my static dev blog. I even went so far as to clean up my code in hopes of releasing a zero-config static dev blog generator called &lt;a href=&quot;md2blog-design.html&quot;&gt;md2blog&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;But in the end, it just didn&amp;#39;t feel right to publish a tool on NPM with 18 direct dependencies and over 200 transitive dependencies (including &lt;em&gt;6 different file matching libraries&lt;/em&gt;). I&amp;#39;m &lt;a href=&quot;../web-development/souring-on-npm.html&quot;&gt;personally concerned&lt;/a&gt; about the NPM ecosystem&amp;#39;s outrageous dependency trees, and their security implications (Dependency Hell 2.0?), so I decided that I shouldn&amp;#39;t be further contributing to the problem.&lt;/p&gt;
+&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/comparison.html&quot;&gt;investigating a bunch of existing static site generators&lt;/a&gt;, I eventually settled on using &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and various plugins) to build my static dev blog. I even went so far as to clean up my code in hopes of releasing a zero-config static dev blog generator called &lt;a href=&quot;https://log.schemescape.com/md2blog-design.html&quot;&gt;md2blog&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;But in the end, it just didn&amp;#39;t feel right to publish a tool on NPM with 18 direct dependencies and over 200 transitive dependencies (including &lt;em&gt;6 different file matching libraries&lt;/em&gt;). I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/../web-development/souring-on-npm.html&quot;&gt;personally concerned&lt;/a&gt; about the NPM ecosystem&amp;#39;s outrageous dependency trees, and their security implications (Dependency Hell 2.0?), so I decided that I shouldn&amp;#39;t be further contributing to the problem.&lt;/p&gt;
 &lt;h1 id=&quot;enter-deno&quot;&gt;Enter Deno&lt;/h1&gt;
-&lt;p&gt;Fortunately, as noted in &lt;a href=&quot;../web-development/souring-on-npm.html&quot;&gt;my post about NPM&lt;/a&gt;, there&amp;#39;s a relatively new JavaScript (and TypeScript) runtime with a security focus: &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Fortunately, as noted in &lt;a href=&quot;https://log.schemescape.com/../web-development/souring-on-npm.html&quot;&gt;my post about NPM&lt;/a&gt;, there&amp;#39;s a relatively new JavaScript (and TypeScript) runtime with a security focus: &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Deno doesn&amp;#39;t magically make it 100% safe to download and run JavaScript code from anywhere, but it at least tries to provide a secure environment by sand boxing JavaScript programs (similar to what is done in a web browser) and only allowing certain operations if permissions are explicitly granted on the command line, e.g.:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ deno run --allow-read=content,out --allow-write=out main.js
 &lt;/code&gt;&lt;/pre&gt;
@@ -286,83 +286,83 @@ The following additional packages will be installed:
 &lt;p&gt;Specifically, I&amp;#39;m going to combine one of the &lt;a href=&quot;https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html&quot;&gt;browser-amd-editor&lt;/a&gt; official samples with &lt;a href=&quot;https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html&quot;&gt;Option 1&lt;/a&gt; from the page above.&lt;/p&gt;
 &lt;h1 id=&quot;automatic-resizing&quot;&gt;Automatic resizing&lt;/h1&gt;
 &lt;p&gt;There&amp;#39;s one line in the sample I find irritating:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;container&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;style&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;width: 800px; height: 600px; border: 1px solid grey&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&amp;lt;div id=&amp;quot;container&amp;quot; style=&amp;quot;width: 800px; height: 600px; border: 1px solid grey&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;Why is the size being manually specified in pixels?&lt;/strong&gt; Is that necessary?&lt;/p&gt;
 &lt;p&gt;There&amp;#39;s a &lt;a href=&quot;https://github.com/Microsoft/monaco-editor/issues/28&quot;&gt;long thread in a Monaco Editor issue&lt;/a&gt; that goes into the details, but basically the editor component needs to be notified of size changes (no idea why) and, at least in 2016, there was no way for the editor to subscribe to size updates.&lt;/p&gt;
 &lt;p&gt;But it&amp;#39;s 2021 as of this post, so can we use &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver&quot;&gt;ResizeObserver&lt;/a&gt; (global support is at &lt;a href=&quot;https://caniuse.com/resizeobserver&quot;&gt;92%&lt;/a&gt; as of this post)? Apparently not, because the implementations of ResizeObserver use inconsistent property names (insert facepalm here).&lt;/p&gt;
 &lt;p&gt;Fortunately, the trusty old &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event&quot;&gt;resize&lt;/a&gt; event is sufficient for my purposes:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;const&lt;/span&gt; editorElement = &lt;span class=&quot;hljs-variable language_&quot;&gt;document&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;getElementById&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;);
-&lt;span class=&quot;hljs-variable language_&quot;&gt;window&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;addEventListener&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;resize&amp;quot;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;() =&amp;gt;&lt;/span&gt; editor.&lt;span class=&quot;hljs-title function_&quot;&gt;layout&lt;/span&gt;({
-    &lt;span class=&quot;hljs-attr&quot;&gt;width&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetWidth&lt;/span&gt;,
-    &lt;span class=&quot;hljs-attr&quot;&gt;height&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetHeight&lt;/span&gt;
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const editorElement = document.getElementById(&amp;quot;editor&amp;quot;);
+window.addEventListener(&amp;quot;resize&amp;quot;, () =&amp;gt; editor.layout({
+    width: editorElement.offsetWidth,
+    height: editorElement.offsetHeight
 }));
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id=&quot;complete-example&quot;&gt;Complete example&lt;/h1&gt;
 &lt;p&gt;The full code is in this repository: &lt;a href=&quot;https://github.com/jaredkrinke/monaco-editor-from-cdn&quot;&gt;monaco-editor-from-cdn&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Here&amp;#39;s a &lt;a href=&quot;https://jaredkrinke.github.io/monaco-editor-from-cdn/&quot;&gt;live demo&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Here&amp;#39;s a copy-paste of the code:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;&amp;lt;!DOCTYPE &lt;span class=&quot;hljs-keyword&quot;&gt;html&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;lang&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;en&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;head&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;meta&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;charset&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;utf-8&amp;quot;&lt;/span&gt; /&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;title&lt;/span&gt;&amp;gt;&lt;/span&gt;Monaco Editor from CDN example, with automatic resizing&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;title&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;language-css&quot;&gt;
-&lt;span class=&quot;hljs-comment&quot;&gt;/* Flex column layout, with the editor taking up all available screen space */&lt;/span&gt;
-&lt;span class=&quot;hljs-selector-tag&quot;&gt;html&lt;/span&gt;, &lt;span class=&quot;hljs-selector-tag&quot;&gt;body&lt;/span&gt; {
-    &lt;span class=&quot;hljs-attribute&quot;&gt;height&lt;/span&gt;: &lt;span class=&quot;hljs-number&quot;&gt;100%&lt;/span&gt;;
-    &lt;span class=&quot;hljs-attribute&quot;&gt;margin&lt;/span&gt;: &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
-    &lt;span class=&quot;hljs-attribute&quot;&gt;overflow&lt;/span&gt;: hidden;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot; /&amp;gt;
+&amp;lt;title&amp;gt;Monaco Editor from CDN example, with automatic resizing&amp;lt;/title&amp;gt;
+&amp;lt;style&amp;gt;
+/* Flex column layout, with the editor taking up all available screen space */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
 }
 
-&lt;span class=&quot;hljs-selector-tag&quot;&gt;body&lt;/span&gt; {
-    &lt;span class=&quot;hljs-attribute&quot;&gt;display&lt;/span&gt;: flex;
-    &lt;span class=&quot;hljs-attribute&quot;&gt;flex-direction&lt;/span&gt;: column;
+body {
+    display: flex;
+    flex-direction: column;
 }
 
-&lt;span class=&quot;hljs-selector-id&quot;&gt;#editor&lt;/span&gt; {
-    &lt;span class=&quot;hljs-attribute&quot;&gt;flex-grow&lt;/span&gt;: &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;;
-    &lt;span class=&quot;hljs-attribute&quot;&gt;border&lt;/span&gt;: solid &lt;span class=&quot;hljs-number&quot;&gt;1px&lt;/span&gt; gray;
-    &lt;span class=&quot;hljs-attribute&quot;&gt;overflow&lt;/span&gt;: hidden;
+#editor {
+    flex-grow: 1;
+    border: solid 1px gray;
+    overflow: hidden;
 }
-&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;head&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;body&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;h1&lt;/span&gt;&amp;gt;&lt;/span&gt;Monaco Editor, loaded via CDN&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;h1&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&amp;lt;/style&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;h1&amp;gt;Monaco Editor, loaded via CDN&amp;lt;/h1&amp;gt;
 
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&amp;lt;div id=&amp;quot;editor&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
 
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/loader.min.js&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;language-javascript&quot;&gt;
-&lt;span class=&quot;hljs-comment&quot;&gt;// Proxy Monaco Editor workers using a data URL (adapted from: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md)&lt;/span&gt;
-&lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;config&lt;/span&gt;({ &lt;span class=&quot;hljs-attr&quot;&gt;paths&lt;/span&gt;: { &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;vs&amp;quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/&amp;quot;&lt;/span&gt; }});
+&amp;lt;script src=&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/loader.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script&amp;gt;
+// Proxy Monaco Editor workers using a data URL (adapted from: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md)
+require.config({ paths: { &amp;quot;vs&amp;quot;: &amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/&amp;quot; }});
 
-&lt;span class=&quot;hljs-variable language_&quot;&gt;window&lt;/span&gt;.&lt;span class=&quot;hljs-property&quot;&gt;MonacoEnvironment&lt;/span&gt; = {
-    &lt;span class=&quot;hljs-attr&quot;&gt;getWorkerUrl&lt;/span&gt;: &lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;hljs-params&quot;&gt;workerId, label&lt;/span&gt;) {
-        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;`data:text/javascript;charset=utf-8,&lt;span class=&quot;hljs-subst&quot;&gt;${&lt;span class=&quot;hljs-built_in&quot;&gt;encodeURIComponent&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;`
+window.MonacoEnvironment = {
+    getWorkerUrl: function(workerId, label) {
+        return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
             self.MonacoEnvironment = { baseUrl: &amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/&amp;quot; };
-            importScripts(&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/base/worker/workerMain.min.js&amp;quot;);`&lt;/span&gt;
-        )}&lt;/span&gt;`&lt;/span&gt;;
+            importScripts(&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/base/worker/workerMain.min.js&amp;quot;);`
+        )}`;
     }
 };
 
-&lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;([&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;vs/editor/editor.main&amp;quot;&lt;/span&gt;], &lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; (&lt;span class=&quot;hljs-params&quot;&gt;&lt;/span&gt;) {
-    &lt;span class=&quot;hljs-comment&quot;&gt;// Create the editor with some sample JavaScript code&lt;/span&gt;
-    &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; editor = monaco.&lt;span class=&quot;hljs-property&quot;&gt;editor&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;create&lt;/span&gt;(&lt;span class=&quot;hljs-variable language_&quot;&gt;document&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;getElementById&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;), {
-        &lt;span class=&quot;hljs-attr&quot;&gt;value&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;// code goes here\n&amp;quot;&lt;/span&gt;,
-        &lt;span class=&quot;hljs-attr&quot;&gt;language&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;javascript&amp;quot;&lt;/span&gt;
+require([&amp;quot;vs/editor/editor.main&amp;quot;], function () {
+    // Create the editor with some sample JavaScript code
+    var editor = monaco.editor.create(document.getElementById(&amp;quot;editor&amp;quot;), {
+        value: &amp;quot;// code goes here\n&amp;quot;,
+        language: &amp;quot;javascript&amp;quot;
     });
 
-    &lt;span class=&quot;hljs-comment&quot;&gt;// Resize the editor when the window size changes&lt;/span&gt;
-    &lt;span class=&quot;hljs-keyword&quot;&gt;const&lt;/span&gt; editorElement = &lt;span class=&quot;hljs-variable language_&quot;&gt;document&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;getElementById&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;);
-    &lt;span class=&quot;hljs-variable language_&quot;&gt;window&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;addEventListener&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;resize&amp;quot;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;() =&amp;gt;&lt;/span&gt; editor.&lt;span class=&quot;hljs-title function_&quot;&gt;layout&lt;/span&gt;({
-        &lt;span class=&quot;hljs-attr&quot;&gt;width&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetWidth&lt;/span&gt;,
-        &lt;span class=&quot;hljs-attr&quot;&gt;height&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetHeight&lt;/span&gt;
+    // Resize the editor when the window size changes
+    const editorElement = document.getElementById(&amp;quot;editor&amp;quot;);
+    window.addEventListener(&amp;quot;resize&amp;quot;, () =&amp;gt; editor.layout({
+        width: editorElement.offsetWidth,
+        height: editorElement.offsetHeight
     }));
 });
-&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;body&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;html&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 </content>
 </entry>
@@ -373,7 +373,7 @@ The following additional packages will be installed:
 <updated>2021-10-27T00:00:00.000Z</updated>
 <summary type="text">Here&apos;s the design of my in-progress static site generator, md2blog.</summary>
 <content type="html">&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;After &lt;a href=&quot;comparison.html&quot;&gt;investigating many popular static site generators&lt;/a&gt;, I wasn&amp;#39;t able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and numerous plugins) to get what I wanted. I&amp;#39;m calling the resulting tool &lt;strong&gt;md2blog&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/comparison.html&quot;&gt;investigating many popular static site generators&lt;/a&gt;, I wasn&amp;#39;t able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and numerous plugins) to get what I wanted. I&amp;#39;m calling the resulting tool &lt;strong&gt;md2blog&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;In this post, I&amp;#39;m going to cover the design of md2blog. Note that md2blog is a work in progress that has not been released yet.&lt;/p&gt;
 &lt;h1 id=&quot;design-goals&quot;&gt;Design goals&lt;/h1&gt;
 &lt;p&gt;Here&amp;#39;s the overarching goal of md2blog:&lt;/p&gt;
@@ -419,11 +419,11 @@ The following additional packages will be installed:
 &lt;/ul&gt;
 &lt;h2 id=&quot;sitejson&quot;&gt;site.json&lt;/h2&gt;
 &lt;p&gt;Here&amp;#39;s an example &lt;code&gt;site.json&lt;/code&gt; file:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;hljs-attr&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;My dev blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;hljs-attr&quot;&gt;&amp;quot;url&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;https://mydevblog.com/&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;hljs-attr&quot;&gt;&amp;quot;description&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;A very good dev blog indeed&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;hljs-punctuation&quot;&gt;}&lt;/span&gt;
+&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;{
+    &amp;quot;title&amp;quot;: &amp;quot;My dev blog&amp;quot;,
+    &amp;quot;url&amp;quot;: &amp;quot;https://mydevblog.com/&amp;quot;,
+    &amp;quot;description&amp;quot;: &amp;quot;A very good dev blog indeed&amp;quot;
+}
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Schema:&lt;/p&gt;
 &lt;table&gt;
@@ -459,14 +459,14 @@ The following additional packages will be installed:
 &lt;p&gt;Posts are written in Markdown and use YAML for front matter.&lt;/p&gt;
 &lt;h3 id=&quot;front-matter&quot;&gt;Front matter&lt;/h3&gt;
 &lt;p&gt;Here&amp;#39;s an example showing all of the supported YAML front matter properties (&lt;code&gt;keywords&lt;/code&gt; and &lt;code&gt;draft&lt;/code&gt; are optional, the rest are required):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;hljs-attr&quot;&gt;title:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;First&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;post&lt;/span&gt;
-&lt;span class=&quot;hljs-attr&quot;&gt;description:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;First&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;blog,&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;relative&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;link.&lt;/span&gt;
-&lt;span class=&quot;hljs-attr&quot;&gt;date:&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;2021-10-26&lt;/span&gt;
-&lt;span class=&quot;hljs-attr&quot;&gt;keywords:&lt;/span&gt; [&lt;span class=&quot;hljs-string&quot;&gt;additional-tag&lt;/span&gt;]
-&lt;span class=&quot;hljs-attr&quot;&gt;draft:&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;
-&lt;span class=&quot;hljs-meta&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;hljs-string&quot;&gt;(Markdown&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;content&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;follows...)&lt;/span&gt;
+&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;---
+title: First post
+description: First post on my blog, with a relative link.
+date: 2021-10-26
+keywords: [additional-tag]
+draft: true
+---
+(Markdown content follows...)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Schema:&lt;/p&gt;
 &lt;table&gt;
@@ -511,22 +511,22 @@ The following additional packages will be installed:
 &lt;/tbody&gt;&lt;/table&gt;
 &lt;h3 id=&quot;content&quot;&gt;Content&lt;/h3&gt;
 &lt;p&gt;Here&amp;#39;s example Markdown content, demonstrating relative links (these links get translated to the corresponding HTML files and checked at build time; they also work in VS Code&amp;#39;s and GitHub&amp;#39;s Markdown previewers):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;&lt;span class=&quot;hljs-section&quot;&gt;# Relative links&lt;/span&gt;
-Here&amp;#x27;s a relative link to another post in this category: [&lt;span class=&quot;hljs-string&quot;&gt;link&lt;/span&gt;](&lt;span class=&quot;hljs-link&quot;&gt;post2.md&lt;/span&gt;)!
+&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;# Relative links
+Here&amp;#39;s a relative link to another post in this category: [link](post2.md)!
 
-And here&amp;#x27;s one to another category, with an anchor: [&lt;span class=&quot;hljs-string&quot;&gt;link 2&lt;/span&gt;](&lt;span class=&quot;hljs-link&quot;&gt;../category2/post3.md#some-section&lt;/span&gt;).
+And here&amp;#39;s one to another category, with an anchor: [link 2](../category2/post3.md#some-section).
 
-&lt;span class=&quot;hljs-section&quot;&gt;# Image&lt;/span&gt;
-Here&amp;#x27;s an image:
-![&lt;span class=&quot;hljs-string&quot;&gt;test&lt;/span&gt;](&lt;span class=&quot;hljs-link&quot;&gt;../../assets/test.png&lt;/span&gt;)
+# Image
+Here&amp;#39;s an image:
+![test](../../assets/test.png)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Finally, here is an example of including a code block (specifying the language is recommended, but optional):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;&lt;span class=&quot;hljs-section&quot;&gt;# Code block&lt;/span&gt;
-Here&amp;#x27;s some code:
+&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;# Code block
+Here&amp;#39;s some code:
 
-&lt;span class=&quot;hljs-code&quot;&gt;```javascript
+```javascript
 const add = (a, b) =&amp;gt; a + b;
-```&lt;/span&gt;
+```
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id=&quot;output&quot;&gt;Output&lt;/h1&gt;
 &lt;p&gt;All output is written to the &lt;code&gt;out/&lt;/code&gt; directory. Here&amp;#39;s what the output might look like for the example above:&lt;/p&gt;
