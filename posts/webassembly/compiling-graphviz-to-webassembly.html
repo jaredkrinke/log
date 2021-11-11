@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Schemescape: Compiling Graphviz to WebAssembly (without Emscripten)</title>
-<meta name="description" content="In order to automatically generate diagrams for my site that&#x27;s built with Node, I compiled Graphviz to WebAssembly. Here&#x27;s my experience." />
+<meta name="description" content="In order to automatically generate diagrams for my site that&#39;s built with Node, I compiled Graphviz to WebAssembly. Here&#39;s my experience." />
 <meta name="keywords" content="diagrams" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -31,7 +31,7 @@
 <p>Specifically, I wanted to be able to automatically generate diagrams (in <a href="https://en.wikipedia.org/wiki/Scalable_Vector_Graphics">SVG</a> format) from text descriptions when building my static site using <a href="../static-site-generators/metalsmith.html">Metalsmith/Node</a>. <a href="https://graphviz.org/">Graphviz</a> is an old package of tools and libraries (written in C) that I&#39;ve successfully used in the past.</p>
 <p>Graphviz diagrams are described in a language called <a href="https://graphviz.org/doc/info/lang.html">DOT</a>. Example:</p>
 <pre><code class="language-dot">digraph {
-    a -&gt; b;
+    <span class="hljs-selector-tag">a</span> -&gt; <span class="hljs-selector-tag">b</span>;
 }
 </code></pre>
 <p>Graphviz supports multiple layout engines, but I&#39;ve only ever needed to use the default <a href="https://graphviz.org/docs/layouts/dot/">dot</a> engine (yes, it&#39;s the same name, just in lower case).</p>
