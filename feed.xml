@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-11T20:03:10.632Z</updated>
+<updated>2021-11-11T22:16:06.236Z</updated>
 
 <entry>
 <title>Designing md2blog 2.0}</title>
@@ -15,21 +15,21 @@
 <link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html"/>
 <updated>2021-11-10T00:00:00.000Z</updated>
 <summary type="text">I hadn&apos;t even released anything yet and I&apos;ve already rewritten md2blog. Here&apos;s why.</summary>
-<content type="html">&lt;p&gt;I really didn&amp;#39;t want to do this. I probably shouldn&amp;#39;t have done this. But I did it anyway.&lt;/p&gt;
+<content type="html">&lt;p&gt;I really didn&amp;apos;t want to do this. I probably shouldn&amp;apos;t have done this. But I did it anyway.&lt;/p&gt;
 &lt;p&gt;I created yet another static site generator.&lt;/p&gt;
 &lt;h1 id=&quot;the-recent-past&quot;&gt;The recent past&lt;/h1&gt;
-&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/comparison.html&quot;&gt;investigating a bunch of existing static site generators&lt;/a&gt;, I eventually settled on using &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and various plugins) to build my static dev blog. I even went so far as to clean up my code in hopes of releasing a zero-config static dev blog generator called &lt;a href=&quot;https://log.schemescape.com/md2blog-design.html&quot;&gt;md2blog&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;But in the end, it just didn&amp;#39;t feel right to publish a tool on NPM with 18 direct dependencies and over 200 transitive dependencies (including &lt;em&gt;6 different file matching libraries&lt;/em&gt;). I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/../web-development/souring-on-npm.html&quot;&gt;personally concerned&lt;/a&gt; about the NPM ecosystem&amp;#39;s outrageous dependency trees, and their security implications (Dependency Hell 2.0?), so I decided that I shouldn&amp;#39;t be further contributing to the problem.&lt;/p&gt;
+&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/comparison.html&quot;&gt;investigating a bunch of existing static site generators&lt;/a&gt;, I eventually settled on using &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and various plugins) to build my static dev blog. I even went so far as to clean up my code in hopes of releasing a zero-config static dev blog generator called &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/md2blog-design.html&quot;&gt;md2blog&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;But in the end, it just didn&amp;apos;t feel right to publish a tool on NPM with 18 direct dependencies and over 200 transitive dependencies (including &lt;em&gt;6 different file matching libraries&lt;/em&gt;). I&amp;apos;m &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../web-development/souring-on-npm.html&quot;&gt;personally concerned&lt;/a&gt; about the NPM ecosystem&amp;apos;s outrageous dependency trees, and their security implications (Dependency Hell 2.0?), so I decided that I shouldn&amp;apos;t be further contributing to the problem.&lt;/p&gt;
 &lt;h1 id=&quot;enter-deno&quot;&gt;Enter Deno&lt;/h1&gt;
-&lt;p&gt;Fortunately, as noted in &lt;a href=&quot;https://log.schemescape.com/../web-development/souring-on-npm.html&quot;&gt;my post about NPM&lt;/a&gt;, there&amp;#39;s a relatively new JavaScript (and TypeScript) runtime with a security focus: &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Deno doesn&amp;#39;t magically make it 100% safe to download and run JavaScript code from anywhere, but it at least tries to provide a secure environment by sand boxing JavaScript programs (similar to what is done in a web browser) and only allowing certain operations if permissions are explicitly granted on the command line, e.g.:&lt;/p&gt;
+&lt;p&gt;Fortunately, as noted in &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../web-development/souring-on-npm.html&quot;&gt;my post about NPM&lt;/a&gt;, there&amp;apos;s a relatively new JavaScript (and TypeScript) runtime with a security focus: &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Deno doesn&amp;apos;t magically make it 100% safe to download and run JavaScript code from anywhere, but it at least tries to provide a secure environment by sand boxing JavaScript programs (similar to what is done in a web browser) and only allowing certain operations if permissions are explicitly granted on the command line, e.g.:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ deno run --allow-read=content,out --allow-write=out main.js
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Additionally, Deno provides a &lt;a href=&quot;https://deno.land/std&quot;&gt;standard library&lt;/a&gt; that has been audited by the Deno authors, so you no longer have to pull in modules from unknown contributors just for common tasks like, say, parsing YAML front matter.&lt;/p&gt;
-&lt;p&gt;Deno also has a focus on the full developer experience and includes facilities for testing, static analysis, dependenc analysis, stand-alone executables, and more. Again, this means that you don&amp;#39;t have to rely on tens or hundreds of NPM packages just to run some unit tests or publish a stand-alone tool. Oh, and Deno fully embraces &lt;code&gt;await&lt;/code&gt; and &lt;code&gt;async&lt;/code&gt;, so no more dealing with tedious error-first callback patterns!&lt;/p&gt;
+&lt;p&gt;Deno also has a focus on the full developer experience and includes facilities for testing, static analysis, dependenc analysis, stand-alone executables, and more. Again, this means that you don&amp;apos;t have to rely on tens or hundreds of NPM packages just to run some unit tests or publish a stand-alone tool. Oh, and Deno fully embraces &lt;code&gt;await&lt;/code&gt; and &lt;code&gt;async&lt;/code&gt;, so no more dealing with tedious error-first callback patterns!&lt;/p&gt;
 &lt;h1 id=&quot;goodbye-metalsmith&quot;&gt;Goodbye, Metalsmith&lt;/h1&gt;
 &lt;p&gt;While Deno has some &lt;a href=&quot;https://deno.land/manual@v1.16.0/npm_nodejs&quot;&gt;facilities for running Node/NPM modules&lt;/a&gt;, I decided that, in order to limit the number of dependencies I take on and to leverage async language features, I would essentially recreate Metalsmith for Deno. Fortunately, Metalsmith is so simple, my prototype was under 150 lines of code.&lt;/p&gt;
-&lt;p&gt;For now, I&amp;#39;m calling this module Goldsmith. Here&amp;#39;s how Goldsmith differs from Metalsmith:&lt;/p&gt;
+&lt;p&gt;For now, I&amp;apos;m calling this module Goldsmith. Here&amp;apos;s how Goldsmith differs from Metalsmith:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Built on Deno and TypeScript instead of Node and JavaScript&lt;ul&gt;
 &lt;li&gt;As a result, permissions are limited to only the input and output directories, by default&lt;/li&gt;
@@ -39,22 +39,22 @@
 &lt;li&gt;Will be released alongside a standard library of essential plugins&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&quot;plugins-and-dependencies&quot;&gt;Plugins and dependencies&lt;/h1&gt;
-&lt;p&gt;Given that &lt;em&gt;most&lt;/em&gt; of the Metalsmith plugins I was using were trivially simple, I decided that I&amp;#39;d just rewrite the ones I needed from scratch in TypeScript.&lt;/p&gt;
+&lt;p&gt;Given that &lt;em&gt;most&lt;/em&gt; of the Metalsmith plugins I was using were trivially simple, I decided that I&amp;apos;d just rewrite the ones I needed from scratch in TypeScript.&lt;/p&gt;
 &lt;p&gt;Along the way, I made a few changes to further reduce the number of dependencies:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Standardized on regular expressoins for file matching instead of using various glob libraries&lt;/li&gt;
-&lt;li&gt;Replaced Handlebars with a trivially simple template language based on JavaScript&amp;#39;s &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates&quot;&gt;tagged template literals&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Replaced Handlebars with a trivially simple template language based on JavaScript&amp;apos;s &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates&quot;&gt;tagged template literals&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Replaced my usage of &lt;a href=&quot;https://lesscss.org/&quot;&gt;Less&lt;/a&gt; with color conversion functions and &lt;code&gt;String.replaceAll()&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&quot;current-state-of-the-tool&quot;&gt;Current state of the tool&lt;/h1&gt;
-&lt;p&gt;While none of the above libraries are fit for general consumption yet, the page you&amp;#39;re reading was generated with my rewritten Deno-based tool. Other than cleaning up the code, adding tests, and releasing everything, the only functionality that is currently missing is:&lt;/p&gt;
+&lt;p&gt;While none of the above libraries are fit for general consumption yet, the page you&amp;apos;re reading was generated with my rewritten Deno-based tool. Other than cleaning up the code, adding tests, and releasing everything, the only functionality that is currently missing is:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Command line configuration arguments&lt;/li&gt;
 &lt;li&gt;Test web server with automatic reloading&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;The first one should be easy, and I think the second one shouldn&amp;#39;t be too hard either (hopefully just a matter of injecting a script to connect to a WebSocket that pushes out reload requests based on &lt;a href=&quot;https://doc.deno.land/builtin/stable#Deno.watchFs&quot;&gt;Deno.watchFs()&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;The first one should be easy, and I think the second one shouldn&amp;apos;t be too hard either (hopefully just a matter of injecting a script to connect to a WebSocket that pushes out reload requests based on &lt;a href=&quot;https://doc.deno.land/builtin/stable#Deno.watchFs&quot;&gt;Deno.watchFs()&lt;/a&gt;).&lt;/p&gt;
 &lt;h1 id=&quot;a-parting-note&quot;&gt;A parting note&lt;/h1&gt;
-&lt;p&gt;So there you have it. Depending on how you count, this is either the 4th or 5th static site generator I&amp;#39;ve built. I like to hope this will be my last.&lt;/p&gt;
+&lt;p&gt;So there you have it. Depending on how you count, this is either the 4th or 5th static site generator I&amp;apos;ve built. I like to hope this will be my last.&lt;/p&gt;
 </content>
 </entry>
 <entry>
@@ -71,15 +71,15 @@
 &lt;p&gt;Of course, my initial reaction ignored some pertinent factors:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;JavaScript is already used on clients (web browsers), so sharing code between client and server would be easier&lt;/li&gt;
-&lt;li&gt;There are &lt;em&gt;a lot&lt;/em&gt; of JavaScript developers out there (because it&amp;#39;s basically the only native option for scripting on the web)&lt;/li&gt;
+&lt;li&gt;There are &lt;em&gt;a lot&lt;/em&gt; of JavaScript developers out there (because it&amp;apos;s basically the only native option for scripting on the web)&lt;/li&gt;
 &lt;li&gt;JavaScript is actually surprisingly fast because the demand for fast web browsers is huge&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;After giving it a try, I found that Node, and the &lt;a href=&quot;https://www.npmjs.com/&quot;&gt;NPM&lt;/a&gt; ecosystem, were pretty enjoyable to work with. And things only improved from there, not least because most of the annoying problems of JavaScript had already been solved in one way or another (NPM for managing dependencies, TypeScript for statically checking types, &lt;code&gt;async&lt;/code&gt; and &lt;code&gt;await&lt;/code&gt; for asynchronous programming, etc.).&lt;/p&gt;
 &lt;h1 id=&quot;fast-forward-to-today&quot;&gt;Fast-forward to today&lt;/h1&gt;
-&lt;p&gt;Recently, I&amp;#39;ve been happily building my static site generator on top of &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt;, although one thing always troubled me. Every time I saw a problem that needed solving, I checked NPM to see if someone had already solved that problem with an (MIT-licensed) package--usually someone had.&lt;/p&gt;
+&lt;p&gt;Recently, I&amp;apos;ve been happily building my static site generator on top of &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt;, although one thing always troubled me. Every time I saw a problem that needed solving, I checked NPM to see if someone had already solved that problem with an (MIT-licensed) package--usually someone had.&lt;/p&gt;
 &lt;p&gt;But when I went to install that package, NPM would happily report that it had downloaded quite a few transitive dependencies from some large pool of contributors.&lt;/p&gt;
 &lt;h2 id=&quot;example-yargs&quot;&gt;Example: yargs&lt;/h2&gt;
-&lt;p&gt;For example, I wanted to parse command line arguments, and I had noticed that &lt;a href=&quot;https://www.npmjs.com/package/yargs&quot;&gt;yargs&lt;/a&gt; was a popular package, so I installed it. According to the previously-linked NPM page, it has 7 dependencies. That&amp;#39;s more than I&amp;#39;d like, but let&amp;#39;s give it a try:&lt;/p&gt;
+&lt;p&gt;For example, I wanted to parse command line arguments, and I had noticed that &lt;a href=&quot;https://www.npmjs.com/package/yargs&quot;&gt;yargs&lt;/a&gt; was a popular package, so I installed it. According to the previously-linked NPM page, it has 7 dependencies. That&amp;apos;s more than I&amp;apos;d like, but let&amp;apos;s give it a try:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ npm install yargs
 
 + yargs@17.2.1
@@ -114,8 +114,8 @@ found 0 vulnerabilities
   +-- y18n@5.0.8
   `-- yargs-parser@20.2.9
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;What&amp;#39;s &lt;code&gt;escalade&lt;/code&gt;? Why do I need &lt;code&gt;emoji-regex&lt;/code&gt; if I&amp;#39;m not planning on using emoji? What do the 18 missing characters in &lt;code&gt;y18n&lt;/code&gt; stand for?&lt;/p&gt;
-&lt;p&gt;Well, I&amp;#39;d better get busy reviewing all that JavaScript code. How much code are we talking?&lt;/p&gt;
+&lt;p&gt;What&amp;apos;s &lt;code&gt;escalade&lt;/code&gt;? Why do I need &lt;code&gt;emoji-regex&lt;/code&gt; if I&amp;apos;m not planning on using emoji? What do the 18 missing characters in &lt;code&gt;y18n&lt;/code&gt; stand for?&lt;/p&gt;
+&lt;p&gt;Well, I&amp;apos;d better get busy reviewing all that JavaScript code. How much code are we talking?&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ find -name *.js|xargs wc -l
     10 ./node_modules/ansi-regex/index.js
    163 ./node_modules/ansi-styles/index.js
@@ -171,8 +171,8 @@ found 0 vulnerabilities
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Wow. &lt;strong&gt;Roughly 7,000 lines of code just for parsing arguments&lt;/strong&gt;. And it could be worse!&lt;/p&gt;
 &lt;h2 id=&quot;malware&quot;&gt;Malware&lt;/h2&gt;
-&lt;p&gt;As I read in &lt;a href=&quot;https://therecord.media/malware-found-in-coa-and-rc-two-npm-packages-with-23m-weekly-downloads/&quot;&gt;an article&lt;/a&gt; today (and similar articles in the recent past), NPM has the questionable default behavior of allowing packages to run arbitrary scripts at install time. Ideally, this would be for life cycle management operations such as building caches or compiling native code, but this is also an easy target for hackers to hijack a commonly-installed package&amp;#39;s maintainer&amp;#39;s account and push out an update with malware that is triggered on install.&lt;/p&gt;
-&lt;p&gt;Obviously, there&amp;#39;s no perfect solution for NPM to stop such attacks, but right now the default behavior of NPM (no version specification required, running scripts on install, not making it easy to inspect the contents of a package before downloading) means that if you want to install a package that solves a problem, now you need to:&lt;/p&gt;
+&lt;p&gt;As I read in &lt;a href=&quot;https://therecord.media/malware-found-in-coa-and-rc-two-npm-packages-with-23m-weekly-downloads/&quot;&gt;an article&lt;/a&gt; today (and similar articles in the recent past), NPM has the questionable default behavior of allowing packages to run arbitrary scripts at install time. Ideally, this would be for life cycle management operations such as building caches or compiling native code, but this is also an easy target for hackers to hijack a commonly-installed package&amp;apos;s maintainer&amp;apos;s account and push out an update with malware that is triggered on install.&lt;/p&gt;
+&lt;p&gt;Obviously, there&amp;apos;s no perfect solution for NPM to stop such attacks, but right now the default behavior of NPM (no version specification required, running scripts on install, not making it easy to inspect the contents of a package before downloading) means that if you want to install a package that solves a problem, now you need to:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Vet the maintainers of the package &lt;em&gt;and all its dependencies&lt;/em&gt;&lt;/li&gt;
 &lt;li&gt;Install the package with &lt;code&gt;--ignore-scripts&lt;/code&gt; to download the code&lt;/li&gt;
@@ -185,10 +185,10 @@ found 0 vulnerabilities
 &lt;p&gt;And, of course, this should ideally be done with each update to any of the packages, especially when security updates are made.&lt;/p&gt;
 &lt;h1 id=&quot;now-what&quot;&gt;Now what?&lt;/h1&gt;
 &lt;p&gt;At this point, you should be able to picture the joy of programming in 2021 rapidly fading from my face. What can be done about this?&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m not holding out hope for NPM to make a breaking change that turns install scripts from &lt;em&gt;opt out&lt;/em&gt; to &lt;em&gt;opt in&lt;/em&gt; (not that this would solve the problem anyway, although I&amp;#39;d consider it a welcome concession to security). I&amp;#39;m also not expecting all the packages on NPM to start weeding out unnecessary dependencies just to make my life easier (although kudos to the author of Chokidar for &lt;a href=&quot;https://paulmillr.com/posts/chokidar-3-save-32tb-of-traffic/&quot;&gt;reducing that package&amp;#39;s dependencies down to just the essentials&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;I&amp;apos;m not holding out hope for NPM to make a breaking change that turns install scripts from &lt;em&gt;opt out&lt;/em&gt; to &lt;em&gt;opt in&lt;/em&gt; (not that this would solve the problem anyway, although I&amp;apos;d consider it a welcome concession to security). I&amp;apos;m also not expecting all the packages on NPM to start weeding out unnecessary dependencies just to make my life easier (although kudos to the author of Chokidar for &lt;a href=&quot;https://paulmillr.com/posts/chokidar-3-save-32tb-of-traffic/&quot;&gt;reducing that package&amp;apos;s dependencies down to just the essentials&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;Honestly, I think the solution is probably going to be for me to move to a more security-focused ecosystem.&lt;/p&gt;
 &lt;h2 id=&quot;deno&quot;&gt;Deno&lt;/h2&gt;
-&lt;p&gt;An alternative (an arguably a successor) to Node is &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt; (initiated by the same person who created Node, Ryan Dahl). Deno appears to be aimed at all of the problems I&amp;#39;m running into with Node/NPM (copy-pasted from the Deno home page):&lt;/p&gt;
+&lt;p&gt;An alternative (an arguably a successor) to Node is &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt; (initiated by the same person who created Node, Ryan Dahl). Deno appears to be aimed at all of the problems I&amp;apos;m running into with Node/NPM (copy-pasted from the Deno home page):&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Secure by default. No file, network, or environment access, unless explicitly enabled.&lt;/li&gt;
 &lt;li&gt;Supports TypeScript out of the box.&lt;/li&gt;
@@ -196,14 +196,14 @@ found 0 vulnerabilities
 &lt;li&gt;Has built-in utilities like a dependency inspector (deno info) and a code formatter (deno fmt).&lt;/li&gt;
 &lt;li&gt;Has a set of reviewed (audited) standard modules that are guaranteed to work with Deno: deno.land/std&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;I&amp;#39;m especially excited about how granular the &lt;a href=&quot;https://deno.land/manual@v1.15.3/getting_started/permissions&quot;&gt;permissions flags&lt;/a&gt; are, for example:&lt;/p&gt;
+&lt;p&gt;I&amp;apos;m especially excited about how granular the &lt;a href=&quot;https://deno.land/manual@v1.15.3/getting_started/permissions&quot;&gt;permissions flags&lt;/a&gt; are, for example:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;code&gt;--allow-read=&amp;lt;allow-read&amp;gt;&lt;/code&gt; Allow file system read access. You can specify an optional, comma-separated list of directories or files to provide an allow-list of allowed file system access.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Deno also has support for &lt;a href=&quot;https://deno.land/manual@v1.15.3/tools/compiler&quot;&gt;building a self-contained executable&lt;/a&gt;, which would be handy for conveniently distributing binaries (although such binaries would have to be trusted by the people downloading them for now).&lt;/p&gt;
 &lt;h1 id=&quot;what-does-this-mean-for-my-current-project&quot;&gt;What does this mean for my current project?&lt;/h1&gt;
-&lt;p&gt;I was getting close to publishing my first sizable package to NPM, possibly even today, but now that I&amp;#39;ve stepped back and let the reality of its long list of dependencies sink in, I&amp;#39;m not sure if publishing my project is even a good idea. I originally picked up Node and Metalsmith to speed up the development process (with no plan to eventually release the tool), but along the way I thought it might be a useful thing to share.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ll think it over a bit more and decide if I want to be a hypocrite and push out a package with 18 direct dependencies and (ahem) &lt;em&gt;200+ transitive dependencies&lt;/em&gt;, or if I should start over (or abandon the idea of releasing the tool entirely).&lt;/p&gt;
+&lt;p&gt;I was getting close to publishing my first sizable package to NPM, possibly even today, but now that I&amp;apos;ve stepped back and let the reality of its long list of dependencies sink in, I&amp;apos;m not sure if publishing my project is even a good idea. I originally picked up Node and Metalsmith to speed up the development process (with no plan to eventually release the tool), but along the way I thought it might be a useful thing to share.&lt;/p&gt;
+&lt;p&gt;I&amp;apos;ll think it over a bit more and decide if I want to be a hypocrite and push out a package with 18 direct dependencies and (ahem) &lt;em&gt;200+ transitive dependencies&lt;/em&gt;, or if I should start over (or abandon the idea of releasing the tool entirely).&lt;/p&gt;
 </content>
 </entry>
 <entry>
@@ -214,10 +214,10 @@ found 0 vulnerabilities
 <summary type="text">Here&apos;s a rant about that time I tried to install NPM on Debian.</summary>
 <content type="html">&lt;h1 id=&quot;debian&quot;&gt;Debian&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&quot;https://www.debian.org/&quot;&gt;Debian&lt;/a&gt; has been my preferred Linux distribution for a long time (longer than &lt;a href=&quot;https://ubuntu.com/&quot;&gt;Ubuntu&lt;/a&gt; has even existed).&lt;/p&gt;
-&lt;p&gt;The main reason I like Debian is that its &lt;a href=&quot;https://manpages.debian.org/buster/apt/apt.8.en.html&quot;&gt;apt&lt;/a&gt; package manager has been the most reliable package manager I&amp;#39;ve ever dealt with, especially when it comes to removing and/or upgrading packages.&lt;/p&gt;
+&lt;p&gt;The main reason I like Debian is that its &lt;a href=&quot;https://manpages.debian.org/buster/apt/apt.8.en.html&quot;&gt;apt&lt;/a&gt; package manager has been the most reliable package manager I&amp;apos;ve ever dealt with, especially when it comes to removing and/or upgrading packages.&lt;/p&gt;
 &lt;h1 id=&quot;npm&quot;&gt;NPM&lt;/h1&gt;
-&lt;p&gt;Since I&amp;#39;ve been playing around with Node and NPM on Windows, I decided I should see if one of my tools works on Linux. Fortunately, I was on Debian 11, which ships with a not-&lt;em&gt;completely&lt;/em&gt;-out-of-date Node v12 runtime.&lt;/p&gt;
-&lt;p&gt;Great, I&amp;#39;ll just run &lt;code&gt;sudo apt install nodejs npm&lt;/code&gt; and get started! I was immediately greeted with the following wall of packages:&lt;/p&gt;
+&lt;p&gt;Since I&amp;apos;ve been playing around with Node and NPM on Windows, I decided I should see if one of my tools works on Linux. Fortunately, I was on Debian 11, which ships with a not-&lt;em&gt;completely&lt;/em&gt;-out-of-date Node v12 runtime.&lt;/p&gt;
+&lt;p&gt;Great, I&amp;apos;ll just run &lt;code&gt;sudo apt install nodejs npm&lt;/code&gt; and get started! I was immediately greeted with the following wall of packages:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ sudo apt install nodejs npm
 Reading package lists... Done
 Building dependency tree... Done
@@ -246,18 +246,18 @@ The following additional packages will be installed:
   node-which node-wide-align node-wrappy node-write-file-atomic node-yallist nodejs-doc perl-openssl-defaults python3-pkg-resources termit x11-common x11-utils x11-xserver-utils xdg-utils xkb-data
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id=&quot;why&quot;&gt;Why?&lt;/h1&gt;
-&lt;p&gt;That&amp;#39;s a lot more packages than I was expecting. Wait, &lt;code&gt;x11-common&lt;/code&gt;? &lt;code&gt;x11-xserver-utils&lt;/code&gt;? What&amp;#39;s going on here?&lt;/p&gt;
-&lt;p&gt;It turns out that &lt;a href=&quot;https://packages.debian.org/bullseye/npm&quot;&gt;Debian&amp;#39;s package for NPM&lt;/a&gt; depends on something called &lt;a href=&quot;https://packages.debian.org/bullseye/node-opener&quot;&gt;node-opener&lt;/a&gt;, which depends on &lt;a href=&quot;https://packages.debian.org/bullseye/xdg-utils&quot;&gt;xdg-utils&lt;/a&gt;, which is described as &amp;quot;desktop integration utilities from freedesktop.org&amp;quot;. Uh oh. Yeah, that depends on X11.&lt;/p&gt;
+&lt;p&gt;That&amp;apos;s a lot more packages than I was expecting. Wait, &lt;code&gt;x11-common&lt;/code&gt;? &lt;code&gt;x11-xserver-utils&lt;/code&gt;? What&amp;apos;s going on here?&lt;/p&gt;
+&lt;p&gt;It turns out that &lt;a href=&quot;https://packages.debian.org/bullseye/npm&quot;&gt;Debian&amp;apos;s package for NPM&lt;/a&gt; depends on something called &lt;a href=&quot;https://packages.debian.org/bullseye/node-opener&quot;&gt;node-opener&lt;/a&gt;, which depends on &lt;a href=&quot;https://packages.debian.org/bullseye/xdg-utils&quot;&gt;xdg-utils&lt;/a&gt;, which is described as &amp;quot;desktop integration utilities from freedesktop.org&amp;quot;. Uh oh. Yeah, that depends on X11.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Why in the world does a command line package manager depend on a GUI environment?&lt;/strong&gt;&lt;/p&gt;
 &lt;h1 id=&quot;node-opener&quot;&gt;node-opener&lt;/h1&gt;
 &lt;p&gt;So what is this &lt;code&gt;node-opener&lt;/code&gt; thing, and does NPM really require it?&lt;/p&gt;
-&lt;p&gt;The &lt;a href=&quot;https://github.com/domenic/opener&quot;&gt;package&amp;#39;s web site&lt;/a&gt; describes it as &amp;quot;Opens stuff, like webpages and files and executables, cross-platform&amp;quot;. I&amp;#39;m still not seeing the relation to NPM. Looking at the code, it&amp;#39;s just a script that calls &lt;code&gt;xdg-open&lt;/code&gt; on Linux (and other commands on Windows and Mac).&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/npm/cli/blob/04eb43f2b2a387987b61a7318908cf18f03d97e0/lib/utils/open-url.js&quot;&gt;Peering into NPM&amp;#39;s source code&lt;/a&gt;, I see that it does in fact seem to &lt;code&gt;require(&amp;#39;opener&amp;#39;)&lt;/code&gt;. That&amp;#39;s disappointing.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/domenic/opener&quot;&gt;package&amp;apos;s web site&lt;/a&gt; describes it as &amp;quot;Opens stuff, like webpages and files and executables, cross-platform&amp;quot;. I&amp;apos;m still not seeing the relation to NPM. Looking at the code, it&amp;apos;s just a script that calls &lt;code&gt;xdg-open&lt;/code&gt; on Linux (and other commands on Windows and Mac).&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/npm/cli/blob/04eb43f2b2a387987b61a7318908cf18f03d97e0/lib/utils/open-url.js&quot;&gt;Peering into NPM&amp;apos;s source code&lt;/a&gt;, I see that it does in fact seem to &lt;code&gt;require(&amp;apos;opener&amp;apos;)&lt;/code&gt;. That&amp;apos;s disappointing.&lt;/p&gt;
 &lt;h1 id=&quot;nodesource-to-the-rescue&quot;&gt;NodeSource to the rescue?&lt;/h1&gt;
 &lt;p&gt;The official nodejs.org site &lt;a href=&quot;https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions&quot;&gt;mentions&lt;/a&gt; binary distributions &lt;a href=&quot;https://github.com/nodesource/distributions/blob/master/README.md&quot;&gt;from NodeSource&lt;/a&gt;. NodeSource helpfully suggests downloading and running their setup script as root.&lt;/p&gt;
-&lt;p&gt;The script appears to mostly do reasonable things like checking for required packages and then updating apt&amp;#39;s &lt;code&gt;sources.list&lt;/code&gt; file, and I guess I&amp;#39;m trusting them with the binaries they&amp;#39;re providing, so I&amp;#39;ll give it a try. They do provide manual install instructions as well.&lt;/p&gt;
+&lt;p&gt;The script appears to mostly do reasonable things like checking for required packages and then updating apt&amp;apos;s &lt;code&gt;sources.list&lt;/code&gt; file, and I guess I&amp;apos;m trusting them with the binaries they&amp;apos;re providing, so I&amp;apos;ll give it a try. They do provide manual install instructions as well.&lt;/p&gt;
 &lt;h1 id=&quot;success&quot;&gt;Success&lt;/h1&gt;
-&lt;p&gt;I can&amp;#39;t say I&amp;#39;m pleased with this setup, but NodeSource&amp;#39;s Node package did in fact work and now I&amp;#39;ve got &lt;code&gt;node&lt;/code&gt; and &lt;code&gt;npm&lt;/code&gt; commands running fine without an X11 installation.&lt;/p&gt;
+&lt;p&gt;I can&amp;apos;t say I&amp;apos;m pleased with this setup, but NodeSource&amp;apos;s Node package did in fact work and now I&amp;apos;ve got &lt;code&gt;node&lt;/code&gt; and &lt;code&gt;npm&lt;/code&gt; commands running fine without an X11 installation.&lt;/p&gt;
 </content>
 </entry>
 <entry>
@@ -266,7 +266,7 @@ The following additional packages will be installed:
 <link rel="alternate" href="https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html"/>
 <updated>2021-11-02T00:00:00.000Z</updated>
 <summary type="text">Here&apos;s how to load VS Code&apos;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing.</summary>
-<content type="html">&lt;p&gt;Here&amp;#39;s how to load Visual Studio Code&amp;#39;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing of the editor component:&lt;/p&gt;
+<content type="html">&lt;p&gt;Here&amp;apos;s how to load Visual Studio Code&amp;apos;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing of the editor component:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/monaco-editor-from-cdn&quot;&gt;Source code&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://jaredkrinke.github.io/monaco-editor-from-cdn/&quot;&gt;Live demo&lt;/a&gt;&lt;/li&gt;
@@ -275,94 +275,94 @@ The following additional packages will be installed:
 &lt;p&gt;&lt;a href=&quot;https://code.visualstudio.com/&quot;&gt;Visual Studio Code&lt;/a&gt; unseated &lt;a href=&quot;https://www.vim.org/&quot;&gt;Vim&lt;/a&gt; as my favorite text editor a few years ago.&lt;/p&gt;
 &lt;p&gt;Surprisingly, VS Code manages to have acceptable performance (even on my very old laptop) despite being built on JavaScript. The (MIT-licensed) editor component is called &lt;a href=&quot;https://microsoft.github.io/monaco-editor/index.html&quot;&gt;Monaco Editor&lt;/a&gt;, and it runs in most desktop browsers.&lt;/p&gt;
 &lt;h1 id=&quot;samples&quot;&gt;Samples&lt;/h1&gt;
-&lt;p&gt;So what&amp;#39;s the easiest way to embed Monaco Editor in a web page for building simple tools?&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s an official repository for &lt;a href=&quot;https://github.com/Microsoft/monaco-editor-samples/&quot;&gt;Monaco Editor samples&lt;/a&gt;, but they all seem to assume you&amp;#39;re using NPM, WebPack, etc., and hosting the scripts yourself. &lt;strong&gt;What if you just want to throw together a quick web page with an editor component, hosted as a single static HTML page?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;So what&amp;apos;s the easiest way to embed Monaco Editor in a web page for building simple tools?&lt;/p&gt;
+&lt;p&gt;There&amp;apos;s an official repository for &lt;a href=&quot;https://github.com/Microsoft/monaco-editor-samples/&quot;&gt;Monaco Editor samples&lt;/a&gt;, but they all seem to assume you&amp;apos;re using NPM, WebPack, etc., and hosting the scripts yourself. &lt;strong&gt;What if you just want to throw together a quick web page with an editor component, hosted as a single static HTML page?&lt;/strong&gt;&lt;/p&gt;
 &lt;h1 id=&quot;loading-from-a-cdn&quot;&gt;Loading from a CDN&lt;/h1&gt;
 &lt;p&gt;Fortunately, there is a (very well hidden) page discussing &lt;a href=&quot;https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md&quot;&gt;integrating the AMD version of the Monaco Editor in a cross-domain setup&lt;/a&gt;:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;If you are hosting your .js on a different domain &lt;strong&gt;(e.g. on a CDN)&lt;/strong&gt; than the HTML, you should know that the Monaco Editor creates web workers for smart language features. Cross-domain web workers are not allowed, but here is how you can proxy their loading and get them to work&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;That sounds like what I&amp;#39;m looking for!&lt;/p&gt;
-&lt;p&gt;Specifically, I&amp;#39;m going to combine one of the &lt;a href=&quot;https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html&quot;&gt;browser-amd-editor&lt;/a&gt; official samples with &lt;a href=&quot;https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html&quot;&gt;Option 1&lt;/a&gt; from the page above.&lt;/p&gt;
+&lt;p&gt;That sounds like what I&amp;apos;m looking for!&lt;/p&gt;
+&lt;p&gt;Specifically, I&amp;apos;m going to combine one of the &lt;a href=&quot;https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html&quot;&gt;browser-amd-editor&lt;/a&gt; official samples with &lt;a href=&quot;https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html&quot;&gt;Option 1&lt;/a&gt; from the page above.&lt;/p&gt;
 &lt;h1 id=&quot;automatic-resizing&quot;&gt;Automatic resizing&lt;/h1&gt;
-&lt;p&gt;There&amp;#39;s one line in the sample I find irritating:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&amp;lt;div id=&amp;quot;container&amp;quot; style=&amp;quot;width: 800px; height: 600px; border: 1px solid grey&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;p&gt;There&amp;apos;s one line in the sample I find irritating:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;container&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;style&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;width: 800px; height: 600px; border: 1px solid grey&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt;&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;Why is the size being manually specified in pixels?&lt;/strong&gt; Is that necessary?&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s a &lt;a href=&quot;https://github.com/Microsoft/monaco-editor/issues/28&quot;&gt;long thread in a Monaco Editor issue&lt;/a&gt; that goes into the details, but basically the editor component needs to be notified of size changes (no idea why) and, at least in 2016, there was no way for the editor to subscribe to size updates.&lt;/p&gt;
-&lt;p&gt;But it&amp;#39;s 2021 as of this post, so can we use &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver&quot;&gt;ResizeObserver&lt;/a&gt; (global support is at &lt;a href=&quot;https://caniuse.com/resizeobserver&quot;&gt;92%&lt;/a&gt; as of this post)? Apparently not, because the implementations of ResizeObserver use inconsistent property names (insert facepalm here).&lt;/p&gt;
+&lt;p&gt;There&amp;apos;s a &lt;a href=&quot;https://github.com/Microsoft/monaco-editor/issues/28&quot;&gt;long thread in a Monaco Editor issue&lt;/a&gt; that goes into the details, but basically the editor component needs to be notified of size changes (no idea why) and, at least in 2016, there was no way for the editor to subscribe to size updates.&lt;/p&gt;
+&lt;p&gt;But it&amp;apos;s 2021 as of this post, so can we use &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver&quot;&gt;ResizeObserver&lt;/a&gt; (global support is at &lt;a href=&quot;https://caniuse.com/resizeobserver&quot;&gt;92%&lt;/a&gt; as of this post)? Apparently not, because the implementations of ResizeObserver use inconsistent property names (insert facepalm here).&lt;/p&gt;
 &lt;p&gt;Fortunately, the trusty old &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event&quot;&gt;resize&lt;/a&gt; event is sufficient for my purposes:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;const editorElement = document.getElementById(&amp;quot;editor&amp;quot;);
-window.addEventListener(&amp;quot;resize&amp;quot;, () =&amp;gt; editor.layout({
-    width: editorElement.offsetWidth,
-    height: editorElement.offsetHeight
+&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;const&lt;/span&gt; editorElement = &lt;span class=&quot;hljs-variable language_&quot;&gt;document&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;getElementById&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-variable language_&quot;&gt;window&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;addEventListener&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;resize&amp;quot;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;() =&amp;gt;&lt;/span&gt; editor.&lt;span class=&quot;hljs-title function_&quot;&gt;layout&lt;/span&gt;({
+    &lt;span class=&quot;hljs-attr&quot;&gt;width&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetWidth&lt;/span&gt;,
+    &lt;span class=&quot;hljs-attr&quot;&gt;height&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetHeight&lt;/span&gt;
 }));
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id=&quot;complete-example&quot;&gt;Complete example&lt;/h1&gt;
 &lt;p&gt;The full code is in this repository: &lt;a href=&quot;https://github.com/jaredkrinke/monaco-editor-from-cdn&quot;&gt;monaco-editor-from-cdn&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s a &lt;a href=&quot;https://jaredkrinke.github.io/monaco-editor-from-cdn/&quot;&gt;live demo&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s a copy-paste of the code:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
-&amp;lt;head&amp;gt;
-&amp;lt;meta charset=&amp;quot;utf-8&amp;quot; /&amp;gt;
-&amp;lt;title&amp;gt;Monaco Editor from CDN example, with automatic resizing&amp;lt;/title&amp;gt;
-&amp;lt;style&amp;gt;
-/* Flex column layout, with the editor taking up all available screen space */
-html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
+&lt;p&gt;Here&amp;apos;s a &lt;a href=&quot;https://jaredkrinke.github.io/monaco-editor-from-cdn/&quot;&gt;live demo&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here&amp;apos;s a copy-paste of the code:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;&amp;lt;!DOCTYPE &lt;span class=&quot;hljs-keyword&quot;&gt;html&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;lang&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;en&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;head&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;meta&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;charset&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;utf-8&amp;quot;&lt;/span&gt; /&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;title&lt;/span&gt;&amp;gt;&lt;/span&gt;Monaco Editor from CDN example, with automatic resizing&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;title&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;language-css&quot;&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;/* Flex column layout, with the editor taking up all available screen space */&lt;/span&gt;
+&lt;span class=&quot;hljs-selector-tag&quot;&gt;html&lt;/span&gt;, &lt;span class=&quot;hljs-selector-tag&quot;&gt;body&lt;/span&gt; {
+    &lt;span class=&quot;hljs-attribute&quot;&gt;height&lt;/span&gt;: &lt;span class=&quot;hljs-number&quot;&gt;100%&lt;/span&gt;;
+    &lt;span class=&quot;hljs-attribute&quot;&gt;margin&lt;/span&gt;: &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
+    &lt;span class=&quot;hljs-attribute&quot;&gt;overflow&lt;/span&gt;: hidden;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
+&lt;span class=&quot;hljs-selector-tag&quot;&gt;body&lt;/span&gt; {
+    &lt;span class=&quot;hljs-attribute&quot;&gt;display&lt;/span&gt;: flex;
+    &lt;span class=&quot;hljs-attribute&quot;&gt;flex-direction&lt;/span&gt;: column;
 }
 
-#editor {
-    flex-grow: 1;
-    border: solid 1px gray;
-    overflow: hidden;
+&lt;span class=&quot;hljs-selector-id&quot;&gt;#editor&lt;/span&gt; {
+    &lt;span class=&quot;hljs-attribute&quot;&gt;flex-grow&lt;/span&gt;: &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;;
+    &lt;span class=&quot;hljs-attribute&quot;&gt;border&lt;/span&gt;: solid &lt;span class=&quot;hljs-number&quot;&gt;1px&lt;/span&gt; gray;
+    &lt;span class=&quot;hljs-attribute&quot;&gt;overflow&lt;/span&gt;: hidden;
 }
-&amp;lt;/style&amp;gt;
-&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-&amp;lt;h1&amp;gt;Monaco Editor, loaded via CDN&amp;lt;/h1&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;head&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;body&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;h1&lt;/span&gt;&amp;gt;&lt;/span&gt;Monaco Editor, loaded via CDN&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;h1&lt;/span&gt;&amp;gt;&lt;/span&gt;
 
-&amp;lt;div id=&amp;quot;editor&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt;&amp;gt;&lt;/span&gt;
 
-&amp;lt;script src=&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/loader.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;script&amp;gt;
-// Proxy Monaco Editor workers using a data URL (adapted from: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md)
-require.config({ paths: { &amp;quot;vs&amp;quot;: &amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/&amp;quot; }});
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/loader.min.js&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;language-javascript&quot;&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;// Proxy Monaco Editor workers using a data URL (adapted from: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md)&lt;/span&gt;
+&lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;config&lt;/span&gt;({ &lt;span class=&quot;hljs-attr&quot;&gt;paths&lt;/span&gt;: { &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;vs&amp;quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/&amp;quot;&lt;/span&gt; }});
 
-window.MonacoEnvironment = {
-    getWorkerUrl: function(workerId, label) {
-        return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+&lt;span class=&quot;hljs-variable language_&quot;&gt;window&lt;/span&gt;.&lt;span class=&quot;hljs-property&quot;&gt;MonacoEnvironment&lt;/span&gt; = {
+    &lt;span class=&quot;hljs-attr&quot;&gt;getWorkerUrl&lt;/span&gt;: &lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;hljs-params&quot;&gt;workerId, label&lt;/span&gt;) {
+        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;`data:text/javascript;charset=utf-8,&lt;span class=&quot;hljs-subst&quot;&gt;${&lt;span class=&quot;hljs-built_in&quot;&gt;encodeURIComponent&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;`
             self.MonacoEnvironment = { baseUrl: &amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/&amp;quot; };
-            importScripts(&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/base/worker/workerMain.min.js&amp;quot;);`
-        )}`;
+            importScripts(&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/base/worker/workerMain.min.js&amp;quot;);`&lt;/span&gt;
+        )}&lt;/span&gt;`&lt;/span&gt;;
     }
 };
 
-require([&amp;quot;vs/editor/editor.main&amp;quot;], function () {
-    // Create the editor with some sample JavaScript code
-    var editor = monaco.editor.create(document.getElementById(&amp;quot;editor&amp;quot;), {
-        value: &amp;quot;// code goes here\n&amp;quot;,
-        language: &amp;quot;javascript&amp;quot;
+&lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;([&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;vs/editor/editor.main&amp;quot;&lt;/span&gt;], &lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; (&lt;span class=&quot;hljs-params&quot;&gt;&lt;/span&gt;) {
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Create the editor with some sample JavaScript code&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; editor = monaco.&lt;span class=&quot;hljs-property&quot;&gt;editor&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;create&lt;/span&gt;(&lt;span class=&quot;hljs-variable language_&quot;&gt;document&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;getElementById&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;), {
+        &lt;span class=&quot;hljs-attr&quot;&gt;value&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;// code goes here\n&amp;quot;&lt;/span&gt;,
+        &lt;span class=&quot;hljs-attr&quot;&gt;language&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;javascript&amp;quot;&lt;/span&gt;
     });
 
-    // Resize the editor when the window size changes
-    const editorElement = document.getElementById(&amp;quot;editor&amp;quot;);
-    window.addEventListener(&amp;quot;resize&amp;quot;, () =&amp;gt; editor.layout({
-        width: editorElement.offsetWidth,
-        height: editorElement.offsetHeight
+    &lt;span class=&quot;hljs-comment&quot;&gt;// Resize the editor when the window size changes&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;const&lt;/span&gt; editorElement = &lt;span class=&quot;hljs-variable language_&quot;&gt;document&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;getElementById&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;);
+    &lt;span class=&quot;hljs-variable language_&quot;&gt;window&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;addEventListener&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;resize&amp;quot;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;() =&amp;gt;&lt;/span&gt; editor.&lt;span class=&quot;hljs-title function_&quot;&gt;layout&lt;/span&gt;({
+        &lt;span class=&quot;hljs-attr&quot;&gt;width&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetWidth&lt;/span&gt;,
+        &lt;span class=&quot;hljs-attr&quot;&gt;height&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetHeight&lt;/span&gt;
     }));
 });
-&amp;lt;/script&amp;gt;
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;body&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;html&lt;/span&gt;&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 </content>
 </entry>
@@ -373,10 +373,10 @@ require([&amp;quot;vs/editor/editor.main&amp;quot;], function () {
 <updated>2021-10-27T00:00:00.000Z</updated>
 <summary type="text">Here&apos;s the design of my in-progress static site generator, md2blog.</summary>
 <content type="html">&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/comparison.html&quot;&gt;investigating many popular static site generators&lt;/a&gt;, I wasn&amp;#39;t able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and numerous plugins) to get what I wanted. I&amp;#39;m calling the resulting tool &lt;strong&gt;md2blog&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;In this post, I&amp;#39;m going to cover the design of md2blog. Note that md2blog is a work in progress that has not been released yet.&lt;/p&gt;
+&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/comparison.html&quot;&gt;investigating many popular static site generators&lt;/a&gt;, I wasn&amp;apos;t able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and numerous plugins) to get what I wanted. I&amp;apos;m calling the resulting tool &lt;strong&gt;md2blog&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;In this post, I&amp;apos;m going to cover the design of md2blog. Note that md2blog is a work in progress that has not been released yet.&lt;/p&gt;
 &lt;h1 id=&quot;design-goals&quot;&gt;Design goals&lt;/h1&gt;
-&lt;p&gt;Here&amp;#39;s the overarching goal of md2blog:&lt;/p&gt;
+&lt;p&gt;Here&amp;apos;s the overarching goal of md2blog:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Convert a &lt;em&gt;self-contained, organized&lt;/em&gt; pile of &lt;a href=&quot;https://daringfireball.net/projects/markdown/&quot;&gt;Markdown&lt;/a&gt; posts into a &lt;em&gt;minimal, but fully functional&lt;/em&gt; static blog, requiring &lt;em&gt;zero configuration&lt;/em&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -393,9 +393,9 @@ require([&amp;quot;vs/editor/editor.main&amp;quot;], function () {
 &lt;li&gt;&lt;strong&gt;Syntax highlighting&lt;/strong&gt; is automatically added to code blocks&lt;/li&gt;
 &lt;li&gt;An &lt;a href=&quot;https://validator.w3.org/feed/docs/atom.html&quot;&gt;Atom&lt;/a&gt;/RSS news feed is automatically generated&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Note that &amp;quot;zero configuration&amp;quot; implies that md2blog is highly opinionated, to the point that there are no options to configure. &lt;strong&gt;Instead of fiddling with options and themes, the user&amp;#39;s focus is strictly on writing and publishing content.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Note that &amp;quot;zero configuration&amp;quot; implies that md2blog is highly opinionated, to the point that there are no options to configure. &lt;strong&gt;Instead of fiddling with options and themes, the user&amp;apos;s focus is strictly on writing and publishing content.&lt;/strong&gt;&lt;/p&gt;
 &lt;h1 id=&quot;input&quot;&gt;Input&lt;/h1&gt;
-&lt;p&gt;Here&amp;#39;s a more detailed look at building a dev blog with md2blog.&lt;/p&gt;
+&lt;p&gt;Here&amp;apos;s a more detailed look at building a dev blog with md2blog.&lt;/p&gt;
 &lt;h2 id=&quot;directory-structure&quot;&gt;Directory structure&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;content/&lt;/code&gt;: Root directory that contains all source content for the site&lt;ul&gt;
@@ -418,12 +418,12 @@ require([&amp;quot;vs/editor/editor.main&amp;quot;], function () {
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;sitejson&quot;&gt;site.json&lt;/h2&gt;
-&lt;p&gt;Here&amp;#39;s an example &lt;code&gt;site.json&lt;/code&gt; file:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;{
-    &amp;quot;title&amp;quot;: &amp;quot;My dev blog&amp;quot;,
-    &amp;quot;url&amp;quot;: &amp;quot;https://mydevblog.com/&amp;quot;,
-    &amp;quot;description&amp;quot;: &amp;quot;A very good dev blog indeed&amp;quot;
-}
+&lt;p&gt;Here&amp;apos;s an example &lt;code&gt;site.json&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;hljs-attr&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;My dev blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;hljs-attr&quot;&gt;&amp;quot;url&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;https://mydevblog.com/&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;hljs-attr&quot;&gt;&amp;quot;description&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;A very good dev blog indeed&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;hljs-punctuation&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Schema:&lt;/p&gt;
 &lt;table&gt;
@@ -458,15 +458,15 @@ require([&amp;quot;vs/editor/editor.main&amp;quot;], function () {
 &lt;h2 id=&quot;posts&quot;&gt;Posts&lt;/h2&gt;
 &lt;p&gt;Posts are written in Markdown and use YAML for front matter.&lt;/p&gt;
 &lt;h3 id=&quot;front-matter&quot;&gt;Front matter&lt;/h3&gt;
-&lt;p&gt;Here&amp;#39;s an example showing all of the supported YAML front matter properties (&lt;code&gt;keywords&lt;/code&gt; and &lt;code&gt;draft&lt;/code&gt; are optional, the rest are required):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;---
-title: First post
-description: First post on my blog, with a relative link.
-date: 2021-10-26
-keywords: [additional-tag]
-draft: true
----
-(Markdown content follows...)
+&lt;p&gt;Here&amp;apos;s an example showing all of the supported YAML front matter properties (&lt;code&gt;keywords&lt;/code&gt; and &lt;code&gt;draft&lt;/code&gt; are optional, the rest are required):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;hljs-attr&quot;&gt;title:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;First&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;post&lt;/span&gt;
+&lt;span class=&quot;hljs-attr&quot;&gt;description:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;First&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;blog,&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;relative&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;link.&lt;/span&gt;
+&lt;span class=&quot;hljs-attr&quot;&gt;date:&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;2021-10-26&lt;/span&gt;
+&lt;span class=&quot;hljs-attr&quot;&gt;keywords:&lt;/span&gt; [&lt;span class=&quot;hljs-string&quot;&gt;additional-tag&lt;/span&gt;]
+&lt;span class=&quot;hljs-attr&quot;&gt;draft:&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;hljs-meta&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;hljs-string&quot;&gt;(Markdown&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;content&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;follows...)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Schema:&lt;/p&gt;
 &lt;table&gt;
@@ -510,26 +510,26 @@ draft: true
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 &lt;h3 id=&quot;content&quot;&gt;Content&lt;/h3&gt;
-&lt;p&gt;Here&amp;#39;s example Markdown content, demonstrating relative links (these links get translated to the corresponding HTML files and checked at build time; they also work in VS Code&amp;#39;s and GitHub&amp;#39;s Markdown previewers):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;# Relative links
-Here&amp;#39;s a relative link to another post in this category: [link](post2.md)!
+&lt;p&gt;Here&amp;apos;s example Markdown content, demonstrating relative links (these links get translated to the corresponding HTML files and checked at build time; they also work in VS Code&amp;apos;s and GitHub&amp;apos;s Markdown previewers):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;&lt;span class=&quot;hljs-section&quot;&gt;# Relative links&lt;/span&gt;
+Here&amp;apos;s a relative link to another post in this category: [&lt;span class=&quot;hljs-string&quot;&gt;link&lt;/span&gt;](&lt;span class=&quot;hljs-link&quot;&gt;post2.md&lt;/span&gt;)!
 
-And here&amp;#39;s one to another category, with an anchor: [link 2](../category2/post3.md#some-section).
+And here&amp;apos;s one to another category, with an anchor: [&lt;span class=&quot;hljs-string&quot;&gt;link 2&lt;/span&gt;](&lt;span class=&quot;hljs-link&quot;&gt;../category2/post3.md#some-section&lt;/span&gt;).
 
-# Image
-Here&amp;#39;s an image:
-![test](../../assets/test.png)
+&lt;span class=&quot;hljs-section&quot;&gt;# Image&lt;/span&gt;
+Here&amp;apos;s an image:
+![&lt;span class=&quot;hljs-string&quot;&gt;test&lt;/span&gt;](&lt;span class=&quot;hljs-link&quot;&gt;../../assets/test.png&lt;/span&gt;)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Finally, here is an example of including a code block (specifying the language is recommended, but optional):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;# Code block
-Here&amp;#39;s some code:
+&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;&lt;span class=&quot;hljs-section&quot;&gt;# Code block&lt;/span&gt;
+Here&amp;apos;s some code:
 
-```javascript
+&lt;span class=&quot;hljs-code&quot;&gt;```javascript
 const add = (a, b) =&amp;gt; a + b;
-```
+```&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id=&quot;output&quot;&gt;Output&lt;/h1&gt;
-&lt;p&gt;All output is written to the &lt;code&gt;out/&lt;/code&gt; directory. Here&amp;#39;s what the output might look like for the example above:&lt;/p&gt;
+&lt;p&gt;All output is written to the &lt;code&gt;out/&lt;/code&gt; directory. Here&amp;apos;s what the output might look like for the example above:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: Home page&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;404.html&lt;/code&gt;: Error page&lt;/li&gt;
