@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Schemescape: Designing md2blog 2.0</title>
+<meta name="description" content="I hadn&#39;t even released anything yet and I&#39;ve already rewritten md2blog. Here&#39;s why." />
+<meta name="keywords" content="metalsmith,md2blog,deno" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+<nav>
+<ul>
+<li><a href="../../posts/static-site-generators/index.html">static-site-generators</a></li>
+<li><a href="../../posts/metalsmith/index.html">metalsmith</a></li>
+<li><a href="../../posts/md2blog/index.html">md2blog</a></li>
+<li><a href="../../posts/deno/index.html">deno</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/static-site-generators/md2blog-deno.html">Designing md2blog 2.0</a></h1>
+<p><time datetime="2021-11-10">November 10, 2021</time></p>
+</header>
+<p>I really didn&#39;t want to do this. I probably shouldn&#39;t have done this. But I did it anyway.</p>
+<p>I created yet another static site generator.</p>
+<h1 id="the-recent-past">The recent past</h1>
+<p>After <a href="comparison.html">investigating a bunch of existing static site generators</a>, I eventually settled on using <a href="https://metalsmith.io/">Metalsmith</a> (and various plugins) to build my static dev blog. I even went so far as to clean up my code in hopes of releasing a zero-config static dev blog generator called <a href="md2blog-design.html">md2blog</a>.</p>
+<p>But in the end, it just didn&#39;t feel right to publish a tool on NPM with 18 direct dependencies and over 200 transitive dependencies (including <em>6 different file matching libraries</em>). I&#39;m <a href="../web-development/souring-on-npm.html">personally concerned</a> about the NPM ecosystem&#39;s outrageous dependency trees, and their security implications (Dependency Hell 2.0?), so I decided that I shouldn&#39;t be further contributing to the problem.</p>
+<h1 id="enter-deno">Enter Deno</h1>
+<p>Fortunately, as noted in <a href="../web-development/souring-on-npm.html">my post about NPM</a>, there&#39;s a relatively new JavaScript (and TypeScript) runtime with a security focus: <a href="https://deno.land/">Deno</a>.</p>
+<p>Deno doesn&#39;t magically make it 100% safe to download and run JavaScript code from anywhere, but it at least tries to provide a secure environment by sand boxing JavaScript programs (similar to what is done in a web browser) and only allowing certain operations if permissions are explicitly granted on the command line, e.g.:</p>
+<pre><code class="language-txt">$ deno run --allow-read=content,out --allow-write=out main.js
+</code></pre>
+<p>Additionally, Deno provides a <a href="https://deno.land/std">standard library</a> that has been audited by the Deno authors, so you no longer have to pull in modules from unknown contributors just for common tasks like, say, parsing YAML front matter.</p>
+<p>Deno also has a focus on the full developer experience and includes facilities for testing, static analysis, dependenc analysis, stand-alone executables, and more. Again, this means that you don&#39;t have to rely on tens or hundreds of NPM packages just to run some unit tests or publish a stand-alone tool. Oh, and Deno fully embraces <code>await</code> and <code>async</code>, so no more dealing with tedious error-first callback patterns!</p>
+<h1 id="goodbye-metalsmith">Goodbye, Metalsmith</h1>
+<p>While Deno has some <a href="https://deno.land/manual@v1.16.0/npm_nodejs">facilities for running Node/NPM modules</a>, I decided that, in order to limit the number of dependencies I take on and to leverage async language features, I would essentially recreate Metalsmith for Deno. Fortunately, Metalsmith is so simple, my prototype was under 150 lines of code.</p>
+<p>For now, I&#39;m calling this module Goldsmith. Here&#39;s how Goldsmith differs from Metalsmith:</p>
+<ul>
+<li>Built on Deno and TypeScript instead of Node and JavaScript<ul>
+<li>As a result, permissions are limited to only the input and output directories, by default</li>
+</ul>
+</li>
+<li>Native asynchronous API based on promises</li>
+<li>Will be released alongside a standard library of essential plugins</li>
+</ul>
+<h1 id="plugins-and-dependencies">Plugins and dependencies</h1>
+<p>Given that <em>most</em> of the Metalsmith plugins I was using were trivially simple, I decided that I&#39;d just rewrite the ones I needed from scratch in TypeScript.</p>
+<p>Along the way, I made a few changes to further reduce the number of dependencies:</p>
+<ul>
+<li>Standardized on regular expressoins for file matching instead of using various glob libraries</li>
+<li>Replaced Handlebars with a trivially simple template language based on JavaScript&#39;s <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates">tagged template literals</a></li>
+<li>Replaced my usage of <a href="https://lesscss.org/">Less</a> with color conversion functions and <code>String.replaceAll()</code></li>
+</ul>
+<h1 id="current-state-of-the-tool">Current state of the tool</h1>
+<p>While none of the above libraries are fit for general consumption yet, the page you&#39;re reading was generated with my rewritten Deno-based tool. Other than cleaning up the code, adding tests, and releasing everything, the only functionality that is currently missing is:</p>
+<ol>
+<li>Command line configuration arguments</li>
+<li>Test web server with automatic reloading</li>
+</ol>
+<p>The first one should be easy, and I think the second one shouldn&#39;t be too hard either (hopefully just a matter of injecting a script to connect to a WebSocket that pushes out reload requests based on <a href="https://doc.deno.land/builtin/stable#Deno.watchFs">Deno.watchFs()</a>).</p>
+<h1 id="a-parting-note">A parting note</h1>
+<p>So there you have it. Depending on how you count, this is either the 4th or 5th static site generator I&#39;ve built. I like to hope this will be my last.</p>
+
+<footer>
+<p><a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+</body>
+</html>

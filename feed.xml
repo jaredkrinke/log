@@ -7,8 +7,56 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-11T04:32:00.597Z</updated>
+<updated>2021-11-11T16:42:20.382Z</updated>
 
+<entry>
+<title>Designing md2blog 2.0}</title>
+<id>https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html"/>
+<updated>2021-11-10T00:00:00.000Z</updated>
+<summary type="text">I hadn&apos;t even released anything yet and I&apos;ve already rewritten md2blog. Here&apos;s why.</summary>
+<content type="html">&lt;p&gt;I really didn&amp;#39;t want to do this. I probably shouldn&amp;#39;t have done this. But I did it anyway.&lt;/p&gt;
+&lt;p&gt;I created yet another static site generator.&lt;/p&gt;
+&lt;h1 id=&quot;the-recent-past&quot;&gt;The recent past&lt;/h1&gt;
+&lt;p&gt;After &lt;a href=&quot;comparison.html&quot;&gt;investigating a bunch of existing static site generators&lt;/a&gt;, I eventually settled on using &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and various plugins) to build my static dev blog. I even went so far as to clean up my code in hopes of releasing a zero-config static dev blog generator called &lt;a href=&quot;md2blog-design.html&quot;&gt;md2blog&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;But in the end, it just didn&amp;#39;t feel right to publish a tool on NPM with 18 direct dependencies and over 200 transitive dependencies (including &lt;em&gt;6 different file matching libraries&lt;/em&gt;). I&amp;#39;m &lt;a href=&quot;../web-development/souring-on-npm.html&quot;&gt;personally concerned&lt;/a&gt; about the NPM ecosystem&amp;#39;s outrageous dependency trees, and their security implications (Dependency Hell 2.0?), so I decided that I shouldn&amp;#39;t be further contributing to the problem.&lt;/p&gt;
+&lt;h1 id=&quot;enter-deno&quot;&gt;Enter Deno&lt;/h1&gt;
+&lt;p&gt;Fortunately, as noted in &lt;a href=&quot;../web-development/souring-on-npm.html&quot;&gt;my post about NPM&lt;/a&gt;, there&amp;#39;s a relatively new JavaScript (and TypeScript) runtime with a security focus: &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Deno doesn&amp;#39;t magically make it 100% safe to download and run JavaScript code from anywhere, but it at least tries to provide a secure environment by sand boxing JavaScript programs (similar to what is done in a web browser) and only allowing certain operations if permissions are explicitly granted on the command line, e.g.:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ deno run --allow-read=content,out --allow-write=out main.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Additionally, Deno provides a &lt;a href=&quot;https://deno.land/std&quot;&gt;standard library&lt;/a&gt; that has been audited by the Deno authors, so you no longer have to pull in modules from unknown contributors just for common tasks like, say, parsing YAML front matter.&lt;/p&gt;
+&lt;p&gt;Deno also has a focus on the full developer experience and includes facilities for testing, static analysis, dependenc analysis, stand-alone executables, and more. Again, this means that you don&amp;#39;t have to rely on tens or hundreds of NPM packages just to run some unit tests or publish a stand-alone tool. Oh, and Deno fully embraces &lt;code&gt;await&lt;/code&gt; and &lt;code&gt;async&lt;/code&gt;, so no more dealing with tedious error-first callback patterns!&lt;/p&gt;
+&lt;h1 id=&quot;goodbye-metalsmith&quot;&gt;Goodbye, Metalsmith&lt;/h1&gt;
+&lt;p&gt;While Deno has some &lt;a href=&quot;https://deno.land/manual@v1.16.0/npm_nodejs&quot;&gt;facilities for running Node/NPM modules&lt;/a&gt;, I decided that, in order to limit the number of dependencies I take on and to leverage async language features, I would essentially recreate Metalsmith for Deno. Fortunately, Metalsmith is so simple, my prototype was under 150 lines of code.&lt;/p&gt;
+&lt;p&gt;For now, I&amp;#39;m calling this module Goldsmith. Here&amp;#39;s how Goldsmith differs from Metalsmith:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Built on Deno and TypeScript instead of Node and JavaScript&lt;ul&gt;
+&lt;li&gt;As a result, permissions are limited to only the input and output directories, by default&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Native asynchronous API based on promises&lt;/li&gt;
+&lt;li&gt;Will be released alongside a standard library of essential plugins&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;plugins-and-dependencies&quot;&gt;Plugins and dependencies&lt;/h1&gt;
+&lt;p&gt;Given that &lt;em&gt;most&lt;/em&gt; of the Metalsmith plugins I was using were trivially simple, I decided that I&amp;#39;d just rewrite the ones I needed from scratch in TypeScript.&lt;/p&gt;
+&lt;p&gt;Along the way, I made a few changes to further reduce the number of dependencies:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Standardized on regular expressoins for file matching instead of using various glob libraries&lt;/li&gt;
+&lt;li&gt;Replaced Handlebars with a trivially simple template language based on JavaScript&amp;#39;s &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates&quot;&gt;tagged template literals&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Replaced my usage of &lt;a href=&quot;https://lesscss.org/&quot;&gt;Less&lt;/a&gt; with color conversion functions and &lt;code&gt;String.replaceAll()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;current-state-of-the-tool&quot;&gt;Current state of the tool&lt;/h1&gt;
+&lt;p&gt;While none of the above libraries are fit for general consumption yet, the page you&amp;#39;re reading was generated with my rewritten Deno-based tool. Other than cleaning up the code, adding tests, and releasing everything, the only functionality that is currently missing is:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Command line configuration arguments&lt;/li&gt;
+&lt;li&gt;Test web server with automatic reloading&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The first one should be easy, and I think the second one shouldn&amp;#39;t be too hard either (hopefully just a matter of injecting a script to connect to a WebSocket that pushes out reload requests based on &lt;a href=&quot;https://doc.deno.land/builtin/stable#Deno.watchFs&quot;&gt;Deno.watchFs()&lt;/a&gt;).&lt;/p&gt;
+&lt;h1 id=&quot;a-parting-note&quot;&gt;A parting note&lt;/h1&gt;
+&lt;p&gt;So there you have it. Depending on how you count, this is either the 4th or 5th static site generator I&amp;#39;ve built. I like to hope this will be my last.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Why I&apos;m starting to sour on Node and NPM}</title>
 <id>https://log.schemescape.com/posts/web-development/souring-on-npm.html</id>
@@ -511,72 +559,6 @@ const add = (a, b) =&amp;gt; a + b;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;As noted previously, the entire site can viewed directly from the file system (no web server required).&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Metalsmith&apos;s downsides}</title>
-<id>https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/metalsmith-downsides.html"/>
-<updated>2021-10-14T00:00:00.000Z</updated>
-<summary type="text">I&apos;m using Metalsmith to generate this site and, while I generally like it, it&apos;s not perfect. Here are some of Metalsmith&apos;s downsides.</summary>
-<content type="html">&lt;p&gt;After &lt;a href=&quot;comparison.html&quot;&gt;testing out a bunch of static site generators&lt;/a&gt;, I settled on using &lt;a href=&quot;metalsmith.html&quot;&gt;Metalsmith&lt;/a&gt; for this site. I like that Metalsmith has a simple design that can be easily extended with plugins (either custom or &amp;quot;off the shelf&amp;quot;), but that&amp;#39;s not to say that Metalsmith is perfect.&lt;/p&gt;
-&lt;p&gt;Let&amp;#39;s dive into the downsides of Metalsmith.&lt;/p&gt;
-&lt;h1 id=&quot;is-metalsmith-being-maintained&quot;&gt;Is Metalsmith being maintained?&lt;/h1&gt;
-&lt;p&gt;There&amp;#39;s the question of ownership and maintenance. Metalsmith was created by &lt;a href=&quot;https://segment.com/&quot;&gt;Segment&lt;/a&gt;, and the &lt;a href=&quot;https://github.com/segmentio/metalsmith&quot;&gt;main repository&lt;/a&gt; lives under their GitHub account. Maintenance duties were &lt;a href=&quot;https://github.com/segmentio/metalsmith/pull/324/files&quot;&gt;transferred in 2018&lt;/a&gt;, but there have been no nontrivial commits since then.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;A pessimistic view is that Metalsmith is a zombie project.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s possible that Metalsmith is simple enough that it doesn&amp;#39;t &lt;em&gt;need&lt;/em&gt; any updates, but if you do run into a problem with Metalsmith itself, you&amp;#39;re probably going to have to fix it yourself.&lt;/p&gt;
-&lt;p&gt;This, to me, is probably the biggest downside of building on top of Metalsmith.&lt;/p&gt;
-&lt;h1 id=&quot;are-the-plugins-being-maintained&quot;&gt;Are the plugins being maintained?&lt;/h1&gt;
-&lt;p&gt;If you take the optimistic view that Metalsmith&amp;#39;s core is rock-solid and not in need of updates, how about the plugins? In many cases, &lt;strong&gt;plugins also appear to be unmaintained&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;For example, take the &lt;a href=&quot;https://github.com/segmentio/metalsmith-collections&quot;&gt;metalsmith-collections&lt;/a&gt; plugin. Its last commit was 3 years ago, but even worse, the &lt;a href=&quot;https://github.com/segmentio/metalsmith-collections&quot;&gt;associated NPM package&lt;/a&gt; was published 5 years ago. In fact, the published package &lt;a href=&quot;https://github.com/segmentio/metalsmith-collections/issues/91&quot;&gt;doesn&amp;#39;t even contain the most up-to-date version of the plugin&lt;/a&gt;. I ran into this particular issue because I wanted to use the plugin&amp;#39;s &lt;code&gt;filterBy&lt;/code&gt; option, but that functionality isn&amp;#39;t actually present in the NPM package&amp;#39;s version.&lt;/p&gt;
-&lt;p&gt;This is unfortunate, but there&amp;#39;s nothing stopping you from forking and updating plugins yourself.&lt;/p&gt;
-&lt;h1 id=&quot;official-forum-sign-up-requirements&quot;&gt;Official forum sign-up requirements&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&amp;#39;s home page&lt;/a&gt; points to a &lt;a href=&quot;https://gitter.im/&quot;&gt;Gitter&lt;/a&gt; community, which I interpret to be the official forum.&lt;/p&gt;
-&lt;p&gt;While I like the &lt;em&gt;idea&lt;/em&gt; of an open source Discord alternative, I was very disappointed with my first experience using (well, attemping to use) Gitter.&lt;/p&gt;
-&lt;p&gt;Gitter was originally created as a way to chat about GitHub projects, so it was naturally tied to GitHub accounts. This was fine then, but even today Gitter requires one of the following accounts for login:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;GitHub&lt;/li&gt;
-&lt;li&gt;GitLab&lt;/li&gt;
-&lt;li&gt;Twitter&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I use GitHub and have a high opinion of both it and GitLab (Twitter, not so much). But Gitter&amp;#39;s &lt;em&gt;default, required&lt;/em&gt; access requests are repulsive:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;GitHub: &amp;quot;This application will be able to read your ... private project boards.&amp;quot;&lt;/li&gt;
-&lt;li&gt;GitLab: &amp;quot;Grants complete read/write access ... including all groups and projects ...&amp;quot;&lt;/li&gt;
-&lt;li&gt;Twitter: Requires a phone number to sign up (that I assume Twitter turns around and sells to advertisers)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;If I already used Twitter, that would be an acceptable option here, but I have no interest in donating my personal data to yet another gigantic advertising company. Without a Twitter account, none of the login options seem even remotely reasonable.&lt;/p&gt;
-&lt;p&gt;In the end, I created a dummy GitHub account just to access Gitter (which essentially negates any user benefit of using OAuth).&lt;/p&gt;
-&lt;h1 id=&quot;plugin-ordering-and-lack-of-history&quot;&gt;Plugin ordering and lack of history&lt;/h1&gt;
-&lt;p&gt;My favorite aspect of Metalsmith is its minimal design that can be easily extended with simple plugins, but I think the design is perhaps &lt;em&gt;too&lt;/em&gt; minimal.&lt;/p&gt;
-&lt;p&gt;Internally, Metalsmith manages a mapping of files to properties, and this mapping is handed from one plugin to the next, sequentially (and asynchronously). Each plugin &lt;em&gt;mutates&lt;/em&gt; the mapping however it wants, and eventually Metalsmith&amp;#39;s &lt;code&gt;build()&lt;/code&gt; function writes out the resulting files.&lt;/p&gt;
-&lt;p&gt;This is indeed a very simple design, but there is a subtle problem lurking: since each plugin can do whatever it wants, information can be changed or lost along the chain. This leads to numerous problems. Here are some examples:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-markdown&quot;&gt;metalsmith-markdown&lt;/a&gt; renames files from &amp;quot;page.md&amp;quot; to &amp;quot;page.html&amp;quot;&lt;ul&gt;
-&lt;li&gt;Subsequent plugins can no longer distinguish which HTML files were generated from Markdown and which were just static HTML files&lt;/li&gt;
-&lt;li&gt;This makes supporting relative links (e.g. &lt;code&gt;./other-page.md&lt;/code&gt;) fragile (e.g. &lt;code&gt;./static-page.html&lt;/code&gt;, referring to a static HTML page--not generated using Markdown--is ambiguous)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/segmentio/metalsmith-permalinks&quot;&gt;metalsmith-permalinks&lt;/a&gt; moves files into different directories&lt;ul&gt;
-&lt;li&gt;This plugin has to come before &lt;a href=&quot;https://github.com/radiovisual/metalsmith-rootpath&quot;&gt;metalsmith-rootpath&lt;/a&gt; to correctly construct a &amp;quot;relative path to root&amp;quot; property&lt;/li&gt;
-&lt;li&gt;Replacing paths also makes it essentially impossible to unambiguously link a source file to its destination, without adding additional plugins to the chain&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The current behavior is simple to reason over, and can be solved without changing the architecture (using more plugins!), but it is initially surprising, and certainly makes the tool harder to use.&lt;/p&gt;
-&lt;h1 id=&quot;configuring-markdown&quot;&gt;Configuring Markdown&lt;/h1&gt;
-&lt;p&gt;One less prominent challenge with Metalsmith&amp;#39;s architecture is that there is no mechanism (or convention) for communicating between plugins. Probably an uncommon scenario, but it would be nice to allow plugins to configure Metalsmith&amp;#39;s Markdown options (without having to use an entirely separate Markdown plugin).&lt;/p&gt;
-&lt;h1 id=&quot;so-do-i-hate-metalsmith-no&quot;&gt;So do I hate Metalsmith? No!&lt;/h1&gt;
-&lt;p&gt;Honestly, this article makes a compelling case for avoiding Metalsmith--yet, I still use it. Why?&lt;/p&gt;
-&lt;p&gt;As someone who&amp;#39;s familiar with JavaScript, Node, and HTML/CSS, Metalsmith is simply the easiest static site generator for me to use:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;It&amp;#39;s simple enough that I know exactly what it&amp;#39;s doing&lt;/li&gt;
-&lt;li&gt;It&amp;#39;s easy to customize and extend&lt;/li&gt;
-&lt;li&gt;Simple plugins already exist for most of the things I want to do&lt;/li&gt;
-&lt;li&gt;It supports &lt;a href=&quot;https://github.com/jstransformers&quot;&gt;pretty much any template language&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;I can even debug it, just by hitting F5 in VS Code&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Metalsmith is really giving me the best of both using a pre-built static site generator and creating my own. It&amp;#39;s possible that the lack of maintenance will force me to switch to something else eventually, but for now I&amp;#39;m happy with it.&lt;/p&gt;
 </content>
 </entry>
 </feed>
