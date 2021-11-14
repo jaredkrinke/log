@@ -39,7 +39,7 @@
 <pre><code class="language-txt">$ deno run --allow-read=content,out --allow-write=out main.js
 </code></pre>
 <p>Additionally, Deno provides a <a href="https://deno.land/std">standard library</a> that has been audited by the Deno authors, so you no longer have to pull in modules from unknown contributors just for common tasks like, say, parsing YAML front matter.</p>
-<p>Deno also has a focus on the full developer experience and includes facilities for testing, static analysis, dependenc analysis, stand-alone executables, and more. Again, this means that you don&#39;t have to rely on tens or hundreds of NPM packages just to run some unit tests or publish a stand-alone tool. Oh, and Deno fully embraces <code>await</code> and <code>async</code>, so no more dealing with tedious error-first callback patterns!</p>
+<p>Deno also has a focus on the full developer experience and includes facilities for testing, static analysis, dependency analysis, stand-alone executables, and more. Again, this means that you don&#39;t have to rely on tens or hundreds of NPM packages just to run some unit tests or publish a stand-alone tool. Oh, and Deno fully embraces <code>await</code> and <code>async</code>, so no more dealing with tedious error-first callback patterns!</p>
 <h1 id="goodbye-metalsmith">Goodbye, Metalsmith</h1>
 <p>While Deno has some <a href="https://deno.land/manual@v1.16.0/npm_nodejs">facilities for running Node/NPM modules</a>, I decided that, in order to limit the number of dependencies I take on and to leverage async language features, I would essentially recreate Metalsmith for Deno. Fortunately, Metalsmith is so simple, my prototype was under 150 lines of code.</p>
 <p>For now, I&#39;m calling this module Goldsmith. Here&#39;s how Goldsmith differs from Metalsmith:</p>
@@ -55,7 +55,7 @@
 <p>Given that <em>most</em> of the Metalsmith plugins I was using were trivially simple, I decided that I&#39;d just rewrite the ones I needed from scratch in TypeScript.</p>
 <p>Along the way, I made a few changes to further reduce the number of dependencies:</p>
 <ul>
-<li>Standardized on regular expressoins for file matching instead of using various glob libraries</li>
+<li>Standardized on regular expressions for file matching instead of using various glob libraries</li>
 <li>Replaced Handlebars with a trivially simple template language based on JavaScript&#39;s <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates">tagged template literals</a></li>
 <li>Replaced my usage of <a href="https://lesscss.org/">Less</a> with color conversion functions and <code>String.replaceAll()</code></li>
 </ul>
@@ -66,6 +66,7 @@
 <li>Test web server with automatic reloading</li>
 </ol>
 <p>The first one should be easy, and I think the second one shouldn&#39;t be too hard either (hopefully just a matter of injecting a script to connect to a WebSocket that pushes out reload requests based on <a href="https://doc.deno.land/builtin/stable#Deno.watchFs">Deno.watchFs()</a>).</p>
+<p><strong>Update</strong>: Both of these are now implemented.</p>
 <h1 id="a-parting-note">A parting note</h1>
 <p>So there you have it. Depending on how you count, this is either the 4th or 5th static site generator I&#39;ve built. I like to hope this will be my last.</p>
 
