@@ -24,7 +24,7 @@ $ deno run --allow-read=content,out --allow-write=out main.js
 
 Additionally, Deno provides a [standard library](https://deno.land/std) that has been audited by the Deno authors, so you no longer have to pull in modules from unknown contributors just for common tasks like, say, parsing YAML front matter.
 
-Deno also has a focus on the full developer experience and includes facilities for testing, static analysis, dependenc analysis, stand-alone executables, and more. Again, this means that you don't have to rely on tens or hundreds of NPM packages just to run some unit tests or publish a stand-alone tool. Oh, and Deno fully embraces `await` and `async`, so no more dealing with tedious error-first callback patterns!
+Deno also has a focus on the full developer experience and includes facilities for testing, static analysis, dependency analysis, stand-alone executables, and more. Again, this means that you don't have to rely on tens or hundreds of NPM packages just to run some unit tests or publish a stand-alone tool. Oh, and Deno fully embraces `await` and `async`, so no more dealing with tedious error-first callback patterns!
 
 # Goodbye, Metalsmith
 While Deno has some [facilities for running Node/NPM modules](https://deno.land/manual@v1.16.0/npm_nodejs), I decided that, in order to limit the number of dependencies I take on and to leverage async language features, I would essentially recreate Metalsmith for Deno. Fortunately, Metalsmith is so simple, my prototype was under 150 lines of code.
@@ -41,7 +41,7 @@ Given that *most* of the Metalsmith plugins I was using were trivially simple, I
 
 Along the way, I made a few changes to further reduce the number of dependencies:
 
-* Standardized on regular expressoins for file matching instead of using various glob libraries
+* Standardized on regular expressions for file matching instead of using various glob libraries
 * Replaced Handlebars with a trivially simple template language based on JavaScript's [tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates)
 * Replaced my usage of [Less](https://lesscss.org/) with color conversion functions and `String.replaceAll()`
 
@@ -52,6 +52,8 @@ While none of the above libraries are fit for general consumption yet, the page 
 1. Test web server with automatic reloading
 
 The first one should be easy, and I think the second one shouldn't be too hard either (hopefully just a matter of injecting a script to connect to a WebSocket that pushes out reload requests based on [Deno.watchFs()](https://doc.deno.land/builtin/stable#Deno.watchFs)).
+
+**Update**: Both of these are now implemented.
 
 # A parting note
 So there you have it. Depending on how you count, this is either the 4th or 5th static site generator I've built. I like to hope this will be my last.
