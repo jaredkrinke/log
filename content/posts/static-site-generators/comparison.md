@@ -2,7 +2,7 @@
 title: Finding the right static site generator
 description: There are hundreds of static site generators available today for creating a blog. Here I compare some of the most popular SSGs.
 keywords: [metalsmith,hugo,eleventy,zola]
-date: 2021-09-12
+date: 2021-09-12 01:00:00
 ---
 
 Having already described [my ideal static site generator](overview.md), I'm investigating tools that hopefully meet my needs.
