@@ -7,10 +7,10 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-11-24T04:57:45.127Z</updated>
+<updated>2021-11-27T02:27:39.641Z</updated>
 
 <entry>
-<title>Designing md2blog 2.0}</title>
+<title>Designing md2blog 2.0</title>
 <id>https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html</id>
 <link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html"/>
 <updated>2021-11-10T00:00:00.000Z</updated>
@@ -59,7 +59,7 @@
 </content>
 </entry>
 <entry>
-<title>Why I&apos;m starting to sour on Node and NPM}</title>
+<title>Why I&apos;m starting to sour on Node and NPM</title>
 <id>https://log.schemescape.com/posts/web-development/souring-on-npm.html</id>
 <link rel="alternate" href="https://log.schemescape.com/posts/web-development/souring-on-npm.html"/>
 <updated>2021-11-05T00:00:00.000Z</updated>
@@ -208,7 +208,7 @@ found 0 vulnerabilities
 </content>
 </entry>
 <entry>
-<title>NPM requires X11 on Debian. Wait, what?}</title>
+<title>NPM requires X11 on Debian. Wait, what?</title>
 <id>https://log.schemescape.com/posts/linux/debian-npm-requires-x11.html</id>
 <link rel="alternate" href="https://log.schemescape.com/posts/linux/debian-npm-requires-x11.html"/>
 <updated>2021-11-04T00:00:00.000Z</updated>
@@ -262,7 +262,7 @@ The following additional packages will be installed:
 </content>
 </entry>
 <entry>
-<title>Embedding VS Code&apos;s Monaco Editor using a CDN}</title>
+<title>Embedding VS Code&apos;s Monaco Editor using a CDN</title>
 <id>https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html</id>
 <link rel="alternate" href="https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html"/>
 <updated>2021-11-02T00:00:00.000Z</updated>
@@ -368,7 +368,7 @@ The following additional packages will be installed:
 </content>
 </entry>
 <entry>
-<title>Designing md2blog, a zero-config static site generator for dev blogs}</title>
+<title>Designing md2blog, a zero-config static site generator for dev blogs</title>
 <id>https://log.schemescape.com/posts/static-site-generators/md2blog-design.html</id>
 <link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-design.html"/>
 <updated>2021-10-27T00:00:00.000Z</updated>
