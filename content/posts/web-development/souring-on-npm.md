@@ -2,6 +2,7 @@
 title: Why I'm starting to sour on Node and NPM
 description: Node made programming fun for me again, but security concerns might drive me away.
 date: 2021-11-05
+keywords: [deno]
 ---
 # Node
 When I first heard about [Node](https://nodejs.org/en/) back in 2013, I thought it was a silly idea.
