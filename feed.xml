@@ -7,8 +7,71 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-12-05T16:20:34.219Z</updated>
+<updated>2021-12-06T17:58:31.186Z</updated>
 
+<entry>
+<title>One month with Deno (the good parts)</title>
+<id>https://log.schemescape.com/posts/web-development/one-month-with-deno.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/web-development/one-month-with-deno.html"/>
+<updated>2021-12-06T00:00:00.000Z</updated>
+<summary type="text">I made the switch from Node to Deno recently. Here&apos;s what I&apos;ve liked after a month of using Deno.</summary>
+<content type="html">&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
+&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/web-development/souring-on-npm.html&quot;&gt;souring on NPM&lt;/a&gt; (due to unnecessarily huge dependency trees and security concerns), I decided to give &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt; a try. Deno supports sand-boxing, TypeScript, and ES modules out of the box. Deno has a standard library, along with a simple and transparent module registry, and also comes with with handy tools for bundling and static analysis.&lt;/p&gt;
+&lt;h1 id=&quot;what-ive-liked-about-deno&quot;&gt;What I&amp;#39;ve liked about Deno&lt;/h1&gt;
+&lt;h2 id=&quot;sand-boxing&quot;&gt;Sand-boxing&lt;/h2&gt;
+&lt;p&gt;Deno disallows file system access, network access, and other privileges by default. You can provide fine-grained permissions on the command line, e.g. &lt;code&gt;--allow-read=file.txt&lt;/code&gt; will let the script read &lt;code&gt;file.txt&lt;/code&gt; in the current directory.&lt;/p&gt;
+&lt;p&gt;In an ideal world this wouldn&amp;#39;t be necessary, but given that hackers have been targeting package registries such as NPM, this is a step in the right direction. As an example, say that I want to find a quick tool to convert a file from one format to another. Here are some options for doing this:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;In the past, you might just try to find a tool for this purpose, download it, and run it.&lt;ul&gt;
+&lt;li&gt;Today, that would be a terrible idea because the tool runs as your user and could, in an extreme example, contain ransomware.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;In the recent past, you might do essentially the same as above, just downloading from NPM and running in Node.&lt;ul&gt;
+&lt;li&gt;Again, very risky.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Without Deno, you could run the tool in a container or VM (or restricted user).&lt;ul&gt;
+&lt;li&gt;This can be safe, but inconvenient.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;With Deno, you might just run the tool with no extra privileges.&lt;ul&gt;
+&lt;li&gt;If the tool just reads from standard input and writes to standard output, great!&lt;/li&gt;
+&lt;li&gt;If the tool has malware that tries to write to the file system or access the network, Deno will block it.&lt;/li&gt;
+&lt;li&gt;Of course, this isn&amp;#39;t 100% safe (&lt;a href=&quot;https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)&quot;&gt;Spectre&lt;/a&gt; worked from inside the web browser&amp;#39;s sand box, after all), but it&amp;#39;s much better than nothing!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Full details on Deno&amp;#39;s permissions are &lt;a href=&quot;https://deno.land/manual@v1.16.4/getting_started/permissions&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;audited-standard-library&quot;&gt;Audited standard library&lt;/h2&gt;
+&lt;p&gt;One of the reasons that NPM projects tend to have gigantic dependency trees is that JavaScript (unlike most popular programming languages of today) doesn&amp;#39;t really come with a standard library. This meant that common tasks such as parsing command line arguments are farmed out to dependencies, which then of course pull in whatever dependencies those authors felt like using, and so on until you have hundreds of dependencies (yes, that happened to me pretty quickly).&lt;/p&gt;
+&lt;p&gt;Deno brings JavaScript (and TypeScript) into the modern era by &lt;a href=&quot;https://deno.land/std@0.117.0&quot;&gt;providing a standard library&lt;/a&gt; containing code that has been audited by the Deno authors. The library is not yet comprehensive and navigating the documentation is currently unpleasant, but having a set of trusted dependencies that will be maintained by the Deno authors is a relief after coming from the Node/NPM ecosystem.&lt;/p&gt;
+&lt;h2 id=&quot;native-typescript-support&quot;&gt;Native TypeScript support&lt;/h2&gt;
+&lt;p&gt;I like JavaScript for prototyping, but I like TypeScript and its tooling more. Honestly, if you know what you&amp;#39;re doing, the compiler should be your friend, helpfully pointing out when you&amp;#39;ve made a typo or not quite lined up types across a function or module boundary. The problem with TypeScript for me has always been setting up a development environment and build scripts.&lt;/p&gt;
+&lt;p&gt;With Deno, you get the benefits of TypeScript without having to do any special setup. Just use the &lt;code&gt;.ts&lt;/code&gt; file extension, and Deno will automatically type-check, compile, and run your code. You can even publish your module as TypeScript and Deno scripts can consume it without doing anything special.&lt;/p&gt;
+&lt;p&gt;If you&amp;#39;re interested in TypeScript, but struggled with Node and NPM (and &lt;code&gt;ts-node&lt;/code&gt;, etc.), give Deno a try!&lt;/p&gt;
+&lt;h2 id=&quot;web-standard-apis&quot;&gt;Web standard APIs&lt;/h2&gt;
+&lt;p&gt;One of the dreams of Node was to write &amp;quot;isomorphic&amp;quot; code that runs both in Node and the browser. Deno brings this one step closer to reality by embracing browser APIs (e.g. &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API&quot;&gt;fetch&lt;/a&gt;). This is helpful because you can learn about the browser while writing code for Deno and vice versa.&lt;/p&gt;
+&lt;h2 id=&quot;simple-transparent-module-registry&quot;&gt;Simple, transparent module registry&lt;/h2&gt;
+&lt;p&gt;A major complaint I have with most package managers and package registries is that they don&amp;#39;t make it easy to see what is inside a package before downloading it. NPM is especially bad here because, by default, installing a package can run arbitrary scripts, so you might get malware just by trying to check and see if a package contains malware (this is your reminder to enable NPM&amp;#39;s &lt;a href=&quot;https://docs.npmjs.com/cli/v7/commands/npm-install#ignore-scripts&quot;&gt;ignore-scripts&lt;/a&gt; setting).&lt;/p&gt;
+&lt;p&gt;Deno&amp;#39;s module registry is &lt;a href=&quot;https://deno.land/x/&quot;&gt;https://deno.land/x/&lt;/a&gt; and all it does is mirror code from GitHub when tags are pushed. This means that you can browse the &lt;em&gt;exact&lt;/em&gt; code you&amp;#39;ll be downloading prior to actually downloading anything. It also automatically generates documentation from JSDoc comments and helpfully displays the list of (static) external dependencies for a given file.&lt;/p&gt;
+&lt;p&gt;I do have concerns about tying the module registry so intimately to GitHub, but for now I just like having a transparent registry that takes the guesswork out of auditing dependencies.&lt;/p&gt;
+&lt;h2 id=&quot;bundlercompiler-script-installer&quot;&gt;Bundler/compiler, script installer&lt;/h2&gt;
+&lt;p&gt;One theme with Deno is that it has a focus on the entire development experience. Sometimes this is called having &amp;quot;batteries included&amp;quot;. For example, one common problem with scripting languages is that sharing a tool usually requires also sharing the entire runtime environment. E.g. if I want to run a Python script, I need a Python environment (in Python&amp;#39;s case, this is probably even true if I already have Python installed, thanks to frequent breaking changes).&lt;/p&gt;
+&lt;p&gt;Deno simplifies this by including a &lt;a href=&quot;https://deno.land/manual@v1.16.4/tools/compiler&quot;&gt;built in bundler and compiler&lt;/a&gt; that packages up a script, its dependencies, and the Deno runtime into a single (~30 MB) download. Obviously, this isn&amp;#39;t efficient if you&amp;#39;re using a lot of Deno tools, but it&amp;#39;s indispensible if you don&amp;#39;t care about Deno and just want to use one specific Deno-based tool.&lt;/p&gt;
+&lt;p&gt;For a more efficient option, Deno also includes a &lt;a href=&quot;https://deno.land/manual@v1.16.4/tools/script_installer&quot;&gt;script installer&lt;/a&gt; that allows you to just download and install a specific script (and its dependencies), relying on the version of Deno you already have.&lt;/p&gt;
+&lt;p&gt;Together, these mean that if someone wants to use your tool, they have two great options (both of which can be supported without third party tools/plugins):&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Just download the self-contained executable and run it,&lt;/li&gt;
+&lt;li&gt;Or just install your script with &lt;code&gt;deno install&lt;/code&gt; and run it&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;built-in-support-for-testing-and-code-coverage&quot;&gt;Built-in support for testing and code coverage&lt;/h2&gt;
+&lt;p&gt;While &lt;a href=&quot;https://deno.land/manual@v1.16.4/testing&quot;&gt;Deno&amp;#39;s testing framework&lt;/a&gt; isn&amp;#39;t as mature or featureful as some of the Node testing frameworks (although &lt;a href=&quot;https://deno.land/manual@v1.16.4/testing#integration-with-testing-libraries&quot;&gt;integrations with other libraries exist&lt;/a&gt;), there is one advantage: there&amp;#39;s no install or setup required (no more fiddling with dependencies or test scripts!).&lt;/p&gt;
+&lt;p&gt;For example, if I want to write some quick unit tests for &lt;code&gt;foo.ts&lt;/code&gt;, I can just create &lt;code&gt;foo.test.ts&lt;/code&gt;, write some tests (see the previous link for example code), and then run &lt;code&gt;deno test&lt;/code&gt;. It will find my test file, run the tests, and print out the results.&lt;/p&gt;
+&lt;p&gt;I love it when tools just do what I want without any effort!&lt;/p&gt;
+&lt;h1 id=&quot;but-its-not-all-good&quot;&gt;But it&amp;#39;s not all good...&lt;/h1&gt;
+&lt;p&gt;Although I&amp;#39;ve found a lot to like about Deno, not everything has been great (or even good... or even acceptable). Stay tuned for part 2: the gripe session.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Designing md2blog 2.0</title>
 <id>https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html</id>
@@ -365,201 +428,6 @@ The following additional packages will be installed:
 &lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;body&lt;/span&gt;&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;html&lt;/span&gt;&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
-</content>
-</entry>
-<entry>
-<title>Designing md2blog, a zero-config static site generator for dev blogs</title>
-<id>https://log.schemescape.com/posts/static-site-generators/md2blog-design.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-design.html"/>
-<updated>2021-10-27T00:00:00.000Z</updated>
-<summary type="text">Here&apos;s the design of my in-progress static site generator, md2blog.</summary>
-<content type="html">&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/comparison.html&quot;&gt;investigating many popular static site generators&lt;/a&gt;, I wasn&amp;#39;t able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and numerous plugins) to get what I wanted. I&amp;#39;m calling the resulting tool &lt;strong&gt;md2blog&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;In this post, I&amp;#39;m going to cover the design of md2blog. Note that md2blog is a work in progress that has not been released yet.&lt;/p&gt;
-&lt;h1 id=&quot;design-goals&quot;&gt;Design goals&lt;/h1&gt;
-&lt;p&gt;Here&amp;#39;s the overarching goal of md2blog:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Convert a &lt;em&gt;self-contained, organized&lt;/em&gt; pile of &lt;a href=&quot;https://daringfireball.net/projects/markdown/&quot;&gt;Markdown&lt;/a&gt; posts into a &lt;em&gt;minimal, but fully functional&lt;/em&gt; static blog, requiring &lt;em&gt;zero configuration&lt;/em&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;The key differentiator for md2blog is the &amp;quot;self-contained, organized&amp;quot; part. By this, I mean:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Relative links between Markdown files (including anchors) &amp;quot;just work&amp;quot;&lt;/strong&gt; (and are validated at build time)&lt;/li&gt;
-&lt;li&gt;Source Markdown files &lt;strong&gt;can be viewed (with links and images) in any Markdown previewer&lt;/strong&gt; (e.g. VS Code or GitHub)&lt;/li&gt;
-&lt;li&gt;Posts are &lt;strong&gt;implicitly categorized based on directory structure&lt;/strong&gt; (supplemental tags are also supported)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Additionally, the produced site is &amp;quot;minimal, but fully functional&amp;quot; in the following sense:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Page templates use &lt;strong&gt;clean, semantic HTML&lt;/strong&gt; with only a few kilobytes of CSS (and no JavaScript)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Relative links are used wherever possible&lt;/strong&gt;, so the site can be hosted anywhere (or even viewed directly from the file system)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Syntax highlighting&lt;/strong&gt; is automatically added to code blocks&lt;/li&gt;
-&lt;li&gt;An &lt;a href=&quot;https://validator.w3.org/feed/docs/atom.html&quot;&gt;Atom&lt;/a&gt;/RSS news feed is automatically generated&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Note that &amp;quot;zero configuration&amp;quot; implies that md2blog is highly opinionated, to the point that there are no options to configure. &lt;strong&gt;Instead of fiddling with options and themes, the user&amp;#39;s focus is strictly on writing and publishing content.&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&quot;input&quot;&gt;Input&lt;/h1&gt;
-&lt;p&gt;Here&amp;#39;s a more detailed look at building a dev blog with md2blog.&lt;/p&gt;
-&lt;h2 id=&quot;directory-structure&quot;&gt;Directory structure&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;content/&lt;/code&gt;: Root directory that contains all source content for the site&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;site.json&lt;/code&gt;: Site-wide metadata&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;assets/&lt;/code&gt;: Directory for assets (e.g. images)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;posts/&lt;/code&gt;: Directory for all posts&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;category1/&lt;/code&gt;: Directory for posts related to &amp;quot;category1&amp;quot;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;post1.md&lt;/code&gt;: Post related to &amp;quot;category1&amp;quot;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;post2.md&lt;/code&gt;: Another &amp;quot;category1&amp;quot; post&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;category2/&lt;/code&gt;: Another category&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;post3.md&lt;/code&gt;: &amp;quot;category2&amp;quot; post&lt;/li&gt;
-&lt;li&gt;etc.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;sitejson&quot;&gt;site.json&lt;/h2&gt;
-&lt;p&gt;Here&amp;#39;s an example &lt;code&gt;site.json&lt;/code&gt; file:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;hljs-attr&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;My dev blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;hljs-attr&quot;&gt;&amp;quot;url&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;https://mydevblog.com/&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;hljs-attr&quot;&gt;&amp;quot;description&amp;quot;&lt;/span&gt;&lt;span class=&quot;hljs-punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;A very good dev blog indeed&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;hljs-punctuation&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Schema:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Field&lt;/th&gt;
-&lt;th&gt;Type&lt;/th&gt;
-&lt;th&gt;Required?&lt;/th&gt;
-&lt;th&gt;Note&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;string&lt;/td&gt;
-&lt;td&gt;Required&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;url&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;string&lt;/td&gt;
-&lt;td&gt;Recommended&lt;/td&gt;
-&lt;td&gt;Must end with &amp;quot;/&amp;quot;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;string&lt;/td&gt;
-&lt;td&gt;Optional&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;Note that the site &lt;em&gt;will&lt;/em&gt; generally work without specifying a URL, but the Atom feed will be forced to use relative links instead of absolute URLs.&lt;/p&gt;
-&lt;h2 id=&quot;posts&quot;&gt;Posts&lt;/h2&gt;
-&lt;p&gt;Posts are written in Markdown and use YAML for front matter.&lt;/p&gt;
-&lt;h3 id=&quot;front-matter&quot;&gt;Front matter&lt;/h3&gt;
-&lt;p&gt;Here&amp;#39;s an example showing all of the supported YAML front matter properties (&lt;code&gt;keywords&lt;/code&gt; and &lt;code&gt;draft&lt;/code&gt; are optional, the rest are required):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-yaml&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;hljs-attr&quot;&gt;title:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;First&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;post&lt;/span&gt;
-&lt;span class=&quot;hljs-attr&quot;&gt;description:&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;First&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;blog,&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;relative&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;link.&lt;/span&gt;
-&lt;span class=&quot;hljs-attr&quot;&gt;date:&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;2021-10-26&lt;/span&gt;
-&lt;span class=&quot;hljs-attr&quot;&gt;keywords:&lt;/span&gt; [&lt;span class=&quot;hljs-string&quot;&gt;additional-tag&lt;/span&gt;]
-&lt;span class=&quot;hljs-attr&quot;&gt;draft:&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;true&lt;/span&gt;
-&lt;span class=&quot;hljs-meta&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;hljs-string&quot;&gt;(Markdown&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;content&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;follows...)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Schema:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Field&lt;/th&gt;
-&lt;th&gt;Type&lt;/th&gt;
-&lt;th&gt;Required?&lt;/th&gt;
-&lt;th&gt;Note&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;string&lt;/td&gt;
-&lt;td&gt;Required&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;string&lt;/td&gt;
-&lt;td&gt;Required&lt;/td&gt;
-&lt;td&gt;This text is displayed on index pages&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;date&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;YYYY-MM-DD&lt;/td&gt;
-&lt;td&gt;Required&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;keywords&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;string[]&lt;/td&gt;
-&lt;td&gt;Optional&lt;/td&gt;
-&lt;td&gt;Additional tags for categorizing the post&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;draft&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Boolean&lt;/td&gt;
-&lt;td&gt;Optional&lt;/td&gt;
-&lt;td&gt;If &lt;code&gt;true&lt;/code&gt;, the post will only be built when serving locally&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;h3 id=&quot;content&quot;&gt;Content&lt;/h3&gt;
-&lt;p&gt;Here&amp;#39;s example Markdown content, demonstrating relative links (these links get translated to the corresponding HTML files and checked at build time; they also work in VS Code&amp;#39;s and GitHub&amp;#39;s Markdown previewers):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;&lt;span class=&quot;hljs-section&quot;&gt;# Relative links&lt;/span&gt;
-Here&amp;#x27;s a relative link to another post in this category: [&lt;span class=&quot;hljs-string&quot;&gt;link&lt;/span&gt;](&lt;span class=&quot;hljs-link&quot;&gt;post2.md&lt;/span&gt;)!
-
-And here&amp;#x27;s one to another category, with an anchor: [&lt;span class=&quot;hljs-string&quot;&gt;link 2&lt;/span&gt;](&lt;span class=&quot;hljs-link&quot;&gt;../category2/post3.md#some-section&lt;/span&gt;).
-
-&lt;span class=&quot;hljs-section&quot;&gt;# Image&lt;/span&gt;
-Here&amp;#x27;s an image:
-![&lt;span class=&quot;hljs-string&quot;&gt;test&lt;/span&gt;](&lt;span class=&quot;hljs-link&quot;&gt;../../assets/test.png&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Finally, here is an example of including a code block (specifying the language is recommended, but optional):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-markdown&quot;&gt;&lt;span class=&quot;hljs-section&quot;&gt;# Code block&lt;/span&gt;
-Here&amp;#x27;s some code:
-
-&lt;span class=&quot;hljs-code&quot;&gt;```javascript
-const add = (a, b) =&amp;gt; a + b;
-```&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h1 id=&quot;output&quot;&gt;Output&lt;/h1&gt;
-&lt;p&gt;All output is written to the &lt;code&gt;out/&lt;/code&gt; directory. Here&amp;#39;s what the output might look like for the example above:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: Home page&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;404.html&lt;/code&gt;: Error page&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;feed.xml&lt;/code&gt;: Atom news feed&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;posts/&lt;/code&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: Archive page containing links to all posts&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;category1/&lt;/code&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: Index page for &amp;quot;category1&amp;quot;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;post1.html&lt;/code&gt;: Post 1&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;post2.html&lt;/code&gt;: Post 2&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;category2/&lt;/code&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: Index page for &amp;quot;category2&amp;quot;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;post3.html&lt;/code&gt;: Post 3&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;assets/&lt;/code&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;test.png&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;css/&lt;/code&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;style.css&lt;/code&gt;: CSS stylesheet&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;As noted previously, the entire site can viewed directly from the file system (no web server required).&lt;/p&gt;
 </content>
 </entry>
 </feed>
