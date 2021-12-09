@@ -25,7 +25,7 @@ It's a bit sad because, other than this issue, Deno provides the best tooling fo
 ## Node packages generally require third party code
 Ok, so non-Deno TypeScript libraries are out, what about non-Node-specific JavaScript packages on NPM?
 
-First of all, Deno only support ES modules (instead of CommonJS), so first you'll need to restrict yourself to packages that publish an ES module.
+First of all, Deno only support ES modules (instead of CommonJS), so only packages that are shipped as modules could possibly work unmodified.
 
 Additionally, if you're planning to publish a Deno module you don't have the luxury of using Deno's [Node compatibility mode](https://deno.land/manual@v1.16.4/npm_nodejs/compatibility_mode) or using import maps to support dependencies, so you're once again stuck trying to bridge the gap between Deno's "no magic" module resolution algorithm and Node's "nothing *but* magic" approach.
 
