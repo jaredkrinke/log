@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/jaredkrinke/md2blog/main/schema/site.schema.json",
     "title": "Schemescape",
     "url": "https://log.schemescape.com/",
     "description": "Development log of a life-long coder",
