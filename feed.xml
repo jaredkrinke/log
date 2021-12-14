@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-12-14T04:43:37.302Z</updated>
+<updated>2021-12-14T21:43:48.081Z</updated>
 
 <entry>
 <title>One month with Deno (part 2)</title>
@@ -60,7 +60,7 @@
 &lt;/ul&gt;
 &lt;h1 id=&quot;so-will-i-keep-using-deno&quot;&gt;So will I keep using Deno?&lt;/h1&gt;
 &lt;p&gt;More than once, I&amp;#39;ve wondered if working around the limitations of Deno is costing me more time than I&amp;#39;m saving by using Deno. It very well might.&lt;/p&gt;
-&lt;p&gt;In the end, however, I plan to continue using Deno because it provides the best TypeScript runtime I&amp;#39;ve seen, and it&amp;#39;s features (and most of its goals) align with my needs and preferences.&lt;/p&gt;
+&lt;p&gt;In the end, however, I plan to continue using Deno because it provides the best TypeScript runtime I&amp;#39;ve seen, and its features (and most of its goals) align with my needs and preferences.&lt;/p&gt;
 </content>
 </entry>
 <entry>
