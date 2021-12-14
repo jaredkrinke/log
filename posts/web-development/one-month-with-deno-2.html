@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>One month with Deno (part 2)</title>
+<meta name="description" content="I made the switch from Node to Deno recently. Here are the problems with Deno I&#39;ve encountered." />
+<meta name="keywords" content="deno" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "One month with Deno (part 2)",
+  "abstract": "I made the switch from Node to Deno recently. Here are the problems with Deno I've encountered.",
+  "keywords": "web-development,deno",
+  "datePublished": "2021-12-13"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/web-development/index.html">web-development</a></li>
+<li><a href="../../posts/deno/index.html">deno</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/web-development/one-month-with-deno-2.html">One month with Deno (part 2)</a></h1>
+<p><time datetime="2021-12-13">December 13, 2021</time></p>
+</header>
+<p>In <a href="one-month-with-deno.html">part 1</a>, I gushed over Deno&#39;s benefits, including sand-boxing, native TypeScript support, a simple module registry, and more. Here&#39;s part 2 (which paints a less rosy picture).</p>
+<h1 id="problems-with-deno">Problems with Deno</h1>
+<p>Using Deno has come with some significant challenges. Here are the top issues I&#39;ve faced using Deno for the last month. The good news is that people are working on addressing most of these.</p>
+<h2 id="existing-typescript-modules-dont-work">Existing TypeScript modules don&#39;t work</h2>
+<p>Wait, I thought Deno had native TypeScript support. What do you mean TypeScript modules don&#39;t work?</p>
+<p>What I mean is that most TypeScript code that wasn&#39;t written specifically for Deno will (generally) not run unmodified in Deno. This is an unfortunate situation because it means that leveraging existing libraries written in TypeScript is nontrivial. The problem arises from two incompatible stances:</p>
+<ul>
+<li>Deno imports modules by full name (or URL), with <a href="https://deno.land/manual@v1.16.4/typescript/faqs">no magical resolution</a>, so file extensions (or special HTTP headers) are required</li>
+<li>TypeScript <a href="https://github.com/Microsoft/TypeScript/issues/27481">doesn&#39;t change import specifiers</a>, so it insists (or rather it used to insist) that file extensions be omitted (so the runtime can find and load the resulting <code>.js</code> files)</li>
+</ul>
+<p>Regardless of which stance is more righteous, the fact is that existing TypeScript code doesn&#39;t work in Deno unless you do work (e.g. adding <code>.ts</code> to imports or creating an <a href="https://deno.land/manual@v1.16.4/linking_to_external_code/import_maps">import map</a>). There isn&#39;t even any agreement on the best way to work around this annoyance. The trend to Deno-ify TypeScript modules from NPM and publish them on deno.land/x is not encouraging.</p>
+<p>It&#39;s a bit sad because, other than this issue, Deno provides the best tooling for TypeScript I&#39;ve encountered.</p>
+<h2 id="node-packages-generally-require-third-party-code">Node packages generally require third party code</h2>
+<p>Ok, so non-Deno TypeScript libraries are out, what about non-Node-specific JavaScript packages on NPM?</p>
+<p>First of all, Deno only supports ES modules (instead of CommonJS), so only packages that are shipped as modules could possibly work unmodified.</p>
+<p>Additionally, if you&#39;re planning to publish a Deno module you don&#39;t have the luxury of using Deno&#39;s <a href="https://deno.land/manual@v1.16.4/npm_nodejs/compatibility_mode">Node compatibility mode</a> or using import maps to support dependencies, so you&#39;re stuck trying to bridge the gap between Deno&#39;s &quot;no magic&quot; module resolution algorithm and Node&#39;s &quot;nothing <em>but</em> magic&quot; approach.</p>
+<p>Once again, I didn&#39;t see a great option for handling this, especially if you want to leverage <a href="https://definitelytyped.org/">Definitely Typed</a> declarations. The Deno documentation recommends using third party content delivery services, but I currently have no way to vet these CDNs.</p>
+<p>I won&#39;t describe the approach I ended up using to work around this problem because it is, frankly, a terrible (and manual) hack.</p>
+<h2 id="standard-library-licenses-arent-uniform">Standard library licenses aren&#39;t uniform</h2>
+<p>Deno has a standard library! Hooray! Now we can all use the code in whatever project we want as long as we include Deno&#39;s copyright notice...</p>
+<p>...except that the library wasn&#39;t entirely written by the Deno authors, so many of the modules have different copyright notices (e.g. <a href="https://deno.land/std@0.117.0/encoding/yaml.ts">std/encoding/yaml.ts</a>).</p>
+<p>This means that you have to track down all of your dependencies and diligently duplicate their copyright notices in tools created with <code>deno compile</code>. At least Deno restricts contributions to the permissive MIT, BSD, and Apache licenses!</p>
+<h2 id="webassembly-isnt-seamless">WebAssembly isn&#39;t seamless</h2>
+<p>Deno currently loads WebAssembly using <code>fetch</code> (just like in the browser). This sounds like a great idea except for the fact that it requires network and/or file system access. Unfortunately, this means that if you want to use WebAssembly in a library, you have two unappealing options:</p>
+<ul>
+<li>Tell consumers that they need to pass <code>--allow-read</code> or <code>--allow-net</code> in when using your library (negating some of the security benefits of Deno)</li>
+<li>Or Base64-encode your module into an obnoxiously huge TypeScript file</li>
+</ul>
+<p>Deno used to support statically importing WebAssembly (without requiring additional privileges), but that support was removed on the assumption that a forthcoming web standard will eventually solve this problem. Last I read, this is still an open problem.</p>
+<h2 id="bundling-only-emits-javascript">Bundling only emits JavaScript</h2>
+<p>Deno <a href="https://deno.land/manual@v1.16.4/tools/bundler">comes with a simple bundler</a>! Unfortunately, it only emits JavaScript, so you can&#39;t use it for packaging a TypeScript module into a single file (because you&#39;d lose all your type information).</p>
+<p>I have yet to find a bundler for TypeScript. I really hope I won&#39;t have to write one myself!</p>
+<h2 id="theres-no-standard-way-to-specify-long-command-lines">There&#39;s no standard way to specify long command lines</h2>
+<p>I applaud Deno for forcing users to provide permissions on the command line, but those command lines can get pretty long. Additionally, Deno seems to be allergic to configuration files, so instead of putting commands into a configuration file, we just have no standard, cross-platform way to specify how to run code.</p>
+<h2 id="the-formatter-produces-ugly-code">The formatter produces ugly code</h2>
+<p>I like the idea of Deno having a built-in formatter, but I don&#39;t actually like the output. For example, the default is to use 2 spaces for indentation. I don&#39;t know anyone (outside of Deno) who prefers 2 spaces over 4 spaces. I find it makes code harder to read. Additionally, the formatter inserts spaces and newlines in surprising places (again, making the code harder to read).</p>
+<p>I appreciate that automatic code formatting is a difficult problem and that style is usually personal preference, but this is the first formatter I&#39;ve seen that I don&#39;t like.</p>
+<h2 id="bugs-bugs-bugs">Bugs, bugs, bugs</h2>
+<p>Deno is a remarkable project and I really enjoy it, but I have encountered several critical bugs, just in my first month of use. My favorite two examples:</p>
+<ul>
+<li><em>Correct</em> code <em>failing</em> type checking (due to a caching issue)</li>
+<li><em>Incorrect</em> code <em>successfully</em> type checking (due to type checking being unexpectedly skipped)</li>
+</ul>
+<h1 id="so-will-i-keep-using-deno">So will I keep using Deno?</h1>
+<p>More than once, I&#39;ve wondered if working around the limitations of Deno is costing me more time than I&#39;m saving by using Deno. It very well might.</p>
+<p>In the end, however, I plan to continue using Deno because it provides the best TypeScript runtime I&#39;ve seen, and it&#39;s features (and most of its goals) align with my needs and preferences.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

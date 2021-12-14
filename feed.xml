@@ -7,8 +7,62 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-12-09T05:09:52.188Z</updated>
+<updated>2021-12-14T04:28:30.893Z</updated>
 
+<entry>
+<title>One month with Deno (part 2)</title>
+<id>https://log.schemescape.com/posts/web-development/one-month-with-deno-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/web-development/one-month-with-deno-2.html"/>
+<updated>2021-12-13T00:00:00.000Z</updated>
+<summary type="text">I made the switch from Node to Deno recently. Here are the problems with Deno I&apos;ve encountered.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/web-development/one-month-with-deno.html&quot;&gt;part 1&lt;/a&gt;, I gushed over Deno&amp;#39;s benefits, including sand-boxing, native TypeScript support, a simple module registry, and more. Here&amp;#39;s part 2 (which paints a less rosy picture).&lt;/p&gt;
+&lt;h1 id=&quot;problems-with-deno&quot;&gt;Problems with Deno&lt;/h1&gt;
+&lt;p&gt;Using Deno has come with some significant challenges. Here are the top issues I&amp;#39;ve faced using Deno for the last month. The good news is that people are working on addressing most of these.&lt;/p&gt;
+&lt;h2 id=&quot;existing-typescript-modules-dont-work&quot;&gt;Existing TypeScript modules don&amp;#39;t work&lt;/h2&gt;
+&lt;p&gt;Wait, I thought Deno had native TypeScript support. What do you mean TypeScript modules don&amp;#39;t work?&lt;/p&gt;
+&lt;p&gt;What I mean is that most TypeScript code that wasn&amp;#39;t written specifically for Deno will (generally) not run unmodified in Deno. This is an unfortunate situation because it means that leveraging existing libraries written in TypeScript is nontrivial. The problem arises from two incompatible stances:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Deno imports modules by full name (or URL), with &lt;a href=&quot;https://deno.land/manual@v1.16.4/typescript/faqs&quot;&gt;no magical resolution&lt;/a&gt;, so file extensions (or special HTTP headers) are required&lt;/li&gt;
+&lt;li&gt;TypeScript &lt;a href=&quot;https://github.com/Microsoft/TypeScript/issues/27481&quot;&gt;doesn&amp;#39;t change import specifiers&lt;/a&gt;, so it insists (or rather it used to insist) that file extensions be omitted (so the runtime can find and load the resulting &lt;code&gt;.js&lt;/code&gt; files)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Regardless of which stance is more righteous, the fact is that existing TypeScript code doesn&amp;#39;t work in Deno unless you do work (e.g. adding &lt;code&gt;.ts&lt;/code&gt; to imports or creating an &lt;a href=&quot;https://deno.land/manual@v1.16.4/linking_to_external_code/import_maps&quot;&gt;import map&lt;/a&gt;). There isn&amp;#39;t even any agreement on the best way to work around this annoyance. The trend to Deno-ify TypeScript modules from NPM and publish them on deno.land/x is not encouraging.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s a bit sad because, other than this issue, Deno provides the best tooling for TypeScript I&amp;#39;ve encountered.&lt;/p&gt;
+&lt;h2 id=&quot;node-packages-generally-require-third-party-code&quot;&gt;Node packages generally require third party code&lt;/h2&gt;
+&lt;p&gt;Ok, so non-Deno TypeScript libraries are out, what about non-Node-specific JavaScript packages on NPM?&lt;/p&gt;
+&lt;p&gt;First of all, Deno only supports ES modules (instead of CommonJS), so only packages that are shipped as modules could possibly work unmodified.&lt;/p&gt;
+&lt;p&gt;Additionally, if you&amp;#39;re planning to publish a Deno module you don&amp;#39;t have the luxury of using Deno&amp;#39;s &lt;a href=&quot;https://deno.land/manual@v1.16.4/npm_nodejs/compatibility_mode&quot;&gt;Node compatibility mode&lt;/a&gt; or using import maps to support dependencies, so you&amp;#39;re stuck trying to bridge the gap between Deno&amp;#39;s &amp;quot;no magic&amp;quot; module resolution algorithm and Node&amp;#39;s &amp;quot;nothing &lt;em&gt;but&lt;/em&gt; magic&amp;quot; approach.&lt;/p&gt;
+&lt;p&gt;Once again, I didn&amp;#39;t see a great option for handling this, especially if you want to leverage &lt;a href=&quot;https://definitelytyped.org/&quot;&gt;Definitely Typed&lt;/a&gt; declarations. The Deno documentation recommends using third party content delivery services, but I currently have no way to vet these CDNs.&lt;/p&gt;
+&lt;p&gt;I won&amp;#39;t describe the approach I ended up using to work around this problem because it is, frankly, a terrible (and manual) hack.&lt;/p&gt;
+&lt;h2 id=&quot;standard-library-licenses-arent-uniform&quot;&gt;Standard library licenses aren&amp;#39;t uniform&lt;/h2&gt;
+&lt;p&gt;Deno has a standard library! Hooray! Now we can all use the code in whatever project we want as long as we include Deno&amp;#39;s copyright notice...&lt;/p&gt;
+&lt;p&gt;...except that the library wasn&amp;#39;t entirely written by the Deno authors, so many of the modules have different copyright notices (e.g. &lt;a href=&quot;https://deno.land/std@0.117.0/encoding/yaml.ts&quot;&gt;std/encoding/yaml.ts&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;This means that you have to track down all of your dependencies and diligently duplicate their copyright notices in tools created with &lt;code&gt;deno compile&lt;/code&gt;. At least Deno restricts contributions to the permissive MIT, BSD, and Apache licenses!&lt;/p&gt;
+&lt;h2 id=&quot;webassembly-isnt-seamless&quot;&gt;WebAssembly isn&amp;#39;t seamless&lt;/h2&gt;
+&lt;p&gt;Deno currently loads WebAssembly using &lt;code&gt;fetch&lt;/code&gt; (just like in the browser). This sounds like a great idea except for the fact that it requires network and/or file system access. Unfortunately, this means that if you want to use WebAssembly in a library, you have two unappealing options:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Tell consumers that they need to pass &lt;code&gt;--allow-read&lt;/code&gt; or &lt;code&gt;--allow-net&lt;/code&gt; in when using your library (negating some of the security benefits of Deno)&lt;/li&gt;
+&lt;li&gt;Or Base64-encode your module into an obnoxiously huge TypeScript file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Deno used to support statically importing WebAssembly (without requiring additional privileges), but that support was removed on the assumption that a forthcoming web standard will eventually solve this problem. Last I read, this is still an open problem.&lt;/p&gt;
+&lt;h2 id=&quot;bundling-only-emits-javascript&quot;&gt;Bundling only emits JavaScript&lt;/h2&gt;
+&lt;p&gt;Deno &lt;a href=&quot;https://deno.land/manual@v1.16.4/tools/bundler&quot;&gt;comes with a simple bundler&lt;/a&gt;! Unfortunately, it only emits JavaScript, so you can&amp;#39;t use it for packaging a TypeScript module into a single file (because you&amp;#39;d lose all your type information).&lt;/p&gt;
+&lt;p&gt;I have yet to find a bundler for TypeScript. I really hope I won&amp;#39;t have to write one myself!&lt;/p&gt;
+&lt;h2 id=&quot;theres-no-standard-way-to-specify-long-command-lines&quot;&gt;There&amp;#39;s no standard way to specify long command lines&lt;/h2&gt;
+&lt;p&gt;I applaud Deno for forcing users to provide permissions on the command line, but those command lines can get pretty long. Additionally, Deno seems to be allergic to configuration files, so instead of putting commands into a configuration file, we just have no standard, cross-platform way to specify how to run code.&lt;/p&gt;
+&lt;h2 id=&quot;the-formatter-produces-ugly-code&quot;&gt;The formatter produces ugly code&lt;/h2&gt;
+&lt;p&gt;I like the idea of Deno having a built-in formatter, but I don&amp;#39;t actually like the output. For example, the default is to use 2 spaces for indentation. I don&amp;#39;t know anyone (outside of Deno) who prefers 2 spaces over 4 spaces. I find it makes code harder to read. Additionally, the formatter inserts spaces and newlines in surprising places (again, making the code harder to read).&lt;/p&gt;
+&lt;p&gt;I appreciate that automatic code formatting is a difficult problem and that style is usually personal preference, but this is the first formatter I&amp;#39;ve seen that I don&amp;#39;t like.&lt;/p&gt;
+&lt;h2 id=&quot;bugs-bugs-bugs&quot;&gt;Bugs, bugs, bugs&lt;/h2&gt;
+&lt;p&gt;Deno is a remarkable project and I really enjoy it, but I have encountered several critical bugs, just in my first month of use. My favorite two examples:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;Correct&lt;/em&gt; code &lt;em&gt;failing&lt;/em&gt; type checking (due to a caching issue)&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Incorrect&lt;/em&gt; code &lt;em&gt;successfully&lt;/em&gt; type checking (due to type checking being unexpectedly skipped)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;so-will-i-keep-using-deno&quot;&gt;So will I keep using Deno?&lt;/h1&gt;
+&lt;p&gt;More than once, I&amp;#39;ve wondered if working around the limitations of Deno is costing me more time than I&amp;#39;m saving by using Deno. It very well might.&lt;/p&gt;
+&lt;p&gt;In the end, however, I plan to continue using Deno because it provides the best TypeScript runtime I&amp;#39;ve seen, and it&amp;#39;s features (and most of its goals) align with my needs and preferences.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>One month with Deno (the good parts)</title>
 <id>https://log.schemescape.com/posts/web-development/one-month-with-deno.html</id>
@@ -322,112 +376,6 @@ The following additional packages will be installed:
 &lt;p&gt;The script appears to mostly do reasonable things like checking for required packages and then updating apt&amp;#39;s &lt;code&gt;sources.list&lt;/code&gt; file, and I guess I&amp;#39;m trusting them with the binaries they&amp;#39;re providing, so I&amp;#39;ll give it a try. They do provide manual install instructions as well.&lt;/p&gt;
 &lt;h1 id=&quot;success&quot;&gt;Success&lt;/h1&gt;
 &lt;p&gt;I can&amp;#39;t say I&amp;#39;m pleased with this setup, but NodeSource&amp;#39;s Node package did in fact work and now I&amp;#39;ve got &lt;code&gt;node&lt;/code&gt; and &lt;code&gt;npm&lt;/code&gt; commands running fine without an X11 installation.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Embedding VS Code&apos;s Monaco Editor using a CDN</title>
-<id>https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html"/>
-<updated>2021-11-02T00:00:00.000Z</updated>
-<summary type="text">Here&apos;s how to load VS Code&apos;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing.</summary>
-<content type="html">&lt;p&gt;Here&amp;#39;s how to load Visual Studio Code&amp;#39;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing of the editor component:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/monaco-editor-from-cdn&quot;&gt;Source code&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://jaredkrinke.github.io/monaco-editor-from-cdn/&quot;&gt;Live demo&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;monaco-editor&quot;&gt;Monaco Editor&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://code.visualstudio.com/&quot;&gt;Visual Studio Code&lt;/a&gt; unseated &lt;a href=&quot;https://www.vim.org/&quot;&gt;Vim&lt;/a&gt; as my favorite text editor a few years ago.&lt;/p&gt;
-&lt;p&gt;Surprisingly, VS Code manages to have acceptable performance (even on my very old laptop) despite being built on JavaScript. The (MIT-licensed) editor component is called &lt;a href=&quot;https://microsoft.github.io/monaco-editor/index.html&quot;&gt;Monaco Editor&lt;/a&gt;, and it runs in most desktop browsers.&lt;/p&gt;
-&lt;h1 id=&quot;samples&quot;&gt;Samples&lt;/h1&gt;
-&lt;p&gt;So what&amp;#39;s the easiest way to embed Monaco Editor in a web page for building simple tools?&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s an official repository for &lt;a href=&quot;https://github.com/Microsoft/monaco-editor-samples/&quot;&gt;Monaco Editor samples&lt;/a&gt;, but they all seem to assume you&amp;#39;re using NPM, WebPack, etc., and hosting the scripts yourself. &lt;strong&gt;What if you just want to throw together a quick web page with an editor component, hosted as a single static HTML page?&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&quot;loading-from-a-cdn&quot;&gt;Loading from a CDN&lt;/h1&gt;
-&lt;p&gt;Fortunately, there is a (very well hidden) page discussing &lt;a href=&quot;https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md&quot;&gt;integrating the AMD version of the Monaco Editor in a cross-domain setup&lt;/a&gt;:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If you are hosting your .js on a different domain &lt;strong&gt;(e.g. on a CDN)&lt;/strong&gt; than the HTML, you should know that the Monaco Editor creates web workers for smart language features. Cross-domain web workers are not allowed, but here is how you can proxy their loading and get them to work&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;That sounds like what I&amp;#39;m looking for!&lt;/p&gt;
-&lt;p&gt;Specifically, I&amp;#39;m going to combine one of the &lt;a href=&quot;https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html&quot;&gt;browser-amd-editor&lt;/a&gt; official samples with &lt;a href=&quot;https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html&quot;&gt;Option 1&lt;/a&gt; from the page above.&lt;/p&gt;
-&lt;h1 id=&quot;automatic-resizing&quot;&gt;Automatic resizing&lt;/h1&gt;
-&lt;p&gt;There&amp;#39;s one line in the sample I find irritating:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;container&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;style&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;width: 800px; height: 600px; border: 1px solid grey&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;Why is the size being manually specified in pixels?&lt;/strong&gt; Is that necessary?&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s a &lt;a href=&quot;https://github.com/Microsoft/monaco-editor/issues/28&quot;&gt;long thread in a Monaco Editor issue&lt;/a&gt; that goes into the details, but basically the editor component needs to be notified of size changes (no idea why) and, at least in 2016, there was no way for the editor to subscribe to size updates.&lt;/p&gt;
-&lt;p&gt;But it&amp;#39;s 2021 as of this post, so can we use &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver&quot;&gt;ResizeObserver&lt;/a&gt; (global support is at &lt;a href=&quot;https://caniuse.com/resizeobserver&quot;&gt;92%&lt;/a&gt; as of this post)? Apparently not, because the implementations of ResizeObserver use inconsistent property names (insert facepalm here).&lt;/p&gt;
-&lt;p&gt;Fortunately, the trusty old &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event&quot;&gt;resize&lt;/a&gt; event is sufficient for my purposes:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;const&lt;/span&gt; editorElement = &lt;span class=&quot;hljs-variable language_&quot;&gt;document&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;getElementById&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;);
-&lt;span class=&quot;hljs-variable language_&quot;&gt;window&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;addEventListener&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;resize&amp;quot;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;() =&amp;gt;&lt;/span&gt; editor.&lt;span class=&quot;hljs-title function_&quot;&gt;layout&lt;/span&gt;({
-    &lt;span class=&quot;hljs-attr&quot;&gt;width&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetWidth&lt;/span&gt;,
-    &lt;span class=&quot;hljs-attr&quot;&gt;height&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetHeight&lt;/span&gt;
-}));
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h1 id=&quot;complete-example&quot;&gt;Complete example&lt;/h1&gt;
-&lt;p&gt;The full code is in this repository: &lt;a href=&quot;https://github.com/jaredkrinke/monaco-editor-from-cdn&quot;&gt;monaco-editor-from-cdn&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s a &lt;a href=&quot;https://jaredkrinke.github.io/monaco-editor-from-cdn/&quot;&gt;live demo&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s a copy-paste of the code:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;&amp;lt;!DOCTYPE &lt;span class=&quot;hljs-keyword&quot;&gt;html&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;lang&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;en&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;head&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;meta&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;charset&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;utf-8&amp;quot;&lt;/span&gt; /&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;title&lt;/span&gt;&amp;gt;&lt;/span&gt;Monaco Editor from CDN example, with automatic resizing&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;title&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;language-css&quot;&gt;
-&lt;span class=&quot;hljs-comment&quot;&gt;/* Flex column layout, with the editor taking up all available screen space */&lt;/span&gt;
-&lt;span class=&quot;hljs-selector-tag&quot;&gt;html&lt;/span&gt;, &lt;span class=&quot;hljs-selector-tag&quot;&gt;body&lt;/span&gt; {
-    &lt;span class=&quot;hljs-attribute&quot;&gt;height&lt;/span&gt;: &lt;span class=&quot;hljs-number&quot;&gt;100%&lt;/span&gt;;
-    &lt;span class=&quot;hljs-attribute&quot;&gt;margin&lt;/span&gt;: &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
-    &lt;span class=&quot;hljs-attribute&quot;&gt;overflow&lt;/span&gt;: hidden;
-}
-
-&lt;span class=&quot;hljs-selector-tag&quot;&gt;body&lt;/span&gt; {
-    &lt;span class=&quot;hljs-attribute&quot;&gt;display&lt;/span&gt;: flex;
-    &lt;span class=&quot;hljs-attribute&quot;&gt;flex-direction&lt;/span&gt;: column;
-}
-
-&lt;span class=&quot;hljs-selector-id&quot;&gt;#editor&lt;/span&gt; {
-    &lt;span class=&quot;hljs-attribute&quot;&gt;flex-grow&lt;/span&gt;: &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;;
-    &lt;span class=&quot;hljs-attribute&quot;&gt;border&lt;/span&gt;: solid &lt;span class=&quot;hljs-number&quot;&gt;1px&lt;/span&gt; gray;
-    &lt;span class=&quot;hljs-attribute&quot;&gt;overflow&lt;/span&gt;: hidden;
-}
-&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;head&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;body&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;h1&lt;/span&gt;&amp;gt;&lt;/span&gt;Monaco Editor, loaded via CDN&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;h1&lt;/span&gt;&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;id&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;div&lt;/span&gt;&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/loader.min.js&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;language-javascript&quot;&gt;
-&lt;span class=&quot;hljs-comment&quot;&gt;// Proxy Monaco Editor workers using a data URL (adapted from: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md)&lt;/span&gt;
-&lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;config&lt;/span&gt;({ &lt;span class=&quot;hljs-attr&quot;&gt;paths&lt;/span&gt;: { &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;vs&amp;quot;&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/&amp;quot;&lt;/span&gt; }});
-
-&lt;span class=&quot;hljs-variable language_&quot;&gt;window&lt;/span&gt;.&lt;span class=&quot;hljs-property&quot;&gt;MonacoEnvironment&lt;/span&gt; = {
-    &lt;span class=&quot;hljs-attr&quot;&gt;getWorkerUrl&lt;/span&gt;: &lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt;(&lt;span class=&quot;hljs-params&quot;&gt;workerId, label&lt;/span&gt;) {
-        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;`data:text/javascript;charset=utf-8,&lt;span class=&quot;hljs-subst&quot;&gt;${&lt;span class=&quot;hljs-built_in&quot;&gt;encodeURIComponent&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;`
-            self.MonacoEnvironment = { baseUrl: &amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/&amp;quot; };
-            importScripts(&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/base/worker/workerMain.min.js&amp;quot;);`&lt;/span&gt;
-        )}&lt;/span&gt;`&lt;/span&gt;;
-    }
-};
-
-&lt;span class=&quot;hljs-built_in&quot;&gt;require&lt;/span&gt;([&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;vs/editor/editor.main&amp;quot;&lt;/span&gt;], &lt;span class=&quot;hljs-keyword&quot;&gt;function&lt;/span&gt; (&lt;span class=&quot;hljs-params&quot;&gt;&lt;/span&gt;) {
-    &lt;span class=&quot;hljs-comment&quot;&gt;// Create the editor with some sample JavaScript code&lt;/span&gt;
-    &lt;span class=&quot;hljs-keyword&quot;&gt;var&lt;/span&gt; editor = monaco.&lt;span class=&quot;hljs-property&quot;&gt;editor&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;create&lt;/span&gt;(&lt;span class=&quot;hljs-variable language_&quot;&gt;document&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;getElementById&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;), {
-        &lt;span class=&quot;hljs-attr&quot;&gt;value&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;// code goes here\n&amp;quot;&lt;/span&gt;,
-        &lt;span class=&quot;hljs-attr&quot;&gt;language&lt;/span&gt;: &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;javascript&amp;quot;&lt;/span&gt;
-    });
-
-    &lt;span class=&quot;hljs-comment&quot;&gt;// Resize the editor when the window size changes&lt;/span&gt;
-    &lt;span class=&quot;hljs-keyword&quot;&gt;const&lt;/span&gt; editorElement = &lt;span class=&quot;hljs-variable language_&quot;&gt;document&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;getElementById&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;editor&amp;quot;&lt;/span&gt;);
-    &lt;span class=&quot;hljs-variable language_&quot;&gt;window&lt;/span&gt;.&lt;span class=&quot;hljs-title function_&quot;&gt;addEventListener&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;resize&amp;quot;&lt;/span&gt;, &lt;span class=&quot;hljs-function&quot;&gt;() =&amp;gt;&lt;/span&gt; editor.&lt;span class=&quot;hljs-title function_&quot;&gt;layout&lt;/span&gt;({
-        &lt;span class=&quot;hljs-attr&quot;&gt;width&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetWidth&lt;/span&gt;,
-        &lt;span class=&quot;hljs-attr&quot;&gt;height&lt;/span&gt;: editorElement.&lt;span class=&quot;hljs-property&quot;&gt;offsetHeight&lt;/span&gt;
-    }));
-});
-&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;script&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;body&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;html&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
 </content>
 </entry>
 </feed>
