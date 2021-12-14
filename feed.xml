@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-12-14T04:28:30.893Z</updated>
+<updated>2021-12-14T04:43:37.302Z</updated>
 
 <entry>
 <title>One month with Deno (part 2)</title>
@@ -173,6 +173,7 @@
 &lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: Both of these are now implemented.&lt;/p&gt;
 &lt;h1 id=&quot;a-parting-note&quot;&gt;A parting note&lt;/h1&gt;
 &lt;p&gt;So there you have it. Depending on how you count, this is either the 4th or 5th static site generator I&amp;#39;ve built. I like to hope this will be my last.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog has been released&lt;/a&gt;.&lt;/p&gt;
 </content>
 </entry>
 <entry>
