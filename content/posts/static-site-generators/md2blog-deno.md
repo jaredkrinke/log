@@ -57,3 +57,5 @@ The first one should be easy, and I think the second one shouldn't be too hard e
 
 # A parting note
 So there you have it. Depending on how you count, this is either the 4th or 5th static site generator I've built. I like to hope this will be my last.
+
+**Update**: [md2blog has been released](https://jaredkrinke.github.io/md2blog/).

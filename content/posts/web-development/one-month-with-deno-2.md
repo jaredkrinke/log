@@ -69,4 +69,4 @@ Deno is a remarkable project and I really enjoy it, but I have encountered sever
 # So will I keep using Deno?
 More than once, I've wondered if working around the limitations of Deno is costing me more time than I'm saving by using Deno. It very well might.
 
-In the end, however, I plan to continue using Deno because it provides the best TypeScript runtime I've seen, and it's features (and most of its goals) align with my needs and preferences.
+In the end, however, I plan to continue using Deno because it provides the best TypeScript runtime I've seen, and its features (and most of its goals) align with my needs and preferences.
