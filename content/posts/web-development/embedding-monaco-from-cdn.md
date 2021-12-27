@@ -19,13 +19,13 @@ So what's the easiest way to embed Monaco Editor in a web page for building simp
 There's an official repository for [Monaco Editor samples](https://github.com/Microsoft/monaco-editor-samples/), but they all seem to assume you're using NPM, WebPack, etc., and hosting the scripts yourself. **What if you just want to throw together a quick web page with an editor component, hosted as a single static HTML page?**
 
 # Loading from a CDN
-Fortunately, there is a (very well hidden) page discussing [integrating the AMD version of the Monaco Editor in a cross-domain setup](https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md):
+Fortunately, there is a (very well hidden) page (which has since been deleted--not sure why) discussing [integrating the AMD version of the Monaco Editor in a cross-domain setup](https://github.com/microsoft/monaco-editor/blob/a73ab1223b22570420706e020a2cc7c4043e7174/docs/integrate-amd-cross.md):
 
 > If you are hosting your .js on a different domain **(e.g. on a CDN)** than the HTML, you should know that the Monaco Editor creates web workers for smart language features. Cross-domain web workers are not allowed, but here is how you can proxy their loading and get them to work
 
 That sounds like what I'm looking for!
 
-Specifically, I'm going to combine one of the [browser-amd-editor](https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html) official samples with [Option 1](https://github.com/microsoft/monaco-editor-samples/blob/main/browser-amd-editor/index.html) from the page above.
+Specifically, I'm going to combine one of the [browser-amd-editor](https://github.com/microsoft/monaco-editor/blob/main/samples/browser-amd-editor/index.html) official samples with Option 1 from the page above.
 
 # Automatic resizing
 There's one line in the sample I find irritating:
