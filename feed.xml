@@ -7,8 +7,44 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2021-12-27T21:56:28.049Z</updated>
+<updated>2022-01-06T17:56:56.289Z</updated>
 
+<entry>
+<title>My first experience with Rust</title>
+<id>https://log.schemescape.com/posts/rust/first-experience.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/rust/first-experience.html"/>
+<updated>2022-01-06T00:00:00.000Z</updated>
+<summary type="text">Rust is popular and I&apos;m interested in its memory safety features and build system. Here&apos;s my first experience with Rust.</summary>
+<content type="html">&lt;p&gt;&lt;a href=&quot;https://www.rust-lang.org/&quot;&gt;Rust&lt;/a&gt; is so popular these days that &amp;quot;written in Rust&amp;quot; is undoubtedly going to become a meme (if it hasn&amp;#39;t already). It&amp;#39;s time I give it a try!&lt;/p&gt;
+&lt;h1 id=&quot;the-appeal-of-rust&quot;&gt;The appeal of Rust&lt;/h1&gt;
+&lt;p&gt;I can understand the appeal of Rust. It&amp;#39;s a modern language (meaning it doesn&amp;#39;t have a ton of legacy cruft), it has a unique memory model that prevents certain classes of bugs, yet it still has manual memory management. This is a unique combination.&lt;/p&gt;
+&lt;p&gt;Theoretically, this should allow Rust to be used all the way from memory-constrained embedded systems to high level apps.&lt;/p&gt;
+&lt;h1 id=&quot;what-about-c&quot;&gt;What about C++?&lt;/h1&gt;
+&lt;p&gt;Now, I&amp;#39;m not willing to jump to a new language and ecosystem just because it&amp;#39;s shiny and new. Rust&amp;#39;s memory model seems like an improvement over C++, but modern C++ has (in my experience) fewer memory bugs anyway, thanks to smart pointers and the &lt;a href=&quot;https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization&quot;&gt;RAII&lt;/a&gt; pattern.&lt;/p&gt;
+&lt;p&gt;But here are some other enticing features of Rust:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Rust has its own package manager, &lt;a href=&quot;https://doc.rust-lang.org/stable/cargo/&quot;&gt;Cargo&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Rust has its own build system, which is also Cargo&lt;/li&gt;
+&lt;li&gt;Rust&amp;#39;s compiler is built on LLVM, so it can trivially target WebAssembly&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If I had to pick the worst part of C++ development, I&amp;#39;d say it&amp;#39;s setting up a build system and dealing with dependencies. To me, Cargo is actually the biggest differentiator for Rust as compared to C++.&lt;/p&gt;
+&lt;h1 id=&quot;installing-rust&quot;&gt;Installing Rust&lt;/h1&gt;
+&lt;p&gt;It might be unreasonable, but I&amp;#39;d like my programming language of choice to have a development environment that is compact and simple to setup. Aside: this is one of the reasons I enjoy &lt;a href=&quot;https://log.schemescape.com/posts/rust/../web-development/one-month-with-deno.html&quot;&gt;Deno&lt;/a&gt;: it ships as a single (fairly small) binary.&lt;/p&gt;
+&lt;p&gt;Following Rust&amp;#39;s &lt;a href=&quot;https://www.rust-lang.org/learn/get-started&quot;&gt;getting started instructions&lt;/a&gt;, I&amp;#39;m immediately discouraged:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It looks like you’re running Windows. To start using Rust, download the installer, then run the program and follow the onscreen instructions. You may need to install the Visual Studio C++ Build tools when prompted to do so.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I have to install a full C++ development environment just to use Rust? Ok, well I click the link and download ~35 MB. Not too bad until it becomes apparent that the download is &lt;em&gt;just the installer itself&lt;/em&gt;. I&amp;#39;m then presented with a huge list of options for things to install.&lt;/p&gt;
+&lt;p&gt;The Rust installer indicates that I should install the Windows 10 SDK, so I select that and am horrified to see that it is 2.8 GB.&lt;/p&gt;
+&lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
+&lt;p&gt;Based on the documentation I&amp;#39;ve seen so far, it looks like you have to install nearly 3 GB of C++ tools just to get a working Rust development environment on Windows.&lt;/p&gt;
+&lt;p&gt;At this point, I&amp;#39;m speechless. I was willing to tolerate a ~500 MB download for a new programming language, but I&amp;#39;m already up to about six times that size without even getting to the Rust part.&lt;/p&gt;
+&lt;p&gt;A quick web search indicates that this requirement is just to provide things like a linker, but I&amp;#39;m certain these tools are much less than 3 GB in size.&lt;/p&gt;
+&lt;p&gt;I was also under the impression that Rust was fully open source, so requiring closed source tools to build on Windows seems bizarre (note: MinGW might fill in this gap, but that&amp;#39;s another huge download I&amp;#39;d like to avoid, if possible).&lt;/p&gt;
+&lt;h1 id=&quot;setting-this-aside-for-now&quot;&gt;Setting this aside for now...&lt;/h1&gt;
+&lt;p&gt;That&amp;#39;s enough disappointment for one day. I&amp;#39;d still like to give Rust a go, but it looks like first I&amp;#39;m going to have to figure out how to get a working environment without installing gigabytes of unrelated tooling (especially since part of my motivation to try Rust was to avoid having to setup an entire C++ toolchain!).&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>md2blog 1.1.1 released</title>
 <id>https://log.schemescape.com/posts/releases/md2blog-1.1.1.html</id>
@@ -189,155 +225,6 @@
 &lt;h1 id=&quot;a-parting-note&quot;&gt;A parting note&lt;/h1&gt;
 &lt;p&gt;So there you have it. Depending on how you count, this is either the 4th or 5th static site generator I&amp;#39;ve built. I like to hope this will be my last.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog has been released&lt;/a&gt;.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Why I&apos;m starting to sour on Node and NPM</title>
-<id>https://log.schemescape.com/posts/web-development/souring-on-npm.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/web-development/souring-on-npm.html"/>
-<updated>2021-11-05T00:00:00.000Z</updated>
-<summary type="text">Node made programming fun for me again, but security concerns might drive me away.</summary>
-<content type="html">&lt;h1 id=&quot;node&quot;&gt;Node&lt;/h1&gt;
-&lt;p&gt;When I first heard about &lt;a href=&quot;https://nodejs.org/en/&quot;&gt;Node&lt;/a&gt; back in 2013, I thought it was a silly idea.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Build a performant web server &lt;em&gt;based on JavaScript&lt;/em&gt;? Just use C++ instead of throwing all your performance gains at an interpreted language!&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Of course, my initial reaction ignored some pertinent factors:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;JavaScript is already used on clients (web browsers), so sharing code between client and server would be easier&lt;/li&gt;
-&lt;li&gt;There are &lt;em&gt;a lot&lt;/em&gt; of JavaScript developers out there (because it&amp;#39;s basically the only native option for scripting on the web)&lt;/li&gt;
-&lt;li&gt;JavaScript is actually surprisingly fast because the demand for fast web browsers is huge&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;After giving it a try, I found that Node, and the &lt;a href=&quot;https://www.npmjs.com/&quot;&gt;NPM&lt;/a&gt; ecosystem, were pretty enjoyable to work with. And things only improved from there, not least because most of the annoying problems of JavaScript had already been solved in one way or another (NPM for managing dependencies, TypeScript for statically checking types, &lt;code&gt;async&lt;/code&gt; and &lt;code&gt;await&lt;/code&gt; for asynchronous programming, etc.).&lt;/p&gt;
-&lt;h1 id=&quot;fast-forward-to-today&quot;&gt;Fast-forward to today&lt;/h1&gt;
-&lt;p&gt;Recently, I&amp;#39;ve been happily building my static site generator on top of &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt;, although one thing always troubled me. Every time I saw a problem that needed solving, I checked NPM to see if someone had already solved that problem with an (MIT-licensed) package--usually someone had.&lt;/p&gt;
-&lt;p&gt;But when I went to install that package, NPM would happily report that it had downloaded quite a few transitive dependencies from some large pool of contributors.&lt;/p&gt;
-&lt;h2 id=&quot;example-yargs&quot;&gt;Example: yargs&lt;/h2&gt;
-&lt;p&gt;For example, I wanted to parse command line arguments, and I had noticed that &lt;a href=&quot;https://www.npmjs.com/package/yargs&quot;&gt;yargs&lt;/a&gt; was a popular package, so I installed it. According to the previously-linked NPM page, it has 7 dependencies. That&amp;#39;s more than I&amp;#39;d like, but let&amp;#39;s give it a try:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ npm install yargs
-
-+ yargs@17.2.1
-added 16 packages from 10 contributors and audited 16 packages in 1.326s
-
-2 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Wait, &lt;em&gt;sixteen&lt;/em&gt; packages? Apparently NPM only counts direct dependencies on package pages. What all got installed?&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ npm ls
-...
-`-- yargs@17.2.1
-  +-- cliui@7.0.4
-  | +-- string-width@4.2.3 deduped
-  | +-- strip-ansi@6.0.1
-  | | `-- ansi-regex@5.0.1
-  | `-- wrap-ansi@7.0.0
-  |   +-- ansi-styles@4.3.0
-  |   | `-- color-convert@2.0.1
-  |   |   `-- color-name@1.1.4
-  |   +-- string-width@4.2.3 deduped
-  |   `-- strip-ansi@6.0.1 deduped
-  +-- escalade@3.1.1
-  +-- get-caller-file@2.0.5
-  +-- require-directory@2.1.1
-  +-- string-width@4.2.3
-  | +-- emoji-regex@8.0.0
-  | +-- is-fullwidth-code-point@3.0.0
-  | `-- strip-ansi@6.0.1 deduped
-  +-- y18n@5.0.8
-  `-- yargs-parser@20.2.9
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;What&amp;#39;s &lt;code&gt;escalade&lt;/code&gt;? Why do I need &lt;code&gt;emoji-regex&lt;/code&gt; if I&amp;#39;m not planning on using emoji? What do the 18 missing characters in &lt;code&gt;y18n&lt;/code&gt; stand for?&lt;/p&gt;
-&lt;p&gt;Well, I&amp;#39;d better get busy reviewing all that JavaScript code. How much code are we talking?&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ find -name *.js|xargs wc -l
-    10 ./node_modules/ansi-regex/index.js
-   163 ./node_modules/ansi-styles/index.js
-   287 ./node_modules/cliui/build/lib/index.js
-    27 ./node_modules/cliui/build/lib/string-utils.js
-   839 ./node_modules/color-convert/conversions.js
-    81 ./node_modules/color-convert/index.js
-    97 ./node_modules/color-convert/route.js
-   152 ./node_modules/color-name/index.js
-     6 ./node_modules/emoji-regex/es2015/index.js
-     6 ./node_modules/emoji-regex/es2015/text.js
-     6 ./node_modules/emoji-regex/index.js
-     6 ./node_modules/emoji-regex/text.js
-    22 ./node_modules/escalade/dist/index.js
-    18 ./node_modules/escalade/sync/index.js
-    21 ./node_modules/get-caller-file/index.js
-    50 ./node_modules/is-fullwidth-code-point/index.js
-    86 ./node_modules/require-directory/index.js
-    47 ./node_modules/string-width/index.js
-     4 ./node_modules/strip-ansi/index.js
-   216 ./node_modules/wrap-ansi/index.js
-     6 ./node_modules/y18n/build/lib/cjs.js
-   174 ./node_modules/y18n/build/lib/index.js
-    19 ./node_modules/y18n/build/lib/platform-shims/node.js
-    62 ./node_modules/yargs/build/lib/argsert.js
-   432 ./node_modules/yargs/build/lib/command.js
-    48 ./node_modules/yargs/build/lib/completion-templates.js
-   200 ./node_modules/yargs/build/lib/completion.js
-    91 ./node_modules/yargs/build/lib/middleware.js
-    32 ./node_modules/yargs/build/lib/parse-command.js
-     9 ./node_modules/yargs/build/lib/typings/common-types.js
-     1 ./node_modules/yargs/build/lib/typings/yargs-parser-types.js
-   568 ./node_modules/yargs/build/lib/usage.js
-    59 ./node_modules/yargs/build/lib/utils/apply-extends.js
-     5 ./node_modules/yargs/build/lib/utils/is-promise.js
-    34 ./node_modules/yargs/build/lib/utils/levenshtein.js
-    17 ./node_modules/yargs/build/lib/utils/maybe-async-result.js
-    10 ./node_modules/yargs/build/lib/utils/obj-filter.js
-    17 ./node_modules/yargs/build/lib/utils/process-argv.js
-    12 ./node_modules/yargs/build/lib/utils/set-blocking.js
-    10 ./node_modules/yargs/build/lib/utils/which-module.js
-   305 ./node_modules/yargs/build/lib/validation.js
-  1483 ./node_modules/yargs/build/lib/yargs-factory.js
-     7 ./node_modules/yargs/build/lib/yerror.js
-    14 ./node_modules/yargs/helpers/index.js
-    29 ./node_modules/yargs-parser/browser.js
-    59 ./node_modules/yargs-parser/build/lib/index.js
-    65 ./node_modules/yargs-parser/build/lib/string-utils.js
-    40 ./node_modules/yargs-parser/build/lib/tokenize-arg-string.js
-    12 ./node_modules/yargs-parser/build/lib/yargs-parser-types.js
-  1037 ./node_modules/yargs-parser/build/lib/yargs-parser.js
-  7001 total
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Wow. &lt;strong&gt;Roughly 7,000 lines of code just for parsing arguments&lt;/strong&gt;. And it could be worse!&lt;/p&gt;
-&lt;h2 id=&quot;malware&quot;&gt;Malware&lt;/h2&gt;
-&lt;p&gt;As I read in &lt;a href=&quot;https://therecord.media/malware-found-in-coa-and-rc-two-npm-packages-with-23m-weekly-downloads/&quot;&gt;an article&lt;/a&gt; today (and similar articles in the recent past), NPM has the questionable default behavior of allowing packages to run arbitrary scripts at install time. Ideally, this would be for life cycle management operations such as building caches or compiling native code, but this is also an easy target for hackers to hijack a commonly-installed package&amp;#39;s maintainer&amp;#39;s account and push out an update with malware that is triggered on install.&lt;/p&gt;
-&lt;p&gt;Obviously, there&amp;#39;s no perfect solution for NPM to stop such attacks, but right now the default behavior of NPM (no version specification required, running scripts on install, not making it easy to inspect the contents of a package before downloading) means that if you want to install a package that solves a problem, now you need to:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Vet the maintainers of the package &lt;em&gt;and all its dependencies&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;Install the package with &lt;code&gt;--ignore-scripts&lt;/code&gt; to download the code&lt;/li&gt;
-&lt;li&gt;Inspect the code of the package &lt;em&gt;and all dependencies&lt;/em&gt; for stowaway malware&lt;/li&gt;
-&lt;li&gt;Use &lt;code&gt;package-lock.json&lt;/code&gt; in the project to keep versions identical&lt;ul&gt;
-&lt;li&gt;And also pin that version when you use the same package elsewhere&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;And, of course, this should ideally be done with each update to any of the packages, especially when security updates are made.&lt;/p&gt;
-&lt;h1 id=&quot;now-what&quot;&gt;Now what?&lt;/h1&gt;
-&lt;p&gt;At this point, you should be able to picture the joy of programming in 2021 rapidly fading from my face. What can be done about this?&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m not holding out hope for NPM to make a breaking change that turns install scripts from &lt;em&gt;opt out&lt;/em&gt; to &lt;em&gt;opt in&lt;/em&gt; (not that this would solve the problem anyway, although I&amp;#39;d consider it a welcome concession to security). I&amp;#39;m also not expecting all the packages on NPM to start weeding out unnecessary dependencies just to make my life easier (although kudos to the author of Chokidar for &lt;a href=&quot;https://paulmillr.com/posts/chokidar-3-save-32tb-of-traffic/&quot;&gt;reducing that package&amp;#39;s dependencies down to just the essentials&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;Honestly, I think the solution is probably going to be for me to move to a more security-focused ecosystem.&lt;/p&gt;
-&lt;h2 id=&quot;deno&quot;&gt;Deno&lt;/h2&gt;
-&lt;p&gt;An alternative (an arguably a successor) to Node is &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt; (initiated by the same person who created Node, Ryan Dahl). Deno appears to be aimed at all of the problems I&amp;#39;m running into with Node/NPM (copy-pasted from the Deno home page):&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Secure by default. No file, network, or environment access, unless explicitly enabled.&lt;/li&gt;
-&lt;li&gt;Supports TypeScript out of the box.&lt;/li&gt;
-&lt;li&gt;Ships only a single executable file.&lt;/li&gt;
-&lt;li&gt;Has built-in utilities like a dependency inspector (deno info) and a code formatter (deno fmt).&lt;/li&gt;
-&lt;li&gt;Has a set of reviewed (audited) standard modules that are guaranteed to work with Deno: deno.land/std&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I&amp;#39;m especially excited about how granular the &lt;a href=&quot;https://deno.land/manual@v1.15.3/getting_started/permissions&quot;&gt;permissions flags&lt;/a&gt; are, for example:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;--allow-read=&amp;lt;allow-read&amp;gt;&lt;/code&gt; Allow file system read access. You can specify an optional, comma-separated list of directories or files to provide an allow-list of allowed file system access.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Deno also has support for &lt;a href=&quot;https://deno.land/manual@v1.15.3/tools/compiler&quot;&gt;building a self-contained executable&lt;/a&gt;, which would be handy for conveniently distributing binaries (although such binaries would have to be trusted by the people downloading them for now).&lt;/p&gt;
-&lt;h1 id=&quot;what-does-this-mean-for-my-current-project&quot;&gt;What does this mean for my current project?&lt;/h1&gt;
-&lt;p&gt;I was getting close to publishing my first sizable package to NPM, possibly even today, but now that I&amp;#39;ve stepped back and let the reality of its long list of dependencies sink in, I&amp;#39;m not sure if publishing my project is even a good idea. I originally picked up Node and Metalsmith to speed up the development process (with no plan to eventually release the tool), but along the way I thought it might be a useful thing to share.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ll think it over a bit more and decide if I want to be a hypocrite and push out a package with 18 direct dependencies and (ahem) &lt;em&gt;200+ transitive dependencies&lt;/em&gt;, or if I should start over (or abandon the idea of releasing the tool entirely).&lt;/p&gt;
 </content>
 </entry>
 </feed>
