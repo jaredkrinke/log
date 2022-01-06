@@ -32,11 +32,24 @@ My research turned up the following relevant frameworks:
 * [Tauri](https://github.com/tauri-apps/tauri)
 * [Neutralinojs](https://github.com/neutralinojs/neutralinojs)
 
-And here is my uneducated, subjective comparison:
+And here is my uneducated, subjective comparison (all of these frameworks currently support Windows, Linux, and macOS, with Tauri planning to eventually support iOS and Android):
 
-| Framework | Platforms | Engine | Maturity | License | Examples |
-| --- | --- | --- | --- | --- | --- |
-| Electron | Windows, Linux, macOS | Chromium | Stable | MIT | VS Code, Slack, Discord |
-| NW.js | Windows, Linux, macOS | Chromium | ? | MIT | ? |
-| Tauri | Windows, Linux, macOS (iOS in progress) | (native) | In development | Apache | ? |
-| Neutralinojs | Windows, Linux, macOS | (native) | In development | [Many](https://github.com/neutralinojs/neutralinojs/blob/main/LICENSE) | ? |
+| Framework | Engine | Maturity | License | Examples |
+| --- | --- | --- | --- | --- |
+| Electron | Chromium | Stable | Many (via Chromium) | VS Code, Slack, Discord |
+| NW.js | Chromium | ? | Many (via Chromium) | ? |
+| Tauri | Chromium (Windows)<br/>WebKit (Linux/macOS) | In development | Apache | ? |
+| Neutralinojs | ? | In development | [Many](https://github.com/neutralinojs/neutralinojs/blob/main/LICENSE) | ? |
+
+Note that I'm ignoring native code interop because it's not relevant to me, but I believe NW.js uses Node and Tauri uses Rust.
+
+# My plan
+For my purposes:
+
+* I only *need* to support Windows (at least initially)
+* I don't need desktop integration or native code
+* I'd like to produce a minimal binary package (i.e. I don't want to bundle an entire browser runtime if I don't have to)
+
+Based on these requirements, Tauri (or maybe Neutralinojs) seems like the best match, so I'm planning to try Tauri first.
+
+I'm a little concerned that if I want to later expand to Linux and/or macOS (where Tauri uses WebKit) I might run into incompatibilities, but I haven't had any complaints about my web app working on other platforms, so this is a risk I'm willing to take, for a hobby project anyway.
