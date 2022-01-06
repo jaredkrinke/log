@@ -21,6 +21,7 @@ Some more typical reasons for porting from web to desktop might be:
 Some downsides:
 
 * Electron (the most popular desktop framework for web technologies) produces large binaries (100+ MB) that use a lot of memory (due to bundling an entire browser engine within each application, to ensure consistency across devices)
+  * This also means that copyright notices for a huge number of open source libraries Chromium uses must be included
 * These frameworks typically have their own unique build processes, which adds additional complexity as compared to building a desktop app "the normal way"
 
 # Options
