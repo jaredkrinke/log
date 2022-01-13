@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Frameworks for porting web apps to the desktop</title>
+<meta name="description" content="This is my initial research into converting a web app to a desktop app." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Frameworks for porting web apps to the desktop",
+  "abstract": "This is my initial research into converting a web app to a desktop app.",
+  "keywords": "web-development",
+  "datePublished": "2022-01-13"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/web-development/index.html">web-development</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/web-development/web-apps-on-the-desktop.html">Frameworks for porting web apps to the desktop</a></h1>
+<p><time datetime="2022-01-13">January 13, 2022</time></p>
+</header>
+<p>I have a browser-based application that I&#39;d like to transform into a &quot;normal&quot; desktop application.</p>
+<h1 id="why">Why?</h1>
+<p>My situation is fairly unique, but here&#39;s my motivation:</p>
+<ul>
+<li>My app is already web-based (using HTML, CSS, TypeScript, with a corresponding HTTP API that&#39;s deployed to <a href="https://functions.netlify.com/">Netlify Functions</a>), and I don&#39;t want to rewrite any of my code</li>
+<li>I&#39;m planning to use a distribution service that&#39;s based on plain old desktop executables (this is probably an unusual requirement)</li>
+</ul>
+<p>Some more typical reasons for porting from web to desktop might be:</p>
+<ul>
+<li>Wanting to take advantage of libraries, devices, or system APIs that aren&#39;t available in the browser</li>
+<li>Wanting to integrate with native code that (probably due to performance) won&#39;t be ported to WebAssembly</li>
+</ul>
+<h1 id="why-not">Why not?</h1>
+<p>Some downsides:</p>
+<ul>
+<li>Electron (the most popular desktop framework for web technologies) produces large binaries (100+ MB) that use a lot of memory (due to bundling an entire browser engine within each application, presumably to ensure consistency across devices)<ul>
+<li>This also means that copyright notices for a huge number of open source libraries Chromium uses must be included</li>
+</ul>
+</li>
+<li>These frameworks typically have their own unique build processes, which adds additional complexity as compared to building a desktop app &quot;the normal way&quot;</li>
+</ul>
+<h1 id="options">Options</h1>
+<p>My research turned up the following relevant frameworks:</p>
+<ul>
+<li><a href="https://github.com/electron/electron">Electron</a></li>
+<li><a href="https://nwjs.io/">NW.js</a> (formerly node-webkit)</li>
+<li><a href="https://github.com/tauri-apps/tauri">Tauri</a></li>
+<li><a href="https://github.com/neutralinojs/neutralinojs">Neutralinojs</a></li>
+</ul>
+<p>And here is my uneducated, subjective comparison (all of these frameworks currently support Windows, Linux, and macOS, with Tauri planning to eventually support iOS and Android):</p>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Engine</th>
+<th>Maturity</th>
+<th>License</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Electron</td>
+<td>Chromium</td>
+<td>Stable</td>
+<td>Many (via Chromium)</td>
+<td>VS Code, Slack, Discord</td>
+</tr>
+<tr>
+<td>NW.js</td>
+<td>Chromium</td>
+<td>?</td>
+<td>Many (via Chromium)</td>
+<td>?</td>
+</tr>
+<tr>
+<td>Tauri</td>
+<td>Chromium (Windows)<br/>WebKit (Linux/macOS)</td>
+<td>In development</td>
+<td>Apache</td>
+<td>?</td>
+</tr>
+<tr>
+<td>Neutralinojs</td>
+<td>?</td>
+<td>In development</td>
+<td><a href="https://github.com/neutralinojs/neutralinojs/blob/main/LICENSE">Many</a></td>
+<td>?</td>
+</tr>
+</tbody></table>
+<p>Note that I&#39;m ignoring native code interop because it&#39;s not relevant to me, but I believe NW.js uses Node and Tauri uses Rust.</p>
+<h1 id="my-plan">My plan</h1>
+<p>For my purposes:</p>
+<ul>
+<li>I only <em>need</em> to support Windows (at least initially)</li>
+<li>I may not need desktop integration or native code</li>
+<li>I&#39;d like to produce a minimal binary package (i.e. I don&#39;t want to bundle an entire browser runtime if I don&#39;t have to)</li>
+</ul>
+<p>Based on that last requirement, Tauri (or maybe Neutralinojs) seemed like the best match, but I had concerns about reliability:</p>
+<ul>
+<li>Tauri is built on <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/">WebView2</a>, which is installed separately from the operating system (so not all Windows computers will have it installed)</li>
+<li>Tauri&#39;s bundler produces installers on Windows that apparently <a href="https://github.com/tauri-apps/tauri/issues/2452">don&#39;t clearly communicate this requirement</a>, possibly leading to broken installs</li>
+<li>This also means that installation inherits the WebView2 runtime&#39;s need for elevated privileges (avoidable by distributing the runtime as well, but that&#39;s basically Electron at that point)</li>
+<li>Obviously, if I want to later expand to Linux and/or macOS (where Tauri uses WebKit) I might run into incompatibilities (although I haven&#39;t heard of any with the web version of my app)</li>
+</ul>
+<p>Taken as a whole (and given that WebView2 is relatively new), unless I have some way to ensure the WebView2 runtime will be present, I will likely end up using Electron, despite my reservations around download size and efficiency. At least in my case, there are some mitigating factors:</p>
+<ul>
+<li>This isn&#39;t an app I expect users to have open all the time (so memory usage is less of a concern)</li>
+<li>There is a simple fallback for anyone who wants to avoid a large download: just use the web version!</li>
+</ul>
+<p>This isn&#39;t the answer I had hoped for, but I&#39;m trying to be pragmatic. Hopefully in the future WebView2 will be installed by default and I can switch to something more lightweight like Tauri.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

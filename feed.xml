@@ -7,8 +7,106 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-01-06T17:56:56.289Z</updated>
+<updated>2022-01-13T22:32:23.528Z</updated>
 
+<entry>
+<title>Frameworks for porting web apps to the desktop</title>
+<id>https://log.schemescape.com/posts/web-development/web-apps-on-the-desktop.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/web-development/web-apps-on-the-desktop.html"/>
+<updated>2022-01-13T00:00:00.000Z</updated>
+<summary type="text">This is my initial research into converting a web app to a desktop app.</summary>
+<content type="html">&lt;p&gt;I have a browser-based application that I&amp;#39;d like to transform into a &amp;quot;normal&amp;quot; desktop application.&lt;/p&gt;
+&lt;h1 id=&quot;why&quot;&gt;Why?&lt;/h1&gt;
+&lt;p&gt;My situation is fairly unique, but here&amp;#39;s my motivation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;My app is already web-based (using HTML, CSS, TypeScript, with a corresponding HTTP API that&amp;#39;s deployed to &lt;a href=&quot;https://functions.netlify.com/&quot;&gt;Netlify Functions&lt;/a&gt;), and I don&amp;#39;t want to rewrite any of my code&lt;/li&gt;
+&lt;li&gt;I&amp;#39;m planning to use a distribution service that&amp;#39;s based on plain old desktop executables (this is probably an unusual requirement)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Some more typical reasons for porting from web to desktop might be:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Wanting to take advantage of libraries, devices, or system APIs that aren&amp;#39;t available in the browser&lt;/li&gt;
+&lt;li&gt;Wanting to integrate with native code that (probably due to performance) won&amp;#39;t be ported to WebAssembly&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;why-not&quot;&gt;Why not?&lt;/h1&gt;
+&lt;p&gt;Some downsides:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Electron (the most popular desktop framework for web technologies) produces large binaries (100+ MB) that use a lot of memory (due to bundling an entire browser engine within each application, presumably to ensure consistency across devices)&lt;ul&gt;
+&lt;li&gt;This also means that copyright notices for a huge number of open source libraries Chromium uses must be included&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;These frameworks typically have their own unique build processes, which adds additional complexity as compared to building a desktop app &amp;quot;the normal way&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;options&quot;&gt;Options&lt;/h1&gt;
+&lt;p&gt;My research turned up the following relevant frameworks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/electron/electron&quot;&gt;Electron&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nwjs.io/&quot;&gt;NW.js&lt;/a&gt; (formerly node-webkit)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/tauri-apps/tauri&quot;&gt;Tauri&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/neutralinojs/neutralinojs&quot;&gt;Neutralinojs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And here is my uneducated, subjective comparison (all of these frameworks currently support Windows, Linux, and macOS, with Tauri planning to eventually support iOS and Android):&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Framework&lt;/th&gt;
+&lt;th&gt;Engine&lt;/th&gt;
+&lt;th&gt;Maturity&lt;/th&gt;
+&lt;th&gt;License&lt;/th&gt;
+&lt;th&gt;Examples&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;Electron&lt;/td&gt;
+&lt;td&gt;Chromium&lt;/td&gt;
+&lt;td&gt;Stable&lt;/td&gt;
+&lt;td&gt;Many (via Chromium)&lt;/td&gt;
+&lt;td&gt;VS Code, Slack, Discord&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NW.js&lt;/td&gt;
+&lt;td&gt;Chromium&lt;/td&gt;
+&lt;td&gt;?&lt;/td&gt;
+&lt;td&gt;Many (via Chromium)&lt;/td&gt;
+&lt;td&gt;?&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Tauri&lt;/td&gt;
+&lt;td&gt;Chromium (Windows)&lt;br/&gt;WebKit (Linux/macOS)&lt;/td&gt;
+&lt;td&gt;In development&lt;/td&gt;
+&lt;td&gt;Apache&lt;/td&gt;
+&lt;td&gt;?&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Neutralinojs&lt;/td&gt;
+&lt;td&gt;?&lt;/td&gt;
+&lt;td&gt;In development&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://github.com/neutralinojs/neutralinojs/blob/main/LICENSE&quot;&gt;Many&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;?&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;Note that I&amp;#39;m ignoring native code interop because it&amp;#39;s not relevant to me, but I believe NW.js uses Node and Tauri uses Rust.&lt;/p&gt;
+&lt;h1 id=&quot;my-plan&quot;&gt;My plan&lt;/h1&gt;
+&lt;p&gt;For my purposes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I only &lt;em&gt;need&lt;/em&gt; to support Windows (at least initially)&lt;/li&gt;
+&lt;li&gt;I may not need desktop integration or native code&lt;/li&gt;
+&lt;li&gt;I&amp;#39;d like to produce a minimal binary package (i.e. I don&amp;#39;t want to bundle an entire browser runtime if I don&amp;#39;t have to)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Based on that last requirement, Tauri (or maybe Neutralinojs) seemed like the best match, but I had concerns about reliability:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Tauri is built on &lt;a href=&quot;https://developer.microsoft.com/en-us/microsoft-edge/webview2/&quot;&gt;WebView2&lt;/a&gt;, which is installed separately from the operating system (so not all Windows computers will have it installed)&lt;/li&gt;
+&lt;li&gt;Tauri&amp;#39;s bundler produces installers on Windows that apparently &lt;a href=&quot;https://github.com/tauri-apps/tauri/issues/2452&quot;&gt;don&amp;#39;t clearly communicate this requirement&lt;/a&gt;, possibly leading to broken installs&lt;/li&gt;
+&lt;li&gt;This also means that installation inherits the WebView2 runtime&amp;#39;s need for elevated privileges (avoidable by distributing the runtime as well, but that&amp;#39;s basically Electron at that point)&lt;/li&gt;
+&lt;li&gt;Obviously, if I want to later expand to Linux and/or macOS (where Tauri uses WebKit) I might run into incompatibilities (although I haven&amp;#39;t heard of any with the web version of my app)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Taken as a whole (and given that WebView2 is relatively new), unless I have some way to ensure the WebView2 runtime will be present, I will likely end up using Electron, despite my reservations around download size and efficiency. At least in my case, there are some mitigating factors:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;This isn&amp;#39;t an app I expect users to have open all the time (so memory usage is less of a concern)&lt;/li&gt;
+&lt;li&gt;There is a simple fallback for anyone who wants to avoid a large download: just use the web version!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This isn&amp;#39;t the answer I had hoped for, but I&amp;#39;m trying to be pragmatic. Hopefully in the future WebView2 will be installed by default and I can switch to something more lightweight like Tauri.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>My first experience with Rust</title>
 <id>https://log.schemescape.com/posts/rust/first-experience.html</id>
@@ -175,56 +273,6 @@
 &lt;p&gt;I love it when tools just do what I want without any effort!&lt;/p&gt;
 &lt;h1 id=&quot;but-its-not-all-good&quot;&gt;But it&amp;#39;s not all good...&lt;/h1&gt;
 &lt;p&gt;Although I&amp;#39;ve found a lot to like about Deno, not everything has been great (or even good... or even acceptable). Stay tuned for part 2: the gripe session.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Designing md2blog 2.0</title>
-<id>https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html"/>
-<updated>2021-11-10T00:00:00.000Z</updated>
-<summary type="text">I hadn&apos;t even released anything yet and I&apos;ve already rewritten md2blog. Here&apos;s why.</summary>
-<content type="html">&lt;p&gt;I really didn&amp;#39;t want to do this. I probably shouldn&amp;#39;t have done this. But I did it anyway.&lt;/p&gt;
-&lt;p&gt;I created yet another static site generator.&lt;/p&gt;
-&lt;h1 id=&quot;the-recent-past&quot;&gt;The recent past&lt;/h1&gt;
-&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/comparison.html&quot;&gt;investigating a bunch of existing static site generators&lt;/a&gt;, I eventually settled on using &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; (and various plugins) to build my static dev blog. I even went so far as to clean up my code in hopes of releasing a zero-config static dev blog generator called &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/md2blog-design.html&quot;&gt;md2blog&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;But in the end, it just didn&amp;#39;t feel right to publish a tool on NPM with 18 direct dependencies and over 200 transitive dependencies (including &lt;em&gt;6 different file matching libraries&lt;/em&gt;). I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../web-development/souring-on-npm.html&quot;&gt;personally concerned&lt;/a&gt; about the NPM ecosystem&amp;#39;s outrageous dependency trees, and their security implications (Dependency Hell 2.0?), so I decided that I shouldn&amp;#39;t be further contributing to the problem.&lt;/p&gt;
-&lt;h1 id=&quot;enter-deno&quot;&gt;Enter Deno&lt;/h1&gt;
-&lt;p&gt;Fortunately, as noted in &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../web-development/souring-on-npm.html&quot;&gt;my post about NPM&lt;/a&gt;, there&amp;#39;s a relatively new JavaScript (and TypeScript) runtime with a security focus: &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Deno doesn&amp;#39;t magically make it 100% safe to download and run JavaScript code from anywhere, but it at least tries to provide a secure environment by sand boxing JavaScript programs (similar to what is done in a web browser) and only allowing certain operations if permissions are explicitly granted on the command line, e.g.:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ deno run --allow-read=content,out --allow-write=out main.js
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Additionally, Deno provides a &lt;a href=&quot;https://deno.land/std&quot;&gt;standard library&lt;/a&gt; that has been audited by the Deno authors, so you no longer have to pull in modules from unknown contributors just for common tasks like, say, parsing YAML front matter.&lt;/p&gt;
-&lt;p&gt;Deno also has a focus on the full developer experience and includes facilities for testing, static analysis, dependency analysis, stand-alone executables, and more. Again, this means that you don&amp;#39;t have to rely on tens or hundreds of NPM packages just to run some unit tests or publish a stand-alone tool. Oh, and Deno fully embraces &lt;code&gt;await&lt;/code&gt; and &lt;code&gt;async&lt;/code&gt;, so no more dealing with tedious error-first callback patterns!&lt;/p&gt;
-&lt;h1 id=&quot;goodbye-metalsmith&quot;&gt;Goodbye, Metalsmith&lt;/h1&gt;
-&lt;p&gt;While Deno has some &lt;a href=&quot;https://deno.land/manual@v1.16.0/npm_nodejs&quot;&gt;facilities for running Node/NPM modules&lt;/a&gt;, I decided that, in order to limit the number of dependencies I take on and to leverage async language features, I would essentially recreate Metalsmith for Deno. Fortunately, Metalsmith is so simple, my prototype was under 150 lines of code.&lt;/p&gt;
-&lt;p&gt;For now, I&amp;#39;m calling this module Goldsmith. Here&amp;#39;s how Goldsmith differs from Metalsmith:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Built on Deno and TypeScript instead of Node and JavaScript&lt;ul&gt;
-&lt;li&gt;As a result, permissions are limited to only the input and output directories, by default&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Native asynchronous API based on promises&lt;/li&gt;
-&lt;li&gt;Will be released alongside a standard library of essential plugins&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;plugins-and-dependencies&quot;&gt;Plugins and dependencies&lt;/h1&gt;
-&lt;p&gt;Given that &lt;em&gt;most&lt;/em&gt; of the Metalsmith plugins I was using were trivially simple, I decided that I&amp;#39;d just rewrite the ones I needed from scratch in TypeScript.&lt;/p&gt;
-&lt;p&gt;Along the way, I made a few changes to further reduce the number of dependencies:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Standardized on regular expressions for file matching instead of using various glob libraries&lt;/li&gt;
-&lt;li&gt;Replaced Handlebars with a trivially simple template language based on JavaScript&amp;#39;s &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates&quot;&gt;tagged template literals&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Replaced my usage of &lt;a href=&quot;https://lesscss.org/&quot;&gt;Less&lt;/a&gt; with color conversion functions and &lt;code&gt;String.replaceAll()&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;current-state-of-the-tool&quot;&gt;Current state of the tool&lt;/h1&gt;
-&lt;p&gt;While none of the above libraries are fit for general consumption yet, the page you&amp;#39;re reading was generated with my rewritten Deno-based tool. Other than cleaning up the code, adding tests, and releasing everything, the only functionality that is currently missing is:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Command line configuration arguments&lt;/li&gt;
-&lt;li&gt;Test web server with automatic reloading&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;The first one should be easy, and I think the second one shouldn&amp;#39;t be too hard either (hopefully just a matter of injecting a script to connect to a WebSocket that pushes out reload requests based on &lt;a href=&quot;https://doc.deno.land/builtin/stable#Deno.watchFs&quot;&gt;Deno.watchFs()&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: Both of these are now implemented.&lt;/p&gt;
-&lt;h1 id=&quot;a-parting-note&quot;&gt;A parting note&lt;/h1&gt;
-&lt;p&gt;So there you have it. Depending on how you count, this is either the 4th or 5th static site generator I&amp;#39;ve built. I like to hope this will be my last.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog has been released&lt;/a&gt;.&lt;/p&gt;
 </content>
 </entry>
 </feed>
