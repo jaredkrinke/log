@@ -1,8 +1,7 @@
 ---
 title: Frameworks for porting web apps to the desktop
-description: This is my initial research on porting a browser-based app to a full-fledged desktop app.
-date: 2022-01-05
-draft: true
+description: This is my initial research into converting a web app to a desktop app.
+date: 2022-01-13
 ---
 I have a browser-based application that I'd like to transform into a "normal" desktop application.
 
@@ -20,7 +19,7 @@ Some more typical reasons for porting from web to desktop might be:
 # Why not?
 Some downsides:
 
-* Electron (the most popular desktop framework for web technologies) produces large binaries (100+ MB) that use a lot of memory (due to bundling an entire browser engine within each application, to ensure consistency across devices)
+* Electron (the most popular desktop framework for web technologies) produces large binaries (100+ MB) that use a lot of memory (due to bundling an entire browser engine within each application, presumably to ensure consistency across devices)
   * This also means that copyright notices for a huge number of open source libraries Chromium uses must be included
 * These frameworks typically have their own unique build processes, which adds additional complexity as compared to building a desktop app "the normal way"
 
@@ -47,9 +46,19 @@ Note that I'm ignoring native code interop because it's not relevant to me, but 
 For my purposes:
 
 * I only *need* to support Windows (at least initially)
-* I don't need desktop integration or native code
+* I may not need desktop integration or native code
 * I'd like to produce a minimal binary package (i.e. I don't want to bundle an entire browser runtime if I don't have to)
 
-Based on these requirements, Tauri (or maybe Neutralinojs) seems like the best match, so I'm planning to try Tauri first.
+Based on that last requirement, Tauri (or maybe Neutralinojs) seemed like the best match, but I had concerns about reliability:
 
-I'm a little concerned that if I want to later expand to Linux and/or macOS (where Tauri uses WebKit) I might run into incompatibilities, but I haven't had any complaints about my web app working on other platforms, so this is a risk I'm willing to take, for a hobby project anyway.
+* Tauri is built on [WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/), which is installed separately from the operating system (so not all Windows computers will have it installed)
+* Tauri's bundler produces installers on Windows that apparently [don't clearly communicate this requirement](https://github.com/tauri-apps/tauri/issues/2452), possibly leading to broken installs
+* This also means that installation inherits the WebView2 runtime's need for elevated privileges (avoidable by distributing the runtime as well, but that's basically Electron at that point)
+* Obviously, if I want to later expand to Linux and/or macOS (where Tauri uses WebKit) I might run into incompatibilities (although I haven't heard of any with the web version of my app)
+
+Taken as a whole (and given that WebView2 is relatively new), unless I have some way to ensure the WebView2 runtime will be present, I will likely end up using Electron, despite my reservations around download size and efficiency. At least in my case, there are some mitigating factors:
+
+* This isn't an app I expect users to have open all the time (so memory usage is less of a concern)
+* There is a simple fallback for anyone who wants to avoid a large download: just use the web version!
+
+This isn't the answer I had hoped for, but I'm trying to be pragmatic. Hopefully in the future WebView2 will be installed by default and I can switch to something more lightweight like Tauri.
