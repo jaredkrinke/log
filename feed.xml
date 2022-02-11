@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-01-13T22:32:23.528Z</updated>
+<updated>2022-02-11T16:41:35.325Z</updated>
 
 <entry>
 <title>Frameworks for porting web apps to the desktop</title>
@@ -109,8 +109,8 @@
 </entry>
 <entry>
 <title>My first experience with Rust</title>
-<id>https://log.schemescape.com/posts/rust/first-experience.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/rust/first-experience.html"/>
+<id>https://log.schemescape.com/posts/programming-languages/first-experience.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/first-experience.html"/>
 <updated>2022-01-06T00:00:00.000Z</updated>
 <summary type="text">Rust is popular and I&apos;m interested in its memory safety features and build system. Here&apos;s my first experience with Rust.</summary>
 <content type="html">&lt;p&gt;&lt;a href=&quot;https://www.rust-lang.org/&quot;&gt;Rust&lt;/a&gt; is so popular these days that &amp;quot;written in Rust&amp;quot; is undoubtedly going to become a meme (if it hasn&amp;#39;t already). It&amp;#39;s time I give it a try!&lt;/p&gt;
@@ -127,7 +127,7 @@
 &lt;/ul&gt;
 &lt;p&gt;If I had to pick the worst part of C++ development, I&amp;#39;d say it&amp;#39;s setting up a build system and dealing with dependencies. To me, Cargo is actually the biggest differentiator for Rust as compared to C++.&lt;/p&gt;
 &lt;h1 id=&quot;installing-rust&quot;&gt;Installing Rust&lt;/h1&gt;
-&lt;p&gt;It might be unreasonable, but I&amp;#39;d like my programming language of choice to have a development environment that is compact and simple to setup. Aside: this is one of the reasons I enjoy &lt;a href=&quot;https://log.schemescape.com/posts/rust/../web-development/one-month-with-deno.html&quot;&gt;Deno&lt;/a&gt;: it ships as a single (fairly small) binary.&lt;/p&gt;
+&lt;p&gt;It might be unreasonable, but I&amp;#39;d like my programming language of choice to have a development environment that is compact and simple to setup. Aside: this is one of the reasons I enjoy &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../web-development/one-month-with-deno.html&quot;&gt;Deno&lt;/a&gt;: it ships as a single (fairly small) binary.&lt;/p&gt;
 &lt;p&gt;Following Rust&amp;#39;s &lt;a href=&quot;https://www.rust-lang.org/learn/get-started&quot;&gt;getting started instructions&lt;/a&gt;, I&amp;#39;m immediately discouraged:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;It looks like you’re running Windows. To start using Rust, download the installer, then run the program and follow the onscreen instructions. You may need to install the Visual Studio C++ Build tools when prompted to do so.&lt;/p&gt;
