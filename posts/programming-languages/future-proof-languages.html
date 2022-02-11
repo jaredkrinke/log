@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Future-proof programming languages</title>
+<meta name="description" content="My projects are currently on hold while I suffer from programming language analysis paralysis." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Future-proof programming languages",
+  "abstract": "My projects are currently on hold while I suffer from programming language analysis paralysis.",
+  "keywords": "programming-languages",
+  "datePublished": "2022-02-11"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/programming-languages/future-proof-languages.html">Future-proof programming languages</a></h1>
+<p><time datetime="2022-02-11">February 11, 2022</time></p>
+</header>
+<p>After some rapid progress on projects such as <a href="../releases/md2blog-1.1.1.html">md2blog</a>, everything has come to a screeching halt while I struggle with making future-proof technology choices. This post is specifically about programming languages.</p>
+<h1 id="why-future-proof">Why future-proof?</h1>
+<p>I want code that I write to continue being useful to me in the future. Specifically, I want to be able to:</p>
+<ul>
+<li>Run my code</li>
+<li>Recompile my code (in case I end up on a new platform)</li>
+<li>Reuse my code in other projects</li>
+<li>Do all of the above with a minimum of hassle (and no multi-gigabyte downloads!)</li>
+</ul>
+<p>And this is why I&#39;m stuck on trying to find a comfortable, future-proof programming language.</p>
+<h1 id="indicators">Indicators</h1>
+<p>Here are some ideas on what indicates that a programming language will persist well into the future:</p>
+<ul>
+<li>Availability of <em>open source</em> compilers and tooling (ideally multiple implementations that are mutually compatible)</li>
+<li>Support for many platforms</li>
+<li>Broad usage (both in open source projects and industry)</li>
+<li>Actively maintained standard library</li>
+<li>No breaking changes (ideally)</li>
+</ul>
+<p>Of course, I&#39;d also like the programming language to be convenient and comfortable, so I&#39;ll add to my wishlist:</p>
+<ul>
+<li>No multi-gigabyte downloads just to get started</li>
+<li>Not tied to a single platform/environment/tool set</li>
+<li>Small and simple (in case I want to build my own tools)</li>
+<li>Easily cross-compiled</li>
+<li>Simple and transparent build process</li>
+<li>Readily available libraries (either with source available or from reputable contributors)</li>
+<li>Ergonomic editing</li>
+</ul>
+<h1 id="observations">Observations</h1>
+<p>According to <a href="https://insights.stackoverflow.com/survey/2021#technology-most-popular-technologies">Stack Overflow</a>, the most popular programming languages are:</p>
+<ol>
+<li>JavaScript</li>
+<li>Python</li>
+<li>Java</li>
+<li>TypeScript</li>
+<li>C#</li>
+<li>C++</li>
+<li>PHP</li>
+<li>C</li>
+<li>Go</li>
+<li>Kotlin</li>
+<li>Rust</li>
+<li>Ruby</li>
+<li>Dart</li>
+<li>Swift</li>
+<li>Objective C</li>
+<li>Scala</li>
+<li>Perl</li>
+<li>Haskell</li>
+<li>Clojure</li>
+<li>Elixir</li>
+<li>Lisp</li>
+<li>Zig (not actually on the list)</li>
+<li>Lua (also not on the list)</li>
+</ol>
+<p>Now it&#39;s time to ruthlessly eliminate popular programming languages.</p>
+<p>Some languages are mostly tied to a particular platform, so they get cut:</p>
+<ul>
+<li>PHP</li>
+<li>Kotlin</li>
+<li>Dart</li>
+<li>Swift</li>
+<li>Objective C</li>
+<li>Scala</li>
+<li>Elixir</li>
+</ul>
+<p>Java and Perl I have experience with, and frankly, they&#39;re too cumbersome, so I won&#39;t investigate them further.</p>
+<h1 id="second-round">Second round</h1>
+<p>After some initial pruning, here is the list with my initial thoughts:</p>
+<ul>
+<li><strong>JavaScript/TypeScript</strong>: lots of implementations and modern JavaScript is nice, but comes with a ton of baggage; TypeScript brings some sanity to the language</li>
+<li><strong>Python</strong>: setting up a Python environment is a recurring nightmare of mine, but it&#39;s so popular that I probably need to give it another shot</li>
+<li><strong>C#</strong>: a great language and standard library, but how much of it is open source? Is it portable? Can I run .NET on a Raspberry Pi?</li>
+<li><strong>C++</strong>: terribly complex, but modern C++ is surprisingly convenient; the build systems are generally awful, though</li>
+<li><strong>C</strong>: probably the most portable and future-proof language ever created, but not very ergonomic</li>
+<li><strong>Go</strong>: &quot;goroutines&quot; seem great and I&#39;ve heard the tooling is nice, but a garbage-collected language with C-like verbosity sounds like the worst of both worlds to me</li>
+<li><strong>Rust</strong>: new and popular, with an appealing memory model, but there&#39;s really only one implementation and <a href="rust-first-experience.html">my first experience setting Rust up on Windows was terrible</a></li>
+<li><strong>Ruby</strong>: just as annoying to setup as Python, but less popular</li>
+<li><strong>Haskell</strong>: it&#39;s been a while since I used a purely functional programming language</li>
+<li><strong>Lisp/Clojure</strong>: I love the simplicity of Lisp (namely Scheme), but I have doubts about it being convenient and portable</li>
+<li><strong>Zig</strong>: probably too new and with too many breaking changes, but I like the idea of a more sane alternative to C, and the Zig compiler is very convenient</li>
+<li><strong>Lua</strong>: I used to love Lua, but TypeScript just seems so much more popular and productive these days</li>
+</ul>
+<p>Given that this list is already too long, I&#39;m going to eliminate a few options without proper due diligence (either based on prior experience or based on the belief that similar but superior options exist elsewhere on this list). Apologies to the following languages that have been cut:</p>
+<ul>
+<li>Ruby</li>
+<li>Haskell</li>
+<li>Lua</li>
+</ul>
+<h1 id="third-round">Third round</h1>
+<p>For the next round, I&#39;ll do more research and hopefully play around with the languages I&#39;m unfamiliar with.</p>
+<p>Some initial thoughts on the languages I&#39;m familiar with:</p>
+<ul>
+<li>TypeScript: comfortable and convenient, but memory usage and parallelism is a concern</li>
+<li>C#: can this run on a Raspberry Pi? How much of the standard library is closed source?</li>
+<li>C++: is there C++ environment that is quick and easy to setup?</li>
+<li>C: a frontrunner, despite its numerous problems</li>
+</ul>
+<p>And here are the languages I need to investigate further:</p>
+<ul>
+<li>Python</li>
+<li>Go</li>
+<li>Rust</li>
+<li>Lisp/Clojure</li>
+<li>Zig</li>
+</ul>
+<h1 id="thats-all-for-now">That&#39;s all for now</h1>
+<p>That&#39;s as far as I&#39;ve gotten. My next steps are to see if C# is viable, determine if there&#39;s a convenient C++ environment, give Python yet another try, and then play around with Go, Rust, Clojure (or other Lisps), and Zig.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

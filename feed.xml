@@ -7,8 +7,125 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-02-11T16:41:35.325Z</updated>
+<updated>2022-02-11T18:24:50.796Z</updated>
 
+<entry>
+<title>Future-proof programming languages</title>
+<id>https://log.schemescape.com/posts/programming-languages/future-proof-languages.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/future-proof-languages.html"/>
+<updated>2022-02-11T00:00:00.000Z</updated>
+<summary type="text">My projects are currently on hold while I suffer from programming language analysis paralysis.</summary>
+<content type="html">&lt;p&gt;After some rapid progress on projects such as &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../releases/md2blog-1.1.1.html&quot;&gt;md2blog&lt;/a&gt;, everything has come to a screeching halt while I struggle with making future-proof technology choices. This post is specifically about programming languages.&lt;/p&gt;
+&lt;h1 id=&quot;why-future-proof&quot;&gt;Why future-proof?&lt;/h1&gt;
+&lt;p&gt;I want code that I write to continue being useful to me in the future. Specifically, I want to be able to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Run my code&lt;/li&gt;
+&lt;li&gt;Recompile my code (in case I end up on a new platform)&lt;/li&gt;
+&lt;li&gt;Reuse my code in other projects&lt;/li&gt;
+&lt;li&gt;Do all of the above with a minimum of hassle (and no multi-gigabyte downloads!)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And this is why I&amp;#39;m stuck on trying to find a comfortable, future-proof programming language.&lt;/p&gt;
+&lt;h1 id=&quot;indicators&quot;&gt;Indicators&lt;/h1&gt;
+&lt;p&gt;Here are some ideas on what indicates that a programming language will persist well into the future:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Availability of &lt;em&gt;open source&lt;/em&gt; compilers and tooling (ideally multiple implementations that are mutually compatible)&lt;/li&gt;
+&lt;li&gt;Support for many platforms&lt;/li&gt;
+&lt;li&gt;Broad usage (both in open source projects and industry)&lt;/li&gt;
+&lt;li&gt;Actively maintained standard library&lt;/li&gt;
+&lt;li&gt;No breaking changes (ideally)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Of course, I&amp;#39;d also like the programming language to be convenient and comfortable, so I&amp;#39;ll add to my wishlist:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;No multi-gigabyte downloads just to get started&lt;/li&gt;
+&lt;li&gt;Not tied to a single platform/environment/tool set&lt;/li&gt;
+&lt;li&gt;Small and simple (in case I want to build my own tools)&lt;/li&gt;
+&lt;li&gt;Easily cross-compiled&lt;/li&gt;
+&lt;li&gt;Simple and transparent build process&lt;/li&gt;
+&lt;li&gt;Readily available libraries (either with source available or from reputable contributors)&lt;/li&gt;
+&lt;li&gt;Ergonomic editing&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;observations&quot;&gt;Observations&lt;/h1&gt;
+&lt;p&gt;According to &lt;a href=&quot;https://insights.stackoverflow.com/survey/2021#technology-most-popular-technologies&quot;&gt;Stack Overflow&lt;/a&gt;, the most popular programming languages are:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;JavaScript&lt;/li&gt;
+&lt;li&gt;Python&lt;/li&gt;
+&lt;li&gt;Java&lt;/li&gt;
+&lt;li&gt;TypeScript&lt;/li&gt;
+&lt;li&gt;C#&lt;/li&gt;
+&lt;li&gt;C++&lt;/li&gt;
+&lt;li&gt;PHP&lt;/li&gt;
+&lt;li&gt;C&lt;/li&gt;
+&lt;li&gt;Go&lt;/li&gt;
+&lt;li&gt;Kotlin&lt;/li&gt;
+&lt;li&gt;Rust&lt;/li&gt;
+&lt;li&gt;Ruby&lt;/li&gt;
+&lt;li&gt;Dart&lt;/li&gt;
+&lt;li&gt;Swift&lt;/li&gt;
+&lt;li&gt;Objective C&lt;/li&gt;
+&lt;li&gt;Scala&lt;/li&gt;
+&lt;li&gt;Perl&lt;/li&gt;
+&lt;li&gt;Haskell&lt;/li&gt;
+&lt;li&gt;Clojure&lt;/li&gt;
+&lt;li&gt;Elixir&lt;/li&gt;
+&lt;li&gt;Lisp&lt;/li&gt;
+&lt;li&gt;Zig (not actually on the list)&lt;/li&gt;
+&lt;li&gt;Lua (also not on the list)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Now it&amp;#39;s time to ruthlessly eliminate popular programming languages.&lt;/p&gt;
+&lt;p&gt;Some languages are mostly tied to a particular platform, so they get cut:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;PHP&lt;/li&gt;
+&lt;li&gt;Kotlin&lt;/li&gt;
+&lt;li&gt;Dart&lt;/li&gt;
+&lt;li&gt;Swift&lt;/li&gt;
+&lt;li&gt;Objective C&lt;/li&gt;
+&lt;li&gt;Scala&lt;/li&gt;
+&lt;li&gt;Elixir&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Java and Perl I have experience with, and frankly, they&amp;#39;re too cumbersome, so I won&amp;#39;t investigate them further.&lt;/p&gt;
+&lt;h1 id=&quot;second-round&quot;&gt;Second round&lt;/h1&gt;
+&lt;p&gt;After some initial pruning, here is the list with my initial thoughts:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;JavaScript/TypeScript&lt;/strong&gt;: lots of implementations and modern JavaScript is nice, but comes with a ton of baggage; TypeScript brings some sanity to the language&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Python&lt;/strong&gt;: setting up a Python environment is a recurring nightmare of mine, but it&amp;#39;s so popular that I probably need to give it another shot&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;C#&lt;/strong&gt;: a great language and standard library, but how much of it is open source? Is it portable? Can I run .NET on a Raspberry Pi?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;C++&lt;/strong&gt;: terribly complex, but modern C++ is surprisingly convenient; the build systems are generally awful, though&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;C&lt;/strong&gt;: probably the most portable and future-proof language ever created, but not very ergonomic&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Go&lt;/strong&gt;: &amp;quot;goroutines&amp;quot; seem great and I&amp;#39;ve heard the tooling is nice, but a garbage-collected language with C-like verbosity sounds like the worst of both worlds to me&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rust&lt;/strong&gt;: new and popular, with an appealing memory model, but there&amp;#39;s really only one implementation and &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/rust-first-experience.html&quot;&gt;my first experience setting Rust up on Windows was terrible&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ruby&lt;/strong&gt;: just as annoying to setup as Python, but less popular&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Haskell&lt;/strong&gt;: it&amp;#39;s been a while since I used a purely functional programming language&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lisp/Clojure&lt;/strong&gt;: I love the simplicity of Lisp (namely Scheme), but I have doubts about it being convenient and portable&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Zig&lt;/strong&gt;: probably too new and with too many breaking changes, but I like the idea of a more sane alternative to C, and the Zig compiler is very convenient&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lua&lt;/strong&gt;: I used to love Lua, but TypeScript just seems so much more popular and productive these days&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Given that this list is already too long, I&amp;#39;m going to eliminate a few options without proper due diligence (either based on prior experience or based on the belief that similar but superior options exist elsewhere on this list). Apologies to the following languages that have been cut:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ruby&lt;/li&gt;
+&lt;li&gt;Haskell&lt;/li&gt;
+&lt;li&gt;Lua&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;third-round&quot;&gt;Third round&lt;/h1&gt;
+&lt;p&gt;For the next round, I&amp;#39;ll do more research and hopefully play around with the languages I&amp;#39;m unfamiliar with.&lt;/p&gt;
+&lt;p&gt;Some initial thoughts on the languages I&amp;#39;m familiar with:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;TypeScript: comfortable and convenient, but memory usage and parallelism is a concern&lt;/li&gt;
+&lt;li&gt;C#: can this run on a Raspberry Pi? How much of the standard library is closed source?&lt;/li&gt;
+&lt;li&gt;C++: is there C++ environment that is quick and easy to setup?&lt;/li&gt;
+&lt;li&gt;C: a frontrunner, despite its numerous problems&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And here are the languages I need to investigate further:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Python&lt;/li&gt;
+&lt;li&gt;Go&lt;/li&gt;
+&lt;li&gt;Rust&lt;/li&gt;
+&lt;li&gt;Lisp/Clojure&lt;/li&gt;
+&lt;li&gt;Zig&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;thats-all-for-now&quot;&gt;That&amp;#39;s all for now&lt;/h1&gt;
+&lt;p&gt;That&amp;#39;s as far as I&amp;#39;ve gotten. My next steps are to see if C# is viable, determine if there&amp;#39;s a convenient C++ environment, give Python yet another try, and then play around with Go, Rust, Clojure (or other Lisps), and Zig.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Frameworks for porting web apps to the desktop</title>
 <id>https://log.schemescape.com/posts/web-development/web-apps-on-the-desktop.html</id>
@@ -109,8 +226,8 @@
 </entry>
 <entry>
 <title>My first experience with Rust</title>
-<id>https://log.schemescape.com/posts/programming-languages/first-experience.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/first-experience.html"/>
+<id>https://log.schemescape.com/posts/programming-languages/rust-first-experience.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/rust-first-experience.html"/>
 <updated>2022-01-06T00:00:00.000Z</updated>
 <summary type="text">Rust is popular and I&apos;m interested in its memory safety features and build system. Here&apos;s my first experience with Rust.</summary>
 <content type="html">&lt;p&gt;&lt;a href=&quot;https://www.rust-lang.org/&quot;&gt;Rust&lt;/a&gt; is so popular these days that &amp;quot;written in Rust&amp;quot; is undoubtedly going to become a meme (if it hasn&amp;#39;t already). It&amp;#39;s time I give it a try!&lt;/p&gt;
@@ -210,69 +327,6 @@
 &lt;h1 id=&quot;so-will-i-keep-using-deno&quot;&gt;So will I keep using Deno?&lt;/h1&gt;
 &lt;p&gt;More than once, I&amp;#39;ve wondered if working around the limitations of Deno is costing me more time than I&amp;#39;m saving by using Deno. It very well might.&lt;/p&gt;
 &lt;p&gt;In the end, however, I plan to continue using Deno because it provides the best TypeScript runtime I&amp;#39;ve seen, and its features (and most of its goals) align with my needs and preferences.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>One month with Deno (the good parts)</title>
-<id>https://log.schemescape.com/posts/web-development/one-month-with-deno.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/web-development/one-month-with-deno.html"/>
-<updated>2021-12-06T00:00:00.000Z</updated>
-<summary type="text">I made the switch from Node to Deno recently. Here&apos;s what I&apos;ve liked after a month of using Deno.</summary>
-<content type="html">&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/web-development/souring-on-npm.html&quot;&gt;souring on NPM&lt;/a&gt; (due to unnecessarily huge dependency trees and security concerns), I decided to give &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt; a try. Deno supports sand-boxing, TypeScript, and ES modules out of the box. Deno has a standard library, along with a simple and transparent module registry, and also comes with with handy tools for bundling and static analysis.&lt;/p&gt;
-&lt;h1 id=&quot;what-ive-liked-about-deno&quot;&gt;What I&amp;#39;ve liked about Deno&lt;/h1&gt;
-&lt;h2 id=&quot;sand-boxing&quot;&gt;Sand-boxing&lt;/h2&gt;
-&lt;p&gt;Deno disallows file system access, network access, and other privileges by default. You can provide fine-grained permissions on the command line, e.g. &lt;code&gt;--allow-read=file.txt&lt;/code&gt; will let the script read &lt;code&gt;file.txt&lt;/code&gt; in the current directory.&lt;/p&gt;
-&lt;p&gt;In an ideal world this wouldn&amp;#39;t be necessary, but given that hackers have been targeting package registries such as NPM, this is a step in the right direction. As an example, say that I want to find a quick tool to convert a file from one format to another. Here are some options for doing this:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;In the past, you might just try to find a tool for this purpose, download it, and run it.&lt;ul&gt;
-&lt;li&gt;Today, that would be a terrible idea because the tool runs as your user and could, in an extreme example, contain ransomware.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;In the recent past, you might do essentially the same as above, just downloading from NPM and running in Node.&lt;ul&gt;
-&lt;li&gt;Again, very risky.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Without Deno, you could run the tool in a container or VM (or restricted user).&lt;ul&gt;
-&lt;li&gt;This can be safe, but inconvenient.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;With Deno, you might just run the tool with no extra privileges.&lt;ul&gt;
-&lt;li&gt;If the tool just reads from standard input and writes to standard output, great!&lt;/li&gt;
-&lt;li&gt;If the tool has malware that tries to write to the file system or access the network, Deno will block it.&lt;/li&gt;
-&lt;li&gt;Of course, this isn&amp;#39;t 100% safe (&lt;a href=&quot;https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)&quot;&gt;Spectre&lt;/a&gt; worked from inside the web browser&amp;#39;s sand box, after all), but it&amp;#39;s much better than nothing!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Full details on Deno&amp;#39;s permissions are &lt;a href=&quot;https://deno.land/manual@v1.16.4/getting_started/permissions&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;audited-standard-library&quot;&gt;Audited standard library&lt;/h2&gt;
-&lt;p&gt;One of the reasons that NPM projects tend to have gigantic dependency trees is that JavaScript (unlike most popular programming languages of today) doesn&amp;#39;t really come with a standard library. This meant that common tasks such as parsing command line arguments are farmed out to dependencies, which then of course pull in whatever dependencies those authors felt like using, and so on until you have hundreds of dependencies (yes, that happened to me pretty quickly).&lt;/p&gt;
-&lt;p&gt;Deno brings JavaScript (and TypeScript) into the modern era by &lt;a href=&quot;https://deno.land/std@0.117.0&quot;&gt;providing a standard library&lt;/a&gt; containing code that has been audited by the Deno authors. The library is not yet comprehensive and navigating the documentation is currently unpleasant, but having a set of trusted dependencies that will be maintained by the Deno authors is a relief after coming from the Node/NPM ecosystem.&lt;/p&gt;
-&lt;h2 id=&quot;native-typescript-support&quot;&gt;Native TypeScript support&lt;/h2&gt;
-&lt;p&gt;I like JavaScript for prototyping, but I like TypeScript and its tooling more. Honestly, if you know what you&amp;#39;re doing, the compiler should be your friend, helpfully pointing out when you&amp;#39;ve made a typo or not quite lined up types across a function or module boundary. The problem with TypeScript for me has always been setting up a development environment and build scripts.&lt;/p&gt;
-&lt;p&gt;With Deno, you get the benefits of TypeScript without having to do any special setup. Just use the &lt;code&gt;.ts&lt;/code&gt; file extension, and Deno will automatically type-check, compile, and run your code. You can even publish your module as TypeScript and Deno scripts can consume it without doing anything special.&lt;/p&gt;
-&lt;p&gt;If you&amp;#39;re interested in TypeScript, but struggled with Node and NPM (and &lt;code&gt;ts-node&lt;/code&gt;, etc.), give Deno a try!&lt;/p&gt;
-&lt;h2 id=&quot;web-standard-apis&quot;&gt;Web standard APIs&lt;/h2&gt;
-&lt;p&gt;One of the dreams of Node was to write &amp;quot;isomorphic&amp;quot; code that runs both in Node and the browser. Deno brings this one step closer to reality by embracing browser APIs (e.g. &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API&quot;&gt;fetch&lt;/a&gt;). This is helpful because you can learn about the browser while writing code for Deno and vice versa.&lt;/p&gt;
-&lt;h2 id=&quot;simple-transparent-module-registry&quot;&gt;Simple, transparent module registry&lt;/h2&gt;
-&lt;p&gt;A major complaint I have with most package managers and package registries is that they don&amp;#39;t make it easy to see what is inside a package before downloading it. NPM is especially bad here because, by default, installing a package can run arbitrary scripts, so you might get malware just by trying to check and see if a package contains malware (this is your reminder to enable NPM&amp;#39;s &lt;a href=&quot;https://docs.npmjs.com/cli/v7/commands/npm-install#ignore-scripts&quot;&gt;ignore-scripts&lt;/a&gt; setting).&lt;/p&gt;
-&lt;p&gt;Deno&amp;#39;s module registry is &lt;a href=&quot;https://deno.land/x/&quot;&gt;https://deno.land/x/&lt;/a&gt; and all it does is mirror code from GitHub when tags are pushed. This means that you can browse the &lt;em&gt;exact&lt;/em&gt; code you&amp;#39;ll be downloading prior to actually downloading anything. It also automatically generates documentation from JSDoc comments and helpfully displays the list of (static) external dependencies for a given file.&lt;/p&gt;
-&lt;p&gt;I do have concerns about tying the module registry so intimately to GitHub, but for now I just like having a transparent registry that takes the guesswork out of auditing dependencies.&lt;/p&gt;
-&lt;h2 id=&quot;bundlercompiler-script-installer&quot;&gt;Bundler/compiler, script installer&lt;/h2&gt;
-&lt;p&gt;One theme with Deno is that it has a focus on the entire development experience. Sometimes this is called having &amp;quot;batteries included&amp;quot;. For example, one common problem with scripting languages is that sharing a tool usually requires also sharing the entire runtime environment. E.g. if I want to run a Python script, I need a Python environment (in Python&amp;#39;s case, this is probably even true if I already have Python installed, thanks to frequent breaking changes).&lt;/p&gt;
-&lt;p&gt;Deno simplifies this by including a &lt;a href=&quot;https://deno.land/manual@v1.16.4/tools/compiler&quot;&gt;built in bundler and compiler&lt;/a&gt; that packages up a script, its dependencies, and the Deno runtime into a single (~30 MB) download. Obviously, this isn&amp;#39;t efficient if you&amp;#39;re using a lot of Deno tools, but it&amp;#39;s indispensible if you don&amp;#39;t care about Deno and just want to use one specific Deno-based tool.&lt;/p&gt;
-&lt;p&gt;For a more efficient option, Deno also includes a &lt;a href=&quot;https://deno.land/manual@v1.16.4/tools/script_installer&quot;&gt;script installer&lt;/a&gt; that allows you to just download and install a specific script (and its dependencies), relying on the version of Deno you already have.&lt;/p&gt;
-&lt;p&gt;Together, these mean that if someone wants to use your tool, they have two great options (both of which can be supported without third party tools/plugins):&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Just download the self-contained executable and run it,&lt;/li&gt;
-&lt;li&gt;Or just install your script with &lt;code&gt;deno install&lt;/code&gt; and run it&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;built-in-support-for-testing-and-code-coverage&quot;&gt;Built-in support for testing and code coverage&lt;/h2&gt;
-&lt;p&gt;While &lt;a href=&quot;https://deno.land/manual@v1.16.4/testing&quot;&gt;Deno&amp;#39;s testing framework&lt;/a&gt; isn&amp;#39;t as mature or featureful as some of the Node testing frameworks (although &lt;a href=&quot;https://deno.land/manual@v1.16.4/testing#integration-with-testing-libraries&quot;&gt;integrations with other libraries exist&lt;/a&gt;), there is one advantage: there&amp;#39;s no install or setup required (no more fiddling with dependencies or test scripts!).&lt;/p&gt;
-&lt;p&gt;For example, if I want to write some quick unit tests for &lt;code&gt;foo.ts&lt;/code&gt;, I can just create &lt;code&gt;foo.test.ts&lt;/code&gt;, write some tests (see the previous link for example code), and then run &lt;code&gt;deno test&lt;/code&gt;. It will find my test file, run the tests, and print out the results.&lt;/p&gt;
-&lt;p&gt;I love it when tools just do what I want without any effort!&lt;/p&gt;
-&lt;h1 id=&quot;but-its-not-all-good&quot;&gt;But it&amp;#39;s not all good...&lt;/h1&gt;
-&lt;p&gt;Although I&amp;#39;ve found a lot to like about Deno, not everything has been great (or even good... or even acceptable). Stay tuned for part 2: the gripe session.&lt;/p&gt;
 </content>
 </entry>
 </feed>
