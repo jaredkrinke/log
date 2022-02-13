@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Testing out C# in 2022</title>
+<meta name="description" content="In my quest to find a future-proof programming language, I&#39;m investigating C#." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Testing out C# in 2022",
+  "abstract": "In my quest to find a future-proof programming language, I'm investigating C#.",
+  "keywords": "programming-languages",
+  "datePublished": "2022-02-13"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/programming-languages/c-sharp.html">Testing out C# in 2022</a></h1>
+<p><time datetime="2022-02-13">February 13, 2022</time></p>
+</header>
+<p>In <a href="future-proof-languages.html">a previous article</a>, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&#39;d still be useful in another decade.</p>
+<p>Now, I&#39;m drilling into the most promising candidates. First up is C#.</p>
+<h1 id="setting-up-a-c-development-environment">Setting up a C# development environment</h1>
+<p>To my surprise, the <a href="https://github.com/dotnet/roslyn">C# compiler</a> and <a href="https://github.com/dotnet/runtime">.NET runtime</a> are both now open source (MIT license). Even more surprising, you can now apparently <a href="https://docs.microsoft.com/en-us/dotnet/iot/deployment">deploy self-contained .NET executables to a Raspberry Pi</a>.</p>
+<p>C# is a great language and the .NET standard library is probably the most thoughtfully crafted standard library I&#39;ve ever used. So is my search over? Is C# the answer?</p>
+<p>First, I need to setup a C# development environment. After selecting the .NET runtime and SDK in the Visual Studio installer, I am appalled to see that it requires <em>5 GB</em> of disk space! There&#39;s probably a bunch of extraneous junk I don&#39;t need, but for comparison: Visual Studio Code is ~300 MB and Deno&#39;s TypeScript runtime is ~60 MB.</p>
+<p>Even after installing all that software, I tried opening a C# project that I created with the <code>dotnet new</code> command line interface and it told me I needed to install 3.5 GB of software. I think this might be because ASP.NET Core wants to use an older version of .NET. Regardless, as far as I can tell, this is in addition to the 5 GB I already installed, so we&#39;re up to something like 8.5 GB just to run a &quot;hello world&quot; web server.</p>
+<p>Fighting my instinct to run away from such a massive disk footprint, I went ahead and installed everything. At least if I test out C# and find it&#39;s not a good fit for me, I&#39;ll be able to easily recover a large amount of disk space without hesitation.</p>
+<h1 id="putting-c-and-net-through-its-paces-or-not">Putting C# and .NET through its paces (or not)</h1>
+<p>As an initial test, I&#39;d like to build a self-contained &quot;hello world&quot; web server, running on Windows (32-bit and 64-bit), Linux (x64 Debian and Alpine), and a Raspberry Pi.</p>
+<p>Unfortunately, even with multiple .NET frameworks and SDKs installed and running Visual Studio, I was not able to successfully build a self-contained executable (it seemed to think I was using .NET Core, which I don&#39;t think I ever installed). After uninstalling the .NET 5.0 SDK, it seems that .NET 4.7.2 was also uninstalled, along with the .NET command line interface (<code>dotnet</code>). Reloading my test project prompted me to retarget to a previous .NET version, but then the project wouldn&#39;t build at all (even &quot;framework-dependent&quot;). Keep in mind this was a trivial &quot;hello world&quot; <em>command line</em> app, as in just <code>Console.WriteLine(&quot;Hello, world!&quot;)</code> inside a class&#39;s <code>Main</code> function).</p>
+<p>Even worse, after throwing up my hands in frustration, I went to uninstall all the .NET and C# components (to start over from scratch) and now Visual Studio&#39;s installer is claiming they&#39;re required for C++ development, so I guess I&#39;m never getting that disk space back unless I want to break my C++ development environment.</p>
+<h1 id="thats-unfortunate">That&#39;s unfortunate...</h1>
+<p>Despite my concerns around C# being closed source, I found that a lot of the C# tooling is actually open source now. Unfortunately, it still seems to be inextricably tied to Visual Studio and its massive, opaque installation process.</p>
+<p>I feel a bit bad about giving up so quickly, but my experience with C# thus far has been the polar opposite of &quot;convenient&quot;. I want a programming language that is future-proof, convenient, and comfortable. C# is comfortable. I don&#39;t know if it&#39;s future-proof (or portable). But it is most definitely <em>not</em> convenient.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
