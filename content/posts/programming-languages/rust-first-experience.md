@@ -2,6 +2,7 @@
 title: My first experience with Rust
 description: Rust is popular and I'm interested in its memory safety features and build system. Here's my first experience with Rust.
 date: 2022-01-06
+keywords: [rust]
 ---
 [Rust](https://www.rust-lang.org/) is so popular these days that "written in Rust" is undoubtedly going to become a meme (if it hasn't already). It's time I give it a try!
 
