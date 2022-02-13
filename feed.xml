@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-02-11T18:24:50.796Z</updated>
+<updated>2022-02-13T01:55:20.363Z</updated>
 
 <entry>
 <title>Future-proof programming languages</title>
@@ -109,7 +109,7 @@
 &lt;p&gt;For the next round, I&amp;#39;ll do more research and hopefully play around with the languages I&amp;#39;m unfamiliar with.&lt;/p&gt;
 &lt;p&gt;Some initial thoughts on the languages I&amp;#39;m familiar with:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;TypeScript: comfortable and convenient, but memory usage and parallelism is a concern&lt;/li&gt;
+&lt;li&gt;TypeScript: comfortable and convenient, but memory usage and (lack of) parallelism are concerns&lt;/li&gt;
 &lt;li&gt;C#: can this run on a Raspberry Pi? How much of the standard library is closed source?&lt;/li&gt;
 &lt;li&gt;C++: is there C++ environment that is quick and easy to setup?&lt;/li&gt;
 &lt;li&gt;C: a frontrunner, despite its numerous problems&lt;/li&gt;
