@@ -7,8 +7,52 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-02-13T18:05:44.419Z</updated>
+<updated>2022-02-21T22:16:17.067Z</updated>
 
+<entry>
+<title>First impressions of Python</title>
+<id>https://log.schemescape.com/posts/programming-languages/python.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/python.html"/>
+<updated>2022-02-21T00:00:00.000Z</updated>
+<summary type="text">Next on my list of programming languages to investigate is Python.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;a previous article&lt;/a&gt;, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&amp;#39;d still be useful in another decade.&lt;/p&gt;
+&lt;p&gt;Now, I&amp;#39;m drilling more deeply into Python.&lt;/p&gt;
+&lt;h1 id=&quot;setting-up-a-python-development-environment&quot;&gt;Setting up a Python development environment&lt;/h1&gt;
+&lt;p&gt;Ah, my old nemesis: Python. I&amp;#39;ve never had a good experience setting up a Python environment. Additionally, the Python 2 to 3 migration (which included unnecessary things like &lt;a href=&quot;https://www.python.org/dev/peps/pep-0238/&quot;&gt;changing the semantics of the division operator&lt;/a&gt;) had so many breaking changes that people are &lt;em&gt;still&lt;/em&gt; using Python 2 (even though it is no longer supported).&lt;/p&gt;
+&lt;p&gt;Yet Python is consistently one of the most popular programming languages. What am I missing?&lt;/p&gt;
+&lt;p&gt;While setting up Python, I noticed that typing &amp;quot;python&amp;quot; into my Windows command prompt launches the Microsoft Store app (compliments of &lt;code&gt;%LocalAppData%\Microsoft\WindowsApps\python.exe&lt;/code&gt;). I&amp;#39;ll give the installer a try since it&amp;#39;s a surprisingly reasonable ~100 MB download. Apparently, Microsoft decided to &lt;a href=&quot;https://devblogs.microsoft.com/python/python-in-the-windows-10-may-2019-update/&quot;&gt;insert this Python shim into Windows itself&lt;/a&gt; just to make it easier for people to find Python. Interesting.&lt;/p&gt;
+&lt;h1 id=&quot;going-through-the-tutorial&quot;&gt;Going through the tutorial&lt;/h1&gt;
+&lt;p&gt;While going through &lt;a href=&quot;https://docs.python.org/3/tutorial/&quot;&gt;Python&amp;#39;s official tutorial&lt;/a&gt;, I&amp;#39;m already seeing things I don&amp;#39;t like:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;There are &lt;code&gt;else&lt;/code&gt; blocks on &lt;em&gt;loops&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pass&lt;/code&gt; is needed to denote empty blocks&lt;/li&gt;
+&lt;li&gt;There are abbreviations that are easy to forget, such as &lt;code&gt;elif&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;*&lt;/code&gt;, &lt;code&gt;**&lt;/code&gt;, and &lt;code&gt;/&lt;/code&gt; are overused in Python&amp;#39;s syntax&lt;/li&gt;
+&lt;li&gt;The syntax for both tuples and sets tries to be pretty, but just ends up creating weird edge cases, such as &lt;code&gt;item,&lt;/code&gt; (requiring a trailing comma) for a single-item tuple and &lt;code&gt;{}&lt;/code&gt; being an empty dictionary and not an empty set&lt;/li&gt;
+&lt;li&gt;&amp;quot;f-strings&amp;quot; can&amp;#39;t be arbitrarily nested (i.e. you can&amp;#39;t use quotation marks inside an f-string that is delimited by quotation marks)&lt;/li&gt;
+&lt;li&gt;The module loading system seems needlessly complicated (&lt;code&gt;__init__.py&lt;/code&gt;, &lt;code&gt;__all__&lt;/code&gt;, &lt;code&gt;import *&lt;/code&gt;, etc.)&lt;/li&gt;
+&lt;li&gt;The default global scope has too many members&lt;/li&gt;
+&lt;li&gt;Variables introduced in a &lt;code&gt;for&lt;/code&gt; loop go into the enclosing scope (making it easy to accidentally change variables in the enclosing scope)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nonlocal&lt;/code&gt; and &lt;code&gt;global&lt;/code&gt; seem dangerous&lt;/li&gt;
+&lt;li&gt;Virtual environments are &lt;em&gt;definitely&lt;/em&gt; not my preferred solution to managing conflicting dependencies&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;overall-first-impressions&quot;&gt;Overall first impressions&lt;/h1&gt;
+&lt;p&gt;Here are my impressions after going through the Python tutorial and playing with Python for a few days:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I don&amp;#39;t like the syntax, but I also don&amp;#39;t hate it as much as I expected to&lt;/li&gt;
+&lt;li&gt;Python definitely shows its age, and it has a lot of compatibility-related warts that are unpleasant&lt;/li&gt;
+&lt;li&gt;There are some handy syntactical conveniences (e.g. list comprehensions)&lt;/li&gt;
+&lt;li&gt;I am strongly in favor of its &amp;quot;batteries included&amp;quot; approach that yields a robust standard library (it even has SQLite out of the box!)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Ultimately, Python&amp;#39;s biggest advantage is its popularity.&lt;/p&gt;
+&lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
+&lt;p&gt;Now that I&amp;#39;ve read up on Python and written some basic scripts (mostly to solve &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt; problems), it&amp;#39;s time to tackle a significant project that is suited to Python, e.g.:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Play around with machine learning (e.g. &lt;a href=&quot;https://magenta.tensorflow.org/music-transformer&quot;&gt;Music Transformer&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Create a basic &amp;quot;shadow testing&amp;quot; web service (for comparing different implementations of a service)&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Testing out C# in 2022</title>
 <id>https://log.schemescape.com/posts/programming-languages/c-sharp.html</id>
@@ -26,7 +70,7 @@
 &lt;h1 id=&quot;putting-c-and-net-through-its-paces-or-not&quot;&gt;Putting C# and .NET through its paces (or not)&lt;/h1&gt;
 &lt;p&gt;As an initial test, I&amp;#39;d like to build a self-contained &amp;quot;hello world&amp;quot; web server, running on Windows (32-bit and 64-bit), Linux (x64 Debian and Alpine), and a Raspberry Pi.&lt;/p&gt;
 &lt;p&gt;Unfortunately, even with multiple .NET frameworks and SDKs installed and running Visual Studio, I was not able to successfully build a self-contained executable (it seemed to think I was using .NET Core, which I don&amp;#39;t think I ever installed). After uninstalling the .NET 5.0 SDK, it seems that .NET 4.7.2 was also uninstalled, along with the .NET command line interface (&lt;code&gt;dotnet&lt;/code&gt;). Reloading my test project prompted me to retarget to a previous .NET version, but then the project wouldn&amp;#39;t build at all (even &amp;quot;framework-dependent&amp;quot;). Keep in mind this was a trivial &amp;quot;hello world&amp;quot; &lt;em&gt;command line&lt;/em&gt; app, as in just &lt;code&gt;Console.WriteLine(&amp;quot;Hello, world!&amp;quot;)&lt;/code&gt; inside a class&amp;#39;s &lt;code&gt;Main&lt;/code&gt; function).&lt;/p&gt;
-&lt;p&gt;Even worse, after throwing up my hands in frustration, I went to uninstall all the .NET and C# components (to start over from scratch) and now Visual Studio&amp;#39;s installer is claiming they&amp;#39;re required for C++ development, so I guess I&amp;#39;m never getting that disk space back unless I want to break my C++ development environment.&lt;/p&gt;
+&lt;p&gt;Even worse, after throwing up my hands in frustration, I went to uninstall all the .NET and C# components (to start over from scratch) and now Visual Studio&amp;#39;s installer is claiming some of the components are required for C++ development, so I guess I&amp;#39;m never getting all that disk space back unless I want to break my C++ development environment.&lt;/p&gt;
 &lt;h1 id=&quot;thats-unfortunate&quot;&gt;That&amp;#39;s unfortunate...&lt;/h1&gt;
 &lt;p&gt;Despite my concerns around C# being closed source, I found that a lot of the C# tooling is actually open source now. Unfortunately, it still seems to be inextricably tied to Visual Studio and its massive, opaque installation process.&lt;/p&gt;
 &lt;p&gt;I feel a bit bad about giving up so quickly, but my experience with C# thus far has been the polar opposite of &amp;quot;convenient&amp;quot;. I want a programming language that is future-proof, convenient, and comfortable. C# is comfortable. I don&amp;#39;t know if it&amp;#39;s future-proof (or portable). But it is most definitely &lt;em&gt;not&lt;/em&gt; convenient.&lt;/p&gt;
@@ -120,7 +164,7 @@
 &lt;li&gt;&lt;strong&gt;Haskell&lt;/strong&gt;: it&amp;#39;s been a while since I used a purely functional programming language&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Lisp/Clojure&lt;/strong&gt;: I love the simplicity of Lisp (namely Scheme), but I have doubts about it being convenient and portable&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Zig&lt;/strong&gt;: probably too new and with too many breaking changes, but I like the idea of a more sane alternative to C, and the Zig compiler is very convenient&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Lua&lt;/strong&gt;: I used to love Lua, but TypeScript just seems so much more popular and productive these days&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lua&lt;/strong&gt;: I used to love Lua, but TypeScript just seems so much more popular and productive these days (also: I hate 1-based arrays)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Given that this list is already too long, I&amp;#39;m going to eliminate a few options without proper due diligence (either based on prior experience or based on the belief that similar but superior options exist elsewhere on this list). Apologies to the following languages that have been cut:&lt;/p&gt;
 &lt;ul&gt;
@@ -281,21 +325,6 @@
 &lt;p&gt;I was also under the impression that Rust was fully open source, so requiring closed source tools to build on Windows seems bizarre (note: MinGW might fill in this gap, but that&amp;#39;s another huge download I&amp;#39;d like to avoid, if possible).&lt;/p&gt;
 &lt;h1 id=&quot;setting-this-aside-for-now&quot;&gt;Setting this aside for now...&lt;/h1&gt;
 &lt;p&gt;That&amp;#39;s enough disappointment for one day. I&amp;#39;d still like to give Rust a go, but it looks like first I&amp;#39;m going to have to figure out how to get a working environment without installing gigabytes of unrelated tooling (especially since part of my motivation to try Rust was to avoid having to setup an entire C++ toolchain!).&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>md2blog 1.1.1 released</title>
-<id>https://log.schemescape.com/posts/releases/md2blog-1.1.1.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/releases/md2blog-1.1.1.html"/>
-<updated>2021-12-27T00:00:00.000Z</updated>
-<summary type="text">md2blog (the zero-config static site generator powering this site) has officially been released.</summary>
-<content type="html">&lt;p&gt;&lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt; is a zero-config static site generator for dev blogs (like this one), that was created out of frustration with existing (bloated) static site generators.&lt;/p&gt;
-&lt;p&gt;The &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog web site&lt;/a&gt; lists the key features, but here&amp;#39;s an overview:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;md2blog enables you to create a dev blog from Markdown files without getting bogged down in extraneous details (like runtime environments, plugins, and themes)&lt;/li&gt;
-&lt;li&gt;md2blog respects your readers by producing a simple (and small) web site that is still fully functional&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;If you&amp;#39;ve been disappointed with the complexity of setting up a simple dev blog using other static site generators, I encourage you to download md2blog&amp;#39;s &lt;em&gt;single self-contained binary&lt;/em&gt; and run through the &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/quick-start.html&quot;&gt;quick start&lt;/a&gt;.&lt;/p&gt;
 </content>
 </entry>
 </feed>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>First impressions of Python</title>
+<meta name="description" content="Next on my list of programming languages to investigate is Python." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "First impressions of Python",
+  "abstract": "Next on my list of programming languages to investigate is Python.",
+  "keywords": "programming-languages",
+  "datePublished": "2022-02-21"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/programming-languages/python.html">First impressions of Python</a></h1>
+<p><time datetime="2022-02-21">February 21, 2022</time></p>
+</header>
+<p>In <a href="future-proof-languages.html">a previous article</a>, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&#39;d still be useful in another decade.</p>
+<p>Now, I&#39;m drilling more deeply into Python.</p>
+<h1 id="setting-up-a-python-development-environment">Setting up a Python development environment</h1>
+<p>Ah, my old nemesis: Python. I&#39;ve never had a good experience setting up a Python environment. Additionally, the Python 2 to 3 migration (which included unnecessary things like <a href="https://www.python.org/dev/peps/pep-0238/">changing the semantics of the division operator</a>) had so many breaking changes that people are <em>still</em> using Python 2 (even though it is no longer supported).</p>
+<p>Yet Python is consistently one of the most popular programming languages. What am I missing?</p>
+<p>While setting up Python, I noticed that typing &quot;python&quot; into my Windows command prompt launches the Microsoft Store app (compliments of <code>%LocalAppData%\Microsoft\WindowsApps\python.exe</code>). I&#39;ll give the installer a try since it&#39;s a surprisingly reasonable ~100 MB download. Apparently, Microsoft decided to <a href="https://devblogs.microsoft.com/python/python-in-the-windows-10-may-2019-update/">insert this Python shim into Windows itself</a> just to make it easier for people to find Python. Interesting.</p>
+<h1 id="going-through-the-tutorial">Going through the tutorial</h1>
+<p>While going through <a href="https://docs.python.org/3/tutorial/">Python&#39;s official tutorial</a>, I&#39;m already seeing things I don&#39;t like:</p>
+<ul>
+<li>There are <code>else</code> blocks on <em>loops</em></li>
+<li><code>pass</code> is needed to denote empty blocks</li>
+<li>There are abbreviations that are easy to forget, such as <code>elif</code></li>
+<li><code>*</code>, <code>**</code>, and <code>/</code> are overused in Python&#39;s syntax</li>
+<li>The syntax for both tuples and sets tries to be pretty, but just ends up creating weird edge cases, such as <code>item,</code> (requiring a trailing comma) for a single-item tuple and <code>{}</code> being an empty dictionary and not an empty set</li>
+<li>&quot;f-strings&quot; can&#39;t be arbitrarily nested (i.e. you can&#39;t use quotation marks inside an f-string that is delimited by quotation marks)</li>
+<li>The module loading system seems needlessly complicated (<code>__init__.py</code>, <code>__all__</code>, <code>import *</code>, etc.)</li>
+<li>The default global scope has too many members</li>
+<li>Variables introduced in a <code>for</code> loop go into the enclosing scope (making it easy to accidentally change variables in the enclosing scope)</li>
+<li><code>nonlocal</code> and <code>global</code> seem dangerous</li>
+<li>Virtual environments are <em>definitely</em> not my preferred solution to managing conflicting dependencies</li>
+</ul>
+<h1 id="overall-first-impressions">Overall first impressions</h1>
+<p>Here are my impressions after going through the Python tutorial and playing with Python for a few days:</p>
+<ul>
+<li>I don&#39;t like the syntax, but I also don&#39;t hate it as much as I expected to</li>
+<li>Python definitely shows its age, and it has a lot of compatibility-related warts that are unpleasant</li>
+<li>There are some handy syntactical conveniences (e.g. list comprehensions)</li>
+<li>I am strongly in favor of its &quot;batteries included&quot; approach that yields a robust standard library (it even has SQLite out of the box!)</li>
+</ul>
+<p>Ultimately, Python&#39;s biggest advantage is its popularity.</p>
+<h1 id="next-steps">Next steps</h1>
+<p>Now that I&#39;ve read up on Python and written some basic scripts (mostly to solve <a href="https://projecteuler.net/">Project Euler</a> problems), it&#39;s time to tackle a significant project that is suited to Python, e.g.:</p>
+<ul>
+<li>Play around with machine learning (e.g. <a href="https://magenta.tensorflow.org/music-transformer">Music Transformer</a>)</li>
+<li>Create a basic &quot;shadow testing&quot; web service (for comparing different implementations of a service)</li>
+</ul>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
