@@ -89,7 +89,7 @@ After some initial pruning, here is the list with my initial thoughts:
 * **Haskell**: it's been a while since I used a purely functional programming language
 * **Lisp/Clojure**: I love the simplicity of Lisp (namely Scheme), but I have doubts about it being convenient and portable
 * **Zig**: probably too new and with too many breaking changes, but I like the idea of a more sane alternative to C, and the Zig compiler is very convenient
-* **Lua**: I used to love Lua, but TypeScript just seems so much more popular and productive these days
+* **Lua**: I used to love Lua, but TypeScript just seems so much more popular and productive these days (also: I hate 1-based arrays)
 
 Given that this list is already too long, I'm going to eliminate a few options without proper due diligence (either based on prior experience or based on the belief that similar but superior options exist elsewhere on this list). Apologies to the following languages that have been cut:
 
