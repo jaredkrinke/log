@@ -17,17 +17,26 @@ While setting up Python, I noticed that typing "python" into my Windows command 
 # Going through the tutorial
 While going through [Python's official tutorial](https://docs.python.org/3/tutorial/), I'm already seeing things I don't like:
 
+Syntax gripes:
+
 * There are `else` blocks on *loops*
 * `pass` is needed to denote empty blocks
 * There are abbreviations that are easy to forget, such as `elif`
 * `*`, `**`, and `/` are overused in Python's syntax
 * The syntax for both tuples and sets tries to be pretty, but just ends up creating weird edge cases, such as `item,` (requiring a trailing comma) for a single-item tuple and `{}` being an empty dictionary and not an empty set
 * "f-strings" can't be arbitrarily nested (i.e. you can't use quotation marks inside an f-string that is delimited by quotation marks)
+
+Module woes:
+
 * The module loading system seems needlessly complicated (`__init__.py`, `__all__`, `import *`, etc.)
+  * It even *prepends* the main module's path to the search path, so local modules are loaded in preference to standard library modules of the same name (pro tip: never create a file named `random.py`)
 * The default global scope has too many members
-* Variables introduced in a `for` loop go into the enclosing scope (making it easy to accidentally change variables in the enclosing scope)
-* `nonlocal` and `global` seem dangerous
 * Virtual environments are *definitely* not my preferred solution to managing conflicting dependencies
+
+Scoping complaints:
+
+* Variables introduced in a `for` loop go into the enclosing scope (making it easy to accidentally change variables in the enclosing scope)
+* `global` seems dangerous
 
 # Overall first impressions
 Here are my impressions after going through the Python tutorial and playing with Python for a few days:
@@ -40,7 +49,4 @@ Here are my impressions after going through the Python tutorial and playing with
 Ultimately, Python's biggest advantage is its popularity.
 
 # Next steps
-Now that I've read up on Python and written some basic scripts (mostly to solve [Project Euler](https://projecteuler.net/) problems), it's time to tackle a significant project that is suited to Python, e.g.:
-
-* Play around with machine learning (e.g. [Music Transformer](https://magenta.tensorflow.org/music-transformer))
-* Create a basic "shadow testing" web service (for comparing different implementations of a service)
+Now that I've read up on Python and written some basic scripts (mostly to solve [Project Euler](https://projecteuler.net/) problems), I'm going to play around with machine learning using Python and NumPy.
