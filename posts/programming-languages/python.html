@@ -45,6 +45,7 @@
 <p>While setting up Python, I noticed that typing &quot;python&quot; into my Windows command prompt launches the Microsoft Store app (compliments of <code>%LocalAppData%\Microsoft\WindowsApps\python.exe</code>). I&#39;ll give the installer a try since it&#39;s a surprisingly reasonable ~100 MB download. Apparently, Microsoft decided to <a href="https://devblogs.microsoft.com/python/python-in-the-windows-10-may-2019-update/">insert this Python shim into Windows itself</a> just to make it easier for people to find Python. Interesting.</p>
 <h1 id="going-through-the-tutorial">Going through the tutorial</h1>
 <p>While going through <a href="https://docs.python.org/3/tutorial/">Python&#39;s official tutorial</a>, I&#39;m already seeing things I don&#39;t like:</p>
+<p>Syntax gripes:</p>
 <ul>
 <li>There are <code>else</code> blocks on <em>loops</em></li>
 <li><code>pass</code> is needed to denote empty blocks</li>
@@ -52,11 +53,20 @@
 <li><code>*</code>, <code>**</code>, and <code>/</code> are overused in Python&#39;s syntax</li>
 <li>The syntax for both tuples and sets tries to be pretty, but just ends up creating weird edge cases, such as <code>item,</code> (requiring a trailing comma) for a single-item tuple and <code>{}</code> being an empty dictionary and not an empty set</li>
 <li>&quot;f-strings&quot; can&#39;t be arbitrarily nested (i.e. you can&#39;t use quotation marks inside an f-string that is delimited by quotation marks)</li>
-<li>The module loading system seems needlessly complicated (<code>__init__.py</code>, <code>__all__</code>, <code>import *</code>, etc.)</li>
+</ul>
+<p>Module woes:</p>
+<ul>
+<li>The module loading system seems needlessly complicated (<code>__init__.py</code>, <code>__all__</code>, <code>import *</code>, etc.)<ul>
+<li>It even <em>prepends</em> the main module&#39;s path to the search path, so local modules are loaded in preference to standard library modules of the same name (pro tip: never create a file named <code>random.py</code>)</li>
+</ul>
+</li>
 <li>The default global scope has too many members</li>
-<li>Variables introduced in a <code>for</code> loop go into the enclosing scope (making it easy to accidentally change variables in the enclosing scope)</li>
-<li><code>nonlocal</code> and <code>global</code> seem dangerous</li>
 <li>Virtual environments are <em>definitely</em> not my preferred solution to managing conflicting dependencies</li>
+</ul>
+<p>Scoping complaints:</p>
+<ul>
+<li>Variables introduced in a <code>for</code> loop go into the enclosing scope (making it easy to accidentally change variables in the enclosing scope)</li>
+<li><code>global</code> seems dangerous</li>
 </ul>
 <h1 id="overall-first-impressions">Overall first impressions</h1>
 <p>Here are my impressions after going through the Python tutorial and playing with Python for a few days:</p>
@@ -68,11 +78,7 @@
 </ul>
 <p>Ultimately, Python&#39;s biggest advantage is its popularity.</p>
 <h1 id="next-steps">Next steps</h1>
-<p>Now that I&#39;ve read up on Python and written some basic scripts (mostly to solve <a href="https://projecteuler.net/">Project Euler</a> problems), it&#39;s time to tackle a significant project that is suited to Python, e.g.:</p>
-<ul>
-<li>Play around with machine learning (e.g. <a href="https://magenta.tensorflow.org/music-transformer">Music Transformer</a>)</li>
-<li>Create a basic &quot;shadow testing&quot; web service (for comparing different implementations of a service)</li>
-</ul>
+<p>Now that I&#39;ve read up on Python and written some basic scripts (mostly to solve <a href="https://projecteuler.net/">Project Euler</a> problems), I&#39;m going to play around with machine learning using Python and NumPy.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>
