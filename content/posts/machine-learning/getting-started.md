@@ -2,7 +2,6 @@
 title: Getting started with machine learning
 description: For personal enrichment, I'm playing around with machine learning.
 date: 2022-03-07
-draft: true
 ---
 One of the reasons I decided to give [Python](../programming-languages/python.md) one last try is that Python is popular for machine learning, and machine learning is a topic I'm interested in.
 
@@ -29,7 +28,7 @@ Although my math is rusty, my biggest struggle is actually with the NumPy API. H
 ## Using a sample data set
 To get a better handle on NumPy, I'd like to actually attempt to create a linear classifier from scratch. A quick search led me to a [page with links to data sets for binary classification problems](https://jamesmccaffrey.wordpress.com/2018/03/14/datasets-for-binary-classification/). I'm using [UCI Machine Learning Repository's "banknote authentication" data set](https://archive.ics.uci.edu/ml/datasets/banknote+authentication) because the data format is simple (4 predictor variables and a 0 or 1 for the classification).
 
-Unfortunately, all the algorithms I implemented struggled to find a good linear separator for the data. I suspect that linear classifiers aren't a good fit for this data.
+To my surprise, simple algorithms (e.g. selecting random parameters) were able to correctly classify over 95% of examples. For what it's worth, my code is posted [here](https://github.com/jaredkrinke/ml/tree/main/binary-classification).
 
 ## Solving a problem from scratch
 I'd like to try solving a real world problem from scratch, but I don't really have a problem in mind that lends itself to binary classification. For what it's worth, here are some Kaggle data sets that might eventually inspire me:
@@ -38,4 +37,4 @@ I'd like to try solving a real world problem from scratch, but I don't really ha
 * [Hacker News data](https://www.kaggle.com/hacker-news/hacker-news)
 * [Chord classification](https://www.kaggle.com/deepcontractor/musical-instrument-chord-classification)
 * [Movie data](https://www.kaggle.com/rounakbanik/the-movies-dataset)
-* [Stack Overflow data](https://www.kaggle.com/stackoverflow/stackoverflow))
+* [Stack Overflow data](https://www.kaggle.com/stackoverflow/stackoverflow)
