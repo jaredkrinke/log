@@ -7,8 +7,52 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-02-25T05:07:19.782Z</updated>
+<updated>2022-03-08T04:02:24.275Z</updated>
 
+<entry>
+<title>Getting started with machine learning</title>
+<id>https://log.schemescape.com/posts/machine-learning/getting-started.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/machine-learning/getting-started.html"/>
+<updated>2022-03-07T00:00:00.000Z</updated>
+<summary type="text">For personal enrichment, I&apos;m playing around with machine learning.</summary>
+<content type="html">&lt;p&gt;One of the reasons I decided to give &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../programming-languages/python.html&quot;&gt;Python&lt;/a&gt; one last try is that Python is popular for machine learning, and machine learning is a topic I&amp;#39;m interested in.&lt;/p&gt;
+&lt;h1 id=&quot;why&quot;&gt;Why?&lt;/h1&gt;
+&lt;p&gt;Why am I interested in machine learning?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It&amp;#39;s an area of computer science that has advanced significantly since I studied CS in school&lt;/li&gt;
+&lt;li&gt;It has many unique practical applications (speech recognition, language translation, machine vision, generative art)&lt;/li&gt;
+&lt;li&gt;I recently acquired a GPU that (as far as I know) is capable of accelerating machine learning pipelines&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;first-steps&quot;&gt;First steps&lt;/h1&gt;
+&lt;p&gt;As an introduction, I&amp;#39;m following MIT&amp;#39;s &lt;a href=&quot;https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/about&quot;&gt;Introduction to Machine Learning (2020)&lt;/a&gt; class. It&amp;#39;s in Python and builds on &lt;a href=&quot;https://numpy.org/&quot;&gt;NumPy&lt;/a&gt;. The first 4 weeks focus on linear classifiers for binary classification.&lt;/p&gt;
+&lt;p&gt;Although my math is rusty, my biggest struggle is actually with the NumPy API. Here is my list of grievances:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;NumPy implicitly &amp;quot;broadcasts&amp;quot; arrays into compatible shapes&lt;ul&gt;
+&lt;li&gt;I assume this is for convenience, but all it&amp;#39;s done for me is silently hide bugs in my code&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;NumPy sometimes silently removes dimensions&lt;ul&gt;
+&lt;li&gt;Again, this is probably for convenience, but all it&amp;#39;s done is trip me up -- I really wish &lt;code&gt;keepdims&lt;/code&gt; defaulted to &lt;code&gt;True&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;The API has a lot of cruft (e.g. a &lt;code&gt;matrix&lt;/code&gt; class that is no longer recommended for matrix computation)&lt;/li&gt;
+&lt;li&gt;The documentation is frustratingly vague, and sometimes circular (e.g. &amp;quot;&lt;code&gt;*&lt;/code&gt; returns &lt;code&gt;self * value&lt;/code&gt;&amp;quot;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;experimentation&quot;&gt;Experimentation&lt;/h1&gt;
+&lt;h2 id=&quot;using-a-sample-data-set&quot;&gt;Using a sample data set&lt;/h2&gt;
+&lt;p&gt;To get a better handle on NumPy, I&amp;#39;d like to actually attempt to create a linear classifier from scratch. A quick search led me to a &lt;a href=&quot;https://jamesmccaffrey.wordpress.com/2018/03/14/datasets-for-binary-classification/&quot;&gt;page with links to data sets for binary classification problems&lt;/a&gt;. I&amp;#39;m using &lt;a href=&quot;https://archive.ics.uci.edu/ml/datasets/banknote+authentication&quot;&gt;UCI Machine Learning Repository&amp;#39;s &amp;quot;banknote authentication&amp;quot; data set&lt;/a&gt; because the data format is simple (4 predictor variables and a 0 or 1 for the classification).&lt;/p&gt;
+&lt;p&gt;To my surprise, simple algorithms (e.g. selecting random parameters) were able to correctly classify over 95% of examples. For what it&amp;#39;s worth, my code is posted &lt;a href=&quot;https://github.com/jaredkrinke/ml/tree/main/binary-classification&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;solving-a-problem-from-scratch&quot;&gt;Solving a problem from scratch&lt;/h2&gt;
+&lt;p&gt;I&amp;#39;d like to try solving a real world problem from scratch, but I don&amp;#39;t really have a problem in mind that lends itself to binary classification. For what it&amp;#39;s worth, here are some Kaggle data sets that might eventually inspire me:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/vivovinco/nba-player-stats&quot;&gt;NBA players&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/hacker-news/hacker-news&quot;&gt;Hacker News data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/deepcontractor/musical-instrument-chord-classification&quot;&gt;Chord classification&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/rounakbanik/the-movies-dataset&quot;&gt;Movie data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/stackoverflow/stackoverflow&quot;&gt;Stack Overflow data&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>First impressions of Python</title>
 <id>https://log.schemescape.com/posts/programming-languages/python.html</id>
@@ -295,42 +339,6 @@
 &lt;li&gt;There is a simple fallback for anyone who wants to avoid a large download: just use the web version!&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;This isn&amp;#39;t the answer I had hoped for, but I&amp;#39;m trying to be pragmatic. Hopefully in the future WebView2 will be installed by default and I can switch to something more lightweight like Tauri.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>My first experience with Rust</title>
-<id>https://log.schemescape.com/posts/programming-languages/rust-first-experience.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/rust-first-experience.html"/>
-<updated>2022-01-06T00:00:00.000Z</updated>
-<summary type="text">Rust is popular and I&apos;m interested in its memory safety features and build system. Here&apos;s my first experience with Rust.</summary>
-<content type="html">&lt;p&gt;&lt;a href=&quot;https://www.rust-lang.org/&quot;&gt;Rust&lt;/a&gt; is so popular these days that &amp;quot;written in Rust&amp;quot; is undoubtedly going to become a meme (if it hasn&amp;#39;t already). It&amp;#39;s time I give it a try!&lt;/p&gt;
-&lt;h1 id=&quot;the-appeal-of-rust&quot;&gt;The appeal of Rust&lt;/h1&gt;
-&lt;p&gt;I can understand the appeal of Rust. It&amp;#39;s a modern language (meaning it doesn&amp;#39;t have a ton of legacy cruft), it has a unique memory model that prevents certain classes of bugs, yet it still has manual memory management. This is a unique combination.&lt;/p&gt;
-&lt;p&gt;Theoretically, this should allow Rust to be used all the way from memory-constrained embedded systems to high level apps.&lt;/p&gt;
-&lt;h1 id=&quot;what-about-c&quot;&gt;What about C++?&lt;/h1&gt;
-&lt;p&gt;Now, I&amp;#39;m not willing to jump to a new language and ecosystem just because it&amp;#39;s shiny and new. Rust&amp;#39;s memory model seems like an improvement over C++, but modern C++ has (in my experience) fewer memory bugs anyway, thanks to smart pointers and the &lt;a href=&quot;https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization&quot;&gt;RAII&lt;/a&gt; pattern.&lt;/p&gt;
-&lt;p&gt;But here are some other enticing features of Rust:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Rust has its own package manager, &lt;a href=&quot;https://doc.rust-lang.org/stable/cargo/&quot;&gt;Cargo&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Rust has its own build system, which is also Cargo&lt;/li&gt;
-&lt;li&gt;Rust&amp;#39;s compiler is built on LLVM, so it can trivially target WebAssembly&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;If I had to pick the worst part of C++ development, I&amp;#39;d say it&amp;#39;s setting up a build system and dealing with dependencies. To me, Cargo is actually the biggest differentiator for Rust as compared to C++.&lt;/p&gt;
-&lt;h1 id=&quot;installing-rust&quot;&gt;Installing Rust&lt;/h1&gt;
-&lt;p&gt;It might be unreasonable, but I&amp;#39;d like my programming language of choice to have a development environment that is compact and simple to setup. Aside: this is one of the reasons I enjoy &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../web-development/one-month-with-deno.html&quot;&gt;Deno&lt;/a&gt;: it ships as a single (fairly small) binary.&lt;/p&gt;
-&lt;p&gt;Following Rust&amp;#39;s &lt;a href=&quot;https://www.rust-lang.org/learn/get-started&quot;&gt;getting started instructions&lt;/a&gt;, I&amp;#39;m immediately discouraged:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;It looks like you’re running Windows. To start using Rust, download the installer, then run the program and follow the onscreen instructions. You may need to install the Visual Studio C++ Build tools when prompted to do so.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;I have to install a full C++ development environment just to use Rust? Ok, well I click the link and download ~35 MB. Not too bad until it becomes apparent that the download is &lt;em&gt;just the installer itself&lt;/em&gt;. I&amp;#39;m then presented with a huge list of options for things to install.&lt;/p&gt;
-&lt;p&gt;The Rust installer indicates that I should install the Windows 10 SDK, so I select that and am horrified to see that it is 2.8 GB.&lt;/p&gt;
-&lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
-&lt;p&gt;Based on the documentation I&amp;#39;ve seen so far, it looks like you have to install nearly 3 GB of C++ tools just to get a working Rust development environment on Windows.&lt;/p&gt;
-&lt;p&gt;At this point, I&amp;#39;m speechless. I was willing to tolerate a ~500 MB download for a new programming language, but I&amp;#39;m already up to about six times that size without even getting to the Rust part.&lt;/p&gt;
-&lt;p&gt;A quick web search indicates that this requirement is just to provide things like a linker, but I&amp;#39;m certain these tools are much less than 3 GB in size.&lt;/p&gt;
-&lt;p&gt;I was also under the impression that Rust was fully open source, so requiring closed source tools to build on Windows seems bizarre (note: MinGW might fill in this gap, but that&amp;#39;s another huge download I&amp;#39;d like to avoid, if possible).&lt;/p&gt;
-&lt;h1 id=&quot;setting-this-aside-for-now&quot;&gt;Setting this aside for now...&lt;/h1&gt;
-&lt;p&gt;That&amp;#39;s enough disappointment for one day. I&amp;#39;d still like to give Rust a go, but it looks like first I&amp;#39;m going to have to figure out how to get a working environment without installing gigabytes of unrelated tooling (especially since part of my motivation to try Rust was to avoid having to setup an entire C++ toolchain!).&lt;/p&gt;
 </content>
 </entry>
 </feed>
