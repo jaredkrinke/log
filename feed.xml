@@ -7,8 +7,42 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-03-08T04:02:24.275Z</updated>
+<updated>2022-04-24T21:25:43.066Z</updated>
 
+<entry>
+<title>MITx - 6.036: Introduction to Machine Learning</title>
+<id>https://log.schemescape.com/posts/machine-learning/mitx-6.036.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/machine-learning/mitx-6.036.html"/>
+<updated>2022-04-24T00:00:00.000Z</updated>
+<summary type="text">I&apos;m following a freely available MIT coure: Introduction to Machine Learning.</summary>
+<content type="html">&lt;p&gt;As &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/getting-started.html&quot;&gt;noted previously&lt;/a&gt;, I&amp;#39;ve been researching machine learning (just for fun).&lt;/p&gt;
+&lt;h1 id=&quot;mitx---6036&quot;&gt;MITx - 6.036&lt;/h1&gt;
+&lt;p&gt;I&amp;#39;m starting with an undergraduate course from MIT that is online for free: &lt;a href=&quot;https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/about&quot;&gt;MITx - 6.036: Introduction to Machine Learning&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Having just completed the course, here are some observations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The lectures are excellent, but note that they&amp;#39;re theory- and math-heavy (and my math was rustier than I realized)&lt;/li&gt;
+&lt;li&gt;I&amp;#39;d recommend learning about &lt;a href=&quot;https://numpy.org/&quot;&gt;NumPy&lt;/a&gt; &lt;em&gt;prior&lt;/em&gt; to starting this course (especially &lt;a href=&quot;https://numpy.org/doc/stable/user/basics.broadcasting.html&quot;&gt;element-wise operations and broadcasting&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;So far, there has been no need (and no benefit) to enabling GPU acceleration (and setting it up on Windows was painful, for &lt;a href=&quot;https://github.com/tensorflow/tensorflow/issues/48868&quot;&gt;reasons I still don&amp;#39;t understand&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;The provided code seems to be built for a previous version of TensorFlow&amp;#39;s Keras interface (although the &lt;a href=&quot;https://gist.github.com/jaredkrinke/0fed897dfbdf35af2c4eb388bfe0d754&quot;&gt;updates I have needed thus far&lt;/a&gt; were minor)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The course provides a great introduction to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Classification&lt;/li&gt;
+&lt;li&gt;Regression&lt;/li&gt;
+&lt;li&gt;Neural networks&lt;/li&gt;
+&lt;li&gt;Convolutional neural networks&lt;/li&gt;
+&lt;li&gt;Recurrent neural networks&lt;/li&gt;
+&lt;li&gt;Recommender systems&lt;/li&gt;
+&lt;li&gt;Decision trees&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Note that the course &lt;em&gt;doesn&amp;#39;t&lt;/em&gt; cover some of the machine learning topics I&amp;#39;m most interested in:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)&quot;&gt;Transformers&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Generative_adversarial_network&quot;&gt;Generative adversarial networks&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Overall, it was a fun course and good Python practice, but I wasn&amp;#39;t really inspired to go start a machine learning project because I&amp;#39;m not terribly interested in classification and regression problems at the moment.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Getting started with machine learning</title>
 <id>https://log.schemescape.com/posts/machine-learning/getting-started.html</id>
@@ -241,104 +275,6 @@
 &lt;/ul&gt;
 &lt;h1 id=&quot;thats-all-for-now&quot;&gt;That&amp;#39;s all for now&lt;/h1&gt;
 &lt;p&gt;That&amp;#39;s as far as I&amp;#39;ve gotten. My next steps are to see if C# is viable, determine if there&amp;#39;s a convenient C++ environment, give Python yet another try, and then play around with Go, Rust, Clojure (or other Lisps), and Zig.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Frameworks for porting web apps to the desktop</title>
-<id>https://log.schemescape.com/posts/web-development/web-apps-on-the-desktop.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/web-development/web-apps-on-the-desktop.html"/>
-<updated>2022-01-13T00:00:00.000Z</updated>
-<summary type="text">This is my initial research into converting a web app to a desktop app.</summary>
-<content type="html">&lt;p&gt;I have a browser-based application that I&amp;#39;d like to transform into a &amp;quot;normal&amp;quot; desktop application.&lt;/p&gt;
-&lt;h1 id=&quot;why&quot;&gt;Why?&lt;/h1&gt;
-&lt;p&gt;My situation is fairly unique, but here&amp;#39;s my motivation:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;My app is already web-based (using HTML, CSS, TypeScript, with a corresponding HTTP API that&amp;#39;s deployed to &lt;a href=&quot;https://functions.netlify.com/&quot;&gt;Netlify Functions&lt;/a&gt;), and I don&amp;#39;t want to rewrite any of my code&lt;/li&gt;
-&lt;li&gt;I&amp;#39;m planning to use a distribution service that&amp;#39;s based on plain old desktop executables (this is probably an unusual requirement)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Some more typical reasons for porting from web to desktop might be:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Wanting to take advantage of libraries, devices, or system APIs that aren&amp;#39;t available in the browser&lt;/li&gt;
-&lt;li&gt;Wanting to integrate with native code that (probably due to performance) won&amp;#39;t be ported to WebAssembly&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;why-not&quot;&gt;Why not?&lt;/h1&gt;
-&lt;p&gt;Some downsides:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Electron (the most popular desktop framework for web technologies) produces large binaries (100+ MB) that use a lot of memory (due to bundling an entire browser engine within each application, presumably to ensure consistency across devices)&lt;ul&gt;
-&lt;li&gt;This also means that copyright notices for a huge number of open source libraries Chromium uses must be included&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;These frameworks typically have their own unique build processes, which adds additional complexity as compared to building a desktop app &amp;quot;the normal way&amp;quot;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;options&quot;&gt;Options&lt;/h1&gt;
-&lt;p&gt;My research turned up the following relevant frameworks:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/electron/electron&quot;&gt;Electron&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://nwjs.io/&quot;&gt;NW.js&lt;/a&gt; (formerly node-webkit)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/tauri-apps/tauri&quot;&gt;Tauri&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/neutralinojs/neutralinojs&quot;&gt;Neutralinojs&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;And here is my uneducated, subjective comparison (all of these frameworks currently support Windows, Linux, and macOS, with Tauri planning to eventually support iOS and Android):&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Framework&lt;/th&gt;
-&lt;th&gt;Engine&lt;/th&gt;
-&lt;th&gt;Maturity&lt;/th&gt;
-&lt;th&gt;License&lt;/th&gt;
-&lt;th&gt;Examples&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;Electron&lt;/td&gt;
-&lt;td&gt;Chromium&lt;/td&gt;
-&lt;td&gt;Stable&lt;/td&gt;
-&lt;td&gt;Many (via Chromium)&lt;/td&gt;
-&lt;td&gt;VS Code, Slack, Discord&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;NW.js&lt;/td&gt;
-&lt;td&gt;Chromium&lt;/td&gt;
-&lt;td&gt;?&lt;/td&gt;
-&lt;td&gt;Many (via Chromium)&lt;/td&gt;
-&lt;td&gt;?&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Tauri&lt;/td&gt;
-&lt;td&gt;Chromium (Windows)&lt;br/&gt;WebKit (Linux/macOS)&lt;/td&gt;
-&lt;td&gt;In development&lt;/td&gt;
-&lt;td&gt;Apache&lt;/td&gt;
-&lt;td&gt;?&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Neutralinojs&lt;/td&gt;
-&lt;td&gt;?&lt;/td&gt;
-&lt;td&gt;In development&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://github.com/neutralinojs/neutralinojs/blob/main/LICENSE&quot;&gt;Many&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;?&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;Note that I&amp;#39;m ignoring native code interop because it&amp;#39;s not relevant to me, but I believe NW.js uses Node and Tauri uses Rust.&lt;/p&gt;
-&lt;h1 id=&quot;my-plan&quot;&gt;My plan&lt;/h1&gt;
-&lt;p&gt;For my purposes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;I only &lt;em&gt;need&lt;/em&gt; to support Windows (at least initially)&lt;/li&gt;
-&lt;li&gt;I may not need desktop integration or native code&lt;/li&gt;
-&lt;li&gt;I&amp;#39;d like to produce a minimal binary package (i.e. I don&amp;#39;t want to bundle an entire browser runtime if I don&amp;#39;t have to)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Based on that last requirement, Tauri (or maybe Neutralinojs) seemed like the best match, but I had concerns about reliability:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Tauri is built on &lt;a href=&quot;https://developer.microsoft.com/en-us/microsoft-edge/webview2/&quot;&gt;WebView2&lt;/a&gt;, which is installed separately from the operating system (so not all Windows computers will have it installed)&lt;/li&gt;
-&lt;li&gt;Tauri&amp;#39;s bundler produces installers on Windows that apparently &lt;a href=&quot;https://github.com/tauri-apps/tauri/issues/2452&quot;&gt;don&amp;#39;t clearly communicate this requirement&lt;/a&gt;, possibly leading to broken installs&lt;/li&gt;
-&lt;li&gt;This also means that installation inherits the WebView2 runtime&amp;#39;s need for elevated privileges (avoidable by distributing the runtime as well, but that&amp;#39;s basically Electron at that point)&lt;/li&gt;
-&lt;li&gt;Obviously, if I want to later expand to Linux and/or macOS (where Tauri uses WebKit) I might run into incompatibilities (although I haven&amp;#39;t heard of any with the web version of my app)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Taken as a whole (and given that WebView2 is relatively new), unless I have some way to ensure the WebView2 runtime will be present, I will likely end up using Electron, despite my reservations around download size and efficiency. At least in my case, there are some mitigating factors:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;This isn&amp;#39;t an app I expect users to have open all the time (so memory usage is less of a concern)&lt;/li&gt;
-&lt;li&gt;There is a simple fallback for anyone who wants to avoid a large download: just use the web version!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;This isn&amp;#39;t the answer I had hoped for, but I&amp;#39;m trying to be pragmatic. Hopefully in the future WebView2 will be installed by default and I can switch to something more lightweight like Tauri.&lt;/p&gt;
 </content>
 </entry>
 </feed>
