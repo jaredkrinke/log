@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Generating music using machine learning</title>
+<meta name="description" content="Let&#39;s see if I can use Google Brain&#39;s Music Transformer to generate ragtime music" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Generating music using machine learning",
+  "abstract": "Let's see if I can use Google Brain's Music Transformer to generate ragtime music",
+  "keywords": "machine-learning",
+  "datePublished": "2022-04-26"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/machine-learning/index.html">machine-learning</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/machine-learning/generating-music.html">Generating music using machine learning</a></h1>
+<p><time datetime="2022-04-26">April 26, 2022</time></p>
+</header>
+<p>Recent music generation results (e.g. <a href="https://magenta.tensorflow.org/music-transformer">Music Transformer: Generating Music with Long-Term Structure</a>) are part of what piqued my interest in machine learning. After <a href="mitx-6.036.html">following an introduction to machine learning</a>, it&#39;s time for some experimentation.</p>
+<p>First up: generating a <a href="https://en.wikipedia.org/wiki/Ragtime">ragtime</a> piano piece.</p>
+<h1 id="approaches">Approaches</h1>
+<p>The most compelling generated music I&#39;ve seen thus far comes from Google Brain, namely their <a href="https://magenta.tensorflow.org/performance-rnn">Performance RNN</a> and <a href="https://magenta.tensorflow.org/music-transformer">Music Transformer</a> papers. The associated GitHub repositories appear to contain models that have been pre-trained on various corpora (e.g. a <a href="https://www.piano-e-competition.com/">piano competition&#39;s MIDI recordings</a>). It&#39;s also possible to train using a new corpus. The trained models can generate continuations based on a primer or generate unconditioned music &quot;from scratch&quot;.</p>
+<p>Here are several approaches I&#39;m investigating for generating a ragtime piece:</p>
+<ol>
+<li>Condition pre-trained Performance RNN and Music Transformer models with existing ragtime music (either an intro or the first few measures) and generate a continuation</li>
+<li>Train a new model on a corpus of ragtime music, and then do unconditioned generation</li>
+<li>Train a new model on a ragtime corpus and generate a continuation from a ragtime primer</li>
+<li>Train a new model on a ragtime corpus and generate a continuation from an arbitrary primer</li>
+</ol>
+<p>I don&#39;t have any intuition for how large of a corpus is required to generate a decent model, so it&#39;s possible that options 2 - 4 won&#39;t be feasible for me (either because finding/generating such a training corpus is too difficult or the compute required to train the model is beyond what my computer can handle).</p>
+<h1 id="using-pre-trained-models">Using pre-trained models</h1>
+<p>Without installing anything locally, you can use the <a href="https://colab.research.google.com/notebooks/magenta/piano_transformer/piano_transformer.ipynb">Music Transformer notebook</a> to generate music. There are several options:</p>
+<ul>
+<li>Generate music &quot;from scratch&quot; (unconditional)</li>
+<li>Generate a continuation based on a primer</li>
+<li>Generate accompaniment for a (monophonic) melody</li>
+</ul>
+<h2 id="unconditional-generation">Unconditional generation</h2>
+<p>Without providing a primer, I don&#39;t think it&#39;s possible to indicate what genre of music you&#39;d like to generate. For example, the clip I got sounds like some sort of <a href="../../assets/music-generation/mt-unconditioned.mid">boogie-woogie folk march</a>. Obviously this isn&#39;t the genre that I was looking for (or, really, than anyone was looking for). Rather than continuing on randomly like this, I&#39;ll investigate primed generation.</p>
+<h2 id="continuations">Continuations</h2>
+<p>The notebook linked above also supports providing a primer, either from a provided list or by uploading a MIDI file directly in the UI.</p>
+<h3 id="cropping-midi-primers">Cropping MIDI primers</h3>
+<p>The primer is included in the output, so I assume it should be reasonably short. My original plan was to edit down an existing ragtime MIDI using <a href="https://musescore.org/en">MuseScore</a>, but MuseScore&#39;s output appears to be incompatible with the <a href="http://craffel.github.io/pretty-midi/">pretty_midi</a> module that the notebook uses, resulting in the following error:</p>
+<pre><code>pretty_midi\pretty_midi.py:<span class="hljs-number">97</span>: RuntimeWarning: Tempo, Key <span class="hljs-keyword">or</span> <span class="hljs-type">Time</span> signature change events <span class="hljs-built_in">found</span> <span class="hljs-keyword">on</span> non-zero tracks. This <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> a <span class="hljs-keyword">valid</span> <span class="hljs-keyword">type</span> <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">type</span> <span class="hljs-number">1</span> MIDI file. Tempo, Key <span class="hljs-keyword">or</span> <span class="hljs-type">Time</span> Signature may be wrong.
+</code></pre>
+<p>My workaround was to switch to using <a href="https://www.audacityteam.org/">Audacity</a> to crop my MIDI primer (and this worked without issue).</p>
+<h3 id="example-continuations">Example continuations</h3>
+<p>First, I tried using just the intro bars of some Scott Joplin rags:</p>
+<ul>
+<li><a href="../../assets/music-generation/mt-continuation-intro-wall-street.mid">Wall Street Rag intro</a>: this generated an interesting continuation that sounded vaguely like a cross between ragtime and new age piano</li>
+<li><a href="../../assets/music-generation/mt-continuation-intro-magnetic.mid">Magnetic Rag intro</a>: this generated a continuation with a halting style that keeps repeating notes</li>
+</ul>
+<p>Overall, the results are impressive, but also somewhat alien. And definitely not ragtime.</p>
+<p>Next, I tried supplying the beginning of a few sections of Joplin rags:</p>
+<ul>
+<li>Wall Street Rag<ul>
+<li>The <a href="../../assets/music-generation/mt-continuation-wall-street-1.mid">first continuation</a> gets a bit stuck on the primer, but then recovers nicely into a very short still-not-quite-ragtime section</li>
+<li>The <a href="../../assets/music-generation/mt-continuation-wall-street-2.mid">second continuation</a> strays quickly and widely from ragtime (continuing the trend of &quot;impressive, but not what I wanted&quot;)</li>
+</ul>
+</li>
+<li>Maple Leaf Rag<ul>
+<li>This <a href="../../assets/music-generation/mt-continuation-maple-leaf.mid">continuation</a> seemed to ignore the primer and just started cycling through music I can only describe as &quot;movie soundtrack&quot;</li>
+</ul>
+</li>
+<li>Magnetic Rag<ul>
+<li>The <a href="../../assets/music-generation/mt-continuation-magnetic-1.mid">first continuation</a> was short, but rag-like!</li>
+<li>The <a href="../../assets/music-generation/mt-continuation-magnetic-2.mid">second continuation</a> was similarly short, but promising</li>
+<li>The <a href="../../assets/music-generation/mt-continuation-magnetic-3.mid">third continuation</a> was much longer, but... bad</li>
+</ul>
+</li>
+</ul>
+<h2 id="accompaniment">Accompaniment</h2>
+<p>Out of curiosity, I also tried generating an accompaniment (based on a monophonic melody that consists of the highest non-overlapping notes in the cropped MIDIs from the last section):</p>
+<ul>
+<li><a href="../../assets/music-generation/mt-accompaniment-magnetic.mid">Magnetic Rag accompaniment</a>: this was a baroquely ornamented mix of classical and blues</li>
+</ul>
+<h2 id="reflecting-on-pre-trained-models">Reflecting on pre-trained models</h2>
+<p>Unsurprisingly, the generic pre-trained models I used, while undoubtedly impressive, seem best suited for exploration and amusement, rather than producing something focused on a particular genre.</p>
+<p>I suspect that the best path forward for this experiment is to train a new ragtime-focused model on a corpus of typical ragtime MIDIs. As noted earlier, it&#39;s possible I won&#39;t be able to find either a large enough corpus or enough compute power to produce a reasonable model, but if I <em>do</em> succeed, I think the results will be more consistently rag-like.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

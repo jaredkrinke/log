@@ -7,8 +7,77 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-04-24T21:25:43.066Z</updated>
+<updated>2022-04-26T22:42:22.339Z</updated>
 
+<entry>
+<title>Generating music using machine learning</title>
+<id>https://log.schemescape.com/posts/machine-learning/generating-music.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/machine-learning/generating-music.html"/>
+<updated>2022-04-26T00:00:00.000Z</updated>
+<summary type="text">Let&apos;s see if I can use Google Brain&apos;s Music Transformer to generate ragtime music</summary>
+<content type="html">&lt;p&gt;Recent music generation results (e.g. &lt;a href=&quot;https://magenta.tensorflow.org/music-transformer&quot;&gt;Music Transformer: Generating Music with Long-Term Structure&lt;/a&gt;) are part of what piqued my interest in machine learning. After &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/mitx-6.036.html&quot;&gt;following an introduction to machine learning&lt;/a&gt;, it&amp;#39;s time for some experimentation.&lt;/p&gt;
+&lt;p&gt;First up: generating a &lt;a href=&quot;https://en.wikipedia.org/wiki/Ragtime&quot;&gt;ragtime&lt;/a&gt; piano piece.&lt;/p&gt;
+&lt;h1 id=&quot;approaches&quot;&gt;Approaches&lt;/h1&gt;
+&lt;p&gt;The most compelling generated music I&amp;#39;ve seen thus far comes from Google Brain, namely their &lt;a href=&quot;https://magenta.tensorflow.org/performance-rnn&quot;&gt;Performance RNN&lt;/a&gt; and &lt;a href=&quot;https://magenta.tensorflow.org/music-transformer&quot;&gt;Music Transformer&lt;/a&gt; papers. The associated GitHub repositories appear to contain models that have been pre-trained on various corpora (e.g. a &lt;a href=&quot;https://www.piano-e-competition.com/&quot;&gt;piano competition&amp;#39;s MIDI recordings&lt;/a&gt;). It&amp;#39;s also possible to train using a new corpus. The trained models can generate continuations based on a primer or generate unconditioned music &amp;quot;from scratch&amp;quot;.&lt;/p&gt;
+&lt;p&gt;Here are several approaches I&amp;#39;m investigating for generating a ragtime piece:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Condition pre-trained Performance RNN and Music Transformer models with existing ragtime music (either an intro or the first few measures) and generate a continuation&lt;/li&gt;
+&lt;li&gt;Train a new model on a corpus of ragtime music, and then do unconditioned generation&lt;/li&gt;
+&lt;li&gt;Train a new model on a ragtime corpus and generate a continuation from a ragtime primer&lt;/li&gt;
+&lt;li&gt;Train a new model on a ragtime corpus and generate a continuation from an arbitrary primer&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I don&amp;#39;t have any intuition for how large of a corpus is required to generate a decent model, so it&amp;#39;s possible that options 2 - 4 won&amp;#39;t be feasible for me (either because finding/generating such a training corpus is too difficult or the compute required to train the model is beyond what my computer can handle).&lt;/p&gt;
+&lt;h1 id=&quot;using-pre-trained-models&quot;&gt;Using pre-trained models&lt;/h1&gt;
+&lt;p&gt;Without installing anything locally, you can use the &lt;a href=&quot;https://colab.research.google.com/notebooks/magenta/piano_transformer/piano_transformer.ipynb&quot;&gt;Music Transformer notebook&lt;/a&gt; to generate music. There are several options:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Generate music &amp;quot;from scratch&amp;quot; (unconditional)&lt;/li&gt;
+&lt;li&gt;Generate a continuation based on a primer&lt;/li&gt;
+&lt;li&gt;Generate accompaniment for a (monophonic) melody&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;unconditional-generation&quot;&gt;Unconditional generation&lt;/h2&gt;
+&lt;p&gt;Without providing a primer, I don&amp;#39;t think it&amp;#39;s possible to indicate what genre of music you&amp;#39;d like to generate. For example, the clip I got sounds like some sort of &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-unconditioned.mid&quot;&gt;boogie-woogie folk march&lt;/a&gt;. Obviously this isn&amp;#39;t the genre that I was looking for (or, really, than anyone was looking for). Rather than continuing on randomly like this, I&amp;#39;ll investigate primed generation.&lt;/p&gt;
+&lt;h2 id=&quot;continuations&quot;&gt;Continuations&lt;/h2&gt;
+&lt;p&gt;The notebook linked above also supports providing a primer, either from a provided list or by uploading a MIDI file directly in the UI.&lt;/p&gt;
+&lt;h3 id=&quot;cropping-midi-primers&quot;&gt;Cropping MIDI primers&lt;/h3&gt;
+&lt;p&gt;The primer is included in the output, so I assume it should be reasonably short. My original plan was to edit down an existing ragtime MIDI using &lt;a href=&quot;https://musescore.org/en&quot;&gt;MuseScore&lt;/a&gt;, but MuseScore&amp;#39;s output appears to be incompatible with the &lt;a href=&quot;http://craffel.github.io/pretty-midi/&quot;&gt;pretty_midi&lt;/a&gt; module that the notebook uses, resulting in the following error:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pretty_midi\pretty_midi.py:&lt;span class=&quot;hljs-number&quot;&gt;97&lt;/span&gt;: RuntimeWarning: Tempo, Key &lt;span class=&quot;hljs-keyword&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Time&lt;/span&gt; signature change events &lt;span class=&quot;hljs-built_in&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;on&lt;/span&gt; non-zero tracks. This &lt;span class=&quot;hljs-keyword&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;not&lt;/span&gt; a &lt;span class=&quot;hljs-keyword&quot;&gt;valid&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; MIDI file. Tempo, Key &lt;span class=&quot;hljs-keyword&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Time&lt;/span&gt; Signature may be wrong.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;My workaround was to switch to using &lt;a href=&quot;https://www.audacityteam.org/&quot;&gt;Audacity&lt;/a&gt; to crop my MIDI primer (and this worked without issue).&lt;/p&gt;
+&lt;h3 id=&quot;example-continuations&quot;&gt;Example continuations&lt;/h3&gt;
+&lt;p&gt;First, I tried using just the intro bars of some Scott Joplin rags:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-intro-wall-street.mid&quot;&gt;Wall Street Rag intro&lt;/a&gt;: this generated an interesting continuation that sounded vaguely like a cross between ragtime and new age piano&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-intro-magnetic.mid&quot;&gt;Magnetic Rag intro&lt;/a&gt;: this generated a continuation with a halting style that keeps repeating notes&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Overall, the results are impressive, but also somewhat alien. And definitely not ragtime.&lt;/p&gt;
+&lt;p&gt;Next, I tried supplying the beginning of a few sections of Joplin rags:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Wall Street Rag&lt;ul&gt;
+&lt;li&gt;The &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-wall-street-1.mid&quot;&gt;first continuation&lt;/a&gt; gets a bit stuck on the primer, but then recovers nicely into a very short still-not-quite-ragtime section&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-wall-street-2.mid&quot;&gt;second continuation&lt;/a&gt; strays quickly and widely from ragtime (continuing the trend of &amp;quot;impressive, but not what I wanted&amp;quot;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Maple Leaf Rag&lt;ul&gt;
+&lt;li&gt;This &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-maple-leaf.mid&quot;&gt;continuation&lt;/a&gt; seemed to ignore the primer and just started cycling through music I can only describe as &amp;quot;movie soundtrack&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Magnetic Rag&lt;ul&gt;
+&lt;li&gt;The &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-magnetic-1.mid&quot;&gt;first continuation&lt;/a&gt; was short, but rag-like!&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-magnetic-2.mid&quot;&gt;second continuation&lt;/a&gt; was similarly short, but promising&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-magnetic-3.mid&quot;&gt;third continuation&lt;/a&gt; was much longer, but... bad&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;accompaniment&quot;&gt;Accompaniment&lt;/h2&gt;
+&lt;p&gt;Out of curiosity, I also tried generating an accompaniment (based on a monophonic melody that consists of the highest non-overlapping notes in the cropped MIDIs from the last section):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-accompaniment-magnetic.mid&quot;&gt;Magnetic Rag accompaniment&lt;/a&gt;: this was a baroquely ornamented mix of classical and blues&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;reflecting-on-pre-trained-models&quot;&gt;Reflecting on pre-trained models&lt;/h2&gt;
+&lt;p&gt;Unsurprisingly, the generic pre-trained models I used, while undoubtedly impressive, seem best suited for exploration and amusement, rather than producing something focused on a particular genre.&lt;/p&gt;
+&lt;p&gt;I suspect that the best path forward for this experiment is to train a new ragtime-focused model on a corpus of typical ragtime MIDIs. As noted earlier, it&amp;#39;s possible I won&amp;#39;t be able to find either a large enough corpus or enough compute power to produce a reasonable model, but if I &lt;em&gt;do&lt;/em&gt; succeed, I think the results will be more consistently rag-like.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>MITx - 6.036: Introduction to Machine Learning</title>
 <id>https://log.schemescape.com/posts/machine-learning/mitx-6.036.html</id>
@@ -158,123 +227,6 @@
 &lt;h1 id=&quot;thats-unfortunate&quot;&gt;That&amp;#39;s unfortunate...&lt;/h1&gt;
 &lt;p&gt;Despite my concerns around C# being closed source, I found that a lot of the C# tooling is actually open source now. Unfortunately, it still seems to be inextricably tied to Visual Studio and its massive, opaque installation process.&lt;/p&gt;
 &lt;p&gt;I feel a bit bad about giving up so quickly, but my experience with C# thus far has been the polar opposite of &amp;quot;convenient&amp;quot;. I want a programming language that is future-proof, convenient, and comfortable. C# is comfortable. I don&amp;#39;t know if it&amp;#39;s future-proof (or portable). But it is most definitely &lt;em&gt;not&lt;/em&gt; convenient.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Future-proof programming languages</title>
-<id>https://log.schemescape.com/posts/programming-languages/future-proof-languages.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/future-proof-languages.html"/>
-<updated>2022-02-11T00:00:00.000Z</updated>
-<summary type="text">My projects are currently on hold while I suffer from programming language analysis paralysis.</summary>
-<content type="html">&lt;p&gt;After some rapid progress on projects such as &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../releases/md2blog-1.1.1.html&quot;&gt;md2blog&lt;/a&gt;, everything has come to a screeching halt while I struggle with making future-proof technology choices. This post is specifically about programming languages.&lt;/p&gt;
-&lt;h1 id=&quot;why-future-proof&quot;&gt;Why future-proof?&lt;/h1&gt;
-&lt;p&gt;I want code that I write to continue being useful to me in the future. Specifically, I want to be able to:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Run my code&lt;/li&gt;
-&lt;li&gt;Recompile my code (in case I end up on a new platform)&lt;/li&gt;
-&lt;li&gt;Reuse my code in other projects&lt;/li&gt;
-&lt;li&gt;Do all of the above with a minimum of hassle (and no multi-gigabyte downloads!)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;And this is why I&amp;#39;m stuck on trying to find a comfortable, future-proof programming language.&lt;/p&gt;
-&lt;h1 id=&quot;indicators&quot;&gt;Indicators&lt;/h1&gt;
-&lt;p&gt;Here are some ideas on what indicates that a programming language will persist well into the future:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Availability of &lt;em&gt;open source&lt;/em&gt; compilers and tooling (ideally multiple implementations that are mutually compatible)&lt;/li&gt;
-&lt;li&gt;Support for many platforms&lt;/li&gt;
-&lt;li&gt;Broad usage (both in open source projects and industry)&lt;/li&gt;
-&lt;li&gt;Actively maintained standard library&lt;/li&gt;
-&lt;li&gt;No breaking changes (ideally)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Of course, I&amp;#39;d also like the programming language to be convenient and comfortable, so I&amp;#39;ll add to my wishlist:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;No multi-gigabyte downloads just to get started&lt;/li&gt;
-&lt;li&gt;Not tied to a single platform/environment/tool set&lt;/li&gt;
-&lt;li&gt;Small and simple (in case I want to build my own tools)&lt;/li&gt;
-&lt;li&gt;Easily cross-compiled&lt;/li&gt;
-&lt;li&gt;Simple and transparent build process&lt;/li&gt;
-&lt;li&gt;Readily available libraries (either with source available or from reputable contributors)&lt;/li&gt;
-&lt;li&gt;Ergonomic editing&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;observations&quot;&gt;Observations&lt;/h1&gt;
-&lt;p&gt;According to &lt;a href=&quot;https://insights.stackoverflow.com/survey/2021#technology-most-popular-technologies&quot;&gt;Stack Overflow&lt;/a&gt;, the most popular programming languages are:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;JavaScript&lt;/li&gt;
-&lt;li&gt;Python&lt;/li&gt;
-&lt;li&gt;Java&lt;/li&gt;
-&lt;li&gt;TypeScript&lt;/li&gt;
-&lt;li&gt;C#&lt;/li&gt;
-&lt;li&gt;C++&lt;/li&gt;
-&lt;li&gt;PHP&lt;/li&gt;
-&lt;li&gt;C&lt;/li&gt;
-&lt;li&gt;Go&lt;/li&gt;
-&lt;li&gt;Kotlin&lt;/li&gt;
-&lt;li&gt;Rust&lt;/li&gt;
-&lt;li&gt;Ruby&lt;/li&gt;
-&lt;li&gt;Dart&lt;/li&gt;
-&lt;li&gt;Swift&lt;/li&gt;
-&lt;li&gt;Objective C&lt;/li&gt;
-&lt;li&gt;Scala&lt;/li&gt;
-&lt;li&gt;Perl&lt;/li&gt;
-&lt;li&gt;Haskell&lt;/li&gt;
-&lt;li&gt;Clojure&lt;/li&gt;
-&lt;li&gt;Elixir&lt;/li&gt;
-&lt;li&gt;Lisp&lt;/li&gt;
-&lt;li&gt;Zig (not actually on the list)&lt;/li&gt;
-&lt;li&gt;Lua (also not on the list)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Now it&amp;#39;s time to ruthlessly eliminate popular programming languages.&lt;/p&gt;
-&lt;p&gt;Some languages are mostly tied to a particular platform, so they get cut:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;PHP&lt;/li&gt;
-&lt;li&gt;Kotlin&lt;/li&gt;
-&lt;li&gt;Dart&lt;/li&gt;
-&lt;li&gt;Swift&lt;/li&gt;
-&lt;li&gt;Objective C&lt;/li&gt;
-&lt;li&gt;Scala&lt;/li&gt;
-&lt;li&gt;Elixir&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Java and Perl I have experience with, and frankly, they&amp;#39;re too cumbersome, so I won&amp;#39;t investigate them further.&lt;/p&gt;
-&lt;h1 id=&quot;second-round&quot;&gt;Second round&lt;/h1&gt;
-&lt;p&gt;After some initial pruning, here is the list with my initial thoughts:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;JavaScript/TypeScript&lt;/strong&gt;: lots of implementations and modern JavaScript is nice, but comes with a ton of baggage; TypeScript brings some sanity to the language&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Python&lt;/strong&gt;: setting up a Python environment is a recurring nightmare of mine, but it&amp;#39;s so popular that I probably need to give it another shot&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;C#&lt;/strong&gt;: a great language and standard library, but how much of it is open source? Is it portable? Can I run .NET on a Raspberry Pi?&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;C++&lt;/strong&gt;: terribly complex, but modern C++ is surprisingly convenient; the build systems are generally awful, though&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;C&lt;/strong&gt;: probably the most portable and future-proof language ever created, but not very ergonomic&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Go&lt;/strong&gt;: &amp;quot;goroutines&amp;quot; seem great and I&amp;#39;ve heard the tooling is nice, but a garbage-collected language with C-like verbosity sounds like the worst of both worlds to me&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Rust&lt;/strong&gt;: new and popular, with an appealing memory model, but there&amp;#39;s really only one implementation and &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/rust-first-experience.html&quot;&gt;my first experience setting Rust up on Windows was terrible&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Ruby&lt;/strong&gt;: just as annoying to setup as Python, but less popular&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Haskell&lt;/strong&gt;: it&amp;#39;s been a while since I used a purely functional programming language&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Lisp/Clojure&lt;/strong&gt;: I love the simplicity of Lisp (namely Scheme), but I have doubts about it being convenient and portable&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Zig&lt;/strong&gt;: probably too new and with too many breaking changes, but I like the idea of a more sane alternative to C, and the Zig compiler is very convenient&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Lua&lt;/strong&gt;: I used to love Lua, but TypeScript just seems so much more popular and productive these days (also: I hate 1-based arrays)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Given that this list is already too long, I&amp;#39;m going to eliminate a few options without proper due diligence (either based on prior experience or based on the belief that similar but superior options exist elsewhere on this list). Apologies to the following languages that have been cut:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Ruby&lt;/li&gt;
-&lt;li&gt;Haskell&lt;/li&gt;
-&lt;li&gt;Lua&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;third-round&quot;&gt;Third round&lt;/h1&gt;
-&lt;p&gt;For the next round, I&amp;#39;ll do more research and hopefully play around with the languages I&amp;#39;m unfamiliar with.&lt;/p&gt;
-&lt;p&gt;Some initial thoughts on the languages I&amp;#39;m familiar with:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;TypeScript: comfortable and convenient, but memory usage and (lack of) parallelism are concerns&lt;/li&gt;
-&lt;li&gt;C#: can this run on a Raspberry Pi? How much of the standard library is closed source?&lt;/li&gt;
-&lt;li&gt;C++: is there C++ environment that is quick and easy to setup?&lt;/li&gt;
-&lt;li&gt;C: a frontrunner, despite its numerous problems&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;And here are the languages I need to investigate further:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Python&lt;/li&gt;
-&lt;li&gt;Go&lt;/li&gt;
-&lt;li&gt;Rust&lt;/li&gt;
-&lt;li&gt;Lisp/Clojure&lt;/li&gt;
-&lt;li&gt;Zig&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;thats-all-for-now&quot;&gt;That&amp;#39;s all for now&lt;/h1&gt;
-&lt;p&gt;That&amp;#39;s as far as I&amp;#39;ve gotten. My next steps are to see if C# is viable, determine if there&amp;#39;s a convenient C++ environment, give Python yet another try, and then play around with Go, Rust, Clojure (or other Lisps), and Zig.&lt;/p&gt;
 </content>
 </entry>
 </feed>
