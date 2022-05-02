@@ -1,7 +1,7 @@
 ---
 title: Generating music using machine learning (part 2)
-description: Let's see if I can use Google Brain's Music Transformer to generate ragtime music
-date: 2022-04-29
+description: An unsuccessful (but less unsuccessful than last time) attempt to generate ragtime music.
+date: 2022-05-02
 ---
 In [part 1](generating-music.md), I played around with pre-trained [Music Transformer](https://magenta.tensorflow.org/music-transformer) models, in an attempt to generate a piece of ragtime piano music. The results were interesting, but the musical styles were random (and internally inconsistent).
 
@@ -42,6 +42,11 @@ Generating results was surprisingly slow (compared to using Magenta), but I have
 
 Regardless, the results sounded a (little) bit like music--a huge improvement from my previous attempt (which was just noise). Examples:
 
-* [Example 1](../../assets/music-generation/train-100-1.midi)
-* [Example 2](../../assets/music-generation/train-100-2.midi)
-* [Example 3](../../assets/music-generation/train-100-3.midi)
+* [Example 1](../../assets/music-generation/train-100-1.midi): occasional glimpses of music
+* [Example 2](../../assets/music-generation/train-100-2.midi): pleasant notes with essentially no rhythm
+* [Example 3](../../assets/music-generation/train-100-3.midi): repetitive, again with inconsistent rhythm
+
+Unfortunately, the results after 250 epochs weren't noticeably any better. It's possible that the small corpus isn't sufficient for training this model.
+
+# Next steps
+I started this project for fun, but after struggling with Python environments and coming to the realization that I have insufficient compute resources available, I'm reconsidering whether or not this is a good use of my time.

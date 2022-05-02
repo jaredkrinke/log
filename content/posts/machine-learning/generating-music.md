@@ -1,6 +1,6 @@
 ---
 title: Generating music using machine learning
-description: Let's see if I can use Google Brain's Music Transformer to generate ragtime music
+description: Let's see if I can use Google Brain's Music Transformer to generate ragtime music.
 date: 2022-04-26
 ---
 Recent music generation results (e.g. [Music Transformer: Generating Music with Long-Term Structure](https://magenta.tensorflow.org/music-transformer)) are part of what piqued my interest in machine learning. After [following an introduction to machine learning](mitx-6.036.md), it's time for some experimentation.
