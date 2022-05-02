@@ -18,4 +18,30 @@ Initially, I tried to generate music using the official Music Transformer enviro
 ## Results
 After training for roughly a day (2,500 steps), the [resulting MIDI](../../assets/music-generation/mt-train-2500.mid) sounds mostly like random noise. It's not clear to me if this was due to a bug in my pipeline or if I just needed to spend a lot more time training.
 
-Ultimately, I decided I didn't understand the Magenta and Tensor2Tensor libraries well enough to make much progress (without investing an excessive amount of time). [My code is here](https://github.com/jaredkrinke/music-transformer-fine-tuning).
+Ultimately, I decided I didn't understand the Magenta and Tensor2Tensor libraries well enough to make much progress (without investing an excessive amount of time), and I'd spent enough time troubleshooting issues already. [My training scripts are here](https://github.com/jaredkrinke/music-transformer-fine-tuning).
+
+# Second attempt
+Rather than give up on transformer-based music generation entirely, I searched around for a simpler codebase that I might be able to more easily understand and/or adapt. Here are a few I ran across:
+
+* [transformer-xl](https://github.com/davidsvy/transformer-xl) by [davidsvy](https://github.com/davidsvy)
+* [music-transformer-comp6248
+](https://github.com/COMP6248-Reproducability-Challenge/music-transformer-comp6248)
+* [MusicAutobot](https://github.com/bearpelican/musicautobot) by [Andrew Shaw](https://github.com/bearpelican)
+
+The first one is a noted as a re-implementation from scratch of the ideas from the transformer/attention research papers (mostly the same ones I'd been looking at) using Tensorflow/Keras. The codebase seemed small enough that I could probably understand it all without too much trouble.
+
+I decided to move forward with the transformer-xl repository. I didn't hit any issues with setup, which was a welcome development.
+
+## Training
+As an initial test, I tried training on a fairly small corpus of 58 Scott Joplin MIDIs. I was able to decrease the batch size slightly to support training on my roughly 7 year old GPU. Training for 100 epochs only took about 7 hours.
+
+Note: although there was a preprocessing step to convert the MIDI files to another format, I didn't notice any data generation/augmentation, as in the Magenta codebase.
+
+## Initial results
+Generating results was surprisingly slow (compared to using Magenta), but I haven't investigated the reason for that yet.
+
+Regardless, the results sounded a (little) bit like music--a huge improvement from my previous attempt (which was just noise). Examples:
+
+* [Example 1](../../assets/music-generation/train-100-1.midi)
+* [Example 2](../../assets/music-generation/train-100-2.midi)
+* [Example 3](../../assets/music-generation/train-100-3.midi)
