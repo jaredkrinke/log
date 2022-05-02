@@ -7,14 +7,59 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-04-26T22:42:22.339Z</updated>
+<updated>2022-05-02T17:21:48.673Z</updated>
 
+<entry>
+<title>Generating music using machine learning (part 2)</title>
+<id>https://log.schemescape.com/posts/machine-learning/generating-music-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/machine-learning/generating-music-2.html"/>
+<updated>2022-05-02T00:00:00.000Z</updated>
+<summary type="text">An unsuccessful (but less unsuccessful than last time) attempt to generate ragtime music.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/generating-music.html&quot;&gt;part 1&lt;/a&gt;, I played around with pre-trained &lt;a href=&quot;https://magenta.tensorflow.org/music-transformer&quot;&gt;Music Transformer&lt;/a&gt; models, in an attempt to generate a piece of ragtime piano music. The results were interesting, but the musical styles were random (and internally inconsistent).&lt;/p&gt;
+&lt;p&gt;In this part, I attempt to train my own Music Transformer model, using a ragtime-focused corpus.&lt;/p&gt;
+&lt;h1 id=&quot;first-attempt&quot;&gt;First attempt&lt;/h1&gt;
+&lt;p&gt;Initially, I tried to generate music using the official Music Transformer environment, &lt;a href=&quot;https://magenta.tensorflow.org/&quot;&gt;Magenta&lt;/a&gt;, following instructions in &lt;a href=&quot;https://groups.google.com/a/tensorflow.org/g/magenta-discuss/c/tRrth7wXF6U&quot;&gt;an email thread about using transfer learning with Music Transformer&amp;#39;s pre-trained checkpoints&lt;/a&gt;. I hit several issues:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/magenta/magenta/issues/1962&quot;&gt;Magenta install fails for Python &amp;gt;= 3.8 &lt;/a&gt; (worked around via &lt;a href=&quot;https://www.anaconda.com/&quot;&gt;Anaconda&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;The default optimizer (&lt;code&gt;AdafactorOptimizer&lt;/code&gt;) appeared to be incompatible with the version of Tensorflow Magenta installed (worked around via &lt;code&gt;--hparams=optimizer=Adam,...&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;I couldn&amp;#39;t use my GPU to train because it didn&amp;#39;t have enough memory&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/magenta/magenta/issues/1862&quot;&gt;Tensor2Tensor terminated on &amp;quot;key not found&amp;quot; errors&lt;/a&gt; (worked around with a newer version, as noted in the linked GitHub issue)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;results&quot;&gt;Results&lt;/h2&gt;
+&lt;p&gt;After training for roughly a day (2,500 steps), the &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-train-2500.mid&quot;&gt;resulting MIDI&lt;/a&gt; sounds mostly like random noise. It&amp;#39;s not clear to me if this was due to a bug in my pipeline or if I just needed to spend a lot more time training.&lt;/p&gt;
+&lt;p&gt;Ultimately, I decided I didn&amp;#39;t understand the Magenta and Tensor2Tensor libraries well enough to make much progress (without investing an excessive amount of time), and I&amp;#39;d spent enough time troubleshooting issues already. &lt;a href=&quot;https://github.com/jaredkrinke/music-transformer-fine-tuning&quot;&gt;My training scripts are here&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;second-attempt&quot;&gt;Second attempt&lt;/h1&gt;
+&lt;p&gt;Rather than give up on transformer-based music generation entirely, I searched around for a simpler codebase that I might be able to more easily understand and/or adapt. Here are a few I ran across:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/davidsvy/transformer-xl&quot;&gt;transformer-xl&lt;/a&gt; by &lt;a href=&quot;https://github.com/davidsvy&quot;&gt;davidsvy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/COMP6248-Reproducability-Challenge/music-transformer-comp6248&quot;&gt;music-transformer-comp6248
+&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/bearpelican/musicautobot&quot;&gt;MusicAutobot&lt;/a&gt; by &lt;a href=&quot;https://github.com/bearpelican&quot;&gt;Andrew Shaw&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The first one is a noted as a re-implementation from scratch of the ideas from the transformer/attention research papers (mostly the same ones I&amp;#39;d been looking at) using Tensorflow/Keras. The codebase seemed small enough that I could probably understand it all without too much trouble.&lt;/p&gt;
+&lt;p&gt;I decided to move forward with the transformer-xl repository. I didn&amp;#39;t hit any issues with setup, which was a welcome development.&lt;/p&gt;
+&lt;h2 id=&quot;training&quot;&gt;Training&lt;/h2&gt;
+&lt;p&gt;As an initial test, I tried training on a fairly small corpus of 58 Scott Joplin MIDIs. I was able to decrease the batch size slightly to support training on my roughly 7 year old GPU. Training for 100 epochs only took about 7 hours.&lt;/p&gt;
+&lt;p&gt;Note: although there was a preprocessing step to convert the MIDI files to another format, I didn&amp;#39;t notice any data generation/augmentation, as in the Magenta codebase.&lt;/p&gt;
+&lt;h2 id=&quot;initial-results&quot;&gt;Initial results&lt;/h2&gt;
+&lt;p&gt;Generating results was surprisingly slow (compared to using Magenta), but I haven&amp;#39;t investigated the reason for that yet.&lt;/p&gt;
+&lt;p&gt;Regardless, the results sounded a (little) bit like music--a huge improvement from my previous attempt (which was just noise). Examples:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/train-100-1.midi&quot;&gt;Example 1&lt;/a&gt;: occasional glimpses of music&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/train-100-2.midi&quot;&gt;Example 2&lt;/a&gt;: pleasant notes with essentially no rhythm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/train-100-3.midi&quot;&gt;Example 3&lt;/a&gt;: repetitive, again with inconsistent rhythm&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Unfortunately, the results after 250 epochs weren&amp;#39;t noticeably any better. It&amp;#39;s possible that the small corpus isn&amp;#39;t sufficient for training this model.&lt;/p&gt;
+&lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
+&lt;p&gt;I started this project for fun, but after struggling with Python environments and coming to the realization that I have insufficient compute resources available, I&amp;#39;m reconsidering whether or not this is a good use of my time.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Generating music using machine learning</title>
 <id>https://log.schemescape.com/posts/machine-learning/generating-music.html</id>
 <link rel="alternate" href="https://log.schemescape.com/posts/machine-learning/generating-music.html"/>
 <updated>2022-04-26T00:00:00.000Z</updated>
-<summary type="text">Let&apos;s see if I can use Google Brain&apos;s Music Transformer to generate ragtime music</summary>
+<summary type="text">Let&apos;s see if I can use Google Brain&apos;s Music Transformer to generate ragtime music.</summary>
 <content type="html">&lt;p&gt;Recent music generation results (e.g. &lt;a href=&quot;https://magenta.tensorflow.org/music-transformer&quot;&gt;Music Transformer: Generating Music with Long-Term Structure&lt;/a&gt;) are part of what piqued my interest in machine learning. After &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/mitx-6.036.html&quot;&gt;following an introduction to machine learning&lt;/a&gt;, it&amp;#39;s time for some experimentation.&lt;/p&gt;
 &lt;p&gt;First up: generating a &lt;a href=&quot;https://en.wikipedia.org/wiki/Ragtime&quot;&gt;ragtime&lt;/a&gt; piano piece.&lt;/p&gt;
 &lt;h1 id=&quot;approaches&quot;&gt;Approaches&lt;/h1&gt;
@@ -204,29 +249,6 @@
 &lt;p&gt;Ultimately, Python&amp;#39;s biggest advantage is its popularity.&lt;/p&gt;
 &lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
 &lt;p&gt;Now that I&amp;#39;ve read up on Python and written some basic scripts (mostly to solve &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt; problems), I&amp;#39;m going to play around with machine learning using Python and NumPy.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Testing out C# in 2022</title>
-<id>https://log.schemescape.com/posts/programming-languages/c-sharp.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/c-sharp.html"/>
-<updated>2022-02-13T00:00:00.000Z</updated>
-<summary type="text">In my quest to find a future-proof programming language, I&apos;m investigating C#.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;a previous article&lt;/a&gt;, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&amp;#39;d still be useful in another decade.&lt;/p&gt;
-&lt;p&gt;Now, I&amp;#39;m drilling into the most promising candidates. First up is C#.&lt;/p&gt;
-&lt;h1 id=&quot;setting-up-a-c-development-environment&quot;&gt;Setting up a C# development environment&lt;/h1&gt;
-&lt;p&gt;To my surprise, the &lt;a href=&quot;https://github.com/dotnet/roslyn&quot;&gt;C# compiler&lt;/a&gt; and &lt;a href=&quot;https://github.com/dotnet/runtime&quot;&gt;.NET runtime&lt;/a&gt; are both now open source (MIT license). Even more surprising, you can now apparently &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/iot/deployment&quot;&gt;deploy self-contained .NET executables to a Raspberry Pi&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;C# is a great language and the .NET standard library is probably the most thoughtfully crafted standard library I&amp;#39;ve ever used. So is my search over? Is C# the answer?&lt;/p&gt;
-&lt;p&gt;First, I need to setup a C# development environment. After selecting the .NET runtime and SDK in the Visual Studio installer, I am appalled to see that it requires &lt;em&gt;5 GB&lt;/em&gt; of disk space! There&amp;#39;s probably a bunch of extraneous junk I don&amp;#39;t need, but for comparison: Visual Studio Code is ~300 MB and Deno&amp;#39;s TypeScript runtime is ~60 MB.&lt;/p&gt;
-&lt;p&gt;Even after installing all that software, I tried opening a C# project that I created with the &lt;code&gt;dotnet new&lt;/code&gt; command line interface and it told me I needed to install 3.5 GB of software. I think this might be because ASP.NET Core wants to use an older version of .NET. Regardless, as far as I can tell, this is in addition to the 5 GB I already installed, so we&amp;#39;re up to something like 8.5 GB just to run a &amp;quot;hello world&amp;quot; web server.&lt;/p&gt;
-&lt;p&gt;Fighting my instinct to run away from such a massive disk footprint, I went ahead and installed everything. At least if I test out C# and find it&amp;#39;s not a good fit for me, I&amp;#39;ll be able to easily recover a large amount of disk space without hesitation.&lt;/p&gt;
-&lt;h1 id=&quot;putting-c-and-net-through-its-paces-or-not&quot;&gt;Putting C# and .NET through its paces (or not)&lt;/h1&gt;
-&lt;p&gt;As an initial test, I&amp;#39;d like to build a self-contained &amp;quot;hello world&amp;quot; web server, running on Windows (32-bit and 64-bit), Linux (x64 Debian and Alpine), and a Raspberry Pi.&lt;/p&gt;
-&lt;p&gt;Unfortunately, even with multiple .NET frameworks and SDKs installed and running Visual Studio, I was not able to successfully build a self-contained executable (it seemed to think I was using .NET Core, which I don&amp;#39;t think I ever installed). After uninstalling the .NET 5.0 SDK, it seems that .NET 4.7.2 was also uninstalled, along with the .NET command line interface (&lt;code&gt;dotnet&lt;/code&gt;). Reloading my test project prompted me to retarget to a previous .NET version, but then the project wouldn&amp;#39;t build at all (even &amp;quot;framework-dependent&amp;quot;). Keep in mind this was a trivial &amp;quot;hello world&amp;quot; &lt;em&gt;command line&lt;/em&gt; app, as in just &lt;code&gt;Console.WriteLine(&amp;quot;Hello, world!&amp;quot;)&lt;/code&gt; inside a class&amp;#39;s &lt;code&gt;Main&lt;/code&gt; function).&lt;/p&gt;
-&lt;p&gt;Even worse, after throwing up my hands in frustration, I went to uninstall all the .NET and C# components (to start over from scratch) and now Visual Studio&amp;#39;s installer is claiming some of the components are required for C++ development, so I guess I&amp;#39;m never getting all that disk space back unless I want to break my C++ development environment.&lt;/p&gt;
-&lt;h1 id=&quot;thats-unfortunate&quot;&gt;That&amp;#39;s unfortunate...&lt;/h1&gt;
-&lt;p&gt;Despite my concerns around C# being closed source, I found that a lot of the C# tooling is actually open source now. Unfortunately, it still seems to be inextricably tied to Visual Studio and its massive, opaque installation process.&lt;/p&gt;
-&lt;p&gt;I feel a bit bad about giving up so quickly, but my experience with C# thus far has been the polar opposite of &amp;quot;convenient&amp;quot;. I want a programming language that is future-proof, convenient, and comfortable. C# is comfortable. I don&amp;#39;t know if it&amp;#39;s future-proof (or portable). But it is most definitely &lt;em&gt;not&lt;/em&gt; convenient.&lt;/p&gt;
 </content>
 </entry>
 </feed>
