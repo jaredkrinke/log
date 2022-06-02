@@ -7,8 +7,20 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-05-02T17:21:48.673Z</updated>
+<updated>2022-06-02T22:06:24.499Z</updated>
 
+<entry>
+<title>May 16th, 2022</title>
+<id>https://log.schemescape.com/posts/misc/2022-05-16.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/misc/2022-05-16.html"/>
+<updated>2022-05-16T00:00:00.000Z</updated>
+<summary type="text">A memory, for my own reference.</summary>
+<content type="html">&lt;p&gt;I had just been there the previous day, but after receiving an inevitable update, I was returning once again. Inevitable or not, I was never able to imagine it actually happening.&lt;/p&gt;
+&lt;p&gt;It was one of the few sunny days of an unusually cold spring. I was driving down a mostly empty freeway in the evening. I&amp;#39;d made this drive many times before, but this time was different.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m still not sure how to feel about it, and I&amp;#39;m not convinced that there even &lt;em&gt;is&lt;/em&gt; a way one should feel about it.&lt;/p&gt;
+&lt;p&gt;Regardless, it puts things into perspective.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Generating music using machine learning (part 2)</title>
 <id>https://log.schemescape.com/posts/machine-learning/generating-music-2.html</id>
@@ -199,56 +211,6 @@
 &lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/rounakbanik/the-movies-dataset&quot;&gt;Movie data&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/stackoverflow/stackoverflow&quot;&gt;Stack Overflow data&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>First impressions of Python</title>
-<id>https://log.schemescape.com/posts/programming-languages/python.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/python.html"/>
-<updated>2022-02-21T00:00:00.000Z</updated>
-<summary type="text">Next on my list of programming languages to investigate is Python.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;a previous article&lt;/a&gt;, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&amp;#39;d still be useful in another decade.&lt;/p&gt;
-&lt;p&gt;Now, I&amp;#39;m drilling more deeply into Python.&lt;/p&gt;
-&lt;h1 id=&quot;setting-up-a-python-development-environment&quot;&gt;Setting up a Python development environment&lt;/h1&gt;
-&lt;p&gt;Ah, my old nemesis: Python. I&amp;#39;ve never had a good experience setting up a Python environment. Additionally, the Python 2 to 3 migration (which included unnecessary things like &lt;a href=&quot;https://www.python.org/dev/peps/pep-0238/&quot;&gt;changing the semantics of the division operator&lt;/a&gt;) had so many breaking changes that people are &lt;em&gt;still&lt;/em&gt; using Python 2 (even though it is no longer supported).&lt;/p&gt;
-&lt;p&gt;Yet Python is consistently one of the most popular programming languages. What am I missing?&lt;/p&gt;
-&lt;p&gt;While setting up Python, I noticed that typing &amp;quot;python&amp;quot; into my Windows command prompt launches the Microsoft Store app (compliments of &lt;code&gt;%LocalAppData%\Microsoft\WindowsApps\python.exe&lt;/code&gt;). I&amp;#39;ll give the installer a try since it&amp;#39;s a surprisingly reasonable ~100 MB download. Apparently, Microsoft decided to &lt;a href=&quot;https://devblogs.microsoft.com/python/python-in-the-windows-10-may-2019-update/&quot;&gt;insert this Python shim into Windows itself&lt;/a&gt; just to make it easier for people to find Python. Interesting.&lt;/p&gt;
-&lt;h1 id=&quot;going-through-the-tutorial&quot;&gt;Going through the tutorial&lt;/h1&gt;
-&lt;p&gt;While going through &lt;a href=&quot;https://docs.python.org/3/tutorial/&quot;&gt;Python&amp;#39;s official tutorial&lt;/a&gt;, I&amp;#39;m already seeing things I don&amp;#39;t like:&lt;/p&gt;
-&lt;p&gt;Syntax gripes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;There are &lt;code&gt;else&lt;/code&gt; blocks on &lt;em&gt;loops&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;pass&lt;/code&gt; is needed to denote empty blocks&lt;/li&gt;
-&lt;li&gt;There are abbreviations that are easy to forget, such as &lt;code&gt;elif&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;*&lt;/code&gt;, &lt;code&gt;**&lt;/code&gt;, and &lt;code&gt;/&lt;/code&gt; are overused in Python&amp;#39;s syntax&lt;/li&gt;
-&lt;li&gt;The syntax for both tuples and sets tries to be pretty, but just ends up creating weird edge cases, such as &lt;code&gt;item,&lt;/code&gt; (requiring a trailing comma) for a single-item tuple and &lt;code&gt;{}&lt;/code&gt; being an empty dictionary and not an empty set&lt;/li&gt;
-&lt;li&gt;&amp;quot;f-strings&amp;quot; can&amp;#39;t be arbitrarily nested (i.e. you can&amp;#39;t use quotation marks inside an f-string that is delimited by quotation marks)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Module woes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The module loading system seems needlessly complicated (&lt;code&gt;__init__.py&lt;/code&gt;, &lt;code&gt;__all__&lt;/code&gt;, &lt;code&gt;import *&lt;/code&gt;, etc.)&lt;ul&gt;
-&lt;li&gt;It even &lt;em&gt;prepends&lt;/em&gt; the main module&amp;#39;s path to the search path, so local modules are loaded in preference to standard library modules of the same name (pro tip: never create a file named &lt;code&gt;random.py&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;The default global scope has too many members&lt;/li&gt;
-&lt;li&gt;Virtual environments are &lt;em&gt;definitely&lt;/em&gt; not my preferred solution to managing conflicting dependencies&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Scoping complaints:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Variables introduced in a &lt;code&gt;for&lt;/code&gt; loop go into the enclosing scope (making it easy to accidentally change variables in the enclosing scope)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;global&lt;/code&gt; seems dangerous&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;overall-first-impressions&quot;&gt;Overall first impressions&lt;/h1&gt;
-&lt;p&gt;Here are my impressions after going through the Python tutorial and playing with Python for a few days:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;I don&amp;#39;t like the syntax, but I also don&amp;#39;t hate it as much as I expected to&lt;/li&gt;
-&lt;li&gt;Python definitely shows its age, and it has a lot of compatibility-related warts that are unpleasant&lt;/li&gt;
-&lt;li&gt;There are some handy syntactical conveniences (e.g. list comprehensions)&lt;/li&gt;
-&lt;li&gt;I am strongly in favor of its &amp;quot;batteries included&amp;quot; approach that yields a robust standard library (it even has SQLite out of the box!)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Ultimately, Python&amp;#39;s biggest advantage is its popularity.&lt;/p&gt;
-&lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
-&lt;p&gt;Now that I&amp;#39;ve read up on Python and written some basic scripts (mostly to solve &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt; problems), I&amp;#39;m going to play around with machine learning using Python and NumPy.&lt;/p&gt;
 </content>
 </entry>
 </feed>
