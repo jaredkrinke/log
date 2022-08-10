@@ -58,6 +58,28 @@
 <li>What sort of analytics does Steam provide for game publishers?</li>
 </ul>
 <p>Answering these questions will take some time, but honestly I think I&#39;d regret not ever trying to port my game to Steam.</p>
+<h1 id="first-steps">First steps</h1>
+<p>Steam publishes documentation for Steamworks here:</p>
+<p><a href="https://partner.steamgames.com/doc/home">https://partner.steamgames.com/doc/home</a></p>
+<h2 id="common-redistributables">Common redistributables</h2>
+<p>There is <a href="https://partner.steamgames.com/doc/features/common_redist">a page about common redistributables</a> that says it includes &quot;Microsoft Visual C++, .NET, DirectX 9, OpenAL, XNA, and PhysX&quot;, but it says the complete, up to date list is on a page that appears to only be visible to developers who have already paid a $100 fee. I had planned to pay the fee regardless, but I&#39;d hoped I could at least answer some of my questions before handing over money.</p>
+<h2 id="platforms">Platforms</h2>
+<p>It&#39;s now possible to download the Steamworks SDK <em>before</em> paying the Steam Direct fee, which is helpful. Within that zip file, it has binaries for 32- and 64-bit Linux and Windows, and macOS. I&#39;m interpreting that list to be the definitive list of supported platforms.</p>
+<h2 id="cloud-saves">Cloud saves</h2>
+<p>The Steam SDK <a href="https://partner.steamgames.com/doc/sdk/api">provides a C++ interface</a> for enumerating/reading/writing files to the Steam Cloud. There is also an <a href="https://partner.steamgames.com/doc/features/cloud#steam_auto-cloud">auto-cloud</a> feature that just synchronizes files based on path.</p>
+<p>As far as transitioning data from the browser version to the Steam version, I doubt there is a reliable and automatic way to do so.</p>
+<h3 id="one-note-on-itch">One note on Itch</h3>
+<p>Note: in the past, I investigated using <a href="https://itch.io/">Itch</a>&#39;s launcher to sync user data, but there were many issues:</p>
+<ul>
+<li>Obtaining the user identity isn&#39;t possible due to known bugs</li>
+<li>Storing data is up to the game developer, because Itch (reasonably, in my opinion) does not offer cloud storage for games</li>
+</ul>
+<h2 id="cost">Cost</h2>
+<p>As far as I can tell, Steam&#39;s $100 fee (plus tax) is a one-time fee. Obviously, I&#39;d prefer not to have to shell out this much money, but, luckily, $100 is not going to make or break my financial situation.</p>
+<h2 id="advertising-steam-release-within-browser-based-version">Advertising Steam release within browser-based version</h2>
+<p>It seems that there is precedent (e.g. <a href="https://anuke.itch.io/mindustry">Mindustry on Itch</a>) for advertising that the same game is available on Steam, when the Steam version has additional features. I didn&#39;t see anything Itch&#39;s terms of service that prohibit this (nor do I think it <em>should</em> be prohibited).</p>
+<h1 id="marketing-and-analytics">Marketing and analytics</h1>
+<p>Steam has <a href="https://partner.steamgames.com/doc/marketing">guidance for marketing games on the platform</a>. It looks like there is support for Google Analytics and some link tracking. For now, I&#39;m just going to put off thinking about marketing because my goal is to share my game, not to get rich off of it.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

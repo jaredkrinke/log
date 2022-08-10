@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-08-10T20:57:42.430Z</updated>
+<updated>2022-08-10T22:44:18.356Z</updated>
 
 <entry>
 <title>Porting a browser-based game to Steam</title>
@@ -36,6 +36,28 @@
 &lt;li&gt;What sort of analytics does Steam provide for game publishers?&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Answering these questions will take some time, but honestly I think I&amp;#39;d regret not ever trying to port my game to Steam.&lt;/p&gt;
+&lt;h1 id=&quot;first-steps&quot;&gt;First steps&lt;/h1&gt;
+&lt;p&gt;Steam publishes documentation for Steamworks here:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://partner.steamgames.com/doc/home&quot;&gt;https://partner.steamgames.com/doc/home&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;common-redistributables&quot;&gt;Common redistributables&lt;/h2&gt;
+&lt;p&gt;There is &lt;a href=&quot;https://partner.steamgames.com/doc/features/common_redist&quot;&gt;a page about common redistributables&lt;/a&gt; that says it includes &amp;quot;Microsoft Visual C++, .NET, DirectX 9, OpenAL, XNA, and PhysX&amp;quot;, but it says the complete, up to date list is on a page that appears to only be visible to developers who have already paid a $100 fee. I had planned to pay the fee regardless, but I&amp;#39;d hoped I could at least answer some of my questions before handing over money.&lt;/p&gt;
+&lt;h2 id=&quot;platforms&quot;&gt;Platforms&lt;/h2&gt;
+&lt;p&gt;It&amp;#39;s now possible to download the Steamworks SDK &lt;em&gt;before&lt;/em&gt; paying the Steam Direct fee, which is helpful. Within that zip file, it has binaries for 32- and 64-bit Linux and Windows, and macOS. I&amp;#39;m interpreting that list to be the definitive list of supported platforms.&lt;/p&gt;
+&lt;h2 id=&quot;cloud-saves&quot;&gt;Cloud saves&lt;/h2&gt;
+&lt;p&gt;The Steam SDK &lt;a href=&quot;https://partner.steamgames.com/doc/sdk/api&quot;&gt;provides a C++ interface&lt;/a&gt; for enumerating/reading/writing files to the Steam Cloud. There is also an &lt;a href=&quot;https://partner.steamgames.com/doc/features/cloud#steam_auto-cloud&quot;&gt;auto-cloud&lt;/a&gt; feature that just synchronizes files based on path.&lt;/p&gt;
+&lt;p&gt;As far as transitioning data from the browser version to the Steam version, I doubt there is a reliable and automatic way to do so.&lt;/p&gt;
+&lt;h3 id=&quot;one-note-on-itch&quot;&gt;One note on Itch&lt;/h3&gt;
+&lt;p&gt;Note: in the past, I investigated using &lt;a href=&quot;https://itch.io/&quot;&gt;Itch&lt;/a&gt;&amp;#39;s launcher to sync user data, but there were many issues:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Obtaining the user identity isn&amp;#39;t possible due to known bugs&lt;/li&gt;
+&lt;li&gt;Storing data is up to the game developer, because Itch (reasonably, in my opinion) does not offer cloud storage for games&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;cost&quot;&gt;Cost&lt;/h2&gt;
+&lt;p&gt;As far as I can tell, Steam&amp;#39;s $100 fee (plus tax) is a one-time fee. Obviously, I&amp;#39;d prefer not to have to shell out this much money, but, luckily, $100 is not going to make or break my financial situation.&lt;/p&gt;
+&lt;h2 id=&quot;advertising-steam-release-within-browser-based-version&quot;&gt;Advertising Steam release within browser-based version&lt;/h2&gt;
+&lt;p&gt;It seems that there is precedent (e.g. &lt;a href=&quot;https://anuke.itch.io/mindustry&quot;&gt;Mindustry on Itch&lt;/a&gt;) for advertising that the same game is available on Steam, when the Steam version has additional features. I didn&amp;#39;t see anything Itch&amp;#39;s terms of service that prohibit this (nor do I think it &lt;em&gt;should&lt;/em&gt; be prohibited).&lt;/p&gt;
+&lt;h1 id=&quot;marketing-and-analytics&quot;&gt;Marketing and analytics&lt;/h1&gt;
+&lt;p&gt;Steam has &lt;a href=&quot;https://partner.steamgames.com/doc/marketing&quot;&gt;guidance for marketing games on the platform&lt;/a&gt;. It looks like there is support for Google Analytics and some link tracking. For now, I&amp;#39;m just going to put off thinking about marketing because my goal is to share my game, not to get rich off of it.&lt;/p&gt;
 </content>
 </entry>
 <entry>
