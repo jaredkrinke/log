@@ -7,8 +7,37 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-06-02T22:06:24.499Z</updated>
+<updated>2022-08-10T20:57:42.430Z</updated>
 
+<entry>
+<title>Porting a browser-based game to Steam</title>
+<id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/browser-based-game-on-steam.html"/>
+<updated>2022-08-10T00:00:00.000Z</updated>
+<summary type="text">I&apos;m researching options for porting a browser-based game to Steam.</summary>
+<content type="html">&lt;p&gt;Browser-based games are great because players can pick them up and start playing without having to install anything (assuming reasonable cross-browser compatibility). HTML can also be convenient for UI, especially for laying out text (although handling CSS and rendering quirks can be frustrating).&lt;/p&gt;
+&lt;p&gt;Despite the benefits, I&amp;#39;d like to port my most popular browser-based game to Steam, for the following reasons:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I want players to be able to sync their data across devices, without forcing them to create a new account (and without me having to host everything)&lt;/li&gt;
+&lt;li&gt;I want Steam&amp;#39;s huge user base to be able to access my game (more for convenience than for exposure)&lt;/li&gt;
+&lt;li&gt;I might want to build on this experience in the future, for example, if I&amp;#39;d like to sell a game&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;open-questions&quot;&gt;Open questions&lt;/h1&gt;
+&lt;p&gt;I have no experience developing for or publishing on Steam, so I have a lot of questions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Which browser-to-native framework should I use (Electron, Tauri, WebView2, etc.)?&lt;/li&gt;
+&lt;li&gt;Does Steam have built-in support for browser-based titles? Are any of the above frameworks in the Steamworks Common Redistributables package?&lt;/li&gt;
+&lt;li&gt;Which platforms should I support?&lt;/li&gt;
+&lt;li&gt;What&amp;#39;s required to take advantage of Steam&amp;#39;s support for cloud saves/syncing?&lt;/li&gt;
+&lt;li&gt;How do I test Steam Cloud saves?&lt;/li&gt;
+&lt;li&gt;Is there any way to transition user information from the current web site to the Steam release?&lt;/li&gt;
+&lt;li&gt;Will it end up costing more than the advertised $100? Is there any way to bring that cost down?&lt;/li&gt;
+&lt;li&gt;Is it permissible to promote the Steam version of the game from its current web-based host?&lt;/li&gt;
+&lt;li&gt;What sort of analytics does Steam provide for game publishers?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Answering these questions will take some time, but honestly I think I&amp;#39;d regret not ever trying to port my game to Steam.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>May 16th, 2022</title>
 <id>https://log.schemescape.com/posts/misc/2022-05-16.html</id>
@@ -167,50 +196,6 @@
 &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Generative_adversarial_network&quot;&gt;Generative adversarial networks&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Overall, it was a fun course and good Python practice, but I wasn&amp;#39;t really inspired to go start a machine learning project because I&amp;#39;m not terribly interested in classification and regression problems at the moment.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Getting started with machine learning</title>
-<id>https://log.schemescape.com/posts/machine-learning/getting-started.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/machine-learning/getting-started.html"/>
-<updated>2022-03-07T00:00:00.000Z</updated>
-<summary type="text">For personal enrichment, I&apos;m playing around with machine learning.</summary>
-<content type="html">&lt;p&gt;One of the reasons I decided to give &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../programming-languages/python.html&quot;&gt;Python&lt;/a&gt; one last try is that Python is popular for machine learning, and machine learning is a topic I&amp;#39;m interested in.&lt;/p&gt;
-&lt;h1 id=&quot;why&quot;&gt;Why?&lt;/h1&gt;
-&lt;p&gt;Why am I interested in machine learning?&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;It&amp;#39;s an area of computer science that has advanced significantly since I studied CS in school&lt;/li&gt;
-&lt;li&gt;It has many unique practical applications (speech recognition, language translation, machine vision, generative art)&lt;/li&gt;
-&lt;li&gt;I recently acquired a GPU that (as far as I know) is capable of accelerating machine learning pipelines&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;first-steps&quot;&gt;First steps&lt;/h1&gt;
-&lt;p&gt;As an introduction, I&amp;#39;m following MIT&amp;#39;s &lt;a href=&quot;https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/about&quot;&gt;Introduction to Machine Learning (2020)&lt;/a&gt; class. It&amp;#39;s in Python and builds on &lt;a href=&quot;https://numpy.org/&quot;&gt;NumPy&lt;/a&gt;. The first 4 weeks focus on linear classifiers for binary classification.&lt;/p&gt;
-&lt;p&gt;Although my math is rusty, my biggest struggle is actually with the NumPy API. Here is my list of grievances:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;NumPy implicitly &amp;quot;broadcasts&amp;quot; arrays into compatible shapes&lt;ul&gt;
-&lt;li&gt;I assume this is for convenience, but all it&amp;#39;s done for me is silently hide bugs in my code&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;NumPy sometimes silently removes dimensions&lt;ul&gt;
-&lt;li&gt;Again, this is probably for convenience, but all it&amp;#39;s done is trip me up -- I really wish &lt;code&gt;keepdims&lt;/code&gt; defaulted to &lt;code&gt;True&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;The API has a lot of cruft (e.g. a &lt;code&gt;matrix&lt;/code&gt; class that is no longer recommended for matrix computation)&lt;/li&gt;
-&lt;li&gt;The documentation is frustratingly vague, and sometimes circular (e.g. &amp;quot;&lt;code&gt;*&lt;/code&gt; returns &lt;code&gt;self * value&lt;/code&gt;&amp;quot;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;experimentation&quot;&gt;Experimentation&lt;/h1&gt;
-&lt;h2 id=&quot;using-a-sample-data-set&quot;&gt;Using a sample data set&lt;/h2&gt;
-&lt;p&gt;To get a better handle on NumPy, I&amp;#39;d like to actually attempt to create a linear classifier from scratch. A quick search led me to a &lt;a href=&quot;https://jamesmccaffrey.wordpress.com/2018/03/14/datasets-for-binary-classification/&quot;&gt;page with links to data sets for binary classification problems&lt;/a&gt;. I&amp;#39;m using &lt;a href=&quot;https://archive.ics.uci.edu/ml/datasets/banknote+authentication&quot;&gt;UCI Machine Learning Repository&amp;#39;s &amp;quot;banknote authentication&amp;quot; data set&lt;/a&gt; because the data format is simple (4 predictor variables and a 0 or 1 for the classification).&lt;/p&gt;
-&lt;p&gt;To my surprise, simple algorithms (e.g. selecting random parameters) were able to correctly classify over 95% of examples. For what it&amp;#39;s worth, my code is posted &lt;a href=&quot;https://github.com/jaredkrinke/ml/tree/main/binary-classification&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;solving-a-problem-from-scratch&quot;&gt;Solving a problem from scratch&lt;/h2&gt;
-&lt;p&gt;I&amp;#39;d like to try solving a real world problem from scratch, but I don&amp;#39;t really have a problem in mind that lends itself to binary classification. For what it&amp;#39;s worth, here are some Kaggle data sets that might eventually inspire me:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/vivovinco/nba-player-stats&quot;&gt;NBA players&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/hacker-news/hacker-news&quot;&gt;Hacker News data&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/deepcontractor/musical-instrument-chord-classification&quot;&gt;Chord classification&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/rounakbanik/the-movies-dataset&quot;&gt;Movie data&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/stackoverflow/stackoverflow&quot;&gt;Stack Overflow data&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>

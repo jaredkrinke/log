@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Porting a browser-based game to Steam</title>
+<meta name="description" content="I&#39;m researching options for porting a browser-based game to Steam." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Porting a browser-based game to Steam",
+  "abstract": "I'm researching options for porting a browser-based game to Steam.",
+  "keywords": "game-development",
+  "datePublished": "2022-08-10"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/game-development/index.html">game-development</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/game-development/browser-based-game-on-steam.html">Porting a browser-based game to Steam</a></h1>
+<p><time datetime="2022-08-10">August 10, 2022</time></p>
+</header>
+<p>Browser-based games are great because players can pick them up and start playing without having to install anything (assuming reasonable cross-browser compatibility). HTML can also be convenient for UI, especially for laying out text (although handling CSS and rendering quirks can be frustrating).</p>
+<p>Despite the benefits, I&#39;d like to port my most popular browser-based game to Steam, for the following reasons:</p>
+<ul>
+<li>I want players to be able to sync their data across devices, without forcing them to create a new account (and without me having to host everything)</li>
+<li>I want Steam&#39;s huge user base to be able to access my game (more for convenience than for exposure)</li>
+<li>I might want to build on this experience in the future, for example, if I&#39;d like to sell a game</li>
+</ul>
+<h1 id="open-questions">Open questions</h1>
+<p>I have no experience developing for or publishing on Steam, so I have a lot of questions:</p>
+<ul>
+<li>Which browser-to-native framework should I use (Electron, Tauri, WebView2, etc.)?</li>
+<li>Does Steam have built-in support for browser-based titles? Are any of the above frameworks in the Steamworks Common Redistributables package?</li>
+<li>Which platforms should I support?</li>
+<li>What&#39;s required to take advantage of Steam&#39;s support for cloud saves/syncing?</li>
+<li>How do I test Steam Cloud saves?</li>
+<li>Is there any way to transition user information from the current web site to the Steam release?</li>
+<li>Will it end up costing more than the advertised $100? Is there any way to bring that cost down?</li>
+<li>Is it permissible to promote the Steam version of the game from its current web-based host?</li>
+<li>What sort of analytics does Steam provide for game publishers?</li>
+</ul>
+<p>Answering these questions will take some time, but honestly I think I&#39;d regret not ever trying to port my game to Steam.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
