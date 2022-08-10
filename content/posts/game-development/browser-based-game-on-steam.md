@@ -25,3 +25,14 @@ I have no experience developing for or publishing on Steam, so I have a lot of q
 * What sort of analytics does Steam provide for game publishers?
 
 Answering these questions will take some time, but honestly I think I'd regret not ever trying to port my game to Steam.
+
+# First steps
+Steam publishes documentation for Steamworks here:
+
+https://partner.steamgames.com/doc/home
+
+## Common redistributables
+There is [a page about common redistributables](https://partner.steamgames.com/doc/features/common_redist) that says it includes "Microsoft Visual C++, .NET, DirectX 9, OpenAL, XNA, and PhysX", but it says the complete, up to date list is on a page that appears to only be visible to developers who have already paid a $100 fee. I had planned to pay the fee regardless, but I'd hoped I could at least answer some of my questions before handing over money.
+
+## Platforms
+It's now possible to download the Steamworks SDK *before* paying the Steam Direct fee, which is helpful. Within that zip file, it has binaries for 32- and 64-bit Linux and Windows, and macOS. I'm interpreting that list to be the definitive list of supported platforms.
