@@ -36,3 +36,23 @@ There is [a page about common redistributables](https://partner.steamgames.com/d
 
 ## Platforms
 It's now possible to download the Steamworks SDK *before* paying the Steam Direct fee, which is helpful. Within that zip file, it has binaries for 32- and 64-bit Linux and Windows, and macOS. I'm interpreting that list to be the definitive list of supported platforms.
+
+## Cloud saves
+The Steam SDK [provides a C++ interface](https://partner.steamgames.com/doc/sdk/api) for enumerating/reading/writing files to the Steam Cloud. There is also an [auto-cloud](https://partner.steamgames.com/doc/features/cloud#steam_auto-cloud) feature that just synchronizes files based on path.
+
+As far as transitioning data from the browser version to the Steam version, I doubt there is a reliable and automatic way to do so.
+
+### One note on Itch
+Note: in the past, I investigated using [Itch](https://itch.io/)'s launcher to sync user data, but there were many issues:
+
+* Obtaining the user identity isn't possible due to known bugs
+* Storing data is up to the game developer, because Itch (reasonably, in my opinion) does not offer cloud storage for games
+
+## Cost
+As far as I can tell, Steam's $100 fee (plus tax) is a one-time fee. Obviously, I'd prefer not to have to shell out this much money, but, luckily, $100 is not going to make or break my financial situation.
+
+## Advertising Steam release within browser-based version
+It seems that there is precedent (e.g. [Mindustry on Itch](https://anuke.itch.io/mindustry)) for advertising that the same game is available on Steam, when the Steam version has additional features. I didn't see anything Itch's terms of service that prohibit this (nor do I think it *should* be prohibited).
+
+# Marketing and analytics
+Steam has [guidance for marketing games on the platform](https://partner.steamgames.com/doc/marketing). It looks like there is support for Google Analytics and some link tracking. For now, I'm just going to put off thinking about marketing because my goal is to share my game, not to get rich off of it.
