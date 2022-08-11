@@ -7,8 +7,18 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-08-10T22:44:18.356Z</updated>
+<updated>2022-08-11T22:28:22.529Z</updated>
 
+<entry>
+<title>Porting a browser-based game to Steam (part 2)</title>
+<id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-2.html"/>
+<updated>2022-08-11T00:00:00.000Z</updated>
+<summary type="text">I&apos;m continuing my search on porting a browser-based game to Steam.</summary>
+<content type="html">&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;/h1&gt;
+&lt;h2 id=&quot;gpl-licensed-code-is-not-allowed&quot;&gt;GPL licensed code is not allowed&lt;/h2&gt;
+</content>
+</entry>
 <entry>
 <title>Porting a browser-based game to Steam</title>
 <id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam.html</id>
@@ -43,6 +53,7 @@
 &lt;p&gt;There is &lt;a href=&quot;https://partner.steamgames.com/doc/features/common_redist&quot;&gt;a page about common redistributables&lt;/a&gt; that says it includes &amp;quot;Microsoft Visual C++, .NET, DirectX 9, OpenAL, XNA, and PhysX&amp;quot;, but it says the complete, up to date list is on a page that appears to only be visible to developers who have already paid a $100 fee. I had planned to pay the fee regardless, but I&amp;#39;d hoped I could at least answer some of my questions before handing over money.&lt;/p&gt;
 &lt;h2 id=&quot;platforms&quot;&gt;Platforms&lt;/h2&gt;
 &lt;p&gt;It&amp;#39;s now possible to download the Steamworks SDK &lt;em&gt;before&lt;/em&gt; paying the Steam Direct fee, which is helpful. Within that zip file, it has binaries for 32- and 64-bit Linux and Windows, and macOS. I&amp;#39;m interpreting that list to be the definitive list of supported platforms.&lt;/p&gt;
+&lt;p&gt;Note that GPL-licensed libraries can&amp;#39;t be linked with the Steamworks SDK (or probably distributed via Steam period).&lt;/p&gt;
 &lt;h2 id=&quot;cloud-saves&quot;&gt;Cloud saves&lt;/h2&gt;
 &lt;p&gt;The Steam SDK &lt;a href=&quot;https://partner.steamgames.com/doc/sdk/api&quot;&gt;provides a C++ interface&lt;/a&gt; for enumerating/reading/writing files to the Steam Cloud. There is also an &lt;a href=&quot;https://partner.steamgames.com/doc/features/cloud#steam_auto-cloud&quot;&gt;auto-cloud&lt;/a&gt; feature that just synchronizes files based on path.&lt;/p&gt;
 &lt;p&gt;As far as transitioning data from the browser version to the Steam version, I doubt there is a reliable and automatic way to do so.&lt;/p&gt;
@@ -184,40 +195,6 @@
 &lt;h2 id=&quot;reflecting-on-pre-trained-models&quot;&gt;Reflecting on pre-trained models&lt;/h2&gt;
 &lt;p&gt;Unsurprisingly, the generic pre-trained models I used, while undoubtedly impressive, seem best suited for exploration and amusement, rather than producing something focused on a particular genre.&lt;/p&gt;
 &lt;p&gt;I suspect that the best path forward for this experiment is to train a new ragtime-focused model on a corpus of typical ragtime MIDIs. As noted earlier, it&amp;#39;s possible I won&amp;#39;t be able to find either a large enough corpus or enough compute power to produce a reasonable model, but if I &lt;em&gt;do&lt;/em&gt; succeed, I think the results will be more consistently rag-like.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>MITx - 6.036: Introduction to Machine Learning</title>
-<id>https://log.schemescape.com/posts/machine-learning/mitx-6.036.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/machine-learning/mitx-6.036.html"/>
-<updated>2022-04-24T00:00:00.000Z</updated>
-<summary type="text">I&apos;m following a freely available MIT coure: Introduction to Machine Learning.</summary>
-<content type="html">&lt;p&gt;As &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/getting-started.html&quot;&gt;noted previously&lt;/a&gt;, I&amp;#39;ve been researching machine learning (just for fun).&lt;/p&gt;
-&lt;h1 id=&quot;mitx---6036&quot;&gt;MITx - 6.036&lt;/h1&gt;
-&lt;p&gt;I&amp;#39;m starting with an undergraduate course from MIT that is online for free: &lt;a href=&quot;https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/about&quot;&gt;MITx - 6.036: Introduction to Machine Learning&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Having just completed the course, here are some observations:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The lectures are excellent, but note that they&amp;#39;re theory- and math-heavy (and my math was rustier than I realized)&lt;/li&gt;
-&lt;li&gt;I&amp;#39;d recommend learning about &lt;a href=&quot;https://numpy.org/&quot;&gt;NumPy&lt;/a&gt; &lt;em&gt;prior&lt;/em&gt; to starting this course (especially &lt;a href=&quot;https://numpy.org/doc/stable/user/basics.broadcasting.html&quot;&gt;element-wise operations and broadcasting&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;So far, there has been no need (and no benefit) to enabling GPU acceleration (and setting it up on Windows was painful, for &lt;a href=&quot;https://github.com/tensorflow/tensorflow/issues/48868&quot;&gt;reasons I still don&amp;#39;t understand&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;The provided code seems to be built for a previous version of TensorFlow&amp;#39;s Keras interface (although the &lt;a href=&quot;https://gist.github.com/jaredkrinke/0fed897dfbdf35af2c4eb388bfe0d754&quot;&gt;updates I have needed thus far&lt;/a&gt; were minor)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The course provides a great introduction to:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Classification&lt;/li&gt;
-&lt;li&gt;Regression&lt;/li&gt;
-&lt;li&gt;Neural networks&lt;/li&gt;
-&lt;li&gt;Convolutional neural networks&lt;/li&gt;
-&lt;li&gt;Recurrent neural networks&lt;/li&gt;
-&lt;li&gt;Recommender systems&lt;/li&gt;
-&lt;li&gt;Decision trees&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Note that the course &lt;em&gt;doesn&amp;#39;t&lt;/em&gt; cover some of the machine learning topics I&amp;#39;m most interested in:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)&quot;&gt;Transformers&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Generative_adversarial_network&quot;&gt;Generative adversarial networks&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Overall, it was a fun course and good Python practice, but I wasn&amp;#39;t really inspired to go start a machine learning project because I&amp;#39;m not terribly interested in classification and regression problems at the moment.&lt;/p&gt;
 </content>
 </entry>
 </feed>
