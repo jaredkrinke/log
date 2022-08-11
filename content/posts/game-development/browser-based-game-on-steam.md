@@ -37,6 +37,8 @@ There is [a page about common redistributables](https://partner.steamgames.com/d
 ## Platforms
 It's now possible to download the Steamworks SDK *before* paying the Steam Direct fee, which is helpful. Within that zip file, it has binaries for 32- and 64-bit Linux and Windows, and macOS. I'm interpreting that list to be the definitive list of supported platforms.
 
+Note that GPL-licensed libraries can't be linked with the Steamworks SDK (or probably distributed via Steam period).
+
 ## Cloud saves
 The Steam SDK [provides a C++ interface](https://partner.steamgames.com/doc/sdk/api) for enumerating/reading/writing files to the Steam Cloud. There is also an [auto-cloud](https://partner.steamgames.com/doc/features/cloud#steam_auto-cloud) feature that just synchronizes files based on path.
 
