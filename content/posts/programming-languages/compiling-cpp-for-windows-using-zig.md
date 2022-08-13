@@ -1,9 +1,8 @@
 ---
 title: Testing out Zig... for C/C++ code... on Windows
 description: Can Zig save me from downloading multi-gigabyte SDKs just to build Windows programs?
-date: 2022-08-12
+date: 2022-08-13
 keywords: [zig]
-draft: true
 ---
 I briefly played around with Zig's C/C++ compiler in the past. It's a tidy ~60 MB download that can magically even cross-compile. I haven't worked up the nerve to investigate the Zig *programming language*, but its built-in C/C++ compiler impressed me.
 
