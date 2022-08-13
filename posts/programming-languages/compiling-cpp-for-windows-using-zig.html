@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Testing out Zig... for C/C++ code... on Windows</title>
+<meta name="description" content="Can Zig save me from downloading multi-gigabyte SDKs just to build Windows programs?" />
+<meta name="keywords" content="zig" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Testing out Zig... for C/C++ code... on Windows",
+  "abstract": "Can Zig save me from downloading multi-gigabyte SDKs just to build Windows programs?",
+  "keywords": "programming-languages,zig",
+  "datePublished": "2022-08-13"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+<li><a href="../../posts/zig/index.html">zig</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/programming-languages/compiling-cpp-for-windows-using-zig.html">Testing out Zig... for C/C++ code... on Windows</a></h1>
+<p><time datetime="2022-08-13">August 13, 2022</time></p>
+</header>
+<p>I briefly played around with Zig&#39;s C/C++ compiler in the past. It&#39;s a tidy ~60 MB download that can magically even cross-compile. I haven&#39;t worked up the nerve to investigate the Zig <em>programming language</em>, but its built-in C/C++ compiler impressed me.</p>
+<p>Now how far can I push it?</p>
+<h2 id="aside-toolchain-bloat">Aside: toolchain bloat</h2>
+<p>A good way to discourage me from testing out your software is to require a gigabyte (or more) download (and no, providing an installer that obscures the massive download is not a solution).</p>
+<p>The chief offender of inexplicably enormous downloads is, unfortunately, anything related to compiling software for Windows. Want to use the free edition of Microsoft Visual C? That will be at least 3 GB. How about a more modern language like C#? That&#39;s 5 GB. Even non-Visual Studio C/C++ compilers tend to be hundreds of megabytes.</p>
+<h1 id="hello-zig-c">Hello, <del>Zig</del> C!</h1>
+<p>First, here&#39;s a trivial &quot;hello world&quot; program:</p>
+<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">const</span> <span class="hljs-type">char</span>** argv)</span> {
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Hello, C!&quot;</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>Here&#39;s the result:</p>
+<pre><code class="language-txt">&gt; zig cc hello-c.c -o hello-c.exe
+
+&gt; hello-c.exe
+Hello, C!
+</code></pre>
+<p>Success!</p>
+<h2 id="making-the-binary-more-portable">Making the binary more portable</h2>
+<p>According to ziglearn.org, <a href="https://ziglearn.org/chapter-3/#cross-compilation">Zig targets the host&#39;s specific CPU by default</a>. If you plan to distribute programs built with Zig, you&#39;ll probably want to choose a more generic architecture, e.g. <code>i386</code> or <code>x86_64</code>:</p>
+<pre><code class="language-txt">&gt; zig cc -target i386-windows-gnu hello-c.c -o hello-c.exe 
+</code></pre>
+<h1 id="hello-win32">Hello, Win32!</h1>
+<p>That last exercise was somewhat trivial, although I&#39;m still impressed at how easy it was to get started with Zig&#39;s compiler (just unzip--no installation or SDK required).</p>
+<p>But I want to be able to call Win32 APIs from my programs. Is Zig up to that task?</p>
+<p>Here&#39;s a trivial program to pop up a message box:</p>
+<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;windows.h&gt;</span></span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
+    MessageBox(<span class="hljs-literal">NULL</span>, <span class="hljs-string">&quot;Hello there!&quot;</span>, <span class="hljs-string">&quot;From Zig land!&quot;</span>, MB_OK);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>Build command:</p>
+<pre><code class="language-txt">&gt; zig cc -target i386-windows-gnu hello-win32.c -o hello-win32.exe 
+
+&gt; hello-win32.exe
+</code></pre>
+<p>Sure enough, a message box appeared!</p>
+<p>At this point, I&#39;m impressed, but it remains to be seen if Zig&#39;s magic will work beyond trivial examples like this.</p>
+<h1 id="hello-c-and-winmain">Hello, C++ and WinMain!</h1>
+<p>Time to throw in some C++ and create an actual Window:</p>
+<pre><code class="language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;windows.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;tchar.h&gt;</span></span>
+
+<span class="hljs-type">static</span> TCHAR szWindowClass[] = _T(<span class="hljs-string">&quot;DesktopApp&quot;</span>);
+<span class="hljs-type">static</span> TCHAR szTitle[] = _T(<span class="hljs-string">&quot;Hello, Windows!&quot;</span>);
+
+<span class="hljs-function">LRESULT CALLBACK <span class="hljs-title">WndProc</span><span class="hljs-params">(HWND, UINT, WPARAM, LPARAM)</span></span>;
+
+<span class="hljs-function"><span class="hljs-type">int</span> CALLBACK <span class="hljs-title">WinMain</span><span class="hljs-params">(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, <span class="hljs-type">int</span> nCmdShow)</span> </span>{
+    WNDCLASSEX wcex;
+
+    wcex.cbSize = <span class="hljs-built_in">sizeof</span>(WNDCLASSEX);
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc = WndProc;
+    wcex.cbClsExtra = <span class="hljs-number">0</span>;
+    wcex.cbWndExtra = <span class="hljs-number">0</span>;
+    wcex.hInstance = hInstance;
+    wcex.hIcon = <span class="hljs-built_in">LoadIcon</span>(hInstance, IDI_APPLICATION);
+    wcex.hCursor = <span class="hljs-built_in">LoadCursor</span>(<span class="hljs-literal">NULL</span>, IDC_ARROW);
+    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + <span class="hljs-number">1</span>);
+    wcex.lpszMenuName = <span class="hljs-literal">NULL</span>;
+    wcex.lpszClassName = szWindowClass;
+    wcex.hIconSm = <span class="hljs-built_in">LoadIcon</span>(wcex.hInstance, IDI_APPLICATION);
+
+    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">RegisterClassEx</span>(&amp;wcex)) {
+        <span class="hljs-built_in">MessageBox</span>(<span class="hljs-literal">NULL</span>, _T(<span class="hljs-string">&quot;Call to RegisterClassEx failed!&quot;</span>), _T(<span class="hljs-string">&quot;Test app&quot;</span>), <span class="hljs-literal">NULL</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+    }
+
+    HWND hWnd = <span class="hljs-built_in">CreateWindow</span>(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, <span class="hljs-number">1200</span>, <span class="hljs-number">900</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>, hInstance, <span class="hljs-literal">NULL</span>);
+    <span class="hljs-keyword">if</span> (!hWnd) {
+        <span class="hljs-built_in">MessageBox</span>(<span class="hljs-literal">NULL</span>,
+            _T(<span class="hljs-string">&quot;Call to CreateWindow failed!&quot;</span>),
+            _T(<span class="hljs-string">&quot;Test app&quot;</span>),
+            <span class="hljs-literal">NULL</span>);
+
+        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+    }
+
+    <span class="hljs-built_in">ShowWindow</span>(hWnd, nCmdShow);
+    <span class="hljs-built_in">UpdateWindow</span>(hWnd);
+
+    MSG msg;
+    <span class="hljs-keyword">while</span> (<span class="hljs-built_in">GetMessage</span>(&amp;msg, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>)) {
+        <span class="hljs-built_in">TranslateMessage</span>(&amp;msg);
+        <span class="hljs-built_in">DispatchMessage</span>(&amp;msg);
+    }
+
+    <span class="hljs-keyword">return</span> (<span class="hljs-type">int</span>)msg.wParam;
+}
+
+<span class="hljs-function">LRESULT CALLBACK <span class="hljs-title">WndProc</span><span class="hljs-params">(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)</span> </span>{
+    <span class="hljs-keyword">switch</span> (message) {
+    <span class="hljs-keyword">case</span> WM_DESTROY:
+        <span class="hljs-built_in">PostQuitMessage</span>(<span class="hljs-number">0</span>);
+        <span class="hljs-keyword">break</span>;
+
+    <span class="hljs-keyword">default</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">DefWindowProc</span>(hWnd, message, wParam, lParam);
+        <span class="hljs-keyword">break</span>;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>And now to build and test:</p>
+<pre><code class="language-txt">&gt; zig c++ -target i386-windows-gnu hello-window.cpp -o hello-window.exe
+
+&gt; hello-window.exe
+</code></pre>
+<p>This popped up a window that I could close.</p>
+<p>Based on functionality, this is a fairly trivial example, but based on the number of lines of code in the included header files, I actually wasn&#39;t expecting this to work on the first try.</p>
+<p>It&#39;s not yet clear to me how much of the Windows SDK Zig ships with, but it&#39;s at least enough to create a real window.</p>
+<h1 id="hello-webview2">Hello, WebView2?</h1>
+<p>Given that <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/">WebView2</a> isn&#39;t a part of the standard Windows SDK, I&#39;m almost certain that this won&#39;t work out of the box, but I&#39;m going to give it a try anyway.</p>
+<p>I&#39;m going to work off of the <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/get-started/win32">WebView2 for Win32 tutorial</a>. The code is fairly lengthy, so I&#39;m not going to duplicate it here.</p>
+<p>After trying to compile the sample, I finally managed to stump Zig:</p>
+<pre><code class="language-txt">&gt; zig c++ -target i386-windows-gnu hello-webview2.cpp -o hello-webview2.exe
+hello-webview2.cpp:5:10: fatal error: &#x27;wil/com.h&#x27; file not found
+#include &lt;wil/com.h&gt;
+         ^~~~~~~~~~~
+1 error generated.
+</code></pre>
+<p>The sample code uses <a href="https://github.com/microsoft/wil">WIL</a>, and regardless of whether that&#39;s part of the Windows SDK, Zig doesn&#39;t ship with it. I&#39;ll try cloning the repository, but you could also download the NuGet package and unzip it (<code>.nupkg</code> files are just Zip files).</p>
+<p>Second attempt, this time with WIL:</p>
+<pre><code class="language-txt">&gt; zig c++ -target i386-windows-gnu hello-webview2.cpp -I..\wil\include -o hello-webview2.exe
+In file included from hello-webview2.cpp:5:
+..\wil\include\wil/com.h:14:10: fatal error: &#x27;WeakReference.h&#x27; file not found
+#include &lt;WeakReference.h&gt;
+         ^~~~~~~~~~~~~~~~~
+1 error generated.
+</code></pre>
+<p>Alright, <code>WeakReference.h</code> is part of <a href="https://docs.microsoft.com/en-us/cpp/cppcx/wrl/windows-runtime-cpp-template-library-wrl?view=msvc-170">WRL</a>, which is actually part of the Windows SDK. Zig doesn&#39;t appear to ship with WRL (and I&#39;m not even sure that it <em>should</em>).</p>
+<p>I suspect I don&#39;t actually <em>need</em> WIL or WRL, but proceeding without them might not be the best use of time, because instantiating WebView2 appears to be an COM-based asynchronous operation, and I don&#39;t want to reimplement a large chunk of WIL, WRL, or even COM just to avoid using the Windows SDK and Visual Studio.</p>
+<p>Ok, fine, Visual Studio Installer. You win this round.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

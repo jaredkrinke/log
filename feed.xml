@@ -7,8 +7,158 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-08-13T20:29:12.650Z</updated>
+<updated>2022-08-13T20:29:33.133Z</updated>
 
+<entry>
+<title>Testing out Zig... for C/C++ code... on Windows</title>
+<id>https://log.schemescape.com/posts/programming-languages/compiling-cpp-for-windows-using-zig.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/compiling-cpp-for-windows-using-zig.html"/>
+<updated>2022-08-13T00:00:00.000Z</updated>
+<summary type="text">Can Zig save me from downloading multi-gigabyte SDKs just to build Windows programs?</summary>
+<content type="html">&lt;p&gt;I briefly played around with Zig&amp;#39;s C/C++ compiler in the past. It&amp;#39;s a tidy ~60 MB download that can magically even cross-compile. I haven&amp;#39;t worked up the nerve to investigate the Zig &lt;em&gt;programming language&lt;/em&gt;, but its built-in C/C++ compiler impressed me.&lt;/p&gt;
+&lt;p&gt;Now how far can I push it?&lt;/p&gt;
+&lt;h2 id=&quot;aside-toolchain-bloat&quot;&gt;Aside: toolchain bloat&lt;/h2&gt;
+&lt;p&gt;A good way to discourage me from testing out your software is to require a gigabyte (or more) download (and no, providing an installer that obscures the massive download is not a solution).&lt;/p&gt;
+&lt;p&gt;The chief offender of inexplicably enormous downloads is, unfortunately, anything related to compiling software for Windows. Want to use the free edition of Microsoft Visual C? That will be at least 3 GB. How about a more modern language like C#? That&amp;#39;s 5 GB. Even non-Visual Studio C/C++ compilers tend to be hundreds of megabytes.&lt;/p&gt;
+&lt;h1 id=&quot;hello-zig-c&quot;&gt;Hello, &lt;del&gt;Zig&lt;/del&gt; C!&lt;/h1&gt;
+&lt;p&gt;First, here&amp;#39;s a trivial &amp;quot;hello world&amp;quot; program:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-c&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;hljs-title function_&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; argc, &lt;span class=&quot;hljs-type&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;char&lt;/span&gt;** argv)&lt;/span&gt; {
+    &lt;span class=&quot;hljs-built_in&quot;&gt;printf&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Hello, C!&amp;quot;&lt;/span&gt;);
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here&amp;#39;s the result:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig cc hello-c.c -o hello-c.exe
+
+&amp;gt; hello-c.exe
+Hello, C!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Success!&lt;/p&gt;
+&lt;h2 id=&quot;making-the-binary-more-portable&quot;&gt;Making the binary more portable&lt;/h2&gt;
+&lt;p&gt;According to ziglearn.org, &lt;a href=&quot;https://ziglearn.org/chapter-3/#cross-compilation&quot;&gt;Zig targets the host&amp;#39;s specific CPU by default&lt;/a&gt;. If you plan to distribute programs built with Zig, you&amp;#39;ll probably want to choose a more generic architecture, e.g. &lt;code&gt;i386&lt;/code&gt; or &lt;code&gt;x86_64&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig cc -target i386-windows-gnu hello-c.c -o hello-c.exe 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&quot;hello-win32&quot;&gt;Hello, Win32!&lt;/h1&gt;
+&lt;p&gt;That last exercise was somewhat trivial, although I&amp;#39;m still impressed at how easy it was to get started with Zig&amp;#39;s compiler (just unzip--no installation or SDK required).&lt;/p&gt;
+&lt;p&gt;But I want to be able to call Win32 APIs from my programs. Is Zig up to that task?&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s a trivial program to pop up a message box:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-c&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;windows.h&amp;gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;hljs-title function_&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; {
+    MessageBox(&lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Hello there!&amp;quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;From Zig land!&amp;quot;&lt;/span&gt;, MB_OK);
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Build command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig cc -target i386-windows-gnu hello-win32.c -o hello-win32.exe 
+
+&amp;gt; hello-win32.exe
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Sure enough, a message box appeared!&lt;/p&gt;
+&lt;p&gt;At this point, I&amp;#39;m impressed, but it remains to be seen if Zig&amp;#39;s magic will work beyond trivial examples like this.&lt;/p&gt;
+&lt;h1 id=&quot;hello-c-and-winmain&quot;&gt;Hello, C++ and WinMain!&lt;/h1&gt;
+&lt;p&gt;Time to throw in some C++ and create an actual Window:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-cpp&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;windows.h&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;tchar.h&amp;gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;hljs-type&quot;&gt;static&lt;/span&gt; TCHAR szWindowClass[] = _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;DesktopApp&amp;quot;&lt;/span&gt;);
+&lt;span class=&quot;hljs-type&quot;&gt;static&lt;/span&gt; TCHAR szTitle[] = _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Hello, Windows!&amp;quot;&lt;/span&gt;);
+
+&lt;span class=&quot;hljs-function&quot;&gt;LRESULT CALLBACK &lt;span class=&quot;hljs-title&quot;&gt;WndProc&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(HWND, UINT, WPARAM, LPARAM)&lt;/span&gt;&lt;/span&gt;;
+
+&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; CALLBACK &lt;span class=&quot;hljs-title&quot;&gt;WinMain&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, &lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; nCmdShow)&lt;/span&gt; &lt;/span&gt;{
+    WNDCLASSEX wcex;
+
+    wcex.cbSize = &lt;span class=&quot;hljs-built_in&quot;&gt;sizeof&lt;/span&gt;(WNDCLASSEX);
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc = WndProc;
+    wcex.cbClsExtra = &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
+    wcex.cbWndExtra = &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
+    wcex.hInstance = hInstance;
+    wcex.hIcon = &lt;span class=&quot;hljs-built_in&quot;&gt;LoadIcon&lt;/span&gt;(hInstance, IDI_APPLICATION);
+    wcex.hCursor = &lt;span class=&quot;hljs-built_in&quot;&gt;LoadCursor&lt;/span&gt;(&lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, IDC_ARROW);
+    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;);
+    wcex.lpszMenuName = &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;;
+    wcex.lpszClassName = szWindowClass;
+    wcex.hIconSm = &lt;span class=&quot;hljs-built_in&quot;&gt;LoadIcon&lt;/span&gt;(wcex.hInstance, IDI_APPLICATION);
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (!&lt;span class=&quot;hljs-built_in&quot;&gt;RegisterClassEx&lt;/span&gt;(&amp;amp;wcex)) {
+        &lt;span class=&quot;hljs-built_in&quot;&gt;MessageBox&lt;/span&gt;(&lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Call to RegisterClassEx failed!&amp;quot;&lt;/span&gt;), _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Test app&amp;quot;&lt;/span&gt;), &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;);
+        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;;
+    }
+
+    HWND hWnd = &lt;span class=&quot;hljs-built_in&quot;&gt;CreateWindow&lt;/span&gt;(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, &lt;span class=&quot;hljs-number&quot;&gt;1200&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;900&lt;/span&gt;, &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, hInstance, &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;);
+    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (!hWnd) {
+        &lt;span class=&quot;hljs-built_in&quot;&gt;MessageBox&lt;/span&gt;(&lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;,
+            _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Call to CreateWindow failed!&amp;quot;&lt;/span&gt;),
+            _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Test app&amp;quot;&lt;/span&gt;),
+            &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;);
+
+        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;;
+    }
+
+    &lt;span class=&quot;hljs-built_in&quot;&gt;ShowWindow&lt;/span&gt;(hWnd, nCmdShow);
+    &lt;span class=&quot;hljs-built_in&quot;&gt;UpdateWindow&lt;/span&gt;(hWnd);
+
+    MSG msg;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;while&lt;/span&gt; (&lt;span class=&quot;hljs-built_in&quot;&gt;GetMessage&lt;/span&gt;(&amp;amp;msg, &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;)) {
+        &lt;span class=&quot;hljs-built_in&quot;&gt;TranslateMessage&lt;/span&gt;(&amp;amp;msg);
+        &lt;span class=&quot;hljs-built_in&quot;&gt;DispatchMessage&lt;/span&gt;(&amp;amp;msg);
+    }
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; (&lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt;)msg.wParam;
+}
+
+&lt;span class=&quot;hljs-function&quot;&gt;LRESULT CALLBACK &lt;span class=&quot;hljs-title&quot;&gt;WndProc&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)&lt;/span&gt; &lt;/span&gt;{
+    &lt;span class=&quot;hljs-keyword&quot;&gt;switch&lt;/span&gt; (message) {
+    &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; WM_DESTROY:
+        &lt;span class=&quot;hljs-built_in&quot;&gt;PostQuitMessage&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;);
+        &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;;
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;default&lt;/span&gt;:
+        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;DefWindowProc&lt;/span&gt;(hWnd, message, wParam, lParam);
+        &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;;
+    }
+
+    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And now to build and test:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig c++ -target i386-windows-gnu hello-window.cpp -o hello-window.exe
+
+&amp;gt; hello-window.exe
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This popped up a window that I could close.&lt;/p&gt;
+&lt;p&gt;Based on functionality, this is a fairly trivial example, but based on the number of lines of code in the included header files, I actually wasn&amp;#39;t expecting this to work on the first try.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s not yet clear to me how much of the Windows SDK Zig ships with, but it&amp;#39;s at least enough to create a real window.&lt;/p&gt;
+&lt;h1 id=&quot;hello-webview2&quot;&gt;Hello, WebView2?&lt;/h1&gt;
+&lt;p&gt;Given that &lt;a href=&quot;https://docs.microsoft.com/en-us/microsoft-edge/webview2/&quot;&gt;WebView2&lt;/a&gt; isn&amp;#39;t a part of the standard Windows SDK, I&amp;#39;m almost certain that this won&amp;#39;t work out of the box, but I&amp;#39;m going to give it a try anyway.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m going to work off of the &lt;a href=&quot;https://docs.microsoft.com/en-us/microsoft-edge/webview2/get-started/win32&quot;&gt;WebView2 for Win32 tutorial&lt;/a&gt;. The code is fairly lengthy, so I&amp;#39;m not going to duplicate it here.&lt;/p&gt;
+&lt;p&gt;After trying to compile the sample, I finally managed to stump Zig:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig c++ -target i386-windows-gnu hello-webview2.cpp -o hello-webview2.exe
+hello-webview2.cpp:5:10: fatal error: &amp;#x27;wil/com.h&amp;#x27; file not found
+#include &amp;lt;wil/com.h&amp;gt;
+         ^~~~~~~~~~~
+1 error generated.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The sample code uses &lt;a href=&quot;https://github.com/microsoft/wil&quot;&gt;WIL&lt;/a&gt;, and regardless of whether that&amp;#39;s part of the Windows SDK, Zig doesn&amp;#39;t ship with it. I&amp;#39;ll try cloning the repository, but you could also download the NuGet package and unzip it (&lt;code&gt;.nupkg&lt;/code&gt; files are just Zip files).&lt;/p&gt;
+&lt;p&gt;Second attempt, this time with WIL:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig c++ -target i386-windows-gnu hello-webview2.cpp -I..\wil\include -o hello-webview2.exe
+In file included from hello-webview2.cpp:5:
+..\wil\include\wil/com.h:14:10: fatal error: &amp;#x27;WeakReference.h&amp;#x27; file not found
+#include &amp;lt;WeakReference.h&amp;gt;
+         ^~~~~~~~~~~~~~~~~
+1 error generated.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Alright, &lt;code&gt;WeakReference.h&lt;/code&gt; is part of &lt;a href=&quot;https://docs.microsoft.com/en-us/cpp/cppcx/wrl/windows-runtime-cpp-template-library-wrl?view=msvc-170&quot;&gt;WRL&lt;/a&gt;, which is actually part of the Windows SDK. Zig doesn&amp;#39;t appear to ship with WRL (and I&amp;#39;m not even sure that it &lt;em&gt;should&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;I suspect I don&amp;#39;t actually &lt;em&gt;need&lt;/em&gt; WIL or WRL, but proceeding without them might not be the best use of time, because instantiating WebView2 appears to be an COM-based asynchronous operation, and I don&amp;#39;t want to reimplement a large chunk of WIL, WRL, or even COM just to avoid using the Windows SDK and Visual Studio.&lt;/p&gt;
+&lt;p&gt;Ok, fine, Visual Studio Installer. You win this round.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Porting a browser-based game to Steam</title>
 <id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam.html</id>
@@ -185,40 +335,6 @@
 &lt;h2 id=&quot;reflecting-on-pre-trained-models&quot;&gt;Reflecting on pre-trained models&lt;/h2&gt;
 &lt;p&gt;Unsurprisingly, the generic pre-trained models I used, while undoubtedly impressive, seem best suited for exploration and amusement, rather than producing something focused on a particular genre.&lt;/p&gt;
 &lt;p&gt;I suspect that the best path forward for this experiment is to train a new ragtime-focused model on a corpus of typical ragtime MIDIs. As noted earlier, it&amp;#39;s possible I won&amp;#39;t be able to find either a large enough corpus or enough compute power to produce a reasonable model, but if I &lt;em&gt;do&lt;/em&gt; succeed, I think the results will be more consistently rag-like.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>MITx - 6.036: Introduction to Machine Learning</title>
-<id>https://log.schemescape.com/posts/machine-learning/mitx-6.036.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/machine-learning/mitx-6.036.html"/>
-<updated>2022-04-24T00:00:00.000Z</updated>
-<summary type="text">I&apos;m following a freely available MIT coure: Introduction to Machine Learning.</summary>
-<content type="html">&lt;p&gt;As &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/getting-started.html&quot;&gt;noted previously&lt;/a&gt;, I&amp;#39;ve been researching machine learning (just for fun).&lt;/p&gt;
-&lt;h1 id=&quot;mitx---6036&quot;&gt;MITx - 6.036&lt;/h1&gt;
-&lt;p&gt;I&amp;#39;m starting with an undergraduate course from MIT that is online for free: &lt;a href=&quot;https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/about&quot;&gt;MITx - 6.036: Introduction to Machine Learning&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Having just completed the course, here are some observations:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The lectures are excellent, but note that they&amp;#39;re theory- and math-heavy (and my math was rustier than I realized)&lt;/li&gt;
-&lt;li&gt;I&amp;#39;d recommend learning about &lt;a href=&quot;https://numpy.org/&quot;&gt;NumPy&lt;/a&gt; &lt;em&gt;prior&lt;/em&gt; to starting this course (especially &lt;a href=&quot;https://numpy.org/doc/stable/user/basics.broadcasting.html&quot;&gt;element-wise operations and broadcasting&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;So far, there has been no need (and no benefit) to enabling GPU acceleration (and setting it up on Windows was painful, for &lt;a href=&quot;https://github.com/tensorflow/tensorflow/issues/48868&quot;&gt;reasons I still don&amp;#39;t understand&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;The provided code seems to be built for a previous version of TensorFlow&amp;#39;s Keras interface (although the &lt;a href=&quot;https://gist.github.com/jaredkrinke/0fed897dfbdf35af2c4eb388bfe0d754&quot;&gt;updates I have needed thus far&lt;/a&gt; were minor)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The course provides a great introduction to:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Classification&lt;/li&gt;
-&lt;li&gt;Regression&lt;/li&gt;
-&lt;li&gt;Neural networks&lt;/li&gt;
-&lt;li&gt;Convolutional neural networks&lt;/li&gt;
-&lt;li&gt;Recurrent neural networks&lt;/li&gt;
-&lt;li&gt;Recommender systems&lt;/li&gt;
-&lt;li&gt;Decision trees&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Note that the course &lt;em&gt;doesn&amp;#39;t&lt;/em&gt; cover some of the machine learning topics I&amp;#39;m most interested in:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)&quot;&gt;Transformers&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Generative_adversarial_network&quot;&gt;Generative adversarial networks&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Overall, it was a fun course and good Python practice, but I wasn&amp;#39;t really inspired to go start a machine learning project because I&amp;#39;m not terribly interested in classification and regression problems at the moment.&lt;/p&gt;
 </content>
 </entry>
 </feed>
