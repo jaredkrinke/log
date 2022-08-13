@@ -158,7 +158,7 @@ Based on functionality, this is a fairly trivial example, but based on the numbe
 
 It's not yet clear to me how much of the Windows SDK Zig ships with, but it's at least enough to create a real window.
 
-# Hello, WebView2
+# Hello, WebView2?
 Given that [WebView2](https://docs.microsoft.com/en-us/microsoft-edge/webview2/) isn't a part of the standard Windows SDK, I'm almost certain that this won't work out of the box, but I'm going to give it a try anyway.
 
 I'm going to work off of the [WebView2 for Win32 tutorial](https://docs.microsoft.com/en-us/microsoft-edge/webview2/get-started/win32). The code is fairly lengthy, so I'm not going to duplicate it here.
@@ -179,7 +179,8 @@ Second attempt, this time with WIL:
 
 ```txt
 > zig c++ -target i386-windows-gnu hello-webview2.cpp -I..\wil\include -o hello-webview2.exe
-hello-webview2.cpp:5:10: fatal error: 'WeakReference.h' file not found
+In file included from hello-webview2.cpp:5:
+..\wil\include\wil/com.h:14:10: fatal error: 'WeakReference.h' file not found
 #include <WeakReference.h>
          ^~~~~~~~~~~~~~~~~
 1 error generated.
@@ -187,4 +188,6 @@ hello-webview2.cpp:5:10: fatal error: 'WeakReference.h' file not found
 
 Alright, `WeakReference.h` is part of [WRL](https://docs.microsoft.com/en-us/cpp/cppcx/wrl/windows-runtime-cpp-template-library-wrl?view=msvc-170), which is actually part of the Windows SDK. Zig doesn't appear to ship with WRL (and I'm not even sure that it *should*).
 
-I suspect I don't actually *need* WIL or WRL, so I'll attempt to proceed without them.
+I suspect I don't actually *need* WIL or WRL, but proceeding without them might not be the best use of time, because instantiating WebView2 appears to be an COM-based asynchronous operation, and I don't want to reimplement a large chunk of WIL, WRL, or even COM just to avoid using the Windows SDK and Visual Studio.
+
+Ok, fine, Visual Studio Installer. You win this round.
