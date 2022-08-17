@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-08-13T20:29:33.133Z</updated>
+<updated>2022-08-17T02:44:16.502Z</updated>
 
 <entry>
 <title>Testing out Zig... for C/C++ code... on Windows</title>
@@ -190,7 +190,7 @@ In file included from hello-webview2.cpp:5:
 &lt;p&gt;Steam publishes documentation for Steamworks here:&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://partner.steamgames.com/doc/home&quot;&gt;https://partner.steamgames.com/doc/home&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&quot;common-redistributables&quot;&gt;Common redistributables&lt;/h2&gt;
-&lt;p&gt;There is &lt;a href=&quot;https://partner.steamgames.com/doc/features/common_redist&quot;&gt;a page about common redistributables&lt;/a&gt; that says it includes &amp;quot;Microsoft Visual C++, .NET, DirectX 9, OpenAL, XNA, and PhysX&amp;quot;, but it says the complete, up to date list is on a page that appears to only be visible to developers who have already paid a $100 fee. I had planned to pay the fee regardless, but I&amp;#39;d hoped I could at least answer some of my questions before handing over money.&lt;/p&gt;
+&lt;p&gt;There is &lt;a href=&quot;https://partner.steamgames.com/doc/features/common_redist&quot;&gt;a page about common redistributables&lt;/a&gt; that says it includes Microsoft Visual C++, .NET, DirectX 9, OpenAL, XNA, and PhysX. This appears to be a comprehensive list.&lt;/p&gt;
 &lt;h2 id=&quot;platforms&quot;&gt;Platforms&lt;/h2&gt;
 &lt;p&gt;It&amp;#39;s now possible to download the Steamworks SDK &lt;em&gt;before&lt;/em&gt; paying the Steam Direct fee, which is helpful. Within that zip file, it has binaries for 32- and 64-bit Linux and Windows, and macOS. I&amp;#39;m interpreting that list to be the definitive list of supported platforms.&lt;/p&gt;
 &lt;p&gt;Note that GPL-licensed libraries can&amp;#39;t be linked with the Steamworks SDK (or probably distributed via Steam period).&lt;/p&gt;
