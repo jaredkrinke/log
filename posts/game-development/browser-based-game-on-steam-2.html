@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Porting a browser-based game to Steam (part 2)</title>
+<meta name="description" content="I&#39;m continuing my research on porting a browser-based game to Steam. My plan is to directly use WebView2 on Windows." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Porting a browser-based game to Steam (part 2)",
+  "abstract": "I'm continuing my research on porting a browser-based game to Steam. My plan is to directly use WebView2 on Windows.",
+  "keywords": "game-development",
+  "datePublished": "2022-08-29"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/game-development/index.html">game-development</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/game-development/browser-based-game-on-steam-2.html">Porting a browser-based game to Steam (part 2)</a></h1>
+<p><time datetime="2022-08-29">August 29, 2022</time></p>
+</header>
+<p>In <a href="browser-based-game-on-steam.html">part 1</a>, I did some initial research into Steam&#39;s support for hosting games that were originally browser-based. Now, I&#39;m diving into the next level of detail.</p>
+<h1 id="choosing-a-framework">Choosing a framework</h1>
+<p>First, I needed to choose a framework for hosting my HTML and JavaScript. My criteria for choosing (roughly in priority order) were as follows:</p>
+<ul>
+<li>Supports Windows (because that is my initial target platform)</li>
+<li>Can interface with C++ APIs (namely the Steamworks API)</li>
+<li>Ships without a runtime <em>or</em> the runtime is easy to install (via Steam)</li>
+<li>Lightweight (the web version is under 30 KB, compressed)</li>
+<li>As few dependencies as possible</li>
+<li>Uses a programming language I&#39;m familiar with (or want to learn)</li>
+<li>Requires as few changes to the web app as possible</li>
+<li>Supports 32-bit Windows (my laptop--which I occasionally use--doesn&#39;t support 64-bit Windows)</li>
+<li>Supports Linux and/or macOS (in case I decide to port the game to those platforms in the future)</li>
+</ul>
+<p>Here are the frameworks I evaluated, along with some notes:</p>
+<ul>
+<li><a href="https://www.electronjs.org/">Electron</a><ul>
+<li>✔ Broadly used and supported</li>
+<li>✔ No runtime required</li>
+<li>✖ Bloated</li>
+</ul>
+</li>
+<li><a href="https://tauri.app/">Tauri</a><ul>
+<li>✔ Lightweight</li>
+<li>✖ No out-of-the-box C++ support</li>
+<li>✖ Many, many dependencies, <a href="https://tauri.app/about/architecture/#license">with no official copyright notice</a></li>
+<li>✖ Requires WebView2 runtime on Windows</li>
+</ul>
+</li>
+<li><a href="https://neutralino.js.org/">Neutralinojs</a><ul>
+<li>✔ Lightweight</li>
+<li>✖ No out-of-the-box C++ support (I think)</li>
+<li>✖ Requires WebView2 runtime on Windows</li>
+<li>✖ Doesn&#39;t appear to support e.g. <code>localStorage</code></li>
+<li>✖ <a href="https://neutralino.js.org/docs/distribution/overview">No support for 32-bit Windows</a></li>
+</ul>
+</li>
+<li><a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/">WebView2</a><ul>
+<li>✔ Natively supports C++</li>
+<li>✔ Lightweight</li>
+<li>✔ No other dependencies</li>
+<li>✔ Supports 32-bit Windows</li>
+<li>✖ Requires WebView2 runtime</li>
+<li>✖ Only supports Windows</li>
+</ul>
+</li>
+</ul>
+<p>After my initial research, I decided that I&#39;d like to avoid Electron, if possible, due to its large disk and memory footprint. All the remaining options use WebView2 on Windows, and a cursory glance made me think the WebView2 runtime could be installed via Steam without too much difficulty.</p>
+<h2 id="tauri-it-is-right">Tauri it is... right?</h2>
+<p>Given its impressive list of features (and supported platforms) and light weight, I decided to use Tauri... until I saw that <a href="https://app.fossa.com/projects/git%2Bgithub.com%2Ftauri-apps%2Ftauri/refs/branch/dev/0668dd42204b163f11aaf31f45106c8551f15942/preview">Tauri had over 1,200 dependencies</a>. If Tauri provided a &quot;third party copyright notice&quot; file I could just paste into my app, I might have continued on, but the <a href="https://tauri.app/about/architecture/#license">Tauri license page</a> only has this unhelpful notice: &quot;it is your responsibility to verify that you are complying with all upstream licenses.&quot; I feel like I&#39;m becoming more disillusioned with open source ecosystems by the day, but if I can&#39;t even enumerate the correct licenses for a library (let alone audit any of the code!), I probably shouldn&#39;t be using it (especially if I want to keep the door open to selling my game in the future).</p>
+<h2 id="webview2-it-is-hopefully">WebView2 it is... hopefully</h2>
+<p>After dismissing Electron and Tauri, I decided to just go with the simplest solution for Windows, which is to just use WebView2 directly.</p>
+<p>The biggest downside of this approach is that I likely won&#39;t be able to port the game to Linux or macOS. This isn&#39;t a justification for only supporting Windows, but I don&#39;t have a Linux machine handy to see if Wine or Proton can handle WebView2 (unlikely, but who knows), and the last Mac I owned was a Macintosh Plus, so I&#39;ve never actually done any development on macOS. At least players on those platforms can just play the browser-based version of the game!</p>
+<h1 id="answering-some-questions">Answering some questions</h1>
+<p>I enumerated some <a href="browser-based-game-on-steam.html#open-questions">open questions in the last post</a>, and I can start answering some of them now:</p>
+<ul>
+<li>Which browser-to-native framework should I use (Electron, Tauri, WebView2, etc.)?<ul>
+<li><strong>Answer</strong>: WebView2</li>
+</ul>
+</li>
+<li>Does Steam have built-in support for browser-based titles? Are any of the above frameworks in the Steamworks Common Redistributables package?<ul>
+<li><strong>Answer</strong>: There is no built-in support for WebView2</li>
+</ul>
+</li>
+<li>Which platforms should I support?<ul>
+<li><strong>Answer</strong>: Just Windows for now, ideally 32-bit and 64-bit</li>
+</ul>
+</li>
+<li>What&#39;s required to take advantage of Steam&#39;s support for cloud saves/syncing?<ul>
+<li><strong>Educated guess</strong>: <a href="https://partner.steamgames.com/doc/features/cloud#steam_auto-cloud">Steam auto-cloud</a> along with a <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/user-data-folder?tabs=win32">custom WebView2 user data folder</a> look promising</li>
+</ul>
+</li>
+<li>How do I test Steam Cloud saves?<ul>
+<li><strong>Educated guess</strong>: Steamworks provides <a href="https://partner.steamgames.com/doc/features/cloud">pre-release testing guidance for Steam Cloud</a></li>
+</ul>
+</li>
+</ul>
+<p>There are also some new questions to add to the list:</p>
+<ul>
+<li>Can a Steam <a href="https://partner.steamgames.com/doc/sdk/installscripts">InstallScript</a> install the WebView2 runtime successfully?</li>
+<li>How should fullscreen support work?</li>
+<li>How can Steam and browser-based leaderboards be shared/merged?</li>
+</ul>
+<h1 id="next-steps">Next steps</h1>
+<p>I have a working proof-of-concept app based on WebView2, but my biggest concern is whether or not Steam&#39;s <a href="https://partner.steamgames.com/doc/sdk/installscripts">InstallScript</a> functionality can successfully install the WebView2 runtime. I don&#39;t see any obvious reason this shouldn&#39;t work, but given that deployment and configuration files have bitten me many times in the past, I&#39;m eager to prototype this as soon as possible. If there&#39;s a roadblock to using WebView2, I&#39;d rather find it sooner than later.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

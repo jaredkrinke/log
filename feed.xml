@@ -7,8 +7,101 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-08-17T02:44:16.502Z</updated>
+<updated>2022-08-29T21:33:31.276Z</updated>
 
+<entry>
+<title>Porting a browser-based game to Steam (part 2)</title>
+<id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-2.html"/>
+<updated>2022-08-29T00:00:00.000Z</updated>
+<summary type="text">I&apos;m continuing my research on porting a browser-based game to Steam. My plan is to directly use WebView2 on Windows.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/game-development/browser-based-game-on-steam.html&quot;&gt;part 1&lt;/a&gt;, I did some initial research into Steam&amp;#39;s support for hosting games that were originally browser-based. Now, I&amp;#39;m diving into the next level of detail.&lt;/p&gt;
+&lt;h1 id=&quot;choosing-a-framework&quot;&gt;Choosing a framework&lt;/h1&gt;
+&lt;p&gt;First, I needed to choose a framework for hosting my HTML and JavaScript. My criteria for choosing (roughly in priority order) were as follows:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Supports Windows (because that is my initial target platform)&lt;/li&gt;
+&lt;li&gt;Can interface with C++ APIs (namely the Steamworks API)&lt;/li&gt;
+&lt;li&gt;Ships without a runtime &lt;em&gt;or&lt;/em&gt; the runtime is easy to install (via Steam)&lt;/li&gt;
+&lt;li&gt;Lightweight (the web version is under 30 KB, compressed)&lt;/li&gt;
+&lt;li&gt;As few dependencies as possible&lt;/li&gt;
+&lt;li&gt;Uses a programming language I&amp;#39;m familiar with (or want to learn)&lt;/li&gt;
+&lt;li&gt;Requires as few changes to the web app as possible&lt;/li&gt;
+&lt;li&gt;Supports 32-bit Windows (my laptop--which I occasionally use--doesn&amp;#39;t support 64-bit Windows)&lt;/li&gt;
+&lt;li&gt;Supports Linux and/or macOS (in case I decide to port the game to those platforms in the future)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here are the frameworks I evaluated, along with some notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.electronjs.org/&quot;&gt;Electron&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;✔ Broadly used and supported&lt;/li&gt;
+&lt;li&gt;✔ No runtime required&lt;/li&gt;
+&lt;li&gt;✖ Bloated&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://tauri.app/&quot;&gt;Tauri&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;✔ Lightweight&lt;/li&gt;
+&lt;li&gt;✖ No out-of-the-box C++ support&lt;/li&gt;
+&lt;li&gt;✖ Many, many dependencies, &lt;a href=&quot;https://tauri.app/about/architecture/#license&quot;&gt;with no official copyright notice&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;✖ Requires WebView2 runtime on Windows&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://neutralino.js.org/&quot;&gt;Neutralinojs&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;✔ Lightweight&lt;/li&gt;
+&lt;li&gt;✖ No out-of-the-box C++ support (I think)&lt;/li&gt;
+&lt;li&gt;✖ Requires WebView2 runtime on Windows&lt;/li&gt;
+&lt;li&gt;✖ Doesn&amp;#39;t appear to support e.g. &lt;code&gt;localStorage&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;✖ &lt;a href=&quot;https://neutralino.js.org/docs/distribution/overview&quot;&gt;No support for 32-bit Windows&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://developer.microsoft.com/en-us/microsoft-edge/webview2/&quot;&gt;WebView2&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;✔ Natively supports C++&lt;/li&gt;
+&lt;li&gt;✔ Lightweight&lt;/li&gt;
+&lt;li&gt;✔ No other dependencies&lt;/li&gt;
+&lt;li&gt;✔ Supports 32-bit Windows&lt;/li&gt;
+&lt;li&gt;✖ Requires WebView2 runtime&lt;/li&gt;
+&lt;li&gt;✖ Only supports Windows&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;After my initial research, I decided that I&amp;#39;d like to avoid Electron, if possible, due to its large disk and memory footprint. All the remaining options use WebView2 on Windows, and a cursory glance made me think the WebView2 runtime could be installed via Steam without too much difficulty.&lt;/p&gt;
+&lt;h2 id=&quot;tauri-it-is-right&quot;&gt;Tauri it is... right?&lt;/h2&gt;
+&lt;p&gt;Given its impressive list of features (and supported platforms) and light weight, I decided to use Tauri... until I saw that &lt;a href=&quot;https://app.fossa.com/projects/git%2Bgithub.com%2Ftauri-apps%2Ftauri/refs/branch/dev/0668dd42204b163f11aaf31f45106c8551f15942/preview&quot;&gt;Tauri had over 1,200 dependencies&lt;/a&gt;. If Tauri provided a &amp;quot;third party copyright notice&amp;quot; file I could just paste into my app, I might have continued on, but the &lt;a href=&quot;https://tauri.app/about/architecture/#license&quot;&gt;Tauri license page&lt;/a&gt; only has this unhelpful notice: &amp;quot;it is your responsibility to verify that you are complying with all upstream licenses.&amp;quot; I feel like I&amp;#39;m becoming more disillusioned with open source ecosystems by the day, but if I can&amp;#39;t even enumerate the correct licenses for a library (let alone audit any of the code!), I probably shouldn&amp;#39;t be using it (especially if I want to keep the door open to selling my game in the future).&lt;/p&gt;
+&lt;h2 id=&quot;webview2-it-is-hopefully&quot;&gt;WebView2 it is... hopefully&lt;/h2&gt;
+&lt;p&gt;After dismissing Electron and Tauri, I decided to just go with the simplest solution for Windows, which is to just use WebView2 directly.&lt;/p&gt;
+&lt;p&gt;The biggest downside of this approach is that I likely won&amp;#39;t be able to port the game to Linux or macOS. This isn&amp;#39;t a justification for only supporting Windows, but I don&amp;#39;t have a Linux machine handy to see if Wine or Proton can handle WebView2 (unlikely, but who knows), and the last Mac I owned was a Macintosh Plus, so I&amp;#39;ve never actually done any development on macOS. At least players on those platforms can just play the browser-based version of the game!&lt;/p&gt;
+&lt;h1 id=&quot;answering-some-questions&quot;&gt;Answering some questions&lt;/h1&gt;
+&lt;p&gt;I enumerated some &lt;a href=&quot;https://log.schemescape.com/posts/game-development/browser-based-game-on-steam.html#open-questions&quot;&gt;open questions in the last post&lt;/a&gt;, and I can start answering some of them now:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Which browser-to-native framework should I use (Electron, Tauri, WebView2, etc.)?&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Answer&lt;/strong&gt;: WebView2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Does Steam have built-in support for browser-based titles? Are any of the above frameworks in the Steamworks Common Redistributables package?&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Answer&lt;/strong&gt;: There is no built-in support for WebView2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Which platforms should I support?&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Answer&lt;/strong&gt;: Just Windows for now, ideally 32-bit and 64-bit&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;What&amp;#39;s required to take advantage of Steam&amp;#39;s support for cloud saves/syncing?&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Educated guess&lt;/strong&gt;: &lt;a href=&quot;https://partner.steamgames.com/doc/features/cloud#steam_auto-cloud&quot;&gt;Steam auto-cloud&lt;/a&gt; along with a &lt;a href=&quot;https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/user-data-folder?tabs=win32&quot;&gt;custom WebView2 user data folder&lt;/a&gt; look promising&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;How do I test Steam Cloud saves?&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Educated guess&lt;/strong&gt;: Steamworks provides &lt;a href=&quot;https://partner.steamgames.com/doc/features/cloud&quot;&gt;pre-release testing guidance for Steam Cloud&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are also some new questions to add to the list:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Can a Steam &lt;a href=&quot;https://partner.steamgames.com/doc/sdk/installscripts&quot;&gt;InstallScript&lt;/a&gt; install the WebView2 runtime successfully?&lt;/li&gt;
+&lt;li&gt;How should fullscreen support work?&lt;/li&gt;
+&lt;li&gt;How can Steam and browser-based leaderboards be shared/merged?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
+&lt;p&gt;I have a working proof-of-concept app based on WebView2, but my biggest concern is whether or not Steam&amp;#39;s &lt;a href=&quot;https://partner.steamgames.com/doc/sdk/installscripts&quot;&gt;InstallScript&lt;/a&gt; functionality can successfully install the WebView2 runtime. I don&amp;#39;t see any obvious reason this shouldn&amp;#39;t work, but given that deployment and configuration files have bitten me many times in the past, I&amp;#39;m eager to prototype this as soon as possible. If there&amp;#39;s a roadblock to using WebView2, I&amp;#39;d rather find it sooner than later.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Testing out Zig... for C/C++ code... on Windows</title>
 <id>https://log.schemescape.com/posts/programming-languages/compiling-cpp-for-windows-using-zig.html</id>
@@ -266,75 +359,6 @@ In file included from hello-webview2.cpp:5:
 &lt;p&gt;Unfortunately, the results after 250 epochs weren&amp;#39;t noticeably any better. It&amp;#39;s possible that the small corpus isn&amp;#39;t sufficient for training this model.&lt;/p&gt;
 &lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
 &lt;p&gt;I started this project for fun, but after struggling with Python environments and coming to the realization that I have insufficient compute resources available, I&amp;#39;m reconsidering whether or not this is a good use of my time.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Generating music using machine learning</title>
-<id>https://log.schemescape.com/posts/machine-learning/generating-music.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/machine-learning/generating-music.html"/>
-<updated>2022-04-26T00:00:00.000Z</updated>
-<summary type="text">Let&apos;s see if I can use Google Brain&apos;s Music Transformer to generate ragtime music.</summary>
-<content type="html">&lt;p&gt;Recent music generation results (e.g. &lt;a href=&quot;https://magenta.tensorflow.org/music-transformer&quot;&gt;Music Transformer: Generating Music with Long-Term Structure&lt;/a&gt;) are part of what piqued my interest in machine learning. After &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/mitx-6.036.html&quot;&gt;following an introduction to machine learning&lt;/a&gt;, it&amp;#39;s time for some experimentation.&lt;/p&gt;
-&lt;p&gt;First up: generating a &lt;a href=&quot;https://en.wikipedia.org/wiki/Ragtime&quot;&gt;ragtime&lt;/a&gt; piano piece.&lt;/p&gt;
-&lt;h1 id=&quot;approaches&quot;&gt;Approaches&lt;/h1&gt;
-&lt;p&gt;The most compelling generated music I&amp;#39;ve seen thus far comes from Google Brain, namely their &lt;a href=&quot;https://magenta.tensorflow.org/performance-rnn&quot;&gt;Performance RNN&lt;/a&gt; and &lt;a href=&quot;https://magenta.tensorflow.org/music-transformer&quot;&gt;Music Transformer&lt;/a&gt; papers. The associated GitHub repositories appear to contain models that have been pre-trained on various corpora (e.g. a &lt;a href=&quot;https://www.piano-e-competition.com/&quot;&gt;piano competition&amp;#39;s MIDI recordings&lt;/a&gt;). It&amp;#39;s also possible to train using a new corpus. The trained models can generate continuations based on a primer or generate unconditioned music &amp;quot;from scratch&amp;quot;.&lt;/p&gt;
-&lt;p&gt;Here are several approaches I&amp;#39;m investigating for generating a ragtime piece:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Condition pre-trained Performance RNN and Music Transformer models with existing ragtime music (either an intro or the first few measures) and generate a continuation&lt;/li&gt;
-&lt;li&gt;Train a new model on a corpus of ragtime music, and then do unconditioned generation&lt;/li&gt;
-&lt;li&gt;Train a new model on a ragtime corpus and generate a continuation from a ragtime primer&lt;/li&gt;
-&lt;li&gt;Train a new model on a ragtime corpus and generate a continuation from an arbitrary primer&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;I don&amp;#39;t have any intuition for how large of a corpus is required to generate a decent model, so it&amp;#39;s possible that options 2 - 4 won&amp;#39;t be feasible for me (either because finding/generating such a training corpus is too difficult or the compute required to train the model is beyond what my computer can handle).&lt;/p&gt;
-&lt;h1 id=&quot;using-pre-trained-models&quot;&gt;Using pre-trained models&lt;/h1&gt;
-&lt;p&gt;Without installing anything locally, you can use the &lt;a href=&quot;https://colab.research.google.com/notebooks/magenta/piano_transformer/piano_transformer.ipynb&quot;&gt;Music Transformer notebook&lt;/a&gt; to generate music. There are several options:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Generate music &amp;quot;from scratch&amp;quot; (unconditional)&lt;/li&gt;
-&lt;li&gt;Generate a continuation based on a primer&lt;/li&gt;
-&lt;li&gt;Generate accompaniment for a (monophonic) melody&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;unconditional-generation&quot;&gt;Unconditional generation&lt;/h2&gt;
-&lt;p&gt;Without providing a primer, I don&amp;#39;t think it&amp;#39;s possible to indicate what genre of music you&amp;#39;d like to generate. For example, the clip I got sounds like some sort of &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-unconditioned.mid&quot;&gt;boogie-woogie folk march&lt;/a&gt;. Obviously this isn&amp;#39;t the genre that I was looking for (or, really, than anyone was looking for). Rather than continuing on randomly like this, I&amp;#39;ll investigate primed generation.&lt;/p&gt;
-&lt;h2 id=&quot;continuations&quot;&gt;Continuations&lt;/h2&gt;
-&lt;p&gt;The notebook linked above also supports providing a primer, either from a provided list or by uploading a MIDI file directly in the UI.&lt;/p&gt;
-&lt;h3 id=&quot;cropping-midi-primers&quot;&gt;Cropping MIDI primers&lt;/h3&gt;
-&lt;p&gt;The primer is included in the output, so I assume it should be reasonably short. My original plan was to edit down an existing ragtime MIDI using &lt;a href=&quot;https://musescore.org/en&quot;&gt;MuseScore&lt;/a&gt;, but MuseScore&amp;#39;s output appears to be incompatible with the &lt;a href=&quot;http://craffel.github.io/pretty-midi/&quot;&gt;pretty_midi&lt;/a&gt; module that the notebook uses, resulting in the following error:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;pretty_midi\pretty_midi.py:&lt;span class=&quot;hljs-number&quot;&gt;97&lt;/span&gt;: RuntimeWarning: Tempo, Key &lt;span class=&quot;hljs-keyword&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Time&lt;/span&gt; signature change events &lt;span class=&quot;hljs-built_in&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;on&lt;/span&gt; non-zero tracks. This &lt;span class=&quot;hljs-keyword&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;not&lt;/span&gt; a &lt;span class=&quot;hljs-keyword&quot;&gt;valid&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; MIDI file. Tempo, Key &lt;span class=&quot;hljs-keyword&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;Time&lt;/span&gt; Signature may be wrong.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;My workaround was to switch to using &lt;a href=&quot;https://www.audacityteam.org/&quot;&gt;Audacity&lt;/a&gt; to crop my MIDI primer (and this worked without issue).&lt;/p&gt;
-&lt;h3 id=&quot;example-continuations&quot;&gt;Example continuations&lt;/h3&gt;
-&lt;p&gt;First, I tried using just the intro bars of some Scott Joplin rags:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-intro-wall-street.mid&quot;&gt;Wall Street Rag intro&lt;/a&gt;: this generated an interesting continuation that sounded vaguely like a cross between ragtime and new age piano&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-intro-magnetic.mid&quot;&gt;Magnetic Rag intro&lt;/a&gt;: this generated a continuation with a halting style that keeps repeating notes&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Overall, the results are impressive, but also somewhat alien. And definitely not ragtime.&lt;/p&gt;
-&lt;p&gt;Next, I tried supplying the beginning of a few sections of Joplin rags:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Wall Street Rag&lt;ul&gt;
-&lt;li&gt;The &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-wall-street-1.mid&quot;&gt;first continuation&lt;/a&gt; gets a bit stuck on the primer, but then recovers nicely into a very short still-not-quite-ragtime section&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-wall-street-2.mid&quot;&gt;second continuation&lt;/a&gt; strays quickly and widely from ragtime (continuing the trend of &amp;quot;impressive, but not what I wanted&amp;quot;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Maple Leaf Rag&lt;ul&gt;
-&lt;li&gt;This &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-maple-leaf.mid&quot;&gt;continuation&lt;/a&gt; seemed to ignore the primer and just started cycling through music I can only describe as &amp;quot;movie soundtrack&amp;quot;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Magnetic Rag&lt;ul&gt;
-&lt;li&gt;The &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-magnetic-1.mid&quot;&gt;first continuation&lt;/a&gt; was short, but rag-like!&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-magnetic-2.mid&quot;&gt;second continuation&lt;/a&gt; was similarly short, but promising&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-continuation-magnetic-3.mid&quot;&gt;third continuation&lt;/a&gt; was much longer, but... bad&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;accompaniment&quot;&gt;Accompaniment&lt;/h2&gt;
-&lt;p&gt;Out of curiosity, I also tried generating an accompaniment (based on a monophonic melody that consists of the highest non-overlapping notes in the cropped MIDIs from the last section):&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-accompaniment-magnetic.mid&quot;&gt;Magnetic Rag accompaniment&lt;/a&gt;: this was a baroquely ornamented mix of classical and blues&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;reflecting-on-pre-trained-models&quot;&gt;Reflecting on pre-trained models&lt;/h2&gt;
-&lt;p&gt;Unsurprisingly, the generic pre-trained models I used, while undoubtedly impressive, seem best suited for exploration and amusement, rather than producing something focused on a particular genre.&lt;/p&gt;
-&lt;p&gt;I suspect that the best path forward for this experiment is to train a new ragtime-focused model on a corpus of typical ragtime MIDIs. As noted earlier, it&amp;#39;s possible I won&amp;#39;t be able to find either a large enough corpus or enough compute power to produce a reasonable model, but if I &lt;em&gt;do&lt;/em&gt; succeed, I think the results will be more consistently rag-like.&lt;/p&gt;
 </content>
 </entry>
 </feed>
