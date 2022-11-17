@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Porting a browser-based game to Steam (part 3)</title>
+<meta name="description" content="I ported a browser-based game to Steam using WebView2. This is an overview of what I learned in the process." />
+<meta name="keywords" content="steam" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Porting a browser-based game to Steam (part 3)",
+  "abstract": "I ported a browser-based game to Steam using WebView2. This is an overview of what I learned in the process.",
+  "keywords": "game-development,steam",
+  "datePublished": "2022-11-17"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/game-development/index.html">game-development</a></li>
+<li><a href="../../posts/steam/index.html">steam</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/game-development/browser-based-game-on-steam-3.html">Porting a browser-based game to Steam (part 3)</a></h1>
+<p><time datetime="2022-11-17">November 17, 2022</time></p>
+</header>
+<p>In <a href="browser-based-game-on-steam-2.html">part 2</a>, I decided to try using <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/">WebView2</a> to port my browser-based game to Steam (in order to avoid having to ship an entire Chrome/Electron runtime with my game).</p>
+<p>The good news is that it is indeed possible to ship an HTML/CSS/JavaScript-based game on Steam using WebView2. The bad news is that I ended up having to write a lot of integration code. I&#39;ll probably never know how much time using <a href="https://www.electronjs.org/">Electron</a>+<a href="https://github.com/greenheartgames/greenworks">Greenworks</a> would have saved me, but I try not to dwell on sunk costs.</p>
+<h1 id="finally-some-brief-answers">Finally, some (brief) answers</h1>
+<p>Below is a categorized overview of the questions I had to answer on my journey to a (hopefully!) final Steam build of my WebView2-based game, along with brief answers.</p>
+<p>I&#39;m planning to write more in-depth answers in the future. For now, if you&#39;re interested in more detail, send an email to any name at this domain.</p>
+<h2 id="installation-environment">Installation, environment</h2>
+<ul>
+<li><strong>Does WebView2 support Windows 7? What about 32-bit Windows?</strong><ul>
+<li>Yes to both (use <a href="https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/">Win7 VMs</a> for testing).</li>
+</ul>
+</li>
+<li><strong>Can a Steam <a href="https://partner.steamgames.com/doc/sdk/installscripts">InstallScript</a> install the WebView2 runtime successfully?</strong><ul>
+<li>Yes: <a href="https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/webview2.vdf">example</a> (note: use your own app id!).</li>
+</ul>
+</li>
+<li><strong>How do you disable F12 dev tools, context menus, etc.?</strong><ul>
+<li><a href="https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/win32/webview2/nf-webview2-icorewebview2settings-put_aredevtoolsenabled">ICoreWebView2Settings::put_AreDevToolsEnabled</a></li>
+</ul>
+</li>
+<li><strong>How do you debug JavaScript code running in the WebView2 app?</strong><ul>
+<li>Use VS Code&#39;s path mapping option: <a href="https://github.com/jaredkrinke/sic1/blob/master/.vscode/launch.json">example</a>.</li>
+</ul>
+</li>
+<li><strong>How do you monitor your game for errors (both JavaScript and native)?</strong><ul>
+<li>Use <a href="https://sentry.io/welcome/">Sentry</a> or <a href="https://backtrace.io/">Backtrace</a>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="integrating-c-and-javascript">Integrating C++ and JavaScript</h2>
+<ul>
+<li><strong>What is WebView2&#39;s threading model? What happens if the network connection is slow?</strong><ul>
+<li>All host object calls come in on your main thread, so you may want to move slow operations to a background (or thread pool) thread, and use the promise-wrapping technique mentioned below for providing asynchronous results.</li>
+</ul>
+</li>
+<li><strong>How do I integrate native code and JavaScript?</strong><ul>
+<li>Use <a href="https://learn.microsoft.com/en-us/microsoft-edge/webview2/how-to/hostobject?tabs=win32cpp">ICoreWebView2::AddHostObjectToScript</a>, <a href="https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/dispatchable.h">implement IDispatch</a>, and <a href="https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/sic1.rc">embed your type library</a>.</li>
+</ul>
+</li>
+<li><strong>How can you run save code when the user clicks the close button?</strong><ul>
+<li>Put code in your WM_CLOSE handler.</li>
+</ul>
+</li>
+<li><strong>How do you return a promise from a host object interface?</strong><ul>
+<li>Not directly supported, but you can marshal the <code>resolve</code> and <code>reject</code> IDispatch interfaces from the <code>Promise</code> constructor to your native code instead (<a href="https://devblogs.microsoft.com/oldnewthing/20151021-00/?p=91311">and even to another thread</a>): <a href="https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/promisehandler.cpp">example</a>.</li>
+</ul>
+</li>
+<li><strong>How do you marshal complex types between JavaScript and native code (e.g. for Steam Leaderboards)?</strong><ul>
+<li>Pack them into flat arrays of values that are represented in native code as <a href="https://learn.microsoft.com/en-us/windows/win32/api/oaidl/ns-oaidl-safearray">SAFEARRAY</a> of <a href="https://learn.microsoft.com/en-us/windows/win32/winauto/variant-structure">VARIANT</a>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="steam-integration">Steam integration</h2>
+<ul>
+<li><strong>Is it trivial to take advantage of Steam&#39;s support for cloud saves/syncing?</strong><ul>
+<li>Nope. I periodically write localStorage to a file that Steam auto-cloud synchronizes.</li>
+</ul>
+</li>
+<li><strong>How do I test Steam Cloud saves?</strong><ul>
+<li>Just delete the local save and let Steam restore it on launch.</li>
+</ul>
+</li>
+<li><strong>How do you integrate Steam&#39;s Callback and CallResult APIs with JavaScript?</strong><ul>
+<li>I did this using very careful multi-threaded code and the promise-wrapping idea from the previous bullet. I hope there&#39;s a better way that I just haven&#39;t found yet!</li>
+</ul>
+</li>
+<li><strong>How do you deal with Steam API rate-limiting?</strong><ul>
+<li>With a <a href="https://github.com/jaredkrinke/crs_queue">coalescing, rate-limited, serializable/deserializable task queue</a>.</li>
+</ul>
+</li>
+<li><strong>Does the Steam Overlay work for WebView2-based games?</strong><ul>
+<li>No.</li>
+</ul>
+</li>
+</ul>
+<h2 id="miscellaneous">Miscellaneous</h2>
+<ul>
+<li><strong>How should fullscreen support work?</strong><ul>
+<li>Must be handled by native code (otherwise &quot;Esc&quot; will always exit fullscreen).</li>
+</ul>
+</li>
+<li><strong>How do you ensure your game can immediately start playing music, even before the user interacts with any HTML elements?</strong><ul>
+<li><a href="https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/win32/webview2/nf-webview2-icorewebview2environmentoptions-put_additionalbrowserarguments">ICoreWebView2EnvironmentOptions::put_AdditionalBrowserArguments</a> with <code>L&quot;--autoplay-policy=no-user-gesture-required&quot;</code>.</li>
+</ul>
+</li>
+<li><strong>Do you need to explicitly move focus to the web view on launch?</strong><ul>
+<li>Yes: <a href="https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/win32/webview2/nf-webview2-icorewebview2controller-movefocus">ICoreWebView2Controller::MoveFocus</a>.</li>
+</ul>
+</li>
+<li><strong>How do you ensure your game is not blurry on high DPI screens?</strong><ul>
+<li>Project properties -&gt; Configuration Properties -&gt; Manifest Tool -&gt; Input and Output -&gt; DPI Awareness -&gt; Per Monitor High DPI Aware.</li>
+</ul>
+</li>
+</ul>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

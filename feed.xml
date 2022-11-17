@@ -7,8 +7,109 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-08-29T21:33:31.276Z</updated>
+<updated>2022-11-17T23:14:29.010Z</updated>
 
+<entry>
+<title>Porting a browser-based game to Steam (part 3)</title>
+<id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-3.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-3.html"/>
+<updated>2022-11-17T00:00:00.000Z</updated>
+<summary type="text">I ported a browser-based game to Steam using WebView2. This is an overview of what I learned in the process.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-2.html&quot;&gt;part 2&lt;/a&gt;, I decided to try using &lt;a href=&quot;https://developer.microsoft.com/en-us/microsoft-edge/webview2/&quot;&gt;WebView2&lt;/a&gt; to port my browser-based game to Steam (in order to avoid having to ship an entire Chrome/Electron runtime with my game).&lt;/p&gt;
+&lt;p&gt;The good news is that it is indeed possible to ship an HTML/CSS/JavaScript-based game on Steam using WebView2. The bad news is that I ended up having to write a lot of integration code. I&amp;#39;ll probably never know how much time using &lt;a href=&quot;https://www.electronjs.org/&quot;&gt;Electron&lt;/a&gt;+&lt;a href=&quot;https://github.com/greenheartgames/greenworks&quot;&gt;Greenworks&lt;/a&gt; would have saved me, but I try not to dwell on sunk costs.&lt;/p&gt;
+&lt;h1 id=&quot;finally-some-brief-answers&quot;&gt;Finally, some (brief) answers&lt;/h1&gt;
+&lt;p&gt;Below is a categorized overview of the questions I had to answer on my journey to a (hopefully!) final Steam build of my WebView2-based game, along with brief answers.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m planning to write more in-depth answers in the future. For now, if you&amp;#39;re interested in more detail, send an email to any name at this domain.&lt;/p&gt;
+&lt;h2 id=&quot;installation-environment&quot;&gt;Installation, environment&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Does WebView2 support Windows 7? What about 32-bit Windows?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Yes to both (use &lt;a href=&quot;https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/&quot;&gt;Win7 VMs&lt;/a&gt; for testing).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Can a Steam &lt;a href=&quot;https://partner.steamgames.com/doc/sdk/installscripts&quot;&gt;InstallScript&lt;/a&gt; install the WebView2 runtime successfully?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Yes: &lt;a href=&quot;https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/webview2.vdf&quot;&gt;example&lt;/a&gt; (note: use your own app id!).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do you disable F12 dev tools, context menus, etc.?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/win32/webview2/nf-webview2-icorewebview2settings-put_aredevtoolsenabled&quot;&gt;ICoreWebView2Settings::put_AreDevToolsEnabled&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do you debug JavaScript code running in the WebView2 app?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Use VS Code&amp;#39;s path mapping option: &lt;a href=&quot;https://github.com/jaredkrinke/sic1/blob/master/.vscode/launch.json&quot;&gt;example&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do you monitor your game for errors (both JavaScript and native)?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Use &lt;a href=&quot;https://sentry.io/welcome/&quot;&gt;Sentry&lt;/a&gt; or &lt;a href=&quot;https://backtrace.io/&quot;&gt;Backtrace&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;integrating-c-and-javascript&quot;&gt;Integrating C++ and JavaScript&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;What is WebView2&amp;#39;s threading model? What happens if the network connection is slow?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;All host object calls come in on your main thread, so you may want to move slow operations to a background (or thread pool) thread, and use the promise-wrapping technique mentioned below for providing asynchronous results.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do I integrate native code and JavaScript?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Use &lt;a href=&quot;https://learn.microsoft.com/en-us/microsoft-edge/webview2/how-to/hostobject?tabs=win32cpp&quot;&gt;ICoreWebView2::AddHostObjectToScript&lt;/a&gt;, &lt;a href=&quot;https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/dispatchable.h&quot;&gt;implement IDispatch&lt;/a&gt;, and &lt;a href=&quot;https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/sic1.rc&quot;&gt;embed your type library&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How can you run save code when the user clicks the close button?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Put code in your WM_CLOSE handler.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do you return a promise from a host object interface?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Not directly supported, but you can marshal the &lt;code&gt;resolve&lt;/code&gt; and &lt;code&gt;reject&lt;/code&gt; IDispatch interfaces from the &lt;code&gt;Promise&lt;/code&gt; constructor to your native code instead (&lt;a href=&quot;https://devblogs.microsoft.com/oldnewthing/20151021-00/?p=91311&quot;&gt;and even to another thread&lt;/a&gt;): &lt;a href=&quot;https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/promisehandler.cpp&quot;&gt;example&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do you marshal complex types between JavaScript and native code (e.g. for Steam Leaderboards)?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Pack them into flat arrays of values that are represented in native code as &lt;a href=&quot;https://learn.microsoft.com/en-us/windows/win32/api/oaidl/ns-oaidl-safearray&quot;&gt;SAFEARRAY&lt;/a&gt; of &lt;a href=&quot;https://learn.microsoft.com/en-us/windows/win32/winauto/variant-structure&quot;&gt;VARIANT&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;steam-integration&quot;&gt;Steam integration&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Is it trivial to take advantage of Steam&amp;#39;s support for cloud saves/syncing?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Nope. I periodically write localStorage to a file that Steam auto-cloud synchronizes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do I test Steam Cloud saves?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Just delete the local save and let Steam restore it on launch.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do you integrate Steam&amp;#39;s Callback and CallResult APIs with JavaScript?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;I did this using very careful multi-threaded code and the promise-wrapping idea from the previous bullet. I hope there&amp;#39;s a better way that I just haven&amp;#39;t found yet!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do you deal with Steam API rate-limiting?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;With a &lt;a href=&quot;https://github.com/jaredkrinke/crs_queue&quot;&gt;coalescing, rate-limited, serializable/deserializable task queue&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Does the Steam Overlay work for WebView2-based games?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;No.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;miscellaneous&quot;&gt;Miscellaneous&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;How should fullscreen support work?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Must be handled by native code (otherwise &amp;quot;Esc&amp;quot; will always exit fullscreen).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do you ensure your game can immediately start playing music, even before the user interacts with any HTML elements?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/win32/webview2/nf-webview2-icorewebview2environmentoptions-put_additionalbrowserarguments&quot;&gt;ICoreWebView2EnvironmentOptions::put_AdditionalBrowserArguments&lt;/a&gt; with &lt;code&gt;L&amp;quot;--autoplay-policy=no-user-gesture-required&amp;quot;&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Do you need to explicitly move focus to the web view on launch?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Yes: &lt;a href=&quot;https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/win32/webview2/nf-webview2-icorewebview2controller-movefocus&quot;&gt;ICoreWebView2Controller::MoveFocus&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;How do you ensure your game is not blurry on high DPI screens?&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;Project properties -&amp;gt; Configuration Properties -&amp;gt; Manifest Tool -&amp;gt; Input and Output -&amp;gt; DPI Awareness -&amp;gt; Per Monitor High DPI Aware.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Porting a browser-based game to Steam (part 2)</title>
 <id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-2.html</id>
@@ -314,51 +415,6 @@ In file included from hello-webview2.cpp:5:
 &lt;p&gt;It was one of the few sunny days of an unusually cold spring. I was driving down a mostly empty freeway in the evening. I&amp;#39;d made this drive many times before, but this time was different.&lt;/p&gt;
 &lt;p&gt;I&amp;#39;m still not sure how to feel about it, and I&amp;#39;m not convinced that there even &lt;em&gt;is&lt;/em&gt; a way one should feel about it.&lt;/p&gt;
 &lt;p&gt;Regardless, it puts things into perspective.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Generating music using machine learning (part 2)</title>
-<id>https://log.schemescape.com/posts/machine-learning/generating-music-2.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/machine-learning/generating-music-2.html"/>
-<updated>2022-05-02T00:00:00.000Z</updated>
-<summary type="text">An unsuccessful (but less unsuccessful than last time) attempt to generate ragtime music.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/generating-music.html&quot;&gt;part 1&lt;/a&gt;, I played around with pre-trained &lt;a href=&quot;https://magenta.tensorflow.org/music-transformer&quot;&gt;Music Transformer&lt;/a&gt; models, in an attempt to generate a piece of ragtime piano music. The results were interesting, but the musical styles were random (and internally inconsistent).&lt;/p&gt;
-&lt;p&gt;In this part, I attempt to train my own Music Transformer model, using a ragtime-focused corpus.&lt;/p&gt;
-&lt;h1 id=&quot;first-attempt&quot;&gt;First attempt&lt;/h1&gt;
-&lt;p&gt;Initially, I tried to generate music using the official Music Transformer environment, &lt;a href=&quot;https://magenta.tensorflow.org/&quot;&gt;Magenta&lt;/a&gt;, following instructions in &lt;a href=&quot;https://groups.google.com/a/tensorflow.org/g/magenta-discuss/c/tRrth7wXF6U&quot;&gt;an email thread about using transfer learning with Music Transformer&amp;#39;s pre-trained checkpoints&lt;/a&gt;. I hit several issues:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/magenta/magenta/issues/1962&quot;&gt;Magenta install fails for Python &amp;gt;= 3.8 &lt;/a&gt; (worked around via &lt;a href=&quot;https://www.anaconda.com/&quot;&gt;Anaconda&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;The default optimizer (&lt;code&gt;AdafactorOptimizer&lt;/code&gt;) appeared to be incompatible with the version of Tensorflow Magenta installed (worked around via &lt;code&gt;--hparams=optimizer=Adam,...&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;I couldn&amp;#39;t use my GPU to train because it didn&amp;#39;t have enough memory&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/magenta/magenta/issues/1862&quot;&gt;Tensor2Tensor terminated on &amp;quot;key not found&amp;quot; errors&lt;/a&gt; (worked around with a newer version, as noted in the linked GitHub issue)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;results&quot;&gt;Results&lt;/h2&gt;
-&lt;p&gt;After training for roughly a day (2,500 steps), the &lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/mt-train-2500.mid&quot;&gt;resulting MIDI&lt;/a&gt; sounds mostly like random noise. It&amp;#39;s not clear to me if this was due to a bug in my pipeline or if I just needed to spend a lot more time training.&lt;/p&gt;
-&lt;p&gt;Ultimately, I decided I didn&amp;#39;t understand the Magenta and Tensor2Tensor libraries well enough to make much progress (without investing an excessive amount of time), and I&amp;#39;d spent enough time troubleshooting issues already. &lt;a href=&quot;https://github.com/jaredkrinke/music-transformer-fine-tuning&quot;&gt;My training scripts are here&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;second-attempt&quot;&gt;Second attempt&lt;/h1&gt;
-&lt;p&gt;Rather than give up on transformer-based music generation entirely, I searched around for a simpler codebase that I might be able to more easily understand and/or adapt. Here are a few I ran across:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/davidsvy/transformer-xl&quot;&gt;transformer-xl&lt;/a&gt; by &lt;a href=&quot;https://github.com/davidsvy&quot;&gt;davidsvy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/COMP6248-Reproducability-Challenge/music-transformer-comp6248&quot;&gt;music-transformer-comp6248
-&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/bearpelican/musicautobot&quot;&gt;MusicAutobot&lt;/a&gt; by &lt;a href=&quot;https://github.com/bearpelican&quot;&gt;Andrew Shaw&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The first one is a noted as a re-implementation from scratch of the ideas from the transformer/attention research papers (mostly the same ones I&amp;#39;d been looking at) using Tensorflow/Keras. The codebase seemed small enough that I could probably understand it all without too much trouble.&lt;/p&gt;
-&lt;p&gt;I decided to move forward with the transformer-xl repository. I didn&amp;#39;t hit any issues with setup, which was a welcome development.&lt;/p&gt;
-&lt;h2 id=&quot;training&quot;&gt;Training&lt;/h2&gt;
-&lt;p&gt;As an initial test, I tried training on a fairly small corpus of 58 Scott Joplin MIDIs. I was able to decrease the batch size slightly to support training on my roughly 7 year old GPU. Training for 100 epochs only took about 7 hours.&lt;/p&gt;
-&lt;p&gt;Note: although there was a preprocessing step to convert the MIDI files to another format, I didn&amp;#39;t notice any data generation/augmentation, as in the Magenta codebase.&lt;/p&gt;
-&lt;h2 id=&quot;initial-results&quot;&gt;Initial results&lt;/h2&gt;
-&lt;p&gt;Generating results was surprisingly slow (compared to using Magenta), but I haven&amp;#39;t investigated the reason for that yet.&lt;/p&gt;
-&lt;p&gt;Regardless, the results sounded a (little) bit like music--a huge improvement from my previous attempt (which was just noise). Examples:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/train-100-1.midi&quot;&gt;Example 1&lt;/a&gt;: occasional glimpses of music&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/train-100-2.midi&quot;&gt;Example 2&lt;/a&gt;: pleasant notes with essentially no rhythm&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/machine-learning/../../assets/music-generation/train-100-3.midi&quot;&gt;Example 3&lt;/a&gt;: repetitive, again with inconsistent rhythm&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Unfortunately, the results after 250 epochs weren&amp;#39;t noticeably any better. It&amp;#39;s possible that the small corpus isn&amp;#39;t sufficient for training this model.&lt;/p&gt;
-&lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
-&lt;p&gt;I started this project for fun, but after struggling with Python environments and coming to the realization that I have insufficient compute resources available, I&amp;#39;m reconsidering whether or not this is a good use of my time.&lt;/p&gt;
 </content>
 </entry>
 </feed>
