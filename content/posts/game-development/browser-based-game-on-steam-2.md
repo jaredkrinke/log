@@ -2,6 +2,7 @@
 title: Porting a browser-based game to Steam (part 2)
 description: I'm continuing my research on porting a browser-based game to Steam. My plan is to directly use WebView2 on Windows.
 date: 2022-08-29
+keywords: [steam]
 ---
 In [part 1](browser-based-game-on-steam.md), I did some initial research into Steam's support for hosting games that were originally browser-based. Now, I'm diving into the next level of detail.
 

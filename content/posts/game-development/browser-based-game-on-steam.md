@@ -2,6 +2,7 @@
 title: Porting a browser-based game to Steam
 description: I'm researching options for porting a browser-based game to Steam.
 date: 2022-08-10
+keywords: [steam]
 ---
 Browser-based games are great because players can pick them up and start playing without having to install anything (assuming reasonable cross-browser compatibility). HTML can also be convenient for UI, especially for laying out text (although handling CSS and rendering quirks can be frustrating).
 
