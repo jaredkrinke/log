@@ -7,8 +7,57 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2022-11-17T23:14:29.010Z</updated>
+<updated>2022-12-07T03:30:45.663Z</updated>
 
+<entry>
+<title>SIC-1: A single-instruction programming game</title>
+<id>https://log.schemescape.com/posts/game-development/sic-1.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/sic-1.html"/>
+<updated>2022-12-06T00:00:00.000Z</updated>
+<summary type="text">SIC-1 is a single-instruction (subleq) programming game that can be played via Steam or the browser.</summary>
+<content type="html">&lt;p&gt;&lt;strong&gt;SIC-1&lt;/strong&gt; is a single-instruction (&lt;a href=&quot;https://esolangs.org/wiki/Subleq&quot;&gt;subleq&lt;/a&gt;) programming game with &amp;quot;zachlike&amp;quot; optimization leaderboards. It can be played here:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://store.steampowered.com/app/2124440/SIC1/&quot;&gt;SIC-1 on Steam (Windows)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://jaredkrinke.itch.io/sic-1&quot;&gt;SIC-1 on itch.io (browser)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
+&lt;p&gt;This game originally started as an experiment to write a subleq assembler that supported labels. After creating the initial assembler, I was inspired by the &lt;a href=&quot;https://www.zachtronics.com/index.html&quot;&gt;Zachtronics&lt;/a&gt; game &lt;a href=&quot;https://www.zachtronics.com/tis-100/&quot;&gt;TIS-100&lt;/a&gt; to create a series of programming puzzles involving subleq.&lt;/p&gt;
+&lt;p&gt;I mostly just wanted to learn for myself how to implement variables and functions in a subleq computer.&lt;/p&gt;
+&lt;h2 id=&quot;prototype-and-initial-release&quot;&gt;Prototype and initial release&lt;/h2&gt;
+&lt;p&gt;After getting thoroughly carried away, I ended up creating a service (initially using &lt;a href=&quot;https://www.sqlite.org/index.html&quot;&gt;SQLite&lt;/a&gt;, then later &lt;a href=&quot;https://firebase.google.com/docs/firestore/&quot;&gt;Firestore&lt;/a&gt; + &lt;a href=&quot;https://functions.netlify.com/&quot;&gt;Netlify Functions&lt;/a&gt;) for storing players&amp;#39; scores so that people could compete against one another to find the most efficient programs.&lt;/p&gt;
+&lt;p&gt;I released the game (for free) in late 2019 on &lt;a href=&quot;https://itch.io/&quot;&gt;itch.io&lt;/a&gt; and it eventually took the top free spot on itch.io for the search term &amp;quot;zachlike&amp;quot;. Over the ensuing two years, the game was played thousands of times (although only roughly 1,000 people completed nontrivial puzzles). I was thrilled to hear from people I&amp;#39;d never met before that they loved the game.&lt;/p&gt;
+&lt;h2 id=&quot;preparing-for-a-release-on-steam&quot;&gt;Preparing for a release on Steam&lt;/h2&gt;
+&lt;p&gt;In the fall of 2022, after putting it off for far too long, I decided to start porting SIC-1 to Steam. I&amp;#39;d always wanted to release a game on Steam, and I thought Steam might provide a new audience for the game.&lt;/p&gt;
+&lt;p&gt;Although Steam allows anyone to release a game (after paying the $100 Steam Direct fee), I wanted to improve the quality of the game so that it looked more like a real game instead of a prototype. This plan snowballed into multi-month effort that included learning many new skills and tools to add game features such as:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Music&lt;/li&gt;
+&lt;li&gt;Sound effects&lt;/li&gt;
+&lt;li&gt;Achievements&lt;/li&gt;
+&lt;li&gt;A new narrative&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Despite being tedious at times, experimenting with things like creating music using the &lt;a href=&quot;https://en.wikipedia.org/wiki/Yamaha_DX7&quot;&gt;Yamaha DX7&lt;/a&gt;-inspired &lt;a href=&quot;https://asb2m10.github.io/dexed/&quot;&gt;dexed synth&lt;/a&gt; turned out to be surprisingly enjoyable. Having a goal in mind and a rough schedule motivated me to produce several tracks of music--something I&amp;#39;d never really done before.&lt;/p&gt;
+&lt;p&gt;The most difficult decision I had to make was whether or not to try and charge for the game. In the end, I decided to keep the game free for a couple of reasons:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;It seemed unlikely I would sell enough copies to have a meaningful financial impact on my life&lt;/li&gt;
+&lt;li&gt;I wanted as many people to play the game as possible, partly to ensure the leaderboards would have enough scores to spur competition&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;steam-release&quot;&gt;Steam release&lt;/h1&gt;
+&lt;p&gt;Last Friday, I released SIC-1 on Steam.&lt;/p&gt;
+&lt;p&gt;Although marketing is not my strong suit, I created a marketing plan with a list of ideas and a rough schedule. Unfortunately, my most promising marketing idea (sharing the game on a web site where esoteric programming languages are popular) garnered very little attention. In the end, the most impactful marketing for the game has simply been pushing the &amp;quot;release&amp;quot; button on Steam. In other words, my marketing efforts had negligible impact.&lt;/p&gt;
+&lt;h1 id=&quot;near-term-goals&quot;&gt;Near-term goals&lt;/h1&gt;
+&lt;p&gt;I&amp;#39;ve never been clear on what my goal was with developing this game. It&amp;#39;s morphed over time and included thoughts such as:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I just want to see if I can make a good game&lt;/li&gt;
+&lt;li&gt;I&amp;#39;d like to see if there&amp;#39;s an audience for my work&lt;/li&gt;
+&lt;li&gt;I&amp;#39;d like to have the experience of releasing a game, specifically on Steam&lt;/li&gt;
+&lt;li&gt;I want people to enjoy something I&amp;#39;ve created&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For now, my only concrete goal is to &lt;strong&gt;get 10 reviews on Steam by the end of 2022&lt;/strong&gt;. I&amp;#39;m not sure if this threshold is used for free games, but I&amp;#39;ve heard that games need 10 reviews on Steam before they&amp;#39;re marked with &amp;quot;positive&amp;quot; (or &amp;quot;mixed&amp;quot; or &amp;quot;negative&amp;quot;) reviews.&lt;/p&gt;
+&lt;h1 id=&quot;one-last-note&quot;&gt;One last note&lt;/h1&gt;
+&lt;p&gt;That&amp;#39;s all for now. Wish me luck! And if you like programming games or are interested in subleq, please give SIC-1 a try on Steam:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://store.steampowered.com/app/2124440/SIC1/&quot;&gt;https://store.steampowered.com/app/2124440/SIC1/&lt;/a&gt;&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Porting a browser-based game to Steam (part 3)</title>
 <id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-3.html</id>
@@ -403,18 +452,6 @@ In file included from hello-webview2.cpp:5:
 &lt;p&gt;It seems that there is precedent (e.g. &lt;a href=&quot;https://anuke.itch.io/mindustry&quot;&gt;Mindustry on Itch&lt;/a&gt;) for advertising that the same game is available on Steam, when the Steam version has additional features. I didn&amp;#39;t see anything Itch&amp;#39;s terms of service that prohibit this (nor do I think it &lt;em&gt;should&lt;/em&gt; be prohibited).&lt;/p&gt;
 &lt;h1 id=&quot;marketing-and-analytics&quot;&gt;Marketing and analytics&lt;/h1&gt;
 &lt;p&gt;Steam has &lt;a href=&quot;https://partner.steamgames.com/doc/marketing&quot;&gt;guidance for marketing games on the platform&lt;/a&gt;. It looks like there is support for Google Analytics and some link tracking. For now, I&amp;#39;m just going to put off thinking about marketing because my goal is to share my game, not to get rich off of it.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>May 16th, 2022</title>
-<id>https://log.schemescape.com/posts/misc/2022-05-16.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/misc/2022-05-16.html"/>
-<updated>2022-05-16T00:00:00.000Z</updated>
-<summary type="text">A memory, for my own reference.</summary>
-<content type="html">&lt;p&gt;I had just been there the previous day, but after receiving an inevitable update, I was returning once again. Inevitable or not, I was never able to imagine it actually happening.&lt;/p&gt;
-&lt;p&gt;It was one of the few sunny days of an unusually cold spring. I was driving down a mostly empty freeway in the evening. I&amp;#39;d made this drive many times before, but this time was different.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m still not sure how to feel about it, and I&amp;#39;m not convinced that there even &lt;em&gt;is&lt;/em&gt; a way one should feel about it.&lt;/p&gt;
-&lt;p&gt;Regardless, it puts things into perspective.&lt;/p&gt;
 </content>
 </entry>
 </feed>

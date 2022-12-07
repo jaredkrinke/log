@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>SIC-1: A single-instruction programming game</title>
+<meta name="description" content="SIC-1 is a single-instruction (subleq) programming game that can be played via Steam or the browser." />
+<meta name="keywords" content="steam,sic1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SIC-1: A single-instruction programming game",
+  "abstract": "SIC-1 is a single-instruction (subleq) programming game that can be played via Steam or the browser.",
+  "keywords": "game-development,steam,sic1",
+  "datePublished": "2022-12-06"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/game-development/index.html">game-development</a></li>
+<li><a href="../../posts/steam/index.html">steam</a></li>
+<li><a href="../../posts/sic1/index.html">sic1</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/game-development/sic-1.html">SIC-1: A single-instruction programming game</a></h1>
+<p><time datetime="2022-12-06">December 6, 2022</time></p>
+</header>
+<p><strong>SIC-1</strong> is a single-instruction (<a href="https://esolangs.org/wiki/Subleq">subleq</a>) programming game with &quot;zachlike&quot; optimization leaderboards. It can be played here:</p>
+<ul>
+<li><a href="https://store.steampowered.com/app/2124440/SIC1/">SIC-1 on Steam (Windows)</a></li>
+<li><a href="https://jaredkrinke.itch.io/sic-1">SIC-1 on itch.io (browser)</a></li>
+</ul>
+<h1 id="background">Background</h1>
+<p>This game originally started as an experiment to write a subleq assembler that supported labels. After creating the initial assembler, I was inspired by the <a href="https://www.zachtronics.com/index.html">Zachtronics</a> game <a href="https://www.zachtronics.com/tis-100/">TIS-100</a> to create a series of programming puzzles involving subleq.</p>
+<p>I mostly just wanted to learn for myself how to implement variables and functions in a subleq computer.</p>
+<h2 id="prototype-and-initial-release">Prototype and initial release</h2>
+<p>After getting thoroughly carried away, I ended up creating a service (initially using <a href="https://www.sqlite.org/index.html">SQLite</a>, then later <a href="https://firebase.google.com/docs/firestore/">Firestore</a> + <a href="https://functions.netlify.com/">Netlify Functions</a>) for storing players&#39; scores so that people could compete against one another to find the most efficient programs.</p>
+<p>I released the game (for free) in late 2019 on <a href="https://itch.io/">itch.io</a> and it eventually took the top free spot on itch.io for the search term &quot;zachlike&quot;. Over the ensuing two years, the game was played thousands of times (although only roughly 1,000 people completed nontrivial puzzles). I was thrilled to hear from people I&#39;d never met before that they loved the game.</p>
+<h2 id="preparing-for-a-release-on-steam">Preparing for a release on Steam</h2>
+<p>In the fall of 2022, after putting it off for far too long, I decided to start porting SIC-1 to Steam. I&#39;d always wanted to release a game on Steam, and I thought Steam might provide a new audience for the game.</p>
+<p>Although Steam allows anyone to release a game (after paying the $100 Steam Direct fee), I wanted to improve the quality of the game so that it looked more like a real game instead of a prototype. This plan snowballed into multi-month effort that included learning many new skills and tools to add game features such as:</p>
+<ul>
+<li>Music</li>
+<li>Sound effects</li>
+<li>Achievements</li>
+<li>A new narrative</li>
+</ul>
+<p>Despite being tedious at times, experimenting with things like creating music using the <a href="https://en.wikipedia.org/wiki/Yamaha_DX7">Yamaha DX7</a>-inspired <a href="https://asb2m10.github.io/dexed/">dexed synth</a> turned out to be surprisingly enjoyable. Having a goal in mind and a rough schedule motivated me to produce several tracks of music--something I&#39;d never really done before.</p>
+<p>The most difficult decision I had to make was whether or not to try and charge for the game. In the end, I decided to keep the game free for a couple of reasons:</p>
+<ol>
+<li>It seemed unlikely I would sell enough copies to have a meaningful financial impact on my life</li>
+<li>I wanted as many people to play the game as possible, partly to ensure the leaderboards would have enough scores to spur competition</li>
+</ol>
+<h1 id="steam-release">Steam release</h1>
+<p>Last Friday, I released SIC-1 on Steam.</p>
+<p>Although marketing is not my strong suit, I created a marketing plan with a list of ideas and a rough schedule. Unfortunately, my most promising marketing idea (sharing the game on a web site where esoteric programming languages are popular) garnered very little attention. In the end, the most impactful marketing for the game has simply been pushing the &quot;release&quot; button on Steam. In other words, my marketing efforts had negligible impact.</p>
+<h1 id="near-term-goals">Near-term goals</h1>
+<p>I&#39;ve never been clear on what my goal was with developing this game. It&#39;s morphed over time and included thoughts such as:</p>
+<ul>
+<li>I just want to see if I can make a good game</li>
+<li>I&#39;d like to see if there&#39;s an audience for my work</li>
+<li>I&#39;d like to have the experience of releasing a game, specifically on Steam</li>
+<li>I want people to enjoy something I&#39;ve created</li>
+</ul>
+<p>For now, my only concrete goal is to <strong>get 10 reviews on Steam by the end of 2022</strong>. I&#39;m not sure if this threshold is used for free games, but I&#39;ve heard that games need 10 reviews on Steam before they&#39;re marked with &quot;positive&quot; (or &quot;mixed&quot; or &quot;negative&quot;) reviews.</p>
+<h1 id="one-last-note">One last note</h1>
+<p>That&#39;s all for now. Wish me luck! And if you like programming games or are interested in subleq, please give SIC-1 a try on Steam:</p>
+<p><a href="https://store.steampowered.com/app/2124440/SIC1/">https://store.steampowered.com/app/2124440/SIC1/</a></p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
