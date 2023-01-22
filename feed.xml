@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-01-02T05:15:58.215Z</updated>
+<updated>2023-01-22T22:32:14.175Z</updated>
 
 <entry>
 <title>SIC-1: A single-instruction programming game</title>
@@ -54,6 +54,7 @@
 &lt;/ul&gt;
 &lt;p&gt;For now, my only concrete goal is to &lt;strong&gt;get 10 reviews on Steam by the end of 2022&lt;/strong&gt;. I&amp;#39;m not sure if this threshold is used for free games, but I&amp;#39;ve heard that games need 10 reviews on Steam before they&amp;#39;re marked with &amp;quot;positive&amp;quot; (or &amp;quot;mixed&amp;quot; or &amp;quot;negative&amp;quot;) reviews.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: SIC-1 ended the month (and calendar year) with 8 reviews on Steam. That&amp;#39;s within striking distance of my goal of 10 reviews, so I&amp;#39;ll consider this goal to be &lt;em&gt;almost&lt;/em&gt; achieved.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Second Update&lt;/strong&gt;: SIC-1 hit 10 Steam reviews on January 18th! The amount of traffic to the Steam page has increased roughly 10x (the number of people &lt;em&gt;playing&lt;/em&gt; SIC-1 has not increased nearly as dramatically--but that&amp;#39;s ok, given that it&amp;#39;s a niche game).&lt;/p&gt;
 &lt;h1 id=&quot;one-last-note&quot;&gt;One last note&lt;/h1&gt;
 &lt;p&gt;That&amp;#39;s all for now. Wish me luck! And if you like programming games or are interested in subleq, please give SIC-1 a try on Steam:&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://store.steampowered.com/app/2124440/SIC1/&quot;&gt;https://store.steampowered.com/app/2124440/SIC1/&lt;/a&gt;&lt;/p&gt;
