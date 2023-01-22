@@ -53,6 +53,8 @@ For now, my only concrete goal is to **get 10 reviews on Steam by the end of 202
 
 **Update**: SIC-1 ended the month (and calendar year) with 8 reviews on Steam. That's within striking distance of my goal of 10 reviews, so I'll consider this goal to be *almost* achieved.
 
+**Second Update**: SIC-1 hit 10 Steam reviews on January 18th! The amount of traffic to the Steam page has increased roughly 10x (the number of people *playing* SIC-1 has not increased nearly as dramatically--but that's ok, given that it's a niche game).
+
 # One last note
 That's all for now. Wish me luck! And if you like programming games or are interested in subleq, please give SIC-1 a try on Steam:
 
