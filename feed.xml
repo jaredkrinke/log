@@ -7,8 +7,50 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-01-22T22:32:14.175Z</updated>
+<updated>2023-02-11T23:24:02.513Z</updated>
 
+<entry>
+<title>In search of a minimal development environment</title>
+<id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html"/>
+<updated>2023-02-11T00:00:00.000Z</updated>
+<summary type="text">What would a minimal development environment look like? How small could it be?</summary>
+<content type="html">&lt;p&gt;Feel free to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/#the-plan&quot;&gt;skip over the obligatory whining about today&amp;#39;s bloat&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;back-in-my-day&quot;&gt;Back in my day...&lt;/h1&gt;
+&lt;p&gt;I think the first computer I ever used was a &lt;a href=&quot;https://en.wikipedia.org/wiki/Commodore_64&quot;&gt;Commodore 64&lt;/a&gt;. Wikipedia tells me that it had a 1 MHz processor and 64 KB of RAM, all packed into an &amp;quot;obese keyboard&amp;quot; form factor. Despite being 100,000+ times slower (with a similar fraction of memory) compared to a modern computer, it could run a word processor, play games, and print documents.&lt;/p&gt;
+&lt;p&gt;Later on, I remember installing Linux on a 1.44 MB floppy disk to turn an aging 486 computer into a network router. Even back then, that was impressive!&lt;/p&gt;
+&lt;p&gt;A few years later, I remember working on a simple arcade game which used OpenGL for graphics... developed partly on a computer that was command line-only! I have fond memories of using &lt;a href=&quot;https://www.gnu.org/software/screen/&quot;&gt;GNU Screen&lt;/a&gt; and &lt;a href=&quot;https://www.vim.org/&quot;&gt;Vim&lt;/a&gt;, along with &lt;a href=&quot;https://en.wikipedia.org/wiki/Man_page&quot;&gt;man pages&lt;/a&gt;, to write the code. Aside: I remember using &lt;a href=&quot;https://en.wikipedia.org/wiki/Concurrent_Versions_System&quot;&gt;CVS&lt;/a&gt;, but &lt;em&gt;not&lt;/em&gt; fondly.&lt;/p&gt;
+&lt;h1 id=&quot;contrast-with-today&quot;&gt;Contrast with today&lt;/h1&gt;
+&lt;p&gt;Fast-forward to 2023, and I&amp;#39;ve been contemplating porting my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../game-development/sic-1.html&quot;&gt;single-instruction programming game&lt;/a&gt; to &lt;a href=&quot;https://www.electronjs.org/&quot;&gt;Electron&lt;/a&gt; (possibly the heaviest popular app framework of all time), to support Linux (and ideally macOS) builds on Steam.&lt;/p&gt;
+&lt;p&gt;For the record, SIC-1 started out as a trim 25 KB zip file (although it has ballooned to 10 MB, mostly due to &lt;a href=&quot;https://en.wikipedia.org/wiki/Pulse-code_modulation&quot;&gt;PCM&lt;/a&gt; music). Of course, browsers provide a deceptive environment. With a few kilobytes of HTML, CSS, and JavaScript, you can build surprisingly complex (and fast) apps. Of course, the browser itself is hundreds of megabytes, so it&amp;#39;s actually a pretty hefty runtime. How hefty? Ask me after I use Electron.&lt;/p&gt;
+&lt;p&gt;Is it any surprise I&amp;#39;m craving a bit of simplicity?&lt;/p&gt;
+&lt;h1 id=&quot;the-plan&quot;&gt;The plan&lt;/h1&gt;
+&lt;p&gt;So what am I going to do about bloat?&lt;/p&gt;
+&lt;p&gt;This is probably a terrible idea, but I&amp;#39;d like to set up a minimal development environment. And I really do mean &amp;quot;minimal&amp;quot;, i.e.:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Command line only&lt;/li&gt;
+&lt;li&gt;Runs acceptably on a slow computer (possibly a &lt;a href=&quot;https://en.wikipedia.org/wiki/Raspberry_Pi&quot;&gt;Raspberry Pi&lt;/a&gt; 1)&lt;/li&gt;
+&lt;li&gt;Minimal disk footprint&lt;/li&gt;
+&lt;li&gt;As full-featured as possible, given the previous constraints&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Of course, &amp;quot;minimal disk footprint&amp;quot; and &amp;quot;as full-featured as possible&amp;quot; are opposing goals, so this plan isn&amp;#39;t well-defined--I&amp;#39;m content to just see where it leads me.&lt;/p&gt;
+&lt;h1 id=&quot;the-software&quot;&gt;The software&lt;/h1&gt;
+&lt;p&gt;I suspect the following software will play a part:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.alpinelinux.org/&quot;&gt;Alpine Linux&lt;/a&gt; or a minimal &lt;a href=&quot;https://www.debian.org/&quot;&gt;Debian&lt;/a&gt; installation (or &lt;a href=&quot;https://www.freebsd.org/&quot;&gt;FreeBSD&lt;/a&gt;? &lt;a href=&quot;https://minix3.org/&quot;&gt;MINIX 3&lt;/a&gt;? I&amp;#39;m open to suggestions)&lt;/li&gt;
+&lt;li&gt;Vim (or &lt;a href=&quot;https://neovim.io/&quot;&gt;NeoVim&lt;/a&gt;?)&lt;/li&gt;
+&lt;li&gt;GNU Screen (or &lt;a href=&quot;https://github.com/tmux/tmux&quot;&gt;tmux&lt;/a&gt;?)&lt;/li&gt;
+&lt;li&gt;A terminal mode web browser (&lt;a href=&quot;https://lynx.browser.org/&quot;&gt;Lynx&lt;/a&gt;?)&lt;/li&gt;
+&lt;li&gt;Maybe a terminal mode &lt;a href=&quot;https://en.wikipedia.org/wiki/RSS&quot;&gt;RSS&lt;/a&gt; reader or &lt;a href=&quot;https://mastodon.social/&quot;&gt;Mastodon&lt;/a&gt; client, just for fun&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;the-programming-language&quot;&gt;The programming language&lt;/h1&gt;
+&lt;p&gt;You may note that I didn&amp;#39;t specify any compilers or build tools. That&amp;#39;s because I&amp;#39;d like to use this minimal environment to test out some of my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../programming-languages/future-proof-languages.html&quot;&gt;future-proof programming language candidates&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ll admit that it&amp;#39;s unreasonable to expect modern programming languages to support development on a Raspberry Pi, but that also means that I&amp;#39;ll be &lt;em&gt;unreasonably impressed&lt;/em&gt; if a programming language is useful in a ridiculously constrained environment like this.&lt;/p&gt;
+&lt;h1 id=&quot;wrapping-up&quot;&gt;Wrapping up&lt;/h1&gt;
+&lt;p&gt;Feel free to let me know if you have any suggestions or if you&amp;#39;ve attempted anything similar (or want to!). You can email me at any address at the &amp;quot;.com&amp;quot; address in the address bar.&lt;/p&gt;
+&lt;p&gt;Wish me luck!&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>SIC-1: A single-instruction programming game</title>
 <id>https://log.schemescape.com/posts/game-development/sic-1.html</id>
@@ -402,58 +444,6 @@ In file included from hello-webview2.cpp:5:
 &lt;p&gt;Alright, &lt;code&gt;WeakReference.h&lt;/code&gt; is part of &lt;a href=&quot;https://docs.microsoft.com/en-us/cpp/cppcx/wrl/windows-runtime-cpp-template-library-wrl?view=msvc-170&quot;&gt;WRL&lt;/a&gt;, which is actually part of the Windows SDK. Zig doesn&amp;#39;t appear to ship with WRL (and I&amp;#39;m not even sure that it &lt;em&gt;should&lt;/em&gt;).&lt;/p&gt;
 &lt;p&gt;I suspect I don&amp;#39;t actually &lt;em&gt;need&lt;/em&gt; WIL or WRL, but proceeding without them might not be the best use of time, because instantiating WebView2 appears to be an COM-based asynchronous operation, and I don&amp;#39;t want to reimplement a large chunk of WIL, WRL, or even COM just to avoid using the Windows SDK and Visual Studio.&lt;/p&gt;
 &lt;p&gt;Ok, fine, Visual Studio Installer. You win this round.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Porting a browser-based game to Steam</title>
-<id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/game-development/browser-based-game-on-steam.html"/>
-<updated>2022-08-10T00:00:00.000Z</updated>
-<summary type="text">I&apos;m researching options for porting a browser-based game to Steam.</summary>
-<content type="html">&lt;p&gt;Browser-based games are great because players can pick them up and start playing without having to install anything (assuming reasonable cross-browser compatibility). HTML can also be convenient for UI, especially for laying out text (although handling CSS and rendering quirks can be frustrating).&lt;/p&gt;
-&lt;p&gt;Despite the benefits, I&amp;#39;d like to port my most popular browser-based game to Steam, for the following reasons:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;I want players to be able to sync their data across devices, without forcing them to create a new account (and without me having to host everything)&lt;/li&gt;
-&lt;li&gt;I want Steam&amp;#39;s huge user base to be able to access my game (more for convenience than for exposure)&lt;/li&gt;
-&lt;li&gt;I might want to build on this experience in the future, for example, if I&amp;#39;d like to sell a game&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;open-questions&quot;&gt;Open questions&lt;/h1&gt;
-&lt;p&gt;I have no experience developing for or publishing on Steam, so I have a lot of questions:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Which browser-to-native framework should I use (Electron, Tauri, WebView2, etc.)?&lt;/li&gt;
-&lt;li&gt;Does Steam have built-in support for browser-based titles? Are any of the above frameworks in the Steamworks Common Redistributables package?&lt;/li&gt;
-&lt;li&gt;Which platforms should I support?&lt;/li&gt;
-&lt;li&gt;What&amp;#39;s required to take advantage of Steam&amp;#39;s support for cloud saves/syncing?&lt;/li&gt;
-&lt;li&gt;How do I test Steam Cloud saves?&lt;/li&gt;
-&lt;li&gt;Is there any way to transition user information from the current web site to the Steam release?&lt;/li&gt;
-&lt;li&gt;Will it end up costing more than the advertised $100? Is there any way to bring that cost down?&lt;/li&gt;
-&lt;li&gt;Is it permissible to promote the Steam version of the game from its current web-based host?&lt;/li&gt;
-&lt;li&gt;What sort of analytics does Steam provide for game publishers?&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Answering these questions will take some time, but honestly I think I&amp;#39;d regret not ever trying to port my game to Steam.&lt;/p&gt;
-&lt;h1 id=&quot;first-steps&quot;&gt;First steps&lt;/h1&gt;
-&lt;p&gt;Steam publishes documentation for Steamworks here:&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://partner.steamgames.com/doc/home&quot;&gt;https://partner.steamgames.com/doc/home&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;common-redistributables&quot;&gt;Common redistributables&lt;/h2&gt;
-&lt;p&gt;There is &lt;a href=&quot;https://partner.steamgames.com/doc/features/common_redist&quot;&gt;a page about common redistributables&lt;/a&gt; that says it includes Microsoft Visual C++, .NET, DirectX 9, OpenAL, XNA, and PhysX. This appears to be a comprehensive list.&lt;/p&gt;
-&lt;h2 id=&quot;platforms&quot;&gt;Platforms&lt;/h2&gt;
-&lt;p&gt;It&amp;#39;s now possible to download the Steamworks SDK &lt;em&gt;before&lt;/em&gt; paying the Steam Direct fee, which is helpful. Within that zip file, it has binaries for 32- and 64-bit Linux and Windows, and macOS. I&amp;#39;m interpreting that list to be the definitive list of supported platforms.&lt;/p&gt;
-&lt;p&gt;Note that GPL-licensed libraries can&amp;#39;t be linked with the Steamworks SDK (or probably distributed via Steam period).&lt;/p&gt;
-&lt;h2 id=&quot;cloud-saves&quot;&gt;Cloud saves&lt;/h2&gt;
-&lt;p&gt;The Steam SDK &lt;a href=&quot;https://partner.steamgames.com/doc/sdk/api&quot;&gt;provides a C++ interface&lt;/a&gt; for enumerating/reading/writing files to the Steam Cloud. There is also an &lt;a href=&quot;https://partner.steamgames.com/doc/features/cloud#steam_auto-cloud&quot;&gt;auto-cloud&lt;/a&gt; feature that just synchronizes files based on path.&lt;/p&gt;
-&lt;p&gt;As far as transitioning data from the browser version to the Steam version, I doubt there is a reliable and automatic way to do so.&lt;/p&gt;
-&lt;h3 id=&quot;one-note-on-itch&quot;&gt;One note on Itch&lt;/h3&gt;
-&lt;p&gt;Note: in the past, I investigated using &lt;a href=&quot;https://itch.io/&quot;&gt;Itch&lt;/a&gt;&amp;#39;s launcher to sync user data, but there were many issues:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Obtaining the user identity isn&amp;#39;t possible due to known bugs&lt;/li&gt;
-&lt;li&gt;Storing data is up to the game developer, because Itch (reasonably, in my opinion) does not offer cloud storage for games&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;cost&quot;&gt;Cost&lt;/h2&gt;
-&lt;p&gt;As far as I can tell, Steam&amp;#39;s $100 fee (plus tax) is a one-time fee. Obviously, I&amp;#39;d prefer not to have to shell out this much money, but, luckily, $100 is not going to make or break my financial situation.&lt;/p&gt;
-&lt;h2 id=&quot;advertising-steam-release-within-browser-based-version&quot;&gt;Advertising Steam release within browser-based version&lt;/h2&gt;
-&lt;p&gt;It seems that there is precedent (e.g. &lt;a href=&quot;https://anuke.itch.io/mindustry&quot;&gt;Mindustry on Itch&lt;/a&gt;) for advertising that the same game is available on Steam, when the Steam version has additional features. I didn&amp;#39;t see anything Itch&amp;#39;s terms of service that prohibit this (nor do I think it &lt;em&gt;should&lt;/em&gt; be prohibited).&lt;/p&gt;
-&lt;h1 id=&quot;marketing-and-analytics&quot;&gt;Marketing and analytics&lt;/h1&gt;
-&lt;p&gt;Steam has &lt;a href=&quot;https://partner.steamgames.com/doc/marketing&quot;&gt;guidance for marketing games on the platform&lt;/a&gt;. It looks like there is support for Google Analytics and some link tracking. For now, I&amp;#39;m just going to put off thinking about marketing because my goal is to share my game, not to get rich off of it.&lt;/p&gt;
 </content>
 </entry>
 </feed>
