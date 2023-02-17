@@ -15,7 +15,7 @@ A few years later, I remember working on a simple arcade game which used OpenGL 
 # Contrast with today
 Fast-forward to 2023, and I've been contemplating porting my [single-instruction programming game](../game-development/sic-1.md) to [Electron](https://www.electronjs.org/) (possibly the heaviest popular app framework of all time), to support Linux (and ideally macOS) builds on Steam.
 
-For the record, SIC-1 started out as a trim 25 KB zip file (although it has ballooned to 10 MB, mostly due to [PCM](https://en.wikipedia.org/wiki/Pulse-code_modulation) music). Of course, browsers provide a deceptive environment. With a few kilobytes of HTML, CSS, and JavaScript, you can build surprisingly complex (and fast) apps. Of course, the browser itself is hundreds of megabytes, so it's actually a pretty hefty runtime. How hefty? Ask me after I use Electron.
+For the record, SIC-1 started out as a trim 25 KB zip file (although it has ballooned to 10 MB, mostly due to [PCM](https://en.wikipedia.org/wiki/Pulse-code_modulation) music). Browsers provide a deceptive environment. With a few kilobytes of HTML, CSS, and JavaScript, you can build surprisingly complex (and fast) apps. Of course, the browser itself is hundreds of megabytes, so it's actually a pretty hefty runtime. How hefty? Ask me after I use Electron.
 
 Is it any surprise I'm craving a bit of simplicity?
 
