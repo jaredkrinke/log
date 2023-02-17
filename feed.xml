@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-02-11T23:24:02.513Z</updated>
+<updated>2023-02-17T22:32:47.022Z</updated>
 
 <entry>
 <title>In search of a minimal development environment</title>
@@ -22,7 +22,7 @@
 &lt;p&gt;A few years later, I remember working on a simple arcade game which used OpenGL for graphics... developed partly on a computer that was command line-only! I have fond memories of using &lt;a href=&quot;https://www.gnu.org/software/screen/&quot;&gt;GNU Screen&lt;/a&gt; and &lt;a href=&quot;https://www.vim.org/&quot;&gt;Vim&lt;/a&gt;, along with &lt;a href=&quot;https://en.wikipedia.org/wiki/Man_page&quot;&gt;man pages&lt;/a&gt;, to write the code. Aside: I remember using &lt;a href=&quot;https://en.wikipedia.org/wiki/Concurrent_Versions_System&quot;&gt;CVS&lt;/a&gt;, but &lt;em&gt;not&lt;/em&gt; fondly.&lt;/p&gt;
 &lt;h1 id=&quot;contrast-with-today&quot;&gt;Contrast with today&lt;/h1&gt;
 &lt;p&gt;Fast-forward to 2023, and I&amp;#39;ve been contemplating porting my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../game-development/sic-1.html&quot;&gt;single-instruction programming game&lt;/a&gt; to &lt;a href=&quot;https://www.electronjs.org/&quot;&gt;Electron&lt;/a&gt; (possibly the heaviest popular app framework of all time), to support Linux (and ideally macOS) builds on Steam.&lt;/p&gt;
-&lt;p&gt;For the record, SIC-1 started out as a trim 25 KB zip file (although it has ballooned to 10 MB, mostly due to &lt;a href=&quot;https://en.wikipedia.org/wiki/Pulse-code_modulation&quot;&gt;PCM&lt;/a&gt; music). Of course, browsers provide a deceptive environment. With a few kilobytes of HTML, CSS, and JavaScript, you can build surprisingly complex (and fast) apps. Of course, the browser itself is hundreds of megabytes, so it&amp;#39;s actually a pretty hefty runtime. How hefty? Ask me after I use Electron.&lt;/p&gt;
+&lt;p&gt;For the record, SIC-1 started out as a trim 25 KB zip file (although it has ballooned to 10 MB, mostly due to &lt;a href=&quot;https://en.wikipedia.org/wiki/Pulse-code_modulation&quot;&gt;PCM&lt;/a&gt; music). Browsers provide a deceptive environment. With a few kilobytes of HTML, CSS, and JavaScript, you can build surprisingly complex (and fast) apps. Of course, the browser itself is hundreds of megabytes, so it&amp;#39;s actually a pretty hefty runtime. How hefty? Ask me after I use Electron.&lt;/p&gt;
 &lt;p&gt;Is it any surprise I&amp;#39;m craving a bit of simplicity?&lt;/p&gt;
 &lt;h1 id=&quot;the-plan&quot;&gt;The plan&lt;/h1&gt;
 &lt;p&gt;So what am I going to do about bloat?&lt;/p&gt;
