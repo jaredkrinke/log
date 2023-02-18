@@ -7,8 +7,119 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-02-17T22:32:47.022Z</updated>
+<updated>2023-02-18T05:28:15.338Z</updated>
 
+<entry>
+<title>Future-proof programming languages, part 2</title>
+<id>https://log.schemescape.com/posts/programming-languages/future-proof-languages-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/future-proof-languages-2.html"/>
+<updated>2023-02-17T00:00:00.000Z</updated>
+<summary type="text">More research on future-proof programming languages.</summary>
+<content type="html">&lt;p&gt;Almost exactly 1 year ago, in &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;part 1&lt;/a&gt;, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&amp;#39;d still be useful in another decade. In the intervening time, I&amp;#39;ve completed some nontrivial projects in both TypeScript (using both Node and Deno) and Python. I&amp;#39;ve also spent time contemplating a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;minimal development environment&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In this post, I&amp;#39;m going to add a few more items to my programming language wishlist, add a few more programming languages to my candidate list, and then briefly describe my initial experiences with a few of those languages.&lt;/p&gt;
+&lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer&lt;/h1&gt;
+&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#x73;&amp;#99;&amp;#x68;&amp;#101;&amp;#x6d;&amp;#101;&amp;#115;&amp;#x63;&amp;#x61;&amp;#112;&amp;#101;&amp;#46;&amp;#x63;&amp;#111;&amp;#x6d;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#x73;&amp;#99;&amp;#x68;&amp;#101;&amp;#x6d;&amp;#101;&amp;#115;&amp;#x63;&amp;#x61;&amp;#112;&amp;#101;&amp;#46;&amp;#x63;&amp;#111;&amp;#x6d;&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;there-can-be-more-than-one&quot;&gt;There can be more than one&lt;/h1&gt;
+&lt;p&gt;Note: I&amp;#39;ve come to terms with the fact that I&amp;#39;ll probably end up needing to use several of these languages for different purposes, namely I&amp;#39;ll want to have one fast, ahead-of-time compiled language for performance-critical projects, and something simpler and more dynamic (while still low-overhead) for most everything else.&lt;/p&gt;
+&lt;h1 id=&quot;wishlist&quot;&gt;Wishlist&lt;/h1&gt;
+&lt;p&gt;In part 1, I &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html#indicators&quot;&gt;listed&lt;/a&gt; some indicators of a future-proof programming language, along with a wishlist of conveniences/ergonomics. Here are some additions (in &lt;strong&gt;bold&lt;/strong&gt;) to my &amp;quot;programming language wishlist&amp;quot;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;No multi-gigabyte downloads just to get started&lt;/li&gt;
+&lt;li&gt;Not tied to a single platform/environment/tool set&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Fully usable for development on many platforms&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Small and simple (in case I want to build my own tools)&lt;/li&gt;
+&lt;li&gt;Easily cross-compiled&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Trivial to deploy&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Simple and transparent build process&lt;/li&gt;
+&lt;li&gt;Readily available libraries (either with source available or from reputable contributors)&lt;/li&gt;
+&lt;li&gt;Ergonomic editing&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Not subject to the whims of a single company&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;del&gt;Easy&lt;/del&gt; Possible to bootstrap&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Most these additions are in response to what I&amp;#39;ve seen while investigating a few languages. Specifically:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Python and Clojure don&amp;#39;t appear to be trivial deploy (especially for Python with dependencies)&lt;/li&gt;
+&lt;li&gt;C# and Go are tied to for-profit companies, both of which are known for canning unprofitable projects (one notoriously so)&lt;/li&gt;
+&lt;li&gt;Small languages written in C, like Lua, would be easy to bootstrap in the future, should the need arise (e.g. if I want to move to a new or old platform that isn&amp;#39;t already supported)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;additional-candidates&quot;&gt;Additional candidates&lt;/h1&gt;
+&lt;p&gt;My original (pruned) list of candidate languages included:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;JavaScript/TypeScript&lt;/li&gt;
+&lt;li&gt;Python&lt;/li&gt;
+&lt;li&gt;C#&lt;/li&gt;
+&lt;li&gt;C++&lt;/li&gt;
+&lt;li&gt;C&lt;/li&gt;
+&lt;li&gt;Go&lt;/li&gt;
+&lt;li&gt;Rust&lt;/li&gt;
+&lt;li&gt;Lisp/Clojure&lt;/li&gt;
+&lt;li&gt;Zig&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I&amp;#39;m going to add a few more languages:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Tcl&lt;/strong&gt;: I&amp;#39;ve only briefly used Tcl in the past, but it seems great for command line &amp;quot;glue&amp;quot;, and the language itself (at least what I&amp;#39;ve experienced) is beautifully simple&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lua&lt;/strong&gt;: I originally discarded Lua because in the past I found its quirks to be too annoying, but that experience was mostly 10+ years ago, and there have been multiple major updates since then&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Aside: I&amp;#39;m intrigued by &lt;a href=&quot;https://vale.dev/&quot;&gt;The Vale Programming Language&lt;/a&gt;, but it&amp;#39;s not even close to done yet.&lt;/p&gt;
+&lt;h1 id=&quot;some-early-observations&quot;&gt;Some early observations&lt;/h1&gt;
+&lt;p&gt;Eventually, I&amp;#39;ll probably compile a big table of these languages, along with an assessment with respect to each of my criteria, but for now I&amp;#39;ve just got a few initial notes.&lt;/p&gt;
+&lt;h2 id=&quot;compilerruntime-installation&quot;&gt;Compiler/runtime installation&lt;/h2&gt;
+&lt;h3 id=&quot;javascripttypescript&quot;&gt;JavaScript/TypeScript&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt; makes running TypeScript trivially easy, but its list of supported platforms is short (notably, it does not include 32-bit Windows!). &lt;a href=&quot;https://nodejs.org/en/&quot;&gt;Node&lt;/a&gt; supports 32-bit Windows, but is much less convenient.&lt;/p&gt;
+&lt;h3 id=&quot;python&quot;&gt;Python&lt;/h3&gt;
+&lt;p&gt;Ah, my old nemesis: Python. I&amp;#39;ve never had a good experience setting up a Python environment. Additionally, the Python 2 to 3 migration (which included unnecessary things like &lt;a href=&quot;https://www.python.org/dev/peps/pep-0238/&quot;&gt;changing the semantics of the division operator&lt;/a&gt;) is remarkable only in that it didn&amp;#39;t kill Python entirely (at least not yet).&lt;/p&gt;
+&lt;p&gt;Yet Python is consistently one of the most popular programming languages. What am I missing?&lt;/p&gt;
+&lt;p&gt;Anyway, the &lt;a href=&quot;https://wiki.python.org/moin/BeginnersGuide/Download&quot;&gt;Python installation docs&lt;/a&gt; recommend seeing if you already have Python installed by typing &lt;code&gt;python&lt;/code&gt; into a command window. To my surprise, I don&amp;#39;t immediately see an &amp;quot;unrecognized command&amp;quot; error. Incredibly, it launches to a Python page in the Microsoft Store (compliments of &lt;code&gt;%LocalAppData%\Microsoft\WindowsApps\python.exe&lt;/code&gt; -- seriously!?). I&amp;#39;ll give it a try since it&amp;#39;s a surprisingly reasonable ~100 MB download. It appears to install a Python runtime and the IDLE editor.&lt;/p&gt;
+&lt;p&gt;Honestly, I&amp;#39;m not thrilled that Microsoft decided to &lt;a href=&quot;https://devblogs.microsoft.com/python/python-in-the-windows-10-may-2019-update/&quot;&gt;insert this Python shim into Windows itself&lt;/a&gt; just to make it easier for people to find Python, but I guess I&amp;#39;ll try it out. Note that I&amp;#39;ll almost certainly be using VS Code and the official Python extension for editing and debugging.&lt;/p&gt;
+&lt;h3 id=&quot;c&quot;&gt;C#&lt;/h3&gt;
+&lt;p&gt;To my surprise, the &lt;a href=&quot;https://github.com/dotnet/roslyn&quot;&gt;C# compiler&lt;/a&gt; and &lt;a href=&quot;https://github.com/dotnet/runtime&quot;&gt;.NET runtime&lt;/a&gt; are both now open source (MIT license). Even more surprising, you can now apparently &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/iot/deployment&quot;&gt;deploy self-contained .NET executables to a Raspberry Pi&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;C# is a great language and the .NET standard library is probably the most thoughtfully crafted standard library I&amp;#39;ve ever used. So is my search over? Is C# the answer?&lt;/p&gt;
+&lt;p&gt;First, I need to setup a C# development environment. I&amp;#39;m developing on Windows (.NET&amp;#39;s home platform), so this might give me an unrealistically positive impression of C#&amp;#39;s convenience.&lt;/p&gt;
+&lt;p&gt;After selecting the .NET runtime and SDK in the Visual Studio installer, I am appalled to see that it requires &lt;em&gt;5 GB&lt;/em&gt; of disk space! There&amp;#39;s probably a bunch of extraneous junk I don&amp;#39;t need, but for comparison: Visual Studio Code is ~300 MB and Deno&amp;#39;s TypeScript runtime is ~60 MB.&lt;/p&gt;
+&lt;p&gt;Since I was curious, I checked out the &lt;a href=&quot;https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian&quot;&gt;.NET SDK for Linux (Debian)&lt;/a&gt;, and it was closer to 500 MB. To my surprise, it was very full-featured, and I was even able to cross-compile for Windows from Linux.&lt;/p&gt;
+&lt;p&gt;As much as I like C#, the unreasonable disk footprint of its tooling has sent C# to the bottom of the pile.&lt;/p&gt;
+&lt;h3 id=&quot;c-1&quot;&gt;C++&lt;/h3&gt;
+&lt;p&gt;C++ sort of gets a free pass because Linux distributions generally provide the GNU C++ compiler and I already had to install a C++ environment in order to use Rust on Windows. Clang is &amp;lt; 1 GB to install and there are numerous free and/or open source C++ IDEs that are less than 1 GB. Visual Studio for C++ was around 3 GB, which is much too big, but not an immediate disqualifier in light of available alternatives. At least there&amp;#39;s a free version now.&lt;/p&gt;
+&lt;h3 id=&quot;c-2&quot;&gt;C&lt;/h3&gt;
+&lt;p&gt;C is similar to C++, with the notable property that it is trivially bootstrap-able on some popular architectures using the &lt;a href=&quot;https://bellard.org/tcc/&quot;&gt;Tiny C Compiler&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;go&quot;&gt;Go&lt;/h3&gt;
+&lt;p&gt;Go for Windows is a reasonable ~125 MB download, and VS Code has an official Go extension. I&amp;#39;ve heard that Go&amp;#39;s tooling is excellent and what I&amp;#39;ve seen thus far (e.g. &lt;code&gt;go fmt&lt;/code&gt;) is similar to what I liked about &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../web-development/one-month-with-deno.html&quot;&gt;Deno&lt;/a&gt;. It only took a couple of minutes (for me, a complete Go newbie) to get a &amp;quot;hello world&amp;quot; program up and running (with debugging, no less).&lt;/p&gt;
+&lt;h3 id=&quot;rust&quot;&gt;Rust&lt;/h3&gt;
+&lt;p&gt;Setting up a Rust environment on Windows &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/rust-first-experience.html&quot;&gt;is not pleasant&lt;/a&gt; because it requires first installing Visual C++ (a multi-gigabyte download). On Linux, installation is a breeze, but that doesn&amp;#39;t help me much.&lt;/p&gt;
+&lt;h3 id=&quot;lispclojure&quot;&gt;Lisp/Clojure&lt;/h3&gt;
+&lt;p&gt;Honestly, I haven&amp;#39;t investigated this option yet.&lt;/p&gt;
+&lt;p&gt;Clojure requires a Java runtime and, at the moment, I don&amp;#39;t really want to install one. I used Java a lot in the past (back when it would pop up messages saying a new version of Java was available, with a possibly ironic exclamation mark), but I don&amp;#39;t want to deal with deploying Java whenever I want to run something.&lt;/p&gt;
+&lt;p&gt;Some other Lisp options include &lt;a href=&quot;https://racket-lang.org/&quot;&gt;Racket&lt;/a&gt; (which I&amp;#39;ve briefly used in the past) and &lt;a href=&quot;http://www.sbcl.org/&quot;&gt;SBCL&lt;/a&gt; (which I have no experience with, but seems more popular).&lt;/p&gt;
+&lt;h3 id=&quot;zig&quot;&gt;Zig&lt;/h3&gt;
+&lt;p&gt;Zig is a smallish download, with a developer-friendly command line interface that appears to be on par with Go and Deno.&lt;/p&gt;
+&lt;h3 id=&quot;tcl&quot;&gt;Tcl&lt;/h3&gt;
+&lt;p&gt;Tcl is a trivially small download. I&amp;#39;ll need to see how adding libraries (namely &lt;a href=&quot;https://www.tcl.tk/software/tcllib/&quot;&gt;Tcllib&lt;/a&gt;) works.&lt;/p&gt;
+&lt;h3 id=&quot;lua&quot;&gt;Lua&lt;/h3&gt;
+&lt;p&gt;While Lua binaries are available, Lua is more of a library that&amp;#39;s meant to be embedded in an application. I thought there was a simple command line wrapper for Windows, but the main one I&amp;#39;ve found for Windows (&lt;a href=&quot;https://github.com/rjpcomputing/luaforwindows&quot;&gt;Lua for windows&lt;/a&gt;) appears to be unmaintained. It&amp;#39;s possible &lt;a href=&quot;https://luarocks.org/&quot;&gt;LuaRocks&lt;/a&gt; might be what I&amp;#39;m looking for, but I&amp;#39;m not sure yet.&lt;/p&gt;
+&lt;p&gt;The good news is that I could easily bootstrap my own Lua shell (similar to what &lt;a href=&quot;https://blubsblog.bearblog.dev/writing-software-that-will-still-build-and-run-in-20-years/&quot;&gt;Blub describes in a blog post&lt;/a&gt;).&lt;/p&gt;
+&lt;h1 id=&quot;closing-thoughts&quot;&gt;Closing thoughts&lt;/h1&gt;
+&lt;p&gt;Based on intuition and my experiences thus far, a few languages are at the bottom of the pack:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;C++&lt;/strong&gt;: A complicated language, with an inscrutable standard library, still without a good module or build system -- but I have a lot of experience with it, and it&amp;#39;s definitely not going anywhere&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Zig&lt;/strong&gt;: The most promising &amp;quot;better C&amp;quot;, with great tooling, but still immature&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A few languages are lingering in the middle:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;C#&lt;/strong&gt;: A great language, with probably the best standard library, but the toolchain is enormous&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;C&lt;/strong&gt;: Arguably the most portable language, just with a mostly awful standard library&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rust&lt;/strong&gt;: Supposedly even more complicated than C++, but at least it provides memory safety and a build system&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lisp&lt;/strong&gt;: An interesting and versatile language, but is it &lt;em&gt;used&lt;/em&gt; as much as it&amp;#39;s &lt;em&gt;discussed&lt;/em&gt;?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lua&lt;/strong&gt;: Almost as portable as C, but I&amp;#39;m not sure I want to bring my own everything&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And then there are a few languages near the top of my list:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;JavaScript/TypeScript&lt;/strong&gt;: A convenient language, made better by Deno&amp;#39;s tooling and standard library, but still fairly volatile and without an official ecosystem-wide standard library&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Python&lt;/strong&gt;: An ugly pile of hacks that is adored by many and is ubiquitous -- do I just need to get over my aversion to Python? Has deployment been solved yet?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Go&lt;/strong&gt;: Great tooling, a simple language, memory safety, and an allegedly great standard library -- I&amp;#39;d never considered Go before, but it has a lot of attractive qualities&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tcl&lt;/strong&gt;: A beautifully simple language with a tiny footprint and great for gluing things together -- but will it be forgotten in another decade or two?&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>In search of a minimal development environment</title>
 <id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html</id>
@@ -294,156 +405,6 @@
 &lt;/ul&gt;
 &lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
 &lt;p&gt;I have a working proof-of-concept app based on WebView2, but my biggest concern is whether or not Steam&amp;#39;s &lt;a href=&quot;https://partner.steamgames.com/doc/sdk/installscripts&quot;&gt;InstallScript&lt;/a&gt; functionality can successfully install the WebView2 runtime. I don&amp;#39;t see any obvious reason this shouldn&amp;#39;t work, but given that deployment and configuration files have bitten me many times in the past, I&amp;#39;m eager to prototype this as soon as possible. If there&amp;#39;s a roadblock to using WebView2, I&amp;#39;d rather find it sooner than later.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Testing out Zig... for C/C++ code... on Windows</title>
-<id>https://log.schemescape.com/posts/programming-languages/compiling-cpp-for-windows-using-zig.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/compiling-cpp-for-windows-using-zig.html"/>
-<updated>2022-08-13T00:00:00.000Z</updated>
-<summary type="text">Can Zig save me from downloading multi-gigabyte SDKs just to build Windows programs?</summary>
-<content type="html">&lt;p&gt;I briefly played around with Zig&amp;#39;s C/C++ compiler in the past. It&amp;#39;s a tidy ~60 MB download that can magically even cross-compile. I haven&amp;#39;t worked up the nerve to investigate the Zig &lt;em&gt;programming language&lt;/em&gt;, but its built-in C/C++ compiler impressed me.&lt;/p&gt;
-&lt;p&gt;Now how far can I push it?&lt;/p&gt;
-&lt;h2 id=&quot;aside-toolchain-bloat&quot;&gt;Aside: toolchain bloat&lt;/h2&gt;
-&lt;p&gt;A good way to discourage me from testing out your software is to require a gigabyte (or more) download (and no, providing an installer that obscures the massive download is not a solution).&lt;/p&gt;
-&lt;p&gt;The chief offender of inexplicably enormous downloads is, unfortunately, anything related to compiling software for Windows. Want to use the free edition of Microsoft Visual C? That will be at least 3 GB. How about a more modern language like C#? That&amp;#39;s 5 GB. Even non-Visual Studio C/C++ compilers tend to be hundreds of megabytes.&lt;/p&gt;
-&lt;h1 id=&quot;hello-zig-c&quot;&gt;Hello, &lt;del&gt;Zig&lt;/del&gt; C!&lt;/h1&gt;
-&lt;p&gt;First, here&amp;#39;s a trivial &amp;quot;hello world&amp;quot; program:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-c&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;/span&gt;
-
-&lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;hljs-title function_&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(&lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; argc, &lt;span class=&quot;hljs-type&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;char&lt;/span&gt;** argv)&lt;/span&gt; {
-    &lt;span class=&quot;hljs-built_in&quot;&gt;printf&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Hello, C!&amp;quot;&lt;/span&gt;);
-    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Here&amp;#39;s the result:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig cc hello-c.c -o hello-c.exe
-
-&amp;gt; hello-c.exe
-Hello, C!
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Success!&lt;/p&gt;
-&lt;h2 id=&quot;making-the-binary-more-portable&quot;&gt;Making the binary more portable&lt;/h2&gt;
-&lt;p&gt;According to ziglearn.org, &lt;a href=&quot;https://ziglearn.org/chapter-3/#cross-compilation&quot;&gt;Zig targets the host&amp;#39;s specific CPU by default&lt;/a&gt;. If you plan to distribute programs built with Zig, you&amp;#39;ll probably want to choose a more generic architecture, e.g. &lt;code&gt;i386&lt;/code&gt; or &lt;code&gt;x86_64&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig cc -target i386-windows-gnu hello-c.c -o hello-c.exe 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h1 id=&quot;hello-win32&quot;&gt;Hello, Win32!&lt;/h1&gt;
-&lt;p&gt;That last exercise was somewhat trivial, although I&amp;#39;m still impressed at how easy it was to get started with Zig&amp;#39;s compiler (just unzip--no installation or SDK required).&lt;/p&gt;
-&lt;p&gt;But I want to be able to call Win32 APIs from my programs. Is Zig up to that task?&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s a trivial program to pop up a message box:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-c&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;windows.h&amp;gt;&lt;/span&gt;&lt;/span&gt;
-
-&lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;hljs-title function_&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; {
-    MessageBox(&lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Hello there!&amp;quot;&lt;/span&gt;, &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;From Zig land!&amp;quot;&lt;/span&gt;, MB_OK);
-    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Build command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig cc -target i386-windows-gnu hello-win32.c -o hello-win32.exe 
-
-&amp;gt; hello-win32.exe
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Sure enough, a message box appeared!&lt;/p&gt;
-&lt;p&gt;At this point, I&amp;#39;m impressed, but it remains to be seen if Zig&amp;#39;s magic will work beyond trivial examples like this.&lt;/p&gt;
-&lt;h1 id=&quot;hello-c-and-winmain&quot;&gt;Hello, C++ and WinMain!&lt;/h1&gt;
-&lt;p&gt;Time to throw in some C++ and create an actual Window:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-cpp&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;windows.h&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-meta&quot;&gt;#&lt;span class=&quot;hljs-keyword&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;lt;tchar.h&amp;gt;&lt;/span&gt;&lt;/span&gt;
-
-&lt;span class=&quot;hljs-type&quot;&gt;static&lt;/span&gt; TCHAR szWindowClass[] = _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;DesktopApp&amp;quot;&lt;/span&gt;);
-&lt;span class=&quot;hljs-type&quot;&gt;static&lt;/span&gt; TCHAR szTitle[] = _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Hello, Windows!&amp;quot;&lt;/span&gt;);
-
-&lt;span class=&quot;hljs-function&quot;&gt;LRESULT CALLBACK &lt;span class=&quot;hljs-title&quot;&gt;WndProc&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(HWND, UINT, WPARAM, LPARAM)&lt;/span&gt;&lt;/span&gt;;
-
-&lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; CALLBACK &lt;span class=&quot;hljs-title&quot;&gt;WinMain&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, &lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt; nCmdShow)&lt;/span&gt; &lt;/span&gt;{
-    WNDCLASSEX wcex;
-
-    wcex.cbSize = &lt;span class=&quot;hljs-built_in&quot;&gt;sizeof&lt;/span&gt;(WNDCLASSEX);
-    wcex.style = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc = WndProc;
-    wcex.cbClsExtra = &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
-    wcex.cbWndExtra = &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
-    wcex.hInstance = hInstance;
-    wcex.hIcon = &lt;span class=&quot;hljs-built_in&quot;&gt;LoadIcon&lt;/span&gt;(hInstance, IDI_APPLICATION);
-    wcex.hCursor = &lt;span class=&quot;hljs-built_in&quot;&gt;LoadCursor&lt;/span&gt;(&lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;);
-    wcex.lpszMenuName = &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;;
-    wcex.lpszClassName = szWindowClass;
-    wcex.hIconSm = &lt;span class=&quot;hljs-built_in&quot;&gt;LoadIcon&lt;/span&gt;(wcex.hInstance, IDI_APPLICATION);
-
-    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (!&lt;span class=&quot;hljs-built_in&quot;&gt;RegisterClassEx&lt;/span&gt;(&amp;amp;wcex)) {
-        &lt;span class=&quot;hljs-built_in&quot;&gt;MessageBox&lt;/span&gt;(&lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Call to RegisterClassEx failed!&amp;quot;&lt;/span&gt;), _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Test app&amp;quot;&lt;/span&gt;), &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;);
-        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;;
-    }
-
-    HWND hWnd = &lt;span class=&quot;hljs-built_in&quot;&gt;CreateWindow&lt;/span&gt;(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, &lt;span class=&quot;hljs-number&quot;&gt;1200&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;900&lt;/span&gt;, &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, hInstance, &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;);
-    &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; (!hWnd) {
-        &lt;span class=&quot;hljs-built_in&quot;&gt;MessageBox&lt;/span&gt;(&lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;,
-            _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Call to CreateWindow failed!&amp;quot;&lt;/span&gt;),
-            _T(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Test app&amp;quot;&lt;/span&gt;),
-            &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;);
-
-        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;;
-    }
-
-    &lt;span class=&quot;hljs-built_in&quot;&gt;ShowWindow&lt;/span&gt;(hWnd, nCmdShow);
-    &lt;span class=&quot;hljs-built_in&quot;&gt;UpdateWindow&lt;/span&gt;(hWnd);
-
-    MSG msg;
-    &lt;span class=&quot;hljs-keyword&quot;&gt;while&lt;/span&gt; (&lt;span class=&quot;hljs-built_in&quot;&gt;GetMessage&lt;/span&gt;(&amp;amp;msg, &lt;span class=&quot;hljs-literal&quot;&gt;NULL&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;)) {
-        &lt;span class=&quot;hljs-built_in&quot;&gt;TranslateMessage&lt;/span&gt;(&amp;amp;msg);
-        &lt;span class=&quot;hljs-built_in&quot;&gt;DispatchMessage&lt;/span&gt;(&amp;amp;msg);
-    }
-
-    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; (&lt;span class=&quot;hljs-type&quot;&gt;int&lt;/span&gt;)msg.wParam;
-}
-
-&lt;span class=&quot;hljs-function&quot;&gt;LRESULT CALLBACK &lt;span class=&quot;hljs-title&quot;&gt;WndProc&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)&lt;/span&gt; &lt;/span&gt;{
-    &lt;span class=&quot;hljs-keyword&quot;&gt;switch&lt;/span&gt; (message) {
-    &lt;span class=&quot;hljs-keyword&quot;&gt;case&lt;/span&gt; WM_DESTROY:
-        &lt;span class=&quot;hljs-built_in&quot;&gt;PostQuitMessage&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;);
-        &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;;
-
-    &lt;span class=&quot;hljs-keyword&quot;&gt;default&lt;/span&gt;:
-        &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;DefWindowProc&lt;/span&gt;(hWnd, message, wParam, lParam);
-        &lt;span class=&quot;hljs-keyword&quot;&gt;break&lt;/span&gt;;
-    }
-
-    &lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;And now to build and test:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig c++ -target i386-windows-gnu hello-window.cpp -o hello-window.exe
-
-&amp;gt; hello-window.exe
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This popped up a window that I could close.&lt;/p&gt;
-&lt;p&gt;Based on functionality, this is a fairly trivial example, but based on the number of lines of code in the included header files, I actually wasn&amp;#39;t expecting this to work on the first try.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s not yet clear to me how much of the Windows SDK Zig ships with, but it&amp;#39;s at least enough to create a real window.&lt;/p&gt;
-&lt;h1 id=&quot;hello-webview2&quot;&gt;Hello, WebView2?&lt;/h1&gt;
-&lt;p&gt;Given that &lt;a href=&quot;https://docs.microsoft.com/en-us/microsoft-edge/webview2/&quot;&gt;WebView2&lt;/a&gt; isn&amp;#39;t a part of the standard Windows SDK, I&amp;#39;m almost certain that this won&amp;#39;t work out of the box, but I&amp;#39;m going to give it a try anyway.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m going to work off of the &lt;a href=&quot;https://docs.microsoft.com/en-us/microsoft-edge/webview2/get-started/win32&quot;&gt;WebView2 for Win32 tutorial&lt;/a&gt;. The code is fairly lengthy, so I&amp;#39;m not going to duplicate it here.&lt;/p&gt;
-&lt;p&gt;After trying to compile the sample, I finally managed to stump Zig:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig c++ -target i386-windows-gnu hello-webview2.cpp -o hello-webview2.exe
-hello-webview2.cpp:5:10: fatal error: &amp;#x27;wil/com.h&amp;#x27; file not found
-#include &amp;lt;wil/com.h&amp;gt;
-         ^~~~~~~~~~~
-1 error generated.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The sample code uses &lt;a href=&quot;https://github.com/microsoft/wil&quot;&gt;WIL&lt;/a&gt;, and regardless of whether that&amp;#39;s part of the Windows SDK, Zig doesn&amp;#39;t ship with it. I&amp;#39;ll try cloning the repository, but you could also download the NuGet package and unzip it (&lt;code&gt;.nupkg&lt;/code&gt; files are just Zip files).&lt;/p&gt;
-&lt;p&gt;Second attempt, this time with WIL:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;&amp;gt; zig c++ -target i386-windows-gnu hello-webview2.cpp -I..\wil\include -o hello-webview2.exe
-In file included from hello-webview2.cpp:5:
-..\wil\include\wil/com.h:14:10: fatal error: &amp;#x27;WeakReference.h&amp;#x27; file not found
-#include &amp;lt;WeakReference.h&amp;gt;
-         ^~~~~~~~~~~~~~~~~
-1 error generated.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Alright, &lt;code&gt;WeakReference.h&lt;/code&gt; is part of &lt;a href=&quot;https://docs.microsoft.com/en-us/cpp/cppcx/wrl/windows-runtime-cpp-template-library-wrl?view=msvc-170&quot;&gt;WRL&lt;/a&gt;, which is actually part of the Windows SDK. Zig doesn&amp;#39;t appear to ship with WRL (and I&amp;#39;m not even sure that it &lt;em&gt;should&lt;/em&gt;).&lt;/p&gt;
-&lt;p&gt;I suspect I don&amp;#39;t actually &lt;em&gt;need&lt;/em&gt; WIL or WRL, but proceeding without them might not be the best use of time, because instantiating WebView2 appears to be an COM-based asynchronous operation, and I don&amp;#39;t want to reimplement a large chunk of WIL, WRL, or even COM just to avoid using the Windows SDK and Visual Studio.&lt;/p&gt;
-&lt;p&gt;Ok, fine, Visual Studio Installer. You win this round.&lt;/p&gt;
 </content>
 </entry>
 </feed>
