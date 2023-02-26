@@ -7,8 +7,78 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-02-18T05:28:15.338Z</updated>
+<updated>2023-02-26T20:45:37.519Z</updated>
 
+<entry>
+<title>In search of a minimal development environment, part 2</title>
+<id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/minimal-dev-env-2.html"/>
+<updated>2023-02-26T00:00:00.000Z</updated>
+<summary type="text">Some practical research into a minimal development environment.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;part 1&lt;/a&gt;, I was yearning for simpler times, when entire operating systems could fit on a single digit number of 1.44 MB floppy disks.&lt;/p&gt;
+&lt;p&gt;What did my initial &amp;quot;minimal development environment&amp;quot; research uncover?&lt;/p&gt;
+&lt;h1 id=&quot;platforms&quot;&gt;Platforms&lt;/h1&gt;
+&lt;p&gt;Although it&amp;#39;s probably possible to run some useful software on a tiny or old platforms (e.g. a microcontroller or Game Boy), the smallest platform I seriously considered was a &lt;a href=&quot;https://www.raspberrypi.com/&quot;&gt;Raspberry Pi&lt;/a&gt; (for the simple reason that I inherited one and hadn&amp;#39;t been using it). My Raspberry Pi is a model B with 512 MB of RAM, apparently from 2012.&lt;/p&gt;
+&lt;h1 id=&quot;operating-systems&quot;&gt;Operating systems&lt;/h1&gt;
+&lt;p&gt;While investigating operating systems, I immediately had to confront the fact that I&amp;#39;m not looking for a &lt;em&gt;truly&lt;/em&gt; minimal operating system. The following OSes intrigued me, but they&amp;#39;re a little too restrictive/esoteric for my current goals:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://collapseos.org/&quot;&gt;Collapse OS&lt;/a&gt; runs on Z80-based hardware with 64 KB or less of RAM&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://sr.ht/~vdupras/duskos/&quot;&gt;Dusk OS&lt;/a&gt; runs on x86 hardware, and can bootstrap itself into a &lt;a href=&quot;https://en.wikipedia.org/wiki/Forth_(programming_language)&quot;&gt;Forth&lt;/a&gt;-based shell with an &amp;quot;Almost C&amp;quot; compiler in just a few thousand lines of code&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.fiwix.org/&quot;&gt;Fiwix&lt;/a&gt; uses a (relatively) small kernel (50k lines of code), but strives to be Linux-compatible&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://minix3.org/&quot;&gt;MINIX&lt;/a&gt; uses an educational kernel that has apparently made its way into Intel products, but the project is &lt;a href=&quot;https://github.com/o-oconnell/minixfromscratch&quot;&gt;no longer maintained&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In the end, I decided to focus on more popular platforms: Linux, FreeBSD, OpenBSD, and NetBSD. (Although I&amp;#39;d really like to explore Dusk OS in the future.)&lt;/p&gt;
+&lt;p&gt;To my surprise, it looked like the smallest full-featured option (in terms of disk footprint, and ignoring &amp;quot;nano&amp;quot; installs that lack functionality) was probably &lt;a href=&quot;https://www.alpinelinux.org/&quot;&gt;Alpine Linux&lt;/a&gt;. A command-line only development environment on Debian weighed in at over 1.5 GB (!), but I was able to set up a somewhat comfortable C development environment on Alpine Linux in under 300 MB! (Although &lt;a href=&quot;https://wiki.alpinelinux.org/wiki/Raspberry_Pi&quot;&gt;installing Alpine Linux on a Raspberry Pi&lt;/a&gt; is tedious.)&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m a little nervous to adopt Alpine Linux without haven&amp;#39;t a good grasp of how updates (especially kernel updates) work, but so far it just feels like exactly what I was looking for.&lt;/p&gt;
+&lt;h1 id=&quot;software&quot;&gt;Software&lt;/h1&gt;
+&lt;p&gt;With a minimal Alpine Linux install on a Raspberry Pi model B, I investigated various console applications.&lt;/p&gt;
+&lt;h2 id=&quot;web-browser&quot;&gt;Web browser&lt;/h2&gt;
+&lt;p&gt;There are a lot of console web browser options today. I tried: &lt;a href=&quot;https://lynx.browser.org/&quot;&gt;Lynx&lt;/a&gt;, &lt;a href=&quot;http://elinks.or.cz/&quot;&gt;ELinks&lt;/a&gt;, &lt;a href=&quot;https://w3m.sourceforge.net/&quot;&gt;w3m&lt;/a&gt;, and a few that I don&amp;#39;t remember. In the past, I used ELinks because it seemed to have the most functionality, but as of today, my favorite is w3m. I liked its rendering the best, and it&amp;#39;s comfortable to use from the keyboard, thanks to vi-inspired key bindings. I will say that w3m has a steep learning curve (there aren&amp;#39;t any user-friendly menus, at least that I found), so it might not be a great choice for everyone.&lt;/p&gt;
+&lt;p&gt;For the record: Lynx was oddly slow and ELinks&amp;#39;s menus seemed a little glitchy.&lt;/p&gt;
+&lt;p&gt;Unfortunately, using the modern web from the console is not a pleasant experience. I ran into sites with huge navigation lists that I&amp;#39;d have to page through, sites that require JavaScript to render anything, etc. &lt;/p&gt;
+&lt;h2 id=&quot;terminal-multiplexer&quot;&gt;Terminal multiplexer&lt;/h2&gt;
+&lt;p&gt;I realize that &lt;a href=&quot;https://github.com/tmux/tmux/wiki&quot;&gt;tmux&lt;/a&gt; has a lot of momentum, but I&amp;#39;ve been using &lt;a href=&quot;https://www.gnu.org/software/screen/&quot;&gt;GNU Screen&lt;/a&gt; because I&amp;#39;m already familiar with it. tmux &lt;em&gt;does&lt;/em&gt; seem to have some nice features (e.g. retaining panes across detach/reattach), so it&amp;#39;s probably what I&amp;#39;d use today if I was starting from scratch.&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s also &lt;a href=&quot;https://zellij.dev/&quot;&gt;Zellij&lt;/a&gt;, which has some interesting ideas (namely floating windows), wrapped up in what appears to be a user-friendly interface. I haven&amp;#39;t tried it yet, however.&lt;/p&gt;
+&lt;h2 id=&quot;rss-reader&quot;&gt;RSS reader&lt;/h2&gt;
+&lt;p&gt;One motivation for setting up a simpler development environment is to slow down and reduce distractions. With some freed up &amp;quot;focus&amp;quot; time, I&amp;#39;d like to get back to using RSS feeds to keep up to date on blogs I enjoy. &lt;a href=&quot;https://newsboat.org/&quot;&gt;Newsboat&lt;/a&gt; is an excellent console RSS reader.&lt;/p&gt;
+&lt;h2 id=&quot;irc&quot;&gt;IRC&lt;/h2&gt;
+&lt;p&gt;And why stop at RSS? Let&amp;#39;s go all the way back to 1988 and use &lt;a href=&quot;https://en.wikipedia.org/wiki/Internet_Relay_Chat&quot;&gt;IRC&lt;/a&gt;! I don&amp;#39;t like how &lt;a href=&quot;https://discord.com/&quot;&gt;Discord&lt;/a&gt; has monopolized chat-based communities, but IRC is fairly tedious to set up, and the command-based interface is unfriendly (the last thing I want to do is embarrass myself by mistyping a command and having everyone see it as a chat message!).&lt;/p&gt;
+&lt;p&gt;I have &lt;a href=&quot;https://irssi.org/&quot;&gt;irssi&lt;/a&gt; installed, but I haven&amp;#39;t really used it enough to say whether this is a good choice for IRC (or if IRC is even a good choice at all).&lt;/p&gt;
+&lt;h2 id=&quot;code-editor&quot;&gt;Code editor&lt;/h2&gt;
+&lt;p&gt;I haven&amp;#39;t investigated editor options in depth yet. The main features I&amp;#39;m looking for are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Runs in console mode&lt;/li&gt;
+&lt;li&gt;Comfortable editing&lt;/li&gt;
+&lt;li&gt;Helpful syntax highlighting&lt;/li&gt;
+&lt;li&gt;Language-specific features (from most important to least):&lt;ul&gt;
+&lt;li&gt;Auto-complete/lookup&lt;/li&gt;
+&lt;li&gt;Go to definition&lt;/li&gt;
+&lt;li&gt;Find all references&lt;/li&gt;
+&lt;li&gt;Rename/refactor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Right now, I&amp;#39;m using &lt;a href=&quot;https://www.vim.org/&quot;&gt;Vim&lt;/a&gt;, with nothing but default syntax highlighting and &amp;quot;Ctrl+N&amp;quot; as a minimal auto-complete. This was great in the 90s, but I&amp;#39;m more productive with advanced language features.&lt;/p&gt;
+&lt;p&gt;Here are a few options I&amp;#39;m planning to investigate:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Vim with &lt;a href=&quot;https://en.wikipedia.org/wiki/Ctags&quot;&gt;Ctags&lt;/a&gt; (ideally automated)&lt;/li&gt;
+&lt;li&gt;Vim/&lt;a href=&quot;https://neovim.io/&quot;&gt;NeoVim&lt;/a&gt; with an actual &lt;a href=&quot;https://microsoft.github.io/language-server-protocol/&quot;&gt;language server&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://helix-editor.com/&quot;&gt;Helix&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://kakoune.org/&quot;&gt;Kakoune&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;and maybe even &lt;a href=&quot;https://www.gnu.org/software/emacs/&quot;&gt;Emacs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;but-am-i-making-a-mistake&quot;&gt;But... am I making a mistake?&lt;/h1&gt;
+&lt;p&gt;After a couple of days using this setup, I&amp;#39;m already starting to question my decision to use the console.&lt;/p&gt;
+&lt;h2 id=&quot;console-web-experience-isnt-great&quot;&gt;Console web experience isn&amp;#39;t great&lt;/h2&gt;
+&lt;p&gt;The biggest issue is that the web is really hard to use from a terminal. It&amp;#39;s difficult to quickly scan headings and identify distinct content areas using only text (specifically: text that wasn&amp;#39;t designed to be used from the console). I guess I didn&amp;#39;t realize how helpful subtle font size/color changes are for quickly scanning content.&lt;/p&gt;
+&lt;h2 id=&quot;sometimes-the-mouse-is-handy&quot;&gt;Sometimes the mouse is handy&lt;/h2&gt;
+&lt;p&gt;Then there&amp;#39;s mouse support. I use the keyboard extensively, but the mouse is sometimes faster for selecting text and interacting with UI elements that aren&amp;#39;t in a simple order/hierarchy. &lt;a href=&quot;https://man.archlinux.org/man/gpm.8.en.html&quot;&gt;GPM&lt;/a&gt; helps, but it&amp;#39;s kind of clunky, and doesn&amp;#39;t help when I need to scroll text while using the mouse.&lt;/p&gt;
+&lt;h2 id=&quot;lack-of-consistency&quot;&gt;Lack of consistency&lt;/h2&gt;
+&lt;p&gt;Finally, there is very little user interface consistency between most console tools. Many include vi-like key bindings (either by default or with customizations), but that&amp;#39;s often where the consistency ends. I guess I didn&amp;#39;t realize how much I&amp;#39;d come to rely on standard GUI elements like menus, tooltips, and buttons. I &lt;em&gt;do&lt;/em&gt; think that a searchable &amp;quot;command palette&amp;quot; would go a long way toward making console tools easier to use, but I&amp;#39;m not planning on implementing those myself. Using Emacs for everything might help with consistency, but I&amp;#39;m skeptical of the performance and robustness of huge pile of Emacs extensions.&lt;/p&gt;
+&lt;h1 id=&quot;to-be-continued&quot;&gt;To be continued...&lt;/h1&gt;
+&lt;p&gt;Next up, I&amp;#39;m planning to document my misadventures in getting &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt; (my &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;-based static site generator) running on a Raspberry Pi B (a platform that Deno doesn&amp;#39;t support).&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Future-proof programming languages, part 2</title>
 <id>https://log.schemescape.com/posts/programming-languages/future-proof-languages-2.html</id>
@@ -18,7 +88,7 @@
 <content type="html">&lt;p&gt;Almost exactly 1 year ago, in &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;part 1&lt;/a&gt;, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&amp;#39;d still be useful in another decade. In the intervening time, I&amp;#39;ve completed some nontrivial projects in both TypeScript (using both Node and Deno) and Python. I&amp;#39;ve also spent time contemplating a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;minimal development environment&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In this post, I&amp;#39;m going to add a few more items to my programming language wishlist, add a few more programming languages to my candidate list, and then briefly describe my initial experiences with a few of those languages.&lt;/p&gt;
 &lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer&lt;/h1&gt;
-&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#x73;&amp;#99;&amp;#x68;&amp;#101;&amp;#x6d;&amp;#101;&amp;#115;&amp;#x63;&amp;#x61;&amp;#112;&amp;#101;&amp;#46;&amp;#x63;&amp;#111;&amp;#x6d;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#x73;&amp;#99;&amp;#x68;&amp;#101;&amp;#x6d;&amp;#101;&amp;#115;&amp;#x63;&amp;#x61;&amp;#112;&amp;#101;&amp;#46;&amp;#x63;&amp;#111;&amp;#x6d;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#x73;&amp;#x63;&amp;#104;&amp;#x65;&amp;#109;&amp;#101;&amp;#x73;&amp;#99;&amp;#x61;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#x6d;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#x73;&amp;#x63;&amp;#104;&amp;#x65;&amp;#109;&amp;#101;&amp;#x73;&amp;#99;&amp;#x61;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#x6d;&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;there-can-be-more-than-one&quot;&gt;There can be more than one&lt;/h1&gt;
 &lt;p&gt;Note: I&amp;#39;ve come to terms with the fact that I&amp;#39;ll probably end up needing to use several of these languages for different purposes, namely I&amp;#39;ll want to have one fast, ahead-of-time compiled language for performance-critical projects, and something simpler and more dynamic (while still low-overhead) for most everything else.&lt;/p&gt;
 &lt;h1 id=&quot;wishlist&quot;&gt;Wishlist&lt;/h1&gt;
@@ -312,99 +382,6 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>Porting a browser-based game to Steam (part 2)</title>
-<id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-2.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-2.html"/>
-<updated>2022-08-29T00:00:00.000Z</updated>
-<summary type="text">I&apos;m continuing my research on porting a browser-based game to Steam. My plan is to directly use WebView2 on Windows.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/game-development/browser-based-game-on-steam.html&quot;&gt;part 1&lt;/a&gt;, I did some initial research into Steam&amp;#39;s support for hosting games that were originally browser-based. Now, I&amp;#39;m diving into the next level of detail.&lt;/p&gt;
-&lt;h1 id=&quot;choosing-a-framework&quot;&gt;Choosing a framework&lt;/h1&gt;
-&lt;p&gt;First, I needed to choose a framework for hosting my HTML and JavaScript. My criteria for choosing (roughly in priority order) were as follows:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Supports Windows (because that is my initial target platform)&lt;/li&gt;
-&lt;li&gt;Can interface with C++ APIs (namely the Steamworks API)&lt;/li&gt;
-&lt;li&gt;Ships without a runtime &lt;em&gt;or&lt;/em&gt; the runtime is easy to install (via Steam)&lt;/li&gt;
-&lt;li&gt;Lightweight (the web version is under 30 KB, compressed)&lt;/li&gt;
-&lt;li&gt;As few dependencies as possible&lt;/li&gt;
-&lt;li&gt;Uses a programming language I&amp;#39;m familiar with (or want to learn)&lt;/li&gt;
-&lt;li&gt;Requires as few changes to the web app as possible&lt;/li&gt;
-&lt;li&gt;Supports 32-bit Windows (my laptop--which I occasionally use--doesn&amp;#39;t support 64-bit Windows)&lt;/li&gt;
-&lt;li&gt;Supports Linux and/or macOS (in case I decide to port the game to those platforms in the future)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Here are the frameworks I evaluated, along with some notes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.electronjs.org/&quot;&gt;Electron&lt;/a&gt;&lt;ul&gt;
-&lt;li&gt;✔ Broadly used and supported&lt;/li&gt;
-&lt;li&gt;✔ No runtime required&lt;/li&gt;
-&lt;li&gt;✖ Bloated&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://tauri.app/&quot;&gt;Tauri&lt;/a&gt;&lt;ul&gt;
-&lt;li&gt;✔ Lightweight&lt;/li&gt;
-&lt;li&gt;✖ No out-of-the-box C++ support&lt;/li&gt;
-&lt;li&gt;✖ Many, many dependencies, &lt;a href=&quot;https://tauri.app/about/architecture/#license&quot;&gt;with no official copyright notice&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;✖ Requires WebView2 runtime on Windows&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://neutralino.js.org/&quot;&gt;Neutralinojs&lt;/a&gt;&lt;ul&gt;
-&lt;li&gt;✔ Lightweight&lt;/li&gt;
-&lt;li&gt;✖ No out-of-the-box C++ support (I think)&lt;/li&gt;
-&lt;li&gt;✖ Requires WebView2 runtime on Windows&lt;/li&gt;
-&lt;li&gt;✖ Doesn&amp;#39;t appear to support e.g. &lt;code&gt;localStorage&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;✖ &lt;a href=&quot;https://neutralino.js.org/docs/distribution/overview&quot;&gt;No support for 32-bit Windows&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://developer.microsoft.com/en-us/microsoft-edge/webview2/&quot;&gt;WebView2&lt;/a&gt;&lt;ul&gt;
-&lt;li&gt;✔ Natively supports C++&lt;/li&gt;
-&lt;li&gt;✔ Lightweight&lt;/li&gt;
-&lt;li&gt;✔ No other dependencies&lt;/li&gt;
-&lt;li&gt;✔ Supports 32-bit Windows&lt;/li&gt;
-&lt;li&gt;✖ Requires WebView2 runtime&lt;/li&gt;
-&lt;li&gt;✖ Only supports Windows&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;After my initial research, I decided that I&amp;#39;d like to avoid Electron, if possible, due to its large disk and memory footprint. All the remaining options use WebView2 on Windows, and a cursory glance made me think the WebView2 runtime could be installed via Steam without too much difficulty.&lt;/p&gt;
-&lt;h2 id=&quot;tauri-it-is-right&quot;&gt;Tauri it is... right?&lt;/h2&gt;
-&lt;p&gt;Given its impressive list of features (and supported platforms) and light weight, I decided to use Tauri... until I saw that &lt;a href=&quot;https://app.fossa.com/projects/git%2Bgithub.com%2Ftauri-apps%2Ftauri/refs/branch/dev/0668dd42204b163f11aaf31f45106c8551f15942/preview&quot;&gt;Tauri had over 1,200 dependencies&lt;/a&gt;. If Tauri provided a &amp;quot;third party copyright notice&amp;quot; file I could just paste into my app, I might have continued on, but the &lt;a href=&quot;https://tauri.app/about/architecture/#license&quot;&gt;Tauri license page&lt;/a&gt; only has this unhelpful notice: &amp;quot;it is your responsibility to verify that you are complying with all upstream licenses.&amp;quot; I feel like I&amp;#39;m becoming more disillusioned with open source ecosystems by the day, but if I can&amp;#39;t even enumerate the correct licenses for a library (let alone audit any of the code!), I probably shouldn&amp;#39;t be using it (especially if I want to keep the door open to selling my game in the future).&lt;/p&gt;
-&lt;h2 id=&quot;webview2-it-is-hopefully&quot;&gt;WebView2 it is... hopefully&lt;/h2&gt;
-&lt;p&gt;After dismissing Electron and Tauri, I decided to just go with the simplest solution for Windows, which is to just use WebView2 directly.&lt;/p&gt;
-&lt;p&gt;The biggest downside of this approach is that I likely won&amp;#39;t be able to port the game to Linux or macOS. This isn&amp;#39;t a justification for only supporting Windows, but I don&amp;#39;t have a Linux machine handy to see if Wine or Proton can handle WebView2 (unlikely, but who knows), and the last Mac I owned was a Macintosh Plus, so I&amp;#39;ve never actually done any development on macOS. At least players on those platforms can just play the browser-based version of the game!&lt;/p&gt;
-&lt;h1 id=&quot;answering-some-questions&quot;&gt;Answering some questions&lt;/h1&gt;
-&lt;p&gt;I enumerated some &lt;a href=&quot;https://log.schemescape.com/posts/game-development/browser-based-game-on-steam.html#open-questions&quot;&gt;open questions in the last post&lt;/a&gt;, and I can start answering some of them now:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Which browser-to-native framework should I use (Electron, Tauri, WebView2, etc.)?&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Answer&lt;/strong&gt;: WebView2&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Does Steam have built-in support for browser-based titles? Are any of the above frameworks in the Steamworks Common Redistributables package?&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Answer&lt;/strong&gt;: There is no built-in support for WebView2&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Which platforms should I support?&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Answer&lt;/strong&gt;: Just Windows for now, ideally 32-bit and 64-bit&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;What&amp;#39;s required to take advantage of Steam&amp;#39;s support for cloud saves/syncing?&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Educated guess&lt;/strong&gt;: &lt;a href=&quot;https://partner.steamgames.com/doc/features/cloud#steam_auto-cloud&quot;&gt;Steam auto-cloud&lt;/a&gt; along with a &lt;a href=&quot;https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/user-data-folder?tabs=win32&quot;&gt;custom WebView2 user data folder&lt;/a&gt; look promising&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;How do I test Steam Cloud saves?&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Educated guess&lt;/strong&gt;: Steamworks provides &lt;a href=&quot;https://partner.steamgames.com/doc/features/cloud&quot;&gt;pre-release testing guidance for Steam Cloud&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;There are also some new questions to add to the list:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Can a Steam &lt;a href=&quot;https://partner.steamgames.com/doc/sdk/installscripts&quot;&gt;InstallScript&lt;/a&gt; install the WebView2 runtime successfully?&lt;/li&gt;
-&lt;li&gt;How should fullscreen support work?&lt;/li&gt;
-&lt;li&gt;How can Steam and browser-based leaderboards be shared/merged?&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
-&lt;p&gt;I have a working proof-of-concept app based on WebView2, but my biggest concern is whether or not Steam&amp;#39;s &lt;a href=&quot;https://partner.steamgames.com/doc/sdk/installscripts&quot;&gt;InstallScript&lt;/a&gt; functionality can successfully install the WebView2 runtime. I don&amp;#39;t see any obvious reason this shouldn&amp;#39;t work, but given that deployment and configuration files have bitten me many times in the past, I&amp;#39;m eager to prototype this as soon as possible. If there&amp;#39;s a roadblock to using WebView2, I&amp;#39;d rather find it sooner than later.&lt;/p&gt;
 </content>
 </entry>
 </feed>
