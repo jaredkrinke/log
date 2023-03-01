@@ -7,8 +7,80 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-02-26T20:45:37.519Z</updated>
+<updated>2023-03-01T01:33:16.317Z</updated>
 
+<entry>
+<title>Minimal dev environment, part 3: introducing &quot;leano&quot;, a tiny Deno-compatible runtime</title>
+<id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env-3.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/minimal-dev-env-3.html"/>
+<updated>2023-02-28T00:00:00.000Z</updated>
+<summary type="text">I developed an actual piece of software using my minimal development environment. Here&apos;s how it went.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env-2.html&quot;&gt;part 2&lt;/a&gt;, I laid out my initial minimal development environment (Raspberry Pi B, Alpine Linux, console only). Today, I&amp;#39;m sharing my initial experience using this setup.&lt;/p&gt;
+&lt;h1 id=&quot;the-task-at-hand&quot;&gt;The task at hand&lt;/h1&gt;
+&lt;p&gt;In order to document my experience, I needed to be able to build and update my dev blog using my &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;-based static site generator (&lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt;), along with Git (and GitHub Pages). Problem: Deno &lt;a href=&quot;https://github.com/denoland/deno/issues/2295&quot;&gt;doesn&amp;#39;t support Raspberry Pi&lt;/a&gt; (32-bit or 64-bit).&lt;/p&gt;
+&lt;p&gt;Fortunately, my static site generator only uses a tiny fraction of Deno&amp;#39;s API surface (at least to build the site), so it&amp;#39;s straight-forward to port the tool to a Pi-friendly runtime. One option would be to compile my TypeScript code to JavaScript, bundle it, and then use &lt;a href=&quot;https://nodejs.org/en/&quot;&gt;Node&lt;/a&gt; with a Node-to-Deno compatibility layer (written in JavaScript).&lt;/p&gt;
+&lt;p&gt;But a more &lt;em&gt;interesting&lt;/em&gt; option would be to create my own (minimal, of course) Deno-compatible runtime, and use &lt;em&gt;that&lt;/em&gt; to run md2blog.&lt;/p&gt;
+&lt;h2 id=&quot;dependencies&quot;&gt;Dependencies&lt;/h2&gt;
+&lt;p&gt;For this project, I decided to get back to my roots and use plain, boring old C. I would have like to try out Zig, but they don&amp;#39;t appear to build SDK binaries for the Raspberry Pi. Why C (or Zig)? Mostly because I was planning to leverage &lt;a href=&quot;https://bellard.org/quickjs/&quot;&gt;QuickJS&lt;/a&gt; (an implementation of ES2020 in C), and I knew that integrating the library would be simple if I stuck to C. If I&amp;#39;d used a new (to me) programming language, I&amp;#39;d immediately be thrown into the treacherous waters of foreign function interfaces/bindings (and past experience told me that&amp;#39;s usually the least fun part of learning a new programming language).&lt;/p&gt;
+&lt;p&gt;Between QuickJS and the C standard library, I was hopeful I could get md2blog up and running on my Raspberry Pi.&lt;/p&gt;
+&lt;h1 id=&quot;code-editing&quot;&gt;Code editing&lt;/h1&gt;
+&lt;p&gt;In the past, I used Vim extensively, but lately I&amp;#39;ve mostly used VS Code (and Visual Studio, if necessary). This project was a good opportunity to reacquaint myself with Vim. Specifically, I wanted to see if I could carry some of my favorite features from VS Code back to Vim:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;(Smart) Auto-complete&lt;/li&gt;
+&lt;li&gt;Go to definition&lt;/li&gt;
+&lt;li&gt;Spellcheck&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;auto-complete-for-c-code-in-vim&quot;&gt;Auto-complete for C code in Vim&lt;/h2&gt;
+&lt;p&gt;I used to think auto-complete was often used as a crutch for not being familiar with code. Nowadays, I&amp;#39;ll take any crutch I can get, because there&amp;#39;s so much code, and it&amp;#39;s honestly not worth my time to understand it all in depth--most of the time, at least.&lt;/p&gt;
+&lt;p&gt;Although I was aware of it, I&amp;#39;d never taken the time to setup &lt;a href=&quot;https://en.wikipedia.org/wiki/Ctags&quot;&gt;Ctags&lt;/a&gt; in Vim. Ctags isn&amp;#39;t as nice as a real language server (it doesn&amp;#39;t automatically regenerate and can&amp;#39;t find all references, for example), but I&amp;#39;m not sure my Raspberry Pi could run a real language server anyway. Fortunately, setting up Ctags was as easy as running &lt;code&gt;ctags -R *&lt;/code&gt; in my project. Then it just all magically worked in insert mode with &lt;strong&gt;Ctrl+N&lt;/strong&gt;. Nice!&lt;/p&gt;
+&lt;h2 id=&quot;go-to-definition&quot;&gt;Go to definition&lt;/h2&gt;
+&lt;p&gt;With Ctags set up, I was just a &lt;code&gt;:help tags&lt;/code&gt; away from learning how to go to the definition of a symbol:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Ctrl+]&lt;/strong&gt; jumps to the definition of the currently highlighted symbol&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ctrl+W Ctrl+]&lt;/strong&gt; opens the definition in a new pane&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ctrl+T&lt;/strong&gt; jumps back to where you were&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;It&amp;#39;s pretty handy, although I started to remember how annoying it is to have to memorize a million key bindings to be productive in Vim.&lt;/p&gt;
+&lt;h2 id=&quot;spellcheck&quot;&gt;Spellcheck&lt;/h2&gt;
+&lt;p&gt;For blog entries, it&amp;#39;s nice to have a spellchecker running, to catch typos. I did a bit of research and couldn&amp;#39;t figure out why &lt;strong&gt;Ctrl+X s&lt;/strong&gt; didn&amp;#39;t work for spellcheck, but &lt;code&gt;:set spell&lt;/code&gt; worked like magic, and highlights any suspicious words.&lt;/p&gt;
+&lt;h2 id=&quot;navigating-new-code-in-vim&quot;&gt;Navigating new code in Vim&lt;/h2&gt;
+&lt;p&gt;Armed with some new Vim knowledge, I got started. The first task was to navigate around the QuickJS code to understand things like how to evaluate JavaScript code and how to expose native functions to JavaScript. Being able to search around the code and jump to definitions was great, but I did start to wish I was in VS Code. In Vim, I&amp;#39;m used to splitting panes horizontally and vertically, but I&amp;#39;m not sure what to do when I need to have so many things open at once that the panes are too small to be readable. In VS Code, I can keep files open without losing context. I&amp;#39;m sure this is possible in Vim, but I haven&amp;#39;t figure it out yet (and I&amp;#39;m not sure I&amp;#39;d remember all the keyboard shortcuts to make it happen).&lt;/p&gt;
+&lt;p&gt;Has someone made a command palette for Vim yet?&lt;/p&gt;
+&lt;h1 id=&quot;web-browser-woes&quot;&gt;Web browser woes&lt;/h1&gt;
+&lt;p&gt;In addition to reading the QuickJS code, I also needed to refer to the HTML manual (although it&amp;#39;s fairly light on details, so no substitute for just reading the code). Once again, the console web browser experience was painful. It&amp;#39;s not the fault of the browsers themselves, it&amp;#39;s just that most web pages don&amp;#39;t seem to be designed with console browsers in mind. The QuickJS manual worked well, but trying to drill into search results, navigate GitHub issues, and read StackOverflow threads was a chore.&lt;/p&gt;
+&lt;p&gt;At least DuckDuckGo and &lt;a href=&quot;https://developer.mozilla.org/en-US&quot;&gt;MDN&lt;/a&gt; provide decent experiences in console mode.&lt;/p&gt;
+&lt;h1 id=&quot;so-slow&quot;&gt;So... &lt;em&gt;slow&lt;/em&gt;...&lt;/h1&gt;
+&lt;p&gt;The preceding issues were tolerable. Performance was another story.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m not sure what I was expecting from a 10 year old computer that cost $50 to begin with. I thought I&amp;#39;d heard that you could play Quake 3 on a Raspberry Pi (although I&amp;#39;m not sure which model). Having used a Raspberry Pi model B with 512 MB of RAM and a 700 MHz ARM CPU for a few days, I&amp;#39;m skeptical.&lt;/p&gt;
+&lt;p&gt;Installing packages and opening web pages in w3m was pretty snappy, but compiling QuickJS was a rude awakening. I typed &lt;code&gt;make&lt;/code&gt; and then left to do something else when it became apparent that it might be a while. Later, I came back, and it was &lt;em&gt;still&lt;/em&gt; compiling! With link-time optimization, it took almost half an hour to build QuickJS.&lt;/p&gt;
+&lt;p&gt;I hoped that the GCC compiler was just being slow (and link-time optimization is probably pretty CPU-intensive in general), but over the course of the day it became apparent that &lt;em&gt;everything&lt;/em&gt; was slow. Navigating large C files in Vim was slow (frequently, I could see the screen re-drawing individual lines of text). Syntax highlighting (which I think isn&amp;#39;t even parsing the full C grammar) was slow enough that it kept automatically turning itself off.&lt;/p&gt;
+&lt;h1 id=&quot;success-and-leano&quot;&gt;Success! And &lt;strong&gt;leano&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;But I persisted and eventually was able to create a minimal Deno-compatible JavaScript runtime, built on QuickJS. I call the result &lt;strong&gt;leano&lt;/strong&gt;, and &lt;a href=&quot;https://github.com/jaredkrinke/leano&quot;&gt;the toy-level prototype code is up on GitHub&lt;/a&gt;. The whole thing weighs in at roughly 800 KB. But, of course, it doesn&amp;#39;t do very much--leano only implements the Deno functions/properties that md2blog uses.&lt;/p&gt;
+&lt;p&gt;For the record: this blog post was written (and built) using leano on my Raspberry Pi.&lt;/p&gt;
+&lt;p&gt;The implementation is fairly simple:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Sets up a QuickJS runtime and context&lt;/li&gt;
+&lt;li&gt;Exposes a couple of native functions (for performance reasons)&lt;/li&gt;
+&lt;li&gt;Injects JavaScript code to implement Deno and web APIs (e.g. &lt;code&gt;Deno.args&lt;/code&gt;, &lt;code&gt;Deno.writeTextFile&lt;/code&gt;, and &lt;code&gt;TextEncoder&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Runs the requested module&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I&amp;#39;ll admit that md2blog hasn&amp;#39;t been optimized. It always regenerates the entire site, and it&amp;#39;s written in JavaScript. On my desktop computer, I can build my site in maybe 1 second. On the Raspberry Pi (admittedly using a much simpler JavaScript runtime), it took &lt;em&gt;over 6 minutes&lt;/em&gt;! Even after moving UTF-8 encode/decode to native code, it still took 4 minutes to rebuild this site.&lt;/p&gt;
+&lt;h1 id=&quot;lessons-learned&quot;&gt;Lessons learned&lt;/h1&gt;
+&lt;p&gt;That was just a depiction of my experience using this minimal dev environment. But what have I &lt;em&gt;learned&lt;/em&gt;?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A ten year-old, cheap computer is capable, but &lt;em&gt;slow&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;Regardless, it &lt;em&gt;is&lt;/em&gt; possible to develop software in C, with most of the bells and whistles, &lt;em&gt;while using under 500 MB of disk space&lt;/em&gt; (this is probably the biggest surprise of this whole experiment)&lt;/li&gt;
+&lt;li&gt;Vim with Ctags is great, but remembering all the key bindings is annoying, and I still feel less productive than in VS Code&lt;/li&gt;
+&lt;li&gt;Not mentioned above, but I haven&amp;#39;t found a good debugging setup, even for C&lt;/li&gt;
+&lt;li&gt;JavaScript is pretty portable, thanks to QuickJS (though I worry what will happen as the language continues to evolve beyond QuickJS&amp;#39;s implementation)&lt;/li&gt;
+&lt;li&gt;Browsing most of the web on the console is tedious&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
+&lt;p&gt;First of all, it&amp;#39;s clear to me that I&amp;#39;d like a faster computer. Would a newer Raspberry Pi hit the sweet spot between performance and cheapness? What about an old laptop?&lt;/p&gt;
+&lt;p&gt;Additionally, I&amp;#39;m still on the fence about wanting to stick to console mode. Ultimately, it&amp;#39;s an arbitrary goal, and I don&amp;#39;t think I&amp;#39;m aiming for it for any other reason than to see if it&amp;#39;s possible. It&amp;#39;s likely at some point I will break down and install a GUI environment. Maybe economizing a GUI is superior to maximizing the console?&lt;/p&gt;
+&lt;p&gt;Regardless, I still plan to play around with a few more code editors and programming languages.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>In search of a minimal development environment, part 2</title>
 <id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env-2.html</id>
@@ -88,7 +160,7 @@
 <content type="html">&lt;p&gt;Almost exactly 1 year ago, in &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;part 1&lt;/a&gt;, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&amp;#39;d still be useful in another decade. In the intervening time, I&amp;#39;ve completed some nontrivial projects in both TypeScript (using both Node and Deno) and Python. I&amp;#39;ve also spent time contemplating a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;minimal development environment&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In this post, I&amp;#39;m going to add a few more items to my programming language wishlist, add a few more programming languages to my candidate list, and then briefly describe my initial experiences with a few of those languages.&lt;/p&gt;
 &lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer&lt;/h1&gt;
-&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#x73;&amp;#x63;&amp;#104;&amp;#x65;&amp;#109;&amp;#101;&amp;#x73;&amp;#99;&amp;#x61;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#x6d;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#x73;&amp;#x63;&amp;#104;&amp;#x65;&amp;#109;&amp;#101;&amp;#x73;&amp;#99;&amp;#x61;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#x6d;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#108;&amp;#111;&amp;#x67;&amp;#x40;&amp;#x73;&amp;#x63;&amp;#104;&amp;#101;&amp;#109;&amp;#x65;&amp;#115;&amp;#x63;&amp;#x61;&amp;#112;&amp;#101;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#109;&quot;&gt;&amp;#108;&amp;#111;&amp;#x67;&amp;#x40;&amp;#x73;&amp;#x63;&amp;#104;&amp;#101;&amp;#109;&amp;#x65;&amp;#115;&amp;#x63;&amp;#x61;&amp;#112;&amp;#101;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#109;&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;there-can-be-more-than-one&quot;&gt;There can be more than one&lt;/h1&gt;
 &lt;p&gt;Note: I&amp;#39;ve come to terms with the fact that I&amp;#39;ll probably end up needing to use several of these languages for different purposes, namely I&amp;#39;ll want to have one fast, ahead-of-time compiled language for performance-critical projects, and something simpler and more dynamic (while still low-overhead) for most everything else.&lt;/p&gt;
 &lt;h1 id=&quot;wishlist&quot;&gt;Wishlist&lt;/h1&gt;
@@ -281,107 +353,6 @@
 &lt;h1 id=&quot;one-last-note&quot;&gt;One last note&lt;/h1&gt;
 &lt;p&gt;That&amp;#39;s all for now. Wish me luck! And if you like programming games or are interested in subleq, please give SIC-1 a try on Steam:&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://store.steampowered.com/app/2124440/SIC1/&quot;&gt;https://store.steampowered.com/app/2124440/SIC1/&lt;/a&gt;&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Porting a browser-based game to Steam (part 3)</title>
-<id>https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-3.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-3.html"/>
-<updated>2022-11-17T00:00:00.000Z</updated>
-<summary type="text">I ported a browser-based game to Steam using WebView2. This is an overview of what I learned in the process.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/game-development/browser-based-game-on-steam-2.html&quot;&gt;part 2&lt;/a&gt;, I decided to try using &lt;a href=&quot;https://developer.microsoft.com/en-us/microsoft-edge/webview2/&quot;&gt;WebView2&lt;/a&gt; to port my browser-based game to Steam (in order to avoid having to ship an entire Chrome/Electron runtime with my game).&lt;/p&gt;
-&lt;p&gt;The good news is that it is indeed possible to ship an HTML/CSS/JavaScript-based game on Steam using WebView2. The bad news is that I ended up having to write a lot of integration code. I&amp;#39;ll probably never know how much time using &lt;a href=&quot;https://www.electronjs.org/&quot;&gt;Electron&lt;/a&gt;+&lt;a href=&quot;https://github.com/greenheartgames/greenworks&quot;&gt;Greenworks&lt;/a&gt; would have saved me, but I try not to dwell on sunk costs.&lt;/p&gt;
-&lt;h1 id=&quot;finally-some-brief-answers&quot;&gt;Finally, some (brief) answers&lt;/h1&gt;
-&lt;p&gt;Below is a categorized overview of the questions I had to answer on my journey to a (hopefully!) final Steam build of my WebView2-based game, along with brief answers.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m planning to write more in-depth answers in the future. For now, if you&amp;#39;re interested in more detail, send an email to any name at this domain.&lt;/p&gt;
-&lt;h2 id=&quot;installation-environment&quot;&gt;Installation, environment&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Does WebView2 support Windows 7? What about 32-bit Windows?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Yes to both (use &lt;a href=&quot;https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/&quot;&gt;Win7 VMs&lt;/a&gt; for testing).&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Can a Steam &lt;a href=&quot;https://partner.steamgames.com/doc/sdk/installscripts&quot;&gt;InstallScript&lt;/a&gt; install the WebView2 runtime successfully?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Yes: &lt;a href=&quot;https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/webview2.vdf&quot;&gt;example&lt;/a&gt; (note: use your own app id!).&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do you disable F12 dev tools, context menus, etc.?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/win32/webview2/nf-webview2-icorewebview2settings-put_aredevtoolsenabled&quot;&gt;ICoreWebView2Settings::put_AreDevToolsEnabled&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do you debug JavaScript code running in the WebView2 app?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Use VS Code&amp;#39;s path mapping option: &lt;a href=&quot;https://github.com/jaredkrinke/sic1/blob/master/.vscode/launch.json&quot;&gt;example&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do you monitor your game for errors (both JavaScript and native)?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Use &lt;a href=&quot;https://sentry.io/welcome/&quot;&gt;Sentry&lt;/a&gt; or &lt;a href=&quot;https://backtrace.io/&quot;&gt;Backtrace&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;integrating-c-and-javascript&quot;&gt;Integrating C++ and JavaScript&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;What is WebView2&amp;#39;s threading model? What happens if the network connection is slow?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;All host object calls come in on your main thread, so you may want to move slow operations to a background (or thread pool) thread, and use the promise-wrapping technique mentioned below for providing asynchronous results.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do I integrate native code and JavaScript?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Use &lt;a href=&quot;https://learn.microsoft.com/en-us/microsoft-edge/webview2/how-to/hostobject?tabs=win32cpp&quot;&gt;ICoreWebView2::AddHostObjectToScript&lt;/a&gt;, &lt;a href=&quot;https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/dispatchable.h&quot;&gt;implement IDispatch&lt;/a&gt;, and &lt;a href=&quot;https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/sic1.rc&quot;&gt;embed your type library&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How can you run save code when the user clicks the close button?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Put code in your WM_CLOSE handler.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do you return a promise from a host object interface?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Not directly supported, but you can marshal the &lt;code&gt;resolve&lt;/code&gt; and &lt;code&gt;reject&lt;/code&gt; IDispatch interfaces from the &lt;code&gt;Promise&lt;/code&gt; constructor to your native code instead (&lt;a href=&quot;https://devblogs.microsoft.com/oldnewthing/20151021-00/?p=91311&quot;&gt;and even to another thread&lt;/a&gt;): &lt;a href=&quot;https://github.com/jaredkrinke/sic1/blob/master/sic1/client/windows/promisehandler.cpp&quot;&gt;example&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do you marshal complex types between JavaScript and native code (e.g. for Steam Leaderboards)?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Pack them into flat arrays of values that are represented in native code as &lt;a href=&quot;https://learn.microsoft.com/en-us/windows/win32/api/oaidl/ns-oaidl-safearray&quot;&gt;SAFEARRAY&lt;/a&gt; of &lt;a href=&quot;https://learn.microsoft.com/en-us/windows/win32/winauto/variant-structure&quot;&gt;VARIANT&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;steam-integration&quot;&gt;Steam integration&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Is it trivial to take advantage of Steam&amp;#39;s support for cloud saves/syncing?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Nope. I periodically write localStorage to a file that Steam auto-cloud synchronizes.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do I test Steam Cloud saves?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Just delete the local save and let Steam restore it on launch.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do you integrate Steam&amp;#39;s Callback and CallResult APIs with JavaScript?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;I did this using very careful multi-threaded code and the promise-wrapping idea from the previous bullet. I hope there&amp;#39;s a better way that I just haven&amp;#39;t found yet!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do you deal with Steam API rate-limiting?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;With a &lt;a href=&quot;https://github.com/jaredkrinke/crs_queue&quot;&gt;coalescing, rate-limited, serializable/deserializable task queue&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Does the Steam Overlay work for WebView2-based games?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;No.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;miscellaneous&quot;&gt;Miscellaneous&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;How should fullscreen support work?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Must be handled by native code (otherwise &amp;quot;Esc&amp;quot; will always exit fullscreen).&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do you ensure your game can immediately start playing music, even before the user interacts with any HTML elements?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/win32/webview2/nf-webview2-icorewebview2environmentoptions-put_additionalbrowserarguments&quot;&gt;ICoreWebView2EnvironmentOptions::put_AdditionalBrowserArguments&lt;/a&gt; with &lt;code&gt;L&amp;quot;--autoplay-policy=no-user-gesture-required&amp;quot;&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Do you need to explicitly move focus to the web view on launch?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Yes: &lt;a href=&quot;https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/win32/webview2/nf-webview2-icorewebview2controller-movefocus&quot;&gt;ICoreWebView2Controller::MoveFocus&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;How do you ensure your game is not blurry on high DPI screens?&lt;/strong&gt;&lt;ul&gt;
-&lt;li&gt;Project properties -&amp;gt; Configuration Properties -&amp;gt; Manifest Tool -&amp;gt; Input and Output -&amp;gt; DPI Awareness -&amp;gt; Per Monitor High DPI Aware.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>
