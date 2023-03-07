@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-03-04T05:07:11.241Z</updated>
+<updated>2023-03-07T23:22:02.738Z</updated>
 
 <entry>
 <title>Future-proof programming languages, part 3</title>
@@ -40,11 +40,11 @@
 &lt;/thead&gt;
 &lt;tbody&gt;&lt;tr&gt;
 &lt;td&gt;Rust&lt;/td&gt;
-&lt;td&gt;990 MB&lt;/td&gt;
+&lt;td&gt;650 MB&lt;/td&gt;
 &lt;td&gt;300 KB&lt;/td&gt;
 &lt;td&gt;?&lt;/td&gt;
 &lt;td&gt;Probably&lt;/td&gt;
-&lt;td&gt;Failed&lt;/td&gt;
+&lt;td&gt;Mostly easy&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Go&lt;/td&gt;
@@ -128,7 +128,7 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 &lt;h2 id=&quot;sdk-size&quot;&gt;SDK size&lt;/h2&gt;
-&lt;p&gt;Just looking at SDK size, Rust is an outlier. Even compared to a similarly complex language like C++, the Rust SDK is absolutely huge. At the moment, I don&amp;#39;t know why the SDK is so big. Even after allowing for a build tool, custom linker, and standard library, the Rust SDK is disappointingly heavy. This unfortunately matches my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/rust-first-experience.html&quot;&gt;previous experience with Rust on Windows&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Just looking at SDK size, Rust is an outlier. Even compared to a similarly complex language like C++, the Rust SDK is absolutely huge. At the moment, I don&amp;#39;t know why the SDK is so big. Even after allowing for a build tool, custom linker, and standard library, the Rust SDK is disappointingly heavy. This unfortunately matches my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/rust-first-experience.html&quot;&gt;previous experience with Rust on Windows&lt;/a&gt;. &lt;strong&gt;Update&lt;/strong&gt;: Using the &amp;quot;minimal&amp;quot; profile, the SDK was closer to 650 MB for native compilation and another 150 MB for cross-compilation.&lt;/p&gt;
 &lt;p&gt;Obviously, it&amp;#39;s not fair to compare the compile-to-native languages to scripting languages, but comparisons within each category seem appropriate. Go is the second largest, but it comes with some impressive features: the ability to trivially cross-compile and &lt;a href=&quot;https://pkg.go.dev/std&quot;&gt;a large standard library&lt;/a&gt;. Go&amp;#39;s offering seems on par with C#, but with a better &amp;quot;compile to native code&amp;quot; story (and, obviously, larger differences in the programming languages themselves).&lt;/p&gt;
 &lt;p&gt;Zig is larger than I expected for a simple language, but it can cross-compile for different architectures (similar to Go), and &lt;a href=&quot;https://zig.news/kristoff/compile-a-c-c-project-with-zig-368j&quot;&gt;Zig can even compile C/C++ code&lt;/a&gt;, so it&amp;#39;s arguably worth the footprint.&lt;/p&gt;
 &lt;p&gt;Looking at interpreted languages, the results are pretty similar except for Tcl and Lua (both of which don&amp;#39;t come with much of a standard library).&lt;/p&gt;
@@ -138,7 +138,7 @@
 &lt;p&gt;The C++ binary using &amp;quot;iostream&amp;quot; was unacceptably big, but using &amp;quot;stdio.h&amp;quot; gets it back in line with C, in the low double-digit kilobytes.&lt;/p&gt;
 &lt;h2 id=&quot;stand-alone-executable-size&quot;&gt;Stand-alone executable size&lt;/h2&gt;
 &lt;p&gt;Deployment is probably my least favorite part of software. Obviously, there are exceptions, but in most cases, a &amp;quot;program that does X&amp;quot; would be most convenient as a single executable (or at least a single zip file) that just does X. Here, I&amp;#39;m looking at fully statically-linked or bundled binaries.&lt;/p&gt;
-&lt;p&gt;Native languages generally compile to a single binary. I didn&amp;#39;t see how to get a fully static binary from Rust, but I&amp;#39;m sure it must be possible. C certainly is good at producing small executables (in the past, this was a prerequisite!).&lt;/p&gt;
+&lt;p&gt;Native languages generally compile to a single binary. I didn&amp;#39;t try to get a fully static binary from Rust, but I&amp;#39;ve read that it&amp;#39;s possible. C certainly is good at producing small executables (in the past, this was a prerequisite!).&lt;/p&gt;
 &lt;p&gt;The other languages show some interesting results: JavaScript and C# appear to be the most bloated, closely followed by SBCL (a Common Lisp implementation). But for JavaScript there are multiple runtimes--80 MB is for Deno, but QuickJS is under 1 MB--so JavaScript supports indirectly optimizing for either size or speed. Lisp has a similar story, although I didn&amp;#39;t investigate it in depth. Python was impressively slim (definitely a surprise for me!).&lt;/p&gt;
 &lt;p&gt;That leaves C# which, sadly, just appears to be bloated. For the record, I couldn&amp;#39;t get a Tcl bundle working, but I suspect it would be &amp;lt; 10 MB.&lt;/p&gt;
 &lt;h2 id=&quot;developing-on-a-raspberry-pi&quot;&gt;Developing &lt;em&gt;on&lt;/em&gt; a Raspberry Pi&lt;/h2&gt;
@@ -156,6 +156,7 @@
 &lt;/li&gt;
 &lt;li&gt;Trivial to cross-compile&lt;ul&gt;
 &lt;li&gt;Go&lt;/li&gt;
+&lt;li&gt;Rust (note: requires &lt;a href=&quot;https://github.com/KodrAus/rust-cross-compile#cross-compiling-to-linux&quot;&gt;editing Cargo&amp;#39;s config file&lt;/a&gt;)&lt;/li&gt;
 &lt;li&gt;Zig (&lt;a href=&quot;https://github.com/ziglang/zig/issues/4875&quot;&gt;except for C/C++ code&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -166,15 +167,14 @@
 &lt;/li&gt;
 &lt;li&gt;Cross-compile failed/didn&amp;#39;t work/not possible&lt;ul&gt;
 &lt;li&gt;C# (executable failed to run)&lt;/li&gt;
-&lt;li&gt;Rust (link error)&lt;/li&gt;
 &lt;li&gt;SBCL (not necessary with runtime, but not possible &lt;em&gt;without&lt;/em&gt; a runtime)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Scripting languages sort of get a free pass here, but there are almost certainly large differences in ease of deployment.&lt;/p&gt;
-&lt;p&gt;Go and Zig have excellent tooling for cross-compiling. And if Zig can eventually support cross-compiling C/C++ code without requiring a separate toolchain, that would be huge!&lt;/p&gt;
+&lt;p&gt;Go and Zig have excellent tooling for cross-compiling. And if Zig can eventually support cross-compiling C/C++ code without requiring a separate toolchain, that would be huge! &lt;strong&gt;Update&lt;/strong&gt;: Cross-compilation for Rust worked well, once I found out &lt;a href=&quot;https://github.com/KodrAus/rust-cross-compile#cross-compiling-to-linux&quot;&gt;how to tell Rust to use its bundled linker&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;C/C++ support cross-compiling through a painful process of setting up an entire compilation environment for the target. It&amp;#39;s tedious and annoying, and I hope I never have to do it again.&lt;/p&gt;
-&lt;p&gt;As for Rust and C#, I suspect there&amp;#39;s some way to get them to successfully cross-compile for a Pi, but neither worked for me. I put SBCL in the last category because it seems to require running on the target in order to produce a bundle.&lt;/p&gt;
+&lt;p&gt;As for C#, I suspect there&amp;#39;s some way to get them to successfully cross-compile for a Pi, but neither worked for me. I put SBCL in the last category because it seems to require running on the target in order to produce a bundle.&lt;/p&gt;
 &lt;h1 id=&quot;analysis&quot;&gt;Analysis&lt;/h1&gt;
 &lt;p&gt;Subjectively, I was least impressed with the following languages, so they&amp;#39;ve been cut:&lt;/p&gt;
 &lt;ul&gt;
@@ -260,6 +260,7 @@
 &lt;li&gt;Raspberry Pi B Alpine Linux triple: arm-unknown-linux-musleabihf&lt;/li&gt;
 &lt;li&gt;Attempt to cross-compile failed with &amp;quot;linker `cc` not found&amp;quot; (and suggestions from the web didn&amp;#39;t help)&lt;/li&gt;
 &lt;li&gt;Cross-compiler setup from rustup was Visual Studio-levels of huge (1.5 GB)&lt;/li&gt;
+&lt;li&gt;Finally found &lt;a href=&quot;https://github.com/KodrAus/rust-cross-compile#cross-compiling-to-linux&quot;&gt;the trick&lt;/a&gt; for linking during cross-compilation: point Cargo to &amp;quot;rust-lld&amp;quot; (which is installed with the toolchain)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&quot;tcl&quot;&gt;Tcl&lt;/h3&gt;
 &lt;ul&gt;
@@ -427,7 +428,7 @@
 <content type="html">&lt;p&gt;Almost exactly 1 year ago, in &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;part 1&lt;/a&gt;, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&amp;#39;d still be useful in another decade. In the intervening time, I&amp;#39;ve completed some nontrivial projects in both TypeScript (using both Node and Deno) and Python. I&amp;#39;ve also spent time contemplating a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;minimal development environment&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In this post, I&amp;#39;m going to add a few more items to my programming language wishlist, add a few more programming languages to my candidate list, and then briefly describe my initial experiences with a few of those languages.&lt;/p&gt;
 &lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer&lt;/h1&gt;
-&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#115;&amp;#x63;&amp;#104;&amp;#101;&amp;#x6d;&amp;#101;&amp;#x73;&amp;#99;&amp;#x61;&amp;#x70;&amp;#101;&amp;#46;&amp;#x63;&amp;#x6f;&amp;#109;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#115;&amp;#x63;&amp;#104;&amp;#101;&amp;#x6d;&amp;#101;&amp;#x73;&amp;#99;&amp;#x61;&amp;#x70;&amp;#101;&amp;#46;&amp;#x63;&amp;#x6f;&amp;#109;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#x40;&amp;#115;&amp;#x63;&amp;#104;&amp;#101;&amp;#x6d;&amp;#101;&amp;#x73;&amp;#x63;&amp;#x61;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#111;&amp;#109;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#x40;&amp;#115;&amp;#x63;&amp;#104;&amp;#101;&amp;#x6d;&amp;#101;&amp;#x73;&amp;#x63;&amp;#x61;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;there-can-be-more-than-one&quot;&gt;There can be more than one&lt;/h1&gt;
 &lt;p&gt;Note: I&amp;#39;ve come to terms with the fact that I&amp;#39;ll probably end up needing to use several of these languages for different purposes, namely I&amp;#39;ll want to have one fast, ahead-of-time compiled language for performance-critical projects, and something simpler and more dynamic (while still low-overhead) for most everything else.&lt;/p&gt;
 &lt;h1 id=&quot;wishlist&quot;&gt;Wishlist&lt;/h1&gt;
