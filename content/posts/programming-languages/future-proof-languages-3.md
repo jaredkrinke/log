@@ -20,7 +20,7 @@ For reference, my Alpine Linux baseline image was around 150 MB. Here are the re
 
 | Language | SDK size | Program size | Stand-alone size | Build on Pi? | Cross-compile for Pi? |
 |---|---|---|---|---|---|
-| Rust | 990 MB | 300 KB | ? | Probably | Failed |
+| Rust | 650 MB | 300 KB | ? | Probably | Mostly easy |
 | Go | 550 MB | 1.2 MB | 1.2 MB | Yes | Easy |
 | C# | 510 MB | 75 KB | 67 MB | No | Failed |
 | Zig | 335 MB | 800 KB | 800 KB | No | Mostly easy |
@@ -33,7 +33,7 @@ For reference, my Alpine Linux baseline image was around 150 MB. Here are the re
 | Lua | 1 MB | 1 KB | 1 MB | Yes | Unnecessary |
 
 ## SDK size
-Just looking at SDK size, Rust is an outlier. Even compared to a similarly complex language like C++, the Rust SDK is absolutely huge. At the moment, I don't know why the SDK is so big. Even after allowing for a build tool, custom linker, and standard library, the Rust SDK is disappointingly heavy. This unfortunately matches my [previous experience with Rust on Windows](rust-first-experience.md).
+Just looking at SDK size, Rust is an outlier. Even compared to a similarly complex language like C++, the Rust SDK is absolutely huge. At the moment, I don't know why the SDK is so big. Even after allowing for a build tool, custom linker, and standard library, the Rust SDK is disappointingly heavy. This unfortunately matches my [previous experience with Rust on Windows](rust-first-experience.md). **Update**: Using the "minimal" profile, the SDK was closer to 650 MB for native compilation and another 150 MB for cross-compilation.
 
 Obviously, it's not fair to compare the compile-to-native languages to scripting languages, but comparisons within each category seem appropriate. Go is the second largest, but it comes with some impressive features: the ability to trivially cross-compile and [a large standard library](https://pkg.go.dev/std). Go's offering seems on par with C#, but with a better "compile to native code" story (and, obviously, larger differences in the programming languages themselves).
 
@@ -51,7 +51,7 @@ The C++ binary using "iostream" was unacceptably big, but using "stdio.h" gets i
 ## Stand-alone executable size
 Deployment is probably my least favorite part of software. Obviously, there are exceptions, but in most cases, a "program that does X" would be most convenient as a single executable (or at least a single zip file) that just does X. Here, I'm looking at fully statically-linked or bundled binaries.
 
-Native languages generally compile to a single binary. I didn't see how to get a fully static binary from Rust, but I'm sure it must be possible. C certainly is good at producing small executables (in the past, this was a prerequisite!).
+Native languages generally compile to a single binary. I didn't try to get a fully static binary from Rust, but I've read that it's possible. C certainly is good at producing small executables (in the past, this was a prerequisite!).
 
 The other languages show some interesting results: JavaScript and C# appear to be the most bloated, closely followed by SBCL (a Common Lisp implementation). But for JavaScript there are multiple runtimes--80 MB is for Deno, but QuickJS is under 1 MB--so JavaScript supports indirectly optimizing for either size or speed. Lisp has a similar story, although I didn't investigate it in depth. Python was impressively slim (definitely a surprise for me!).
 
@@ -72,22 +72,22 @@ Although I'm interested in developing directly on a Pi (as part of [my minimal d
   * Tcl
 * Trivial to cross-compile
   * Go
+  * Rust (note: requires [editing Cargo's config file](https://github.com/KodrAus/rust-cross-compile#cross-compiling-to-linux))
   * Zig ([except for C/C++ code](https://github.com/ziglang/zig/issues/4875))
 * Tedious, but possible to cross-compile
   * C
   * C++
 * Cross-compile failed/didn't work/not possible
   * C# (executable failed to run)
-  * Rust (link error)
   * SBCL (not necessary with runtime, but not possible *without* a runtime)
 
 Scripting languages sort of get a free pass here, but there are almost certainly large differences in ease of deployment.
 
-Go and Zig have excellent tooling for cross-compiling. And if Zig can eventually support cross-compiling C/C++ code without requiring a separate toolchain, that would be huge!
+Go and Zig have excellent tooling for cross-compiling. And if Zig can eventually support cross-compiling C/C++ code without requiring a separate toolchain, that would be huge! **Update**: Cross-compilation for Rust worked well, once I found out [how to tell Rust to use its bundled linker](https://github.com/KodrAus/rust-cross-compile#cross-compiling-to-linux).
 
 C/C++ support cross-compiling through a painful process of setting up an entire compilation environment for the target. It's tedious and annoying, and I hope I never have to do it again.
 
-As for Rust and C#, I suspect there's some way to get them to successfully cross-compile for a Pi, but neither worked for me. I put SBCL in the last category because it seems to require running on the target in order to produce a bundle.
+As for C#, I suspect there's some way to get them to successfully cross-compile for a Pi, but neither worked for me. I put SBCL in the last category because it seems to require running on the target in order to produce a bundle.
 
 # Analysis
 Subjectively, I was least impressed with the following languages, so they've been cut:
@@ -178,6 +178,7 @@ The next section is just a collection of notes I made while testing out language
 * Raspberry Pi B Alpine Linux triple: arm-unknown-linux-musleabihf
 * Attempt to cross-compile failed with "linker \`cc\` not found" (and suggestions from the web didn't help)
 * Cross-compiler setup from rustup was Visual Studio-levels of huge (1.5 GB)
+* Finally found [the trick](https://github.com/KodrAus/rust-cross-compile#cross-compiling-to-linux) for linking during cross-compilation: point Cargo to "rust-lld" (which is installed with the toolchain)
 
 ### Tcl
 * Couldn't figure out how to make a TclKit...
