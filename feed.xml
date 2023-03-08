@@ -7,8 +7,63 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-03-07T23:22:02.738Z</updated>
+<updated>2023-03-08T05:05:51.107Z</updated>
 
+<entry>
+<title>Speeding up md2blog</title>
+<id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html"/>
+<updated>2023-03-07T00:00:00.000Z</updated>
+<summary type="text">md2blog is fast on my desktop, but slow on my Raspberry Pi. Here are my plans to improve rebuild performance.</summary>
+<content type="html">&lt;p&gt;I&amp;#39;ve been happily using &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html&quot;&gt;md2blog&lt;/a&gt; to generate this site for over a year now, but I recently ran into a problem: it&amp;#39;s not as fast as it could be.&lt;/p&gt;
+&lt;p&gt;On my desktop computer, this is no big deal because a clean build only takes a couple of seconds and a live rebuild takes less than 2 seconds. But on my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-3.html&quot;&gt;minimal development environment I&amp;#39;ve been playing with&lt;/a&gt; (which runs on a Raspberry Pi 1, model B), even after some basic optimization, it still takes 2 minutes to build the site from scratch! I haven&amp;#39;t bothered to attempt a &amp;quot;live&amp;quot; rebuild.&lt;/p&gt;
+&lt;p&gt;One reason for this is the fact that md2blog always rebuilds the entire site, regardless of whether or not anything changed. This was a design decision I made solely to simplify the implementation, with the understanding that my site was small enough and my computer fast enough that it wouldn&amp;#39;t matter. Now, my computer is slow.&lt;/p&gt;
+&lt;h1 id=&quot;solutions-to-explore&quot;&gt;Solutions to explore&lt;/h1&gt;
+&lt;p&gt;Here are some ideas I had for improving performance on low-end devices:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hugo&lt;/strong&gt;: Give up on JavaScript/Deno/&lt;a href=&quot;https://github.com/jaredkrinke/goldsmith&quot;&gt;Goldsmith&lt;/a&gt; and port everything to &lt;a href=&quot;https://gohugo.io/&quot;&gt;Hugo&lt;/a&gt; (which is implemented in Go and therefore compiled to native code, so probably faster)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rust&lt;/strong&gt;: Give up on JavaScript and rewrite md2blog (and possibly Goldsmith) in Rust (also compiles to native code, but without a garbage collector, so maybe even faster)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Caching&lt;/strong&gt;: Refactor Goldsmith so that it avoids rebuilding items whose source files haven&amp;#39;t changed&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;hugo&quot;&gt;Hugo&lt;/h2&gt;
+&lt;p&gt;Hugo is a popular static site generator. I &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/hugo.html&quot;&gt;tried it out&lt;/a&gt; when I was first creating this site, but I hated the template language and the learning curve for creating new themes was fairly steep. Despite my complaints, I admire Hugo&amp;#39;s portability and speed, so I&amp;#39;m willing to give it another shot, so this option remains on the table.&lt;/p&gt;
+&lt;h2 id=&quot;rust&quot;&gt;Rust&lt;/h2&gt;
+&lt;p&gt;I&amp;#39;d like to learn Rust because it&amp;#39;s unique as a &lt;em&gt;safe&lt;/em&gt; systems language, and redesigning/reimplementing Goldsmith+md2blog in Rust would be a great way to learn the language. Using a compiled language would enable parallel builds (although my Raspberry Pi 1 only has a single CPU core), and I suspect that native Markdown/syntax highlighting libraries would speed things up.&lt;/p&gt;
+&lt;p&gt;This would be a large project, but educational enough that I&amp;#39;m open to it.&lt;/p&gt;
+&lt;h2 id=&quot;caching&quot;&gt;Caching&lt;/h2&gt;
+&lt;p&gt;It&amp;#39;s hard to estimate the impact of caching intermediate objects and outputs, but done correctly this would at least reduce the number of files written out from roughly 100, down to just a handful.&lt;/p&gt;
+&lt;p&gt;This option also has the attractive quality that it doesn&amp;#39;t require reimplementing everything in a new language or framework, so it&amp;#39;s probably the shortest path to performance improvements without functional regressions.&lt;/p&gt;
+&lt;p&gt;For now, I&amp;#39;m planning to investigate caching first since it&amp;#39;s the easiest and safest option.&lt;/p&gt;
+&lt;h1 id=&quot;adding-caching-to-goldsmith&quot;&gt;Adding caching to Goldsmith&lt;/h1&gt;
+&lt;p&gt;I never got around to documenting Goldsmith (the base upon which md2blog is built), but it&amp;#39;s essentially &amp;quot;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/metalsmith.html&quot;&gt;Metalsmith&lt;/a&gt; for Deno, with very few dependencies&amp;quot;. Unfortunately, Metalsmith&amp;#39;s data model (which Goldsmith copies) doesn&amp;#39;t trivially lend itself to caching.&lt;/p&gt;
+&lt;h2 id=&quot;goldsmiths-data-model-vs-caching&quot;&gt;Goldsmith&amp;#39;s data model vs. caching&lt;/h2&gt;
+&lt;p&gt;Goldsmith&amp;#39;s data model is essentially one giant mutable map of filenames to metadata and content. A sequence of plugins manipulate this map, in order to transform input files to output files (adding/modifying metadata along the way). At the end of the plugin chain, files are written out to disk.&lt;/p&gt;
+&lt;p&gt;The problem with this approach is that output files never specify their dependencies. Looking at it from the other direction, if I modify this post&amp;#39;s Markdown file, the only change to Goldsmith&amp;#39;s initial data model is the content of this Markdown file. The problem is that this one input file could impact numerous output files: the post itself, the Atom feed, any category/keyword index pages (especially if keywords are added or removed), the home page, and, of course, the archive page.&lt;/p&gt;
+&lt;h2 id=&quot;caching-requirements&quot;&gt;Caching requirements&lt;/h2&gt;
+&lt;p&gt;In order to rebuild the minimal set of files when a change is detected, I need an accurate dependency graph. There are a couple of pitfalls:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;The pipeline itself can change&lt;/strong&gt; (in general for Goldsmith, and in configuration for md2blog)&lt;/li&gt;
+&lt;li&gt;Plugins always consume the entire data model (plugins internally may filter the set of files, but that&amp;#39;s an implementation detail)&lt;/li&gt;
+&lt;li&gt;Plugins can add/delete files at will (there isn&amp;#39;t even a &amp;quot;rename&amp;quot; operation--it just shows up as two independent operations: add and delete)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;brainstorming-dependency-graph-approaches&quot;&gt;Brainstorming dependency graph approaches&lt;/h2&gt;
+&lt;p&gt;Obviously, I could just mandate that Goldsmith plugins have to accurately enumerate their dependencies when adding or modifying entires in the collection data model. For md2blog, with its fixed pipeline, this should be feasible, but potentially error-prone.&lt;/p&gt;
+&lt;p&gt;Another approach would be to automatically gather dependency information for each output by providing the data model wrapped in a &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy&quot;&gt;proxy object&lt;/a&gt;. The trick is scoping the proxy object to a single output, and I don&amp;#39;t see a way to accomplish this without changing the plugin contract. One approach might be to create a new class of plugins that &lt;em&gt;only&lt;/em&gt; transform/rename files individually. &lt;strong&gt;This would also open the door to parallel processing of these &amp;quot;per-file&amp;quot; plugins&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Having the dependency graph computed automatically is preferable, so I&amp;#39;ll try that first.&lt;/p&gt;
+&lt;h2 id=&quot;from-dependencies-to-caching&quot;&gt;From dependencies to caching&lt;/h2&gt;
+&lt;p&gt;Creating the dependency graph is necessary, but not sufficient. I&amp;#39;ll need to also cache the intermediate results from plugins, along with the timestamps of input files so that I can:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Check to see which files have changed&lt;/li&gt;
+&lt;li&gt;Restart the build pipeline from the deepest point that hasn&amp;#39;t changed&lt;/li&gt;
+&lt;li&gt;Add back in unmodified data model entries&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
+&lt;p&gt;Other than ad-hoc tests, it will probably be a good idea to &lt;strong&gt;run both the new cache-aware pipeline and the old rebuild-the-world approach to ensure there aren&amp;#39;t any differences&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ll also, of course, need to &lt;strong&gt;ensure that the additional overhead from caching isn&amp;#39;t so large as to negate any of the benefits&lt;/strong&gt;, at least on my personal site (I&amp;#39;m not the only md2blog use in the entire world, but there are very few, and I suspect most won&amp;#39;t ever find the updated version).&lt;/p&gt;
+&lt;h1 id=&quot;stay-tuned&quot;&gt;Stay tuned&lt;/h1&gt;
+&lt;p&gt;I have no idea how long this project will take or whether I&amp;#39;ll abandon it, but if I make progress, I&amp;#39;ll be sure to post an update (and link it from here--hopefully the rebuild picks up the change!).&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Future-proof programming languages, part 3</title>
 <id>https://log.schemescape.com/posts/programming-languages/future-proof-languages-3.html</id>
@@ -428,7 +483,7 @@
 <content type="html">&lt;p&gt;Almost exactly 1 year ago, in &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;part 1&lt;/a&gt;, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&amp;#39;d still be useful in another decade. In the intervening time, I&amp;#39;ve completed some nontrivial projects in both TypeScript (using both Node and Deno) and Python. I&amp;#39;ve also spent time contemplating a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;minimal development environment&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In this post, I&amp;#39;m going to add a few more items to my programming language wishlist, add a few more programming languages to my candidate list, and then briefly describe my initial experiences with a few of those languages.&lt;/p&gt;
 &lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer&lt;/h1&gt;
-&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#x40;&amp;#115;&amp;#x63;&amp;#104;&amp;#101;&amp;#x6d;&amp;#101;&amp;#x73;&amp;#x63;&amp;#x61;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#111;&amp;#109;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#x40;&amp;#115;&amp;#x63;&amp;#104;&amp;#101;&amp;#x6d;&amp;#101;&amp;#x73;&amp;#x63;&amp;#x61;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#x40;&amp;#x73;&amp;#99;&amp;#104;&amp;#x65;&amp;#x6d;&amp;#101;&amp;#x73;&amp;#x63;&amp;#x61;&amp;#x70;&amp;#x65;&amp;#x2e;&amp;#99;&amp;#111;&amp;#x6d;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#x40;&amp;#x73;&amp;#99;&amp;#104;&amp;#x65;&amp;#x6d;&amp;#101;&amp;#x73;&amp;#x63;&amp;#x61;&amp;#x70;&amp;#x65;&amp;#x2e;&amp;#99;&amp;#111;&amp;#x6d;&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;there-can-be-more-than-one&quot;&gt;There can be more than one&lt;/h1&gt;
 &lt;p&gt;Note: I&amp;#39;ve come to terms with the fact that I&amp;#39;ll probably end up needing to use several of these languages for different purposes, namely I&amp;#39;ll want to have one fast, ahead-of-time compiled language for performance-critical projects, and something simpler and more dynamic (while still low-overhead) for most everything else.&lt;/p&gt;
 &lt;h1 id=&quot;wishlist&quot;&gt;Wishlist&lt;/h1&gt;
@@ -528,48 +583,6 @@
 &lt;li&gt;&lt;strong&gt;Go&lt;/strong&gt;: Great tooling, a simple language, memory safety, and an allegedly great standard library -- I&amp;#39;d never considered Go before, but it has a lot of attractive qualities&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Tcl&lt;/strong&gt;: A beautifully simple language with a tiny footprint and great for gluing things together -- but will it be forgotten in another decade or two?&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>In search of a minimal development environment</title>
-<id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html"/>
-<updated>2023-02-11T00:00:00.000Z</updated>
-<summary type="text">What would a minimal development environment look like? How small could it be?</summary>
-<content type="html">&lt;p&gt;Feel free to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/#the-plan&quot;&gt;skip over the obligatory whining about today&amp;#39;s bloat&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;back-in-my-day&quot;&gt;Back in my day...&lt;/h1&gt;
-&lt;p&gt;I think the first computer I ever used was a &lt;a href=&quot;https://en.wikipedia.org/wiki/Commodore_64&quot;&gt;Commodore 64&lt;/a&gt;. Wikipedia tells me that it had a 1 MHz processor and 64 KB of RAM, all packed into an &amp;quot;obese keyboard&amp;quot; form factor. Despite being 100,000+ times slower (with a similar fraction of memory) compared to a modern computer, it could run a word processor, play games, and print documents.&lt;/p&gt;
-&lt;p&gt;Later on, I remember installing Linux on a 1.44 MB floppy disk to turn an aging 486 computer into a network router. Even back then, that was impressive!&lt;/p&gt;
-&lt;p&gt;A few years later, I remember working on a simple arcade game which used OpenGL for graphics... developed partly on a computer that was command line-only! I have fond memories of using &lt;a href=&quot;https://www.gnu.org/software/screen/&quot;&gt;GNU Screen&lt;/a&gt; and &lt;a href=&quot;https://www.vim.org/&quot;&gt;Vim&lt;/a&gt;, along with &lt;a href=&quot;https://en.wikipedia.org/wiki/Man_page&quot;&gt;man pages&lt;/a&gt;, to write the code. Aside: I remember using &lt;a href=&quot;https://en.wikipedia.org/wiki/Concurrent_Versions_System&quot;&gt;CVS&lt;/a&gt;, but &lt;em&gt;not&lt;/em&gt; fondly.&lt;/p&gt;
-&lt;h1 id=&quot;contrast-with-today&quot;&gt;Contrast with today&lt;/h1&gt;
-&lt;p&gt;Fast-forward to 2023, and I&amp;#39;ve been contemplating porting my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../game-development/sic-1.html&quot;&gt;single-instruction programming game&lt;/a&gt; to &lt;a href=&quot;https://www.electronjs.org/&quot;&gt;Electron&lt;/a&gt; (possibly the heaviest popular app framework of all time), to support Linux (and ideally macOS) builds on Steam.&lt;/p&gt;
-&lt;p&gt;For the record, SIC-1 started out as a trim 25 KB zip file (although it has ballooned to 10 MB, mostly due to &lt;a href=&quot;https://en.wikipedia.org/wiki/Pulse-code_modulation&quot;&gt;PCM&lt;/a&gt; music). Browsers provide a deceptive environment. With a few kilobytes of HTML, CSS, and JavaScript, you can build surprisingly complex (and fast) apps. Of course, the browser itself is hundreds of megabytes, so it&amp;#39;s actually a pretty hefty runtime. How hefty? Ask me after I use Electron.&lt;/p&gt;
-&lt;p&gt;Is it any surprise I&amp;#39;m craving a bit of simplicity?&lt;/p&gt;
-&lt;h1 id=&quot;the-plan&quot;&gt;The plan&lt;/h1&gt;
-&lt;p&gt;So what am I going to do about bloat?&lt;/p&gt;
-&lt;p&gt;This is probably a terrible idea, but I&amp;#39;d like to set up a minimal development environment. And I really do mean &amp;quot;minimal&amp;quot;, i.e.:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Command line only&lt;/li&gt;
-&lt;li&gt;Runs acceptably on a slow computer (possibly a &lt;a href=&quot;https://en.wikipedia.org/wiki/Raspberry_Pi&quot;&gt;Raspberry Pi&lt;/a&gt; 1)&lt;/li&gt;
-&lt;li&gt;Minimal disk footprint&lt;/li&gt;
-&lt;li&gt;As full-featured as possible, given the previous constraints&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Of course, &amp;quot;minimal disk footprint&amp;quot; and &amp;quot;as full-featured as possible&amp;quot; are opposing goals, so this plan isn&amp;#39;t well-defined--I&amp;#39;m content to just see where it leads me.&lt;/p&gt;
-&lt;h1 id=&quot;the-software&quot;&gt;The software&lt;/h1&gt;
-&lt;p&gt;I suspect the following software will play a part:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.alpinelinux.org/&quot;&gt;Alpine Linux&lt;/a&gt; or a minimal &lt;a href=&quot;https://www.debian.org/&quot;&gt;Debian&lt;/a&gt; installation (or &lt;a href=&quot;https://www.freebsd.org/&quot;&gt;FreeBSD&lt;/a&gt;? &lt;a href=&quot;https://minix3.org/&quot;&gt;MINIX 3&lt;/a&gt;? I&amp;#39;m open to suggestions)&lt;/li&gt;
-&lt;li&gt;Vim (or &lt;a href=&quot;https://neovim.io/&quot;&gt;NeoVim&lt;/a&gt;?)&lt;/li&gt;
-&lt;li&gt;GNU Screen (or &lt;a href=&quot;https://github.com/tmux/tmux&quot;&gt;tmux&lt;/a&gt;?)&lt;/li&gt;
-&lt;li&gt;A terminal mode web browser (&lt;a href=&quot;https://lynx.browser.org/&quot;&gt;Lynx&lt;/a&gt;?)&lt;/li&gt;
-&lt;li&gt;Maybe a terminal mode &lt;a href=&quot;https://en.wikipedia.org/wiki/RSS&quot;&gt;RSS&lt;/a&gt; reader or &lt;a href=&quot;https://mastodon.social/&quot;&gt;Mastodon&lt;/a&gt; client, just for fun&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;the-programming-language&quot;&gt;The programming language&lt;/h1&gt;
-&lt;p&gt;You may note that I didn&amp;#39;t specify any compilers or build tools. That&amp;#39;s because I&amp;#39;d like to use this minimal environment to test out some of my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../programming-languages/future-proof-languages.html&quot;&gt;future-proof programming language candidates&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ll admit that it&amp;#39;s unreasonable to expect modern programming languages to support development on a Raspberry Pi, but that also means that I&amp;#39;ll be &lt;em&gt;unreasonably impressed&lt;/em&gt; if a programming language is useful in a ridiculously constrained environment like this.&lt;/p&gt;
-&lt;h1 id=&quot;wrapping-up&quot;&gt;Wrapping up&lt;/h1&gt;
-&lt;p&gt;Feel free to let me know if you have any suggestions or if you&amp;#39;ve attempted anything similar (or want to!). You can email me at any address at the &amp;quot;.com&amp;quot; address in the address bar.&lt;/p&gt;
-&lt;p&gt;Wish me luck!&lt;/p&gt;
 </content>
 </entry>
 </feed>
