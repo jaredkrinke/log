@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-03-08T05:05:51.107Z</updated>
+<updated>2023-03-14T02:34:13.494Z</updated>
 
 <entry>
 <title>Speeding up md2blog</title>
@@ -27,6 +27,7 @@
 &lt;/ul&gt;
 &lt;h2 id=&quot;hugo&quot;&gt;Hugo&lt;/h2&gt;
 &lt;p&gt;Hugo is a popular static site generator. I &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/hugo.html&quot;&gt;tried it out&lt;/a&gt; when I was first creating this site, but I hated the template language and the learning curve for creating new themes was fairly steep. Despite my complaints, I admire Hugo&amp;#39;s portability and speed, so I&amp;#39;m willing to give it another shot, so this option remains on the table.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I looked into Hugo more, and it doesn&amp;#39;t support deriving taxonomies from file system metadata (namely: parent directory), so I&amp;#39;d have to make some compromises (either to my workflow or the site design) if I wanted to switch to Hugo. Still on the table (just less attractive).&lt;/p&gt;
 &lt;h2 id=&quot;rust&quot;&gt;Rust&lt;/h2&gt;
 &lt;p&gt;I&amp;#39;d like to learn Rust because it&amp;#39;s unique as a &lt;em&gt;safe&lt;/em&gt; systems language, and redesigning/reimplementing Goldsmith+md2blog in Rust would be a great way to learn the language. Using a compiled language would enable parallel builds (although my Raspberry Pi 1 only has a single CPU core), and I suspect that native Markdown/syntax highlighting libraries would speed things up.&lt;/p&gt;
 &lt;p&gt;This would be a large project, but educational enough that I&amp;#39;m open to it.&lt;/p&gt;
@@ -483,7 +484,7 @@
 <content type="html">&lt;p&gt;Almost exactly 1 year ago, in &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;part 1&lt;/a&gt;, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&amp;#39;d still be useful in another decade. In the intervening time, I&amp;#39;ve completed some nontrivial projects in both TypeScript (using both Node and Deno) and Python. I&amp;#39;ve also spent time contemplating a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;minimal development environment&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In this post, I&amp;#39;m going to add a few more items to my programming language wishlist, add a few more programming languages to my candidate list, and then briefly describe my initial experiences with a few of those languages.&lt;/p&gt;
 &lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer&lt;/h1&gt;
-&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#x40;&amp;#x73;&amp;#99;&amp;#104;&amp;#x65;&amp;#x6d;&amp;#101;&amp;#x73;&amp;#x63;&amp;#x61;&amp;#x70;&amp;#x65;&amp;#x2e;&amp;#99;&amp;#111;&amp;#x6d;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#x40;&amp;#x73;&amp;#99;&amp;#104;&amp;#x65;&amp;#x6d;&amp;#101;&amp;#x73;&amp;#x63;&amp;#x61;&amp;#x70;&amp;#x65;&amp;#x2e;&amp;#99;&amp;#111;&amp;#x6d;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#111;&amp;#103;&amp;#x40;&amp;#x73;&amp;#99;&amp;#104;&amp;#x65;&amp;#x6d;&amp;#x65;&amp;#x73;&amp;#x63;&amp;#97;&amp;#x70;&amp;#x65;&amp;#46;&amp;#99;&amp;#x6f;&amp;#x6d;&quot;&gt;&amp;#x6c;&amp;#111;&amp;#103;&amp;#x40;&amp;#x73;&amp;#99;&amp;#104;&amp;#x65;&amp;#x6d;&amp;#x65;&amp;#x73;&amp;#x63;&amp;#97;&amp;#x70;&amp;#x65;&amp;#46;&amp;#99;&amp;#x6f;&amp;#x6d;&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;there-can-be-more-than-one&quot;&gt;There can be more than one&lt;/h1&gt;
 &lt;p&gt;Note: I&amp;#39;ve come to terms with the fact that I&amp;#39;ll probably end up needing to use several of these languages for different purposes, namely I&amp;#39;ll want to have one fast, ahead-of-time compiled language for performance-critical projects, and something simpler and more dynamic (while still low-overhead) for most everything else.&lt;/p&gt;
 &lt;h1 id=&quot;wishlist&quot;&gt;Wishlist&lt;/h1&gt;
