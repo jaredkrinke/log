@@ -20,6 +20,8 @@ Here are some ideas I had for improving performance on low-end devices:
 ## Hugo
 Hugo is a popular static site generator. I [tried it out](hugo.md) when I was first creating this site, but I hated the template language and the learning curve for creating new themes was fairly steep. Despite my complaints, I admire Hugo's portability and speed, so I'm willing to give it another shot, so this option remains on the table.
 
+**Update**: I looked into Hugo more, and it doesn't support deriving taxonomies from file system metadata (namely: parent directory), so I'd have to make some compromises (either to my workflow or the site design) if I wanted to switch to Hugo. Still on the table (just less attractive).
+
 ## Rust
 I'd like to learn Rust because it's unique as a *safe* systems language, and redesigning/reimplementing Goldsmith+md2blog in Rust would be a great way to learn the language. Using a compiled language would enable parallel builds (although my Raspberry Pi 1 only has a single CPU core), and I suspect that native Markdown/syntax highlighting libraries would speed things up.
 
