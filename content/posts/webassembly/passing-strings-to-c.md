@@ -172,7 +172,7 @@ Here was my initial thinking for returning a dynamic string from C to JavaScript
 
 Given that I'm already exposing allocations to JavaScript, I thought this would work, but there's one problem: `TextDecoder.decode()` doesn't have built-in support for null-terminated strings (nor should it, in my opinion). Potential solutions:
 
-1. Have JavaScript can for the null terminator
+1. Have JavaScript scan for the null terminator
 1. Return the string and its length, possibly by encoding the length into the top half of a 64-bit return value (note: [WebAssembly is always little endian](https://github.com/WebAssembly/design/blob/main/Portability.md#assumptions-for-efficient-execution))
 
 I'm going to opt for the first option.
