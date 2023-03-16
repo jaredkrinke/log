@@ -173,7 +173,7 @@
 </ol>
 <p>Given that I&#39;m already exposing allocations to JavaScript, I thought this would work, but there&#39;s one problem: <code>TextDecoder.decode()</code> doesn&#39;t have built-in support for null-terminated strings (nor should it, in my opinion). Potential solutions:</p>
 <ol>
-<li>Have JavaScript can for the null terminator</li>
+<li>Have JavaScript scan for the null terminator</li>
 <li>Return the string and its length, possibly by encoding the length into the top half of a 64-bit return value (note: <a href="https://github.com/WebAssembly/design/blob/main/Portability.md#assumptions-for-efficient-execution">WebAssembly is always little endian</a>)</li>
 </ol>
 <p>I&#39;m going to opt for the first option.</p>
