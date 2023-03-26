@@ -7,8 +7,100 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-03-16T03:03:03.969Z</updated>
+<updated>2023-03-26T05:09:01.551Z</updated>
 
+<entry>
+<title>Reflecting on my first release on Steam, SIC-1</title>
+<id>https://log.schemescape.com/posts/game-development/sic-1-retrospective.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/sic-1-retrospective.html"/>
+<updated>2023-03-25T00:00:00.000Z</updated>
+<summary type="text">This is a retrospective on my first game I&apos;ve released on Steam, along with some thoughts about the future.</summary>
+<content type="html">&lt;p&gt;It&amp;#39;s been almost four months since I released &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1.html&quot;&gt;SIC-1&lt;/a&gt; (a single-instruction programming game) for free on Steam (and re-released it &lt;a href=&quot;https://jaredkrinke.itch.io/sic-1&quot;&gt;on itch.io&lt;/a&gt;). This is an update on how the release went, and my plans for the future.&lt;/p&gt;
+&lt;h1 id=&quot;financial-summary&quot;&gt;Financial summary&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Revenue: $0&lt;/li&gt;
+&lt;li&gt;Expenses: $134.07&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;SIC-1 can be played by anyone for free (with no ads), so it&amp;#39;s earned a grand total of $0 in revenue. Expenses include a $100 Steam direct fee, and roughly $34 for a year of (completely optional) web hosting.&lt;/p&gt;
+&lt;h2 id=&quot;do-i-regret-releasing-sic-1-for-free&quot;&gt;Do I regret releasing SIC-1 for free?&lt;/h2&gt;
+&lt;p&gt;I released SIC-1 for free because:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Free games attract more players, and I wanted as many players as possible to fill up the charts/leaderboards&lt;/li&gt;
+&lt;li&gt;I strongly doubted I would ever earn enough money from SIC-1 to make a meaningful financial difference in my life&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In the absolute best case scenario, let&amp;#39;s assume that all 1,800 players on Steam bought the game for my hypothetical full price of $10. Taking out Steam&amp;#39;s 30% fee and another 15% for taxes, that would be a little under $11,000 in my theoretical pocket. An extra $11k actually sounds pretty great! Realistically, however, &lt;a href=&quot;https://vginsights.com/insights/article/infographic-indie-game-revenues-on-steam&quot;&gt;most indie games make less than $4,000 (lifetime)&lt;/a&gt;, and SIC-1 probably would have ended up even lower (on a couple hundred sales, at less than $4 net profit per sale).&lt;/p&gt;
+&lt;p&gt;Additionally, if I had wanted to charge for the game on Steam, I would have had to either start charging for the previously free game on itch.io or take that version down entirely. That would feel like a betrayal of existing players. On the flip side, if I had charged for the game, I would have felt like I couldn&amp;#39;t eventually make the game free (or open source) because that might annoy my biggest fans (the ones who actually gave me money). A freemium model might have resolved these problems, but I didn&amp;#39;t want to fragment the player base over a small amount of money.&lt;/p&gt;
+&lt;p&gt;In the end, earning some extra money would have been nice from a motivational standpoint, but I think I made the right decision to release the game for free.&lt;/p&gt;
+&lt;h1 id=&quot;statistics&quot;&gt;Statistics&lt;/h1&gt;
+&lt;h2 id=&quot;steamitchio-statistics&quot;&gt;Steam+itch.io statistics&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;3,500 people started in the in-game tutorial&lt;/li&gt;
+&lt;li&gt;1,700 completed the first puzzle&lt;/li&gt;
+&lt;li&gt;500 completed the most difficult arithmetic task&lt;/li&gt;
+&lt;li&gt;230 completed the first sequence task&lt;/li&gt;
+&lt;li&gt;50 completed (correctly) the entire set of sequence puzzles&lt;/li&gt;
+&lt;li&gt;30 completed the original set of 30 puzzles&lt;/li&gt;
+&lt;li&gt;11 have completed the (new) final puzzle&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;steam-specific-statistics&quot;&gt;Steam-specific statistics&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;13,000 free licenses granted&lt;/li&gt;
+&lt;li&gt;1,800 lifetime unique users&lt;/li&gt;
+&lt;li&gt;20 positive reviews&lt;/li&gt;
+&lt;li&gt;Peak concurrent players: 10&lt;/li&gt;
+&lt;li&gt;Daily active users peaked at 65 in January and trended down to 10 as of late March&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;statistics-summary&quot;&gt;Statistics summary&lt;/h2&gt;
+&lt;p&gt;I made SIC-1 for fun. I knew that the market for programming games was probably pretty small. But I guess I didn&amp;#39;t quite realize &lt;em&gt;how small&lt;/em&gt; that market actually is. Even &lt;a href=&quot;https://www.zachtronics.com/last-call-bbs/&quot;&gt;Last Call BBS&lt;/a&gt;, the most recent (and final) game from &lt;a href=&quot;https://www.zachtronics.com/&quot;&gt;Zachtronics&lt;/a&gt; only has roughly 700 positive reviews (and approximately 22k sales).&lt;/p&gt;
+&lt;p&gt;SIC-1 was able to reach 20 positive reviews in four months (with no negative reviews) and &lt;a href=&quot;https://vginsights.com/game/2124440&quot;&gt;Video Game Insights estimates that SIC-1 is in the top 45% for positive reviews and units &amp;quot;sold&amp;quot;&lt;/a&gt;. Given the niche audience and punishing nature of single-instruction programming, that actually sounds pretty good!&lt;/p&gt;
+&lt;p&gt;Unfortunately, I didn&amp;#39;t really do any market research before diving into the Steam release for SIC-1, so I&amp;#39;d been hoping for a small single digit multiple of all the numbers above. Oh well, next time I&amp;#39;ll mentally set the bar lower.&lt;/p&gt;
+&lt;h1 id=&quot;marketing&quot;&gt;Marketing&lt;/h1&gt;
+&lt;p&gt;As SIC-1&amp;#39;s Steam debut approached, I cobbled together a long list of potential marketing activities. For example, sharing the game on sites that are popular with programmers, esolang enthusiasts, and zachlike players. As &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1.html#steam-release&quot;&gt;noted in the previous post&lt;/a&gt;, none of my marketing activities were terribly fruitful, but I was at least heartened to eventually see &lt;em&gt;someone else&lt;/em&gt; organically share my game on the unofficial Zachtronics Discord server (someone even streamed it on Twitch!). Regardless, until late December 2022, just relying on Steam was my best marketing activity (and, spoiler alert, not much has changed).&lt;/p&gt;
+&lt;h2 id=&quot;december-2022-traffic-spike&quot;&gt;December 2022 traffic spike&lt;/h2&gt;
+&lt;p&gt;After the first few disappointing weeks on Steam, I seriously started to consider shelving the entire project. But one day I saw a large spike in traffic coming from (of all places) GitHub. It took a little bit of searching to find out that &lt;a href=&quot;https://github.com/jaredkrinke/sic1&quot;&gt;SIC-1&amp;#39;s GitHub repository&lt;/a&gt; had been shared on Twitter... by someone will millions of followers!&lt;/p&gt;
+&lt;p&gt;Specifically, &lt;a href=&quot;https://twitter.com/notch/status/1604998134354137099&quot;&gt;the original creator of Minecraft, Notch, shared my game&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Zachlike subleq &amp;quot;game&amp;quot; ... I&amp;#39;m going to lose a lot of braincells to this one ... ie, highly recommended.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Given that Notch had 3.5 million followers, I thought this might be my big break, and I did get quite a few new players at the time, but the total impact was probably only in the (very) low hundreds of new players. Regardless, it was fairly surreal to see a billionaire live-tweeting about playing my game (during the winter holiday season, no less).&lt;/p&gt;
+&lt;h2 id=&quot;positive-rating-on-steam&quot;&gt;&amp;quot;Positive&amp;quot; rating on Steam&lt;/h2&gt;
+&lt;p&gt;But it turns out the best marketing for SIC-1 was, again, just to let Steam provide some visibility. Once SIC-1 hit 10 reviews, it got a &amp;quot;Positive&amp;quot; rating and a very large spike in traffic (over 5,000 visitors in one day). The spike has been receding, but I&amp;#39;m still seeing over 100 unique visitors to the Steam page per day.&lt;/p&gt;
+&lt;h2 id=&quot;marketing-summary&quot;&gt;Marketing summary&lt;/h2&gt;
+&lt;p&gt;All things considered, I should probably be content with where SIC-1 ended up, given the small audience and my apparent lack of marketing prowess, but I can&amp;#39;t shake the feeling that the game didn&amp;#39;t attract as many players as I&amp;#39;d hoped.&lt;/p&gt;
+&lt;h1 id=&quot;overall&quot;&gt;Overall&lt;/h1&gt;
+&lt;p&gt;Obviously, I learned a lot producing and launching a small (but complete) game on Steam, not limited to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;How Steam works behind the scenes&lt;/li&gt;
+&lt;li&gt;How to make a trailer for a game&lt;/li&gt;
+&lt;li&gt;How to create Yamaha DX7 music (without owning any synthesizers or spending any money)&lt;/li&gt;
+&lt;li&gt;How to write a narrative for a game&lt;/li&gt;
+&lt;li&gt;How to run asynchronous operations with WebView2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Of the list above, creating original music was definitely the most enjoyable activity, so it&amp;#39;s good that SIC-1 provided motivation to learn more about that process.&lt;/p&gt;
+&lt;p&gt;Releasing a game on Steam was a bucket list item for me, and I&amp;#39;m glad I did it. It remains to be seen if I&amp;#39;ll make any more games in the future.&lt;/p&gt;
+&lt;h1 id=&quot;the-future&quot;&gt;The future&lt;/h1&gt;
+&lt;p&gt;Speaking of the future, SIC-1 is mostly complete. I&amp;#39;d like to add an interactive tutorial and support for custom puzzles, but given the lower player count I&amp;#39;m not convinced that would be a good use of my (limited) free time.&lt;/p&gt;
+&lt;p&gt;Here are the biggest remaining open questions for me&lt;/p&gt;
+&lt;h2 id=&quot;should-i-open-source-sic-1&quot;&gt;Should I open-source SIC-1?&lt;/h2&gt;
+&lt;p&gt;Currently the game is free and source is available, but it&amp;#39;s not &lt;a href=&quot;https://opensource.org/osd/&quot;&gt;Open Source&lt;/a&gt; because I don&amp;#39;t allow redistribution/resale/modifications. I love open source software, but there are two reasons I&amp;#39;m hesitant to release my game as open source:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;* I don&amp;#x27;t want someone &lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;to&lt;/span&gt; turn &lt;span class=&quot;hljs-keyword&quot;&gt;around&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;and&lt;/span&gt; sell &lt;span class=&quot;hljs-keyword&quot;&gt;my&lt;/span&gt; game (&lt;span class=&quot;hljs-keyword&quot;&gt;that&lt;/span&gt; I released &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; free)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;I&amp;#39;m proud of the music and characters/narrative, and I don&amp;#39;t want other people to be able to profit off of them&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;An obvious solution would be to release everything except the narrative and music as open source, but I&amp;#39;m not sure that&amp;#39;s worth the effort.&lt;/p&gt;
+&lt;h2 id=&quot;should-i-port-the-steam-version-of-the-game-to-linux&quot;&gt;Should I port the Steam version of the game to Linux?&lt;/h2&gt;
+&lt;p&gt;I feel bad for only supporting Windows for the Steam release. My original reasoning was:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The web version already works on Linux/macOS/whatever&lt;/li&gt;
+&lt;li&gt;By using WebView2 (instead of Electron), I could keep the download size reasonable (less than 30 MB)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In retrospect, I should have just used Electron from the beginning. Not only would it have been easier to implement, but then I could have easily supported Steam on Linux (and maybe even macOS), allowing those players to sync save data across devices and compare achievement statistics. The only downside is that the download would be roughly 5 times as large (which &lt;em&gt;does&lt;/em&gt; seem excessive for a mostly text-based game).&lt;/p&gt;
+&lt;p&gt;But once again, I&amp;#39;m just not sure that the game is popular enough to warrant porting to Linux. It might please a handful of people (and make me feel better), but I should probably focus on more impactful projects.&lt;/p&gt;
+&lt;h1 id=&quot;thats-all-for-now&quot;&gt;That&amp;#39;s all, for now&lt;/h1&gt;
+&lt;p&gt;Thus concludes my brain dump. Feel free to send questions or comments to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#x40;&amp;#115;&amp;#x63;&amp;#104;&amp;#101;&amp;#109;&amp;#101;&amp;#x73;&amp;#99;&amp;#97;&amp;#112;&amp;#x65;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#109;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#x40;&amp;#115;&amp;#x63;&amp;#104;&amp;#101;&amp;#109;&amp;#101;&amp;#x73;&amp;#99;&amp;#97;&amp;#112;&amp;#x65;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#109;&lt;/a&gt;. If you enjoyed the game, I&amp;#39;d love to hear from you!&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Speeding up md2blog</title>
 <id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html</id>
@@ -473,117 +565,6 @@
 &lt;p&gt;Finally, there is very little user interface consistency between most console tools. Many include vi-like key bindings (either by default or with customizations), but that&amp;#39;s often where the consistency ends. I guess I didn&amp;#39;t realize how much I&amp;#39;d come to rely on standard GUI elements like menus, tooltips, and buttons. I &lt;em&gt;do&lt;/em&gt; think that a searchable &amp;quot;command palette&amp;quot; would go a long way toward making console tools easier to use, but I&amp;#39;m not planning on implementing those myself. Using Emacs for everything might help with consistency, but I&amp;#39;m skeptical of the performance and robustness of huge pile of Emacs extensions.&lt;/p&gt;
 &lt;h1 id=&quot;to-be-continued&quot;&gt;To be continued...&lt;/h1&gt;
 &lt;p&gt;Next up, I&amp;#39;m planning to document my misadventures in getting &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt; (my &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;-based static site generator) running on a Raspberry Pi B (a platform that Deno doesn&amp;#39;t support).&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Future-proof programming languages, part 2</title>
-<id>https://log.schemescape.com/posts/programming-languages/future-proof-languages-2.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/future-proof-languages-2.html"/>
-<updated>2023-02-17T00:00:00.000Z</updated>
-<summary type="text">More research on future-proof programming languages.</summary>
-<content type="html">&lt;p&gt;Almost exactly 1 year ago, in &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;part 1&lt;/a&gt;, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&amp;#39;d still be useful in another decade. In the intervening time, I&amp;#39;ve completed some nontrivial projects in both TypeScript (using both Node and Deno) and Python. I&amp;#39;ve also spent time contemplating a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;minimal development environment&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;In this post, I&amp;#39;m going to add a few more items to my programming language wishlist, add a few more programming languages to my candidate list, and then briefly describe my initial experiences with a few of those languages.&lt;/p&gt;
-&lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer&lt;/h1&gt;
-&lt;p&gt;I don&amp;#39;t have a lot of experience with most of these programming languages. I&amp;#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to &lt;a href=&quot;mailto:&amp;#108;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#115;&amp;#99;&amp;#x68;&amp;#x65;&amp;#x6d;&amp;#x65;&amp;#x73;&amp;#99;&amp;#x61;&amp;#x70;&amp;#101;&amp;#46;&amp;#99;&amp;#x6f;&amp;#109;&quot;&gt;&amp;#108;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#115;&amp;#99;&amp;#x68;&amp;#x65;&amp;#x6d;&amp;#x65;&amp;#x73;&amp;#99;&amp;#x61;&amp;#x70;&amp;#101;&amp;#46;&amp;#99;&amp;#x6f;&amp;#109;&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;there-can-be-more-than-one&quot;&gt;There can be more than one&lt;/h1&gt;
-&lt;p&gt;Note: I&amp;#39;ve come to terms with the fact that I&amp;#39;ll probably end up needing to use several of these languages for different purposes, namely I&amp;#39;ll want to have one fast, ahead-of-time compiled language for performance-critical projects, and something simpler and more dynamic (while still low-overhead) for most everything else.&lt;/p&gt;
-&lt;h1 id=&quot;wishlist&quot;&gt;Wishlist&lt;/h1&gt;
-&lt;p&gt;In part 1, I &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html#indicators&quot;&gt;listed&lt;/a&gt; some indicators of a future-proof programming language, along with a wishlist of conveniences/ergonomics. Here are some additions (in &lt;strong&gt;bold&lt;/strong&gt;) to my &amp;quot;programming language wishlist&amp;quot;:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;No multi-gigabyte downloads just to get started&lt;/li&gt;
-&lt;li&gt;Not tied to a single platform/environment/tool set&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Fully usable for development on many platforms&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;Small and simple (in case I want to build my own tools)&lt;/li&gt;
-&lt;li&gt;Easily cross-compiled&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Trivial to deploy&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;Simple and transparent build process&lt;/li&gt;
-&lt;li&gt;Readily available libraries (either with source available or from reputable contributors)&lt;/li&gt;
-&lt;li&gt;Ergonomic editing&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Not subject to the whims of a single company&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;&lt;del&gt;Easy&lt;/del&gt; Possible to bootstrap&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Most these additions are in response to what I&amp;#39;ve seen while investigating a few languages. Specifically:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Python and Clojure don&amp;#39;t appear to be trivial deploy (especially for Python with dependencies)&lt;/li&gt;
-&lt;li&gt;C# and Go are tied to for-profit companies, both of which are known for canning unprofitable projects (one notoriously so)&lt;/li&gt;
-&lt;li&gt;Small languages written in C, like Lua, would be easy to bootstrap in the future, should the need arise (e.g. if I want to move to a new or old platform that isn&amp;#39;t already supported)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;additional-candidates&quot;&gt;Additional candidates&lt;/h1&gt;
-&lt;p&gt;My original (pruned) list of candidate languages included:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;JavaScript/TypeScript&lt;/li&gt;
-&lt;li&gt;Python&lt;/li&gt;
-&lt;li&gt;C#&lt;/li&gt;
-&lt;li&gt;C++&lt;/li&gt;
-&lt;li&gt;C&lt;/li&gt;
-&lt;li&gt;Go&lt;/li&gt;
-&lt;li&gt;Rust&lt;/li&gt;
-&lt;li&gt;Lisp/Clojure&lt;/li&gt;
-&lt;li&gt;Zig&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I&amp;#39;m going to add a few more languages:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Tcl&lt;/strong&gt;: I&amp;#39;ve only briefly used Tcl in the past, but it seems great for command line &amp;quot;glue&amp;quot;, and the language itself (at least what I&amp;#39;ve experienced) is beautifully simple&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Lua&lt;/strong&gt;: I originally discarded Lua because in the past I found its quirks to be too annoying, but that experience was mostly 10+ years ago, and there have been multiple major updates since then&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Aside: I&amp;#39;m intrigued by &lt;a href=&quot;https://vale.dev/&quot;&gt;The Vale Programming Language&lt;/a&gt;, but it&amp;#39;s not even close to done yet.&lt;/p&gt;
-&lt;h1 id=&quot;some-early-observations&quot;&gt;Some early observations&lt;/h1&gt;
-&lt;p&gt;Eventually, I&amp;#39;ll probably compile a big table of these languages, along with an assessment with respect to each of my criteria, but for now I&amp;#39;ve just got a few initial notes.&lt;/p&gt;
-&lt;h2 id=&quot;compilerruntime-installation&quot;&gt;Compiler/runtime installation&lt;/h2&gt;
-&lt;h3 id=&quot;javascripttypescript&quot;&gt;JavaScript/TypeScript&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt; makes running TypeScript trivially easy, but its list of supported platforms is short (notably, it does not include 32-bit Windows!). &lt;a href=&quot;https://nodejs.org/en/&quot;&gt;Node&lt;/a&gt; supports 32-bit Windows, but is much less convenient.&lt;/p&gt;
-&lt;h3 id=&quot;python&quot;&gt;Python&lt;/h3&gt;
-&lt;p&gt;Ah, my old nemesis: Python. I&amp;#39;ve never had a good experience setting up a Python environment. Additionally, the Python 2 to 3 migration (which included unnecessary things like &lt;a href=&quot;https://www.python.org/dev/peps/pep-0238/&quot;&gt;changing the semantics of the division operator&lt;/a&gt;) is remarkable only in that it didn&amp;#39;t kill Python entirely (at least not yet).&lt;/p&gt;
-&lt;p&gt;Yet Python is consistently one of the most popular programming languages. What am I missing?&lt;/p&gt;
-&lt;p&gt;Anyway, the &lt;a href=&quot;https://wiki.python.org/moin/BeginnersGuide/Download&quot;&gt;Python installation docs&lt;/a&gt; recommend seeing if you already have Python installed by typing &lt;code&gt;python&lt;/code&gt; into a command window. To my surprise, I don&amp;#39;t immediately see an &amp;quot;unrecognized command&amp;quot; error. Incredibly, it launches to a Python page in the Microsoft Store (compliments of &lt;code&gt;%LocalAppData%\Microsoft\WindowsApps\python.exe&lt;/code&gt; -- seriously!?). I&amp;#39;ll give it a try since it&amp;#39;s a surprisingly reasonable ~100 MB download. It appears to install a Python runtime and the IDLE editor.&lt;/p&gt;
-&lt;p&gt;Honestly, I&amp;#39;m not thrilled that Microsoft decided to &lt;a href=&quot;https://devblogs.microsoft.com/python/python-in-the-windows-10-may-2019-update/&quot;&gt;insert this Python shim into Windows itself&lt;/a&gt; just to make it easier for people to find Python, but I guess I&amp;#39;ll try it out. Note that I&amp;#39;ll almost certainly be using VS Code and the official Python extension for editing and debugging.&lt;/p&gt;
-&lt;h3 id=&quot;c&quot;&gt;C#&lt;/h3&gt;
-&lt;p&gt;To my surprise, the &lt;a href=&quot;https://github.com/dotnet/roslyn&quot;&gt;C# compiler&lt;/a&gt; and &lt;a href=&quot;https://github.com/dotnet/runtime&quot;&gt;.NET runtime&lt;/a&gt; are both now open source (MIT license). Even more surprising, you can now apparently &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/iot/deployment&quot;&gt;deploy self-contained .NET executables to a Raspberry Pi&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;C# is a great language and the .NET standard library is probably the most thoughtfully crafted standard library I&amp;#39;ve ever used. So is my search over? Is C# the answer?&lt;/p&gt;
-&lt;p&gt;First, I need to setup a C# development environment. I&amp;#39;m developing on Windows (.NET&amp;#39;s home platform), so this might give me an unrealistically positive impression of C#&amp;#39;s convenience.&lt;/p&gt;
-&lt;p&gt;After selecting the .NET runtime and SDK in the Visual Studio installer, I am appalled to see that it requires &lt;em&gt;5 GB&lt;/em&gt; of disk space! There&amp;#39;s probably a bunch of extraneous junk I don&amp;#39;t need, but for comparison: Visual Studio Code is ~300 MB and Deno&amp;#39;s TypeScript runtime is ~60 MB.&lt;/p&gt;
-&lt;p&gt;Since I was curious, I checked out the &lt;a href=&quot;https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian&quot;&gt;.NET SDK for Linux (Debian)&lt;/a&gt;, and it was closer to 500 MB. To my surprise, it was very full-featured, and I was even able to cross-compile for Windows from Linux.&lt;/p&gt;
-&lt;p&gt;As much as I like C#, the unreasonable disk footprint of its tooling has sent C# to the bottom of the pile.&lt;/p&gt;
-&lt;h3 id=&quot;c-1&quot;&gt;C++&lt;/h3&gt;
-&lt;p&gt;C++ sort of gets a free pass because Linux distributions generally provide the GNU C++ compiler and I already had to install a C++ environment in order to use Rust on Windows. Clang is &amp;lt; 1 GB to install and there are numerous free and/or open source C++ IDEs that are less than 1 GB. Visual Studio for C++ was around 3 GB, which is much too big, but not an immediate disqualifier in light of available alternatives. At least there&amp;#39;s a free version now.&lt;/p&gt;
-&lt;h3 id=&quot;c-2&quot;&gt;C&lt;/h3&gt;
-&lt;p&gt;C is similar to C++, with the notable property that it is trivially bootstrap-able on some popular architectures using the &lt;a href=&quot;https://bellard.org/tcc/&quot;&gt;Tiny C Compiler&lt;/a&gt;.&lt;/p&gt;
-&lt;h3 id=&quot;go&quot;&gt;Go&lt;/h3&gt;
-&lt;p&gt;Go for Windows is a reasonable ~125 MB download, and VS Code has an official Go extension. I&amp;#39;ve heard that Go&amp;#39;s tooling is excellent and what I&amp;#39;ve seen thus far (e.g. &lt;code&gt;go fmt&lt;/code&gt;) is similar to what I liked about &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../web-development/one-month-with-deno.html&quot;&gt;Deno&lt;/a&gt;. It only took a couple of minutes (for me, a complete Go newbie) to get a &amp;quot;hello world&amp;quot; program up and running (with debugging, no less).&lt;/p&gt;
-&lt;h3 id=&quot;rust&quot;&gt;Rust&lt;/h3&gt;
-&lt;p&gt;Setting up a Rust environment on Windows &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/rust-first-experience.html&quot;&gt;is not pleasant&lt;/a&gt; because it requires first installing Visual C++ (a multi-gigabyte download). On Linux, installation is a breeze, but that doesn&amp;#39;t help me much.&lt;/p&gt;
-&lt;h3 id=&quot;lispclojure&quot;&gt;Lisp/Clojure&lt;/h3&gt;
-&lt;p&gt;Honestly, I haven&amp;#39;t investigated this option yet.&lt;/p&gt;
-&lt;p&gt;Clojure requires a Java runtime and, at the moment, I don&amp;#39;t really want to install one. I used Java a lot in the past (back when it would pop up messages saying a new version of Java was available, with a possibly ironic exclamation mark), but I don&amp;#39;t want to deal with deploying Java whenever I want to run something.&lt;/p&gt;
-&lt;p&gt;Some other Lisp options include &lt;a href=&quot;https://racket-lang.org/&quot;&gt;Racket&lt;/a&gt; (which I&amp;#39;ve briefly used in the past) and &lt;a href=&quot;http://www.sbcl.org/&quot;&gt;SBCL&lt;/a&gt; (which I have no experience with, but seems more popular).&lt;/p&gt;
-&lt;h3 id=&quot;zig&quot;&gt;Zig&lt;/h3&gt;
-&lt;p&gt;Zig is a smallish download, with a developer-friendly command line interface that appears to be on par with Go and Deno.&lt;/p&gt;
-&lt;h3 id=&quot;tcl&quot;&gt;Tcl&lt;/h3&gt;
-&lt;p&gt;Tcl is a trivially small download. I&amp;#39;ll need to see how adding libraries (namely &lt;a href=&quot;https://www.tcl.tk/software/tcllib/&quot;&gt;Tcllib&lt;/a&gt;) works.&lt;/p&gt;
-&lt;h3 id=&quot;lua&quot;&gt;Lua&lt;/h3&gt;
-&lt;p&gt;While Lua binaries are available, Lua is more of a library that&amp;#39;s meant to be embedded in an application. I thought there was a simple command line wrapper for Windows, but the main one I&amp;#39;ve found for Windows (&lt;a href=&quot;https://github.com/rjpcomputing/luaforwindows&quot;&gt;Lua for windows&lt;/a&gt;) appears to be unmaintained. It&amp;#39;s possible &lt;a href=&quot;https://luarocks.org/&quot;&gt;LuaRocks&lt;/a&gt; might be what I&amp;#39;m looking for, but I&amp;#39;m not sure yet.&lt;/p&gt;
-&lt;p&gt;The good news is that I could easily bootstrap my own Lua shell (similar to what &lt;a href=&quot;https://blubsblog.bearblog.dev/writing-software-that-will-still-build-and-run-in-20-years/&quot;&gt;Blub describes in a blog post&lt;/a&gt;).&lt;/p&gt;
-&lt;h1 id=&quot;closing-thoughts&quot;&gt;Closing thoughts&lt;/h1&gt;
-&lt;p&gt;Based on intuition and my experiences thus far, a few languages are at the bottom of the pack:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;C++&lt;/strong&gt;: A complicated language, with an inscrutable standard library, still without a good module or build system -- but I have a lot of experience with it, and it&amp;#39;s definitely not going anywhere&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Zig&lt;/strong&gt;: The most promising &amp;quot;better C&amp;quot;, with great tooling, but still immature&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;A few languages are lingering in the middle:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;C#&lt;/strong&gt;: A great language, with probably the best standard library, but the toolchain is enormous&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;C&lt;/strong&gt;: Arguably the most portable language, just with a mostly awful standard library&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Rust&lt;/strong&gt;: Supposedly even more complicated than C++, but at least it provides memory safety and a build system&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Lisp&lt;/strong&gt;: An interesting and versatile language, but is it &lt;em&gt;used&lt;/em&gt; as much as it&amp;#39;s &lt;em&gt;discussed&lt;/em&gt;?&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Lua&lt;/strong&gt;: Almost as portable as C, but I&amp;#39;m not sure I want to bring my own everything&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;And then there are a few languages near the top of my list:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;JavaScript/TypeScript&lt;/strong&gt;: A convenient language, made better by Deno&amp;#39;s tooling and standard library, but still fairly volatile and without an official ecosystem-wide standard library&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Python&lt;/strong&gt;: An ugly pile of hacks that is adored by many and is ubiquitous -- do I just need to get over my aversion to Python? Has deployment been solved yet?&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Go&lt;/strong&gt;: Great tooling, a simple language, memory safety, and an allegedly great standard library -- I&amp;#39;d never considered Go before, but it has a lot of attractive qualities&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Tcl&lt;/strong&gt;: A beautifully simple language with a tiny footprint and great for gluing things together -- but will it be forgotten in another decade or two?&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>
