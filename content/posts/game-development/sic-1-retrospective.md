@@ -87,7 +87,7 @@ Here are the biggest remaining open questions for me
 ## Should I open-source SIC-1?
 Currently the game is free and source is available, but it's not [Open Source](https://opensource.org/osd/) because I don't allow redistribution/resale/modifications. I love open source software, but there are two reasons I'm hesitant to release my game as open source:
 
-    * I don't want someone else to turn around and sell my game (that I released for free)
+* I don't want someone else to turn around and sell my game (that I released for free)
 * I'm proud of the music and characters/narrative, and I don't want other people to be able to profit off of them
 
 An obvious solution would be to release everything except the narrative and music as open source, but I'm not sure that's worth the effort.
