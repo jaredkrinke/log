@@ -7,8 +7,111 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-03-26T23:12:57.048Z</updated>
+<updated>2023-04-02T23:48:42.453Z</updated>
 
+<entry>
+<title>Speeding up md2blog, part 2</title>
+<id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html"/>
+<updated>2023-04-02T00:00:00.000Z</updated>
+<summary type="text">Using GNU Make to enable incremental builds of this site.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html&quot;&gt;part 1&lt;/a&gt;, I brainstormed some ideas to speed up rebuilds of my static site (because I&amp;#39;ve been &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-3.html&quot;&gt;playing around with using old/slow computers&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;In this update, I&amp;#39;m going to share a potentially misguided (but functional!) approach to supporting incremental builds using &lt;a href=&quot;https://www.gnu.org/software/make/&quot;&gt;GNU Make&lt;/a&gt;. The code is &lt;a href=&quot;https://github.com/jaredkrinke/make-blog&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
+&lt;p&gt;My static site generator, &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html&quot;&gt;md2blog&lt;/a&gt;, is written in TypeScript, simply because I&amp;#39;m used to the language and it&amp;#39;s popular. On my desktop computer, rebuilding this site is trivially fast. But once I switched to a Raspberry Pi 1 B (and now a 12 year-old netbook), the overhead of JavaScript became more noticeable. On my netbook, I&amp;#39;ve been able to get the full rebuild time of this site (only full rebuilds are supported in md2blog) down to about 12 seconds. This is tolerable, but obviously still inefficient. If I&amp;#39;m only adding or modifying a single post, why should I rebuild the entire site?&lt;/p&gt;
+&lt;p&gt;Incremental builds should be possible by caching some intermediate state. Originally, I&amp;#39;d hoped to implement a generic solution in TypeScript, but part way through I realized that I was essentially reimplementing Make. So why not just use Make?&lt;/p&gt;
+&lt;h1 id=&quot;md2blogs-build-process&quot;&gt;md2blog&amp;#39;s build process&lt;/h1&gt;
+&lt;p&gt;md2blog is designed to be simple, but complete. This means that the build process is straight-forward:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Clean up the output directory (delete everything)&lt;/li&gt;
+&lt;li&gt;Read (and validate) site-wide metadata from &lt;code&gt;site.json&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Read (and validate) front matter from all posts (and remove drafts, if requested)&lt;/li&gt;
+&lt;li&gt;Implicitly tag posts with their parent directory name (in addition to any explicitly-entered keywords)&lt;/li&gt;
+&lt;li&gt;Generate an index of tags to posts&lt;/li&gt;
+&lt;li&gt;Generate some necessary files (error page, stylesheet)&lt;/li&gt;
+&lt;li&gt;Process Markdown (adding syntax highlighting and rewriting relative &lt;code&gt;*.md&lt;/code&gt; links, as needed)&lt;/li&gt;
+&lt;li&gt;Generate an Atom feed of recent posts&lt;/li&gt;
+&lt;li&gt;Generate an archive and tag index pages&lt;/li&gt;
+&lt;li&gt;Validate all internal links&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;After writing down that list, I&amp;#39;m realizing there are a lot of steps, but they&amp;#39;re mostly just to support implicit tags and various index pages. Regardless, it&amp;#39;s relatively straight-forward.&lt;/p&gt;
+&lt;h1 id=&quot;using-gnu-make&quot;&gt;Using GNU Make&lt;/h1&gt;
+&lt;p&gt;Like a good little developer, I&amp;#39;ve shied away from using GNU Make-specific functionality, and have just used the limited subset of Make that is widely supported. But for this project, I ended up needing to dig deep into GNU Make&amp;#39;s functionality to model md2blog&amp;#39;s build process correctly.&lt;/p&gt;
+&lt;p&gt;Specifically, there were a few aspects of md2blog&amp;#39;s build process that were tricky to implement using GNU Make:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Enumerating posts and their implicit directory structure&lt;/li&gt;
+&lt;li&gt;Cleaning up extraneous files in the &lt;code&gt;out&lt;/code&gt; directory&lt;/li&gt;
+&lt;li&gt;Aggregating all posts into a single archive&lt;/li&gt;
+&lt;li&gt;Discovering and handling tags that don&amp;#39;t correspond to any directory (i.e. keywords)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;enumerating-and-cleaning-files&quot;&gt;Enumerating and cleaning files&lt;/h2&gt;
+&lt;p&gt;In this case, I wanted to avoid listing all posts explicitly in my &lt;code&gt;Makefile&lt;/code&gt;--I just wanted it to discover all of the files in the file system, a la &amp;quot;classic&amp;quot; md2blog. GNU Make supports enumerating files by letting you delegate that job to the &lt;code&gt;find&lt;/code&gt; command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Makefile&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;# Use &amp;quot;find&amp;quot; to enumerate all directories and files under &amp;quot;content/&amp;quot; (excluding &amp;quot;content/&amp;quot; itself)&lt;/span&gt;
+INPUT_FILES := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;shell&lt;/span&gt; find content -follow -type f -not -name &amp;#x27;.*&amp;#x27;)&lt;/span&gt;
+INPUT_DIRECTORIES := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;filter&lt;/span&gt;-out content,$(&lt;span class=&quot;hljs-built_in&quot;&gt;shell&lt;/span&gt; find content -follow -type d)&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that in the above snippet I also enumerate directories. This is so that I can recreate the same directory structure in the output directory. I also exclude files beginning with a dot (e.g. swap files).&lt;/p&gt;
+&lt;p&gt;How do I &amp;quot;clean&amp;quot; up any extraneous files &lt;em&gt;before&lt;/em&gt; anything builds? The only reliable solution I could come up with was to sneakily run a command while expanding an usused &lt;em&gt;simply expanded&lt;/em&gt; (&lt;code&gt;:=&lt;/code&gt; instead of &lt;code&gt;=&lt;/code&gt;) variable (note: it must be simply expanded to ensure it is expanded first, and only once):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Makefile&quot;&gt;INPUT_FILES_POSTS := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;filter&lt;/span&gt; content/posts/%.md,&lt;span class=&quot;hljs-variable&quot;&gt;$(INPUT_FILES)&lt;/span&gt;)&lt;/span&gt;
+INTERMEDIATE_FILES_POST_METADATA := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;patsubst&lt;/span&gt; content/posts/%.md,cache/posts/%.metadata.json,&lt;span class=&quot;hljs-variable&quot;&gt;$(INPUT_FILES_POSTS)&lt;/span&gt;)&lt;/span&gt;
+...
+INTERMEDIATE_FILES_EXTRANEOUS := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;filter&lt;/span&gt;-out &lt;span class=&quot;hljs-variable&quot;&gt;$(INTERMEDIATE_FILES)&lt;/span&gt;,$(&lt;span class=&quot;hljs-built_in&quot;&gt;shell&lt;/span&gt; mkdir -p cache &amp;amp;&amp;amp; find cache -type f)&lt;/span&gt;)
+...
+TIDY_RESULT := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;shell&lt;/span&gt; rm -f &lt;span class=&quot;hljs-variable&quot;&gt;$(INTERMEDIATE_FILES_EXTRANEOUS)&lt;/span&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This feels like a hack, since it relies on a side-effect of a &lt;code&gt;$(shell ...)&lt;/code&gt; expansion, but it&amp;#39;s the best solution I could come up with.&lt;/p&gt;
+&lt;h2 id=&quot;aggregating-posts&quot;&gt;Aggregating posts&lt;/h2&gt;
+&lt;p&gt;Aggregating a bunch of posts into a single index sounds like a trivial problem, and it really should be. But since GNU Make relies on command lines, I&amp;#39;m paranoid that any solution which relies on passing paths to &lt;em&gt;every&lt;/em&gt; post via the command line will run into the dreaded command line length limit (which varies significantly in the wild, and isn&amp;#39;t always documented properly).&lt;/p&gt;
+&lt;p&gt;The only solution I could come up with was to pass the large list via the file system. This could either be done using a file that lists the paths, or it could be implicit by searching a directory tree (assuming that the tree has been purged of extraneous files--as I do above).&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Makefile&quot;&gt;&lt;span class=&quot;hljs-section&quot;&gt;cache/posts/index.json: &lt;span class=&quot;hljs-variable&quot;&gt;$(INTERMEDIATE_FILES_POST_METADATA)&lt;/span&gt; | &lt;span class=&quot;hljs-variable&quot;&gt;$(INTERMEDIATE_DIRECTORIES)&lt;/span&gt;&lt;/span&gt;
+    deno run --allow-read=cache --allow-write=cache index.ts cache/posts &lt;span class=&quot;hljs-variable&quot;&gt;$@&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note the order-only prerequisite for &lt;code&gt;$(INTERMEDIATE_DIRECTORIES)&lt;/code&gt; that ensures the directory structure is already in place before the script runs.&lt;/p&gt;
+&lt;h3 id=&quot;aside-on-aigpt&quot;&gt;Aside on AI/GPT&lt;/h3&gt;
+&lt;p&gt;Given that I was somewhat stumped by this problem, I decided to try asking Bing&amp;#39;s fancy new GPT-based AI chat thingy. Its response was pretty underwhelming. Its first suggestion was to switch from GNU Make to... GNU Make. The second suggestion was to use VPATHs--but that&amp;#39;s a solution to a different problem. And its last suggestion was just clearly copy-pasted--without proper context!--from GNU Make&amp;#39;s documentation.&lt;/p&gt;
+&lt;p&gt;Overall, the answer pointed to documentation I had already consulted (so it &lt;em&gt;did&lt;/em&gt; find information I had already noted as potentially relevant), but the answer was mostly &amp;quot;just don&amp;#39;t do that, duh!&amp;quot;. Color me not impressed.&lt;/p&gt;
+&lt;h2 id=&quot;discovering-tags-that-dont-exist-as-directories&quot;&gt;Discovering tags that don&amp;#39;t exist as directories&lt;/h2&gt;
+&lt;p&gt;My current solution to discovering tags that don&amp;#39;t also exist as directories runs a script that enumerates tags programmatically and then outputs &lt;em&gt;all&lt;/em&gt; index pages. This requires also managing the creation and non-cleanup-ification of those directories. Sadly, my current solution has a bug (it doesn&amp;#39;t programmatically clean up extraneous tag indexes), but the scenario (deleting a unique keyword) is rare enough that I haven&amp;#39;t bothered to fix the bug yet.&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s where I had to hack in a pattern to avoid treating programmatically-discovered tags&amp;#39; index pages as extraneous (for the purposes of cleaning up the output directory):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Makefile&quot;&gt;OUTPUT_FILES_EXTRANEOUS := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;filter&lt;/span&gt;-out &lt;span class=&quot;hljs-variable&quot;&gt;$(OUTPUT_FILES)&lt;/span&gt; out/posts/%/index.html,$(&lt;span class=&quot;hljs-built_in&quot;&gt;shell&lt;/span&gt; mkdir -p out &amp;amp;&amp;amp; find out -type f)&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&quot;performance&quot;&gt;Performance&lt;/h1&gt;
+&lt;p&gt;So was this all worth it? The answer is: kind of. Here&amp;#39;s a table with the results:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;left&quot;&gt;Scenario&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;Elapsed time&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Full rebuild using &amp;quot;classic&amp;quot; md2blog&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;12 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Full rebuild using &amp;quot;make&amp;quot;&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;90 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Incremental build using &amp;quot;make&amp;quot;&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;3 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;I haven&amp;#39;t heavily optimized the incremental build process, but as it stands currently, an incremental build using Make is 4x faster, but a full rebuild using Make is 8x slower. If I could get the &amp;quot;full rebuild&amp;quot; time down to a reasonable level, I&amp;#39;d be very happy.&lt;/p&gt;
+&lt;h2 id=&quot;bottlenecks&quot;&gt;Bottlenecks&lt;/h2&gt;
+&lt;p&gt;The biggest issue with leveraging Make in this case is that it spins up a separate process for each build command, but I&amp;#39;m using a JavaScript runtime that has a significant startup cost. I&amp;#39;m not sure exactly how Deno works internally, but setting up a relatively heavy JavaScript environment for processing markdown and adding syntax highlighting, just for a single file, seems wasteful and slow (even when running in parallel--something that GNU Make enables).&lt;/p&gt;
+&lt;h2 id=&quot;potential-improvements&quot;&gt;Potential improvements&lt;/h2&gt;
+&lt;p&gt;There&amp;#39;s a silver lining, however. Because Make decomposes each step into a separate command line, I could theoretically replace the underlying tool of the slowest commands with a more efficient implementation (without touching anything else). In my case, the slowest processes are syntax highlighting and processing markdown (in that order). I&amp;#39;m tempted to try using native code implementations of these two steps to see how much startup/process creation overhead that avoids.&lt;/p&gt;
+&lt;p&gt;Another solution might be to run a persistent JavaScript server and use a trivial tool to communicate with it. For example, running an HTTP server with Deno and using &lt;code&gt;wget&lt;/code&gt; in my command lines to send it processing jobs. I&amp;#39;m not sure if GNU Make has any support for such a server process, but I suspect I could hack something together by launching a server process into the background and just having it spin itself down after some number of seconds of inactivity.&lt;/p&gt;
+&lt;h1 id=&quot;this-post-brought-to-you-by-make-blog&quot;&gt;This post brought to you by &lt;strong&gt;make-blog&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;A 9 second improvement for incremental builds doesn&amp;#39;t sound terribly noticeable, but just in the process of authoring this post I&amp;#39;m already finding it useful. Now I can tweak a few words or a bit of formatting and view the result (almost) immediately, even on my super slow twelve year-old netbook.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ll most likely continue using &amp;quot;old&amp;quot; md2blog for officially updating the site prior to publishing (just because I&amp;#39;m paranoid), but I&amp;#39;m still satisfied with my improved local workflow.&lt;/p&gt;
+&lt;p&gt;In case anyone&amp;#39;s curious, here is the code:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/make-blog&quot;&gt;make-blog&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Reflecting on my first release on Steam, SIC-1</title>
 <id>https://log.schemescape.com/posts/game-development/sic-1-retrospective.html</id>
@@ -97,7 +200,7 @@
 &lt;p&gt;In retrospect, I should have just used Electron from the beginning. Not only would it have been easier to implement, but then I could have easily supported Steam on Linux (and maybe even macOS), allowing those players to sync save data across devices and compare achievement statistics. The only downside is that the download would be roughly 5 times as large (which &lt;em&gt;does&lt;/em&gt; seem excessive for a mostly text-based game).&lt;/p&gt;
 &lt;p&gt;But once again, I&amp;#39;m just not sure that the game is popular enough to warrant porting to Linux. It might please a handful of people (and make me feel better), but I should probably focus on more impactful projects.&lt;/p&gt;
 &lt;h1 id=&quot;thats-all-for-now&quot;&gt;That&amp;#39;s all, for now&lt;/h1&gt;
-&lt;p&gt;Thus concludes my brain dump. Feel free to send questions or comments to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#111;&amp;#x67;&amp;#64;&amp;#115;&amp;#x63;&amp;#x68;&amp;#101;&amp;#109;&amp;#101;&amp;#x73;&amp;#99;&amp;#97;&amp;#x70;&amp;#x65;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#x6d;&quot;&gt;&amp;#x6c;&amp;#111;&amp;#x67;&amp;#64;&amp;#115;&amp;#x63;&amp;#x68;&amp;#101;&amp;#109;&amp;#101;&amp;#x73;&amp;#99;&amp;#97;&amp;#x70;&amp;#x65;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#x6d;&lt;/a&gt;. If you enjoyed the game, I&amp;#39;d love to hear from you!&lt;/p&gt;
+&lt;p&gt;Thus concludes my brain dump. Feel free to send questions or comments to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#115;&amp;#99;&amp;#x68;&amp;#x65;&amp;#109;&amp;#x65;&amp;#115;&amp;#x63;&amp;#97;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#111;&amp;#109;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#115;&amp;#99;&amp;#x68;&amp;#x65;&amp;#109;&amp;#x65;&amp;#115;&amp;#x63;&amp;#97;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;. If you enjoyed the game, I&amp;#39;d love to hear from you!&lt;/p&gt;
 </content>
 </entry>
 <entry>
@@ -494,76 +597,6 @@
 &lt;p&gt;First of all, it&amp;#39;s clear to me that I&amp;#39;d like a faster computer. Would a newer Raspberry Pi hit the sweet spot between performance and cheapness? What about an old laptop?&lt;/p&gt;
 &lt;p&gt;Additionally, I&amp;#39;m still on the fence about wanting to stick to console mode. Ultimately, it&amp;#39;s an arbitrary goal, and I don&amp;#39;t think I&amp;#39;m aiming for it for any other reason than to see if it&amp;#39;s possible. It&amp;#39;s likely at some point I will break down and install a GUI environment. Maybe economizing a GUI is superior to maximizing the console?&lt;/p&gt;
 &lt;p&gt;Regardless, I still plan to play around with a few more code editors and programming languages.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>In search of a minimal development environment, part 2</title>
-<id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env-2.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/minimal-dev-env-2.html"/>
-<updated>2023-02-26T00:00:00.000Z</updated>
-<summary type="text">Some practical research into a minimal development environment.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;part 1&lt;/a&gt;, I was yearning for simpler times, when entire operating systems could fit on a single digit number of 1.44 MB floppy disks.&lt;/p&gt;
-&lt;p&gt;What did my initial &amp;quot;minimal development environment&amp;quot; research uncover?&lt;/p&gt;
-&lt;h1 id=&quot;platforms&quot;&gt;Platforms&lt;/h1&gt;
-&lt;p&gt;Although it&amp;#39;s probably possible to run some useful software on a tiny or old platforms (e.g. a microcontroller or Game Boy), the smallest platform I seriously considered was a &lt;a href=&quot;https://www.raspberrypi.com/&quot;&gt;Raspberry Pi&lt;/a&gt; (for the simple reason that I inherited one and hadn&amp;#39;t been using it). My Raspberry Pi is a model B with 512 MB of RAM, apparently from 2012.&lt;/p&gt;
-&lt;h1 id=&quot;operating-systems&quot;&gt;Operating systems&lt;/h1&gt;
-&lt;p&gt;While investigating operating systems, I immediately had to confront the fact that I&amp;#39;m not looking for a &lt;em&gt;truly&lt;/em&gt; minimal operating system. The following OSes intrigued me, but they&amp;#39;re a little too restrictive/esoteric for my current goals:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://collapseos.org/&quot;&gt;Collapse OS&lt;/a&gt; runs on Z80-based hardware with 64 KB or less of RAM&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://sr.ht/~vdupras/duskos/&quot;&gt;Dusk OS&lt;/a&gt; runs on x86 hardware, and can bootstrap itself into a &lt;a href=&quot;https://en.wikipedia.org/wiki/Forth_(programming_language)&quot;&gt;Forth&lt;/a&gt;-based shell with an &amp;quot;Almost C&amp;quot; compiler in just a few thousand lines of code&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.fiwix.org/&quot;&gt;Fiwix&lt;/a&gt; uses a (relatively) small kernel (50k lines of code), but strives to be Linux-compatible&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://minix3.org/&quot;&gt;MINIX&lt;/a&gt; uses an educational kernel that has apparently made its way into Intel products, but the project is &lt;a href=&quot;https://github.com/o-oconnell/minixfromscratch&quot;&gt;no longer maintained&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;In the end, I decided to focus on more popular platforms: Linux, FreeBSD, OpenBSD, and NetBSD. (Although I&amp;#39;d really like to explore Dusk OS in the future.)&lt;/p&gt;
-&lt;p&gt;To my surprise, it looked like the smallest full-featured option (in terms of disk footprint, and ignoring &amp;quot;nano&amp;quot; installs that lack functionality) was probably &lt;a href=&quot;https://www.alpinelinux.org/&quot;&gt;Alpine Linux&lt;/a&gt;. A command-line only development environment on Debian weighed in at over 1.5 GB (!), but I was able to set up a somewhat comfortable C development environment on Alpine Linux in under 300 MB! (Although &lt;a href=&quot;https://wiki.alpinelinux.org/wiki/Raspberry_Pi&quot;&gt;installing Alpine Linux on a Raspberry Pi&lt;/a&gt; is tedious.)&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m a little nervous to adopt Alpine Linux without haven&amp;#39;t a good grasp of how updates (especially kernel updates) work, but so far it just feels like exactly what I was looking for.&lt;/p&gt;
-&lt;h1 id=&quot;software&quot;&gt;Software&lt;/h1&gt;
-&lt;p&gt;With a minimal Alpine Linux install on a Raspberry Pi model B, I investigated various console applications.&lt;/p&gt;
-&lt;h2 id=&quot;web-browser&quot;&gt;Web browser&lt;/h2&gt;
-&lt;p&gt;There are a lot of console web browser options today. I tried: &lt;a href=&quot;https://lynx.browser.org/&quot;&gt;Lynx&lt;/a&gt;, &lt;a href=&quot;http://elinks.or.cz/&quot;&gt;ELinks&lt;/a&gt;, &lt;a href=&quot;https://w3m.sourceforge.net/&quot;&gt;w3m&lt;/a&gt;, and a few that I don&amp;#39;t remember. In the past, I used ELinks because it seemed to have the most functionality, but as of today, my favorite is w3m. I liked its rendering the best, and it&amp;#39;s comfortable to use from the keyboard, thanks to vi-inspired key bindings. I will say that w3m has a steep learning curve (there aren&amp;#39;t any user-friendly menus, at least that I found), so it might not be a great choice for everyone.&lt;/p&gt;
-&lt;p&gt;For the record: Lynx was oddly slow and ELinks&amp;#39;s menus seemed a little glitchy.&lt;/p&gt;
-&lt;p&gt;Unfortunately, using the modern web from the console is not a pleasant experience. I ran into sites with huge navigation lists that I&amp;#39;d have to page through, sites that require JavaScript to render anything, etc. &lt;/p&gt;
-&lt;h2 id=&quot;terminal-multiplexer&quot;&gt;Terminal multiplexer&lt;/h2&gt;
-&lt;p&gt;I realize that &lt;a href=&quot;https://github.com/tmux/tmux/wiki&quot;&gt;tmux&lt;/a&gt; has a lot of momentum, but I&amp;#39;ve been using &lt;a href=&quot;https://www.gnu.org/software/screen/&quot;&gt;GNU Screen&lt;/a&gt; because I&amp;#39;m already familiar with it. tmux &lt;em&gt;does&lt;/em&gt; seem to have some nice features (e.g. retaining panes across detach/reattach), so it&amp;#39;s probably what I&amp;#39;d use today if I was starting from scratch.&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s also &lt;a href=&quot;https://zellij.dev/&quot;&gt;Zellij&lt;/a&gt;, which has some interesting ideas (namely floating windows), wrapped up in what appears to be a user-friendly interface. I haven&amp;#39;t tried it yet, however.&lt;/p&gt;
-&lt;h2 id=&quot;rss-reader&quot;&gt;RSS reader&lt;/h2&gt;
-&lt;p&gt;One motivation for setting up a simpler development environment is to slow down and reduce distractions. With some freed up &amp;quot;focus&amp;quot; time, I&amp;#39;d like to get back to using RSS feeds to keep up to date on blogs I enjoy. &lt;a href=&quot;https://newsboat.org/&quot;&gt;Newsboat&lt;/a&gt; is an excellent console RSS reader.&lt;/p&gt;
-&lt;h2 id=&quot;irc&quot;&gt;IRC&lt;/h2&gt;
-&lt;p&gt;And why stop at RSS? Let&amp;#39;s go all the way back to 1988 and use &lt;a href=&quot;https://en.wikipedia.org/wiki/Internet_Relay_Chat&quot;&gt;IRC&lt;/a&gt;! I don&amp;#39;t like how &lt;a href=&quot;https://discord.com/&quot;&gt;Discord&lt;/a&gt; has monopolized chat-based communities, but IRC is fairly tedious to set up, and the command-based interface is unfriendly (the last thing I want to do is embarrass myself by mistyping a command and having everyone see it as a chat message!).&lt;/p&gt;
-&lt;p&gt;I have &lt;a href=&quot;https://irssi.org/&quot;&gt;irssi&lt;/a&gt; installed, but I haven&amp;#39;t really used it enough to say whether this is a good choice for IRC (or if IRC is even a good choice at all).&lt;/p&gt;
-&lt;h2 id=&quot;code-editor&quot;&gt;Code editor&lt;/h2&gt;
-&lt;p&gt;I haven&amp;#39;t investigated editor options in depth yet. The main features I&amp;#39;m looking for are:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Runs in console mode&lt;/li&gt;
-&lt;li&gt;Comfortable editing&lt;/li&gt;
-&lt;li&gt;Helpful syntax highlighting&lt;/li&gt;
-&lt;li&gt;Language-specific features (from most important to least):&lt;ul&gt;
-&lt;li&gt;Auto-complete/lookup&lt;/li&gt;
-&lt;li&gt;Go to definition&lt;/li&gt;
-&lt;li&gt;Find all references&lt;/li&gt;
-&lt;li&gt;Rename/refactor&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Right now, I&amp;#39;m using &lt;a href=&quot;https://www.vim.org/&quot;&gt;Vim&lt;/a&gt;, with nothing but default syntax highlighting and &amp;quot;Ctrl+N&amp;quot; as a minimal auto-complete. This was great in the 90s, but I&amp;#39;m more productive with advanced language features.&lt;/p&gt;
-&lt;p&gt;Here are a few options I&amp;#39;m planning to investigate:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Vim with &lt;a href=&quot;https://en.wikipedia.org/wiki/Ctags&quot;&gt;Ctags&lt;/a&gt; (ideally automated)&lt;/li&gt;
-&lt;li&gt;Vim/&lt;a href=&quot;https://neovim.io/&quot;&gt;NeoVim&lt;/a&gt; with an actual &lt;a href=&quot;https://microsoft.github.io/language-server-protocol/&quot;&gt;language server&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://helix-editor.com/&quot;&gt;Helix&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://kakoune.org/&quot;&gt;Kakoune&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;and maybe even &lt;a href=&quot;https://www.gnu.org/software/emacs/&quot;&gt;Emacs&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;but-am-i-making-a-mistake&quot;&gt;But... am I making a mistake?&lt;/h1&gt;
-&lt;p&gt;After a couple of days using this setup, I&amp;#39;m already starting to question my decision to use the console.&lt;/p&gt;
-&lt;h2 id=&quot;console-web-experience-isnt-great&quot;&gt;Console web experience isn&amp;#39;t great&lt;/h2&gt;
-&lt;p&gt;The biggest issue is that the web is really hard to use from a terminal. It&amp;#39;s difficult to quickly scan headings and identify distinct content areas using only text (specifically: text that wasn&amp;#39;t designed to be used from the console). I guess I didn&amp;#39;t realize how helpful subtle font size/color changes are for quickly scanning content.&lt;/p&gt;
-&lt;h2 id=&quot;sometimes-the-mouse-is-handy&quot;&gt;Sometimes the mouse is handy&lt;/h2&gt;
-&lt;p&gt;Then there&amp;#39;s mouse support. I use the keyboard extensively, but the mouse is sometimes faster for selecting text and interacting with UI elements that aren&amp;#39;t in a simple order/hierarchy. &lt;a href=&quot;https://man.archlinux.org/man/gpm.8.en.html&quot;&gt;GPM&lt;/a&gt; helps, but it&amp;#39;s kind of clunky, and doesn&amp;#39;t help when I need to scroll text while using the mouse.&lt;/p&gt;
-&lt;h2 id=&quot;lack-of-consistency&quot;&gt;Lack of consistency&lt;/h2&gt;
-&lt;p&gt;Finally, there is very little user interface consistency between most console tools. Many include vi-like key bindings (either by default or with customizations), but that&amp;#39;s often where the consistency ends. I guess I didn&amp;#39;t realize how much I&amp;#39;d come to rely on standard GUI elements like menus, tooltips, and buttons. I &lt;em&gt;do&lt;/em&gt; think that a searchable &amp;quot;command palette&amp;quot; would go a long way toward making console tools easier to use, but I&amp;#39;m not planning on implementing those myself. Using Emacs for everything might help with consistency, but I&amp;#39;m skeptical of the performance and robustness of huge pile of Emacs extensions.&lt;/p&gt;
-&lt;h1 id=&quot;to-be-continued&quot;&gt;To be continued...&lt;/h1&gt;
-&lt;p&gt;Next up, I&amp;#39;m planning to document my misadventures in getting &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt; (my &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;-based static site generator) running on a Raspberry Pi B (a platform that Deno doesn&amp;#39;t support).&lt;/p&gt;
 </content>
 </entry>
 </feed>
