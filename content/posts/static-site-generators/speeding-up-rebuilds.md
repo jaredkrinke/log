@@ -70,3 +70,6 @@ I'll also, of course, need to **ensure that the additional overhead from caching
 
 # Stay tuned
 I have no idea how long this project will take or whether I'll abandon it, but if I make progress, I'll be sure to post an update (and link it from here--hopefully the rebuild picks up the change!).
+
+**Update**: I prototyped [incremental builds using GNU Make](speeding-up-rebuilds-2.md).
+
