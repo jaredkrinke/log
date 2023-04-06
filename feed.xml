@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-04-06T22:31:44.758Z</updated>
+<updated>2023-04-06T22:42:56.414Z</updated>
 
 <entry>
 <title>Minimal dev environment, part 4</title>
@@ -266,7 +266,7 @@ TIDY_RESULT := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quo
 &lt;p&gt;In retrospect, I should have just used Electron from the beginning. Not only would it have been easier to implement, but then I could have easily supported Steam on Linux (and maybe even macOS), allowing those players to sync save data across devices and compare achievement statistics. The only downside is that the download would be roughly 5 times as large (which &lt;em&gt;does&lt;/em&gt; seem excessive for a mostly text-based game).&lt;/p&gt;
 &lt;p&gt;But once again, I&amp;#39;m just not sure that the game is popular enough to warrant porting to Linux. It might please a handful of people (and make me feel better), but I should probably focus on more impactful projects.&lt;/p&gt;
 &lt;h1 id=&quot;thats-all-for-now&quot;&gt;That&amp;#39;s all, for now&lt;/h1&gt;
-&lt;p&gt;Thus concludes my brain dump. Feel free to send questions or comments to &lt;a href=&quot;mailto:&amp;#108;&amp;#111;&amp;#x67;&amp;#x40;&amp;#115;&amp;#99;&amp;#104;&amp;#x65;&amp;#x6d;&amp;#x65;&amp;#115;&amp;#x63;&amp;#97;&amp;#x70;&amp;#x65;&amp;#x2e;&amp;#x63;&amp;#x6f;&amp;#x6d;&quot;&gt;&amp;#108;&amp;#111;&amp;#x67;&amp;#x40;&amp;#115;&amp;#99;&amp;#104;&amp;#x65;&amp;#x6d;&amp;#x65;&amp;#115;&amp;#x63;&amp;#97;&amp;#x70;&amp;#x65;&amp;#x2e;&amp;#x63;&amp;#x6f;&amp;#x6d;&lt;/a&gt;. If you enjoyed the game, I&amp;#39;d love to hear from you!&lt;/p&gt;
+&lt;p&gt;Thus concludes my brain dump. Feel free to send questions or comments to &lt;a href=&quot;mailto:log@schemescape.com&quot;&gt;log@schemescape.com&lt;/a&gt;. If you enjoyed the game, I&amp;#39;d love to hear from you!&lt;/p&gt;
 </content>
 </entry>
 <entry>
