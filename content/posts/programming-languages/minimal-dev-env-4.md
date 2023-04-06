@@ -1,7 +1,7 @@
 ---
 title: Minimal dev environment, part 4
-description: TODO
-date: 2023-04-03
+description: My minimal development environment was too minimal, so I upgraded to a faster computer.
+date: 2023-04-06
 keywords: [minimalism]
 ---
 In [part 3](minimal-dev-env-3.md), I tried out a minimal development environment (based on Alpine Linux) on a Raspberry Pi 1 B. This update is essentially the conclusion of my Raspberry Pi experiment.
