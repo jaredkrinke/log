@@ -7,8 +7,74 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-04-02T23:48:42.453Z</updated>
+<updated>2023-04-06T22:31:44.758Z</updated>
 
+<entry>
+<title>Minimal dev environment, part 4</title>
+<id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env-4.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/minimal-dev-env-4.html"/>
+<updated>2023-04-06T00:00:00.000Z</updated>
+<summary type="text">My minimal development environment was too minimal, so I upgraded to a faster computer.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env-3.html&quot;&gt;part 3&lt;/a&gt;, I tried out a minimal development environment (based on Alpine Linux) on a Raspberry Pi 1 B. This update is essentially the conclusion of my Raspberry Pi experiment.&lt;/p&gt;
+&lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
+&lt;p&gt;Here&amp;#39;s a summary of what I&amp;#39;ve learned so far:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;I love Alpine Linux--it honestly feels like the only sane way to manage a Linux distribution--because it&amp;#39;s fast, light, and (mostly) only contains the tools you ask for&lt;/li&gt;
+&lt;li&gt;The Raspberry Pi 1 B is &lt;em&gt;very&lt;/em&gt; slow--I was willing to accept that my JavaScript/Deno-based static site generator might be slow (I never really optimized it), but paging through code in Vim (in the terminal) is something I &lt;em&gt;need&lt;/em&gt; to be fast, and my Pi-based setup failed at this&lt;/li&gt;
+&lt;li&gt;Browsing the modern web in a terminal is unpleasant&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;enter-the-gui&quot;&gt;Enter the GUI&lt;/h1&gt;
+&lt;p&gt;To address the last point, I decided to see if I could get a lightweight GUI environment running on the Pi. I hadn&amp;#39;t run a Linux desktop in over a decade, but I previously used &lt;a href=&quot;http://fluxbox.org/&quot;&gt;Fluxbox&lt;/a&gt; and later &lt;a href=&quot;https://www.gnome.org/&quot;&gt;GNOME&lt;/a&gt;, so I&amp;#39;m not completely lost. The latter is a full desktop environment, and fairly heavy, so I decided to give Fluxbox a shot first (after reading up on how to run rootless X.org).&lt;/p&gt;
+&lt;p&gt;Getting X.org up and running with Fluxbox wasn&amp;#39;t too difficult, and then I was able to use the &lt;a href=&quot;https://www.dillo.org/&quot;&gt;Dillo browser&lt;/a&gt; to improve my web browsing experience. Unfortunately, everything GUI-related was painfully slow, especially moving windows around. Just in case I was missing some sort of hardware acceleration or something, I tested out the official Raspberry Pi OS. It was unbearably slow as well (and the build of Chromium appeared to be for ARMv7, which my Pi doesn&amp;#39;t support).&lt;/p&gt;
+&lt;h1 id=&quot;goodbye-pi&quot;&gt;Goodbye, Pi&lt;/h1&gt;
+&lt;p&gt;To be honest, it&amp;#39;s impressive how much you can do with a 10+ year-old, less than $50 (originally) single-board computer (running at 3.5 Watts). I could run Linux, edit and compile C code, browse the web in a terminal, read RSS feeds, and even run Node/NPM. It seems perfect for running a low-traffic server at home (something I &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../services/cheap-hosting.html&quot;&gt;don&amp;#39;t need to do at the moment&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;But the bottom line is that I want something faster.&lt;/p&gt;
+&lt;p&gt;There are newer Raspberry Pi models that should be &lt;em&gt;much&lt;/em&gt; faster than my almost-original--and I&amp;#39;d like to try one out someday--but for now I&amp;#39;m proceeding with hardware that I already own. &lt;/p&gt;
+&lt;h1 id=&quot;hello-netbook&quot;&gt;Hello, netbook&lt;/h1&gt;
+&lt;p&gt;Specifically, I&amp;#39;m upgrading to a 12 year-old Dell netbook (Inspiron Mini 1018) with a 1.66 GHz Intel Atom (N455) processor and 1 GB of RAM.&lt;/p&gt;
+&lt;h2 id=&quot;linux-on-a-laptop-is-pretty-great&quot;&gt;Linux on a laptop... is pretty great!&lt;/h2&gt;
+&lt;p&gt;As an aside, I&amp;#39;m compelled to comment on how much the laptop experience on Linux has improved since I last gave up (in the mid-00s). The sub-200 MB Alpine Linux installer &lt;em&gt;just worked&lt;/em&gt;, even for Wi-Fi! Additionally, I discovered that, even though the netbook shipped with 32-bit Windows, its processor is actually 64-bit, so now I&amp;#39;m running an architecture that is &lt;em&gt;still relevant&lt;/em&gt;. This is intriguing to me because Deno only supports 64-bit processors, and I assumed that the old hardware I had laying around couldn&amp;#39;t run Deno.&lt;/p&gt;
+&lt;p&gt;Having said that, at one point I decided to see if Debian would work better than Alpine. The Debian installer worked great (it automatically supported wireless networking on my netbook), but after installation wireless stopped working. After a few hours of researching and trying to fix the problem, I reverted back to Alpine.&lt;/p&gt;
+&lt;p&gt;For the record, only &amp;quot;suspend&amp;quot; works on this laptop (hibernate is indistinguishable from powering off). I also have to manually adjust the terminal resolution using &lt;code&gt;fbset&lt;/code&gt; (after enabling Linux &amp;quot;Kernel Mode Setting&amp;quot;, a.k.a. KMS). Not a seamless experience, but still acceptable.&lt;/p&gt;
+&lt;h1 id=&quot;performance&quot;&gt;Performance&lt;/h1&gt;
+&lt;p&gt;Here&amp;#39;s a quick performance comparison of building this site using &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt;, on various JavaScript runtimes, between my Raspberry Pi 1 B and my Dell Inspiron Mini 1018:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Build time by device&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;&lt;a href=&quot;https://github.com/jaredkrinke/leano&quot;&gt;leano&lt;/a&gt;&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;Node&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;Deno&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;Raspberry Pi&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;4 minutes&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;2 minutes&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;not possible&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Netbook&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;1 minute&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;20 seconds&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;12 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;Note that I had to resort to using &lt;a href=&quot;https://github.com/NixOS/nix&quot;&gt;Nix&lt;/a&gt; to get Deno running because Deno depends on &lt;a href=&quot;https://www.gnu.org/software/libc/&quot;&gt;glibc&lt;/a&gt; and doesn&amp;#39;t support &lt;a href=&quot;https://musl.libc.org/&quot;&gt;musl&lt;/a&gt; (the C standard library implementation that Alpine Linux uses).&lt;/p&gt;
+&lt;p&gt;Overall, this is a 4 - 6x performance improvement (on a machine that coincidentally cost 4 - 6 times as much as the Pi 1 B, originally).&lt;/p&gt;
+&lt;h2 id=&quot;battery-life&quot;&gt;Battery life&lt;/h2&gt;
+&lt;p&gt;My old setup chained me to my desk, but now I can take my laptop wherever. I don&amp;#39;t really remember what the battery life was like originally (or on Windows), but I&amp;#39;m able to get 4 - 6 hours of intensive use. That is plenty for me at the moment, although it certainly doesn&amp;#39;t seem like &amp;quot;good&amp;quot; battery life. I&amp;#39;ve also noticed that the (rotational) hard drive seems to spin up and down consistently every 5 seconds, even when I&amp;#39;m not doing anything. I&amp;#39;m not sure if it&amp;#39;s a hardware, driver, or Linux problem, but I&amp;#39;m just trying to ignore it for now. &lt;/p&gt;
+&lt;h2 id=&quot;power-consumption&quot;&gt;Power consumption&lt;/h2&gt;
+&lt;p&gt;One area where the Raspberry Pi excelled was power consumption. At max capacity, I measured it at around 3.5 Watts.&lt;/p&gt;
+&lt;p&gt;My netbook is much less efficient, but overall not too bad. At full load, it seems to peak around 15 - 20 Watts. In standby, it consumes rougly 4 Watts, which is pretty similar to the Raspberry Pi (considering that I never powered down the Pi).&lt;/p&gt;
+&lt;h1 id=&quot;to-be-continued&quot;&gt;To be continued...&lt;/h1&gt;
+&lt;p&gt;Now that I&amp;#39;ve got a tolerably fast computer, I can get some &lt;em&gt;real&lt;/em&gt; work done. In the next post, I&amp;#39;m planning to cover the software side of things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Adding a console &amp;quot;taskbar&amp;quot; to GNU Screen&lt;/li&gt;
+&lt;li&gt;Attempting to use a language server with a text editor&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Speeding up md2blog, part 2</title>
 <id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html</id>
@@ -200,7 +266,7 @@ TIDY_RESULT := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quo
 &lt;p&gt;In retrospect, I should have just used Electron from the beginning. Not only would it have been easier to implement, but then I could have easily supported Steam on Linux (and maybe even macOS), allowing those players to sync save data across devices and compare achievement statistics. The only downside is that the download would be roughly 5 times as large (which &lt;em&gt;does&lt;/em&gt; seem excessive for a mostly text-based game).&lt;/p&gt;
 &lt;p&gt;But once again, I&amp;#39;m just not sure that the game is popular enough to warrant porting to Linux. It might please a handful of people (and make me feel better), but I should probably focus on more impactful projects.&lt;/p&gt;
 &lt;h1 id=&quot;thats-all-for-now&quot;&gt;That&amp;#39;s all, for now&lt;/h1&gt;
-&lt;p&gt;Thus concludes my brain dump. Feel free to send questions or comments to &lt;a href=&quot;mailto:&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#115;&amp;#99;&amp;#x68;&amp;#x65;&amp;#109;&amp;#x65;&amp;#115;&amp;#x63;&amp;#97;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#111;&amp;#109;&quot;&gt;&amp;#x6c;&amp;#x6f;&amp;#x67;&amp;#64;&amp;#115;&amp;#99;&amp;#x68;&amp;#x65;&amp;#109;&amp;#x65;&amp;#115;&amp;#x63;&amp;#97;&amp;#x70;&amp;#101;&amp;#x2e;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;. If you enjoyed the game, I&amp;#39;d love to hear from you!&lt;/p&gt;
+&lt;p&gt;Thus concludes my brain dump. Feel free to send questions or comments to &lt;a href=&quot;mailto:&amp;#108;&amp;#111;&amp;#x67;&amp;#x40;&amp;#115;&amp;#99;&amp;#104;&amp;#x65;&amp;#x6d;&amp;#x65;&amp;#115;&amp;#x63;&amp;#97;&amp;#x70;&amp;#x65;&amp;#x2e;&amp;#x63;&amp;#x6f;&amp;#x6d;&quot;&gt;&amp;#108;&amp;#111;&amp;#x67;&amp;#x40;&amp;#115;&amp;#99;&amp;#104;&amp;#x65;&amp;#x6d;&amp;#x65;&amp;#115;&amp;#x63;&amp;#97;&amp;#x70;&amp;#x65;&amp;#x2e;&amp;#x63;&amp;#x6f;&amp;#x6d;&lt;/a&gt;. If you enjoyed the game, I&amp;#39;d love to hear from you!&lt;/p&gt;
 </content>
 </entry>
 <entry>
@@ -257,6 +323,7 @@ TIDY_RESULT := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quo
 &lt;p&gt;I&amp;#39;ll also, of course, need to &lt;strong&gt;ensure that the additional overhead from caching isn&amp;#39;t so large as to negate any of the benefits&lt;/strong&gt;, at least on my personal site (I&amp;#39;m not the only md2blog use in the entire world, but there are very few, and I suspect most won&amp;#39;t ever find the updated version).&lt;/p&gt;
 &lt;h1 id=&quot;stay-tuned&quot;&gt;Stay tuned&lt;/h1&gt;
 &lt;p&gt;I have no idea how long this project will take or whether I&amp;#39;ll abandon it, but if I make progress, I&amp;#39;ll be sure to post an update (and link it from here--hopefully the rebuild picks up the change!).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I prototyped &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html&quot;&gt;incremental builds using GNU Make&lt;/a&gt;.&lt;/p&gt;
 </content>
 </entry>
 <entry>
@@ -525,78 +592,6 @@ TIDY_RESULT := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quo
 &lt;li&gt;Cross compile to Raspberry Pi B with Alpine Linux: &lt;code&gt;zig build -Dtarget=arm-linux-musleabihf -Dcpu=arm1176jzf_s&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Cross-compiling C code &lt;a href=&quot;https://github.com/ziglang/zig/issues/4875&quot;&gt;doesn&amp;#39;t appear to be possible at the moment&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>Minimal dev environment, part 3: introducing &quot;leano&quot;, a tiny Deno-compatible runtime</title>
-<id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env-3.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/minimal-dev-env-3.html"/>
-<updated>2023-02-28T00:00:00.000Z</updated>
-<summary type="text">I developed an actual piece of software using my minimal development environment. Here&apos;s how it went.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env-2.html&quot;&gt;part 2&lt;/a&gt;, I laid out my initial minimal development environment (Raspberry Pi B, Alpine Linux, console only). Today, I&amp;#39;m sharing my initial experience using this setup.&lt;/p&gt;
-&lt;h1 id=&quot;the-task-at-hand&quot;&gt;The task at hand&lt;/h1&gt;
-&lt;p&gt;In order to document my experience, I needed to be able to build and update my dev blog using my &lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt;-based static site generator (&lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt;), along with Git (and GitHub Pages). Problem: Deno &lt;a href=&quot;https://github.com/denoland/deno/issues/2295&quot;&gt;doesn&amp;#39;t support Raspberry Pi&lt;/a&gt; (32-bit or 64-bit).&lt;/p&gt;
-&lt;p&gt;Fortunately, my static site generator only uses a tiny fraction of Deno&amp;#39;s API surface (at least to build the site), so it&amp;#39;s straight-forward to port the tool to a Pi-friendly runtime. One option would be to compile my TypeScript code to JavaScript, bundle it, and then use &lt;a href=&quot;https://nodejs.org/en/&quot;&gt;Node&lt;/a&gt; with a Node-to-Deno compatibility layer (written in JavaScript).&lt;/p&gt;
-&lt;p&gt;But a more &lt;em&gt;interesting&lt;/em&gt; option would be to create my own (minimal, of course) Deno-compatible runtime, and use &lt;em&gt;that&lt;/em&gt; to run md2blog.&lt;/p&gt;
-&lt;h2 id=&quot;dependencies&quot;&gt;Dependencies&lt;/h2&gt;
-&lt;p&gt;For this project, I decided to get back to my roots and use plain, boring old C. I would have like to try out Zig, but they don&amp;#39;t appear to build SDK binaries for the Raspberry Pi. Why C (or Zig)? Mostly because I was planning to leverage &lt;a href=&quot;https://bellard.org/quickjs/&quot;&gt;QuickJS&lt;/a&gt; (an implementation of ES2020 in C), and I knew that integrating the library would be simple if I stuck to C. If I&amp;#39;d used a new (to me) programming language, I&amp;#39;d immediately be thrown into the treacherous waters of foreign function interfaces/bindings (and past experience told me that&amp;#39;s usually the least fun part of learning a new programming language).&lt;/p&gt;
-&lt;p&gt;Between QuickJS and the C standard library, I was hopeful I could get md2blog up and running on my Raspberry Pi.&lt;/p&gt;
-&lt;h1 id=&quot;code-editing&quot;&gt;Code editing&lt;/h1&gt;
-&lt;p&gt;In the past, I used Vim extensively, but lately I&amp;#39;ve mostly used VS Code (and Visual Studio, if necessary). This project was a good opportunity to reacquaint myself with Vim. Specifically, I wanted to see if I could carry some of my favorite features from VS Code back to Vim:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;(Smart) Auto-complete&lt;/li&gt;
-&lt;li&gt;Go to definition&lt;/li&gt;
-&lt;li&gt;Spellcheck&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;auto-complete-for-c-code-in-vim&quot;&gt;Auto-complete for C code in Vim&lt;/h2&gt;
-&lt;p&gt;I used to think auto-complete was often used as a crutch for not being familiar with code. Nowadays, I&amp;#39;ll take any crutch I can get, because there&amp;#39;s so much code, and it&amp;#39;s honestly not worth my time to understand it all in depth--most of the time, at least.&lt;/p&gt;
-&lt;p&gt;Although I was aware of it, I&amp;#39;d never taken the time to setup &lt;a href=&quot;https://en.wikipedia.org/wiki/Ctags&quot;&gt;Ctags&lt;/a&gt; in Vim. Ctags isn&amp;#39;t as nice as a real language server (it doesn&amp;#39;t automatically regenerate and can&amp;#39;t find all references, for example), but I&amp;#39;m not sure my Raspberry Pi could run a real language server anyway. Fortunately, setting up Ctags was as easy as running &lt;code&gt;ctags -R *&lt;/code&gt; in my project. Then it just all magically worked in insert mode with &lt;strong&gt;Ctrl+N&lt;/strong&gt;. Nice!&lt;/p&gt;
-&lt;h2 id=&quot;go-to-definition&quot;&gt;Go to definition&lt;/h2&gt;
-&lt;p&gt;With Ctags set up, I was just a &lt;code&gt;:help tags&lt;/code&gt; away from learning how to go to the definition of a symbol:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Ctrl+]&lt;/strong&gt; jumps to the definition of the currently highlighted symbol&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Ctrl+W Ctrl+]&lt;/strong&gt; opens the definition in a new pane&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Ctrl+T&lt;/strong&gt; jumps back to where you were&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;It&amp;#39;s pretty handy, although I started to remember how annoying it is to have to memorize a million key bindings to be productive in Vim.&lt;/p&gt;
-&lt;h2 id=&quot;spellcheck&quot;&gt;Spellcheck&lt;/h2&gt;
-&lt;p&gt;For blog entries, it&amp;#39;s nice to have a spellchecker running, to catch typos. I did a bit of research and couldn&amp;#39;t figure out why &lt;strong&gt;Ctrl+X s&lt;/strong&gt; didn&amp;#39;t work for spellcheck, but &lt;code&gt;:set spell&lt;/code&gt; worked like magic, and highlights any suspicious words.&lt;/p&gt;
-&lt;h2 id=&quot;navigating-new-code-in-vim&quot;&gt;Navigating new code in Vim&lt;/h2&gt;
-&lt;p&gt;Armed with some new Vim knowledge, I got started. The first task was to navigate around the QuickJS code to understand things like how to evaluate JavaScript code and how to expose native functions to JavaScript. Being able to search around the code and jump to definitions was great, but I did start to wish I was in VS Code. In Vim, I&amp;#39;m used to splitting panes horizontally and vertically, but I&amp;#39;m not sure what to do when I need to have so many things open at once that the panes are too small to be readable. In VS Code, I can keep files open without losing context. I&amp;#39;m sure this is possible in Vim, but I haven&amp;#39;t figure it out yet (and I&amp;#39;m not sure I&amp;#39;d remember all the keyboard shortcuts to make it happen).&lt;/p&gt;
-&lt;p&gt;Has someone made a command palette for Vim yet?&lt;/p&gt;
-&lt;h1 id=&quot;web-browser-woes&quot;&gt;Web browser woes&lt;/h1&gt;
-&lt;p&gt;In addition to reading the QuickJS code, I also needed to refer to the HTML manual (although it&amp;#39;s fairly light on details, so no substitute for just reading the code). Once again, the console web browser experience was painful. It&amp;#39;s not the fault of the browsers themselves, it&amp;#39;s just that most web pages don&amp;#39;t seem to be designed with console browsers in mind. The QuickJS manual worked well, but trying to drill into search results, navigate GitHub issues, and read StackOverflow threads was a chore.&lt;/p&gt;
-&lt;p&gt;At least DuckDuckGo and &lt;a href=&quot;https://developer.mozilla.org/en-US&quot;&gt;MDN&lt;/a&gt; provide decent experiences in console mode.&lt;/p&gt;
-&lt;h1 id=&quot;so-slow&quot;&gt;So... &lt;em&gt;slow&lt;/em&gt;...&lt;/h1&gt;
-&lt;p&gt;The preceding issues were tolerable. Performance was another story.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m not sure what I was expecting from a 10 year old computer that cost $50 to begin with. I thought I&amp;#39;d heard that you could play Quake 3 on a Raspberry Pi (although I&amp;#39;m not sure which model). Having used a Raspberry Pi model B with 512 MB of RAM and a 700 MHz ARM CPU for a few days, I&amp;#39;m skeptical.&lt;/p&gt;
-&lt;p&gt;Installing packages and opening web pages in w3m was pretty snappy, but compiling QuickJS was a rude awakening. I typed &lt;code&gt;make&lt;/code&gt; and then left to do something else when it became apparent that it might be a while. Later, I came back, and it was &lt;em&gt;still&lt;/em&gt; compiling! With link-time optimization, it took almost half an hour to build QuickJS.&lt;/p&gt;
-&lt;p&gt;I hoped that the GCC compiler was just being slow (and link-time optimization is probably pretty CPU-intensive in general), but over the course of the day it became apparent that &lt;em&gt;everything&lt;/em&gt; was slow. Navigating large C files in Vim was slow (frequently, I could see the screen re-drawing individual lines of text). Syntax highlighting (which I think isn&amp;#39;t even parsing the full C grammar) was slow enough that it kept automatically turning itself off.&lt;/p&gt;
-&lt;h1 id=&quot;success-and-leano&quot;&gt;Success! And &lt;strong&gt;leano&lt;/strong&gt;&lt;/h1&gt;
-&lt;p&gt;But I persisted and eventually was able to create a minimal Deno-compatible JavaScript runtime, built on QuickJS. I call the result &lt;strong&gt;leano&lt;/strong&gt;, and &lt;a href=&quot;https://github.com/jaredkrinke/leano&quot;&gt;the toy-level prototype code is up on GitHub&lt;/a&gt;. The whole thing weighs in at roughly 800 KB. But, of course, it doesn&amp;#39;t do very much--leano only implements the Deno functions/properties that md2blog uses.&lt;/p&gt;
-&lt;p&gt;For the record: this blog post was written (and built) using leano on my Raspberry Pi.&lt;/p&gt;
-&lt;p&gt;The implementation is fairly simple:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Sets up a QuickJS runtime and context&lt;/li&gt;
-&lt;li&gt;Exposes a couple of native functions (for performance reasons)&lt;/li&gt;
-&lt;li&gt;Injects JavaScript code to implement Deno and web APIs (e.g. &lt;code&gt;Deno.args&lt;/code&gt;, &lt;code&gt;Deno.writeTextFile&lt;/code&gt;, and &lt;code&gt;TextEncoder&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;Runs the requested module&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I&amp;#39;ll admit that md2blog hasn&amp;#39;t been optimized. It always regenerates the entire site, and it&amp;#39;s written in JavaScript. On my desktop computer, I can build my site in maybe 1 second. On the Raspberry Pi (admittedly using a much simpler JavaScript runtime), it took &lt;em&gt;over 6 minutes&lt;/em&gt;! Even after moving UTF-8 encode/decode to native code, it still took 4 minutes to rebuild this site.&lt;/p&gt;
-&lt;h1 id=&quot;lessons-learned&quot;&gt;Lessons learned&lt;/h1&gt;
-&lt;p&gt;That was just a depiction of my experience using this minimal dev environment. But what have I &lt;em&gt;learned&lt;/em&gt;?&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;A ten year-old, cheap computer is capable, but &lt;em&gt;slow&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;Regardless, it &lt;em&gt;is&lt;/em&gt; possible to develop software in C, with most of the bells and whistles, &lt;em&gt;while using under 500 MB of disk space&lt;/em&gt; (this is probably the biggest surprise of this whole experiment)&lt;/li&gt;
-&lt;li&gt;Vim with Ctags is great, but remembering all the key bindings is annoying, and I still feel less productive than in VS Code&lt;/li&gt;
-&lt;li&gt;Not mentioned above, but I haven&amp;#39;t found a good debugging setup, even for C&lt;/li&gt;
-&lt;li&gt;JavaScript is pretty portable, thanks to QuickJS (though I worry what will happen as the language continues to evolve beyond QuickJS&amp;#39;s implementation)&lt;/li&gt;
-&lt;li&gt;Browsing most of the web on the console is tedious&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;next-steps&quot;&gt;Next steps&lt;/h1&gt;
-&lt;p&gt;First of all, it&amp;#39;s clear to me that I&amp;#39;d like a faster computer. Would a newer Raspberry Pi hit the sweet spot between performance and cheapness? What about an old laptop?&lt;/p&gt;
-&lt;p&gt;Additionally, I&amp;#39;m still on the fence about wanting to stick to console mode. Ultimately, it&amp;#39;s an arbitrary goal, and I don&amp;#39;t think I&amp;#39;m aiming for it for any other reason than to see if it&amp;#39;s possible. It&amp;#39;s likely at some point I will break down and install a GUI environment. Maybe economizing a GUI is superior to maximizing the console?&lt;/p&gt;
-&lt;p&gt;Regardless, I still plan to play around with a few more code editors and programming languages.&lt;/p&gt;
 </content>
 </entry>
 </feed>
