@@ -2,7 +2,7 @@
 title: Speeding up md2blog, part 2
 description: Using GNU Make to enable incremental builds of this site.
 date: 2023-04-02
-keywords: [md2blog]
+keywords: [md2blog,deno]
 ---
 In [part 1](speeding-up-rebuilds.md), I brainstormed some ideas to speed up rebuilds of my static site (because I've been [playing around with using old/slow computers](../programming-languages/minimal-dev-env-3.md)).
 

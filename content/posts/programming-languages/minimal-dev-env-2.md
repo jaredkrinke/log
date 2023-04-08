@@ -2,7 +2,7 @@
 title: In search of a minimal development environment, part 2
 description: Some practical research into a minimal development environment.
 date: 2023-02-26
-keywords: [minimalism]
+keywords: [minimalism,linux,deno]
 ---
 In [part 1](minimal-dev-env.md), I was yearning for simpler times, when entire operating systems could fit on a single digit number of 1.44 MB floppy disks.
 

@@ -2,7 +2,7 @@
 title: Speeding up md2blog
 description: md2blog is fast on my desktop, but slow on my Raspberry Pi. Here are my plans to improve rebuild performance.
 date: 2023-03-07
-keywords: [md2blog]
+keywords: [md2blog,hugo,rust]
 ---
 I've been happily using [md2blog](md2blog-deno.md) to generate this site for over a year now, but I recently ran into a problem: it's not as fast as it could be.
 

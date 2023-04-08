@@ -2,7 +2,7 @@
 title: In search of a minimal development environment
 description: What would a minimal development environment look like? How small could it be?
 date: 2023-02-11
-keywords: [minimalism]
+keywords: [minimalism,linux]
 ---
 Feel free to [skip over the obligatory whining about today's bloat](#the-plan).
 

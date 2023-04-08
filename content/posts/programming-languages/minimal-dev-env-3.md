@@ -2,7 +2,7 @@
 title: "Minimal dev environment, part 3: introducing \"leano\", a tiny Deno-compatible runtime"
 description: I developed an actual piece of software using my minimal development environment. Here's how it went.
 date: 2023-02-28
-keywords: [minimalism]
+keywords: [minimalism,linux,deno]
 ---
 In [part 2](minimal-dev-env-2.md), I laid out my initial minimal development environment (Raspberry Pi B, Alpine Linux, console only). Today, I'm sharing my initial experience using this setup.
 
