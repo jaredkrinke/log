@@ -7,8 +7,126 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-04-08T02:48:19.154Z</updated>
+<updated>2023-04-17T22:35:26.389Z</updated>
 
+<entry>
+<title>JavaScript runtime startup performance</title>
+<id>https://log.schemescape.com/posts/static-site-generators/js-runtimes-startup-perf.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/js-runtimes-startup-perf.html"/>
+<updated>2023-04-17T00:00:00.000Z</updated>
+<summary type="text">Incremental rebuilds with GNU Make use separate processes for each task. So how does startup time compare between Node, Deno, Bun, and Leano?</summary>
+<content type="html">&lt;p&gt;In a previous post, I &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html&quot;&gt;set up incremental builds of this site using GNU Make&lt;/a&gt;. I was able to reduce the incremental build time (for updating a single post, on my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-4.html#hello-netbook&quot;&gt;twelve year-old netbook&lt;/a&gt;) from 12 seconds (when doing a full rebuild using Deno) to 3 seconds (using Make, and a bunch of smaller scripts, all running under Deno). Unfortunately, the &lt;em&gt;full&lt;/em&gt; rebuild time ballooned from 12 seconds to 90 seconds when using Make.&lt;/p&gt;
+&lt;p&gt;Just from watching the console output, it was apparent that Deno&amp;#39;s startup overhead was a likely culprit, so I decided to compare Deno to a few other JavaScript runtimes.&lt;/p&gt;
+&lt;h1 id=&quot;hello-startup-performance&quot;&gt;Hello, startup performance!&lt;/h1&gt;
+&lt;p&gt;This is a completely unscientific benchmark, but to get a feel for the minimum amount of startup overhead, I decided to compare the time to run a simple &amp;quot;hello, world&amp;quot; program on:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://nodejs.org/&quot;&gt;Node&lt;/a&gt; 18.14.2 (based on &lt;a href=&quot;https://v8.dev/&quot;&gt;V8&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt; 1.31.1 (based on V8)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://bun.sh/&quot;&gt;Bun&lt;/a&gt; 0.5.8 (based on &lt;a href=&quot;https://developer.apple.com/documentation/javascriptcore&quot;&gt;JavaScriptCore&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-3.html#success-and-leano&quot;&gt;Leano&lt;/a&gt; (based on &lt;a href=&quot;https://bellard.org/quickjs/&quot;&gt;QuickJS&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here are the results:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;left&quot;&gt;Runtime&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;&amp;quot;Hello, world!&amp;quot; elapsed time&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Node&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;360 ms&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Deno&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;240 ms&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Bun&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;(crashed)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Leano&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;20 ms&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;Deno being faster than Node definitely matches my subjective experience. Unfortunately for Bun, I wasn&amp;#39;t able to get it to run under Alpine Linux (the official installer seemed to require glibc, and Bun installed via Nix was compiled for a newer instruciton set than what my netbook supports). There appeared to be open issues in Bun&amp;#39;s tracker for both problems.&lt;/p&gt;
+&lt;p&gt;Leano is a minimal (and &lt;em&gt;barely&lt;/em&gt; functional) wrapper around QuickJS, so I figured it would be fast for a &amp;quot;hello, world&amp;quot;, but I wasn&amp;#39;t expecting it to be quite &lt;em&gt;that&lt;/em&gt; much faster!&lt;/p&gt;
+&lt;p&gt;Of course, this is a contrived example, and it&amp;#39;s not clear how QuickJS will fare once I throw gigantic transpiled and bundled scripts at it.&lt;/p&gt;
+&lt;h1 id=&quot;template-performance&quot;&gt;Template performance&lt;/h1&gt;
+&lt;p&gt;One step above &amp;quot;hello, world&amp;quot; is the last stage of building this site, templating. All this does is read in JSON and HTML and interpolate them into a bunch of vanilla JS template literals. This seems like an ideal place to test Leano because it&amp;#39;s a lot less JavaScript code than, say, syntax highlighting. Note: I already know from &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-4.html#performance&quot;&gt;a previous experiment&lt;/a&gt; that V8 can be 3 - 5 times faster than QuickJS in a complex scenario like an md2blog full rebuild (presumably due to just-in-time compilation and other optimizations).&lt;/p&gt;
+&lt;p&gt;Here are the times needed to apply templates to 84 posts on this site under both Deno and Leano (which use the same API):&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;left&quot;&gt;Runtime&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;Templating elapsed time&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Deno&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;25 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Leano&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;4 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;These results line up with the previous ones pretty closely: Deno seems to have a startup overhead of 200 - 250 milliseconds, and that adds up when running 80+ processes sequentially. What if I run Make in parallel?&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;left&quot;&gt;Runtime&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;Templating elapsed time (parallel)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Deno&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;19 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Leano&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;3 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;Running two tasks in parallel (on my dual-core machine) closes the gap slightly.&lt;/p&gt;
+&lt;p&gt;Other simple scripts that took less than a second to run (parsing front matter, generating an index, and creating an Atom feed) showed 30 - 50% improvements.&lt;/p&gt;
+&lt;h1 id=&quot;heavy-lifting&quot;&gt;Heavy lifting&lt;/h1&gt;
+&lt;p&gt;By far, the most complicated script in the entire pipeline is the one that processes Markdown and applies syntax highlighting to code blocks. Mostly due to embedded grammars, the script for this step weighs in at nearly 2 megabytes of JavaScript.&lt;/p&gt;
+&lt;p&gt;This is where Deno&amp;#39;s caching and V8&amp;#39;s JIT shine. Processing a particularly complicated post using Deno (including process creation/termination) took about 1.5 seconds on my netbook, whereas Leano required 3 seconds. I tried precompiling the JavaScript code to QuickJS bytecode (to avoid parsing overhead), but that only saved about 40 milliseconds (I guess parsing is really fast!).&lt;/p&gt;
+&lt;h1 id=&quot;final-results&quot;&gt;Final results&lt;/h1&gt;
+&lt;p&gt;After moving all the small/trivial scripts over to Leano while leaving Markdown/syntax highlighting to Deno, I was able to improve upon my previous results:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;left&quot;&gt;Scenario&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;Elapsed time&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Full rebuild using &amp;quot;classic&amp;quot; md2blog&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;12 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Full rebuild using &amp;quot;make&amp;quot; solely under Deno&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;90 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;Incremental build using &amp;quot;make&amp;quot; soley under Deno&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;3 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;&lt;strong&gt;Full rebuild using &amp;quot;make&amp;quot; using Deno &lt;em&gt;and&lt;/em&gt; Leano&lt;/strong&gt;&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;70 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;left&quot;&gt;&lt;strong&gt;Incremental build using &amp;quot;make&amp;quot; using Deno &lt;em&gt;and&lt;/em&gt; Leano&lt;/strong&gt;&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;1.6 seconds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;In the end, removing Deno&amp;#39;s startup penalty from the process resulted in a modest speedup. Unfortunately, it&amp;#39;s still slower than &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-3.html#further-optimizations&quot;&gt;running a full rebuild under Deno when in &amp;quot;watch&amp;quot; mode&lt;/a&gt;, so, while interesting, this experiment did not lead to any changes in my current workflow.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Speeding up md2blog, part 3</title>
 <id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-3.html</id>
@@ -300,63 +418,6 @@ TIDY_RESULT := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quo
 &lt;p&gt;But once again, I&amp;#39;m just not sure that the game is popular enough to warrant porting to Linux. It might please a handful of people (and make me feel better), but I should probably focus on more impactful projects.&lt;/p&gt;
 &lt;h1 id=&quot;thats-all-for-now&quot;&gt;That&amp;#39;s all, for now&lt;/h1&gt;
 &lt;p&gt;Thus concludes my brain dump. Feel free to send questions or comments to &lt;a href=&quot;mailto:log@schemescape.com&quot;&gt;log@schemescape.com&lt;/a&gt;. If you enjoyed the game, I&amp;#39;d love to hear from you!&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Speeding up md2blog</title>
-<id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html"/>
-<updated>2023-03-07T00:00:00.000Z</updated>
-<summary type="text">md2blog is fast on my desktop, but slow on my Raspberry Pi. Here are my plans to improve rebuild performance.</summary>
-<content type="html">&lt;p&gt;I&amp;#39;ve been happily using &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html&quot;&gt;md2blog&lt;/a&gt; to generate this site for over a year now, but I recently ran into a problem: it&amp;#39;s not as fast as it could be.&lt;/p&gt;
-&lt;p&gt;On my desktop computer, this is no big deal because a clean build only takes a couple of seconds and a live rebuild takes less than 2 seconds. But on my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-3.html&quot;&gt;minimal development environment I&amp;#39;ve been playing with&lt;/a&gt; (which runs on a Raspberry Pi 1, model B), even after some basic optimization, it still takes 2 minutes to build the site from scratch! I haven&amp;#39;t bothered to attempt a &amp;quot;live&amp;quot; rebuild.&lt;/p&gt;
-&lt;p&gt;One reason for this is the fact that md2blog always rebuilds the entire site, regardless of whether or not anything changed. This was a design decision I made solely to simplify the implementation, with the understanding that my site was small enough and my computer fast enough that it wouldn&amp;#39;t matter. Now, my computer is slow.&lt;/p&gt;
-&lt;h1 id=&quot;solutions-to-explore&quot;&gt;Solutions to explore&lt;/h1&gt;
-&lt;p&gt;Here are some ideas I had for improving performance on low-end devices:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Hugo&lt;/strong&gt;: Give up on JavaScript/Deno/&lt;a href=&quot;https://github.com/jaredkrinke/goldsmith&quot;&gt;Goldsmith&lt;/a&gt; and port everything to &lt;a href=&quot;https://gohugo.io/&quot;&gt;Hugo&lt;/a&gt; (which is implemented in Go and therefore compiled to native code, so probably faster)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Rust&lt;/strong&gt;: Give up on JavaScript and rewrite md2blog (and possibly Goldsmith) in Rust (also compiles to native code, but without a garbage collector, so maybe even faster)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Caching&lt;/strong&gt;: Refactor Goldsmith so that it avoids rebuilding items whose source files haven&amp;#39;t changed&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;hugo&quot;&gt;Hugo&lt;/h2&gt;
-&lt;p&gt;Hugo is a popular static site generator. I &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/hugo.html&quot;&gt;tried it out&lt;/a&gt; when I was first creating this site, but I hated the template language and the learning curve for creating new themes was fairly steep. Despite my complaints, I admire Hugo&amp;#39;s portability and speed, so I&amp;#39;m willing to give it another shot, so this option remains on the table.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I looked into Hugo more, and it doesn&amp;#39;t support deriving taxonomies from file system metadata (namely: parent directory), so I&amp;#39;d have to make some compromises (either to my workflow or the site design) if I wanted to switch to Hugo. Still on the table (just less attractive).&lt;/p&gt;
-&lt;h2 id=&quot;rust&quot;&gt;Rust&lt;/h2&gt;
-&lt;p&gt;I&amp;#39;d like to learn Rust because it&amp;#39;s unique as a &lt;em&gt;safe&lt;/em&gt; systems language, and redesigning/reimplementing Goldsmith+md2blog in Rust would be a great way to learn the language. Using a compiled language would enable parallel builds (although my Raspberry Pi 1 only has a single CPU core), and I suspect that native Markdown/syntax highlighting libraries would speed things up.&lt;/p&gt;
-&lt;p&gt;This would be a large project, but educational enough that I&amp;#39;m open to it.&lt;/p&gt;
-&lt;h2 id=&quot;caching&quot;&gt;Caching&lt;/h2&gt;
-&lt;p&gt;It&amp;#39;s hard to estimate the impact of caching intermediate objects and outputs, but done correctly this would at least reduce the number of files written out from roughly 100, down to just a handful.&lt;/p&gt;
-&lt;p&gt;This option also has the attractive quality that it doesn&amp;#39;t require reimplementing everything in a new language or framework, so it&amp;#39;s probably the shortest path to performance improvements without functional regressions.&lt;/p&gt;
-&lt;p&gt;For now, I&amp;#39;m planning to investigate caching first since it&amp;#39;s the easiest and safest option.&lt;/p&gt;
-&lt;h1 id=&quot;adding-caching-to-goldsmith&quot;&gt;Adding caching to Goldsmith&lt;/h1&gt;
-&lt;p&gt;I never got around to documenting Goldsmith (the base upon which md2blog is built), but it&amp;#39;s essentially &amp;quot;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/metalsmith.html&quot;&gt;Metalsmith&lt;/a&gt; for Deno, with very few dependencies&amp;quot;. Unfortunately, Metalsmith&amp;#39;s data model (which Goldsmith copies) doesn&amp;#39;t trivially lend itself to caching.&lt;/p&gt;
-&lt;h2 id=&quot;goldsmiths-data-model-vs-caching&quot;&gt;Goldsmith&amp;#39;s data model vs. caching&lt;/h2&gt;
-&lt;p&gt;Goldsmith&amp;#39;s data model is essentially one giant mutable map of filenames to metadata and content. A sequence of plugins manipulate this map, in order to transform input files to output files (adding/modifying metadata along the way). At the end of the plugin chain, files are written out to disk.&lt;/p&gt;
-&lt;p&gt;The problem with this approach is that output files never specify their dependencies. Looking at it from the other direction, if I modify this post&amp;#39;s Markdown file, the only change to Goldsmith&amp;#39;s initial data model is the content of this Markdown file. The problem is that this one input file could impact numerous output files: the post itself, the Atom feed, any category/keyword index pages (especially if keywords are added or removed), the home page, and, of course, the archive page.&lt;/p&gt;
-&lt;h2 id=&quot;caching-requirements&quot;&gt;Caching requirements&lt;/h2&gt;
-&lt;p&gt;In order to rebuild the minimal set of files when a change is detected, I need an accurate dependency graph. There are a couple of pitfalls:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;The pipeline itself can change&lt;/strong&gt; (in general for Goldsmith, and in configuration for md2blog)&lt;/li&gt;
-&lt;li&gt;Plugins always consume the entire data model (plugins internally may filter the set of files, but that&amp;#39;s an implementation detail)&lt;/li&gt;
-&lt;li&gt;Plugins can add/delete files at will (there isn&amp;#39;t even a &amp;quot;rename&amp;quot; operation--it just shows up as two independent operations: add and delete)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;brainstorming-dependency-graph-approaches&quot;&gt;Brainstorming dependency graph approaches&lt;/h2&gt;
-&lt;p&gt;Obviously, I could just mandate that Goldsmith plugins have to accurately enumerate their dependencies when adding or modifying entires in the collection data model. For md2blog, with its fixed pipeline, this should be feasible, but potentially error-prone.&lt;/p&gt;
-&lt;p&gt;Another approach would be to automatically gather dependency information for each output by providing the data model wrapped in a &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy&quot;&gt;proxy object&lt;/a&gt;. The trick is scoping the proxy object to a single output, and I don&amp;#39;t see a way to accomplish this without changing the plugin contract. One approach might be to create a new class of plugins that &lt;em&gt;only&lt;/em&gt; transform/rename files individually. &lt;strong&gt;This would also open the door to parallel processing of these &amp;quot;per-file&amp;quot; plugins&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Having the dependency graph computed automatically is preferable, so I&amp;#39;ll try that first.&lt;/p&gt;
-&lt;h2 id=&quot;from-dependencies-to-caching&quot;&gt;From dependencies to caching&lt;/h2&gt;
-&lt;p&gt;Creating the dependency graph is necessary, but not sufficient. I&amp;#39;ll need to also cache the intermediate results from plugins, along with the timestamps of input files so that I can:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Check to see which files have changed&lt;/li&gt;
-&lt;li&gt;Restart the build pipeline from the deepest point that hasn&amp;#39;t changed&lt;/li&gt;
-&lt;li&gt;Add back in unmodified data model entries&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
-&lt;p&gt;Other than ad-hoc tests, it will probably be a good idea to &lt;strong&gt;run both the new cache-aware pipeline and the old rebuild-the-world approach to ensure there aren&amp;#39;t any differences&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ll also, of course, need to &lt;strong&gt;ensure that the additional overhead from caching isn&amp;#39;t so large as to negate any of the benefits&lt;/strong&gt;, at least on my personal site (I&amp;#39;m not the only md2blog use in the entire world, but there are very few, and I suspect most won&amp;#39;t ever find the updated version).&lt;/p&gt;
-&lt;h1 id=&quot;stay-tuned&quot;&gt;Stay tuned&lt;/h1&gt;
-&lt;p&gt;I have no idea how long this project will take or whether I&amp;#39;ll abandon it, but if I make progress, I&amp;#39;ll be sure to post an update (and link it from here--hopefully the rebuild picks up the change!).&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I prototyped &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html&quot;&gt;incremental builds using GNU Make&lt;/a&gt;.&lt;/p&gt;
 </content>
 </entry>
 </feed>

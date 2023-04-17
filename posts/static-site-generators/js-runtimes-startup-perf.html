@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>JavaScript runtime startup performance</title>
+<meta name="description" content="Incremental rebuilds with GNU Make use separate processes for each task. So how does startup time compare between Node, Deno, Bun, and Leano?" />
+<meta name="keywords" content="md2blog,deno" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "JavaScript runtime startup performance",
+  "abstract": "Incremental rebuilds with GNU Make use separate processes for each task. So how does startup time compare between Node, Deno, Bun, and Leano?",
+  "keywords": "static-site-generators,md2blog,deno",
+  "datePublished": "2023-04-17"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/static-site-generators/index.html">static-site-generators</a></li>
+<li><a href="../../posts/md2blog/index.html">md2blog</a></li>
+<li><a href="../../posts/deno/index.html">deno</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/static-site-generators/js-runtimes-startup-perf.html">JavaScript runtime startup performance</a></h1>
+<p><time datetime="2023-04-17">April 17, 2023</time></p>
+</header>
+<p>In a previous post, I <a href="speeding-up-rebuilds-2.html">set up incremental builds of this site using GNU Make</a>. I was able to reduce the incremental build time (for updating a single post, on my <a href="../programming-languages/minimal-dev-env-4.html#hello-netbook">twelve year-old netbook</a>) from 12 seconds (when doing a full rebuild using Deno) to 3 seconds (using Make, and a bunch of smaller scripts, all running under Deno). Unfortunately, the <em>full</em> rebuild time ballooned from 12 seconds to 90 seconds when using Make.</p>
+<p>Just from watching the console output, it was apparent that Deno&#39;s startup overhead was a likely culprit, so I decided to compare Deno to a few other JavaScript runtimes.</p>
+<h1 id="hello-startup-performance">Hello, startup performance!</h1>
+<p>This is a completely unscientific benchmark, but to get a feel for the minimum amount of startup overhead, I decided to compare the time to run a simple &quot;hello, world&quot; program on:</p>
+<ul>
+<li><a href="https://nodejs.org/">Node</a> 18.14.2 (based on <a href="https://v8.dev/">V8</a>)</li>
+<li><a href="https://deno.land/">Deno</a> 1.31.1 (based on V8)</li>
+<li><a href="https://bun.sh/">Bun</a> 0.5.8 (based on <a href="https://developer.apple.com/documentation/javascriptcore">JavaScriptCore</a>)</li>
+<li><a href="../programming-languages/minimal-dev-env-3.html#success-and-leano">Leano</a> (based on <a href="https://bellard.org/quickjs/">QuickJS</a>)</li>
+</ul>
+<p>Here are the results:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Runtime</th>
+<th align="right">&quot;Hello, world!&quot; elapsed time</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Node</td>
+<td align="right">360 ms</td>
+</tr>
+<tr>
+<td align="left">Deno</td>
+<td align="right">240 ms</td>
+</tr>
+<tr>
+<td align="left">Bun</td>
+<td align="right">(crashed)</td>
+</tr>
+<tr>
+<td align="left">Leano</td>
+<td align="right">20 ms</td>
+</tr>
+</tbody></table>
+<p>Deno being faster than Node definitely matches my subjective experience. Unfortunately for Bun, I wasn&#39;t able to get it to run under Alpine Linux (the official installer seemed to require glibc, and Bun installed via Nix was compiled for a newer instruciton set than what my netbook supports). There appeared to be open issues in Bun&#39;s tracker for both problems.</p>
+<p>Leano is a minimal (and <em>barely</em> functional) wrapper around QuickJS, so I figured it would be fast for a &quot;hello, world&quot;, but I wasn&#39;t expecting it to be quite <em>that</em> much faster!</p>
+<p>Of course, this is a contrived example, and it&#39;s not clear how QuickJS will fare once I throw gigantic transpiled and bundled scripts at it.</p>
+<h1 id="template-performance">Template performance</h1>
+<p>One step above &quot;hello, world&quot; is the last stage of building this site, templating. All this does is read in JSON and HTML and interpolate them into a bunch of vanilla JS template literals. This seems like an ideal place to test Leano because it&#39;s a lot less JavaScript code than, say, syntax highlighting. Note: I already know from <a href="../programming-languages/minimal-dev-env-4.html#performance">a previous experiment</a> that V8 can be 3 - 5 times faster than QuickJS in a complex scenario like an md2blog full rebuild (presumably due to just-in-time compilation and other optimizations).</p>
+<p>Here are the times needed to apply templates to 84 posts on this site under both Deno and Leano (which use the same API):</p>
+<table>
+<thead>
+<tr>
+<th align="left">Runtime</th>
+<th align="right">Templating elapsed time</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Deno</td>
+<td align="right">25 seconds</td>
+</tr>
+<tr>
+<td align="left">Leano</td>
+<td align="right">4 seconds</td>
+</tr>
+</tbody></table>
+<p>These results line up with the previous ones pretty closely: Deno seems to have a startup overhead of 200 - 250 milliseconds, and that adds up when running 80+ processes sequentially. What if I run Make in parallel?</p>
+<table>
+<thead>
+<tr>
+<th align="left">Runtime</th>
+<th align="right">Templating elapsed time (parallel)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Deno</td>
+<td align="right">19 seconds</td>
+</tr>
+<tr>
+<td align="left">Leano</td>
+<td align="right">3 seconds</td>
+</tr>
+</tbody></table>
+<p>Running two tasks in parallel (on my dual-core machine) closes the gap slightly.</p>
+<p>Other simple scripts that took less than a second to run (parsing front matter, generating an index, and creating an Atom feed) showed 30 - 50% improvements.</p>
+<h1 id="heavy-lifting">Heavy lifting</h1>
+<p>By far, the most complicated script in the entire pipeline is the one that processes Markdown and applies syntax highlighting to code blocks. Mostly due to embedded grammars, the script for this step weighs in at nearly 2 megabytes of JavaScript.</p>
+<p>This is where Deno&#39;s caching and V8&#39;s JIT shine. Processing a particularly complicated post using Deno (including process creation/termination) took about 1.5 seconds on my netbook, whereas Leano required 3 seconds. I tried precompiling the JavaScript code to QuickJS bytecode (to avoid parsing overhead), but that only saved about 40 milliseconds (I guess parsing is really fast!).</p>
+<h1 id="final-results">Final results</h1>
+<p>After moving all the small/trivial scripts over to Leano while leaving Markdown/syntax highlighting to Deno, I was able to improve upon my previous results:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Scenario</th>
+<th align="right">Elapsed time</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Full rebuild using &quot;classic&quot; md2blog</td>
+<td align="right">12 seconds</td>
+</tr>
+<tr>
+<td align="left">Full rebuild using &quot;make&quot; solely under Deno</td>
+<td align="right">90 seconds</td>
+</tr>
+<tr>
+<td align="left">Incremental build using &quot;make&quot; soley under Deno</td>
+<td align="right">3 seconds</td>
+</tr>
+<tr>
+<td align="left"><strong>Full rebuild using &quot;make&quot; using Deno <em>and</em> Leano</strong></td>
+<td align="right">70 seconds</td>
+</tr>
+<tr>
+<td align="left"><strong>Incremental build using &quot;make&quot; using Deno <em>and</em> Leano</strong></td>
+<td align="right">1.6 seconds</td>
+</tr>
+</tbody></table>
+<p>In the end, removing Deno&#39;s startup penalty from the process resulted in a modest speedup. Unfortunately, it&#39;s still slower than <a href="speeding-up-rebuilds-3.html#further-optimizations">running a full rebuild under Deno when in &quot;watch&quot; mode</a>, so, while interesting, this experiment did not lead to any changes in my current workflow.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
