@@ -1,7 +1,7 @@
 ---
 title: JavaScript runtime startup performance
 description: Incremental rebuilds using GNU Make run separate processes for each task. So how does startup time compare between Node, Deno, Bun, and Leano?
-date: 2023-04-16
+date: 2023-04-17
 keywords: [md2blog,deno]
 draft: true
 ---
@@ -19,14 +19,14 @@ This is a completely unscientific benchmark, but to get a feel for the minimum a
 
 Here are the results:
 
-| Runtime | Elapsed time |
+| Runtime | "Hello, world!" elapsed time |
 | :-- | --: |
 | Node | 360 ms |
 | Deno | 240 ms |
 | Bun | (crashed) |
 | Leano | 20 ms |
 
-Deno being faster than Node definitely matches my subjective experience. Unfortunately for Bun, I wasn't able to get it to run under Alpine Linux (either installed via the bun.sh script or installed via Nix).
+Deno being faster than Node definitely matches my subjective experience. Unfortunately for Bun, I wasn't able to get it to run under Alpine Linux (the official installer seemed to require glibc, and Bun installed via Nix was compiled for a newer instruciton set than what my netbook supports).
 
 Leano is a minimal (barely functional) wrapper around QuickJS, so I figured it would be fast for a "hello, world", but I wasn't expecting it to be quite *that* fast!
 
@@ -35,10 +35,39 @@ Of course, this is a contrived example, and it's not clear how QuickJS will fare
 # Template performance
 One step above "hello, world" is the last stage of building this site, templating. All this does is read in JSON and HTML and interpolate them into a bunch of vanilla JS template literals. This seems like an ideal place to test Leano because it's a lot less JavaScript code than, say, syntax highlighting. Note: I already know from [a previous experiment](../programming-languages/minimal-dev-env-4.md#performance) that V8 can be 3 - 5 times faster than QuickJS (presumably due to just-in-time compilation and other optimizations) in a complex scenario like an md2blog full rebuild.
 
-Here are the times needed to apply templates for posts on this site under both Deno and Leano (which use the same API):
+Here are the times needed to apply templates to 84 posts on this site under both Deno and Leano (which use the same API):
 
-| Runtime | Elapsed time |
+| Runtime | Templating elapsed time |
 | :-- | --: |
-| Deno | |
-| Leano | |
+| Deno | 25 seconds |
+| Leano | 4 seconds |
+
+These results line up with the previous ones pretty closely: Deno seems to have a startup overhead of 200 - 250 milliseconds, and that adds up when running 80+ processes sequentially. What if I run Make in parallel?
+
+| Runtime | Templating elapsed time (parallel) |
+| :-- | --: |
+| Deno | 19 seconds |
+| Leano | 3 seconds |
+
+Running two tasks in parallel (on my dual-core machine) closes the gap slightly.
+
+Other simple scripts that took less than a second to run (parsing front matter, generating an index, and creating an Atom feed) showed 30 - 50% improvements.
+
+# Heavy lifting
+By far, the most complicated script in the entire pipeline is the one that processes Markdown and applies syntax highlighting to code blocks. Mostly due to embedded grammars, the script for this step weighs in at a hefty 1.8 MB of JavaScript.
+
+This is where Deno's caching and V8's JIT shine. Processing a particularly complicated post using Deno (including process creation/termination) took about 1.5 seconds on my netbook, whereas Leano required 3 seconds.
+
+# Final results
+After moving all the small/trivial scripts over to Leano while leaving the heavy lifting to Deno, I was able to improve upon my previous results:
+
+| Scenario | Elapsed time | 
+| :-- | --: |
+| Full rebuild using "classic" md2blog | 12 seconds |
+| Full rebuild using "make" solely under Deno | 90 seconds |
+| Incremental build using "make" soley under Deno | 3 seconds |
+| **Full rebuild using "make" using Deno *and* Leano** | 70 seconds |
+| **Incremental build using "make" using Deno *and* Leano** | 1.6 seconds |
+
+In the end, removing Deno's startup penalty from the process resulted in a modest speedup. Unfortunately, it's still slower than [running a full rebuild under Deno when in "watch" mode](speeding-up-rebuilds-3.md#further-optimizations), so, while interesting, this experiment did not meaningfully affect my current workflow.
 
