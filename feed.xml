@@ -7,8 +7,46 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-04-25T22:59:28.231Z</updated>
+<updated>2023-05-15T23:50:44.009Z</updated>
 
+<entry>
+<title>Resources for learning Common Lisp</title>
+<id>https://log.schemescape.com/posts/programming-languages/common-lisp-resources.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/common-lisp-resources.html"/>
+<updated>2023-05-15T00:00:00.000Z</updated>
+<summary type="text">Here are the resources I&apos;ve personally found most helpful for learning Common Lisp.</summary>
+<content type="html">&lt;p&gt;In order to test out fully interactive program development (&lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/learning-lisp-in-2023.html&quot;&gt;as noted previously&lt;/a&gt;), I&amp;#39;ve been learning Common Lisp. I assumed that it would take a while to catch up on nearly four decades of Common Lisp&amp;#39;s progress and... I was not wrong about that. On the plus side, given the long timeline, there &lt;em&gt;are&lt;/em&gt; a lot of resources available. On the flip side, they&amp;#39;re not always up to date.&lt;/p&gt;
+&lt;p&gt;Regardless, here are the resources that I&amp;#39;ve found most helpful over the last couple of weeks. My intention is to keep this list up to date as I go.&lt;/p&gt;
+&lt;h1 id=&quot;introductory-materials&quot;&gt;Introductory materials&lt;/h1&gt;
+&lt;p&gt;In descending order of how much time I&amp;#39;ve spent studying them (i.e. in completely arbitrary order):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://gigamonkeys.com/book/&quot;&gt;&lt;strong&gt;Practical Common Lisp&lt;/strong&gt;&lt;/a&gt; by Peter Seibel&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://dept-info.labri.fr/~strandh/Teaching/MTP/Common/David-Lamkins/cover.html&quot;&gt;&lt;strong&gt;Successful Lisp&lt;/strong&gt;&lt;/a&gt; by David B. Lamkins&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://leanpub.com/lovinglisp&quot;&gt;&lt;strong&gt;Loving Common Lisp, or the Savvy Programmer&amp;#39;s Secret Weapon&lt;/strong&gt;&lt;/a&gt; by Mark Watson&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;in-depth-materials&quot;&gt;In-depth materials&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Various topics: &lt;a href=&quot;https://lispcookbook.github.io/cl-cookbook/&quot;&gt;Common Lisp Cookbook&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Debugging: &lt;a href=&quot;https://malisper.me/debugging-lisp-part-1-recompilation/&quot;&gt;Debugging Lisp (series)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Packaging/libraries: &lt;a href=&quot;https://lispmethods.com/libraries.html&quot;&gt;Source Code Organization&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;The LOOP macro: &lt;a href=&quot;https://www.ai.sri.com/~pkarp/loop.html&quot;&gt;Tutorial for the Common Lisp Loop Macro&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;JSON libraries: &lt;a href=&quot;https://sabracrolleton.github.io/json-review.html&quot;&gt;Review of CL JSON libraries&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;resource-collections&quot;&gt;Resource collections:&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;List of libraries/tools: &lt;a href=&quot;https://awesome-cl.com/&quot;&gt;Awesome Common Lisp&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;List of books: &lt;a href=&quot;https://lisp-lang.org/books/&quot;&gt;lisp-lang.org/books&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;general-reference&quot;&gt;General reference&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://clhs.lisp.se/Front/index.htm&quot;&gt;Common Lisp HyperSpec&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;thats-great-but-what-have-you-been-doing&quot;&gt;That&amp;#39;s great, but what have you been &lt;em&gt;doing&lt;/em&gt;?&lt;/h1&gt;
+&lt;p&gt;That&amp;#39;s mostly a topic for a future post. Briefly: my first project has been building a service that hosts webhooks which implement &lt;a href=&quot;https://play.battlesnake.com/&quot;&gt;Battlesnake&lt;/a&gt; clients. Surely there&amp;#39;s no more noble endeavour than programming games!&lt;/p&gt;
+&lt;p&gt;Battlesnake is a competitive programming game where snakes move around a grid collecting food and trying not to collide with each other and the walls. Each snake is implemented as a webhook which is given 500 milliseconds to respond with the direction it would like to move. It&amp;#39;s a simple concept, but that just leaves lots of room for optimization. As an aside, the global leaderboard is a little bit pointless in that it can&amp;#39;t take into account hardware, so for all I know my little netbook is competing with a rack of servers, but I&amp;#39;m still having fun.&lt;/p&gt;
+&lt;p&gt;Hopefully I&amp;#39;ll have more to say about Battlesnake and Common Lisp soon!&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>It&apos;s 2023, so of course I&apos;m learning Common Lisp</title>
 <id>https://log.schemescape.com/posts/programming-languages/learning-lisp-in-2023.html</id>
@@ -257,109 +295,6 @@
 &lt;ul&gt;
 &lt;li&gt;Adding a console &amp;quot;taskbar&amp;quot; to GNU Screen&lt;/li&gt;
 &lt;li&gt;Attempting to use a language server with a text editor&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>Speeding up md2blog, part 2</title>
-<id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html"/>
-<updated>2023-04-02T00:00:00.000Z</updated>
-<summary type="text">Using GNU Make to enable incremental builds of this site.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html&quot;&gt;part 1&lt;/a&gt;, I brainstormed some ideas to speed up rebuilds of my static site (because I&amp;#39;ve been &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-3.html&quot;&gt;playing around with using old/slow computers&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;In this update, I&amp;#39;m going to share a potentially misguided (but functional!) approach to supporting incremental builds using &lt;a href=&quot;https://www.gnu.org/software/make/&quot;&gt;GNU Make&lt;/a&gt;. The code is &lt;a href=&quot;https://github.com/jaredkrinke/make-blog&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;My static site generator, &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/md2blog-deno.html&quot;&gt;md2blog&lt;/a&gt;, is written in TypeScript, simply because I&amp;#39;m used to the language and it&amp;#39;s popular. On my desktop computer, rebuilding this site is trivially fast. But once I switched to a Raspberry Pi 1 B (and now a 12 year-old netbook), the overhead of JavaScript became more noticeable. On my netbook, I&amp;#39;ve been able to get the full rebuild time of this site (only full rebuilds are supported in md2blog) down to about 12 seconds. This is tolerable, but obviously still inefficient. If I&amp;#39;m only adding or modifying a single post, why should I rebuild the entire site?&lt;/p&gt;
-&lt;p&gt;Incremental builds should be possible by caching some intermediate state. Originally, I&amp;#39;d hoped to implement a generic solution in TypeScript, but part way through I realized that I was essentially reimplementing Make. So why not just use Make?&lt;/p&gt;
-&lt;h1 id=&quot;md2blogs-build-process&quot;&gt;md2blog&amp;#39;s build process&lt;/h1&gt;
-&lt;p&gt;md2blog is designed to be simple, but complete. This means that the build process is straight-forward:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Clean up the output directory (delete everything)&lt;/li&gt;
-&lt;li&gt;Read (and validate) site-wide metadata from &lt;code&gt;site.json&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Read (and validate) front matter from all posts (and remove drafts, if requested)&lt;/li&gt;
-&lt;li&gt;Implicitly tag posts with their parent directory name (in addition to any explicitly-entered keywords)&lt;/li&gt;
-&lt;li&gt;Generate an index of tags to posts&lt;/li&gt;
-&lt;li&gt;Generate some necessary files (error page, stylesheet)&lt;/li&gt;
-&lt;li&gt;Process Markdown (adding syntax highlighting and rewriting relative &lt;code&gt;*.md&lt;/code&gt; links, as needed)&lt;/li&gt;
-&lt;li&gt;Generate an Atom feed of recent posts&lt;/li&gt;
-&lt;li&gt;Generate an archive and tag index pages&lt;/li&gt;
-&lt;li&gt;Validate all internal links&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;After writing down that list, I&amp;#39;m realizing there are a lot of steps, but they&amp;#39;re mostly just to support implicit tags and various index pages. Regardless, it&amp;#39;s relatively straight-forward.&lt;/p&gt;
-&lt;h1 id=&quot;using-gnu-make&quot;&gt;Using GNU Make&lt;/h1&gt;
-&lt;p&gt;Like a good little developer, I&amp;#39;ve shied away from using GNU Make-specific functionality, and have just used the limited subset of Make that is widely supported. But for this project, I ended up needing to dig deep into GNU Make&amp;#39;s functionality to model md2blog&amp;#39;s build process correctly.&lt;/p&gt;
-&lt;p&gt;Specifically, there were a few aspects of md2blog&amp;#39;s build process that were tricky to implement using GNU Make:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Enumerating posts and their implicit directory structure&lt;/li&gt;
-&lt;li&gt;Cleaning up extraneous files in the &lt;code&gt;out&lt;/code&gt; directory&lt;/li&gt;
-&lt;li&gt;Aggregating all posts into a single archive&lt;/li&gt;
-&lt;li&gt;Discovering and handling tags that don&amp;#39;t correspond to any directory (i.e. keywords)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;enumerating-and-cleaning-files&quot;&gt;Enumerating and cleaning files&lt;/h2&gt;
-&lt;p&gt;In this case, I wanted to avoid listing all posts explicitly in my &lt;code&gt;Makefile&lt;/code&gt;--I just wanted it to discover all of the files in the file system, a la &amp;quot;classic&amp;quot; md2blog. GNU Make supports enumerating files by letting you delegate that job to the &lt;code&gt;find&lt;/code&gt; command:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Makefile&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;# Use &amp;quot;find&amp;quot; to enumerate all directories and files under &amp;quot;content/&amp;quot; (excluding &amp;quot;content/&amp;quot; itself)&lt;/span&gt;
-INPUT_FILES := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;shell&lt;/span&gt; find content -follow -type f -not -name &amp;#x27;.*&amp;#x27;)&lt;/span&gt;
-INPUT_DIRECTORIES := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;filter&lt;/span&gt;-out content,$(&lt;span class=&quot;hljs-built_in&quot;&gt;shell&lt;/span&gt; find content -follow -type d)&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Note that in the above snippet I also enumerate directories. This is so that I can recreate the same directory structure in the output directory. I also exclude files beginning with a dot (e.g. swap files).&lt;/p&gt;
-&lt;p&gt;How do I &amp;quot;clean&amp;quot; up any extraneous files &lt;em&gt;before&lt;/em&gt; anything builds? The only reliable solution I could come up with was to sneakily run a command while expanding an usused &lt;em&gt;simply expanded&lt;/em&gt; (&lt;code&gt;:=&lt;/code&gt; instead of &lt;code&gt;=&lt;/code&gt;) variable (note: it must be simply expanded to ensure it is expanded first, and only once):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Makefile&quot;&gt;INPUT_FILES_POSTS := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;filter&lt;/span&gt; content/posts/%.md,&lt;span class=&quot;hljs-variable&quot;&gt;$(INPUT_FILES)&lt;/span&gt;)&lt;/span&gt;
-INTERMEDIATE_FILES_POST_METADATA := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;patsubst&lt;/span&gt; content/posts/%.md,cache/posts/%.metadata.json,&lt;span class=&quot;hljs-variable&quot;&gt;$(INPUT_FILES_POSTS)&lt;/span&gt;)&lt;/span&gt;
-...
-INTERMEDIATE_FILES_EXTRANEOUS := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;filter&lt;/span&gt;-out &lt;span class=&quot;hljs-variable&quot;&gt;$(INTERMEDIATE_FILES)&lt;/span&gt;,$(&lt;span class=&quot;hljs-built_in&quot;&gt;shell&lt;/span&gt; mkdir -p cache &amp;amp;&amp;amp; find cache -type f)&lt;/span&gt;)
-...
-TIDY_RESULT := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;shell&lt;/span&gt; rm -f &lt;span class=&quot;hljs-variable&quot;&gt;$(INTERMEDIATE_FILES_EXTRANEOUS)&lt;/span&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This feels like a hack, since it relies on a side-effect of a &lt;code&gt;$(shell ...)&lt;/code&gt; expansion, but it&amp;#39;s the best solution I could come up with.&lt;/p&gt;
-&lt;h2 id=&quot;aggregating-posts&quot;&gt;Aggregating posts&lt;/h2&gt;
-&lt;p&gt;Aggregating a bunch of posts into a single index sounds like a trivial problem, and it really should be. But since GNU Make relies on command lines, I&amp;#39;m paranoid that any solution which relies on passing paths to &lt;em&gt;every&lt;/em&gt; post via the command line will run into the dreaded command line length limit (which varies significantly in the wild, and isn&amp;#39;t always documented properly).&lt;/p&gt;
-&lt;p&gt;The only solution I could come up with was to pass the large list via the file system. This could either be done using a file that lists the paths, or it could be implicit by searching a directory tree (assuming that the tree has been purged of extraneous files--as I do above).&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Makefile&quot;&gt;&lt;span class=&quot;hljs-section&quot;&gt;cache/posts/index.json: &lt;span class=&quot;hljs-variable&quot;&gt;$(INTERMEDIATE_FILES_POST_METADATA)&lt;/span&gt; | &lt;span class=&quot;hljs-variable&quot;&gt;$(INTERMEDIATE_DIRECTORIES)&lt;/span&gt;&lt;/span&gt;
-    deno run --allow-read=cache --allow-write=cache index.ts cache/posts &lt;span class=&quot;hljs-variable&quot;&gt;$@&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Note the order-only prerequisite for &lt;code&gt;$(INTERMEDIATE_DIRECTORIES)&lt;/code&gt; that ensures the directory structure is already in place before the script runs.&lt;/p&gt;
-&lt;h3 id=&quot;aside-on-aigpt&quot;&gt;Aside on AI/GPT&lt;/h3&gt;
-&lt;p&gt;Given that I was somewhat stumped by this problem, I decided to try asking Bing&amp;#39;s fancy new GPT-based AI chat thingy. Its response was pretty underwhelming. Its first suggestion was to switch from GNU Make to... GNU Make. The second suggestion was to use VPATHs--but that&amp;#39;s a solution to a different problem. And its last suggestion was just clearly copy-pasted--without proper context!--from GNU Make&amp;#39;s documentation.&lt;/p&gt;
-&lt;p&gt;Overall, the answer pointed to documentation I had already consulted (so it &lt;em&gt;did&lt;/em&gt; find information I had already noted as potentially relevant), but the answer was mostly &amp;quot;just don&amp;#39;t do that, duh!&amp;quot;. Color me not impressed.&lt;/p&gt;
-&lt;h2 id=&quot;discovering-tags-that-dont-exist-as-directories&quot;&gt;Discovering tags that don&amp;#39;t exist as directories&lt;/h2&gt;
-&lt;p&gt;My current solution to discovering tags that don&amp;#39;t also exist as directories runs a script that enumerates tags programmatically and then outputs &lt;em&gt;all&lt;/em&gt; index pages. This requires also managing the creation and non-cleanup-ification of those directories. Sadly, my current solution has a bug (it doesn&amp;#39;t programmatically clean up extraneous tag indexes), but the scenario (deleting a unique keyword) is rare enough that I haven&amp;#39;t bothered to fix the bug yet.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s where I had to hack in a pattern to avoid treating programmatically-discovered tags&amp;#39; index pages as extraneous (for the purposes of cleaning up the output directory):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Makefile&quot;&gt;OUTPUT_FILES_EXTRANEOUS := &lt;span class=&quot;hljs-variable&quot;&gt;$(&lt;span class=&quot;hljs-built_in&quot;&gt;filter&lt;/span&gt;-out &lt;span class=&quot;hljs-variable&quot;&gt;$(OUTPUT_FILES)&lt;/span&gt; out/posts/%/index.html,$(&lt;span class=&quot;hljs-built_in&quot;&gt;shell&lt;/span&gt; mkdir -p out &amp;amp;&amp;amp; find out -type f)&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h1 id=&quot;performance&quot;&gt;Performance&lt;/h1&gt;
-&lt;p&gt;So was this all worth it? The answer is: kind of. Here&amp;#39;s a table with the results:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&quot;left&quot;&gt;Scenario&lt;/th&gt;
-&lt;th align=&quot;right&quot;&gt;Elapsed time&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Full rebuild using &amp;quot;classic&amp;quot; md2blog&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;12 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Full rebuild using &amp;quot;make&amp;quot;&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;90 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Incremental build using &amp;quot;make&amp;quot;&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;3 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;I haven&amp;#39;t heavily optimized the incremental build process, but as it stands currently, an incremental build using Make is 4x faster, but a full rebuild using Make is 8x slower. If I could get the &amp;quot;full rebuild&amp;quot; time down to a reasonable level, I&amp;#39;d be very happy.&lt;/p&gt;
-&lt;h2 id=&quot;bottlenecks&quot;&gt;Bottlenecks&lt;/h2&gt;
-&lt;p&gt;The biggest issue with leveraging Make in this case is that it spins up a separate process for each build command, but I&amp;#39;m using a JavaScript runtime that has a significant startup cost. I&amp;#39;m not sure exactly how Deno works internally, but setting up a relatively heavy JavaScript environment for processing markdown and adding syntax highlighting, just for a single file, seems wasteful and slow (even when running in parallel--something that GNU Make enables).&lt;/p&gt;
-&lt;h2 id=&quot;potential-improvements&quot;&gt;Potential improvements&lt;/h2&gt;
-&lt;p&gt;There&amp;#39;s a silver lining, however. Because Make decomposes each step into a separate command line, I could theoretically replace the underlying tool of the slowest commands with a more efficient implementation (without touching anything else). In my case, the slowest processes are syntax highlighting and processing markdown (in that order). I&amp;#39;m tempted to try using native code implementations of these two steps to see how much startup/process creation overhead that avoids.&lt;/p&gt;
-&lt;p&gt;Another solution might be to run a persistent JavaScript server and use a trivial tool to communicate with it. For example, running an HTTP server with Deno and using &lt;code&gt;wget&lt;/code&gt; in my command lines to send it processing jobs. I&amp;#39;m not sure if GNU Make has any support for such a server process, but I suspect I could hack something together by launching a server process into the background and just having it spin itself down after some number of seconds of inactivity.&lt;/p&gt;
-&lt;h1 id=&quot;this-post-brought-to-you-by-make-blog&quot;&gt;This post brought to you by &lt;strong&gt;make-blog&lt;/strong&gt;&lt;/h1&gt;
-&lt;p&gt;A 9 second improvement for incremental builds doesn&amp;#39;t sound terribly noticeable, but just in the process of authoring this post I&amp;#39;m already finding it useful. Now I can tweak a few words or a bit of formatting and view the result (almost) immediately, even on my super slow twelve year-old netbook.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ll most likely continue using &amp;quot;old&amp;quot; md2blog for officially updating the site prior to publishing (just because I&amp;#39;m paranoid), but I&amp;#39;m still satisfied with my improved local workflow.&lt;/p&gt;
-&lt;p&gt;In case anyone&amp;#39;s curious, here is the code:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/make-blog&quot;&gt;make-blog&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </content>
 </entry>

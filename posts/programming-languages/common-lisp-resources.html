@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Resources for learning Common Lisp</title>
+<meta name="description" content="Here are the resources I&#39;ve personally found most helpful for learning Common Lisp." />
+<meta name="keywords" content="lisp" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Resources for learning Common Lisp",
+  "abstract": "Here are the resources I've personally found most helpful for learning Common Lisp.",
+  "keywords": "programming-languages,lisp",
+  "datePublished": "2023-05-15"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+<li><a href="../../posts/lisp/index.html">lisp</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/programming-languages/common-lisp-resources.html">Resources for learning Common Lisp</a></h1>
+<p><time datetime="2023-05-15">May 15, 2023</time></p>
+</header>
+<p>In order to test out fully interactive program development (<a href="learning-lisp-in-2023.html">as noted previously</a>), I&#39;ve been learning Common Lisp. I assumed that it would take a while to catch up on nearly four decades of Common Lisp&#39;s progress and... I was not wrong about that. On the plus side, given the long timeline, there <em>are</em> a lot of resources available. On the flip side, they&#39;re not always up to date.</p>
+<p>Regardless, here are the resources that I&#39;ve found most helpful over the last couple of weeks. My intention is to keep this list up to date as I go.</p>
+<h1 id="introductory-materials">Introductory materials</h1>
+<p>In descending order of how much time I&#39;ve spent studying them (i.e. in completely arbitrary order):</p>
+<ul>
+<li><a href="https://gigamonkeys.com/book/"><strong>Practical Common Lisp</strong></a> by Peter Seibel</li>
+<li><a href="https://dept-info.labri.fr/~strandh/Teaching/MTP/Common/David-Lamkins/cover.html"><strong>Successful Lisp</strong></a> by David B. Lamkins</li>
+<li><a href="https://leanpub.com/lovinglisp"><strong>Loving Common Lisp, or the Savvy Programmer&#39;s Secret Weapon</strong></a> by Mark Watson</li>
+</ul>
+<h1 id="in-depth-materials">In-depth materials</h1>
+<ul>
+<li>Various topics: <a href="https://lispcookbook.github.io/cl-cookbook/">Common Lisp Cookbook</a></li>
+<li>Debugging: <a href="https://malisper.me/debugging-lisp-part-1-recompilation/">Debugging Lisp (series)</a></li>
+<li>Packaging/libraries: <a href="https://lispmethods.com/libraries.html">Source Code Organization</a></li>
+<li>The LOOP macro: <a href="https://www.ai.sri.com/~pkarp/loop.html">Tutorial for the Common Lisp Loop Macro</a></li>
+<li>JSON libraries: <a href="https://sabracrolleton.github.io/json-review.html">Review of CL JSON libraries</a></li>
+</ul>
+<h1 id="resource-collections">Resource collections:</h1>
+<ul>
+<li>List of libraries/tools: <a href="https://awesome-cl.com/">Awesome Common Lisp</a></li>
+<li>List of books: <a href="https://lisp-lang.org/books/">lisp-lang.org/books</a></li>
+</ul>
+<h1 id="general-reference">General reference</h1>
+<ul>
+<li><a href="http://clhs.lisp.se/Front/index.htm">Common Lisp HyperSpec</a></li>
+</ul>
+<h1 id="thats-great-but-what-have-you-been-doing">That&#39;s great, but what have you been <em>doing</em>?</h1>
+<p>That&#39;s mostly a topic for a future post. Briefly: my first project has been building a service that hosts webhooks which implement <a href="https://play.battlesnake.com/">Battlesnake</a> clients. Surely there&#39;s no more noble endeavour than programming games!</p>
+<p>Battlesnake is a competitive programming game where snakes move around a grid collecting food and trying not to collide with each other and the walls. Each snake is implemented as a webhook which is given 500 milliseconds to respond with the direction it would like to move. It&#39;s a simple concept, but that just leaves lots of room for optimization. As an aside, the global leaderboard is a little bit pointless in that it can&#39;t take into account hardware, so for all I know my little netbook is competing with a rack of servers, but I&#39;m still having fun.</p>
+<p>Hopefully I&#39;ll have more to say about Battlesnake and Common Lisp soon!</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
