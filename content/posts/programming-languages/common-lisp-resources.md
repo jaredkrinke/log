@@ -35,7 +35,7 @@ In descending order of how much time I've spent studying them (i.e. in completel
 # That's great, but what have you been *doing*?
 That's mostly a topic for a future post. Briefly: my first project has been building a service that hosts webhooks which implement [Battlesnake](https://play.battlesnake.com/) clients. Surely there's no more noble endeavour than programming games!
 
-Battlesnake is a competitive programming game where snakes move around a grid collecting food and trying not to collide with each other and the walls. Each snake is implemented as a webhook which is given 500 milliseconds to respond with the direction it would like to move. It's a simple concept, but that just leaves lots of room for optimization. As an aside, the global leaderboard is a little bit pointless in that it can't take into account hardware, so for all I know my little netbook is competing with a rack of servers, but I'm still having fun.
+Battlesnake is a competitive programming game where snakes move around a grid collecting food and trying not to collide with each other or the walls. Each snake is implemented as a webhook which is given 500 milliseconds to respond with the direction it would like to move. It's a simple concept, but that just leaves lots of room for optimization. As an aside, the global leaderboard is a little bit pointless in that it can't take into account hardware, so for all I know my little netbook is competing with a rack of servers, but I'm still having fun.
 
 Hopefully I'll have more to say about Battlesnake and Common Lisp soon!
 
