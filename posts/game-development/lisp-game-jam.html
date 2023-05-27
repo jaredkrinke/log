@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Lisp Game Jam (Spring 2023)</title>
+<meta name="description" content="Might as well try and make a game in Common Lisp, right?" />
+<meta name="keywords" content="lisp" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Lisp Game Jam (Spring 2023)",
+  "abstract": "Might as well try and make a game in Common Lisp, right?",
+  "keywords": "game-development,lisp",
+  "datePublished": "2023-05-26"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/game-development/index.html">game-development</a></li>
+<li><a href="../../posts/lisp/index.html">lisp</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/game-development/lisp-game-jam.html">Lisp Game Jam (Spring 2023)</a></h1>
+<p><time datetime="2023-05-26">May 26, 2023</time></p>
+</header>
+<p>Recently, I&#39;ve been <a href="../programming-languages/learning-lisp-in-2023.html">learning Common Lisp</a> and so I&#39;ve been keeping an eye out for practice projects. Fortunately, as I&#39;m writing this, the <a href="https://itch.io/jam/spring-lisp-game-jam-2023">Lisp Game Jam (Spring 2023)</a> is just about to start, so I guess I&#39;m doing that now.</p>
+<p>For the time being, I&#39;ll just describe the (tiny) game I have in mind.  I&#39;m not terribly confident that I&#39;ll be able to complete anything within the next ten days, but I&#39;ll give it a try anyway!</p>
+<h1 id="a-word-game">A word game</h1>
+<p>The goal of the game is to look at a bunch of letters and then, as quickly as possible, find the longest word that can be constructed by drawing from the given set of letters (without replacement). Ideally, this would be a real-time, global competition, but I doubt I&#39;ll be able to get anywhere close to that within 10 days (of roughly 1 - 2 hours per day, at best, of development time).</p>
+<p>When I originally had this idea, I gave it the intentionally terrible name of <strong>Longle</strong> (&quot;long&quot; + &quot;Boggle&quot;). Today, I&#39;m thinking I&#39;ll call it <strong>Thirteen Letters</strong> (actual number subject to change).</p>
+<h1 id="plan">Plan</h1>
+<p>Here&#39;s my rough plan for implementing this game:</p>
+<ol>
+<li>Find or create a word list</li>
+<li>Consider reducing that list (based on observed word frequencies) to a set of difficult, but reasonable, puzzles</li>
+<li>Implement a simple terminal version of the game that just records how long it takes for the player to identify the longest word</li>
+<li>If time permits, create a service to distribute puzzles and record the <em>actual</em> time taken to get a response</li>
+<li>If time is abundant, create a service to host global competitions with 30 - 60 second rounds and resulting scoreboards</li>
+</ol>
+<h1 id="progress">Progress</h1>
+<p>As of right now (May 26th, at least as far as UTC is concerned), I&#39;m struggling with the first item. The best word lists I&#39;ve found so far have been copyrighted works related to Scrabble. Other than obvious legal risks, these lists also have a cap on the length of words. Most of the other word lists I&#39;ve found contain proper nouns, lack inflected nouns/verbs, or contain huge amounts of questionable &quot;words&quot; (for example: &quot;zzzs&quot;).</p>
+<p>For now, I think my best bet is to use the public domain <a href="https://github.com/elasticdog/yawl">YAWL</a> word list, possibly filtered by some arbitrary frequency cutoff based on the Google Trillion Word Corpus via <a href="http://norvig.com/ngrams/">Peter Norvig&#39;s web site</a>. After exploring this a bit, it looks like just ensuring the word is in the top ~300,000 most frequent words may be sufficient to get a set of words that I consider to be legitimate.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
