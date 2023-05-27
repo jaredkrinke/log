@@ -7,8 +7,33 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-05-15T23:50:44.009Z</updated>
+<updated>2023-05-27T00:03:21.592Z</updated>
 
+<entry>
+<title>Lisp Game Jam (Spring 2023)</title>
+<id>https://log.schemescape.com/posts/game-development/lisp-game-jam.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/lisp-game-jam.html"/>
+<updated>2023-05-26T00:00:00.000Z</updated>
+<summary type="text">Might as well try and make a game in Common Lisp, right?</summary>
+<content type="html">&lt;p&gt;Recently, I&amp;#39;ve been &lt;a href=&quot;https://log.schemescape.com/posts/game-development/../programming-languages/learning-lisp-in-2023.html&quot;&gt;learning Common Lisp&lt;/a&gt; and so I&amp;#39;ve been keeping an eye out for practice projects. Fortunately, as I&amp;#39;m writing this, the &lt;a href=&quot;https://itch.io/jam/spring-lisp-game-jam-2023&quot;&gt;Lisp Game Jam (Spring 2023)&lt;/a&gt; is just about to start, so I guess I&amp;#39;m doing that now.&lt;/p&gt;
+&lt;p&gt;For the time being, I&amp;#39;ll just describe the (tiny) game I have in mind.  I&amp;#39;m not terribly confident that I&amp;#39;ll be able to complete anything within the next ten days, but I&amp;#39;ll give it a try anyway!&lt;/p&gt;
+&lt;h1 id=&quot;a-word-game&quot;&gt;A word game&lt;/h1&gt;
+&lt;p&gt;The goal of the game is to look at a bunch of letters and then, as quickly as possible, find the longest word that can be constructed by drawing from the given set of letters (without replacement). Ideally, this would be a real-time, global competition, but I doubt I&amp;#39;ll be able to get anywhere close to that within 10 days (of roughly 1 - 2 hours per day, at best, of development time).&lt;/p&gt;
+&lt;p&gt;When I originally had this idea, I gave it the intentionally terrible name of &lt;strong&gt;Longle&lt;/strong&gt; (&amp;quot;long&amp;quot; + &amp;quot;Boggle&amp;quot;). Today, I&amp;#39;m thinking I&amp;#39;ll call it &lt;strong&gt;Thirteen Letters&lt;/strong&gt; (actual number subject to change).&lt;/p&gt;
+&lt;h1 id=&quot;plan&quot;&gt;Plan&lt;/h1&gt;
+&lt;p&gt;Here&amp;#39;s my rough plan for implementing this game:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Find or create a word list&lt;/li&gt;
+&lt;li&gt;Consider reducing that list (based on observed word frequencies) to a set of difficult, but reasonable, puzzles&lt;/li&gt;
+&lt;li&gt;Implement a simple terminal version of the game that just records how long it takes for the player to identify the longest word&lt;/li&gt;
+&lt;li&gt;If time permits, create a service to distribute puzzles and record the &lt;em&gt;actual&lt;/em&gt; time taken to get a response&lt;/li&gt;
+&lt;li&gt;If time is abundant, create a service to host global competitions with 30 - 60 second rounds and resulting scoreboards&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;progress&quot;&gt;Progress&lt;/h1&gt;
+&lt;p&gt;As of right now (May 26th, at least as far as UTC is concerned), I&amp;#39;m struggling with the first item. The best word lists I&amp;#39;ve found so far have been copyrighted works related to Scrabble. Other than obvious legal risks, these lists also have a cap on the length of words. Most of the other word lists I&amp;#39;ve found contain proper nouns, lack inflected nouns/verbs, or contain huge amounts of questionable &amp;quot;words&amp;quot; (for example: &amp;quot;zzzs&amp;quot;).&lt;/p&gt;
+&lt;p&gt;For now, I think my best bet is to use the public domain &lt;a href=&quot;https://github.com/elasticdog/yawl&quot;&gt;YAWL&lt;/a&gt; word list, possibly filtered by some arbitrary frequency cutoff based on the Google Trillion Word Corpus via &lt;a href=&quot;http://norvig.com/ngrams/&quot;&gt;Peter Norvig&amp;#39;s web site&lt;/a&gt;. After exploring this a bit, it looks like just ensuring the word is in the top ~300,000 most frequent words may be sufficient to get a set of words that I consider to be legitimate.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Resources for learning Common Lisp</title>
 <id>https://log.schemescape.com/posts/programming-languages/common-lisp-resources.html</id>
@@ -43,7 +68,7 @@
 &lt;/ul&gt;
 &lt;h1 id=&quot;thats-great-but-what-have-you-been-doing&quot;&gt;That&amp;#39;s great, but what have you been &lt;em&gt;doing&lt;/em&gt;?&lt;/h1&gt;
 &lt;p&gt;That&amp;#39;s mostly a topic for a future post. Briefly: my first project has been building a service that hosts webhooks which implement &lt;a href=&quot;https://play.battlesnake.com/&quot;&gt;Battlesnake&lt;/a&gt; clients. Surely there&amp;#39;s no more noble endeavour than programming games!&lt;/p&gt;
-&lt;p&gt;Battlesnake is a competitive programming game where snakes move around a grid collecting food and trying not to collide with each other and the walls. Each snake is implemented as a webhook which is given 500 milliseconds to respond with the direction it would like to move. It&amp;#39;s a simple concept, but that just leaves lots of room for optimization. As an aside, the global leaderboard is a little bit pointless in that it can&amp;#39;t take into account hardware, so for all I know my little netbook is competing with a rack of servers, but I&amp;#39;m still having fun.&lt;/p&gt;
+&lt;p&gt;Battlesnake is a competitive programming game where snakes move around a grid collecting food and trying not to collide with each other or the walls. Each snake is implemented as a webhook which is given 500 milliseconds to respond with the direction it would like to move. It&amp;#39;s a simple concept, but that just leaves lots of room for optimization. As an aside, the global leaderboard is a little bit pointless in that it can&amp;#39;t take into account hardware, so for all I know my little netbook is competing with a rack of servers, but I&amp;#39;m still having fun.&lt;/p&gt;
 &lt;p&gt;Hopefully I&amp;#39;ll have more to say about Battlesnake and Common Lisp soon!&lt;/p&gt;
 </content>
 </entry>
@@ -230,72 +255,6 @@
 &lt;li&gt;Implement real incremental builds, at least for internal rebuilds (done properly, this could even avoid a significant chunk of link-checking work)&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;After moving link-checking off the critical path (#1 above), hot rebuilds now complete in under a second (with link-checking completing a second or two later), so I&amp;#39;m no longer feeling terribly motivated to rearchitect everything around an accurate dependency graph (#2), at least not until I either add enough content to make things feels sluggish once again or I downgrade to an even slower computer.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Minimal dev environment, part 4</title>
-<id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env-4.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/minimal-dev-env-4.html"/>
-<updated>2023-04-06T00:00:00.000Z</updated>
-<summary type="text">My minimal development environment was too minimal, so I upgraded to a faster computer.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env-3.html&quot;&gt;part 3&lt;/a&gt;, I tried out a minimal development environment (based on Alpine Linux) on a Raspberry Pi 1 B. This update is essentially the conclusion of my Raspberry Pi experiment.&lt;/p&gt;
-&lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
-&lt;p&gt;Here&amp;#39;s a summary of what I&amp;#39;ve learned so far:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;I love Alpine Linux--it honestly feels like the only sane way to manage a Linux distribution--because it&amp;#39;s fast, light, and (mostly) only contains the tools you ask for&lt;/li&gt;
-&lt;li&gt;The Raspberry Pi 1 B is &lt;em&gt;very&lt;/em&gt; slow--I was willing to accept that my JavaScript/Deno-based static site generator might be slow (I never really optimized it), but paging through code in Vim (in the terminal) is something I &lt;em&gt;need&lt;/em&gt; to be fast, and my Pi-based setup failed at this&lt;/li&gt;
-&lt;li&gt;Browsing the modern web in a terminal is unpleasant&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h1 id=&quot;enter-the-gui&quot;&gt;Enter the GUI&lt;/h1&gt;
-&lt;p&gt;To address the last point, I decided to see if I could get a lightweight GUI environment running on the Pi. I hadn&amp;#39;t run a Linux desktop in over a decade, but I previously used &lt;a href=&quot;http://fluxbox.org/&quot;&gt;Fluxbox&lt;/a&gt; and later &lt;a href=&quot;https://www.gnome.org/&quot;&gt;GNOME&lt;/a&gt;, so I&amp;#39;m not completely lost. The latter is a full desktop environment, and fairly heavy, so I decided to give Fluxbox a shot first (after reading up on how to run rootless X.org).&lt;/p&gt;
-&lt;p&gt;Getting X.org up and running with Fluxbox wasn&amp;#39;t too difficult, and then I was able to use the &lt;a href=&quot;https://www.dillo.org/&quot;&gt;Dillo browser&lt;/a&gt; to improve my web browsing experience. Unfortunately, everything GUI-related was painfully slow, especially moving windows around. Just in case I was missing some sort of hardware acceleration or something, I tested out the official Raspberry Pi OS. It was unbearably slow as well (and the build of Chromium appeared to be for ARMv7, which my Pi doesn&amp;#39;t support).&lt;/p&gt;
-&lt;h1 id=&quot;goodbye-pi&quot;&gt;Goodbye, Pi&lt;/h1&gt;
-&lt;p&gt;To be honest, it&amp;#39;s impressive how much you can do with a 10+ year-old, less than $50 (originally) single-board computer (running at 3.5 Watts). I could run Linux, edit and compile C code, browse the web in a terminal, read RSS feeds, and even run Node/NPM. It seems perfect for running a low-traffic server at home (something I &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../services/cheap-hosting.html&quot;&gt;don&amp;#39;t need to do at the moment&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;But the bottom line is that I want something faster.&lt;/p&gt;
-&lt;p&gt;There are newer Raspberry Pi models that should be &lt;em&gt;much&lt;/em&gt; faster than my almost-original--and I&amp;#39;d like to try one out someday--but for now I&amp;#39;m proceeding with hardware that I already own. &lt;/p&gt;
-&lt;h1 id=&quot;hello-netbook&quot;&gt;Hello, netbook&lt;/h1&gt;
-&lt;p&gt;Specifically, I&amp;#39;m upgrading to a 12 year-old Dell netbook (Inspiron Mini 1018) with a 1.66 GHz Intel Atom (N455) processor and 1 GB of RAM.&lt;/p&gt;
-&lt;h2 id=&quot;linux-on-a-laptop-is-pretty-great&quot;&gt;Linux on a laptop... is pretty great!&lt;/h2&gt;
-&lt;p&gt;As an aside, I&amp;#39;m compelled to comment on how much the laptop experience on Linux has improved since I last gave up (in the mid-00s). The sub-200 MB Alpine Linux installer &lt;em&gt;just worked&lt;/em&gt;, even for Wi-Fi! Additionally, I discovered that, even though the netbook shipped with 32-bit Windows, its processor is actually 64-bit, so now I&amp;#39;m running an architecture that is &lt;em&gt;still relevant&lt;/em&gt;. This is intriguing to me because Deno only supports 64-bit processors, and I assumed that the old hardware I had laying around couldn&amp;#39;t run Deno.&lt;/p&gt;
-&lt;p&gt;Having said that, at one point I decided to see if Debian would work better than Alpine. The Debian installer worked great (it automatically supported wireless networking on my netbook), but after installation wireless stopped working. After a few hours of researching and trying to fix the problem, I reverted back to Alpine.&lt;/p&gt;
-&lt;p&gt;For the record, only &amp;quot;suspend&amp;quot; works on this laptop (hibernate is indistinguishable from powering off). I also have to manually adjust the terminal resolution using &lt;code&gt;fbset&lt;/code&gt; (after enabling Linux &amp;quot;Kernel Mode Setting&amp;quot;, a.k.a. KMS). Not a seamless experience, but still acceptable.&lt;/p&gt;
-&lt;h1 id=&quot;performance&quot;&gt;Performance&lt;/h1&gt;
-&lt;p&gt;Here&amp;#39;s a quick performance comparison of building this site using &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt;, on various JavaScript runtimes, between my Raspberry Pi 1 B and my Dell Inspiron Mini 1018:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Build time by device&lt;/th&gt;
-&lt;th align=&quot;right&quot;&gt;&lt;a href=&quot;https://github.com/jaredkrinke/leano&quot;&gt;leano&lt;/a&gt;&lt;/th&gt;
-&lt;th align=&quot;right&quot;&gt;Node&lt;/th&gt;
-&lt;th align=&quot;right&quot;&gt;Deno&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;Raspberry Pi&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;4 minutes&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;2 minutes&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;not possible&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Netbook&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;1 minute&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;20 seconds&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;12 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;Note that I had to resort to using &lt;a href=&quot;https://github.com/NixOS/nix&quot;&gt;Nix&lt;/a&gt; to get Deno running because Deno depends on &lt;a href=&quot;https://www.gnu.org/software/libc/&quot;&gt;glibc&lt;/a&gt; and doesn&amp;#39;t support &lt;a href=&quot;https://musl.libc.org/&quot;&gt;musl&lt;/a&gt; (the C standard library implementation that Alpine Linux uses).&lt;/p&gt;
-&lt;p&gt;Overall, this is a 4 - 6x performance improvement (on a machine that coincidentally cost 4 - 6 times as much as the Pi 1 B, originally).&lt;/p&gt;
-&lt;h2 id=&quot;battery-life&quot;&gt;Battery life&lt;/h2&gt;
-&lt;p&gt;My old setup chained me to my desk, but now I can take my laptop wherever. I don&amp;#39;t really remember what the battery life was like originally (or on Windows), but I&amp;#39;m able to get 4 - 6 hours of intensive use. That is plenty for me at the moment, although it certainly doesn&amp;#39;t seem like &amp;quot;good&amp;quot; battery life. I&amp;#39;ve also noticed that the (rotational) hard drive seems to spin up and down consistently every 5 seconds, even when I&amp;#39;m not doing anything. I&amp;#39;m not sure if it&amp;#39;s a hardware, driver, or Linux problem, but I&amp;#39;m just trying to ignore it for now. &lt;/p&gt;
-&lt;h2 id=&quot;power-consumption&quot;&gt;Power consumption&lt;/h2&gt;
-&lt;p&gt;One area where the Raspberry Pi excelled was power consumption. At max capacity, I measured it at around 3.5 Watts.&lt;/p&gt;
-&lt;p&gt;My netbook is much less efficient, but overall not too bad. At full load, it seems to peak around 15 - 20 Watts. In standby, it consumes rougly 4 Watts, which is pretty similar to the Raspberry Pi (considering that I never powered down the Pi).&lt;/p&gt;
-&lt;h1 id=&quot;to-be-continued&quot;&gt;To be continued...&lt;/h1&gt;
-&lt;p&gt;Now that I&amp;#39;ve got a tolerably fast computer, I can get some &lt;em&gt;real&lt;/em&gt; work done. In the next post, I&amp;#39;m planning to cover the software side of things:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Adding a console &amp;quot;taskbar&amp;quot; to GNU Screen&lt;/li&gt;
-&lt;li&gt;Attempting to use a language server with a text editor&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>
