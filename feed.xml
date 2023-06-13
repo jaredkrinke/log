@@ -7,8 +7,104 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-05-27T02:52:30.867Z</updated>
+<updated>2023-06-13T17:53:41.824Z</updated>
 
+<entry>
+<title>Retrospective: Lisp Game Jam (Spring 2023)</title>
+<id>https://log.schemescape.com/posts/game-development/lisp-game-jam-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/lisp-game-jam-2.html"/>
+<updated>2023-06-13T00:00:00.000Z</updated>
+<summary type="text">I managed to implement a multiplayer browser-based game in Common Lisp!</summary>
+<content type="html">&lt;p&gt;This is a follow-up to &lt;a href=&quot;https://log.schemescape.com/posts/game-development/lisp-game-jam.html&quot;&gt;my previous post about discovering Lisp Game Jame (Spring 2023)&lt;/a&gt;. In the previous post, I described my word game and implementation approach. This post covers how it all went, along with some lessons learned and general thoughts about Common Lisp.&lt;/p&gt;
+&lt;p&gt;You can play the game here (but note that it&amp;#39;s designed for multiplayer):&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://jaredkrinke.itch.io/13l/&quot;&gt;https://jaredkrinke.itch.io/13l/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Source code is &lt;a href=&quot;https://github.com/jaredkrinke/thirteen-letters/&quot;&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
+&lt;p&gt;I&amp;#39;ve been &lt;a href=&quot;https://log.schemescape.com/posts/game-development/../programming-languages/learning-lisp-in-2023.html&quot;&gt;learning Common Lisp&lt;/a&gt; and &lt;a href=&quot;https://itch.io/jam/spring-lisp-game-jam-2023&quot;&gt;Lisp Game Jam (Spring 2023)&lt;/a&gt; was an appropriate motivator. I wanted to make a simple word scramble game that was played in real time against other players, inside the browser.&lt;/p&gt;
+&lt;h1 id=&quot;the-challenge&quot;&gt;The challenge&lt;/h1&gt;
+&lt;p&gt;I set a challenge for myself to write &lt;em&gt;the entire game&lt;/em&gt; in Common Lisp. Specifically, I was going to use various domain-specific/template languages to produce HTML, CSS, and JavaScript for use in the browser. (Running Common Lisp on the back end was, and is, trivial.)&lt;/p&gt;
+&lt;p&gt;After some searching, I settled on the following tools/libraries:&lt;/p&gt;
+&lt;h2 id=&quot;front-end&quot;&gt;Front end&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://parenscript.common-lisp.dev/&quot;&gt;Parenscript&lt;/a&gt; for translating Common Lisp to JavaScript&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/ruricolist/spinneret&quot;&gt;Spinneret&lt;/a&gt; for creating HTML from s-expressions and CL code&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/Inaimathi/cl-css&quot;&gt;cl-css&lt;/a&gt; for creating CSS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;back-end&quot;&gt;Back end&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://edicl.github.io/hunchentoot/&quot;&gt;Hunchentoot&lt;/a&gt; as a base web server&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/joaotavora/hunchensocket&quot;&gt;Hunchensocket&lt;/a&gt; for handling WebSockets on the server side&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/hankhero/cl-json&quot;&gt;cl-json&lt;/a&gt; for encoding/decoding JSON&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.sbcl.org/&quot;&gt;SBCL&lt;/a&gt; for running the server (sitting behind nginx for TLS support)  and compiling everything&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;day-by-day-progress&quot;&gt;Day-by-day progress&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;May 26: Generated a word list (most frequent words from the YAWL corpus)&lt;/li&gt;
+&lt;li&gt;May 27: Implemented command line game loop&lt;/li&gt;
+&lt;li&gt;May 28: Investigated binary distribution options (static SBCL/ECL builds, AppImages), eventually giving up&lt;/li&gt;
+&lt;li&gt;May 29: Prepared backup submission (the command line version)&lt;/li&gt;
+&lt;li&gt;May 30: Investigated libraries for browser-based version (Hunchensocket, Lisp in Parallel, Parenscript, Spinneret, cl-json, cl-css)&lt;/li&gt;
+&lt;li&gt;May 31: Partially implemented WebSocket-based server&lt;/li&gt;
+&lt;li&gt;June 1: Completed server (mostly)&lt;/li&gt;
+&lt;li&gt;June 2: Discovered ngrok free tier couldn&amp;#39;t support public WebSockets, settling on standing up a simple VPS instead&lt;/li&gt;
+&lt;li&gt;June 3: Implemented basic HTML+JavaScript front end&lt;/li&gt;
+&lt;li&gt;June 4: Added a countdown timer, hall of fame, and mobile formatting&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(After the jam ended: bug fixes, WebSocket reconnecting, input validation, code cleanup.)&lt;/p&gt;
+&lt;h1 id=&quot;results&quot;&gt;Results&lt;/h1&gt;
+&lt;p&gt;Playing the completed entry myself confirmed my original suspicion that the game is really only fun when there&amp;#39;s someone else to compete against.&lt;/p&gt;
+&lt;p&gt;I had hoped that the time-limited nature of the voting period would mean that people would end up connecting at the same time as others, but that ended up being wishful thinking. With 30 submissions, each game probably only got a few minutes of playing time, so there were only a handful of times when players overlapped and actually got to compete (often against me, since I connected very frequently). It &lt;em&gt;did&lt;/em&gt; sound like those players had fun, though!&lt;/p&gt;
+&lt;p&gt;Even worse, when someone was streaming their playthroughs of all the submissions, I was sitting and waiting to hop in and give the streamer some competition, but they ended up breezing through my game in the 5 minutes I happened to be away from my computer! Very poor timing on my part...&lt;/p&gt;
+&lt;p&gt;Despite the lack of ideal (multiplayer) conditions, my entry had generally positive feedback, with most praise being related to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Making a real-time multiplayer game that runs in the browser&lt;/li&gt;
+&lt;li&gt;Using Common Lisp everywhere&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I was going to be happy with an overall placement in the middle, but Thirteen Letters actually managed to end up in the top third. Not too bad!&lt;/p&gt;
+&lt;h1 id=&quot;lessons-learned&quot;&gt;Lessons learned&lt;/h1&gt;
+&lt;h2 id=&quot;multiplayer-games-need-multiple-players&quot;&gt;Multiplayer games need multiple players&lt;/h2&gt;
+&lt;p&gt;I knew this intuitively going into the jam. I even had a plan to pop up a notification on my phone whenever someone connected, so that I could hop in and play against them, but I wasn&amp;#39;t able to implement it in time.&lt;/p&gt;
+&lt;p&gt;In retrospect, implementing notifications should have been my top priority after getting the game working. Instead, I focused on creating a &amp;quot;hall of fame&amp;quot; so that players could compete asynchronously on the leaderboard, but this wasn&amp;#39;t actually interesting because it was just about play time (how many rounds they sat through by themself) and not skill.&lt;/p&gt;
+&lt;p&gt;If I ever make another multipler game jam entry, I&amp;#39;ll focus on ensuring people are able to actually play against an opponent (even if I have to secretly create a bot or just play the game &lt;em&gt;all day long&lt;/em&gt;).&lt;/p&gt;
+&lt;h2 id=&quot;repl-driven-developmentdeveloping-in-production&quot;&gt;REPL-driven development/developing in production&lt;/h2&gt;
+&lt;p&gt;Given that my entire motivation to learn Common Lisp was to experiment with REPL-driven development, I decided to try and develop and test as much as possible using Emacs SLIME (over a Swank connection).&lt;/p&gt;
+&lt;p&gt;Overall, having a direct connection to the server was helpful for monitoring activity, enabling/disabling logging, and making small tweaks (e.g. changing formatting or adding alerts).&lt;/p&gt;
+&lt;p&gt;Notably, as the deadline for the jam approached, I decided to take advantage of the client-server architecture and make it possible to &amp;quot;cheat&amp;quot; the deadline a bit: I added a channel for pushing raw HTML from the server to the client. Since the server could be modified at any time, this would theoretically allow for updating part of the game post-deadline. I didn&amp;#39;t end up needing to use this facility, but it &lt;em&gt;did&lt;/em&gt; end up becoming the &amp;quot;hall of fame&amp;quot; section at the bottom of the page. (I also planned to use it as an easter egg while someone was streaming the game, but as noted above, I missed that opportunity.)&lt;/p&gt;
+&lt;p&gt;Unfortunately, I also hit a couple of snags with REPL-driven development:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Obviously, you have to &lt;em&gt;plan&lt;/em&gt; if you want to keep your code and your live service in sync&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;Sometimes I&amp;#39;d modify a function or add a parameter and then forget to send it to the live service, leading to errors in the production service&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;Even worse, one time I connected to the live service via Swank, modified a few things, and then suspended my laptop--this then caused &lt;em&gt;every&lt;/em&gt; HTTP request to hang while Swank was trying to log to my unresponsive laptop--oops!&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;On the whole, &amp;quot;developing in production&amp;quot; isn&amp;#39;t generally a good idea, but just having the ability to connect and inspect things every now and then was invaluable. This was my first time having deep, read/write access to a running service, and it&amp;#39;s something I&amp;#39;d like to use again in the future--at least for hobby projects! Connecting a REPL to an important/income-generating service would require careful planning.&lt;/p&gt;
+&lt;h2 id=&quot;ngrok-for-websockets-or-not&quot;&gt;ngrok for WebSockets (or not)&lt;/h2&gt;
+&lt;p&gt;Despite ngrok (a service for exposing local endpoints publicly) officially supporting WebSockets, I&amp;#39;ve come to the conclusion that their &lt;em&gt;free tier&lt;/em&gt; has no such support. The reason for this is that it appears to sniff the browser user agent string and then add an interstitial HTML page to the HTTP Upgrade request. Obviously, the WebSocket client doesn&amp;#39;t understand HTML, and just bails out with an error.&lt;/p&gt;
+&lt;p&gt;ngrok is great, but in this case I ended up having to spin up a VPS in short order to get my WebSocket server working properly (an unwelcome surprise during a short game jam!).&lt;/p&gt;
+&lt;h2 id=&quot;parenscript&quot;&gt;Parenscript&lt;/h2&gt;
+&lt;p&gt;Parenscript seems like a great tool for:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;People who are very familiar with Common Lisp and want to translate idioms/code into JavaScript&lt;/li&gt;
+&lt;li&gt;People targeting very old versions of JavaScript (back before &lt;code&gt;let&lt;/code&gt; was added, for instance)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Given that I&amp;#39;m new to Common Lisp and have a lot of experience with JavaScript and TypeScript, I wasn&amp;#39;t really the target market for Parenscript. I was able to stumble through it, but the resulting code make it obvious I was thinking in JavaScript and writing in Parenscript.&lt;/p&gt;
+&lt;p&gt;The most interesting part of Parenscript for me was the ability to define macros. For instance, I added a macro to wrap code in a try-catch that logged to HTML (so I could find errors even when no JavaScript debugger was available). (Note that &lt;code&gt;@&lt;/code&gt; in function position is used for accessing object properties in Parenscript, e.g. &lt;code&gt;(@ window onerror)&lt;/code&gt; would translate to &lt;code&gt;window.onerror&lt;/code&gt;.)&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-lisp&quot;&gt;(&lt;span class=&quot;hljs-name&quot;&gt;ps&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;:defpsmacro&lt;/span&gt; watch (&lt;span class=&quot;hljs-name&quot;&gt;&amp;amp;body&lt;/span&gt; body)
+  `(ps&lt;span class=&quot;hljs-symbol&quot;&gt;:try&lt;/span&gt; (progn ,@body) (:catch (e) (error (+ (@ e message) &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot; (&amp;quot;&lt;/span&gt; (@ e line-number) &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;)&amp;quot;&lt;/span&gt;)))))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Obviously, this could be done in plain JavaScript with a regular function that takes an anonymous function for the body, but I might as well use macros while they&amp;#39;re available!&lt;/p&gt;
+&lt;h2 id=&quot;generating-html-and-css&quot;&gt;Generating HTML and CSS&lt;/h2&gt;
+&lt;p&gt;Being able to use concise s-expressions for generating HTML and CSS felt comfortable (and much more productive than writing HTML in Notepad, as I&amp;#39;d done 20 years prior). But HTML and CSS tooling have come a &lt;em&gt;long&lt;/em&gt; way and these days I pretty much expect context-sensitive auto-complete.&lt;/p&gt;
+&lt;p&gt;In the end, I like the look of s-expressions, but I don&amp;#39;t think they actually made me more productive than I&amp;#39;d be in, say VS Code.&lt;/p&gt;
+&lt;h1 id=&quot;final-thoughts&quot;&gt;Final thoughts&lt;/h1&gt;
+&lt;p&gt;The recurring theme I&amp;#39;m noticing with Common Lisp is that it&amp;#39;s easy to mold into new workflows, and these workflows would have been life-changing 20 years ago (and arguably still are notable for their simplicity), but some of the non-Lisp tooling has caught up to (and sometimes surpassed) Common Lisp in the last 5 - 10 years. Not in all cases or in all aspects, but in most of the ones that are important to me (auto-complete, documentation, static checks, debugging).&lt;/p&gt;
+&lt;p&gt;Of course, modern tools come with &amp;quot;modern&amp;quot; system requirements (i.e. unbelievable bloat), so it&amp;#39;s possible that Common Lisp with SLIME is a happy middle ground, with powerful features, and minimal bloat. It doesn&amp;#39;t matter if VS Code can do everything I need with TypeScript if I can&amp;#39;t even get VS Code to run on my laptop!&lt;/p&gt;
+&lt;p&gt;Regardless, I&amp;#39;m still having fun learning Common Lisp and have no plans to abandon it, so I guess in that sense this experiment has been a success.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Lisp Game Jam (Spring 2023)</title>
 <id>https://log.schemescape.com/posts/game-development/lisp-game-jam.html</id>
@@ -222,39 +318,6 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 &lt;p&gt;In the end, removing Deno&amp;#39;s startup penalty from the process resulted in a modest speedup. Unfortunately, it&amp;#39;s still slower than &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-3.html#further-optimizations&quot;&gt;running a full rebuild under Deno when in &amp;quot;watch&amp;quot; mode&lt;/a&gt;, so, while interesting, this experiment did not lead to any changes in my current workflow.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Speeding up md2blog, part 3</title>
-<id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-3.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-3.html"/>
-<updated>2023-04-07T00:00:00.000Z</updated>
-<summary type="text">I made a rookie mistake while trying to optimize my workflow for building this site.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html&quot;&gt;part 2&lt;/a&gt;, I added support for incremental builds of this site, based on GNU Make.&lt;/p&gt;
-&lt;h1 id=&quot;original-thought-process&quot;&gt;Original thought process&lt;/h1&gt;
-&lt;p&gt;My reasoning for investigating incremental builds seemed sound:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Rebuilding the entire site &lt;em&gt;every time&lt;/em&gt; was obviously unnecessary&lt;/li&gt;
-&lt;li&gt;Based on some measurements, syntax highlighting and processing Markdown were the most time-consuming operations (in that order), by far&lt;/li&gt;
-&lt;li&gt;Thus, it made sense to avoid re-running these steps for pages that didn&amp;#39;t require updates&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I went ahead with my experiment fully aware that GNU Make probably wasn&amp;#39;t well-suited to the project (because it creates a new process for each task and Deno, while reasonable, has significant startup overhead). I&amp;#39;m still happy I used Make because this issue has straight-forward mitigations: don&amp;#39;t spin up new processes (e.g. rely on a server) or move the dependency graph into md2blog&amp;#39;s main process.&lt;/p&gt;
-&lt;h1 id=&quot;but&quot;&gt;But...&lt;/h1&gt;
-&lt;p&gt;... I made a rookie mistake. Rather than carefully scrutinizing my workflow, I just charged ahead with optimizing the obvious bottleneck. In the end, I was able to easily get the incremental build down to 3 seconds (N.B. on a 12 year-old netbook). This meant that I could author a new post and view the results on my (slow) computer fairly quickly, to enable fast iteration.&lt;/p&gt;
-&lt;p&gt;So what&amp;#39;s the problem?&lt;/p&gt;
-&lt;p&gt;The problem is that I measured a full clean build in isolation, but my actual workflow when using md2blog is to run md2blog as a server that watches the file system and automatically triggers rebuilds, and &lt;em&gt;those&lt;/em&gt; subsequent (full) rebuilds are not only about 50% faster (down in the 6 second range), they are also ripe for &lt;em&gt;even simpler&lt;/em&gt; optimizations.&lt;/p&gt;
-&lt;h1 id=&quot;a-new-approach&quot;&gt;A new approach&lt;/h1&gt;
-&lt;p&gt;Given that rebuilds in my &amp;quot;edit and test&amp;quot; (hot-reloading server) workflow all run in the same process and most of the work is redundant (rebuilding pages that haven&amp;#39;t changed), and that the most expensive operation (by far) is adding syntax highlighting, one trivial optimization would be to simply &lt;a href=&quot;https://en.wikipedia.org/wiki/Memoization&quot;&gt;memoize&lt;/a&gt; the syntax highlighting function.&lt;/p&gt;
-&lt;p&gt;For memory efficiency, I initially planned to hash input strings and use that as the key to look up results in a cache. This ended up being trickier than I expected because the &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest&quot;&gt;&lt;code&gt;crypto.subtle.digest&lt;/code&gt;&lt;/a&gt; function provides its result asynchronously and &lt;a href=&quot;https://marked.js.org/using_advanced#highlight&quot;&gt;Marked&amp;#39;s highlight callback&lt;/a&gt; is synchronous. In the end, I decided this was premature optimization anyway--I&amp;#39;m already going to be caching the entire output in memory, so caching the entire input as well is just a linear increase in memory usage--there&amp;#39;s no need to complicate things.&lt;/p&gt;
-&lt;p&gt;After writing about 10 lines of trivial code, I had a working cache, and rebuilds were under 3 seconds--faster than my previous convoluted incremental approach. Most of the remaining time was simply validating that internal links are not broken (a step I haven&amp;#39;t implemented in my Makefile yet).&lt;/p&gt;
-&lt;p&gt;Lesson learned: always measure and optimize the &lt;em&gt;actual&lt;/em&gt; scenario--not an artifical (or easier to measure) one!&lt;/p&gt;
-&lt;h1 id=&quot;further-optimizations&quot;&gt;Further optimizations&lt;/h1&gt;
-&lt;p&gt;With this one trivial optimization, I got an acceptably fast workflow, even on a 12 year-old netbook. But there were still two obvious avenues for improvement (that didn&amp;#39;t involve switching languages or runtimes):&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Move internal link-checking off the critical path of my workflow (either by deferring it or skipping it entirely--broken links will be caught when I do a full &amp;quot;official&amp;quot; build, prior to uploading the site)&lt;/li&gt;
-&lt;li&gt;Implement real incremental builds, at least for internal rebuilds (done properly, this could even avoid a significant chunk of link-checking work)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;After moving link-checking off the critical path (#1 above), hot rebuilds now complete in under a second (with link-checking completing a second or two later), so I&amp;#39;m no longer feeling terribly motivated to rearchitect everything around an accurate dependency graph (#2), at least not until I either add enough content to make things feels sluggish once again or I downgrade to an even slower computer.&lt;/p&gt;
 </content>
 </entry>
 </feed>
