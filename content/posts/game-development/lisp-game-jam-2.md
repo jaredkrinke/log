@@ -28,7 +28,8 @@ After some searching, I settled on the following tools/libraries:
 ## Back end
 * [Hunchentoot](https://edicl.github.io/hunchentoot/) as a base web server
 * [Hunchensocket](https://github.com/joaotavora/hunchensocket) for handling WebSockets on the server side
-* [cl-json](https://github.com/hankhero/cl-json) for encoding/decoding JSON
+* ~~[cl-json](https://github.com/hankhero/cl-json) for encoding/decoding JSON~~
+* [YASON](https://phmarek.github.io/yason/) for encoding/decoding JSON (cl-json doesn't support non-BMP Unicode)
 * [SBCL](https://www.sbcl.org/) for running the server (sitting behind nginx for TLS support)  and compiling everything
 
 # Day-by-day progress
