@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-06-13T17:53:41.824Z</updated>
+<updated>2023-06-19T23:06:17.885Z</updated>
 
 <entry>
 <title>Retrospective: Lisp Game Jam (Spring 2023)</title>
@@ -34,7 +34,8 @@
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://edicl.github.io/hunchentoot/&quot;&gt;Hunchentoot&lt;/a&gt; as a base web server&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/joaotavora/hunchensocket&quot;&gt;Hunchensocket&lt;/a&gt; for handling WebSockets on the server side&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/hankhero/cl-json&quot;&gt;cl-json&lt;/a&gt; for encoding/decoding JSON&lt;/li&gt;
+&lt;li&gt;&lt;del&gt;&lt;a href=&quot;https://github.com/hankhero/cl-json&quot;&gt;cl-json&lt;/a&gt; for encoding/decoding JSON&lt;/del&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://phmarek.github.io/yason/&quot;&gt;YASON&lt;/a&gt; for encoding/decoding JSON (cl-json doesn&amp;#39;t support non-BMP Unicode)&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://www.sbcl.org/&quot;&gt;SBCL&lt;/a&gt; for running the server (sitting behind nginx for TLS support)  and compiling everything&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&quot;day-by-day-progress&quot;&gt;Day-by-day progress&lt;/h1&gt;
