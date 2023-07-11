@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Porting a browser-based game to Steam... on Linux</title>
+<meta name="description" content="I ported a web game to Steam, but it only works on Windows. Can I get it to run on Linux?" />
+<meta name="keywords" content="steam,linux,sic1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Porting a browser-based game to Steam... on Linux",
+  "abstract": "I ported a web game to Steam, but it only works on Windows. Can I get it to run on Linux?",
+  "keywords": "game-development,steam,linux,sic1",
+  "datePublished": "2023-07-10"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/game-development/index.html">game-development</a></li>
+<li><a href="../../posts/steam/index.html">steam</a></li>
+<li><a href="../../posts/linux/index.html">linux</a></li>
+<li><a href="../../posts/sic1/index.html">sic1</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/game-development/web-game-on-steam-for-linux.html">Porting a browser-based game to Steam... on Linux</a></h1>
+<p><time datetime="2023-07-10">July 10, 2023</time></p>
+</header>
+<p>Last year, I <a href="sic-1-retrospective.html">ported my single-instruction programming game to Steam</a>, but I <a href="sic-1-retrospective.html#should-i-port-the-steam-version-of-the-game-to-linux">felt bad that it didn&#39;t run on Linux</a> (because I chose to use Windows-only <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/">WebView2</a> to avoid using Electron). I&#39;d like to rectify this situation, but it&#39;s testing my patience.</p>
+<h1 id="original-plan">Original plan</h1>
+<p>From the beginning, I wanted to avoid using Electron because it&#39;s inherently inefficient (it basically ships an entire Node+Chromium browser runtime alongside the app)... but for games it&#39;s probably fine. No one is going to notice or care that a game on Steam is 100 MB instead of 10 MB.</p>
+<p>So my original plan was to port my game to Electron, add <a href="https://github.com/greenheartgames/greenworks">Greenworks</a> (a Steam integration library), and release a native Linux version on Steam.</p>
+<h1 id="but">But...</h1>
+<p>Unfortunately, it turns out that Greenworks is no longer maintained and (more importantly) it doesn&#39;t support friend leaderboards. Given that friend leaderboards are arguably the most enticing integration point with Steam for a zachlike, this is a big problem.</p>
+<p>I&#39;m not opposed to learning new technologies for educational purposes, but learning about <a href="https://nodejs.org/api/addons.html">Node native addons</a> (which version of the API? I have no idea) and <a href="https://www.electronjs.org/docs/latest/tutorial/using-native-node-modules">rebuilding them for Electron&#39;s incompatible ABI</a> does not sound <em>at all</em> enjoyable to me at the moment. If I have to patch Greenworks, I&#39;ll do it, but I&#39;d prefer a solution that is better aligned with my current interests.</p>
+<h1 id="options">Options</h1>
+<p>Speaking of solutions, what other options do I have to bring SIC-1 to Linux on Steam? The game is implemented in TypeScript, using HTML+CSS for the UI, all bundled using Parcel.</p>
+<p>A few potential approaches and some commentary follow.</p>
+<h2 id="electron">Electron</h2>
+<p>Electron is nice because it works consistently across operating systems (and Linux distributions). Some initial testing also indicates that Electron-based games on Windows can run on Linux via Proton.</p>
+<p>The biggest downside to Electron (other than its immense size) is that it&#39;s completely unnecessary (all Steam-supported operating systems already contain a native browser). I also suspect that as Electron adds more script isolation features it will become even more unwieldy for simple web games.</p>
+<p>As far as interfacing with Steam&#39;s API, there are a few options:</p>
+<ol>
+<li>Extend Greenworks to support friend leaderboards (pros: probably the least new code; cons: requires learning about a new platform I don&#39;t have any interest in, Node native addons)</li>
+<li>Create a shared library that exposes necessary Steam API functionality as simple C functions and then use one of Node&#39;s foreign function interfaces to call those functions from the Windows build, using Proton on Linux (pros: might be able to reuse existing C++ code from the WebView2 version; cons: translating WebView2&#39;s Windows Runtime/VARIANT structure-based API into plain C functions could get tricky)</li>
+<li>Implement the existing Steam integration code on Linux, ideally using a unifying cross-platform synchronization library (pros: native Linux binaries; cons: requires rewriting the entire Steam integration library)</li>
+</ol>
+<h2 id="native-webview">Native WebView</h2>
+<p>I could shrink the disk and memory footprint by using native WebViews, of course (via <a href="https://tauri.app/">Tauri</a>, <a href="https://neutralino.js.org/">Neutralino.js</a>, or <a href="https://github.com/webview/webview">webview</a>). Steam integration would likely require a full rewrite, however.</p>
+<p>This feels like The Right Thing To Do because it removes Electron-related bloat, but then I&#39;m just trading efficiency for limited functionality and a compatibility can of worms. Notably, Steam&#39;s Linux Runtime doesn&#39;t include a native WebView library, so I&#39;d have to package one with the game, which defeats the entire purpose of using a native library.</p>
+<p>In the long term, I like this approach because it would enable efficiently shipping the game in downloadable form on other operating systems (outside of Steam).</p>
+<p>Overall, this approach aligns with my interests better, but it isn&#39;t a great fit for my immediate goal of supporting Steam on Linux.</p>
+<h2 id="new-ui-framework">New UI framework</h2>
+<p>Originally, I created SIC-1 to run in the browser because it&#39;s convenient and doesn&#39;t require downloading anything. Since it&#39;s web-native, it also starts up pretty much instantly. However, as I fleshed out the game (adding music, save data, etc.), the browser became more of a hassle than a convenience (Local Storage is unreliable, looping music basically doesn&#39;t work correctly on most browsers, styling native UI elements is tricky). I absolutely want to support playing in the browser, but playing outside the browser might produce a more reliable experience.</p>
+<p>Here are a few approaches I&#39;m considering:</p>
+<ol>
+<li>Refactor into <a href="https://reactnative.dev/">React Native</a> (shared across desktop and web versions)</li>
+<li>Rewrite for a real game engine that supports web export (e.g. <a href="https://godotengine.org/">Godot 3</a>)</li>
+<li>Rewrite as a terminal game, just because it sounds fun</li>
+</ol>
+<p>All of these would solve portability and Steam-related issues, but they&#39;re also all a lot of work. Maybe I&#39;ll tackle them <em>someday</em>, but I don&#39;t think I want to rewrite my game <em>today</em>.</p>
+<h1 id="current-plan">Current plan</h1>
+<p>Unfortunately, there&#39;s no clear winner amongst all these options. The shortest path to Linux support on Steam probably involves Electron and either extending Greenworks or repackaging my existing Steam integration code.</p>
+<p>I&#39;m still trying to decide how important it is to me to leave the door open to non-Steam downloadable releases (on various platforms). I&#39;ve always had a dream of getting a piece of software incorporated into a popular Linux distribution, and I assume using Electron would make that very unlikely (because bloat).</p>
+<p>For now, I will likely pursue the following:</p>
+<ol>
+<li>Port the Steam release to Electron</li>
+<li>Refactor Steam integration code into a flat C interface</li>
+<li>Consume the Steam integration code using one of Node&#39;s FFI libraries</li>
+<li><em>Hope</em> that this new version works acceptably via Proton</li>
+<li>Consider porting (again) to a native WebView library, for use in downloadable releases on Windows, Linux, and maybe even elsewhere</li>
+</ol>
+<p>That&#39;s more work than I had anticipated and the next to last step (&quot;hoping&quot; Proton supports it) is questionable, but I think it&#39;s the simplest option that is best aligned with my interests.</p>
+<p>Hopefully I don&#39;t regret this decision!</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

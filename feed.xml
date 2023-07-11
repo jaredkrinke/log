@@ -7,8 +7,62 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-06-19T23:06:17.885Z</updated>
+<updated>2023-07-11T15:49:30.681Z</updated>
 
+<entry>
+<title>Porting a browser-based game to Steam... on Linux</title>
+<id>https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux.html"/>
+<updated>2023-07-10T00:00:00.000Z</updated>
+<summary type="text">I ported a web game to Steam, but it only works on Windows. Can I get it to run on Linux?</summary>
+<content type="html">&lt;p&gt;Last year, I &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html&quot;&gt;ported my single-instruction programming game to Steam&lt;/a&gt;, but I &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html#should-i-port-the-steam-version-of-the-game-to-linux&quot;&gt;felt bad that it didn&amp;#39;t run on Linux&lt;/a&gt; (because I chose to use Windows-only &lt;a href=&quot;https://developer.microsoft.com/en-us/microsoft-edge/webview2/&quot;&gt;WebView2&lt;/a&gt; to avoid using Electron). I&amp;#39;d like to rectify this situation, but it&amp;#39;s testing my patience.&lt;/p&gt;
+&lt;h1 id=&quot;original-plan&quot;&gt;Original plan&lt;/h1&gt;
+&lt;p&gt;From the beginning, I wanted to avoid using Electron because it&amp;#39;s inherently inefficient (it basically ships an entire Node+Chromium browser runtime alongside the app)... but for games it&amp;#39;s probably fine. No one is going to notice or care that a game on Steam is 100 MB instead of 10 MB.&lt;/p&gt;
+&lt;p&gt;So my original plan was to port my game to Electron, add &lt;a href=&quot;https://github.com/greenheartgames/greenworks&quot;&gt;Greenworks&lt;/a&gt; (a Steam integration library), and release a native Linux version on Steam.&lt;/p&gt;
+&lt;h1 id=&quot;but&quot;&gt;But...&lt;/h1&gt;
+&lt;p&gt;Unfortunately, it turns out that Greenworks is no longer maintained and (more importantly) it doesn&amp;#39;t support friend leaderboards. Given that friend leaderboards are arguably the most enticing integration point with Steam for a zachlike, this is a big problem.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m not opposed to learning new technologies for educational purposes, but learning about &lt;a href=&quot;https://nodejs.org/api/addons.html&quot;&gt;Node native addons&lt;/a&gt; (which version of the API? I have no idea) and &lt;a href=&quot;https://www.electronjs.org/docs/latest/tutorial/using-native-node-modules&quot;&gt;rebuilding them for Electron&amp;#39;s incompatible ABI&lt;/a&gt; does not sound &lt;em&gt;at all&lt;/em&gt; enjoyable to me at the moment. If I have to patch Greenworks, I&amp;#39;ll do it, but I&amp;#39;d prefer a solution that is better aligned with my current interests.&lt;/p&gt;
+&lt;h1 id=&quot;options&quot;&gt;Options&lt;/h1&gt;
+&lt;p&gt;Speaking of solutions, what other options do I have to bring SIC-1 to Linux on Steam? The game is implemented in TypeScript, using HTML+CSS for the UI, all bundled using Parcel.&lt;/p&gt;
+&lt;p&gt;A few potential approaches and some commentary follow.&lt;/p&gt;
+&lt;h2 id=&quot;electron&quot;&gt;Electron&lt;/h2&gt;
+&lt;p&gt;Electron is nice because it works consistently across operating systems (and Linux distributions). Some initial testing also indicates that Electron-based games on Windows can run on Linux via Proton.&lt;/p&gt;
+&lt;p&gt;The biggest downside to Electron (other than its immense size) is that it&amp;#39;s completely unnecessary (all Steam-supported operating systems already contain a native browser). I also suspect that as Electron adds more script isolation features it will become even more unwieldy for simple web games.&lt;/p&gt;
+&lt;p&gt;As far as interfacing with Steam&amp;#39;s API, there are a few options:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Extend Greenworks to support friend leaderboards (pros: probably the least new code; cons: requires learning about a new platform I don&amp;#39;t have any interest in, Node native addons)&lt;/li&gt;
+&lt;li&gt;Create a shared library that exposes necessary Steam API functionality as simple C functions and then use one of Node&amp;#39;s foreign function interfaces to call those functions from the Windows build, using Proton on Linux (pros: might be able to reuse existing C++ code from the WebView2 version; cons: translating WebView2&amp;#39;s Windows Runtime/VARIANT structure-based API into plain C functions could get tricky)&lt;/li&gt;
+&lt;li&gt;Implement the existing Steam integration code on Linux, ideally using a unifying cross-platform synchronization library (pros: native Linux binaries; cons: requires rewriting the entire Steam integration library)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;native-webview&quot;&gt;Native WebView&lt;/h2&gt;
+&lt;p&gt;I could shrink the disk and memory footprint by using native WebViews, of course (via &lt;a href=&quot;https://tauri.app/&quot;&gt;Tauri&lt;/a&gt;, &lt;a href=&quot;https://neutralino.js.org/&quot;&gt;Neutralino.js&lt;/a&gt;, or &lt;a href=&quot;https://github.com/webview/webview&quot;&gt;webview&lt;/a&gt;). Steam integration would likely require a full rewrite, however.&lt;/p&gt;
+&lt;p&gt;This feels like The Right Thing To Do because it removes Electron-related bloat, but then I&amp;#39;m just trading efficiency for limited functionality and a compatibility can of worms. Notably, Steam&amp;#39;s Linux Runtime doesn&amp;#39;t include a native WebView library, so I&amp;#39;d have to package one with the game, which defeats the entire purpose of using a native library.&lt;/p&gt;
+&lt;p&gt;In the long term, I like this approach because it would enable efficiently shipping the game in downloadable form on other operating systems (outside of Steam).&lt;/p&gt;
+&lt;p&gt;Overall, this approach aligns with my interests better, but it isn&amp;#39;t a great fit for my immediate goal of supporting Steam on Linux.&lt;/p&gt;
+&lt;h2 id=&quot;new-ui-framework&quot;&gt;New UI framework&lt;/h2&gt;
+&lt;p&gt;Originally, I created SIC-1 to run in the browser because it&amp;#39;s convenient and doesn&amp;#39;t require downloading anything. Since it&amp;#39;s web-native, it also starts up pretty much instantly. However, as I fleshed out the game (adding music, save data, etc.), the browser became more of a hassle than a convenience (Local Storage is unreliable, looping music basically doesn&amp;#39;t work correctly on most browsers, styling native UI elements is tricky). I absolutely want to support playing in the browser, but playing outside the browser might produce a more reliable experience.&lt;/p&gt;
+&lt;p&gt;Here are a few approaches I&amp;#39;m considering:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Refactor into &lt;a href=&quot;https://reactnative.dev/&quot;&gt;React Native&lt;/a&gt; (shared across desktop and web versions)&lt;/li&gt;
+&lt;li&gt;Rewrite for a real game engine that supports web export (e.g. &lt;a href=&quot;https://godotengine.org/&quot;&gt;Godot 3&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Rewrite as a terminal game, just because it sounds fun&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;All of these would solve portability and Steam-related issues, but they&amp;#39;re also all a lot of work. Maybe I&amp;#39;ll tackle them &lt;em&gt;someday&lt;/em&gt;, but I don&amp;#39;t think I want to rewrite my game &lt;em&gt;today&lt;/em&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;current-plan&quot;&gt;Current plan&lt;/h1&gt;
+&lt;p&gt;Unfortunately, there&amp;#39;s no clear winner amongst all these options. The shortest path to Linux support on Steam probably involves Electron and either extending Greenworks or repackaging my existing Steam integration code.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m still trying to decide how important it is to me to leave the door open to non-Steam downloadable releases (on various platforms). I&amp;#39;ve always had a dream of getting a piece of software incorporated into a popular Linux distribution, and I assume using Electron would make that very unlikely (because bloat).&lt;/p&gt;
+&lt;p&gt;For now, I will likely pursue the following:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Port the Steam release to Electron&lt;/li&gt;
+&lt;li&gt;Refactor Steam integration code into a flat C interface&lt;/li&gt;
+&lt;li&gt;Consume the Steam integration code using one of Node&amp;#39;s FFI libraries&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Hope&lt;/em&gt; that this new version works acceptably via Proton&lt;/li&gt;
+&lt;li&gt;Consider porting (again) to a native WebView library, for use in downloadable releases on Windows, Linux, and maybe even elsewhere&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;That&amp;#39;s more work than I had anticipated and the next to last step (&amp;quot;hoping&amp;quot; Proton supports it) is questionable, but I think it&amp;#39;s the simplest option that is best aligned with my interests.&lt;/p&gt;
+&lt;p&gt;Hopefully I don&amp;#39;t regret this decision!&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Retrospective: Lisp Game Jam (Spring 2023)</title>
 <id>https://log.schemescape.com/posts/game-development/lisp-game-jam-2.html</id>
@@ -201,124 +255,6 @@
 &lt;p&gt;That new workflow is my motivation for learning Common Lisp. I want to try interactively building a program to see if it&amp;#39;s a pleasant way to work.&lt;/p&gt;
 &lt;p&gt;Is it a good idea to learn a new programming language and standard library just to explore a new workflow? Maybe not, but I&amp;#39;m not sure there&amp;#39;s a great alternative. I&amp;#39;m sure similar REPL-editor integrations exist in other languages, but I also suspect that they&amp;#39;re buggier because they&amp;#39;ve been bolted on, rather than supported from the beginning. Additionally, if I put in the work and am not satisfied with the workflow after all, I can rest assured that I gave it the best possible chance, using standard tools.&lt;/p&gt;
 &lt;p&gt;Regardless, it should be an interesting adventure!&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>JavaScript runtime startup performance</title>
-<id>https://log.schemescape.com/posts/static-site-generators/js-runtimes-startup-perf.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/js-runtimes-startup-perf.html"/>
-<updated>2023-04-17T00:00:00.000Z</updated>
-<summary type="text">Incremental rebuilds with GNU Make use separate processes for each task. So how does startup time compare between Node, Deno, Bun, and Leano?</summary>
-<content type="html">&lt;p&gt;In a previous post, I &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html&quot;&gt;set up incremental builds of this site using GNU Make&lt;/a&gt;. I was able to reduce the incremental build time (for updating a single post, on my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-4.html#hello-netbook&quot;&gt;twelve year-old netbook&lt;/a&gt;) from 12 seconds (when doing a full rebuild using Deno) to 3 seconds (using Make, and a bunch of smaller scripts, all running under Deno). Unfortunately, the &lt;em&gt;full&lt;/em&gt; rebuild time ballooned from 12 seconds to 90 seconds when using Make.&lt;/p&gt;
-&lt;p&gt;Just from watching the console output, it was apparent that Deno&amp;#39;s startup overhead was a likely culprit, so I decided to compare Deno to a few other JavaScript runtimes.&lt;/p&gt;
-&lt;h1 id=&quot;hello-startup-performance&quot;&gt;Hello, startup performance!&lt;/h1&gt;
-&lt;p&gt;This is a completely unscientific benchmark, but to get a feel for the minimum amount of startup overhead, I decided to compare the time to run a simple &amp;quot;hello, world&amp;quot; program on:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://nodejs.org/&quot;&gt;Node&lt;/a&gt; 18.14.2 (based on &lt;a href=&quot;https://v8.dev/&quot;&gt;V8&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://deno.land/&quot;&gt;Deno&lt;/a&gt; 1.31.1 (based on V8)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://bun.sh/&quot;&gt;Bun&lt;/a&gt; 0.5.8 (based on &lt;a href=&quot;https://developer.apple.com/documentation/javascriptcore&quot;&gt;JavaScriptCore&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-3.html#success-and-leano&quot;&gt;Leano&lt;/a&gt; (based on &lt;a href=&quot;https://bellard.org/quickjs/&quot;&gt;QuickJS&lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Here are the results:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&quot;left&quot;&gt;Runtime&lt;/th&gt;
-&lt;th align=&quot;right&quot;&gt;&amp;quot;Hello, world!&amp;quot; elapsed time&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Node&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;360 ms&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Deno&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;240 ms&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Bun&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;(crashed)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Leano&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;20 ms&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;Deno being faster than Node definitely matches my subjective experience. Unfortunately for Bun, I wasn&amp;#39;t able to get it to run under Alpine Linux (the official installer seemed to require glibc, and Bun installed via Nix was compiled for a newer instruciton set than what my netbook supports). There appeared to be open issues in Bun&amp;#39;s tracker for both problems.&lt;/p&gt;
-&lt;p&gt;Leano is a minimal (and &lt;em&gt;barely&lt;/em&gt; functional) wrapper around QuickJS, so I figured it would be fast for a &amp;quot;hello, world&amp;quot;, but I wasn&amp;#39;t expecting it to be quite &lt;em&gt;that&lt;/em&gt; much faster!&lt;/p&gt;
-&lt;p&gt;Of course, this is a contrived example, and it&amp;#39;s not clear how QuickJS will fare once I throw gigantic transpiled and bundled scripts at it.&lt;/p&gt;
-&lt;h1 id=&quot;template-performance&quot;&gt;Template performance&lt;/h1&gt;
-&lt;p&gt;One step above &amp;quot;hello, world&amp;quot; is the last stage of building this site, templating. All this does is read in JSON and HTML and interpolate them into a bunch of vanilla JS template literals. This seems like an ideal place to test Leano because it&amp;#39;s a lot less JavaScript code than, say, syntax highlighting. Note: I already know from &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-4.html#performance&quot;&gt;a previous experiment&lt;/a&gt; that V8 can be 3 - 5 times faster than QuickJS in a complex scenario like an md2blog full rebuild (presumably due to just-in-time compilation and other optimizations).&lt;/p&gt;
-&lt;p&gt;Here are the times needed to apply templates to 84 posts on this site under both Deno and Leano (which use the same API):&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&quot;left&quot;&gt;Runtime&lt;/th&gt;
-&lt;th align=&quot;right&quot;&gt;Templating elapsed time&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Deno&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;25 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Leano&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;4 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;These results line up with the previous ones pretty closely: Deno seems to have a startup overhead of 200 - 250 milliseconds, and that adds up when running 80+ processes sequentially. What if I run Make in parallel?&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&quot;left&quot;&gt;Runtime&lt;/th&gt;
-&lt;th align=&quot;right&quot;&gt;Templating elapsed time (parallel)&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Deno&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;19 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Leano&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;3 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;Running two tasks in parallel (on my dual-core machine) closes the gap slightly.&lt;/p&gt;
-&lt;p&gt;Other simple scripts that took less than a second to run (parsing front matter, generating an index, and creating an Atom feed) showed 30 - 50% improvements.&lt;/p&gt;
-&lt;h1 id=&quot;heavy-lifting&quot;&gt;Heavy lifting&lt;/h1&gt;
-&lt;p&gt;By far, the most complicated script in the entire pipeline is the one that processes Markdown and applies syntax highlighting to code blocks. Mostly due to embedded grammars, the script for this step weighs in at nearly 2 megabytes of JavaScript.&lt;/p&gt;
-&lt;p&gt;This is where Deno&amp;#39;s caching and V8&amp;#39;s JIT shine. Processing a particularly complicated post using Deno (including process creation/termination) took about 1.5 seconds on my netbook, whereas Leano required 3 seconds. I tried precompiling the JavaScript code to QuickJS bytecode (to avoid parsing overhead), but that only saved about 40 milliseconds (I guess parsing is really fast!).&lt;/p&gt;
-&lt;h1 id=&quot;final-results&quot;&gt;Final results&lt;/h1&gt;
-&lt;p&gt;After moving all the small/trivial scripts over to Leano while leaving Markdown/syntax highlighting to Deno, I was able to improve upon my previous results:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&quot;left&quot;&gt;Scenario&lt;/th&gt;
-&lt;th align=&quot;right&quot;&gt;Elapsed time&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Full rebuild using &amp;quot;classic&amp;quot; md2blog&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;12 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Full rebuild using &amp;quot;make&amp;quot; solely under Deno&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;90 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;Incremental build using &amp;quot;make&amp;quot; soley under Deno&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;3 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;&lt;strong&gt;Full rebuild using &amp;quot;make&amp;quot; using Deno &lt;em&gt;and&lt;/em&gt; Leano&lt;/strong&gt;&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;70 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&quot;left&quot;&gt;&lt;strong&gt;Incremental build using &amp;quot;make&amp;quot; using Deno &lt;em&gt;and&lt;/em&gt; Leano&lt;/strong&gt;&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;1.6 seconds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;In the end, removing Deno&amp;#39;s startup penalty from the process resulted in a modest speedup. Unfortunately, it&amp;#39;s still slower than &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-3.html#further-optimizations&quot;&gt;running a full rebuild under Deno when in &amp;quot;watch&amp;quot; mode&lt;/a&gt;, so, while interesting, this experiment did not lead to any changes in my current workflow.&lt;/p&gt;
 </content>
 </entry>
 </feed>
