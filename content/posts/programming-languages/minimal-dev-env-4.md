@@ -19,7 +19,7 @@ To address the last point, I decided to see if I could get a lightweight GUI env
 Getting X.org up and running with Fluxbox wasn't too difficult, and then I was able to use the [Dillo browser](https://www.dillo.org/) to improve my web browsing experience. Unfortunately, everything GUI-related was painfully slow, especially moving windows around. Just in case I was missing some sort of hardware acceleration or something, I tested out the official Raspberry Pi OS. It was unbearably slow as well (and the build of Chromium appeared to be for ARMv7, which my Pi doesn't support).
 
 # Goodbye, Pi
-To be honest, it's impressive how much you can do with a 10+ year-old, less than $50 (originally) single-board computer (running at 3.5 Watts). I could run Linux, edit and compile C code, browse the web in a terminal, read RSS feeds, and even run Node/NPM. It seems perfect for running a low-traffic server at home (something I [don't need to do at the moment](../services/cheap-hosting.md)).
+To be honest, it's impressive how much you can do with a 10+ year-old, less than $50 (originally) single-board computer (running at 3.5 Watts). I could run Linux, edit and compile C code, browse the web in a terminal, read RSS feeds, and even run Node/NPM. It seems perfect for running a low-traffic server at home (something I [don't need to do at the moment](../web-development/cheap-hosting.md)).
 
 But the bottom line is that I want something faster.
 

@@ -1,7 +1,6 @@
 ---
 title: Test-driving Zola for a simple dev blog
 description: I'm testing out static site generators for my new dev blog. Here's my first experience with Zola.
-keywords: [zola]
 date: 2021-09-15
 ---
 

@@ -2,7 +2,7 @@
 title: "SIC-1: A single-instruction programming game"
 description: SIC-1 is a single-instruction (subleq) programming game that can be played via Steam or the browser.
 date: 2022-12-06
-keywords: [steam,sic1]
+keywords: [steam,sic1,releases]
 ---
 **SIC-1** is a single-instruction ([subleq](https://esolangs.org/wiki/Subleq)) programming game with "zachlike" optimization leaderboards. It can be played here:
 
