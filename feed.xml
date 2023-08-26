@@ -7,8 +7,48 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-07-12T22:41:05.509Z</updated>
+<updated>2023-08-26T20:06:35.924Z</updated>
 
+<entry>
+<title>Porting a browser-based game to Steam, on Linux (part 2)</title>
+<id>https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux-2.html"/>
+<updated>2023-08-26T00:00:00.000Z</updated>
+<summary type="text">I finally ported my browser-based Steam game to Linux. It was mostly straight-forward.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux.html&quot;&gt;a previous post&lt;/a&gt; I outlined a plan to (finally) port &lt;a href=&quot;https://log.schemescape.com/posts/game-development/../game-development/sic-1.html&quot;&gt;my browser-based Steam game&lt;/a&gt; to Linux. (The original Windows-only release used WebView2.) The port mostly went according to plan and only took a week or two, working in my spare time.&lt;/p&gt;
+&lt;h1 id=&quot;original-plan&quot;&gt;Original plan&lt;/h1&gt;
+&lt;p&gt;The simplest way to run a browser-based game using Steam on Linux was to use Electron, but there was one problem: &lt;a href=&quot;https://github.com/greenheartgames/greenworks&quot;&gt;Greenworks&lt;/a&gt; (a Steam integration library) didn&amp;#39;t support friend leaderboards (an important feature of my game). My plan (which optimized for having to learn the fewest new libraries/concepts) was to:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Port the Steam release to Electron&lt;/li&gt;
+&lt;li&gt;Refactor Steam integration code into a flat C interface&lt;/li&gt;
+&lt;li&gt;Consume the Steam integration code using one of Node&amp;#39;s FFI libraries&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Hope&lt;/em&gt; that this new version works acceptably via Proton&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;porting-to-electron&quot;&gt;Porting to Electron&lt;/h1&gt;
+&lt;p&gt;Porting to Electron was fairly straightforward. I was able to use Electron&amp;#39;s tutorials to get a mostly working game pretty quickly. There were a few issues I had to iron out:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Electron Forge doesn&amp;#39;t have an easy way to add binaries (e.g. the Steamworks binary) to the root of the output folder, so I had to &lt;a href=&quot;https://github.com/jaredkrinke/sic1/commit/c953e7adb63a43022102dbf434123c400ac507a2#diff-4c2d32d0a0906dd3108b9ce9d29178bc2e8e3eae8d82f0b735a73e1f2b23ee5e&quot;&gt;hack in an &lt;code&gt;afterExtract&lt;/code&gt; callback to copy the files&lt;/a&gt; and switch from using &lt;code&gt;electron-forge start&lt;/code&gt; (which &lt;em&gt;doesn&amp;#39;t&lt;/em&gt; run &lt;code&gt;afterExtract&lt;/code&gt;) to &lt;code&gt;electron-forge package&lt;/code&gt; (which does) for testing&lt;/li&gt;
+&lt;li&gt;Electron allows &amp;quot;Ctrl+R&amp;quot; to reload the page by default (fix: &lt;a href=&quot;https://github.com/jaredkrinke/sic1/commit/0459f8c1bd7efd55095936fd1d5350bd27b6eab8&quot;&gt;remove the menu&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Fortunately, &lt;a href=&quot;https://github.com/jaredkrinke/sic1/commit/ef4d99f517f227ba7755bb67cb7abf962d18be0b&quot;&gt;adding crash reporting&lt;/a&gt; was trivially easy.&lt;/p&gt;
+&lt;h1 id=&quot;refactoring-steam-integration-for-electron-andor-linux&quot;&gt;Refactoring Steam integration for Electron and/or Linux&lt;/h1&gt;
+&lt;p&gt;My original Steam integration code used the Win32 API, so I had to rewrite it using only the C++11 standard library. I then exposed that code in a flat, synchronous C interface (which I dubbed &lt;a href=&quot;https://github.com/jaredkrinke/ez-steam-api&quot;&gt;ez-steam-api&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;To support calling the C API from Electron, I used &lt;a href=&quot;https://koffi.dev/&quot;&gt;Koffi&lt;/a&gt; (which was great, other than one bug I hit--which has since been fixed). The wrapper is documented &lt;a href=&quot;https://github.com/jaredkrinke/ez-steam-api/tree/main/js&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;hoping-that-electron-runs-on-proton&quot;&gt;&lt;em&gt;Hoping&lt;/em&gt; that Electron runs on Proton&lt;/h1&gt;
+&lt;p&gt;In the previous post, I acknowledged that &lt;em&gt;hoping&lt;/em&gt; Electron ran acceptably on Proton was a risk. It turns out this risk was well founded.&lt;/p&gt;
+&lt;p&gt;In addition to &lt;a href=&quot;https://github.com/jaredkrinke/sic1/issues/270#issuecomment-1636918488&quot;&gt;wasting a lot of time testing out different Electron and Proton combinations&lt;/a&gt;, I ran into one insurmountable bug that was only &lt;em&gt;just annoying enough&lt;/em&gt; to make me give up: the mouse cursor is off by about 25 pixels on Ubuntu, when windowed (no idea why or how to investigate it, although I wonder if it&amp;#39;s related to the system bar at the top of the screen). In fullscreen, Electron-on-Proton worked great! But having windowed mode be broken was unacceptable for my programming game (for other genres, this bug might be acceptable).&lt;/p&gt;
+&lt;p&gt;So I ended up having to do a native Linux port anyway.&lt;/p&gt;
+&lt;h1 id=&quot;native-linux-port-on-steam&quot;&gt;Native Linux port on Steam&lt;/h1&gt;
+&lt;p&gt;Building an Electron app for Linux is trivial. Getting it to run on Steam was a bit frustrating, however, because the game would fail to launch. But &lt;em&gt;only&lt;/em&gt; when run from Steam! Even &lt;a href=&quot;https://gitlab.steamos.cloud/steamrt/scout/sdk/-/blob/steamrt/scout/README.md#testing-software-that-runs-in-scout&quot;&gt;Steam&amp;#39;s test script&lt;/a&gt; launched the game fine.&lt;/p&gt;
+&lt;p&gt;I don&amp;#39;t recall how I discovered the solution, but the issue was related to Electron&amp;#39;s sandboxing. Given my game only loads its own code (and not anything from the web), the workaround was just to &lt;a href=&quot;https://steamcommunity.com/groups/steamworks/discussions/13/3801651941320989565/#c3801651941326097085&quot;&gt;add &lt;code&gt;--no-sandbox&lt;/code&gt; to the list of command line arguments&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;And just like that, I had a working Linux port!&lt;/p&gt;
+&lt;h1 id=&quot;summary-and-statistics&quot;&gt;Summary and statistics&lt;/h1&gt;
+&lt;p&gt;I&amp;#39;ve said it before, but I&amp;#39;ll say it again: I should have just used Electron from the beginning. It&amp;#39;s inefficient, but it&amp;#39;s known to work fine on Steam, across platforms (cf. Vampire Survivors). If I had just used Electron originally, porting to Linux would have been trivial. Fortunately, porting to Electron and then Linux wasn&amp;#39;t too onerous.&lt;/p&gt;
+&lt;p&gt;This Linux port also resolved &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html#should-i-port-the-steam-version-of-the-game-to-linux&quot;&gt;one of my open questions&lt;/a&gt; around what to do with SIC-1. And, of course, now people on a free OS can play my game, &lt;em&gt;with friend leaderboards&lt;/em&gt;. I think the peak number of concurrent Linux players was roughly 3, which is pretty high for a game that only ever peaked at 10 concurrent players on Windows.&lt;/p&gt;
+&lt;h1 id=&quot;up-next&quot;&gt;Up next...&lt;/h1&gt;
+&lt;p&gt;That&amp;#39;s all for the Linux port! Next, I&amp;#39;m planning to provide an update on how SIC-1&amp;#39;s release has been going. Spoiler: it finally met my own internal bar for success!&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Porting a browser-based game to Steam... on Linux</title>
 <id>https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux.html</id>
@@ -221,40 +261,6 @@
 &lt;p&gt;That&amp;#39;s mostly a topic for a future post. Briefly: my first project has been building a service that hosts webhooks which implement &lt;a href=&quot;https://play.battlesnake.com/&quot;&gt;Battlesnake&lt;/a&gt; clients. Surely there&amp;#39;s no more noble endeavour than programming games!&lt;/p&gt;
 &lt;p&gt;Battlesnake is a competitive programming game where snakes move around a grid collecting food and trying not to collide with each other or the walls. Each snake is implemented as a webhook which is given 500 milliseconds to respond with the direction it would like to move. It&amp;#39;s a simple concept, but that just leaves lots of room for optimization. As an aside, the global leaderboard is a little bit pointless in that it can&amp;#39;t take into account hardware, so for all I know my little netbook is competing with a rack of servers, but I&amp;#39;m still having fun.&lt;/p&gt;
 &lt;p&gt;Hopefully I&amp;#39;ll have more to say about Battlesnake and Common Lisp soon!&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>It&apos;s 2023, so of course I&apos;m learning Common Lisp</title>
-<id>https://log.schemescape.com/posts/programming-languages/learning-lisp-in-2023.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/learning-lisp-in-2023.html"/>
-<updated>2023-04-25T00:00:00.000Z</updated>
-<summary type="text">I&apos;m traveling back in time to explore an ancient development workflow that is somehow more modern than today&apos;s workflows.</summary>
-<content type="html">&lt;p&gt;I&amp;#39;ve &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;spent&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages-2.html&quot;&gt;some&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages-3.html&quot;&gt;time&lt;/a&gt; contemplating future-proof programming languages because I want to enusre that code I write will be usable in the future. Generally, if I want to build something and share it with others, I&amp;#39;m a pragmatist, so I&amp;#39;ll &lt;del&gt;use JavaScript&lt;/del&gt; choose a programming language that is popular, portable, and convenient.&lt;/p&gt;
-&lt;p&gt;But &lt;em&gt;other times&lt;/em&gt;, I just want to have fun and experiment with other programming languages and tools. In that vein, I&amp;#39;ve been monitoring a few single-syllable, intriguing-but-maybe-not-future-proof programming languages such as &lt;a href=&quot;https://nim-lang.org/&quot;&gt;Nim&lt;/a&gt; and &lt;a href=&quot;https://ziglang.org/&quot;&gt;Zig&lt;/a&gt;. Sometimes these experiments open my eyes to new ways of programming or new tools that eventually become indispensible.&lt;/p&gt;
-&lt;h1 id=&quot;janet&quot;&gt;Janet&lt;/h1&gt;
-&lt;p&gt;Very recently, I ran across a newly-published (free) book about the &lt;a href=&quot;https://janet-lang.org/&quot;&gt;Janet&lt;/a&gt; programming language called &lt;a href=&quot;https://janet.guide/&quot;&gt;Janet for Mortals&lt;/a&gt; and it piqued my interest. Janet is a relatively small Lisp/Clojure-inspired scripting language that tries to fill a similar niche to Lua, but with an actual standard library (and, of course, Lisp-style metaprogramming and compile-time execution via macros).&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Janet for Mortals&lt;/strong&gt; is an entertaining and informative read, and it gave me the nudge I needed to become interested in Lisps again. I had previously abandoned using Scheme because, frankly, I ran out of free time for exploratory programming. But while I was reading about Janet, I kept coming back to one question: why should I use Janet instead of an established Lisp, e.g. Scheme?&lt;/p&gt;
-&lt;p&gt;For me, the most attractive qualities of Janet (other than general Lispiness) are portability, embeddability, and &lt;a href=&quot;https://janet-lang.org/docs/peg.html&quot;&gt;Parsing Expression Grammars&lt;/a&gt;. Realistically, however, I don&amp;#39;t currently have any need to embed a language, so that leaves portability and parsing. As far as portability, &lt;a href=&quot;http://www.call-cc.org/&quot;&gt;CHICKEN Scheme&lt;/a&gt;, &lt;a href=&quot;https://www.gnu.org/software/clisp/&quot;&gt;CLISP&lt;/a&gt;, and &lt;a href=&quot;http://www.sbcl.org/&quot;&gt;Steel Bank Common Lisp&lt;/a&gt; looked acceptable. For parsing, &lt;a href=&quot;https://bford.info/packrat/&quot;&gt;Packrat&lt;/a&gt; looked reasonable.&lt;/p&gt;
-&lt;p&gt;At this point, I started to run out of reasons to pursue Janet instead of an established Lisp.&lt;/p&gt;
-&lt;h1 id=&quot;common-lisp&quot;&gt;Common Lisp&lt;/h1&gt;
-&lt;p&gt;During my research, I ran across a &lt;a href=&quot;https://mikelevins.github.io/posts/2020-12-18-repl-driven/&quot;&gt;blog post describing Common Lisp&amp;#39;s (mostly) unique REPL-driven workflow&lt;/a&gt;. In that post, the author describes handling a runtime error by just fixing the broken code--in-place, without any restarts:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Try this in your favorite repl:&lt;/p&gt;
-&lt;p&gt;Define a function, foo, that calls some other function, bar, that is not yet defined. Now call foo. What happens?&lt;/p&gt;
-&lt;p&gt;Obviously, the call to foo breaks, because bar is not defined. But what happens when it breaks?&lt;/p&gt;
-&lt;p&gt;...&lt;/p&gt;
-&lt;p&gt;The answer to that question is the differentiating point of repl-driven programming. In an old-fashioned Lisp or Smalltalk environment, the break in foo drops you into a breakloop.&lt;/p&gt;
-&lt;p&gt;A breakloop is a full-featured repl, complete with all of the tools of the main repl, but it exists inside the dynamic environment of the broken function. From the breakloop you can roam up and down the suspended call stack, examining all variables that are lexically visible from each stack frame. In fact, you can inspect all live data in the running program.&lt;/p&gt;
-&lt;p&gt;What&amp;#39;s more, you can edit all live data in the program. If you think that a break was caused by a wrong value in some particular variable or field, you can interactively change it and resume the suspended function.&lt;/p&gt;
-&lt;p&gt;...&lt;/p&gt;
-&lt;p&gt;Moreover, because the entire language and development system are available, unrestricted, in the repl, you can define the missing function bar, resume foo, and get a sensible result.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;I&amp;#39;ve seen various (often unreliable) &amp;quot;edit and continue&amp;quot; features over the years, but I didn&amp;#39;t realize that Common Lisp was built with this sort of workflow in mind.&lt;/p&gt;
-&lt;p&gt;When I first learned to program, I used &amp;quot;printf debugging&amp;quot;, where I&amp;#39;d temporarily add in code to log values, recompile, run, and inspect the output to troubleshoot problems. Eventually, I ran into scenarios where I couldn&amp;#39;t modify the program or rerun it, so I learned to use a debugger. Using a real debugger is definitely the right thing to do, but setting up a debugging environment is often painful (and sometimes impossible).&lt;/p&gt;
-&lt;p&gt;Common Lisp seems to take debugging a step further. Sure, I&amp;#39;ve modified memory in a debugger to test out potential fixes, but being able to rewrite code and patch into a live process &lt;em&gt;in a sane way&lt;/em&gt; sounds amazing--almost too good to be true.&lt;/p&gt;
-&lt;p&gt;That new workflow is my motivation for learning Common Lisp. I want to try interactively building a program to see if it&amp;#39;s a pleasant way to work.&lt;/p&gt;
-&lt;p&gt;Is it a good idea to learn a new programming language and standard library just to explore a new workflow? Maybe not, but I&amp;#39;m not sure there&amp;#39;s a great alternative. I&amp;#39;m sure similar REPL-editor integrations exist in other languages, but I also suspect that they&amp;#39;re buggier because they&amp;#39;ve been bolted on, rather than supported from the beginning. Additionally, if I put in the work and am not satisfied with the workflow after all, I can rest assured that I gave it the best possible chance, using standard tools.&lt;/p&gt;
-&lt;p&gt;Regardless, it should be an interesting adventure!&lt;/p&gt;
 </content>
 </entry>
 </feed>
