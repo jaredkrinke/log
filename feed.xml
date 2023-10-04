@@ -7,8 +7,41 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-08-26T20:06:35.924Z</updated>
+<updated>2023-10-04T23:47:48.219Z</updated>
 
+<entry>
+<title>Creating Windows-style paths (backslash-separated) from pathnames in Common Lisp</title>
+<id>https://log.schemescape.com/posts/lisp/pathnames-on-windows.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/lisp/pathnames-on-windows.html"/>
+<updated>2023-10-04T00:00:00.000Z</updated>
+<summary type="text">I spent far too long trying to figure out how to do this, so I&apos;m documenting it here, in case anyone else has trouble finding the answer.</summary>
+<content type="html">&lt;p&gt;Use &lt;code&gt;uiop/filesystem:native-namestring&lt;/code&gt;. That&amp;#39;s the answer.&lt;/p&gt;
+&lt;p&gt;The rest of this post is just additional context/whining.&lt;/p&gt;
+&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
+&lt;p&gt;Common Lisp was born in an era of surprising file system diversity. Nowadays, Windows is mocked for using something other than a forward slash as a path separator, but old Macs used colons and I&amp;#39;ve seen references to &lt;code&gt;&amp;gt;&lt;/code&gt; being used on more exotic platforms.&lt;/p&gt;
+&lt;p&gt;Common Lisp handles this difference (and many other differences that never even occurred to me, such as types and versions) by abstracting everything into a platform-independent concept called a &lt;a href=&quot;http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/Body/glo_p.html#pathname&quot;&gt;pathname&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;example-pathname&quot;&gt;Example pathname&lt;/h2&gt;
+&lt;p&gt;Here&amp;#39;s how to create a (relative) pathname for &amp;quot;the directory &amp;#39;foo&amp;#39;, which is located in the parent directory&amp;quot;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-lisp&quot;&gt; (&lt;span class=&quot;hljs-name&quot;&gt;make-pathname&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:directory&lt;/span&gt; &amp;#x27;(&lt;span class=&quot;hljs-symbol&quot;&gt;:relative&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:up&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;foo&amp;quot;&lt;/span&gt;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;the-problem&quot;&gt;The problem&lt;/h2&gt;
+&lt;p&gt;While working on a tiny Common Lisp project, my program needed to run a command in a subprocess (using &lt;code&gt;uiop:run-program&lt;/code&gt;) with a directory passed as an argument. &lt;strong&gt;I had assumed that &lt;code&gt;format&lt;/code&gt;-ing a pathname on Windows would result in a Windows-compatible string&lt;/strong&gt; (or at least that &lt;code&gt;namestring&lt;/code&gt; would), e.g. &amp;quot;..\foo\&amp;quot; for the example code above.&lt;/p&gt;
+&lt;p&gt;For reasons I won&amp;#39;t yet understand, &lt;strong&gt;this is &lt;em&gt;not&lt;/em&gt; how things work on SBCL&lt;/strong&gt;! Instead, forward slashes are used: &amp;quot;../foo/&amp;quot;. This works fine for some programs (including Git, apparently), but I doubt it&amp;#39;s robust in general, considering some (mostly old) Windows programs use the forward slash to indicate command-line flags (instead of using a hyphen).&lt;/p&gt;
+&lt;h2 id=&quot;but-why&quot;&gt;But why?&lt;/h2&gt;
+&lt;p&gt;I thought the point of pathnames was to support a platform-independent notion of a file path/name, so it&amp;#39;s not clear to me why they don&amp;#39;t &lt;code&gt;format&lt;/code&gt; by default into a form that&amp;#39;s compatible with the host environment.&lt;/p&gt;
+&lt;p&gt;Even more surprising, after spending way too much time browsing the &lt;a href=&quot;http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/FrontMatter/index.html&quot;&gt;Common Lisp HyperSpec&lt;/a&gt;, I couldn&amp;#39;t even find anything in Common Lisp&amp;#39;s standard library for this scenario. Why can I create and manipulate pathnames but not actually pass them to the operating system? That&amp;#39;s a serious question--if you know the answer, please tell me!&lt;/p&gt;
+&lt;h1 id=&quot;uiop-to-the-rescue&quot;&gt;UIOP to the rescue&lt;/h1&gt;
+&lt;p&gt;Given that (ANSI) Common Lisp hasn&amp;#39;t been updated since 1994, I don&amp;#39;t see this situation changing, but the good news is that Common Lisp implementations fill in this gap and &lt;a href=&quot;https://asdf.common-lisp.dev/uiop.html&quot;&gt;UIOP&lt;/a&gt; abstracts away the implementations&amp;#39; different approaches/naming schemes.&lt;/p&gt;
+&lt;p&gt;So that leads us to the solution: &lt;code&gt;uiop/filesystem:native-namestring&lt;/code&gt;. Example:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-lisp&quot;&gt; (&lt;span class=&quot;hljs-name&quot;&gt;uiop/filesystem&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;:native-namestring&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;make-pathname&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:directory&lt;/span&gt; &amp;#x27;(&lt;span class=&quot;hljs-symbol&quot;&gt;:relative&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:up&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;foo&amp;quot;&lt;/span&gt;)))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Result:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;..&lt;span class=&quot;hljs-subst&quot;&gt;\\&lt;/span&gt;foo&lt;span class=&quot;hljs-subst&quot;&gt;\\&lt;/span&gt;&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Problem solved!&lt;/p&gt;
+&lt;p&gt;The only lingering question for me is: why is &lt;code&gt;native-namestring&lt;/code&gt; in &lt;code&gt;uiop/filesystem&lt;/code&gt; instead of &lt;code&gt;uiop/pathname&lt;/code&gt;?&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Porting a browser-based game to Steam, on Linux (part 2)</title>
 <id>https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux-2.html</id>
@@ -223,44 +256,6 @@
 &lt;h1 id=&quot;progress&quot;&gt;Progress&lt;/h1&gt;
 &lt;p&gt;As of right now (May 26th, at least as far as UTC is concerned), I&amp;#39;m struggling with the first item. The best word lists I&amp;#39;ve found so far have been copyrighted works related to Scrabble. Other than obvious legal risks, these lists also have a cap on the length of words. Most of the other word lists I&amp;#39;ve found contain proper nouns, lack inflected nouns/verbs, or contain huge amounts of questionable &amp;quot;words&amp;quot; (for example: &amp;quot;zzzs&amp;quot;).&lt;/p&gt;
 &lt;p&gt;For now, I think my best bet is to use the public domain &lt;a href=&quot;https://github.com/elasticdog/yawl&quot;&gt;YAWL&lt;/a&gt; word list, possibly filtered by some arbitrary frequency cutoff based on the Google Trillion Word Corpus via &lt;a href=&quot;http://norvig.com/ngrams/&quot;&gt;Peter Norvig&amp;#39;s web site&lt;/a&gt;. After exploring this a bit, it looks like just ensuring the word is in the top ~300,000 most frequent words may be sufficient to get a set of words that I consider to be legitimate.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Resources for learning Common Lisp</title>
-<id>https://log.schemescape.com/posts/programming-languages/common-lisp-resources.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/common-lisp-resources.html"/>
-<updated>2023-05-15T00:00:00.000Z</updated>
-<summary type="text">Here are the resources I&apos;ve personally found most helpful for learning Common Lisp.</summary>
-<content type="html">&lt;p&gt;In order to test out fully interactive program development (&lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/learning-lisp-in-2023.html&quot;&gt;as noted previously&lt;/a&gt;), I&amp;#39;ve been learning Common Lisp. I assumed that it would take a while to catch up on nearly four decades of Common Lisp&amp;#39;s progress and... I was not wrong about that. On the plus side, given the long timeline, there &lt;em&gt;are&lt;/em&gt; a lot of resources available. On the flip side, they&amp;#39;re not always up to date.&lt;/p&gt;
-&lt;p&gt;Regardless, here are the resources that I&amp;#39;ve found most helpful over the last couple of weeks. My intention is to keep this list up to date as I go.&lt;/p&gt;
-&lt;h1 id=&quot;introductory-materials&quot;&gt;Introductory materials&lt;/h1&gt;
-&lt;p&gt;In descending order of how much time I&amp;#39;ve spent studying them (i.e. in completely arbitrary order):&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://gigamonkeys.com/book/&quot;&gt;&lt;strong&gt;Practical Common Lisp&lt;/strong&gt;&lt;/a&gt; by Peter Seibel&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://dept-info.labri.fr/~strandh/Teaching/MTP/Common/David-Lamkins/cover.html&quot;&gt;&lt;strong&gt;Successful Lisp&lt;/strong&gt;&lt;/a&gt; by David B. Lamkins&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://leanpub.com/lovinglisp&quot;&gt;&lt;strong&gt;Loving Common Lisp, or the Savvy Programmer&amp;#39;s Secret Weapon&lt;/strong&gt;&lt;/a&gt; by Mark Watson&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;in-depth-materials&quot;&gt;In-depth materials&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;Various topics: &lt;a href=&quot;https://lispcookbook.github.io/cl-cookbook/&quot;&gt;Common Lisp Cookbook&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Debugging: &lt;a href=&quot;https://malisper.me/debugging-lisp-part-1-recompilation/&quot;&gt;Debugging Lisp (series)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Packaging/libraries: &lt;a href=&quot;https://lispmethods.com/libraries.html&quot;&gt;Source Code Organization&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;The LOOP macro: &lt;a href=&quot;https://www.ai.sri.com/~pkarp/loop.html&quot;&gt;Tutorial for the Common Lisp Loop Macro&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;JSON libraries: &lt;a href=&quot;https://sabracrolleton.github.io/json-review.html&quot;&gt;Review of CL JSON libraries&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;resource-collections&quot;&gt;Resource collections:&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;List of libraries/tools: &lt;a href=&quot;https://awesome-cl.com/&quot;&gt;Awesome Common Lisp&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;List of books: &lt;a href=&quot;https://lisp-lang.org/books/&quot;&gt;lisp-lang.org/books&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;general-reference&quot;&gt;General reference&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://clhs.lisp.se/Front/index.htm&quot;&gt;Common Lisp HyperSpec&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;thats-great-but-what-have-you-been-doing&quot;&gt;That&amp;#39;s great, but what have you been &lt;em&gt;doing&lt;/em&gt;?&lt;/h1&gt;
-&lt;p&gt;That&amp;#39;s mostly a topic for a future post. Briefly: my first project has been building a service that hosts webhooks which implement &lt;a href=&quot;https://play.battlesnake.com/&quot;&gt;Battlesnake&lt;/a&gt; clients. Surely there&amp;#39;s no more noble endeavour than programming games!&lt;/p&gt;
-&lt;p&gt;Battlesnake is a competitive programming game where snakes move around a grid collecting food and trying not to collide with each other or the walls. Each snake is implemented as a webhook which is given 500 milliseconds to respond with the direction it would like to move. It&amp;#39;s a simple concept, but that just leaves lots of room for optimization. As an aside, the global leaderboard is a little bit pointless in that it can&amp;#39;t take into account hardware, so for all I know my little netbook is competing with a rack of servers, but I&amp;#39;m still having fun.&lt;/p&gt;
-&lt;p&gt;Hopefully I&amp;#39;ll have more to say about Battlesnake and Common Lisp soon!&lt;/p&gt;
 </content>
 </entry>
 </feed>
