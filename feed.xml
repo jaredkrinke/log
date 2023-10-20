@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-10-20T00:18:49.665Z</updated>
+<updated>2023-10-20T22:20:24.308Z</updated>
 
 <entry>
 <title>Building a browser-based app without JavaScript</title>
@@ -35,7 +35,7 @@
 &lt;p&gt;Having said that, form submission reloads the entire web page, so the experience is decidedly seamful. Additionally, form submission is user-initiated, so there&amp;#39;s no way for the application to update its UI in the absence of user input.&lt;/p&gt;
 &lt;p&gt;Can we do better?&lt;/p&gt;
 &lt;h1 id=&quot;potential-solution-chunked-transfer-encoding-and-frames&quot;&gt;Potential solution: chunked transfer encoding and frames&lt;/h1&gt;
-&lt;p&gt;I&amp;#39;m not sure where I first heard the story, but there are tales of browser-based, JavaScript-free chat apps that use &lt;a href=&quot;https://en.wikipedia.org/wiki/Chunked_transfer_encoding&quot;&gt;chunked transfer encoding&lt;/a&gt; to append to an HTML page, along with an &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTML/Element/frame&quot;&gt;HTML frame element&lt;/a&gt; that uses form submission to trigger the transfer to said &lt;del&gt;appendages&lt;/del&gt; chunks that are appended to the page.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m not sure where I first heard the story, but there are tales of browser-based, JavaScript-free chat apps that use &lt;a href=&quot;https://en.wikipedia.org/wiki/Chunked_transfer_encoding&quot;&gt;chunked transfer encoding&lt;/a&gt; to append to an HTML page, along with an &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTML/Element/frame&quot;&gt;HTML frame element&lt;/a&gt; that uses form submission to trigger the transfer of said &lt;del&gt;appendages&lt;/del&gt; chunks that are appended to the page.&lt;/p&gt;
 &lt;p&gt;It&amp;#39;s unclear to me what the motivation was behind these apps. Did they predate JavaScript? Did they need to support unscriptable browsers? Did their users frequently have JavaScript disabled (perhaps for privacy or security reasons)?&lt;/p&gt;
 &lt;p&gt;Regardless, I see no obvious reason why this approach wouldn&amp;#39;t work for building an interactive web app without JavaScript. Who knows, it might even be possible to use some fancy CSS rules to make it appear as though part of a page is being updated instead of just appended to.&lt;/p&gt;
 &lt;h1 id=&quot;so-does-it-work&quot;&gt;So does it work?&lt;/h1&gt;
