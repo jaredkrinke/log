@@ -3,7 +3,7 @@ title: Building a browser-based app without JavaScript
 description: Can I build an interactive (and ideally real-time) browser-based app without using JavaScript?
 date: 2023-10-19
 ---
-For [Lisp Game Jam (Spring 2023)](lisp-game-jam-2.md), I built a browser-based word scramble game without (technically) writing a single line of JavaScript. But that's a little bit misleading since [Parenscript](https://parenscript.common-lisp.dev/) transpiled my Common Lisp code into JavaScript at build time, so JavaScript was still used at run-time.
+For [Lisp Game Jam (Spring 2023)](../game-development/lisp-game-jam-2.md), I built a browser-based word scramble game without (technically) writing a single line of JavaScript. But that's a little bit misleading since [Parenscript](https://parenscript.common-lisp.dev/) transpiled my Common Lisp code into JavaScript at build time, so JavaScript was still used at run-time.
 
 Lately, I've gotten to wondering: **how interactive of an application can be built for the browser *without any JavaScript whatsoever*?** (N.B. WebAssembly doesn't help since WebAssembly modules are loaded using JavaScript.)
 
