@@ -30,7 +30,7 @@ Having said that, form submission reloads the entire web page, so the experience
 Can we do better?
 
 # Potential solution: chunked transfer encoding and frames
-I'm not sure where I first heard the story, but there are tales of browser-based, JavaScript-free chat apps that use [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding) to append to an HTML page, along with an [HTML frame element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/frame) that uses form submission to trigger the transfer to said ~~appendages~~ chunks that are appended to the page.
+I'm not sure where I first heard the story, but there are tales of browser-based, JavaScript-free chat apps that use [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding) to append to an HTML page, along with an [HTML frame element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/frame) that uses form submission to trigger the transfer of said ~~appendages~~ chunks that are appended to the page.
 
 It's unclear to me what the motivation was behind these apps. Did they predate JavaScript? Did they need to support unscriptable browsers? Did their users frequently have JavaScript disabled (perhaps for privacy or security reasons)?
 
