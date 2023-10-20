@@ -7,8 +7,41 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-10-04T23:47:48.219Z</updated>
+<updated>2023-10-20T00:18:49.665Z</updated>
 
+<entry>
+<title>Building a browser-based app without JavaScript</title>
+<id>https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js.html"/>
+<updated>2023-10-19T00:00:00.000Z</updated>
+<summary type="text">Can I build an interactive (and ideally real-time) browser-based app without using JavaScript?</summary>
+<content type="html">&lt;p&gt;For &lt;a href=&quot;https://log.schemescape.com/posts/web-development/../game-development/lisp-game-jam-2.html&quot;&gt;Lisp Game Jam (Spring 2023)&lt;/a&gt;, I built a browser-based word scramble game without (technically) writing a single line of JavaScript. But that&amp;#39;s a little bit misleading since &lt;a href=&quot;https://parenscript.common-lisp.dev/&quot;&gt;Parenscript&lt;/a&gt; transpiled my Common Lisp code into JavaScript at build time, so JavaScript was still used at run-time.&lt;/p&gt;
+&lt;p&gt;Lately, I&amp;#39;ve gotten to wondering: &lt;strong&gt;how interactive of an application can be built for the browser &lt;em&gt;without any JavaScript whatsoever&lt;/em&gt;?&lt;/strong&gt; (N.B. WebAssembly doesn&amp;#39;t help since WebAssembly modules are loaded using JavaScript.)&lt;/p&gt;
+&lt;p&gt;For the record, my motivation is two-part:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Mostly, I&amp;#39;m just curious if such a thing is possible&lt;/li&gt;
+&lt;li&gt;But additionally, I find it slightly horrifying that browsing the web today requires multiple gigabytes of RAM--and I attribute much of that bloat to the operating system-sized browser runtime (and associated sandboxing) that supports &lt;del&gt;ad delivery&lt;/del&gt; JavaScript&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;aside&quot;&gt;Aside&lt;/h2&gt;
+&lt;p&gt;Unrelated to this project, I&amp;#39;d like to mention a service I ran across recently: &lt;a href=&quot;https://sourcehut.org/&quot;&gt;SourceHut&lt;/a&gt;. It provides project hosting with two notable (and tangentially related to this article) features:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;All features work without JavaScript&lt;/li&gt;
+&lt;li&gt;Many features work without an &lt;em&gt;account&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I&amp;#39;ll admit I&amp;#39;m a little jealous that I didn&amp;#39;t come up with this idea myself. It seems like the sort of thing the software development world needs these days.&lt;/p&gt;
+&lt;p&gt;But back to the task at hand...&lt;/p&gt;
+&lt;h1 id=&quot;html-forms-to-the-rescue&quot;&gt;HTML forms &lt;del&gt;to the rescue!&lt;/del&gt;&lt;/h1&gt;
+&lt;p&gt;The World Wide Web worked fine prior to JavaScript. I&amp;#39;m not sure when HTML forms were added to the HTML &amp;quot;standard&amp;quot;, but for the sake of argument, I&amp;#39;m assuming that forms existed prior to JavaScript being widely supported. Using form submission, it&amp;#39;s possible for browsers to have a two-way communication channel with a web site, so interactive web applications clearly don&amp;#39;t &lt;em&gt;require&lt;/em&gt; JavaScript.&lt;/p&gt;
+&lt;p&gt;Having said that, form submission reloads the entire web page, so the experience is decidedly seamful. Additionally, form submission is user-initiated, so there&amp;#39;s no way for the application to update its UI in the absence of user input.&lt;/p&gt;
+&lt;p&gt;Can we do better?&lt;/p&gt;
+&lt;h1 id=&quot;potential-solution-chunked-transfer-encoding-and-frames&quot;&gt;Potential solution: chunked transfer encoding and frames&lt;/h1&gt;
+&lt;p&gt;I&amp;#39;m not sure where I first heard the story, but there are tales of browser-based, JavaScript-free chat apps that use &lt;a href=&quot;https://en.wikipedia.org/wiki/Chunked_transfer_encoding&quot;&gt;chunked transfer encoding&lt;/a&gt; to append to an HTML page, along with an &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTML/Element/frame&quot;&gt;HTML frame element&lt;/a&gt; that uses form submission to trigger the transfer to said &lt;del&gt;appendages&lt;/del&gt; chunks that are appended to the page.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s unclear to me what the motivation was behind these apps. Did they predate JavaScript? Did they need to support unscriptable browsers? Did their users frequently have JavaScript disabled (perhaps for privacy or security reasons)?&lt;/p&gt;
+&lt;p&gt;Regardless, I see no obvious reason why this approach wouldn&amp;#39;t work for building an interactive web app without JavaScript. Who knows, it might even be possible to use some fancy CSS rules to make it appear as though part of a page is being updated instead of just appended to.&lt;/p&gt;
+&lt;h1 id=&quot;so-does-it-work&quot;&gt;So does it work?&lt;/h1&gt;
+&lt;p&gt;I don&amp;#39;t know! But I&amp;#39;m planning to find out, so stay tuned...&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Creating Windows-style paths (backslash-separated) from pathnames in Common Lisp</title>
 <id>https://log.schemescape.com/posts/lisp/pathnames-on-windows.html</id>
@@ -231,31 +264,6 @@
 &lt;p&gt;The recurring theme I&amp;#39;m noticing with Common Lisp is that it&amp;#39;s easy to mold into new workflows, and these workflows would have been life-changing 20 years ago (and arguably still are notable for their simplicity), but some of the non-Lisp tooling has caught up to (and sometimes surpassed) Common Lisp in the last 5 - 10 years. Not in all cases or in all aspects, but in most of the ones that are important to me (auto-complete, documentation, static checks, debugging).&lt;/p&gt;
 &lt;p&gt;Of course, modern tools come with &amp;quot;modern&amp;quot; system requirements (i.e. unbelievable bloat), so it&amp;#39;s possible that Common Lisp with SLIME is a happy middle ground, with powerful features, and minimal bloat. It doesn&amp;#39;t matter if VS Code can do everything I need with TypeScript if I can&amp;#39;t even get VS Code to run on my laptop!&lt;/p&gt;
 &lt;p&gt;Regardless, I&amp;#39;m still having fun learning Common Lisp and have no plans to abandon it, so I guess in that sense this experiment has been a success.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Lisp Game Jam (Spring 2023)</title>
-<id>https://log.schemescape.com/posts/game-development/lisp-game-jam.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/game-development/lisp-game-jam.html"/>
-<updated>2023-05-26T00:00:00.000Z</updated>
-<summary type="text">Might as well try and make a game in Common Lisp, right?</summary>
-<content type="html">&lt;p&gt;Recently, I&amp;#39;ve been &lt;a href=&quot;https://log.schemescape.com/posts/game-development/../programming-languages/learning-lisp-in-2023.html&quot;&gt;learning Common Lisp&lt;/a&gt; and so I&amp;#39;ve been keeping an eye out for practice projects. Fortunately, as I&amp;#39;m writing this, the &lt;a href=&quot;https://itch.io/jam/spring-lisp-game-jam-2023&quot;&gt;Lisp Game Jam (Spring 2023)&lt;/a&gt; is just about to start, so I guess I&amp;#39;m doing that now.&lt;/p&gt;
-&lt;p&gt;For the time being, I&amp;#39;ll just describe the (tiny) game I have in mind.  I&amp;#39;m not terribly confident that I&amp;#39;ll be able to complete anything within the next ten days, but I&amp;#39;ll give it a try anyway!&lt;/p&gt;
-&lt;h1 id=&quot;a-word-game&quot;&gt;A word game&lt;/h1&gt;
-&lt;p&gt;The goal of the game is to look at a bunch of letters and then, as quickly as possible, find the longest word that can be constructed by drawing from the given set of letters (without replacement). Ideally, this would be a real-time, global competition, but I doubt I&amp;#39;ll be able to get anywhere close to that within 10 days (of roughly 1 - 2 hours per day, at best, of development time).&lt;/p&gt;
-&lt;p&gt;When I originally had this idea, I gave it the intentionally terrible name of &lt;strong&gt;Longle&lt;/strong&gt; (&amp;quot;long&amp;quot; + &amp;quot;Boggle&amp;quot;). Today, I&amp;#39;m thinking I&amp;#39;ll call it &lt;strong&gt;Thirteen Letters&lt;/strong&gt; (actual number subject to change).&lt;/p&gt;
-&lt;h1 id=&quot;plan&quot;&gt;Plan&lt;/h1&gt;
-&lt;p&gt;Here&amp;#39;s my rough plan for implementing this game:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Find or create a word list&lt;/li&gt;
-&lt;li&gt;Consider reducing that list (based on observed word frequencies) to a set of difficult, but reasonable, puzzles&lt;/li&gt;
-&lt;li&gt;Implement a simple terminal version of the game that just records how long it takes for the player to identify the longest word&lt;/li&gt;
-&lt;li&gt;If time permits, create a service to distribute puzzles and record the &lt;em&gt;actual&lt;/em&gt; time taken to get a response&lt;/li&gt;
-&lt;li&gt;If time is abundant, create a service to host global competitions with 30 - 60 second rounds and resulting scoreboards&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h1 id=&quot;progress&quot;&gt;Progress&lt;/h1&gt;
-&lt;p&gt;As of right now (May 26th, at least as far as UTC is concerned), I&amp;#39;m struggling with the first item. The best word lists I&amp;#39;ve found so far have been copyrighted works related to Scrabble. Other than obvious legal risks, these lists also have a cap on the length of words. Most of the other word lists I&amp;#39;ve found contain proper nouns, lack inflected nouns/verbs, or contain huge amounts of questionable &amp;quot;words&amp;quot; (for example: &amp;quot;zzzs&amp;quot;).&lt;/p&gt;
-&lt;p&gt;For now, I think my best bet is to use the public domain &lt;a href=&quot;https://github.com/elasticdog/yawl&quot;&gt;YAWL&lt;/a&gt; word list, possibly filtered by some arbitrary frequency cutoff based on the Google Trillion Word Corpus via &lt;a href=&quot;http://norvig.com/ngrams/&quot;&gt;Peter Norvig&amp;#39;s web site&lt;/a&gt;. After exploring this a bit, it looks like just ensuring the word is in the top ~300,000 most frequent words may be sufficient to get a set of words that I consider to be legitimate.&lt;/p&gt;
 </content>
 </entry>
 </feed>
