@@ -7,8 +7,103 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-10-20T22:20:24.308Z</updated>
+<updated>2023-10-27T05:09:47.245Z</updated>
 
+<entry>
+<title>Building a browser-based app without JavaScript, part 2</title>
+<id>https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js-2.html"/>
+<updated>2023-10-26T00:00:00.000Z</updated>
+<summary type="text">Yes, you can build real-time, interactive browser-based apps without JavaScript. But I wouldn&apos;t suggest using this particular approach.</summary>
+<content type="html">&lt;p&gt;In the &lt;a href=&quot;https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js.html&quot;&gt;last post&lt;/a&gt;, I brainstormed ideas for creating a real-time, interactive browser-based app without using JavaScript (or WebAssembly).&lt;/p&gt;
+&lt;p&gt;In this post, I&amp;#39;ll describe a proof-of-concept that I created for &lt;a href=&quot;https://itch.io/jam/autumn-lisp-game-jam-2023&quot;&gt;Lisp Game Jam (Autumn 2023)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;You can play the game here: &lt;a href=&quot;https://foo.schemescape.com/&quot;&gt;https://foo.schemescape.com/&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
+&lt;p&gt;The most difficult adjective to support without JavaScript is &amp;quot;real-time&amp;quot;. In some cases, &lt;a href=&quot;https://speckyboy.com/pure-css-games/&quot;&gt;CSS itself might be enough&lt;/a&gt; (although I truly hope CSS is not bloated enough for implementing a snake game!).&lt;/p&gt;
+&lt;p&gt;If you don&amp;#39;t need real-time feedback, you can probably get by with regular &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Learn/Forms/Your_first_form&quot;&gt;HTML forms&lt;/a&gt;, &lt;a href=&quot;https://en.wikipedia.org/wiki/Push_technology#Long_polling&quot;&gt;long-polling&lt;/a&gt;, or even &lt;a href=&quot;https://en.wikipedia.org/wiki/Meta_refresh&quot;&gt;meta refresh&lt;/a&gt;. But if you need immediate feedback for both user input and server state updates, avoiding JavaScript can be tricky.&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s what I came up with:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Chunked_transfer_encoding&quot;&gt;HTTP 1.1 chunked transfer encoding&lt;/a&gt;, for progressively appending HTML/CSS&lt;/li&gt;
+&lt;li&gt;HTML forms (inside an &lt;code&gt;&amp;lt;iframe&amp;gt;&lt;/code&gt;), for providing input (without reloading the main page)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I don&amp;#39;t know if this is the best approach (in fact, I doubt it), but it is &lt;em&gt;an&lt;/em&gt; approach that is &amp;quot;good enough&amp;quot; for my terrible game.&lt;/p&gt;
+&lt;h1 id=&quot;architecture&quot;&gt;Architecture&lt;/h1&gt;
+&lt;p&gt;The architecture for my game is pretty simple:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;There&amp;#39;s a table of cells for the game board, each addressable via CSS (I used a class, but probably should have used an id)&lt;/li&gt;
+&lt;li&gt;This is all pushed as an initial chunk, with the stream kept open (and without closing the &lt;code&gt;&amp;lt;body&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;html&amp;gt;&lt;/code&gt; tags)&lt;/li&gt;
+&lt;li&gt;As the game runs, I modify the color of the table cells by pushing additional CSS rules in additional &lt;code&gt;&amp;lt;style&amp;gt;&lt;/code&gt; chunks&lt;/li&gt;
+&lt;li&gt;I also &amp;quot;overwrite&amp;quot; some HTML by defaulting one class to not being shown, with a &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/CSS/:last-of-type&quot;&gt;&lt;code&gt;:last-of-type&lt;/code&gt;&lt;/a&gt; override to show the most recently written element only&lt;/li&gt;
+&lt;li&gt;Input is handled via HTTP post (with a &amp;quot;session id&amp;quot; string) using an HTML form inside an &lt;code&gt;&amp;lt;iframe&amp;gt;&lt;/code&gt; (relegating the &amp;quot;entire page reloads&amp;quot; problem to a frame)&lt;/li&gt;
+&lt;li&gt;The form&amp;#39;s submission button has an &amp;quot;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey&quot;&gt;access key&lt;/a&gt;&amp;quot; for keyboard-only control--this could be useful for games with multiple buttons, although it requires holding down modifier keys (which vary widely based on operating system and browser)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;examples&quot;&gt;Examples&lt;/h1&gt;
+&lt;h2 id=&quot;table&quot;&gt;Table&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;table&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;tbody&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;tr&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;s29_0&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;&amp;amp;nbsp;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- Row 29, column 0 --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;s29_1&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;&amp;amp;nbsp;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- Row 29, column 1 --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;s29_2&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;&amp;amp;nbsp;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- etc. --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;s29_3&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;&amp;amp;nbsp;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt;&amp;gt;&lt;/span&gt;
+...
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;tr&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;tbody&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;table&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;game-board-visual-updates&quot;&gt;Game board visual updates&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;language-css&quot;&gt;&lt;span class=&quot;hljs-selector-class&quot;&gt;.s9_12&lt;/span&gt; { &lt;span class=&quot;hljs-attribute&quot;&gt;background-color&lt;/span&gt;: yellow }&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- Change row 9, col 12 to yellow --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;language-css&quot;&gt;&lt;span class=&quot;hljs-selector-class&quot;&gt;.s6_12&lt;/span&gt; { &lt;span class=&quot;hljs-attribute&quot;&gt;background-color&lt;/span&gt;: blue }&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note: I should have used ids instead of classes (since they&amp;#39;re unique elements). Also, I could have consolidated multiple same-frame updates into a single &lt;code&gt;&amp;lt;style&amp;gt;&lt;/code&gt; tag.&lt;/p&gt;
+&lt;h2 id=&quot;overwriting-the-last-bit-of-html-the-score&quot;&gt;&amp;quot;Overwriting&amp;quot; the last bit of HTML (the score)&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-css&quot;&gt;&lt;span class=&quot;hljs-selector-class&quot;&gt;.score&lt;/span&gt; { &lt;span class=&quot;hljs-attribute&quot;&gt;display&lt;/span&gt;: none }
+&lt;span class=&quot;hljs-selector-class&quot;&gt;.score&lt;/span&gt;&lt;span class=&quot;hljs-selector-pseudo&quot;&gt;:last-of-type&lt;/span&gt; { &lt;span class=&quot;hljs-attribute&quot;&gt;display&lt;/span&gt;: block }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;score&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;Score: 0&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;p&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- Initial score --&amp;gt;&lt;/span&gt;
+...
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;score&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;Score: 1&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;p&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- Later, this score is shown instead --&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;input-frame&quot;&gt;Input frame&lt;/h2&gt;
+&lt;p&gt;My game only uses a single button, but multiple buttons are easy to support using distinct forms with hidden inputs. In fact, I used multiple buttons until I decided to simplify at the very end.&lt;/p&gt;
+&lt;p&gt;Parent page:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;iframe&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;controls?id=cbecixentpsc&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;iframe&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Frame body:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;form&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;action&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;action&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;method&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;post&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- This id links input to an active instance of the game --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;hidden&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;cbecixentpsc&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;cbecixentpsc&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- This was for supporting multiple buttons --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;hidden&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;action&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;clockwise&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- The actual submit button that is shown in-game --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;submit&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;↻&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;accesskey&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;form&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;id&lt;/code&gt; parameter is tracked on the server to link input to a particular HTTP request (which runs an entire round of the game).&lt;/p&gt;
+&lt;h1 id=&quot;analysis&quot;&gt;Analysis&lt;/h1&gt;
+&lt;p&gt;Give the game a try! If your latency isn&amp;#39;t too high, then it&amp;#39;s somewhat playable.&lt;/p&gt;
+&lt;p&gt;Of course, I wouldn&amp;#39;t recommend this approach because it has a number of drawbacks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;As noted, latency is a problem because &lt;em&gt;every user input event&lt;/em&gt; is a new HTTP post -- this is a nontrivial amount of overhead&lt;/li&gt;
+&lt;li&gt;Also, successive button presses are slow because the entire input frame has to be reloaded&lt;/li&gt;
+&lt;li&gt;The server can&amp;#39;t handle too many concurrent players because each game holds an HTTP request open for the entire length of the game (I&amp;#39;m using a web server that dedicates a thread to each request, although many web servers don&amp;#39;t do this anymore)&lt;/li&gt;
+&lt;li&gt;Updating the game board requires evaluating CSS rules, which is obviously less efficient than just drawing, say, a canvas square&lt;/li&gt;
+&lt;li&gt;&amp;quot;Normal&amp;quot; keyboard input doesn&amp;#39;t really work since HTML can only use access keys (which require holding down some combination of Ctrl/Shift/Alt/Meta/Command)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;But it &lt;em&gt;does&lt;/em&gt; (mostly) work! And it gave me an excuse to mess around with Lisp and participate in a game jam.&lt;/p&gt;
+&lt;p&gt;Overall, I&amp;#39;m calling this a success since it answered my original question... even if it&amp;#39;s not a technique I&amp;#39;d recommend.&lt;/p&gt;
+&lt;h1 id=&quot;addendum&quot;&gt;Addendum&lt;/h1&gt;
+&lt;h2 id=&quot;achievement-not-unlocked&quot;&gt;Achievement &lt;em&gt;not&lt;/em&gt; unlocked&lt;/h2&gt;
+&lt;p&gt;Unfortunately, I wasn&amp;#39;t able to achieve one secret goal I had in mind: getting the game to run in a minimalist, no-JavaScript browser, like &lt;a href=&quot;https://dillo.org/&quot;&gt;Dillo&lt;/a&gt;. Apparently Dillo doesn&amp;#39;t support inline frames, so the control scheme doesn&amp;#39;t really work (unless you have another window open to the frame). Additionally, Dillo didn&amp;#39;t seem to like my &amp;quot;streaming CSS&amp;quot; approach--the entire game board just remained its initial blue color.&lt;/p&gt;
+&lt;p&gt;Oh well. At least I tried.&lt;/p&gt;
+&lt;h2 id=&quot;nginx&quot;&gt;nginx&lt;/h2&gt;
+&lt;p&gt;In order to support HTTPS using nginx, I had to tweak a couple of nginx settings. I&amp;#39;m noting them down here for reference:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-attribute&quot;&gt;proxy_http_version&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;.&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;; &lt;span class=&quot;hljs-comment&quot;&gt;# nginx default is 1.0, but chunking is a 1.1 feature&lt;/span&gt;
+&lt;span class=&quot;hljs-attribute&quot;&gt;proxy_buffering&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;off&lt;/span&gt;; &lt;span class=&quot;hljs-comment&quot;&gt;# Necessary to ensure chunks are forwarded as soon as received&lt;/span&gt;
+&lt;span class=&quot;hljs-attribute&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;off&lt;/span&gt;; &lt;span class=&quot;hljs-comment&quot;&gt;# This is actually the default, chunking only worked with gzip disabled&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry>
 <entry>
 <title>Building a browser-based app without JavaScript</title>
 <id>https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js.html</id>
@@ -167,103 +262,6 @@
 &lt;/ol&gt;
 &lt;p&gt;That&amp;#39;s more work than I had anticipated and the next to last step (&amp;quot;hoping&amp;quot; Proton supports it) is questionable, but I think it&amp;#39;s the simplest option that is best aligned with my interests.&lt;/p&gt;
 &lt;p&gt;Hopefully I don&amp;#39;t regret this decision!&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Retrospective: Lisp Game Jam (Spring 2023)</title>
-<id>https://log.schemescape.com/posts/game-development/lisp-game-jam-2.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/game-development/lisp-game-jam-2.html"/>
-<updated>2023-06-13T00:00:00.000Z</updated>
-<summary type="text">I managed to implement a multiplayer browser-based game in Common Lisp!</summary>
-<content type="html">&lt;p&gt;This is a follow-up to &lt;a href=&quot;https://log.schemescape.com/posts/game-development/lisp-game-jam.html&quot;&gt;my previous post about discovering Lisp Game Jame (Spring 2023)&lt;/a&gt;. In the previous post, I described my word game and implementation approach. This post covers how it all went, along with some lessons learned and general thoughts about Common Lisp.&lt;/p&gt;
-&lt;p&gt;You can play the game here (but note that it&amp;#39;s designed for multiplayer):&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://jaredkrinke.itch.io/13l/&quot;&gt;https://jaredkrinke.itch.io/13l/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Source code is &lt;a href=&quot;https://github.com/jaredkrinke/thirteen-letters/&quot;&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
-&lt;p&gt;I&amp;#39;ve been &lt;a href=&quot;https://log.schemescape.com/posts/game-development/../programming-languages/learning-lisp-in-2023.html&quot;&gt;learning Common Lisp&lt;/a&gt; and &lt;a href=&quot;https://itch.io/jam/spring-lisp-game-jam-2023&quot;&gt;Lisp Game Jam (Spring 2023)&lt;/a&gt; was an appropriate motivator. I wanted to make a simple word scramble game that was played in real time against other players, inside the browser.&lt;/p&gt;
-&lt;h1 id=&quot;the-challenge&quot;&gt;The challenge&lt;/h1&gt;
-&lt;p&gt;I set a challenge for myself to write &lt;em&gt;the entire game&lt;/em&gt; in Common Lisp. Specifically, I was going to use various domain-specific/template languages to produce HTML, CSS, and JavaScript for use in the browser. (Running Common Lisp on the back end was, and is, trivial.)&lt;/p&gt;
-&lt;p&gt;After some searching, I settled on the following tools/libraries:&lt;/p&gt;
-&lt;h2 id=&quot;front-end&quot;&gt;Front end&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://parenscript.common-lisp.dev/&quot;&gt;Parenscript&lt;/a&gt; for translating Common Lisp to JavaScript&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/ruricolist/spinneret&quot;&gt;Spinneret&lt;/a&gt; for creating HTML from s-expressions and CL code&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/Inaimathi/cl-css&quot;&gt;cl-css&lt;/a&gt; for creating CSS&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;back-end&quot;&gt;Back end&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://edicl.github.io/hunchentoot/&quot;&gt;Hunchentoot&lt;/a&gt; as a base web server&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/joaotavora/hunchensocket&quot;&gt;Hunchensocket&lt;/a&gt; for handling WebSockets on the server side&lt;/li&gt;
-&lt;li&gt;&lt;del&gt;&lt;a href=&quot;https://github.com/hankhero/cl-json&quot;&gt;cl-json&lt;/a&gt; for encoding/decoding JSON&lt;/del&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://phmarek.github.io/yason/&quot;&gt;YASON&lt;/a&gt; for encoding/decoding JSON (cl-json doesn&amp;#39;t support non-BMP Unicode)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.sbcl.org/&quot;&gt;SBCL&lt;/a&gt; for running the server (sitting behind nginx for TLS support)  and compiling everything&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;day-by-day-progress&quot;&gt;Day-by-day progress&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;May 26: Generated a word list (most frequent words from the YAWL corpus)&lt;/li&gt;
-&lt;li&gt;May 27: Implemented command line game loop&lt;/li&gt;
-&lt;li&gt;May 28: Investigated binary distribution options (static SBCL/ECL builds, AppImages), eventually giving up&lt;/li&gt;
-&lt;li&gt;May 29: Prepared backup submission (the command line version)&lt;/li&gt;
-&lt;li&gt;May 30: Investigated libraries for browser-based version (Hunchensocket, Lisp in Parallel, Parenscript, Spinneret, cl-json, cl-css)&lt;/li&gt;
-&lt;li&gt;May 31: Partially implemented WebSocket-based server&lt;/li&gt;
-&lt;li&gt;June 1: Completed server (mostly)&lt;/li&gt;
-&lt;li&gt;June 2: Discovered ngrok free tier couldn&amp;#39;t support public WebSockets, settling on standing up a simple VPS instead&lt;/li&gt;
-&lt;li&gt;June 3: Implemented basic HTML+JavaScript front end&lt;/li&gt;
-&lt;li&gt;June 4: Added a countdown timer, hall of fame, and mobile formatting&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;(After the jam ended: bug fixes, WebSocket reconnecting, input validation, code cleanup.)&lt;/p&gt;
-&lt;h1 id=&quot;results&quot;&gt;Results&lt;/h1&gt;
-&lt;p&gt;Playing the completed entry myself confirmed my original suspicion that the game is really only fun when there&amp;#39;s someone else to compete against.&lt;/p&gt;
-&lt;p&gt;I had hoped that the time-limited nature of the voting period would mean that people would end up connecting at the same time as others, but that ended up being wishful thinking. With 30 submissions, each game probably only got a few minutes of playing time, so there were only a handful of times when players overlapped and actually got to compete (often against me, since I connected very frequently). It &lt;em&gt;did&lt;/em&gt; sound like those players had fun, though!&lt;/p&gt;
-&lt;p&gt;Even worse, when someone was streaming their playthroughs of all the submissions, I was sitting and waiting to hop in and give the streamer some competition, but they ended up breezing through my game in the 5 minutes I happened to be away from my computer! Very poor timing on my part...&lt;/p&gt;
-&lt;p&gt;Despite the lack of ideal (multiplayer) conditions, my entry had generally positive feedback, with most praise being related to:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Making a real-time multiplayer game that runs in the browser&lt;/li&gt;
-&lt;li&gt;Using Common Lisp everywhere&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I was going to be happy with an overall placement in the middle, but Thirteen Letters actually managed to end up in the top third. Not too bad!&lt;/p&gt;
-&lt;h1 id=&quot;lessons-learned&quot;&gt;Lessons learned&lt;/h1&gt;
-&lt;h2 id=&quot;multiplayer-games-need-multiple-players&quot;&gt;Multiplayer games need multiple players&lt;/h2&gt;
-&lt;p&gt;I knew this intuitively going into the jam. I even had a plan to pop up a notification on my phone whenever someone connected, so that I could hop in and play against them, but I wasn&amp;#39;t able to implement it in time.&lt;/p&gt;
-&lt;p&gt;In retrospect, implementing notifications should have been my top priority after getting the game working. Instead, I focused on creating a &amp;quot;hall of fame&amp;quot; so that players could compete asynchronously on the leaderboard, but this wasn&amp;#39;t actually interesting because it was just about play time (how many rounds they sat through by themself) and not skill.&lt;/p&gt;
-&lt;p&gt;If I ever make another multipler game jam entry, I&amp;#39;ll focus on ensuring people are able to actually play against an opponent (even if I have to secretly create a bot or just play the game &lt;em&gt;all day long&lt;/em&gt;).&lt;/p&gt;
-&lt;h2 id=&quot;repl-driven-developmentdeveloping-in-production&quot;&gt;REPL-driven development/developing in production&lt;/h2&gt;
-&lt;p&gt;Given that my entire motivation to learn Common Lisp was to experiment with REPL-driven development, I decided to try and develop and test as much as possible using Emacs SLIME (over a Swank connection).&lt;/p&gt;
-&lt;p&gt;Overall, having a direct connection to the server was helpful for monitoring activity, enabling/disabling logging, and making small tweaks (e.g. changing formatting or adding alerts).&lt;/p&gt;
-&lt;p&gt;Notably, as the deadline for the jam approached, I decided to take advantage of the client-server architecture and make it possible to &amp;quot;cheat&amp;quot; the deadline a bit: I added a channel for pushing raw HTML from the server to the client. Since the server could be modified at any time, this would theoretically allow for updating part of the game post-deadline. I didn&amp;#39;t end up needing to use this facility, but it &lt;em&gt;did&lt;/em&gt; end up becoming the &amp;quot;hall of fame&amp;quot; section at the bottom of the page. (I also planned to use it as an easter egg while someone was streaming the game, but as noted above, I missed that opportunity.)&lt;/p&gt;
-&lt;p&gt;Unfortunately, I also hit a couple of snags with REPL-driven development:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Obviously, you have to &lt;em&gt;plan&lt;/em&gt; if you want to keep your code and your live service in sync&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;Sometimes I&amp;#39;d modify a function or add a parameter and then forget to send it to the live service, leading to errors in the production service&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ol&gt;
-&lt;li&gt;Even worse, one time I connected to the live service via Swank, modified a few things, and then suspended my laptop--this then caused &lt;em&gt;every&lt;/em&gt; HTTP request to hang while Swank was trying to log to my unresponsive laptop--oops!&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;On the whole, &amp;quot;developing in production&amp;quot; isn&amp;#39;t generally a good idea, but just having the ability to connect and inspect things every now and then was invaluable. This was my first time having deep, read/write access to a running service, and it&amp;#39;s something I&amp;#39;d like to use again in the future--at least for hobby projects! Connecting a REPL to an important/income-generating service would require careful planning.&lt;/p&gt;
-&lt;h2 id=&quot;ngrok-for-websockets-or-not&quot;&gt;ngrok for WebSockets (or not)&lt;/h2&gt;
-&lt;p&gt;Despite ngrok (a service for exposing local endpoints publicly) officially supporting WebSockets, I&amp;#39;ve come to the conclusion that their &lt;em&gt;free tier&lt;/em&gt; has no such support. The reason for this is that it appears to sniff the browser user agent string and then add an interstitial HTML page to the HTTP Upgrade request. Obviously, the WebSocket client doesn&amp;#39;t understand HTML, and just bails out with an error.&lt;/p&gt;
-&lt;p&gt;ngrok is great, but in this case I ended up having to spin up a VPS in short order to get my WebSocket server working properly (an unwelcome surprise during a short game jam!).&lt;/p&gt;
-&lt;h2 id=&quot;parenscript&quot;&gt;Parenscript&lt;/h2&gt;
-&lt;p&gt;Parenscript seems like a great tool for:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;People who are very familiar with Common Lisp and want to translate idioms/code into JavaScript&lt;/li&gt;
-&lt;li&gt;People targeting very old versions of JavaScript (back before &lt;code&gt;let&lt;/code&gt; was added, for instance)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Given that I&amp;#39;m new to Common Lisp and have a lot of experience with JavaScript and TypeScript, I wasn&amp;#39;t really the target market for Parenscript. I was able to stumble through it, but the resulting code make it obvious I was thinking in JavaScript and writing in Parenscript.&lt;/p&gt;
-&lt;p&gt;The most interesting part of Parenscript for me was the ability to define macros. For instance, I added a macro to wrap code in a try-catch that logged to HTML (so I could find errors even when no JavaScript debugger was available). (Note that &lt;code&gt;@&lt;/code&gt; in function position is used for accessing object properties in Parenscript, e.g. &lt;code&gt;(@ window onerror)&lt;/code&gt; would translate to &lt;code&gt;window.onerror&lt;/code&gt;.)&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-lisp&quot;&gt;(&lt;span class=&quot;hljs-name&quot;&gt;ps&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;:defpsmacro&lt;/span&gt; watch (&lt;span class=&quot;hljs-name&quot;&gt;&amp;amp;body&lt;/span&gt; body)
-  `(ps&lt;span class=&quot;hljs-symbol&quot;&gt;:try&lt;/span&gt; (progn ,@body) (:catch (e) (error (+ (@ e message) &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot; (&amp;quot;&lt;/span&gt; (@ e line-number) &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;)&amp;quot;&lt;/span&gt;)))))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Obviously, this could be done in plain JavaScript with a regular function that takes an anonymous function for the body, but I might as well use macros while they&amp;#39;re available!&lt;/p&gt;
-&lt;h2 id=&quot;generating-html-and-css&quot;&gt;Generating HTML and CSS&lt;/h2&gt;
-&lt;p&gt;Being able to use concise s-expressions for generating HTML and CSS felt comfortable (and much more productive than writing HTML in Notepad, as I&amp;#39;d done 20 years prior). But HTML and CSS tooling have come a &lt;em&gt;long&lt;/em&gt; way and these days I pretty much expect context-sensitive auto-complete.&lt;/p&gt;
-&lt;p&gt;In the end, I like the look of s-expressions, but I don&amp;#39;t think they actually made me more productive than I&amp;#39;d be in, say VS Code.&lt;/p&gt;
-&lt;h1 id=&quot;final-thoughts&quot;&gt;Final thoughts&lt;/h1&gt;
-&lt;p&gt;The recurring theme I&amp;#39;m noticing with Common Lisp is that it&amp;#39;s easy to mold into new workflows, and these workflows would have been life-changing 20 years ago (and arguably still are notable for their simplicity), but some of the non-Lisp tooling has caught up to (and sometimes surpassed) Common Lisp in the last 5 - 10 years. Not in all cases or in all aspects, but in most of the ones that are important to me (auto-complete, documentation, static checks, debugging).&lt;/p&gt;
-&lt;p&gt;Of course, modern tools come with &amp;quot;modern&amp;quot; system requirements (i.e. unbelievable bloat), so it&amp;#39;s possible that Common Lisp with SLIME is a happy middle ground, with powerful features, and minimal bloat. It doesn&amp;#39;t matter if VS Code can do everything I need with TypeScript if I can&amp;#39;t even get VS Code to run on my laptop!&lt;/p&gt;
-&lt;p&gt;Regardless, I&amp;#39;m still having fun learning Common Lisp and have no plans to abandon it, so I guess in that sense this experiment has been a success.&lt;/p&gt;
 </content>
 </entry>
 </feed>
