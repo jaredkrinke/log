@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-10-27T05:09:47.245Z</updated>
+<updated>2023-10-27T22:29:33.115Z</updated>
 
 <entry>
 <title>Building a browser-based app without JavaScript, part 2</title>
@@ -18,6 +18,7 @@
 <content type="html">&lt;p&gt;In the &lt;a href=&quot;https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js.html&quot;&gt;last post&lt;/a&gt;, I brainstormed ideas for creating a real-time, interactive browser-based app without using JavaScript (or WebAssembly).&lt;/p&gt;
 &lt;p&gt;In this post, I&amp;#39;ll describe a proof-of-concept that I created for &lt;a href=&quot;https://itch.io/jam/autumn-lisp-game-jam-2023&quot;&gt;Lisp Game Jam (Autumn 2023)&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;You can play the game here: &lt;a href=&quot;https://foo.schemescape.com/&quot;&gt;https://foo.schemescape.com/&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Source code is here: &lt;a href=&quot;https://github.com/jaredkrinke/cl-stuff/tree/main/foolander&quot;&gt;https://github.com/jaredkrinke/cl-stuff/tree/main/foolander&lt;/a&gt;&lt;/p&gt;
 &lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
 &lt;p&gt;The most difficult adjective to support without JavaScript is &amp;quot;real-time&amp;quot;. In some cases, &lt;a href=&quot;https://speckyboy.com/pure-css-games/&quot;&gt;CSS itself might be enough&lt;/a&gt; (although I truly hope CSS is not bloated enough for implementing a snake game!).&lt;/p&gt;
 &lt;p&gt;If you don&amp;#39;t need real-time feedback, you can probably get by with regular &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Learn/Forms/Your_first_form&quot;&gt;HTML forms&lt;/a&gt;, &lt;a href=&quot;https://en.wikipedia.org/wiki/Push_technology#Long_polling&quot;&gt;long-polling&lt;/a&gt;, or even &lt;a href=&quot;https://en.wikipedia.org/wiki/Meta_refresh&quot;&gt;meta refresh&lt;/a&gt;. But if you need immediate feedback for both user input and server state updates, avoiding JavaScript can be tricky.&lt;/p&gt;
