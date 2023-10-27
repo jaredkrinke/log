@@ -9,6 +9,8 @@ In this post, I'll describe a proof-of-concept that I created for [Lisp Game Jam
 
 **You can play the game here: [https://foo.schemescape.com/](https://foo.schemescape.com/)**
 
+Source code is here: [https://github.com/jaredkrinke/cl-stuff/tree/main/foolander](https://github.com/jaredkrinke/cl-stuff/tree/main/foolander)
+
 # Recap
 The most difficult adjective to support without JavaScript is "real-time". In some cases, [CSS itself might be enough](https://speckyboy.com/pure-css-games/) (although I truly hope CSS is not bloated enough for implementing a snake game!).
 
