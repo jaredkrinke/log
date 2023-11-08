@@ -7,8 +7,81 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-10-27T22:29:33.115Z</updated>
+<updated>2023-11-08T18:09:51.714Z</updated>
 
+<entry>
+<title>Building the fastest static site generator... or not</title>
+<id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-4.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-4.html"/>
+<updated>2023-11-08T00:00:00.000Z</updated>
+<summary type="text">This is a personal anecdote about the struggle to avoid over-engineering a static site generator.</summary>
+<content type="html">&lt;p&gt;Well, I did it.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I have successfully staved off the urge (at least temporarily) to create &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/pre-markdown.html&quot;&gt;yet&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/md2blog-design.html&quot;&gt;another&lt;/a&gt; static site generator&lt;/strong&gt; by instead making &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt; (my zero-config dev blog generator) &lt;em&gt;just fast enough&lt;/em&gt; for my workflow that it seems pointless to bother improving upon its performance.&lt;/p&gt;
+&lt;p&gt;Spoiler: adding trivial caching and bypassing the file system shrunk live rebuild times by ~80%--down to &lt;strong&gt;50 milliseconds&lt;/strong&gt; on my (decade old) desktop computer. Updates now appear in roughly the amount of time it takes me to shift the focus of my eyes from my text editor to the adjacent browser.&lt;/p&gt;
+&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
+&lt;p&gt;Possibly as a reaction to &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../game-development/web-game-on-steam-for-linux-2.html&quot;&gt;releasing a piece of software based on Electron&lt;/a&gt;, I&amp;#39;ve been playing with a &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-4.html&quot;&gt;minimal development environment, running on an old netbook&lt;/a&gt;. Unfortunately, my static site generator was taking roughly 6 seconds (on the netbook) to perform live rebuilds of my site (~90 pages), and I&amp;#39;m generally not patient with poorly optimized software.&lt;/p&gt;
+&lt;p&gt;Fortunately, after &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-3.html&quot;&gt;a few tweaks&lt;/a&gt;, I was able to reduce that time down to around 900 milliseconds. Sub-second updates are acceptable (impressive, even--on a netbook), but I couldn&amp;#39;t shake the feeling that it could be &lt;em&gt;a lot&lt;/em&gt; faster.&lt;/p&gt;
+&lt;h1 id=&quot;plans-for-a-new-static-site-generator&quot;&gt;Plans for a new static site generator&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;The most obvious way to speed up rebuilds of a static site is to avoid doing unnecessary work&lt;/strong&gt;. Given that &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html&quot;&gt;a previous experiment of mine&lt;/a&gt; showed it was only necessary to rebuild roughly 5 pages when updating (or adding) a single blog post, I started making plans for an extensible static site generator (similar to &lt;a href=&quot;https://github.com/jaredkrinke/goldsmith&quot;&gt;Goldsmith&lt;/a&gt;/&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/metalsmith.html&quot;&gt;Metalsmith&lt;/a&gt;) &lt;em&gt;with an accurate dependency graph&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Since I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/learning-lisp-in-2023.html&quot;&gt;learning Lisp&lt;/a&gt;, I started planning to rebuild md2blog in Common Lisp. With an accurate dependency graph, compilation to native code, and the ability to process Markdown/syntax highlighting in parallel, I was fairly certain I could significantly improve live rebuild times.&lt;/p&gt;
+&lt;p&gt;Additionally, Common Lisp would trivially allow for beautiful s-expression-based templates, interactive debugging and introspection, and even automatic detection of pipeline/code updates.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I could build the most extensible--and fastest--static site generator ever!&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&quot;or-i-could-do-something-else&quot;&gt;Or I could do something else&lt;/h1&gt;
+&lt;p&gt;But I already have a perfectly functional (and tolerably fast) static site generator. &lt;strong&gt;And I&amp;#39;m (nearly) the only user&lt;/strong&gt;. Is it really a good use of my time to build the same thing, just faster and in Lisp? It would certainly be educational, and a great way to learn Common Lisp, but finding Common Lisp libraries for Markdown processing, syntax highlighting, JSON validation, cache storage, and file system monitoring sounds... daunting.&lt;/p&gt;
+&lt;p&gt;I still maintain that static site generators are a perfect first project for learning a programming language (and its ecosystem). It forces you to interact with the file system, understand data flows, find relevant libraries, and maybe even build a web server. In the end, you can produce a fast and efficient web site.&lt;/p&gt;
+&lt;p&gt;But I&amp;#39;ve already done this at least four times and I&amp;#39;m probably past the point of diminishing returns. Is this a project that&amp;#39;s really worth spending a few weeks of my spare time on?&lt;/p&gt;
+&lt;p&gt;Analogous to speeding up a static site generator, &lt;strong&gt;the most obvious way to speed up a &lt;em&gt;software project&lt;/em&gt; is to avoid doing unnecessary work&lt;/strong&gt; (i.e. avoid starting over from scratch). So I refocused my efforts on wringing maximal performance from md2blog, while staying within its existing design constraints.&lt;/p&gt;
+&lt;h2 id=&quot;an-epiphany-around-caching&quot;&gt;An epiphany around caching&lt;/h2&gt;
+&lt;p&gt;What if, instead of making a really smart cache, I made a really dumb one?&lt;/p&gt;
+&lt;p&gt;While planning a scheme for reliably caching the results of arbitrary steps in the processing pipeline (specifically, deciding between simply using files&amp;#39; &amp;quot;last modified time&amp;quot; vs. using their actual content--or a hash--to detect changes), I realized that &lt;strong&gt;most of the challenges evaporated if I scoped the cache a single run of the tool&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;As noted in a previous post, my primary performance-sensitive workflow is:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Run md2blog as a live-reloading server&lt;/li&gt;
+&lt;li&gt;Edit a blog post&lt;/li&gt;
+&lt;li&gt;Hit Ctrl+S in my text editor&lt;/li&gt;
+&lt;li&gt;Wait for updated content to render in my browser&lt;/li&gt;
+&lt;li&gt;Go to 2&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I.e. &lt;strong&gt;it&amp;#39;s all one run of md2blog&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;As an experiment, I added a trivial in-memory Markdown cache and found that this One Weird Trick removed plugin processing as the primary bottleneck. The largest remaining bottleneck was the file system itself (writing out all the file contents to disk).&lt;/p&gt;
+&lt;h2 id=&quot;an-epiphany-around-the-file-system&quot;&gt;An epiphany around the file system&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Why am I even waiting on the file system?&lt;/strong&gt; md2blog reads in files and then all subsequent processing is done in memory. Since I&amp;#39;m already running my own web server, &lt;strong&gt;I can just serve HTTP requests straight out of memory&lt;/strong&gt; while files are written to disk in the background!&lt;/p&gt;
+&lt;p&gt;That removed the final obvious bottleneck.&lt;/p&gt;
+&lt;h1 id=&quot;results&quot;&gt;Results&lt;/h1&gt;
+&lt;p&gt;Here&amp;#39;s a table of approximate &amp;quot;live rebuild&amp;quot; times from:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;md2blog 1.1.1: no optimizations whatsoever&lt;/li&gt;
+&lt;li&gt;md2blog 1.2.0: syntax highlighting cached and link-checking moved to the background&lt;/li&gt;
+&lt;li&gt;md2blog 1.2.2 (new): Markdown cached and file system output moved to the background&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;md2blog version&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;Netbook (ms)&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;Desktop (ms)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;v1.1.1&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;6000&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;1200&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;v1.2.0&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;900&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;190&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;v1.2.2&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;200&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;50&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;As noted in the spoiler, on my desktop computer (with an 11 year-old processor), updates appear almost instantaneously (fortunately, my site has simple HTML and no JavaScript, so rendering is also fast).&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m fairly certain this is still &lt;em&gt;not&lt;/em&gt; the fastest static site generator in existence. Maybe the fastest full-featured, JavaScript-based one? Regardless, it is clearly &lt;em&gt;fast enough&lt;/em&gt;--at least for now.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Building a browser-based app without JavaScript, part 2</title>
 <id>https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js-2.html</id>
@@ -209,60 +282,6 @@
 &lt;p&gt;This Linux port also resolved &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html#should-i-port-the-steam-version-of-the-game-to-linux&quot;&gt;one of my open questions&lt;/a&gt; around what to do with SIC-1. And, of course, now people on a free OS can play my game, &lt;em&gt;with friend leaderboards&lt;/em&gt;. I think the peak number of concurrent Linux players was roughly 3, which is pretty high for a game that only ever peaked at 10 concurrent players on Windows.&lt;/p&gt;
 &lt;h1 id=&quot;up-next&quot;&gt;Up next...&lt;/h1&gt;
 &lt;p&gt;That&amp;#39;s all for the Linux port! Next, I&amp;#39;m planning to provide an update on how SIC-1&amp;#39;s release has been going. Spoiler: it finally met my own internal bar for success!&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Porting a browser-based game to Steam... on Linux</title>
-<id>https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux.html"/>
-<updated>2023-07-10T00:00:00.000Z</updated>
-<summary type="text">I ported a web game to Steam, but it only works on Windows. Can I get it to run on Linux?</summary>
-<content type="html">&lt;p&gt;Last year, I &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html&quot;&gt;ported my single-instruction programming game to Steam&lt;/a&gt;, but I &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html#should-i-port-the-steam-version-of-the-game-to-linux&quot;&gt;felt bad that it didn&amp;#39;t run on Linux&lt;/a&gt; (because I chose to use Windows-only &lt;a href=&quot;https://developer.microsoft.com/en-us/microsoft-edge/webview2/&quot;&gt;WebView2&lt;/a&gt; to avoid using Electron). I&amp;#39;d like to rectify this situation, but it&amp;#39;s testing my patience.&lt;/p&gt;
-&lt;h1 id=&quot;original-plan&quot;&gt;Original plan&lt;/h1&gt;
-&lt;p&gt;From the beginning, I wanted to avoid using Electron because it&amp;#39;s inherently inefficient (it basically ships an entire Node+Chromium browser runtime alongside the app)... but for games it&amp;#39;s probably fine. No one is going to notice or care that a game on Steam is 100 MB instead of 10 MB.&lt;/p&gt;
-&lt;p&gt;So my original plan was to port my game to Electron, add &lt;a href=&quot;https://github.com/greenheartgames/greenworks&quot;&gt;Greenworks&lt;/a&gt; (a Steam integration library), and release a native Linux version on Steam.&lt;/p&gt;
-&lt;h1 id=&quot;but&quot;&gt;But...&lt;/h1&gt;
-&lt;p&gt;Unfortunately, it turns out that Greenworks is no longer maintained and (more importantly) it doesn&amp;#39;t support friend leaderboards. Given that friend leaderboards are arguably the most enticing integration point with Steam for a zachlike, this is a big problem.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m not opposed to learning new technologies for educational purposes, but learning about &lt;a href=&quot;https://nodejs.org/api/addons.html&quot;&gt;Node native addons&lt;/a&gt; (which version of the API? I have no idea) and &lt;a href=&quot;https://www.electronjs.org/docs/latest/tutorial/using-native-node-modules&quot;&gt;rebuilding them for Electron&amp;#39;s incompatible ABI&lt;/a&gt; does not sound &lt;em&gt;at all&lt;/em&gt; enjoyable to me at the moment. If I have to patch Greenworks, I&amp;#39;ll do it, but I&amp;#39;d prefer a solution that is better aligned with my current interests.&lt;/p&gt;
-&lt;h1 id=&quot;options&quot;&gt;Options&lt;/h1&gt;
-&lt;p&gt;Speaking of solutions, what other options do I have to bring SIC-1 to Linux on Steam? The game is implemented in TypeScript, using HTML+CSS for the UI, all bundled using Parcel.&lt;/p&gt;
-&lt;p&gt;A few potential approaches and some commentary follow.&lt;/p&gt;
-&lt;h2 id=&quot;electron&quot;&gt;Electron&lt;/h2&gt;
-&lt;p&gt;Electron is nice because it works consistently across operating systems (and Linux distributions). Some initial testing also indicates that Electron-based games on Windows can run on Linux via Proton.&lt;/p&gt;
-&lt;p&gt;The biggest downside to Electron (other than its immense size) is that it&amp;#39;s completely unnecessary (all Steam-supported operating systems already contain a native browser). I also suspect that as Electron adds more script isolation features it will become even more unwieldy for simple web games.&lt;/p&gt;
-&lt;p&gt;As far as interfacing with Steam&amp;#39;s API, there are a few options:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Extend Greenworks to support friend leaderboards (pros: probably the least new code; cons: requires learning about a new platform I don&amp;#39;t have any interest in, Node native addons)&lt;/li&gt;
-&lt;li&gt;Create a shared library that exposes necessary Steam API functionality as simple C functions and then use one of Node&amp;#39;s foreign function interfaces to call those functions from the Windows build, using Proton on Linux (pros: might be able to reuse existing C++ code from the WebView2 version; cons: translating WebView2&amp;#39;s Windows Runtime/VARIANT structure-based API into plain C functions could get tricky)&lt;/li&gt;
-&lt;li&gt;Implement the existing Steam integration code on Linux, ideally using a unifying cross-platform synchronization library (pros: native Linux binaries; cons: requires rewriting the entire Steam integration library)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;native-webview&quot;&gt;Native WebView&lt;/h2&gt;
-&lt;p&gt;I could shrink the disk and memory footprint by using native WebViews, of course (via &lt;a href=&quot;https://tauri.app/&quot;&gt;Tauri&lt;/a&gt;, &lt;a href=&quot;https://neutralino.js.org/&quot;&gt;Neutralino.js&lt;/a&gt;, or &lt;a href=&quot;https://github.com/webview/webview&quot;&gt;webview&lt;/a&gt;). Steam integration would likely require a full rewrite, however.&lt;/p&gt;
-&lt;p&gt;This feels like The Right Thing To Do because it removes Electron-related bloat, but then I&amp;#39;m just trading efficiency for limited functionality and a compatibility can of worms. Notably, Steam&amp;#39;s Linux Runtime doesn&amp;#39;t include a native WebView library, so I&amp;#39;d have to package one with the game, which defeats the entire purpose of using a native library.&lt;/p&gt;
-&lt;p&gt;In the long term, I like this approach because it would enable efficiently shipping the game in downloadable form on other operating systems (outside of Steam).&lt;/p&gt;
-&lt;p&gt;Overall, this approach aligns with my interests better, but it isn&amp;#39;t a great fit for my immediate goal of supporting Steam on Linux.&lt;/p&gt;
-&lt;h2 id=&quot;new-ui-framework&quot;&gt;New UI framework&lt;/h2&gt;
-&lt;p&gt;Originally, I created SIC-1 to run in the browser because it&amp;#39;s convenient and doesn&amp;#39;t require downloading anything. Since it&amp;#39;s web-native, it also starts up pretty much instantly. However, as I fleshed out the game (adding music, save data, etc.), the browser became more of a hassle than a convenience (Local Storage is unreliable, looping music basically doesn&amp;#39;t work correctly on most browsers, styling native UI elements is tricky). I absolutely want to support playing in the browser, but playing outside the browser might produce a more reliable experience.&lt;/p&gt;
-&lt;p&gt;Here are a few approaches I&amp;#39;m considering:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Refactor into &lt;a href=&quot;https://reactnative.dev/&quot;&gt;React Native&lt;/a&gt; (shared across desktop and web versions)&lt;/li&gt;
-&lt;li&gt;Rewrite for a real game engine that supports web export (e.g. &lt;a href=&quot;https://godotengine.org/&quot;&gt;Godot 3&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;Rewrite as a terminal game, just because it sounds fun&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;All of these would solve portability and Steam-related issues, but they&amp;#39;re also all a lot of work. Maybe I&amp;#39;ll tackle them &lt;em&gt;someday&lt;/em&gt;, but I don&amp;#39;t think I want to rewrite my game &lt;em&gt;today&lt;/em&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;current-plan&quot;&gt;Current plan&lt;/h1&gt;
-&lt;p&gt;Unfortunately, there&amp;#39;s no clear winner amongst all these options. The shortest path to Linux support on Steam probably involves Electron and either extending Greenworks or repackaging my existing Steam integration code.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m still trying to decide how important it is to me to leave the door open to non-Steam downloadable releases (on various platforms). I&amp;#39;ve always had a dream of getting a piece of software incorporated into a popular Linux distribution, and I assume using Electron would make that very unlikely (because bloat).&lt;/p&gt;
-&lt;p&gt;For now, I will likely pursue the following:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Port the Steam release to Electron&lt;/li&gt;
-&lt;li&gt;Refactor Steam integration code into a flat C interface&lt;/li&gt;
-&lt;li&gt;Consume the Steam integration code using one of Node&amp;#39;s FFI libraries&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Hope&lt;/em&gt; that this new version works acceptably via Proton&lt;/li&gt;
-&lt;li&gt;Consider porting (again) to a native WebView library, for use in downloadable releases on Windows, Linux, and maybe even elsewhere&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;That&amp;#39;s more work than I had anticipated and the next to last step (&amp;quot;hoping&amp;quot; Proton supports it) is questionable, but I think it&amp;#39;s the simplest option that is best aligned with my interests.&lt;/p&gt;
-&lt;p&gt;Hopefully I don&amp;#39;t regret this decision!&lt;/p&gt;
 </content>
 </entry>
 </feed>
