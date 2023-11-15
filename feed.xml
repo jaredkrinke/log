@@ -7,8 +7,185 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-11-08T18:09:51.714Z</updated>
+<updated>2023-11-15T18:29:10.847Z</updated>
 
+<entry>
+<title>Investigating slow file enumeration in SBCL on Windows</title>
+<id>https://log.schemescape.com/posts/lisp/sbcl-file-perf-windows.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/lisp/sbcl-file-perf-windows.html"/>
+<updated>2023-11-14T00:00:00.000Z</updated>
+<summary type="text">Is file enumeration when using SBCL on Windows so slow that it can&apos;t support a fast static site generator? Yes and no.</summary>
+<content type="html">&lt;p&gt;While experimenting to see if I could improve upon &lt;a href=&quot;https://log.schemescape.com/posts/lisp/../static-site-generators/speeding-up-rebuilds-4.html&quot;&gt;the performance of md2blog&lt;/a&gt; using Common Lisp (and a fancier design), I noticed that &lt;strong&gt;file enumeration in &lt;a href=&quot;https://www.sbcl.org/&quot;&gt;Steel Bank Common Lisp&lt;/a&gt; (on Windows) was slow&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Spoiler: it can be a &lt;em&gt;lot&lt;/em&gt; faster (for my scenario, at least).&lt;/p&gt;
+&lt;h1 id=&quot;the-problem&quot;&gt;The problem&lt;/h1&gt;
+&lt;p&gt;Obviously, I shouldn&amp;#39;t be wasting my time building a new static site generator, with precise incremental builds. Also, obviously, I am.&lt;/p&gt;
+&lt;p&gt;Since I&amp;#39;ve gotten &lt;a href=&quot;https://log.schemescape.com/posts/lisp/../static-site-generators/speeding-up-rebuilds-4.html#results&quot;&gt;live rebuilds of md2blog down to 50 milliseconds on my desktop&lt;/a&gt;, there&amp;#39;s not a lot of room for inefficiency when trying to improve performance. Unfortunately, my initial experiments using SBCL showed that &lt;strong&gt;just &lt;em&gt;enumerating&lt;/em&gt; files (no processing whatsoever) took up my entire 50 millisecond budget&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;I tried simplifying my code so that it only used built-in directory/pathname functions:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-lisp&quot;&gt;(&lt;span class=&quot;hljs-name&quot;&gt;defparameter&lt;/span&gt; *wildcard-pathname* (&lt;span class=&quot;hljs-name&quot;&gt;make-pathname&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:name&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:wild&lt;/span&gt;
+                                                 &lt;span class=&quot;hljs-symbol&quot;&gt;:type&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:wild&lt;/span&gt;))
+
+(&lt;span class=&quot;hljs-name&quot;&gt;defun&lt;/span&gt; enumerate-files (&lt;span class=&quot;hljs-name&quot;&gt;directory&lt;/span&gt;)
+  (&lt;span class=&quot;hljs-name&quot;&gt;let&lt;/span&gt; ((&lt;span class=&quot;hljs-name&quot;&gt;items&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;list&lt;/span&gt; directory))
+        (&lt;span class=&quot;hljs-name&quot;&gt;files&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;nil&lt;/span&gt;))
+    (&lt;span class=&quot;hljs-name&quot;&gt;loop&lt;/span&gt; while items do
+      (&lt;span class=&quot;hljs-name&quot;&gt;let&lt;/span&gt; ((&lt;span class=&quot;hljs-name&quot;&gt;item&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;pop&lt;/span&gt; items)))
+        (&lt;span class=&quot;hljs-name&quot;&gt;if&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;pathname-name&lt;/span&gt; item)
+            (&lt;span class=&quot;hljs-name&quot;&gt;push&lt;/span&gt; item files)
+            (&lt;span class=&quot;hljs-name&quot;&gt;loop&lt;/span&gt; for child in (&lt;span class=&quot;hljs-name&quot;&gt;directory&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;merge-pathnames&lt;/span&gt; *wildcard-pathname* item)) do
+              (&lt;span class=&quot;hljs-name&quot;&gt;push&lt;/span&gt; child items)))))
+    files))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&quot;investigation&quot;&gt;Investigation&lt;/h1&gt;
+&lt;h2 id=&quot;is-it-just-windows&quot;&gt;Is it just Windows?&lt;/h2&gt;
+&lt;p&gt;As a sanity check, I ran the same scenario under SBCL on Linux on a &lt;em&gt;much&lt;/em&gt; slower computer (Intel Atom, rotational drive)... but the performance was the same: 50 milliseconds. Could Windows really be so slow that my fancy desktop is as slow as an old netbook?&lt;/p&gt;
+&lt;p&gt;No, that can&amp;#39;t be. I can enumerate all these files using &lt;a href=&quot;https://deno.com/&quot;&gt;Deno&lt;/a&gt; in 5 milliseconds (that&amp;#39;s what md2blog does, after all).&lt;/p&gt;
+&lt;h2 id=&quot;is-it-just-overhead&quot;&gt;Is it just overhead?&lt;/h2&gt;
+&lt;p&gt;So if the problem is &lt;em&gt;not&lt;/em&gt; Windows, maybe the problem is SBCL (or Common Lisp itself). Fortunately, Common Lisp has a built-in &lt;code&gt;time&lt;/code&gt; function to measure time spent in a function.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-lisp&quot;&gt;(&lt;span class=&quot;hljs-name&quot;&gt;time&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;enumerate-files&lt;/span&gt; #p&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;../../log/content/&amp;quot;&lt;/span&gt;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Reports:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;Evaluation took:
+  0.054 seconds of real time
+  0.046875 seconds of total run time (0.000000 user, 0.046875 system)
+  87.04% CPU
+  186,748,133 processor cycles
+  425,088 bytes consed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Hmmm... no &amp;quot;user&amp;quot; time and all &amp;quot;system&amp;quot; time? Blaming the system seems a little suspicious, given that this code runs 10x slower than Deno&amp;#39;s baseline.&lt;/p&gt;
+&lt;p&gt;I thought this might be a great time to test out &lt;a href=&quot;http://www.sbcl.org/manual/#Statistical-Profiler&quot;&gt;SBCL&amp;#39;s statistical profiler&lt;/a&gt;, but it turns out it&amp;#39;s &lt;a href=&quot;https://github.com/sbcl/sbcl/blob/a9abb1c41c457e9299b53f75b4196d3014432c9b/contrib/sb-sprof/interface.lisp#L224&quot;&gt;not implemented on Windows&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;is-sbcl-using-the-wrong-api&quot;&gt;Is SBCL using the wrong API?&lt;/h2&gt;
+&lt;p&gt;Maybe SBCL is correctly reporting that virtually the entire time is spent in system calls because it&amp;#39;s using an inefficient API?&lt;/p&gt;
+&lt;p&gt;After locating a searchable version of its source, I found that SBCL &lt;a href=&quot;https://github.com/sbcl/sbcl/blob/a9abb1c41c457e9299b53f75b4196d3014432c9b/src/code/win32.lisp#L534&quot;&gt;is using FindFirstile&lt;/a&gt;. There &lt;em&gt;is&lt;/em&gt; a &lt;code&gt;FindFirstFileEx&lt;/code&gt; which offers at least one minor optimization, but I don&amp;#39;t see Rust/Deno using it, so that&amp;#39;s probably not the issue.&lt;/p&gt;
+&lt;h1 id=&quot;reassessing&quot;&gt;Reassessing&lt;/h1&gt;
+&lt;p&gt;SBCL indicates that the operating system is the bottleneck, but it&amp;#39;s calling &lt;code&gt;FindFirstFile&lt;/code&gt;--same as Deno. Maybe there are some &lt;em&gt;other&lt;/em&gt; system calls I didn&amp;#39;t notice?&lt;/p&gt;
+&lt;p&gt;Time to just inspect the system and see what&amp;#39;s happening!&lt;/p&gt;
+&lt;h2 id=&quot;debugging&quot;&gt;Debugging&lt;/h2&gt;
+&lt;p&gt;I don&amp;#39;t recommend this approach, but since I already had WinDbg installed, I attached WinDbg to sbcl.exe and set a breakpoint on everything in kernel32.dll (&lt;code&gt;bm kernel32!*&lt;/code&gt;), let the program run, and kept track of which functions were hit (disabling each breakpoint afterwards).&lt;/p&gt;
+&lt;p&gt;These functions sounded relevant:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FindFirstFileW&lt;/li&gt;
+&lt;li&gt;GetFileAttributesExW&lt;/li&gt;
+&lt;li&gt;GetLongPathNameW&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I wasn&amp;#39;t familiar with that last one (&lt;code&gt;GetLongPathName&lt;/code&gt;), but apparently it&amp;#39;s for &lt;a href=&quot;https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getlongpathnamea&quot;&gt;converting from &amp;quot;short&amp;quot; (DOS-style 8.3) file names (e.g. &amp;quot;progra~1&amp;quot;) to &amp;quot;long&amp;quot; file names&lt;/a&gt;. Honestly, this is the first time I&amp;#39;ve had to think about short file names in at least a decade.&lt;/p&gt;
+&lt;p&gt;New question: &lt;strong&gt;which (if any) of these functions is slow?&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;windows-performance-recorderanalyzer&quot;&gt;Windows Performance Recorder/Analyzer&lt;/h2&gt;
+&lt;p&gt;In the past, I&amp;#39;ve used &lt;a href=&quot;https://learn.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer&quot;&gt;Windows Performance Analyzer&lt;/a&gt; for this sort of problem. Conveniently, &lt;strong&gt;Microsoft now bundles Windows Performance Analyzer (a 15 MB tool) along with a million other things I doubt I&amp;#39;ll ever use in a tidy little 4 GB download&lt;/strong&gt;. I&amp;#39;d think it would be in their best interest to separate these tools in order to reduce the bandwidth needed to deliver basic performance analysis tools, but what do I know?&lt;/p&gt;
+&lt;p&gt;Using Windows Performance Recorder&amp;#39;s generic profile, I captured a several second trace of file enumeration via SBCL. Opening the trace and looking at the &amp;quot;CPU Usage (Sampled)&amp;quot; chart (and filtering to &amp;quot;sbcl.exe&amp;quot;--with symbol loading enabled), I see the following sample counts by stack:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;Line #, Process, Stack, Count
+1, sbcl.exe (34020), , 1581
+2, , [Root], 1579
+3, ,   |- ?!?, 1576
+4, ,   |    |- kernel32.dll!GetLongPathNameW, 1299
+5, ,   |    |- KernelBase.dll!GetFileAttributesExW, 155
+6, ,   |    |- ?!?&amp;lt;itself&amp;gt;, 75
+7, ,   |    |- KernelBase.dll!FindNextFileW, 16
+8, ,   |    |- KernelBase.dll!FindFirstFileW, 14
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Looks like the vast majority of samples are in &lt;code&gt;GetLongPathName&lt;/code&gt;, with a significant chunk in &lt;code&gt;GetFileAttributesEx&lt;/code&gt;. I&amp;#39;m still not entirely clear why these are necessary. Maybe the Common Lisp spec specifies that &lt;code&gt;DIRECTORY&lt;/code&gt; must return absolute paths? I don&amp;#39;t see anything like that in the &lt;a href=&quot;http://clhs.lisp.se/Body/f_dir.htm&quot;&gt;Common Lisp HyperSpec entry for DIRECTORY&lt;/a&gt;, but I definitely don&amp;#39;t know what I&amp;#39;m talking about, so I&amp;#39;ll just stop speculating.&lt;/p&gt;
+&lt;h2 id=&quot;debugging-sbcl-with-itself&quot;&gt;Debugging SBCL with itself&lt;/h2&gt;
+&lt;p&gt;While exploring &lt;a href=&quot;https://github.com/sbcl/sbcl/blob/a9abb1c41c457e9299b53f75b4196d3014432c9b/src/code/win32.lisp&quot;&gt;SBCL&amp;#39;s Win32 code&lt;/a&gt;, I decided to try debugging SBCL using itself:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Download a copy of SBCL 2.3.2&amp;#39;s source code&lt;/li&gt;
+&lt;li&gt;Open it in Emacs (with SLIME)&lt;/li&gt;
+&lt;li&gt;Add a call to &lt;code&gt;BREAK&lt;/code&gt; within a function of interest&lt;/li&gt;
+&lt;li&gt;Ctrl+C, Ctrl+C to recompile the function&lt;/li&gt;
+&lt;li&gt;Run file enumeration code&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The breakpoint was hit! Of course, after that I tried to remove the breakpoint and recompile, but the recompilation process started hitting breakpoints related to the function of SLIME/SBCL itself. So maybe messing with SBCL&amp;#39;s internals isn&amp;#39;t always a great approach. It&amp;#39;s still neat that you can tinker with SBCL&amp;#39;s internals without any external tools (Emacs+SLIME make it easier, but are not &lt;em&gt;required&lt;/em&gt;).&lt;/p&gt;
+&lt;h1 id=&quot;solution&quot;&gt;Solution?&lt;/h1&gt;
+&lt;h2 id=&quot;initial-attempt&quot;&gt;Initial attempt&lt;/h2&gt;
+&lt;p&gt;As an initial attempt to speed up file enumeration, I decided to just directly call SBCL&amp;#39;s internal Win32 function that uses &lt;code&gt;FindFirstFile&lt;/code&gt;/&lt;code&gt;FindNextFile&lt;/code&gt;. The function is named &lt;code&gt;native-call-with-directory-iterator&lt;/code&gt;, and here&amp;#39;s the (surprisingly readable, other than the convoluted callback convention) definition:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-lisp&quot;&gt;(&lt;span class=&quot;hljs-name&quot;&gt;defun&lt;/span&gt; native-call-with-directory-iterator (&lt;span class=&quot;hljs-name&quot;&gt;function&lt;/span&gt; namestring errorp)
+  (&lt;span class=&quot;hljs-name&quot;&gt;declare&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;type&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;or&lt;/span&gt; null string) namestring)
+           (&lt;span class=&quot;hljs-name&quot;&gt;function&lt;/span&gt; function))
+  (&lt;span class=&quot;hljs-name&quot;&gt;when&lt;/span&gt; namestring
+    (&lt;span class=&quot;hljs-name&quot;&gt;with-alien&lt;/span&gt; ((&lt;span class=&quot;hljs-name&quot;&gt;find-data&lt;/span&gt; find-data))
+      (&lt;span class=&quot;hljs-name&quot;&gt;with-handle&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;handle&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;syscall&lt;/span&gt; ((&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;FindFirstFile&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;t&lt;/span&gt;) handle
+                                     system-string find-data)
+                                    (&lt;span class=&quot;hljs-name&quot;&gt;if&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;eql&lt;/span&gt; result invalid-handle)
+                                        (&lt;span class=&quot;hljs-name&quot;&gt;if&lt;/span&gt; errorp
+                                            (&lt;span class=&quot;hljs-name&quot;&gt;win32-error&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;FindFirstFile&amp;quot;&lt;/span&gt;)
+                                            (&lt;span class=&quot;hljs-name&quot;&gt;return&lt;/span&gt;))
+                                        result)
+                                    (&lt;span class=&quot;hljs-name&quot;&gt;concatenate&lt;/span&gt; &amp;#x27;string
+                                                 namestring &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;*.*&amp;quot;&lt;/span&gt;)
+                                    find-data)
+                    &lt;span class=&quot;hljs-symbol&quot;&gt;:close-operator&lt;/span&gt; find-close)
+        (&lt;span class=&quot;hljs-name&quot;&gt;let&lt;/span&gt; ((&lt;span class=&quot;hljs-name&quot;&gt;more&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;t&lt;/span&gt;))
+          (&lt;span class=&quot;hljs-name&quot;&gt;dx-flet&lt;/span&gt; ((&lt;span class=&quot;hljs-name&quot;&gt;one-iter&lt;/span&gt; ()
+                      (&lt;span class=&quot;hljs-name&quot;&gt;tagbody&lt;/span&gt;
+                       &lt;span class=&quot;hljs-symbol&quot;&gt;:next&lt;/span&gt;
+                         (&lt;span class=&quot;hljs-name&quot;&gt;when&lt;/span&gt; more
+                           (&lt;span class=&quot;hljs-name&quot;&gt;let&lt;/span&gt; ((&lt;span class=&quot;hljs-name&quot;&gt;name&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;decode-system-string&lt;/span&gt;
+                                        (&lt;span class=&quot;hljs-name&quot;&gt;slot&lt;/span&gt; find-data &amp;#x27;long-name)))
+                                 (&lt;span class=&quot;hljs-name&quot;&gt;attributes&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;slot&lt;/span&gt; find-data &amp;#x27;attributes)))
+                             (&lt;span class=&quot;hljs-name&quot;&gt;setf&lt;/span&gt; more
+                                   (&lt;span class=&quot;hljs-name&quot;&gt;syscall&lt;/span&gt; ((&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;FindNextFile&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;t&lt;/span&gt;) lispbool
+                                             handle find-data) result
+                                             handle find-data))
+                             (&lt;span class=&quot;hljs-name&quot;&gt;cond&lt;/span&gt; ((&lt;span class=&quot;hljs-name&quot;&gt;equal&lt;/span&gt; name &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;.&amp;quot;&lt;/span&gt;) (&lt;span class=&quot;hljs-name&quot;&gt;go&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:next&lt;/span&gt;))
+                                   ((&lt;span class=&quot;hljs-name&quot;&gt;equal&lt;/span&gt; name &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;..&amp;quot;&lt;/span&gt;) (&lt;span class=&quot;hljs-name&quot;&gt;go&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:next&lt;/span&gt;))
+                                   (&lt;span class=&quot;hljs-name&quot;&gt;t&lt;/span&gt;
+                                    (&lt;span class=&quot;hljs-name&quot;&gt;return-from&lt;/span&gt; one-iter
+                                      (&lt;span class=&quot;hljs-name&quot;&gt;values&lt;/span&gt; name
+                                              (&lt;span class=&quot;hljs-name&quot;&gt;attribute-file-kind&lt;/span&gt;
+                                               attributes))))))))))
+            (&lt;span class=&quot;hljs-name&quot;&gt;funcall&lt;/span&gt; function #&amp;#x27;one-iter)))))))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Interestingly, the callback receives both the file system item&amp;#39;s name, as well as its &amp;quot;kind&amp;quot; (&lt;code&gt;:file&lt;/code&gt; or &lt;code&gt;:directory&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s my sloppy code (note to self: make it more obvious which variables are &amp;quot;namestrings&amp;quot; versus &amp;quot;pathnames&amp;quot;):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-lisp&quot;&gt;(&lt;span class=&quot;hljs-name&quot;&gt;defun&lt;/span&gt; for-each-item-in-directory (&lt;span class=&quot;hljs-name&quot;&gt;function&lt;/span&gt; directory)
+  &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Calls FUNCTION with (string, (or :file :directory)) for each item in DIRECTORY&amp;quot;&lt;/span&gt;
+  (&lt;span class=&quot;hljs-name&quot;&gt;declare&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;type&lt;/span&gt; function function))
+  (&lt;span class=&quot;hljs-name&quot;&gt;sb-win32&lt;/span&gt;:&lt;span class=&quot;hljs-symbol&quot;&gt;:native-call-with-directory-iterator&lt;/span&gt;
+   (&lt;span class=&quot;hljs-name&quot;&gt;lambda&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;next&lt;/span&gt;)
+     (&lt;span class=&quot;hljs-name&quot;&gt;declare&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;type&lt;/span&gt; function next))
+     (&lt;span class=&quot;hljs-name&quot;&gt;loop&lt;/span&gt; for (&lt;span class=&quot;hljs-name&quot;&gt;name&lt;/span&gt; kind) = (&lt;span class=&quot;hljs-name&quot;&gt;multiple-value-list&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;funcall&lt;/span&gt; next))
+           while name
+           do (&lt;span class=&quot;hljs-name&quot;&gt;funcall&lt;/span&gt; function name kind)))
+   (&lt;span class=&quot;hljs-name&quot;&gt;namestring&lt;/span&gt; directory)
+   &lt;span class=&quot;hljs-literal&quot;&gt;nil&lt;/span&gt;))
+
+(&lt;span class=&quot;hljs-name&quot;&gt;defun&lt;/span&gt; enumerate-files (&lt;span class=&quot;hljs-name&quot;&gt;directory&lt;/span&gt;)
+  (&lt;span class=&quot;hljs-name&quot;&gt;declare&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;type&lt;/span&gt; pathname directory))
+  (&lt;span class=&quot;hljs-name&quot;&gt;let&lt;/span&gt; ((&lt;span class=&quot;hljs-name&quot;&gt;items&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;list&lt;/span&gt; directory))
+        (&lt;span class=&quot;hljs-name&quot;&gt;files&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;nil&lt;/span&gt;))
+    (&lt;span class=&quot;hljs-name&quot;&gt;loop&lt;/span&gt; while items do
+      (&lt;span class=&quot;hljs-name&quot;&gt;let&lt;/span&gt; ((&lt;span class=&quot;hljs-name&quot;&gt;item&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;pop&lt;/span&gt; items)))
+        (&lt;span class=&quot;hljs-name&quot;&gt;declare&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;type&lt;/span&gt; pathname item))
+        (&lt;span class=&quot;hljs-name&quot;&gt;if&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;pathname-name&lt;/span&gt; item)
+            (&lt;span class=&quot;hljs-name&quot;&gt;push&lt;/span&gt; item files)
+            (&lt;span class=&quot;hljs-name&quot;&gt;for-each-item-in-directory&lt;/span&gt;
+             (&lt;span class=&quot;hljs-name&quot;&gt;lambda&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;name&lt;/span&gt; kind)
+               (&lt;span class=&quot;hljs-name&quot;&gt;push&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;merge-pathnames&lt;/span&gt;
+                      (&lt;span class=&quot;hljs-name&quot;&gt;ecase&lt;/span&gt; kind
+                        (&lt;span class=&quot;hljs-symbol&quot;&gt;:file&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;parse-namestring&lt;/span&gt; name))
+                        (&lt;span class=&quot;hljs-symbol&quot;&gt;:directory&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;make-pathname&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:directory&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:relative&lt;/span&gt; name))))
+                      item)
+                     items))
+             item))))
+    files))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And now, the moment of truth when I run this modified function:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;Evaluation took:
+  0.002 seconds of real time
+  0.015625 seconds of total run time (0.000000 user, 0.015625 system)
+  800.00% CPU
+  7,000,104 processor cycles
+  65,200 bytes consed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;That&amp;#39;s a 27x speedup!&lt;/strong&gt; And, other than returning relative paths instead of absolute paths (a detail which doesn&amp;#39;t currently matter to me), the output looks the same. Even better, there might be more opportunities for improvement in my scenario:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I&amp;#39;ll likely need the &amp;quot;last modified&amp;quot; time of each time, but it looks like &lt;code&gt;FindFirstFile&lt;/code&gt; already provides that value&lt;/li&gt;
+&lt;li&gt;There is a &lt;code&gt;FindFirstFileEx&lt;/code&gt;, with some (Windows 7+) optimization flags&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Of course, to do all this &lt;em&gt;correctly&lt;/em&gt; (i.e. portably), I should use CFFI instead of SBCL-internal functions. But I don&amp;#39;t know how to do that yet.&lt;/p&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Reducing file enumeration down to 2 milliseconds gives me some breathing room in my 50-ish millisecond budget. This is fortunate in the sense that I might end up with something useful, but unfortunate in the sense that I can no longer be satisfied with immediately discarding this project as obviously infeasible.&lt;/p&gt;
+&lt;p&gt;Looks like I&amp;#39;ve got some more work to do...&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Building the fastest static site generator... or not</title>
 <id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-4.html</id>
@@ -242,46 +419,6 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Problem solved!&lt;/p&gt;
 &lt;p&gt;The only lingering question for me is: why is &lt;code&gt;native-namestring&lt;/code&gt; in &lt;code&gt;uiop/filesystem&lt;/code&gt; instead of &lt;code&gt;uiop/pathname&lt;/code&gt;?&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Porting a browser-based game to Steam, on Linux (part 2)</title>
-<id>https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux-2.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux-2.html"/>
-<updated>2023-08-26T00:00:00.000Z</updated>
-<summary type="text">I finally ported my browser-based Steam game to Linux. It was mostly straight-forward.</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux.html&quot;&gt;a previous post&lt;/a&gt; I outlined a plan to (finally) port &lt;a href=&quot;https://log.schemescape.com/posts/game-development/../game-development/sic-1.html&quot;&gt;my browser-based Steam game&lt;/a&gt; to Linux. (The original Windows-only release used WebView2.) The port mostly went according to plan and only took a week or two, working in my spare time.&lt;/p&gt;
-&lt;h1 id=&quot;original-plan&quot;&gt;Original plan&lt;/h1&gt;
-&lt;p&gt;The simplest way to run a browser-based game using Steam on Linux was to use Electron, but there was one problem: &lt;a href=&quot;https://github.com/greenheartgames/greenworks&quot;&gt;Greenworks&lt;/a&gt; (a Steam integration library) didn&amp;#39;t support friend leaderboards (an important feature of my game). My plan (which optimized for having to learn the fewest new libraries/concepts) was to:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Port the Steam release to Electron&lt;/li&gt;
-&lt;li&gt;Refactor Steam integration code into a flat C interface&lt;/li&gt;
-&lt;li&gt;Consume the Steam integration code using one of Node&amp;#39;s FFI libraries&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Hope&lt;/em&gt; that this new version works acceptably via Proton&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h1 id=&quot;porting-to-electron&quot;&gt;Porting to Electron&lt;/h1&gt;
-&lt;p&gt;Porting to Electron was fairly straightforward. I was able to use Electron&amp;#39;s tutorials to get a mostly working game pretty quickly. There were a few issues I had to iron out:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Electron Forge doesn&amp;#39;t have an easy way to add binaries (e.g. the Steamworks binary) to the root of the output folder, so I had to &lt;a href=&quot;https://github.com/jaredkrinke/sic1/commit/c953e7adb63a43022102dbf434123c400ac507a2#diff-4c2d32d0a0906dd3108b9ce9d29178bc2e8e3eae8d82f0b735a73e1f2b23ee5e&quot;&gt;hack in an &lt;code&gt;afterExtract&lt;/code&gt; callback to copy the files&lt;/a&gt; and switch from using &lt;code&gt;electron-forge start&lt;/code&gt; (which &lt;em&gt;doesn&amp;#39;t&lt;/em&gt; run &lt;code&gt;afterExtract&lt;/code&gt;) to &lt;code&gt;electron-forge package&lt;/code&gt; (which does) for testing&lt;/li&gt;
-&lt;li&gt;Electron allows &amp;quot;Ctrl+R&amp;quot; to reload the page by default (fix: &lt;a href=&quot;https://github.com/jaredkrinke/sic1/commit/0459f8c1bd7efd55095936fd1d5350bd27b6eab8&quot;&gt;remove the menu&lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Fortunately, &lt;a href=&quot;https://github.com/jaredkrinke/sic1/commit/ef4d99f517f227ba7755bb67cb7abf962d18be0b&quot;&gt;adding crash reporting&lt;/a&gt; was trivially easy.&lt;/p&gt;
-&lt;h1 id=&quot;refactoring-steam-integration-for-electron-andor-linux&quot;&gt;Refactoring Steam integration for Electron and/or Linux&lt;/h1&gt;
-&lt;p&gt;My original Steam integration code used the Win32 API, so I had to rewrite it using only the C++11 standard library. I then exposed that code in a flat, synchronous C interface (which I dubbed &lt;a href=&quot;https://github.com/jaredkrinke/ez-steam-api&quot;&gt;ez-steam-api&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;To support calling the C API from Electron, I used &lt;a href=&quot;https://koffi.dev/&quot;&gt;Koffi&lt;/a&gt; (which was great, other than one bug I hit--which has since been fixed). The wrapper is documented &lt;a href=&quot;https://github.com/jaredkrinke/ez-steam-api/tree/main/js&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;hoping-that-electron-runs-on-proton&quot;&gt;&lt;em&gt;Hoping&lt;/em&gt; that Electron runs on Proton&lt;/h1&gt;
-&lt;p&gt;In the previous post, I acknowledged that &lt;em&gt;hoping&lt;/em&gt; Electron ran acceptably on Proton was a risk. It turns out this risk was well founded.&lt;/p&gt;
-&lt;p&gt;In addition to &lt;a href=&quot;https://github.com/jaredkrinke/sic1/issues/270#issuecomment-1636918488&quot;&gt;wasting a lot of time testing out different Electron and Proton combinations&lt;/a&gt;, I ran into one insurmountable bug that was only &lt;em&gt;just annoying enough&lt;/em&gt; to make me give up: the mouse cursor is off by about 25 pixels on Ubuntu, when windowed (no idea why or how to investigate it, although I wonder if it&amp;#39;s related to the system bar at the top of the screen). In fullscreen, Electron-on-Proton worked great! But having windowed mode be broken was unacceptable for my programming game (for other genres, this bug might be acceptable).&lt;/p&gt;
-&lt;p&gt;So I ended up having to do a native Linux port anyway.&lt;/p&gt;
-&lt;h1 id=&quot;native-linux-port-on-steam&quot;&gt;Native Linux port on Steam&lt;/h1&gt;
-&lt;p&gt;Building an Electron app for Linux is trivial. Getting it to run on Steam was a bit frustrating, however, because the game would fail to launch. But &lt;em&gt;only&lt;/em&gt; when run from Steam! Even &lt;a href=&quot;https://gitlab.steamos.cloud/steamrt/scout/sdk/-/blob/steamrt/scout/README.md#testing-software-that-runs-in-scout&quot;&gt;Steam&amp;#39;s test script&lt;/a&gt; launched the game fine.&lt;/p&gt;
-&lt;p&gt;I don&amp;#39;t recall how I discovered the solution, but the issue was related to Electron&amp;#39;s sandboxing. Given my game only loads its own code (and not anything from the web), the workaround was just to &lt;a href=&quot;https://steamcommunity.com/groups/steamworks/discussions/13/3801651941320989565/#c3801651941326097085&quot;&gt;add &lt;code&gt;--no-sandbox&lt;/code&gt; to the list of command line arguments&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;And just like that, I had a working Linux port!&lt;/p&gt;
-&lt;h1 id=&quot;summary-and-statistics&quot;&gt;Summary and statistics&lt;/h1&gt;
-&lt;p&gt;I&amp;#39;ve said it before, but I&amp;#39;ll say it again: I should have just used Electron from the beginning. It&amp;#39;s inefficient, but it&amp;#39;s known to work fine on Steam, across platforms (cf. Vampire Survivors). If I had just used Electron originally, porting to Linux would have been trivial. Fortunately, porting to Electron and then Linux wasn&amp;#39;t too onerous.&lt;/p&gt;
-&lt;p&gt;This Linux port also resolved &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html#should-i-port-the-steam-version-of-the-game-to-linux&quot;&gt;one of my open questions&lt;/a&gt; around what to do with SIC-1. And, of course, now people on a free OS can play my game, &lt;em&gt;with friend leaderboards&lt;/em&gt;. I think the peak number of concurrent Linux players was roughly 3, which is pretty high for a game that only ever peaked at 10 concurrent players on Windows.&lt;/p&gt;
-&lt;h1 id=&quot;up-next&quot;&gt;Up next...&lt;/h1&gt;
-&lt;p&gt;That&amp;#39;s all for the Linux port! Next, I&amp;#39;m planning to provide an update on how SIC-1&amp;#39;s release has been going. Spoiler: it finally met my own internal bar for success!&lt;/p&gt;
 </content>
 </entry>
 </feed>

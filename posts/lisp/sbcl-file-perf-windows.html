@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Investigating slow file enumeration in SBCL on Windows</title>
+<meta name="description" content="Is file enumeration when using SBCL on Windows so slow that it can&#39;t support a fast static site generator? Yes and no." />
+<meta name="keywords" content="static-site-generators" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Investigating slow file enumeration in SBCL on Windows",
+  "abstract": "Is file enumeration when using SBCL on Windows so slow that it can't support a fast static site generator? Yes and no.",
+  "keywords": "lisp,static-site-generators",
+  "datePublished": "2023-11-14"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/lisp/index.html">lisp</a></li>
+<li><a href="../../posts/static-site-generators/index.html">static-site-generators</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/lisp/sbcl-file-perf-windows.html">Investigating slow file enumeration in SBCL on Windows</a></h1>
+<p><time datetime="2023-11-14">November 14, 2023</time></p>
+</header>
+<p>While experimenting to see if I could improve upon <a href="../static-site-generators/speeding-up-rebuilds-4.html">the performance of md2blog</a> using Common Lisp (and a fancier design), I noticed that <strong>file enumeration in <a href="https://www.sbcl.org/">Steel Bank Common Lisp</a> (on Windows) was slow</strong>.</p>
+<p>Spoiler: it can be a <em>lot</em> faster (for my scenario, at least).</p>
+<h1 id="the-problem">The problem</h1>
+<p>Obviously, I shouldn&#39;t be wasting my time building a new static site generator, with precise incremental builds. Also, obviously, I am.</p>
+<p>Since I&#39;ve gotten <a href="../static-site-generators/speeding-up-rebuilds-4.html#results">live rebuilds of md2blog down to 50 milliseconds on my desktop</a>, there&#39;s not a lot of room for inefficiency when trying to improve performance. Unfortunately, my initial experiments using SBCL showed that <strong>just <em>enumerating</em> files (no processing whatsoever) took up my entire 50 millisecond budget</strong>.</p>
+<p>I tried simplifying my code so that it only used built-in directory/pathname functions:</p>
+<pre><code class="language-lisp">(<span class="hljs-name">defparameter</span> *wildcard-pathname* (<span class="hljs-name">make-pathname</span> <span class="hljs-symbol">:name</span> <span class="hljs-symbol">:wild</span>
+                                                 <span class="hljs-symbol">:type</span> <span class="hljs-symbol">:wild</span>))
+
+(<span class="hljs-name">defun</span> enumerate-files (<span class="hljs-name">directory</span>)
+  (<span class="hljs-name">let</span> ((<span class="hljs-name">items</span> (<span class="hljs-name">list</span> directory))
+        (<span class="hljs-name">files</span> <span class="hljs-literal">nil</span>))
+    (<span class="hljs-name">loop</span> while items do
+      (<span class="hljs-name">let</span> ((<span class="hljs-name">item</span> (<span class="hljs-name">pop</span> items)))
+        (<span class="hljs-name">if</span> (<span class="hljs-name">pathname-name</span> item)
+            (<span class="hljs-name">push</span> item files)
+            (<span class="hljs-name">loop</span> for child in (<span class="hljs-name">directory</span> (<span class="hljs-name">merge-pathnames</span> *wildcard-pathname* item)) do
+              (<span class="hljs-name">push</span> child items)))))
+    files))
+</code></pre>
+<h1 id="investigation">Investigation</h1>
+<h2 id="is-it-just-windows">Is it just Windows?</h2>
+<p>As a sanity check, I ran the same scenario under SBCL on Linux on a <em>much</em> slower computer (Intel Atom, rotational drive)... but the performance was the same: 50 milliseconds. Could Windows really be so slow that my fancy desktop is as slow as an old netbook?</p>
+<p>No, that can&#39;t be. I can enumerate all these files using <a href="https://deno.com/">Deno</a> in 5 milliseconds (that&#39;s what md2blog does, after all).</p>
+<h2 id="is-it-just-overhead">Is it just overhead?</h2>
+<p>So if the problem is <em>not</em> Windows, maybe the problem is SBCL (or Common Lisp itself). Fortunately, Common Lisp has a built-in <code>time</code> function to measure time spent in a function.</p>
+<pre><code class="language-lisp">(<span class="hljs-name">time</span> (<span class="hljs-name">enumerate-files</span> #p<span class="hljs-string">&quot;../../log/content/&quot;</span>))
+</code></pre>
+<p>Reports:</p>
+<pre><code class="language-txt">Evaluation took:
+  0.054 seconds of real time
+  0.046875 seconds of total run time (0.000000 user, 0.046875 system)
+  87.04% CPU
+  186,748,133 processor cycles
+  425,088 bytes consed
+</code></pre>
+<p>Hmmm... no &quot;user&quot; time and all &quot;system&quot; time? Blaming the system seems a little suspicious, given that this code runs 10x slower than Deno&#39;s baseline.</p>
+<p>I thought this might be a great time to test out <a href="http://www.sbcl.org/manual/#Statistical-Profiler">SBCL&#39;s statistical profiler</a>, but it turns out it&#39;s <a href="https://github.com/sbcl/sbcl/blob/a9abb1c41c457e9299b53f75b4196d3014432c9b/contrib/sb-sprof/interface.lisp#L224">not implemented on Windows</a>.</p>
+<h2 id="is-sbcl-using-the-wrong-api">Is SBCL using the wrong API?</h2>
+<p>Maybe SBCL is correctly reporting that virtually the entire time is spent in system calls because it&#39;s using an inefficient API?</p>
+<p>After locating a searchable version of its source, I found that SBCL <a href="https://github.com/sbcl/sbcl/blob/a9abb1c41c457e9299b53f75b4196d3014432c9b/src/code/win32.lisp#L534">is using FindFirstile</a>. There <em>is</em> a <code>FindFirstFileEx</code> which offers at least one minor optimization, but I don&#39;t see Rust/Deno using it, so that&#39;s probably not the issue.</p>
+<h1 id="reassessing">Reassessing</h1>
+<p>SBCL indicates that the operating system is the bottleneck, but it&#39;s calling <code>FindFirstFile</code>--same as Deno. Maybe there are some <em>other</em> system calls I didn&#39;t notice?</p>
+<p>Time to just inspect the system and see what&#39;s happening!</p>
+<h2 id="debugging">Debugging</h2>
+<p>I don&#39;t recommend this approach, but since I already had WinDbg installed, I attached WinDbg to sbcl.exe and set a breakpoint on everything in kernel32.dll (<code>bm kernel32!*</code>), let the program run, and kept track of which functions were hit (disabling each breakpoint afterwards).</p>
+<p>These functions sounded relevant:</p>
+<ul>
+<li>FindFirstFileW</li>
+<li>GetFileAttributesExW</li>
+<li>GetLongPathNameW</li>
+</ul>
+<p>I wasn&#39;t familiar with that last one (<code>GetLongPathName</code>), but apparently it&#39;s for <a href="https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getlongpathnamea">converting from &quot;short&quot; (DOS-style 8.3) file names (e.g. &quot;progra~1&quot;) to &quot;long&quot; file names</a>. Honestly, this is the first time I&#39;ve had to think about short file names in at least a decade.</p>
+<p>New question: <strong>which (if any) of these functions is slow?</strong></p>
+<h2 id="windows-performance-recorderanalyzer">Windows Performance Recorder/Analyzer</h2>
+<p>In the past, I&#39;ve used <a href="https://learn.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer">Windows Performance Analyzer</a> for this sort of problem. Conveniently, <strong>Microsoft now bundles Windows Performance Analyzer (a 15 MB tool) along with a million other things I doubt I&#39;ll ever use in a tidy little 4 GB download</strong>. I&#39;d think it would be in their best interest to separate these tools in order to reduce the bandwidth needed to deliver basic performance analysis tools, but what do I know?</p>
+<p>Using Windows Performance Recorder&#39;s generic profile, I captured a several second trace of file enumeration via SBCL. Opening the trace and looking at the &quot;CPU Usage (Sampled)&quot; chart (and filtering to &quot;sbcl.exe&quot;--with symbol loading enabled), I see the following sample counts by stack:</p>
+<pre><code class="language-txt">Line #, Process, Stack, Count
+1, sbcl.exe (34020), , 1581
+2, , [Root], 1579
+3, ,   |- ?!?, 1576
+4, ,   |    |- kernel32.dll!GetLongPathNameW, 1299
+5, ,   |    |- KernelBase.dll!GetFileAttributesExW, 155
+6, ,   |    |- ?!?&lt;itself&gt;, 75
+7, ,   |    |- KernelBase.dll!FindNextFileW, 16
+8, ,   |    |- KernelBase.dll!FindFirstFileW, 14
+</code></pre>
+<p>Looks like the vast majority of samples are in <code>GetLongPathName</code>, with a significant chunk in <code>GetFileAttributesEx</code>. I&#39;m still not entirely clear why these are necessary. Maybe the Common Lisp spec specifies that <code>DIRECTORY</code> must return absolute paths? I don&#39;t see anything like that in the <a href="http://clhs.lisp.se/Body/f_dir.htm">Common Lisp HyperSpec entry for DIRECTORY</a>, but I definitely don&#39;t know what I&#39;m talking about, so I&#39;ll just stop speculating.</p>
+<h2 id="debugging-sbcl-with-itself">Debugging SBCL with itself</h2>
+<p>While exploring <a href="https://github.com/sbcl/sbcl/blob/a9abb1c41c457e9299b53f75b4196d3014432c9b/src/code/win32.lisp">SBCL&#39;s Win32 code</a>, I decided to try debugging SBCL using itself:</p>
+<ul>
+<li>Download a copy of SBCL 2.3.2&#39;s source code</li>
+<li>Open it in Emacs (with SLIME)</li>
+<li>Add a call to <code>BREAK</code> within a function of interest</li>
+<li>Ctrl+C, Ctrl+C to recompile the function</li>
+<li>Run file enumeration code</li>
+</ul>
+<p>The breakpoint was hit! Of course, after that I tried to remove the breakpoint and recompile, but the recompilation process started hitting breakpoints related to the function of SLIME/SBCL itself. So maybe messing with SBCL&#39;s internals isn&#39;t always a great approach. It&#39;s still neat that you can tinker with SBCL&#39;s internals without any external tools (Emacs+SLIME make it easier, but are not <em>required</em>).</p>
+<h1 id="solution">Solution?</h1>
+<h2 id="initial-attempt">Initial attempt</h2>
+<p>As an initial attempt to speed up file enumeration, I decided to just directly call SBCL&#39;s internal Win32 function that uses <code>FindFirstFile</code>/<code>FindNextFile</code>. The function is named <code>native-call-with-directory-iterator</code>, and here&#39;s the (surprisingly readable, other than the convoluted callback convention) definition:</p>
+<pre><code class="language-lisp">(<span class="hljs-name">defun</span> native-call-with-directory-iterator (<span class="hljs-name">function</span> namestring errorp)
+  (<span class="hljs-name">declare</span> (<span class="hljs-name">type</span> (<span class="hljs-name">or</span> null string) namestring)
+           (<span class="hljs-name">function</span> function))
+  (<span class="hljs-name">when</span> namestring
+    (<span class="hljs-name">with-alien</span> ((<span class="hljs-name">find-data</span> find-data))
+      (<span class="hljs-name">with-handle</span> (<span class="hljs-name">handle</span> (<span class="hljs-name">syscall</span> ((<span class="hljs-string">&quot;FindFirstFile&quot;</span> <span class="hljs-literal">t</span>) handle
+                                     system-string find-data)
+                                    (<span class="hljs-name">if</span> (<span class="hljs-name">eql</span> result invalid-handle)
+                                        (<span class="hljs-name">if</span> errorp
+                                            (<span class="hljs-name">win32-error</span> <span class="hljs-string">&quot;FindFirstFile&quot;</span>)
+                                            (<span class="hljs-name">return</span>))
+                                        result)
+                                    (<span class="hljs-name">concatenate</span> &#x27;string
+                                                 namestring <span class="hljs-string">&quot;*.*&quot;</span>)
+                                    find-data)
+                    <span class="hljs-symbol">:close-operator</span> find-close)
+        (<span class="hljs-name">let</span> ((<span class="hljs-name">more</span> <span class="hljs-literal">t</span>))
+          (<span class="hljs-name">dx-flet</span> ((<span class="hljs-name">one-iter</span> ()
+                      (<span class="hljs-name">tagbody</span>
+                       <span class="hljs-symbol">:next</span>
+                         (<span class="hljs-name">when</span> more
+                           (<span class="hljs-name">let</span> ((<span class="hljs-name">name</span> (<span class="hljs-name">decode-system-string</span>
+                                        (<span class="hljs-name">slot</span> find-data &#x27;long-name)))
+                                 (<span class="hljs-name">attributes</span> (<span class="hljs-name">slot</span> find-data &#x27;attributes)))
+                             (<span class="hljs-name">setf</span> more
+                                   (<span class="hljs-name">syscall</span> ((<span class="hljs-string">&quot;FindNextFile&quot;</span> <span class="hljs-literal">t</span>) lispbool
+                                             handle find-data) result
+                                             handle find-data))
+                             (<span class="hljs-name">cond</span> ((<span class="hljs-name">equal</span> name <span class="hljs-string">&quot;.&quot;</span>) (<span class="hljs-name">go</span> <span class="hljs-symbol">:next</span>))
+                                   ((<span class="hljs-name">equal</span> name <span class="hljs-string">&quot;..&quot;</span>) (<span class="hljs-name">go</span> <span class="hljs-symbol">:next</span>))
+                                   (<span class="hljs-name">t</span>
+                                    (<span class="hljs-name">return-from</span> one-iter
+                                      (<span class="hljs-name">values</span> name
+                                              (<span class="hljs-name">attribute-file-kind</span>
+                                               attributes))))))))))
+            (<span class="hljs-name">funcall</span> function #&#x27;one-iter)))))))
+</code></pre>
+<p>Interestingly, the callback receives both the file system item&#39;s name, as well as its &quot;kind&quot; (<code>:file</code> or <code>:directory</code>).</p>
+<p>Here&#39;s my sloppy code (note to self: make it more obvious which variables are &quot;namestrings&quot; versus &quot;pathnames&quot;):</p>
+<pre><code class="language-lisp">(<span class="hljs-name">defun</span> for-each-item-in-directory (<span class="hljs-name">function</span> directory)
+  <span class="hljs-string">&quot;Calls FUNCTION with (string, (or :file :directory)) for each item in DIRECTORY&quot;</span>
+  (<span class="hljs-name">declare</span> (<span class="hljs-name">type</span> function function))
+  (<span class="hljs-name">sb-win32</span>:<span class="hljs-symbol">:native-call-with-directory-iterator</span>
+   (<span class="hljs-name">lambda</span> (<span class="hljs-name">next</span>)
+     (<span class="hljs-name">declare</span> (<span class="hljs-name">type</span> function next))
+     (<span class="hljs-name">loop</span> for (<span class="hljs-name">name</span> kind) = (<span class="hljs-name">multiple-value-list</span> (<span class="hljs-name">funcall</span> next))
+           while name
+           do (<span class="hljs-name">funcall</span> function name kind)))
+   (<span class="hljs-name">namestring</span> directory)
+   <span class="hljs-literal">nil</span>))
+
+(<span class="hljs-name">defun</span> enumerate-files (<span class="hljs-name">directory</span>)
+  (<span class="hljs-name">declare</span> (<span class="hljs-name">type</span> pathname directory))
+  (<span class="hljs-name">let</span> ((<span class="hljs-name">items</span> (<span class="hljs-name">list</span> directory))
+        (<span class="hljs-name">files</span> <span class="hljs-literal">nil</span>))
+    (<span class="hljs-name">loop</span> while items do
+      (<span class="hljs-name">let</span> ((<span class="hljs-name">item</span> (<span class="hljs-name">pop</span> items)))
+        (<span class="hljs-name">declare</span> (<span class="hljs-name">type</span> pathname item))
+        (<span class="hljs-name">if</span> (<span class="hljs-name">pathname-name</span> item)
+            (<span class="hljs-name">push</span> item files)
+            (<span class="hljs-name">for-each-item-in-directory</span>
+             (<span class="hljs-name">lambda</span> (<span class="hljs-name">name</span> kind)
+               (<span class="hljs-name">push</span> (<span class="hljs-name">merge-pathnames</span>
+                      (<span class="hljs-name">ecase</span> kind
+                        (<span class="hljs-symbol">:file</span> (<span class="hljs-name">parse-namestring</span> name))
+                        (<span class="hljs-symbol">:directory</span> (<span class="hljs-name">make-pathname</span> <span class="hljs-symbol">:directory</span> (<span class="hljs-name">list</span> <span class="hljs-symbol">:relative</span> name))))
+                      item)
+                     items))
+             item))))
+    files))
+</code></pre>
+<p>And now, the moment of truth when I run this modified function:</p>
+<pre><code class="language-txt">Evaluation took:
+  0.002 seconds of real time
+  0.015625 seconds of total run time (0.000000 user, 0.015625 system)
+  800.00% CPU
+  7,000,104 processor cycles
+  65,200 bytes consed
+</code></pre>
+<p><strong>That&#39;s a 27x speedup!</strong> And, other than returning relative paths instead of absolute paths (a detail which doesn&#39;t currently matter to me), the output looks the same. Even better, there might be more opportunities for improvement in my scenario:</p>
+<ul>
+<li>I&#39;ll likely need the &quot;last modified&quot; time of each time, but it looks like <code>FindFirstFile</code> already provides that value</li>
+<li>There is a <code>FindFirstFileEx</code>, with some (Windows 7+) optimization flags</li>
+</ul>
+<p>Of course, to do all this <em>correctly</em> (i.e. portably), I should use CFFI instead of SBCL-internal functions. But I don&#39;t know how to do that yet.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Reducing file enumeration down to 2 milliseconds gives me some breathing room in my 50-ish millisecond budget. This is fortunate in the sense that I might end up with something useful, but unfortunate in the sense that I can no longer be satisfied with immediately discarding this project as obviously infeasible.</p>
+<p>Looks like I&#39;ve got some more work to do...</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
