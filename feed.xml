@@ -7,8 +7,66 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-11-15T18:29:10.847Z</updated>
+<updated>2023-11-18T05:27:11.445Z</updated>
 
+<entry>
+<title>My hobby is... bikeshedding?</title>
+<id>https://log.schemescape.com/posts/misc/my-hobby-is-bikeshedding.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/misc/my-hobby-is-bikeshedding.html"/>
+<updated>2023-11-17T00:00:00.000Z</updated>
+<summary type="text">Am I spending development time on things that matter?</summary>
+<content type="html">&lt;p&gt;Although I&amp;#39;d seen the term thrown around, I hadn&amp;#39;t looked up the definition of &amp;quot;bikeshedding&amp;quot; until recently. DuckDuckGo tells me that &amp;quot;bikeshedding&amp;quot; is:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Futile investment of time and energy in marginal technical issues&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Wait a minute. That accurately describes much (if not most) of this blog.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bikeshedding is my primary hobby&lt;/strong&gt;, apparently.&lt;/p&gt;
+&lt;h1 id=&quot;a-quick-review&quot;&gt;A quick review&lt;/h1&gt;
+&lt;p&gt;Looking back at my previous posts, I see:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../static-site-generators/comparison.html&quot;&gt;Trying to find a static site generator&lt;/a&gt; that supports my desired workflow, and &lt;a href=&quot;https://log.schemescape.com/posts/misc/../static-site-generators/md2blog-deno.html&quot;&gt;eventually building my own&lt;/a&gt; (instead of just using Hugo)&lt;/li&gt;
+&lt;li&gt;Attempting to speed up my home-grown static site generator because, &lt;a href=&quot;https://log.schemescape.com/posts/misc/../static-site-generators/speeding-up-rebuilds-4.html&quot;&gt;apparently, 50 millisecond rebuilds doesn&amp;#39;t seem optimal&lt;/a&gt; (ignoring the fact that 50 milliseconds is probably actual lightning speed)&lt;/li&gt;
+&lt;li&gt;Avoiding Emscripten&amp;#39;s bloated (and Python-based) tooling to &lt;a href=&quot;https://log.schemescape.com/posts/misc/../webassembly/compiling-graphviz-to-webassembly.html&quot;&gt;generate diagrams&lt;/a&gt; and &lt;a href=&quot;https://log.schemescape.com/posts/misc/../webassembly/passing-strings-to-c.html&quot;&gt;pass strings around&lt;/a&gt; (instead of just using the most popular native-to-browser framework)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../web-development/souring-on-npm.html&quot;&gt;Fretting over the software supply chain of NPM&lt;/a&gt;, and switching to Deno (abandoning one of the largest library ecosystems ever created--N.B. this was before Deno added NPM support)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/rust-first-experience.html&quot;&gt;Whining about the size of the Rust toolchain on Windows&lt;/a&gt; (even though I have a terabyte drive)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/future-proof-languages.html&quot;&gt;&lt;em&gt;Way&lt;/em&gt;&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/future-proof-languages-2.html&quot;&gt;too&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/future-proof-languages-3.html&quot;&gt;much&lt;/a&gt; musing about &amp;quot;future-proof&amp;quot; programming languages (instead of just picking the right tool for the job)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../game-development/browser-based-game-on-steam-2.html&quot;&gt;Porting a browser-based game to Steam without using Electron&lt;/a&gt; because I thought Electron was too bloated (spoiler: I ended up using Electron to add Linux support anyway)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/minimal-dev-env-3.html&quot;&gt;Developing software &lt;em&gt;on&lt;/em&gt; a Raspberry Pi 1B&lt;/a&gt; because &lt;em&gt;it should be possible, right?&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../web-development/interactive-browser-app-without-js-2.html&quot;&gt;Creating a (nearly unplayable) real-time browser-based game that doesn&amp;#39;t use any JavaScript&lt;/a&gt; because modern browsers eat up all my netbook&amp;#39;s memory (even though I mostly use my desktop computer, because it&amp;#39;s convenient)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../web-development/cheap-hosting.html&quot;&gt;Rewriting software to avoid spending a few dollars per month&lt;/a&gt; (despite that money likely being a rounding error in my monthly finances)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;but-why&quot;&gt;But why?&lt;/h1&gt;
+&lt;p&gt;At the time, I justified most of these plans in terms of economy: &lt;strong&gt;I was optimizing resources in reaction to everything else seeming so bloated&lt;/strong&gt;. I was &lt;em&gt;respecting the user&lt;/em&gt; by minimizing dependencies/system requirements.&lt;/p&gt;
+&lt;p&gt;But in retrospect, I wonder if &lt;strong&gt;I was just focused on optimization because it was often the most straight-forward and unambiguous task&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s not to say that I was necessarily &lt;em&gt;wasting my time&lt;/em&gt;. I learned a ton from these projects. And minimizing resource usage is extremely important for respecting your users... but that only matters when you have users. Otherwise, it&amp;#39;s just premature optimization (assuming a reasonable baseline).&lt;/p&gt;
+&lt;h1 id=&quot;goals&quot;&gt;Goals&lt;/h1&gt;
+&lt;p&gt;I suspect software development can be lucrative because costs scale slowly. Solving a problem for 1 person may take a lot of work, but solving it for 100 (or 1000) additional users often costs very little. Of course, sometimes, I&amp;#39;m just looking to solve my own problem, and I don&amp;#39;t plan on having any &amp;quot;users&amp;quot;.&lt;/p&gt;
+&lt;p&gt;Ultimately, &lt;strong&gt;before I start a project, I should have a target audience and/or goal in mind&lt;/strong&gt;. This seems obvious, but I&amp;#39;m fairly certain that most of my projects began organically, with only a vague notion of what I wanted to achieve.&lt;/p&gt;
+&lt;p&gt;Additionally, &lt;strong&gt;I need to critically evaluate any goals and whether or not they&amp;#39;re worth the effort&lt;/strong&gt;. Creating a Common Lisp-based static site generator in order to learn Lisp because it sounds fun? Probably a good idea! Creating a Common Lisp-based static site generator in order to provide faster incremental and custom templates, for a tool that &lt;a href=&quot;https://blubsblog.bearblog.dev/i-am-the-only-user/&quot;&gt;will likely only ever have one user&lt;/a&gt;? Probably not worth the effort!&lt;/p&gt;
+&lt;h1 id=&quot;looking-forward&quot;&gt;Looking forward&lt;/h1&gt;
+&lt;p&gt;Fittingly, my current hobby of learning Common Lisp started &lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/learning-lisp-in-2023.html&quot;&gt;because I read about REPL-driven development and wanted to test it out for myself&lt;/a&gt;. In the process, I&amp;#39;ve found many additional reasons to persist with Lisp:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Macros&lt;/strong&gt;, for ergonomically generating code&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Conditions&lt;/strong&gt;, for observing and handling errors at a distance&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lists&lt;/strong&gt; (of course), a handy, multi-purpose data structure, built into the core of the language&lt;/li&gt;
+&lt;li&gt;With Emacs and SLIME, &lt;strong&gt;a fully-featured editing and debugging experience&lt;/strong&gt; that easily runs on an old netbook&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;A broad ecosystem&lt;/strong&gt;, with numerous implementations and a wide range of libraries&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Lisp is just &lt;em&gt;too&lt;/em&gt; enticing to a dedicated software developer. It&amp;#39;s the most expressive and extensible programming language I&amp;#39;ve encountered, and it&amp;#39;s &lt;em&gt;just popular enough&lt;/em&gt; that learning it doesn&amp;#39;t feel like a waste of time.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;But what is my &lt;em&gt;goal&lt;/em&gt; with learning Common Lisp?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Originally, I just was curious and wanted to try REPL-driven development, and now I&amp;#39;m used to it--it&amp;#39;s nice, but not indispensable&lt;/li&gt;
+&lt;li&gt;Macros can be handy (in small doses), but I&amp;#39;m pretty sure other languages now support syntax tree-level macros&lt;/li&gt;
+&lt;li&gt;Common Lisp &amp;quot;conditions&amp;quot; (and &amp;quot;restarts&amp;quot;) still seem unique and useful&lt;/li&gt;
+&lt;li&gt;Lists are handy, but they seem inefficient on modern hardware&lt;/li&gt;
+&lt;li&gt;Having the equivalent of a language server that runs comfortably in the terminal on a netbook warms my heart, but fast computers are cheap&lt;/li&gt;
+&lt;li&gt;Having many interoperable Common Lisp implementations sounds future-proof, but am I realistically going to use anything other than SBCL?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Overall, I like Common Lisp, but now I can&amp;#39;t shake the feeling that using an extensible programming language that fits on netbook is just more bikeshedding.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Most programming language distinctions could probably be classified as &amp;quot;marginal technical issues&amp;quot; for all but the most demanding workloads.&lt;/p&gt;
+&lt;p&gt;The whole world seems to be using Python or JavaScript and they&amp;#39;re &amp;quot;good enough&amp;quot; for most purposes. Should I just hop on the bandwagon and stop fussing over those languages&amp;#39; deficiencies? Well, that depends on the goal...&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Investigating slow file enumeration in SBCL on Windows</title>
 <id>https://log.schemescape.com/posts/lisp/sbcl-file-perf-windows.html</id>
@@ -386,39 +444,6 @@
 &lt;p&gt;Regardless, I see no obvious reason why this approach wouldn&amp;#39;t work for building an interactive web app without JavaScript. Who knows, it might even be possible to use some fancy CSS rules to make it appear as though part of a page is being updated instead of just appended to.&lt;/p&gt;
 &lt;h1 id=&quot;so-does-it-work&quot;&gt;So does it work?&lt;/h1&gt;
 &lt;p&gt;I don&amp;#39;t know! But I&amp;#39;m planning to find out, so stay tuned...&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Creating Windows-style paths (backslash-separated) from pathnames in Common Lisp</title>
-<id>https://log.schemescape.com/posts/lisp/pathnames-on-windows.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/lisp/pathnames-on-windows.html"/>
-<updated>2023-10-04T00:00:00.000Z</updated>
-<summary type="text">I spent far too long trying to figure out how to do this, so I&apos;m documenting it here, in case anyone else has trouble finding the answer.</summary>
-<content type="html">&lt;p&gt;Use &lt;code&gt;uiop/filesystem:native-namestring&lt;/code&gt;. That&amp;#39;s the answer.&lt;/p&gt;
-&lt;p&gt;The rest of this post is just additional context/whining.&lt;/p&gt;
-&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;Common Lisp was born in an era of surprising file system diversity. Nowadays, Windows is mocked for using something other than a forward slash as a path separator, but old Macs used colons and I&amp;#39;ve seen references to &lt;code&gt;&amp;gt;&lt;/code&gt; being used on more exotic platforms.&lt;/p&gt;
-&lt;p&gt;Common Lisp handles this difference (and many other differences that never even occurred to me, such as types and versions) by abstracting everything into a platform-independent concept called a &lt;a href=&quot;http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/Body/glo_p.html#pathname&quot;&gt;pathname&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;example-pathname&quot;&gt;Example pathname&lt;/h2&gt;
-&lt;p&gt;Here&amp;#39;s how to create a (relative) pathname for &amp;quot;the directory &amp;#39;foo&amp;#39;, which is located in the parent directory&amp;quot;:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-lisp&quot;&gt; (&lt;span class=&quot;hljs-name&quot;&gt;make-pathname&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:directory&lt;/span&gt; &amp;#x27;(&lt;span class=&quot;hljs-symbol&quot;&gt;:relative&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:up&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;foo&amp;quot;&lt;/span&gt;))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;the-problem&quot;&gt;The problem&lt;/h2&gt;
-&lt;p&gt;While working on a tiny Common Lisp project, my program needed to run a command in a subprocess (using &lt;code&gt;uiop:run-program&lt;/code&gt;) with a directory passed as an argument. &lt;strong&gt;I had assumed that &lt;code&gt;format&lt;/code&gt;-ing a pathname on Windows would result in a Windows-compatible string&lt;/strong&gt; (or at least that &lt;code&gt;namestring&lt;/code&gt; would), e.g. &amp;quot;..\foo\&amp;quot; for the example code above.&lt;/p&gt;
-&lt;p&gt;For reasons I won&amp;#39;t yet understand, &lt;strong&gt;this is &lt;em&gt;not&lt;/em&gt; how things work on SBCL&lt;/strong&gt;! Instead, forward slashes are used: &amp;quot;../foo/&amp;quot;. This works fine for some programs (including Git, apparently), but I doubt it&amp;#39;s robust in general, considering some (mostly old) Windows programs use the forward slash to indicate command-line flags (instead of using a hyphen).&lt;/p&gt;
-&lt;h2 id=&quot;but-why&quot;&gt;But why?&lt;/h2&gt;
-&lt;p&gt;I thought the point of pathnames was to support a platform-independent notion of a file path/name, so it&amp;#39;s not clear to me why they don&amp;#39;t &lt;code&gt;format&lt;/code&gt; by default into a form that&amp;#39;s compatible with the host environment.&lt;/p&gt;
-&lt;p&gt;Even more surprising, after spending way too much time browsing the &lt;a href=&quot;http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/FrontMatter/index.html&quot;&gt;Common Lisp HyperSpec&lt;/a&gt;, I couldn&amp;#39;t even find anything in Common Lisp&amp;#39;s standard library for this scenario. Why can I create and manipulate pathnames but not actually pass them to the operating system? That&amp;#39;s a serious question--if you know the answer, please tell me!&lt;/p&gt;
-&lt;h1 id=&quot;uiop-to-the-rescue&quot;&gt;UIOP to the rescue&lt;/h1&gt;
-&lt;p&gt;Given that (ANSI) Common Lisp hasn&amp;#39;t been updated since 1994, I don&amp;#39;t see this situation changing, but the good news is that Common Lisp implementations fill in this gap and &lt;a href=&quot;https://asdf.common-lisp.dev/uiop.html&quot;&gt;UIOP&lt;/a&gt; abstracts away the implementations&amp;#39; different approaches/naming schemes.&lt;/p&gt;
-&lt;p&gt;So that leads us to the solution: &lt;code&gt;uiop/filesystem:native-namestring&lt;/code&gt;. Example:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-lisp&quot;&gt; (&lt;span class=&quot;hljs-name&quot;&gt;uiop/filesystem&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;:native-namestring&lt;/span&gt; (&lt;span class=&quot;hljs-name&quot;&gt;make-pathname&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:directory&lt;/span&gt; &amp;#x27;(&lt;span class=&quot;hljs-symbol&quot;&gt;:relative&lt;/span&gt; &lt;span class=&quot;hljs-symbol&quot;&gt;:up&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;foo&amp;quot;&lt;/span&gt;)))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Result:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;..&lt;span class=&quot;hljs-subst&quot;&gt;\\&lt;/span&gt;foo&lt;span class=&quot;hljs-subst&quot;&gt;\\&lt;/span&gt;&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Problem solved!&lt;/p&gt;
-&lt;p&gt;The only lingering question for me is: why is &lt;code&gt;native-namestring&lt;/code&gt; in &lt;code&gt;uiop/filesystem&lt;/code&gt; instead of &lt;code&gt;uiop/pathname&lt;/code&gt;?&lt;/p&gt;
 </content>
 </entry>
 </feed>

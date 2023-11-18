@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>My hobby is... bikeshedding?</title>
+<meta name="description" content="Am I spending development time on things that matter?" />
+<meta name="keywords" content="lisp,minimalism" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "My hobby is... bikeshedding?",
+  "abstract": "Am I spending development time on things that matter?",
+  "keywords": "misc,lisp,minimalism",
+  "datePublished": "2023-11-17"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/misc/index.html">misc</a></li>
+<li><a href="../../posts/lisp/index.html">lisp</a></li>
+<li><a href="../../posts/minimalism/index.html">minimalism</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/misc/my-hobby-is-bikeshedding.html">My hobby is... bikeshedding?</a></h1>
+<p><time datetime="2023-11-17">November 17, 2023</time></p>
+</header>
+<p>Although I&#39;d seen the term thrown around, I hadn&#39;t looked up the definition of &quot;bikeshedding&quot; until recently. DuckDuckGo tells me that &quot;bikeshedding&quot; is:</p>
+<blockquote>
+<p>Futile investment of time and energy in marginal technical issues</p>
+</blockquote>
+<p>Wait a minute. That accurately describes much (if not most) of this blog.</p>
+<p><strong>Bikeshedding is my primary hobby</strong>, apparently.</p>
+<h1 id="a-quick-review">A quick review</h1>
+<p>Looking back at my previous posts, I see:</p>
+<ul>
+<li><a href="../static-site-generators/comparison.html">Trying to find a static site generator</a> that supports my desired workflow, and <a href="../static-site-generators/md2blog-deno.html">eventually building my own</a> (instead of just using Hugo)</li>
+<li>Attempting to speed up my home-grown static site generator because, <a href="../static-site-generators/speeding-up-rebuilds-4.html">apparently, 50 millisecond rebuilds doesn&#39;t seem optimal</a> (ignoring the fact that 50 milliseconds is probably actual lightning speed)</li>
+<li>Avoiding Emscripten&#39;s bloated (and Python-based) tooling to <a href="../webassembly/compiling-graphviz-to-webassembly.html">generate diagrams</a> and <a href="../webassembly/passing-strings-to-c.html">pass strings around</a> (instead of just using the most popular native-to-browser framework)</li>
+<li><a href="../web-development/souring-on-npm.html">Fretting over the software supply chain of NPM</a>, and switching to Deno (abandoning one of the largest library ecosystems ever created--N.B. this was before Deno added NPM support)</li>
+<li><a href="../programming-languages/rust-first-experience.html">Whining about the size of the Rust toolchain on Windows</a> (even though I have a terabyte drive)</li>
+<li><a href="../programming-languages/future-proof-languages.html"><em>Way</em></a> <a href="../programming-languages/future-proof-languages-2.html">too</a> <a href="../programming-languages/future-proof-languages-3.html">much</a> musing about &quot;future-proof&quot; programming languages (instead of just picking the right tool for the job)</li>
+<li><a href="../game-development/browser-based-game-on-steam-2.html">Porting a browser-based game to Steam without using Electron</a> because I thought Electron was too bloated (spoiler: I ended up using Electron to add Linux support anyway)</li>
+<li><a href="../programming-languages/minimal-dev-env-3.html">Developing software <em>on</em> a Raspberry Pi 1B</a> because <em>it should be possible, right?</em></li>
+<li><a href="../web-development/interactive-browser-app-without-js-2.html">Creating a (nearly unplayable) real-time browser-based game that doesn&#39;t use any JavaScript</a> because modern browsers eat up all my netbook&#39;s memory (even though I mostly use my desktop computer, because it&#39;s convenient)</li>
+<li><a href="../web-development/cheap-hosting.html">Rewriting software to avoid spending a few dollars per month</a> (despite that money likely being a rounding error in my monthly finances)</li>
+</ul>
+<h1 id="but-why">But why?</h1>
+<p>At the time, I justified most of these plans in terms of economy: <strong>I was optimizing resources in reaction to everything else seeming so bloated</strong>. I was <em>respecting the user</em> by minimizing dependencies/system requirements.</p>
+<p>But in retrospect, I wonder if <strong>I was just focused on optimization because it was often the most straight-forward and unambiguous task</strong>.</p>
+<p>That&#39;s not to say that I was necessarily <em>wasting my time</em>. I learned a ton from these projects. And minimizing resource usage is extremely important for respecting your users... but that only matters when you have users. Otherwise, it&#39;s just premature optimization (assuming a reasonable baseline).</p>
+<h1 id="goals">Goals</h1>
+<p>I suspect software development can be lucrative because costs scale slowly. Solving a problem for 1 person may take a lot of work, but solving it for 100 (or 1000) additional users often costs very little. Of course, sometimes, I&#39;m just looking to solve my own problem, and I don&#39;t plan on having any &quot;users&quot;.</p>
+<p>Ultimately, <strong>before I start a project, I should have a target audience and/or goal in mind</strong>. This seems obvious, but I&#39;m fairly certain that most of my projects began organically, with only a vague notion of what I wanted to achieve.</p>
+<p>Additionally, <strong>I need to critically evaluate any goals and whether or not they&#39;re worth the effort</strong>. Creating a Common Lisp-based static site generator in order to learn Lisp because it sounds fun? Probably a good idea! Creating a Common Lisp-based static site generator in order to provide faster incremental and custom templates, for a tool that <a href="https://blubsblog.bearblog.dev/i-am-the-only-user/">will likely only ever have one user</a>? Probably not worth the effort!</p>
+<h1 id="looking-forward">Looking forward</h1>
+<p>Fittingly, my current hobby of learning Common Lisp started <a href="../programming-languages/learning-lisp-in-2023.html">because I read about REPL-driven development and wanted to test it out for myself</a>. In the process, I&#39;ve found many additional reasons to persist with Lisp:</p>
+<ul>
+<li><strong>Macros</strong>, for ergonomically generating code</li>
+<li><strong>Conditions</strong>, for observing and handling errors at a distance</li>
+<li><strong>Lists</strong> (of course), a handy, multi-purpose data structure, built into the core of the language</li>
+<li>With Emacs and SLIME, <strong>a fully-featured editing and debugging experience</strong> that easily runs on an old netbook</li>
+<li><strong>A broad ecosystem</strong>, with numerous implementations and a wide range of libraries</li>
+</ul>
+<p>Lisp is just <em>too</em> enticing to a dedicated software developer. It&#39;s the most expressive and extensible programming language I&#39;ve encountered, and it&#39;s <em>just popular enough</em> that learning it doesn&#39;t feel like a waste of time.</p>
+<p><strong>But what is my <em>goal</em> with learning Common Lisp?</strong></p>
+<ul>
+<li>Originally, I just was curious and wanted to try REPL-driven development, and now I&#39;m used to it--it&#39;s nice, but not indispensable</li>
+<li>Macros can be handy (in small doses), but I&#39;m pretty sure other languages now support syntax tree-level macros</li>
+<li>Common Lisp &quot;conditions&quot; (and &quot;restarts&quot;) still seem unique and useful</li>
+<li>Lists are handy, but they seem inefficient on modern hardware</li>
+<li>Having the equivalent of a language server that runs comfortably in the terminal on a netbook warms my heart, but fast computers are cheap</li>
+<li>Having many interoperable Common Lisp implementations sounds future-proof, but am I realistically going to use anything other than SBCL?</li>
+</ul>
+<p><strong>Overall, I like Common Lisp, but now I can&#39;t shake the feeling that using an extensible programming language that fits on netbook is just more bikeshedding.</strong></p>
+<p>Most programming language distinctions could probably be classified as &quot;marginal technical issues&quot; for all but the most demanding workloads.</p>
+<p>The whole world seems to be using Python or JavaScript and they&#39;re &quot;good enough&quot; for most purposes. Should I just hop on the bandwagon and stop fussing over those languages&#39; deficiencies? Well, that depends on the goal...</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
