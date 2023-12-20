@@ -7,8 +7,52 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2023-11-30T05:11:47.384Z</updated>
+<updated>2023-12-20T05:12:16.132Z</updated>
 
+<entry>
+<title>SIC-1 is going open source</title>
+<id>https://log.schemescape.com/posts/game-development/sic-1-open-source.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/sic-1-open-source.html"/>
+<updated>2023-12-19T00:00:00.000Z</updated>
+<summary type="text">Which open source licenses make the most sense for my game?</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html&quot;&gt;my original retrospective on releasing SIC-1&lt;/a&gt; (a single-instruction zachlike programming game), there were two open questions about the future:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Should I port the game to Linux (on Steam)?&lt;/li&gt;
+&lt;li&gt;Should I release the game under an open source license?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The first question has been answered: &lt;a href=&quot;https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux-2.html&quot;&gt;SIC-1 has been ported to Linux (on Steam)&lt;/a&gt;, but the second had not (until now).&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ve finally decided to release the game under an open source license. &lt;strong&gt;Which license? Good question!&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&quot;motivation&quot;&gt;Motivation&lt;/h1&gt;
+&lt;p&gt;Why release SIC-1 as open source? Up until now, the game has been my baby and there have been no substantial contributions by anyone else.&lt;/p&gt;
+&lt;p&gt;If I was naive, I&amp;#39;d hope that releasing the game as open source would lead to a revival, driven by contributions from excited new authors. But I&amp;#39;m &lt;em&gt;not&lt;/em&gt; naive, and I fully expect that no one else will take the time to read, understand, and modify the code in any significant way.&lt;/p&gt;
+&lt;p&gt;But games are more than just code! There are also assets. Specifically, SIC-1 contains a bunch of English text, both in the form of documentation and narrative. While I don&amp;#39;t expect the characters I&amp;#39;ve developed to get their own spin-off TV series, there is at least &lt;em&gt;one&lt;/em&gt; area where I am hopelessly under-qualified &lt;em&gt;and&lt;/em&gt; multiple people have expressed an actual interest in contributing:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Translating SIC-1 into additional languages&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;I feel it would be unfair to ask for translations from &lt;em&gt;volunteers&lt;/em&gt; in the case that I retained ownership over the entire game (even though the game is available for free already). Instead, I think it makes sense to open up ownership of the game to &lt;em&gt;everyone&lt;/em&gt;, i.e. release the game as open source.&lt;/p&gt;
+&lt;h1 id=&quot;hypothetical-concerns&quot;&gt;Hypothetical concerns&lt;/h1&gt;
+&lt;p&gt;Given that SIC-1 is free, with source already available, why wasn&amp;#39;t the game already open source? Here was my &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html#should-i-open-source-sic-1&quot;&gt;original rationale&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;I don&amp;#39;t want someone else to turn around and sell my game (that I released for free)&lt;/li&gt;
+&lt;li&gt;I&amp;#39;m proud of the music and characters/narrative, and I don&amp;#39;t want other people to be able to profit off of them&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Now that the game has been out on Steam for over a year and I think it&amp;#39;s already past its popularity peak, I feel less concerned about someone else profiting off of the game. The zachlike genre is just not that popular. Even excellent zachlikes &lt;em&gt;from Zachtronics&lt;/em&gt; don&amp;#39;t sell that many copies. And SIC-1 isn&amp;#39;t nearly as good! &lt;strong&gt;No one&amp;#39;s going to get rich off this game.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;As far as the characters and narrative, I can&amp;#39;t imagine anyone repurposing them. And I can just use a copyleft/share-alike license anyway.&lt;/p&gt;
+&lt;p&gt;Having said all of that, I don&amp;#39;t think I&amp;#39;m quite ready to let &lt;em&gt;just anyone&lt;/em&gt; use the music from the &lt;a href=&quot;https://soundcloud.com/schemescape/sets/sic-1-original-soundtrack&quot;&gt;SIC-1 Original Soundtrack&lt;/a&gt;. Unlike code and documentation, background music could fit right into completely unrelated projects--or even &lt;em&gt;events&lt;/em&gt;. &lt;strong&gt;What if 80s-inspired puzzlewave suddenly breaks into the mainstream and then I&amp;#39;m hearing the SIC-1 soundtrack at political rallies?&lt;/strong&gt; Maybe that&amp;#39;s taking this hypothetical situation a bit too far, but, regardless, I&amp;#39;ll probably continue to retain sole ownership over the soundtrack.&lt;/p&gt;
+&lt;h1 id=&quot;copyleft-or-permissive-license&quot;&gt;Copyleft or permissive license?&lt;/h1&gt;
+&lt;p&gt;The main decision I need to make around licensing is between choosing a &lt;a href=&quot;https://en.wikipedia.org/wiki/Copyleft&quot;&gt;copyleft&lt;/a&gt; vs. permissive license (e.g. &lt;a href=&quot;https://en.wikipedia.org/wiki/GNU_General_Public_License&quot;&gt;GPL&lt;/a&gt; vs. &lt;a href=&quot;https://en.wikipedia.org/wiki/MIT_license&quot;&gt;MIT&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;I like the idea of using a copyleft license because it (roughly) requires anyone distributing derivative works release their modifications back to the community. There is one sticking point with the GPL, however: it doesn&amp;#39;t allow linking with closed source code--in my case, this means I couldn&amp;#39;t link with the Steamworks SDK (which provides achievements and friend leaderboards on Steam) without jumping through some hoops (e.g. &lt;a href=&quot;https://github.com/icculus/steamshim&quot;&gt;moving Steam interactions out of process&lt;/a&gt; or requiring contributors sign a &amp;quot;contributor license agreement&amp;quot; allowing distribution on Steam). The &lt;a href=&quot;https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License&quot;&gt;LGPL license &lt;/a&gt; would avoid this problem.&lt;/p&gt;
+&lt;p&gt;There&amp;#39;s another issue with copyleft: what if I want to later use my code in a new game? Of course I can use &lt;em&gt;my&lt;/em&gt; code, but I wouldn&amp;#39;t be able to use any improvements that have been contributed by others. Honestly, however, this seems unfair to those contributors--I&amp;#39;d be (potentially) profiting off of their work.&lt;/p&gt;
+&lt;p&gt;After writing these thoughts down, I think the answer is clear: &lt;strong&gt;I&amp;#39;d prefer to use a copyleft license to protect both my contributions &lt;em&gt;and the contributions of others&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;the-plan&quot;&gt;The plan&lt;/h1&gt;
+&lt;p&gt;Given all of the above, here&amp;#39;s my plan for licensing the various categories of SIC-1 content:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Source code&lt;/strong&gt;: &lt;a href=&quot;https://www.gnu.org/licenses/lgpl-3.0.en.html&quot;&gt;GNU Lesser General Public License&lt;/a&gt; (at least until I have time to incorporate a GPL shim for the Steamworks SDK)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Documentation/narrative&lt;/strong&gt;: &lt;a href=&quot;https://creativecommons.org/licenses/by-sa/4.0/&quot;&gt;Creative Commons Attribution, Share-Alike&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Music&lt;/strong&gt;: &amp;quot;all rights reserved&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>A Common Lisp static site generator, because why not?</title>
 <id>https://log.schemescape.com/posts/static-site-generators/lisp-ssg.html</id>
@@ -459,102 +503,6 @@
 &lt;/tbody&gt;&lt;/table&gt;
 &lt;p&gt;As noted in the spoiler, on my desktop computer (with an 11 year-old processor), updates appear almost instantaneously (fortunately, my site has simple HTML and no JavaScript, so rendering is also fast).&lt;/p&gt;
 &lt;p&gt;I&amp;#39;m fairly certain this is still &lt;em&gt;not&lt;/em&gt; the fastest static site generator in existence. Maybe the fastest full-featured, JavaScript-based one? Regardless, it is clearly &lt;em&gt;fast enough&lt;/em&gt;--at least for now.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Building a browser-based app without JavaScript, part 2</title>
-<id>https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js-2.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js-2.html"/>
-<updated>2023-10-26T00:00:00.000Z</updated>
-<summary type="text">Yes, you can build real-time, interactive browser-based apps without JavaScript. But I wouldn&apos;t suggest using this particular approach.</summary>
-<content type="html">&lt;p&gt;In the &lt;a href=&quot;https://log.schemescape.com/posts/web-development/interactive-browser-app-without-js.html&quot;&gt;last post&lt;/a&gt;, I brainstormed ideas for creating a real-time, interactive browser-based app without using JavaScript (or WebAssembly).&lt;/p&gt;
-&lt;p&gt;In this post, I&amp;#39;ll describe a proof-of-concept that I created for &lt;a href=&quot;https://itch.io/jam/autumn-lisp-game-jam-2023&quot;&gt;Lisp Game Jam (Autumn 2023)&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;You can play the game here: &lt;a href=&quot;https://foo.schemescape.com/&quot;&gt;https://foo.schemescape.com/&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Source code is here: &lt;a href=&quot;https://github.com/jaredkrinke/cl-stuff/tree/main/foolander&quot;&gt;https://github.com/jaredkrinke/cl-stuff/tree/main/foolander&lt;/a&gt;&lt;/p&gt;
-&lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
-&lt;p&gt;The most difficult adjective to support without JavaScript is &amp;quot;real-time&amp;quot;. In some cases, &lt;a href=&quot;https://speckyboy.com/pure-css-games/&quot;&gt;CSS itself might be enough&lt;/a&gt; (although I truly hope CSS is not bloated enough for implementing a snake game!).&lt;/p&gt;
-&lt;p&gt;If you don&amp;#39;t need real-time feedback, you can probably get by with regular &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Learn/Forms/Your_first_form&quot;&gt;HTML forms&lt;/a&gt;, &lt;a href=&quot;https://en.wikipedia.org/wiki/Push_technology#Long_polling&quot;&gt;long-polling&lt;/a&gt;, or even &lt;a href=&quot;https://en.wikipedia.org/wiki/Meta_refresh&quot;&gt;meta refresh&lt;/a&gt;. But if you need immediate feedback for both user input and server state updates, avoiding JavaScript can be tricky.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s what I came up with:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Chunked_transfer_encoding&quot;&gt;HTTP 1.1 chunked transfer encoding&lt;/a&gt;, for progressively appending HTML/CSS&lt;/li&gt;
-&lt;li&gt;HTML forms (inside an &lt;code&gt;&amp;lt;iframe&amp;gt;&lt;/code&gt;), for providing input (without reloading the main page)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I don&amp;#39;t know if this is the best approach (in fact, I doubt it), but it is &lt;em&gt;an&lt;/em&gt; approach that is &amp;quot;good enough&amp;quot; for my terrible game.&lt;/p&gt;
-&lt;h1 id=&quot;architecture&quot;&gt;Architecture&lt;/h1&gt;
-&lt;p&gt;The architecture for my game is pretty simple:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;There&amp;#39;s a table of cells for the game board, each addressable via CSS (I used a class, but probably should have used an id)&lt;/li&gt;
-&lt;li&gt;This is all pushed as an initial chunk, with the stream kept open (and without closing the &lt;code&gt;&amp;lt;body&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;html&amp;gt;&lt;/code&gt; tags)&lt;/li&gt;
-&lt;li&gt;As the game runs, I modify the color of the table cells by pushing additional CSS rules in additional &lt;code&gt;&amp;lt;style&amp;gt;&lt;/code&gt; chunks&lt;/li&gt;
-&lt;li&gt;I also &amp;quot;overwrite&amp;quot; some HTML by defaulting one class to not being shown, with a &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/CSS/:last-of-type&quot;&gt;&lt;code&gt;:last-of-type&lt;/code&gt;&lt;/a&gt; override to show the most recently written element only&lt;/li&gt;
-&lt;li&gt;Input is handled via HTTP post (with a &amp;quot;session id&amp;quot; string) using an HTML form inside an &lt;code&gt;&amp;lt;iframe&amp;gt;&lt;/code&gt; (relegating the &amp;quot;entire page reloads&amp;quot; problem to a frame)&lt;/li&gt;
-&lt;li&gt;The form&amp;#39;s submission button has an &amp;quot;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey&quot;&gt;access key&lt;/a&gt;&amp;quot; for keyboard-only control--this could be useful for games with multiple buttons, although it requires holding down modifier keys (which vary widely based on operating system and browser)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;examples&quot;&gt;Examples&lt;/h1&gt;
-&lt;h2 id=&quot;table&quot;&gt;Table&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;table&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;tbody&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;tr&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;s29_0&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;&amp;amp;nbsp;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- Row 29, column 0 --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;s29_1&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;&amp;amp;nbsp;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- Row 29, column 1 --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;s29_2&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;&amp;amp;nbsp;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- etc. --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;s29_3&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-symbol&quot;&gt;&amp;amp;nbsp;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;td&lt;/span&gt;&amp;gt;&lt;/span&gt;
-...
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;tr&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;tbody&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;table&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;game-board-visual-updates&quot;&gt;Game board visual updates&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;language-css&quot;&gt;&lt;span class=&quot;hljs-selector-class&quot;&gt;.s9_12&lt;/span&gt; { &lt;span class=&quot;hljs-attribute&quot;&gt;background-color&lt;/span&gt;: yellow }&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- Change row 9, col 12 to yellow --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;language-css&quot;&gt;&lt;span class=&quot;hljs-selector-class&quot;&gt;.s6_12&lt;/span&gt; { &lt;span class=&quot;hljs-attribute&quot;&gt;background-color&lt;/span&gt;: blue }&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;style&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Note: I should have used ids instead of classes (since they&amp;#39;re unique elements). Also, I could have consolidated multiple same-frame updates into a single &lt;code&gt;&amp;lt;style&amp;gt;&lt;/code&gt; tag.&lt;/p&gt;
-&lt;h2 id=&quot;overwriting-the-last-bit-of-html-the-score&quot;&gt;&amp;quot;Overwriting&amp;quot; the last bit of HTML (the score)&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&quot;language-css&quot;&gt;&lt;span class=&quot;hljs-selector-class&quot;&gt;.score&lt;/span&gt; { &lt;span class=&quot;hljs-attribute&quot;&gt;display&lt;/span&gt;: none }
-&lt;span class=&quot;hljs-selector-class&quot;&gt;.score&lt;/span&gt;&lt;span class=&quot;hljs-selector-pseudo&quot;&gt;:last-of-type&lt;/span&gt; { &lt;span class=&quot;hljs-attribute&quot;&gt;display&lt;/span&gt;: block }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;score&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;Score: 0&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;p&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- Initial score --&amp;gt;&lt;/span&gt;
-...
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;class&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;score&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;Score: 1&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;p&lt;/span&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- Later, this score is shown instead --&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;input-frame&quot;&gt;Input frame&lt;/h2&gt;
-&lt;p&gt;My game only uses a single button, but multiple buttons are easy to support using distinct forms with hidden inputs. In fact, I used multiple buttons until I decided to simplify at the very end.&lt;/p&gt;
-&lt;p&gt;Parent page:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;iframe&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;src&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;controls?id=cbecixentpsc&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;iframe&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Frame body:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;form&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;action&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;action&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;method&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;post&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- This id links input to an active instance of the game --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;hidden&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;cbecixentpsc&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;cbecixentpsc&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- This was for supporting multiple buttons --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;hidden&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;name&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;action&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;clockwise&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;hljs-comment&quot;&gt;&amp;lt;!-- The actual submit button that is shown in-game --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-name&quot;&gt;input&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;type&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;submit&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;value&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;↻&amp;quot;&lt;/span&gt; &lt;span class=&quot;hljs-attr&quot;&gt;accesskey&lt;/span&gt;=&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;/&lt;span class=&quot;hljs-name&quot;&gt;form&lt;/span&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The &lt;code&gt;id&lt;/code&gt; parameter is tracked on the server to link input to a particular HTTP request (which runs an entire round of the game).&lt;/p&gt;
-&lt;h1 id=&quot;analysis&quot;&gt;Analysis&lt;/h1&gt;
-&lt;p&gt;Give the game a try! If your latency isn&amp;#39;t too high, then it&amp;#39;s somewhat playable.&lt;/p&gt;
-&lt;p&gt;Of course, I wouldn&amp;#39;t recommend this approach because it has a number of drawbacks:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;As noted, latency is a problem because &lt;em&gt;every user input event&lt;/em&gt; is a new HTTP post -- this is a nontrivial amount of overhead&lt;/li&gt;
-&lt;li&gt;Also, successive button presses are slow because the entire input frame has to be reloaded&lt;/li&gt;
-&lt;li&gt;The server can&amp;#39;t handle too many concurrent players because each game holds an HTTP request open for the entire length of the game (I&amp;#39;m using a web server that dedicates a thread to each request, although many web servers don&amp;#39;t do this anymore)&lt;/li&gt;
-&lt;li&gt;Updating the game board requires evaluating CSS rules, which is obviously less efficient than just drawing, say, a canvas square&lt;/li&gt;
-&lt;li&gt;&amp;quot;Normal&amp;quot; keyboard input doesn&amp;#39;t really work since HTML can only use access keys (which require holding down some combination of Ctrl/Shift/Alt/Meta/Command)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;But it &lt;em&gt;does&lt;/em&gt; (mostly) work! And it gave me an excuse to mess around with Lisp and participate in a game jam.&lt;/p&gt;
-&lt;p&gt;Overall, I&amp;#39;m calling this a success since it answered my original question... even if it&amp;#39;s not a technique I&amp;#39;d recommend.&lt;/p&gt;
-&lt;h1 id=&quot;addendum&quot;&gt;Addendum&lt;/h1&gt;
-&lt;h2 id=&quot;achievement-not-unlocked&quot;&gt;Achievement &lt;em&gt;not&lt;/em&gt; unlocked&lt;/h2&gt;
-&lt;p&gt;Unfortunately, I wasn&amp;#39;t able to achieve one secret goal I had in mind: getting the game to run in a minimalist, no-JavaScript browser, like &lt;a href=&quot;https://dillo.org/&quot;&gt;Dillo&lt;/a&gt;. Apparently Dillo doesn&amp;#39;t support inline frames, so the control scheme doesn&amp;#39;t really work (unless you have another window open to the frame). Additionally, Dillo didn&amp;#39;t seem to like my &amp;quot;streaming CSS&amp;quot; approach--the entire game board just remained its initial blue color.&lt;/p&gt;
-&lt;p&gt;Oh well. At least I tried.&lt;/p&gt;
-&lt;h2 id=&quot;nginx&quot;&gt;nginx&lt;/h2&gt;
-&lt;p&gt;In order to support HTTPS using nginx, I had to tweak a couple of nginx settings. I&amp;#39;m noting them down here for reference:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-attribute&quot;&gt;proxy_http_version&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;.&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;; &lt;span class=&quot;hljs-comment&quot;&gt;# nginx default is 1.0, but chunking is a 1.1 feature&lt;/span&gt;
-&lt;span class=&quot;hljs-attribute&quot;&gt;proxy_buffering&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;off&lt;/span&gt;; &lt;span class=&quot;hljs-comment&quot;&gt;# Necessary to ensure chunks are forwarded as soon as received&lt;/span&gt;
-&lt;span class=&quot;hljs-attribute&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;hljs-literal&quot;&gt;off&lt;/span&gt;; &lt;span class=&quot;hljs-comment&quot;&gt;# This is actually the default, chunking only worked with gzip disabled&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
 </content>
 </entry>
 </feed>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>SIC-1 is going open source</title>
+<meta name="description" content="Which open source licenses make the most sense for my game?" />
+<meta name="keywords" content="sic1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SIC-1 is going open source",
+  "abstract": "Which open source licenses make the most sense for my game?",
+  "keywords": "game-development,sic1",
+  "datePublished": "2023-12-19"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/game-development/index.html">game-development</a></li>
+<li><a href="../../posts/sic1/index.html">sic1</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/game-development/sic-1-open-source.html">SIC-1 is going open source</a></h1>
+<p><time datetime="2023-12-19">December 19, 2023</time></p>
+</header>
+<p>In <a href="sic-1-retrospective.html">my original retrospective on releasing SIC-1</a> (a single-instruction zachlike programming game), there were two open questions about the future:</p>
+<ol>
+<li>Should I port the game to Linux (on Steam)?</li>
+<li>Should I release the game under an open source license?</li>
+</ol>
+<p>The first question has been answered: <a href="web-game-on-steam-for-linux-2.html">SIC-1 has been ported to Linux (on Steam)</a>, but the second had not (until now).</p>
+<p>I&#39;ve finally decided to release the game under an open source license. <strong>Which license? Good question!</strong></p>
+<h1 id="motivation">Motivation</h1>
+<p>Why release SIC-1 as open source? Up until now, the game has been my baby and there have been no substantial contributions by anyone else.</p>
+<p>If I was naive, I&#39;d hope that releasing the game as open source would lead to a revival, driven by contributions from excited new authors. But I&#39;m <em>not</em> naive, and I fully expect that no one else will take the time to read, understand, and modify the code in any significant way.</p>
+<p>But games are more than just code! There are also assets. Specifically, SIC-1 contains a bunch of English text, both in the form of documentation and narrative. While I don&#39;t expect the characters I&#39;ve developed to get their own spin-off TV series, there is at least <em>one</em> area where I am hopelessly under-qualified <em>and</em> multiple people have expressed an actual interest in contributing:</p>
+<p><strong>Translating SIC-1 into additional languages</strong>.</p>
+<p>I feel it would be unfair to ask for translations from <em>volunteers</em> in the case that I retained ownership over the entire game (even though the game is available for free already). Instead, I think it makes sense to open up ownership of the game to <em>everyone</em>, i.e. release the game as open source.</p>
+<h1 id="hypothetical-concerns">Hypothetical concerns</h1>
+<p>Given that SIC-1 is free, with source already available, why wasn&#39;t the game already open source? Here was my <a href="sic-1-retrospective.html#should-i-open-source-sic-1">original rationale</a>:</p>
+<blockquote>
+<ul>
+<li>I don&#39;t want someone else to turn around and sell my game (that I released for free)</li>
+<li>I&#39;m proud of the music and characters/narrative, and I don&#39;t want other people to be able to profit off of them</li>
+</ul>
+</blockquote>
+<p>Now that the game has been out on Steam for over a year and I think it&#39;s already past its popularity peak, I feel less concerned about someone else profiting off of the game. The zachlike genre is just not that popular. Even excellent zachlikes <em>from Zachtronics</em> don&#39;t sell that many copies. And SIC-1 isn&#39;t nearly as good! <strong>No one&#39;s going to get rich off this game.</strong></p>
+<p>As far as the characters and narrative, I can&#39;t imagine anyone repurposing them. And I can just use a copyleft/share-alike license anyway.</p>
+<p>Having said all of that, I don&#39;t think I&#39;m quite ready to let <em>just anyone</em> use the music from the <a href="https://soundcloud.com/schemescape/sets/sic-1-original-soundtrack">SIC-1 Original Soundtrack</a>. Unlike code and documentation, background music could fit right into completely unrelated projects--or even <em>events</em>. <strong>What if 80s-inspired puzzlewave suddenly breaks into the mainstream and then I&#39;m hearing the SIC-1 soundtrack at political rallies?</strong> Maybe that&#39;s taking this hypothetical situation a bit too far, but, regardless, I&#39;ll probably continue to retain sole ownership over the soundtrack.</p>
+<h1 id="copyleft-or-permissive-license">Copyleft or permissive license?</h1>
+<p>The main decision I need to make around licensing is between choosing a <a href="https://en.wikipedia.org/wiki/Copyleft">copyleft</a> vs. permissive license (e.g. <a href="https://en.wikipedia.org/wiki/GNU_General_Public_License">GPL</a> vs. <a href="https://en.wikipedia.org/wiki/MIT_license">MIT</a>).</p>
+<p>I like the idea of using a copyleft license because it (roughly) requires anyone distributing derivative works release their modifications back to the community. There is one sticking point with the GPL, however: it doesn&#39;t allow linking with closed source code--in my case, this means I couldn&#39;t link with the Steamworks SDK (which provides achievements and friend leaderboards on Steam) without jumping through some hoops (e.g. <a href="https://github.com/icculus/steamshim">moving Steam interactions out of process</a> or requiring contributors sign a &quot;contributor license agreement&quot; allowing distribution on Steam). The <a href="https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License">LGPL license </a> would avoid this problem.</p>
+<p>There&#39;s another issue with copyleft: what if I want to later use my code in a new game? Of course I can use <em>my</em> code, but I wouldn&#39;t be able to use any improvements that have been contributed by others. Honestly, however, this seems unfair to those contributors--I&#39;d be (potentially) profiting off of their work.</p>
+<p>After writing these thoughts down, I think the answer is clear: <strong>I&#39;d prefer to use a copyleft license to protect both my contributions <em>and the contributions of others</em></strong>.</p>
+<h1 id="the-plan">The plan</h1>
+<p>Given all of the above, here&#39;s my plan for licensing the various categories of SIC-1 content:</p>
+<ul>
+<li><strong>Source code</strong>: <a href="https://www.gnu.org/licenses/lgpl-3.0.en.html">GNU Lesser General Public License</a> (at least until I have time to incorporate a GPL shim for the Steamworks SDK)</li>
+<li><strong>Documentation/narrative</strong>: <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution, Share-Alike</a></li>
+<li><strong>Music</strong>: &quot;all rights reserved&quot;</li>
+</ul>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
