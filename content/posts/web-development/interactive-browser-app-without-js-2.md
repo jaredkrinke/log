@@ -7,7 +7,7 @@ In the [last post](interactive-browser-app-without-js.md), I brainstormed ideas 
 
 In this post, I'll describe a proof-of-concept that I created for [Lisp Game Jam (Autumn 2023)](https://itch.io/jam/autumn-lisp-game-jam-2023).
 
-**You can play the game here: [https://foo.schemescape.com/](https://foo.schemescape.com/)**
+Note: the game server has been taken offline. Sorry!
 
 Source code is here: [https://github.com/jaredkrinke/cl-stuff/tree/main/foolander](https://github.com/jaredkrinke/cl-stuff/tree/main/foolander)
 
