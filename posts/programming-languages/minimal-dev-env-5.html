@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Minimal dev environment, part 5</title>
+<meta name="description" content="I almost found the perfect minimal development environment." />
+<meta name="keywords" content="minimalism,lisp" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Minimal dev environment, part 5",
+  "abstract": "I almost found the perfect minimal development environment.",
+  "keywords": "programming-languages,minimalism,lisp",
+  "datePublished": "2024-03-05"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+<li><a href="../../posts/minimalism/index.html">minimalism</a></li>
+<li><a href="../../posts/lisp/index.html">lisp</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/programming-languages/minimal-dev-env-5.html">Minimal dev environment, part 5</a></h1>
+<p><time datetime="2024-03-05">March 5, 2024</time></p>
+</header>
+<p>In <a href="minimal-dev-env-4.html">part 4 of my quest to find a minimal (but comfortable) development environment</a>, I upgraded from a Raspberry Pi B to an old netbook. But now I&#39;m back to tinkering with the Pi.</p>
+<h1 id="why">Why?</h1>
+<p><strong>Why am I back to using an ancient single-board computer</strong> (with a 700 MHz, 32-bit ARM CPU and 512 MB of RAM)? Because I think I can do better this time.</p>
+<p>On my previous attempt, I was writing code in C and TypeScript because, frankly, those were the languages I was most familiar (and content) with. Sadly, parsing and analyzing those languages is nontrivial, and I noticed that syntax highlighting and (especially) static analysis were so computationally expensive, that Vim would start to crawl. I could literally watch lines of text appearing like typewriter.</p>
+<p>So, have I found a magical new language server that runs snappily on an original Pi? No. But kind of.</p>
+<h1 id="a-faster-integrated-development-environment">A faster integrated development environment</h1>
+<p>Of course, to get faster syntax highlighting and whatnot, I had to change a few things--namely <em>everything</em>.</p>
+<p><strong>Out goes Vim, in comes Emacs.</strong> I know that sounds like a bad trade-off for performance, but bear with me.</p>
+<p><strong>Out go C and TypeScript, and in comes Common Lisp.</strong></p>
+<p>Emacs is not known for speed, but, when working with Lisp, it gets to cheat a bit. Lisp&#39;s syntax is trivial, so parsing is very fast. Additionally, auto-complete is essentially baked into the <a href="../programming-languages/learning-lisp-in-2023.html">&quot;read, evaluate, and print&quot; loop of Lisp development</a>, and Emacs+SLIME adds formatting too.</p>
+<p>It does take a while to startup, but once it&#39;s running, Emacs with SLIME and SBCL is surprisingly usable on my cute little hardware relic. I played around with some Lisp code and started making plans to write the finale to this series. I&#39;d done it! I&#39;d found a minimal, yet productive, development environment that could run on an endangered architecture!</p>
+<h1 id="or-not">Or not</h1>
+<p>Unfortunately, when I went to try compiling <a href="https://lem-project.github.io/">Lem</a> (a Common Lisp-based editor), I encountered a strange error message from <a href="https://sionescu.github.io/bordeaux-threads/">Bordeaux Threads</a> (the de facto threading library for Common Lisp). The error breadcrumbs eventually led me to an inconvenient truth: <a href="http://www.sbcl.org/manual/index.html#Threading">SBCL doesn&#39;t support multithreading on 32-bit ARM</a>. Cue sad face emoji.</p>
+<p>I tried installing CLISP, but the Debian build of CLISP also didn&#39;t appear to support threads. Same for ECL. I could maybe recompile one or both of those, but I haven&#39;t gone down that road because I suspect they will eventually be too slow (CLISP during execution and ECL during compilation).</p>
+<h1 id="or-not-1">Or not?</h1>
+<p>Of course, I don&#39;t really <em>need</em> multithreading for some of my projects, so I didn&#39;t give up at this point. I happily solved a few <a href="https://projecteuler.net/">Project Euler</a> problems using Common Lisp, in Emacs. I&#39;ll admit that the editor was a bit slow when running in X.org (with the <a href="https://www.nongnu.org/ratpoison/">Ratpoison</a> window manager). Without X.org, editor performance was great, although that breaks some key combinations, has limited mouse support, and the font is frankly a bit too small on my monitor.</p>
+<p>But I eventually ran into an insurmountable annoyance...</p>
+<h1 id="so-we-meet-again-modern-web">So we meet again, modern web</h1>
+<p><strong>The modern web is just the worst</strong>, and the most recent brick wall I slammed into is: captchas (specifically Project Euler&#39;s captcha, which requires JavaScript).</p>
+<p>On my Pi, I generally try to stick to a terminal-mode browser like <a href="https://w3m.sourceforge.net/">w3m</a> because it&#39;s fast and uses very little memory. If I need graphics, I move to <a href="https://dillo.org/">Dillo</a> or <a href="https://www.netsurf-browser.org/">NetSurf</a>. If I need JavaScript, I use <a href="https://astian.org/midori-browser/">Midori</a>, but it is <em>painfully</em> slow on my Pi. And don&#39;t even ask about Firefox--it couldn&#39;t even load its own landing page on my Pi!</p>
+<p><strong>Having to use a JavaScript-enabled browser on a woefully underpowered device just absolutely killed my enthusiasm for minimalist development</strong>. Too many sites require JavaScript, and being effectively locked out of a large chunk of the web is too annoying for me at the moment.</p>
+<p>Oh well, at least I tried.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

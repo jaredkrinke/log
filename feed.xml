@@ -7,8 +7,38 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-03-02T04:16:38.440Z</updated>
+<updated>2024-03-06T04:19:06.996Z</updated>
 
+<entry>
+<title>Minimal dev environment, part 5</title>
+<id>https://log.schemescape.com/posts/programming-languages/minimal-dev-env-5.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/minimal-dev-env-5.html"/>
+<updated>2024-03-05T00:00:00.000Z</updated>
+<summary type="text">I almost found the perfect minimal development environment.</summary>
+<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env-4.html&quot;&gt;part 4 of my quest to find a minimal (but comfortable) development environment&lt;/a&gt;, I upgraded from a Raspberry Pi B to an old netbook. But now I&amp;#39;m back to tinkering with the Pi.&lt;/p&gt;
+&lt;h1 id=&quot;why&quot;&gt;Why?&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Why am I back to using an ancient single-board computer&lt;/strong&gt; (with a 700 MHz, 32-bit ARM CPU and 512 MB of RAM)? Because I think I can do better this time.&lt;/p&gt;
+&lt;p&gt;On my previous attempt, I was writing code in C and TypeScript because, frankly, those were the languages I was most familiar (and content) with. Sadly, parsing and analyzing those languages is nontrivial, and I noticed that syntax highlighting and (especially) static analysis were so computationally expensive, that Vim would start to crawl. I could literally watch lines of text appearing like typewriter.&lt;/p&gt;
+&lt;p&gt;So, have I found a magical new language server that runs snappily on an original Pi? No. But kind of.&lt;/p&gt;
+&lt;h1 id=&quot;a-faster-integrated-development-environment&quot;&gt;A faster integrated development environment&lt;/h1&gt;
+&lt;p&gt;Of course, to get faster syntax highlighting and whatnot, I had to change a few things--namely &lt;em&gt;everything&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Out goes Vim, in comes Emacs.&lt;/strong&gt; I know that sounds like a bad trade-off for performance, but bear with me.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Out go C and TypeScript, and in comes Common Lisp.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Emacs is not known for speed, but, when working with Lisp, it gets to cheat a bit. Lisp&amp;#39;s syntax is trivial, so parsing is very fast. Additionally, auto-complete is essentially baked into the &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../programming-languages/learning-lisp-in-2023.html&quot;&gt;&amp;quot;read, evaluate, and print&amp;quot; loop of Lisp development&lt;/a&gt;, and Emacs+SLIME adds formatting too.&lt;/p&gt;
+&lt;p&gt;It does take a while to startup, but once it&amp;#39;s running, Emacs with SLIME and SBCL is surprisingly usable on my cute little hardware relic. I played around with some Lisp code and started making plans to write the finale to this series. I&amp;#39;d done it! I&amp;#39;d found a minimal, yet productive, development environment that could run on an endangered architecture!&lt;/p&gt;
+&lt;h1 id=&quot;or-not&quot;&gt;Or not&lt;/h1&gt;
+&lt;p&gt;Unfortunately, when I went to try compiling &lt;a href=&quot;https://lem-project.github.io/&quot;&gt;Lem&lt;/a&gt; (a Common Lisp-based editor), I encountered a strange error message from &lt;a href=&quot;https://sionescu.github.io/bordeaux-threads/&quot;&gt;Bordeaux Threads&lt;/a&gt; (the de facto threading library for Common Lisp). The error breadcrumbs eventually led me to an inconvenient truth: &lt;a href=&quot;http://www.sbcl.org/manual/index.html#Threading&quot;&gt;SBCL doesn&amp;#39;t support multithreading on 32-bit ARM&lt;/a&gt;. Cue sad face emoji.&lt;/p&gt;
+&lt;p&gt;I tried installing CLISP, but the Debian build of CLISP also didn&amp;#39;t appear to support threads. Same for ECL. I could maybe recompile one or both of those, but I haven&amp;#39;t gone down that road because I suspect they will eventually be too slow (CLISP during execution and ECL during compilation).&lt;/p&gt;
+&lt;h1 id=&quot;or-not-1&quot;&gt;Or not?&lt;/h1&gt;
+&lt;p&gt;Of course, I don&amp;#39;t really &lt;em&gt;need&lt;/em&gt; multithreading for some of my projects, so I didn&amp;#39;t give up at this point. I happily solved a few &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt; problems using Common Lisp, in Emacs. I&amp;#39;ll admit that the editor was a bit slow when running in X.org (with the &lt;a href=&quot;https://www.nongnu.org/ratpoison/&quot;&gt;Ratpoison&lt;/a&gt; window manager). Without X.org, editor performance was great, although that breaks some key combinations, has limited mouse support, and the font is frankly a bit too small on my monitor.&lt;/p&gt;
+&lt;p&gt;But I eventually ran into an insurmountable annoyance...&lt;/p&gt;
+&lt;h1 id=&quot;so-we-meet-again-modern-web&quot;&gt;So we meet again, modern web&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;The modern web is just the worst&lt;/strong&gt;, and the most recent brick wall I slammed into is: captchas (specifically Project Euler&amp;#39;s captcha, which requires JavaScript).&lt;/p&gt;
+&lt;p&gt;On my Pi, I generally try to stick to a terminal-mode browser like &lt;a href=&quot;https://w3m.sourceforge.net/&quot;&gt;w3m&lt;/a&gt; because it&amp;#39;s fast and uses very little memory. If I need graphics, I move to &lt;a href=&quot;https://dillo.org/&quot;&gt;Dillo&lt;/a&gt; or &lt;a href=&quot;https://www.netsurf-browser.org/&quot;&gt;NetSurf&lt;/a&gt;. If I need JavaScript, I use &lt;a href=&quot;https://astian.org/midori-browser/&quot;&gt;Midori&lt;/a&gt;, but it is &lt;em&gt;painfully&lt;/em&gt; slow on my Pi. And don&amp;#39;t even ask about Firefox--it couldn&amp;#39;t even load its own landing page on my Pi!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Having to use a JavaScript-enabled browser on a woefully underpowered device just absolutely killed my enthusiasm for minimalist development&lt;/strong&gt;. Too many sites require JavaScript, and being effectively locked out of a large chunk of the web is too annoying for me at the moment.&lt;/p&gt;
+&lt;p&gt;Oh well, at least I tried.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>SIC-1 is going open source</title>
 <id>https://log.schemescape.com/posts/game-development/sic-1-open-source.html</id>
@@ -430,79 +460,6 @@
 &lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
 &lt;p&gt;Reducing file enumeration down to 2 milliseconds gives me some breathing room in my 50-ish millisecond budget. This is fortunate in the sense that I might end up with something useful, but unfortunate in the sense that I can no longer be satisfied with immediately discarding this project as obviously infeasible.&lt;/p&gt;
 &lt;p&gt;Looks like I&amp;#39;ve got some more work to do...&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Building the fastest static site generator... or not</title>
-<id>https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-4.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-4.html"/>
-<updated>2023-11-08T00:00:00.000Z</updated>
-<summary type="text">This is a personal anecdote about the struggle to avoid over-engineering a static site generator.</summary>
-<content type="html">&lt;p&gt;Well, I did it.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;I have successfully staved off the urge (at least temporarily) to create &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/pre-markdown.html&quot;&gt;yet&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/md2blog-design.html&quot;&gt;another&lt;/a&gt; static site generator&lt;/strong&gt; by instead making &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt; (my zero-config dev blog generator) &lt;em&gt;just fast enough&lt;/em&gt; for my workflow that it seems pointless to bother improving upon its performance.&lt;/p&gt;
-&lt;p&gt;Spoiler: adding trivial caching and bypassing the file system shrunk live rebuild times by ~80%--down to &lt;strong&gt;50 milliseconds&lt;/strong&gt; on my (decade old) desktop computer. Updates now appear in roughly the amount of time it takes me to shift the focus of my eyes from my text editor to the adjacent browser.&lt;/p&gt;
-&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;Possibly as a reaction to &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../game-development/web-game-on-steam-for-linux-2.html&quot;&gt;releasing a piece of software based on Electron&lt;/a&gt;, I&amp;#39;ve been playing with a &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/minimal-dev-env-4.html&quot;&gt;minimal development environment, running on an old netbook&lt;/a&gt;. Unfortunately, my static site generator was taking roughly 6 seconds (on the netbook) to perform live rebuilds of my site (~90 pages), and I&amp;#39;m generally not patient with poorly optimized software.&lt;/p&gt;
-&lt;p&gt;Fortunately, after &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-3.html&quot;&gt;a few tweaks&lt;/a&gt;, I was able to reduce that time down to around 900 milliseconds. Sub-second updates are acceptable (impressive, even--on a netbook), but I couldn&amp;#39;t shake the feeling that it could be &lt;em&gt;a lot&lt;/em&gt; faster.&lt;/p&gt;
-&lt;h1 id=&quot;plans-for-a-new-static-site-generator&quot;&gt;Plans for a new static site generator&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;The most obvious way to speed up rebuilds of a static site is to avoid doing unnecessary work&lt;/strong&gt;. Given that &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html&quot;&gt;a previous experiment of mine&lt;/a&gt; showed it was only necessary to rebuild roughly 5 pages when updating (or adding) a single blog post, I started making plans for an extensible static site generator (similar to &lt;a href=&quot;https://github.com/jaredkrinke/goldsmith&quot;&gt;Goldsmith&lt;/a&gt;/&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/metalsmith.html&quot;&gt;Metalsmith&lt;/a&gt;) &lt;em&gt;with an accurate dependency graph&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;Since I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/learning-lisp-in-2023.html&quot;&gt;learning Lisp&lt;/a&gt;, I started planning to rebuild md2blog in Common Lisp. With an accurate dependency graph, compilation to native code, and the ability to process Markdown/syntax highlighting in parallel, I was fairly certain I could significantly improve live rebuild times.&lt;/p&gt;
-&lt;p&gt;Additionally, Common Lisp would trivially allow for beautiful s-expression-based templates, interactive debugging and introspection, and even automatic detection of pipeline/code updates.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;I could build the most extensible--and fastest--static site generator ever!&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&quot;or-i-could-do-something-else&quot;&gt;Or I could do something else&lt;/h1&gt;
-&lt;p&gt;But I already have a perfectly functional (and tolerably fast) static site generator. &lt;strong&gt;And I&amp;#39;m (nearly) the only user&lt;/strong&gt;. Is it really a good use of my time to build the same thing, just faster and in Lisp? It would certainly be educational, and a great way to learn Common Lisp, but finding Common Lisp libraries for Markdown processing, syntax highlighting, JSON validation, cache storage, and file system monitoring sounds... daunting.&lt;/p&gt;
-&lt;p&gt;I still maintain that static site generators are a perfect first project for learning a programming language (and its ecosystem). It forces you to interact with the file system, understand data flows, find relevant libraries, and maybe even build a web server. In the end, you can produce a fast and efficient web site.&lt;/p&gt;
-&lt;p&gt;But I&amp;#39;ve already done this at least four times and I&amp;#39;m probably past the point of diminishing returns. Is this a project that&amp;#39;s really worth spending a few weeks of my spare time on?&lt;/p&gt;
-&lt;p&gt;Analogous to speeding up a static site generator, &lt;strong&gt;the most obvious way to speed up a &lt;em&gt;software project&lt;/em&gt; is to avoid doing unnecessary work&lt;/strong&gt; (i.e. avoid starting over from scratch). So I refocused my efforts on wringing maximal performance from md2blog, while staying within its existing design constraints.&lt;/p&gt;
-&lt;h2 id=&quot;an-epiphany-around-caching&quot;&gt;An epiphany around caching&lt;/h2&gt;
-&lt;p&gt;What if, instead of making a really smart cache, I made a really dumb one?&lt;/p&gt;
-&lt;p&gt;While planning a scheme for reliably caching the results of arbitrary steps in the processing pipeline (specifically, deciding between simply using files&amp;#39; &amp;quot;last modified time&amp;quot; vs. using their actual content--or a hash--to detect changes), I realized that &lt;strong&gt;most of the challenges evaporated if I scoped the cache a single run of the tool&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;As noted in a previous post, my primary performance-sensitive workflow is:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Run md2blog as a live-reloading server&lt;/li&gt;
-&lt;li&gt;Edit a blog post&lt;/li&gt;
-&lt;li&gt;Hit Ctrl+S in my text editor&lt;/li&gt;
-&lt;li&gt;Wait for updated content to render in my browser&lt;/li&gt;
-&lt;li&gt;Go to 2&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;I.e. &lt;strong&gt;it&amp;#39;s all one run of md2blog&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;As an experiment, I added a trivial in-memory Markdown cache and found that this One Weird Trick removed plugin processing as the primary bottleneck. The largest remaining bottleneck was the file system itself (writing out all the file contents to disk).&lt;/p&gt;
-&lt;h2 id=&quot;an-epiphany-around-the-file-system&quot;&gt;An epiphany around the file system&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;Why am I even waiting on the file system?&lt;/strong&gt; md2blog reads in files and then all subsequent processing is done in memory. Since I&amp;#39;m already running my own web server, &lt;strong&gt;I can just serve HTTP requests straight out of memory&lt;/strong&gt; while files are written to disk in the background!&lt;/p&gt;
-&lt;p&gt;That removed the final obvious bottleneck.&lt;/p&gt;
-&lt;h1 id=&quot;results&quot;&gt;Results&lt;/h1&gt;
-&lt;p&gt;Here&amp;#39;s a table of approximate &amp;quot;live rebuild&amp;quot; times from:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;md2blog 1.1.1: no optimizations whatsoever&lt;/li&gt;
-&lt;li&gt;md2blog 1.2.0: syntax highlighting cached and link-checking moved to the background&lt;/li&gt;
-&lt;li&gt;md2blog 1.2.2 (new): Markdown cached and file system output moved to the background&lt;/li&gt;
-&lt;/ul&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;md2blog version&lt;/th&gt;
-&lt;th align=&quot;right&quot;&gt;Netbook (ms)&lt;/th&gt;
-&lt;th align=&quot;right&quot;&gt;Desktop (ms)&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;v1.1.1&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;6000&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;1200&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;v1.2.0&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;900&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;190&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;v1.2.2&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;200&lt;/td&gt;
-&lt;td align=&quot;right&quot;&gt;50&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;As noted in the spoiler, on my desktop computer (with an 11 year-old processor), updates appear almost instantaneously (fortunately, my site has simple HTML and no JavaScript, so rendering is also fast).&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m fairly certain this is still &lt;em&gt;not&lt;/em&gt; the fastest static site generator in existence. Maybe the fastest full-featured, JavaScript-based one? Regardless, it is clearly &lt;em&gt;fast enough&lt;/em&gt;--at least for now.&lt;/p&gt;
 </content>
 </entry>
 </feed>
