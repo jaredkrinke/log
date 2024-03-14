@@ -24,6 +24,6 @@ Despite this being an obvious waste of time, I'm still "full steam ahead" becaus
 * It's such an awful idea, that **I'll feel zero regret if I abandon the project**
 
 # Caveats
-I left this section for last, hoping that people wouldn't make it this far, because I the headline is deliberately misleading. **When I mentioned "100 days", I didn't mean 100 *consecutive* days**. And I didn't even necessarily mean that each programming language would take 1 day. The "100 days" is really more about limiting the amount of collateral damage to my personal life that this project might cause.
+I left this section for last, hoping that people wouldn't make it this far, because the headline is deliberately misleading. **When I mentioned "100 days", I didn't mean 100 *consecutive* days**. And I didn't even necessarily mean that each programming language would take 1 day. The "100 days" is really more about limiting the amount of collateral damage to my personal life that this project might cause.
 
 On that note, wish me luck! And feel free to [email me](mailto:log@schemescape.com) suggestions for programming languages (especially if you know of Project Euler problems to pair with them).
