@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-03-14T17:06:48.094Z</updated>
+<updated>2024-03-14T17:09:21.361Z</updated>
 
 <entry>
 <title>100 programming languages in 100 days</title>
@@ -33,7 +33,7 @@
 &lt;li&gt;It&amp;#39;s such an awful idea, that &lt;strong&gt;I&amp;#39;ll feel zero regret if I abandon the project&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&quot;caveats&quot;&gt;Caveats&lt;/h1&gt;
-&lt;p&gt;I left this section for last in, hoping that people wouldn&amp;#39;t make it this far, because I the headline is deliberately misleading. &lt;strong&gt;When I mentioned &amp;quot;100 days&amp;quot;, I didn&amp;#39;t mean 100 &lt;em&gt;consecutive&lt;/em&gt; days&lt;/strong&gt;. And I didn&amp;#39;t even necessarily mean that each programming language would take 1 day. The &amp;quot;100 days&amp;quot; is really more about limiting the amount of collateral damage to my personal life that this project might cause.&lt;/p&gt;
+&lt;p&gt;I left this section for last, hoping that people wouldn&amp;#39;t make it this far, because I the headline is deliberately misleading. &lt;strong&gt;When I mentioned &amp;quot;100 days&amp;quot;, I didn&amp;#39;t mean 100 &lt;em&gt;consecutive&lt;/em&gt; days&lt;/strong&gt;. And I didn&amp;#39;t even necessarily mean that each programming language would take 1 day. The &amp;quot;100 days&amp;quot; is really more about limiting the amount of collateral damage to my personal life that this project might cause.&lt;/p&gt;
 &lt;p&gt;On that note, wish me luck! And feel free to &lt;a href=&quot;mailto:log@schemescape.com&quot;&gt;email me&lt;/a&gt; suggestions for programming languages (especially if you know of Project Euler problems to pair with them).&lt;/p&gt;
 </content>
 </entry>
