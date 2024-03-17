@@ -2,10 +2,13 @@
 title: 100 programming languages in 100 days
 description: I'm going to write code in 100 different programming languages. For fun.
 date: 2024-03-14
+keywords: [100-languages]
 ---
 As usual, this is probably a terrible idea, but I've set a poorly conceived personal goal:
 
 **Solve the first 100 problems from [Project Euler](https://projecteuler.net/) *using a different programming language for each one*.**
+
+**Update**: I've created a [repository on GitHub to track my progress](https://github.com/jaredkrinke/100-languages) and a [tag index page](../100-languages/index.html) for related blog posts. And I [just finished day 1](100-languages-1.md).
 
 # Reasons this is a dumb idea
 If you're thinking this is a pointless, trivial exercise, you might be right. Here are some reasons that this is likely *not* a good use of my time:
@@ -27,3 +30,8 @@ Despite this being an obvious waste of time, I'm still "full steam ahead" becaus
 I left this section for last, hoping that people wouldn't make it this far, because the headline is deliberately misleading. **When I mentioned "100 days", I didn't mean 100 *consecutive* days**. And I didn't even necessarily mean that each programming language would take 1 day. The "100 days" is really more about limiting the amount of collateral damage to my personal life that this project might cause.
 
 On that note, wish me luck! And feel free to [email me](mailto:log@schemescape.com) suggestions for programming languages (especially if you know of Project Euler problems to pair with them).
+
+# Links
+* [Index of related posts](../100-languages/index.html)
+* [Day 1 update](100-languages-1.md)
+* [GitHub repository tracking my progress](https://github.com/jaredkrinke/100-languages)
