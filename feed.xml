@@ -7,8 +7,33 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-03-14T17:10:05.049Z</updated>
+<updated>2024-03-17T04:05:36.027Z</updated>
 
+<entry>
+<title>100 programming languages, day 1</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-1.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-1.html"/>
+<updated>2024-03-16T00:00:00.000Z</updated>
+<summary type="text">Up first: SIC-1 Assembly Language.</summary>
+<content type="html">&lt;p&gt;I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;trying to write code in 100 different programming languages&lt;/a&gt;. Note: I&amp;#39;m not necessarily planning on blogging about each programming language, but I &lt;em&gt;will&lt;/em&gt; try to collect (and share) notes about my experiences, likely in batches.&lt;/p&gt;
+&lt;h1 id=&quot;sic-1-assembly-language&quot;&gt;SIC-1 Assembly Language&lt;/h1&gt;
+&lt;p&gt;In order to ensure progress doesn&amp;#39;t fizzle out immediately, I&amp;#39;m starting with a programming language I know well: &lt;strong&gt;&lt;a href=&quot;https://esolangs.org/wiki/SIC-1_Assembly_Language&quot;&gt;SIC-1 Assembly Language&lt;/a&gt;&lt;/strong&gt;. I&amp;#39;m familiar with this language because I designed both it and the (fictional) 8-bit SIC-1 computer it runs on myself (for a game titled, fittingly, &lt;a href=&quot;https://store.steampowered.com/app/2124440/SIC1/&quot;&gt;SIC-1&lt;/a&gt;). &lt;strong&gt;SIC-1 Assembly Language is basically my take on a usable (though somewhat un-ergonomic) &lt;a href=&quot;https://esolangs.org/wiki/Subleq&quot;&gt;subleq&lt;/a&gt; assembly language&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m mildly familiar with assembly languages, and have written assembly code for MIPS and ATmega (non-professionally), but &lt;strong&gt;most code I write is not performance-sensitive, so I prefer to use more expressive languages&lt;/strong&gt;, despite any potential overhead.&lt;/p&gt;
+&lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Subleq is inconvenient, but straight-forward, however &lt;strong&gt;the SIC-1 is an 8-bit computer with only a single 256 byte address space&lt;/strong&gt;, yielding space for less than 85 instructions, even before adding in any variables&lt;/li&gt;
+&lt;li&gt;Fitting &amp;quot;big int&amp;quot; arithmetic, formatting, and the actual logic into roughly 70 &amp;quot;subtract and maybe branch&amp;quot; instructions&amp;quot; required some creativity&lt;/li&gt;
+&lt;li&gt;The tedium of subleq and my lack of focus led to several bugs, so I had to add a lot of comments to ensure I could remember what all those subleqs were for&lt;/li&gt;
+&lt;li&gt;I had to invent a subroutine calling convention in order to make my solution &amp;quot;fit&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Overall, &lt;strong&gt;subleq is interesting theoretically&lt;/strong&gt; (but not &lt;em&gt;practically&lt;/em&gt;), and, while &lt;strong&gt;the tight constraints of the SIC-1 give me an appreciation for assembly language hacks of yore&lt;/strong&gt;, I&amp;#39;d never want to use subleq for anything substantial (though I&amp;#39;ve heard &lt;a href=&quot;http://users.atw.hu/gerigeri/DawnOS/index.html&quot;&gt;it&amp;#39;s been done&lt;/a&gt;!).&lt;/p&gt;
+&lt;h2 id=&quot;links&quot;&gt;Links&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;Main GitHub repository where I&amp;#39;m tracking progress&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/p1.sic1&quot;&gt;Solution&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>100 programming languages in 100 days</title>
 <id>https://log.schemescape.com/posts/programming-languages/100-languages.html</id>
@@ -17,6 +42,7 @@
 <summary type="text">I&apos;m going to write code in 100 different programming languages. For fun.</summary>
 <content type="html">&lt;p&gt;As usual, this is probably a terrible idea, but I&amp;#39;ve set a poorly conceived personal goal:&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Solve the first 100 problems from &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt; &lt;em&gt;using a different programming language for each one&lt;/em&gt;.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I&amp;#39;ve created a &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;repository on GitHub to track my progress&lt;/a&gt; and a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../100-languages/index.html&quot;&gt;tag index page&lt;/a&gt; for related blog posts. And I &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-1.html&quot;&gt;just finished day 1&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;reasons-this-is-a-dumb-idea&quot;&gt;Reasons this is a dumb idea&lt;/h1&gt;
 &lt;p&gt;If you&amp;#39;re thinking this is a pointless, trivial exercise, you might be right. Here are some reasons that this is likely &lt;em&gt;not&lt;/em&gt; a good use of my time:&lt;/p&gt;
 &lt;ul&gt;
@@ -35,6 +61,12 @@
 &lt;h1 id=&quot;caveats&quot;&gt;Caveats&lt;/h1&gt;
 &lt;p&gt;I left this section for last, hoping that people wouldn&amp;#39;t make it this far, because the headline is deliberately misleading. &lt;strong&gt;When I mentioned &amp;quot;100 days&amp;quot;, I didn&amp;#39;t mean 100 &lt;em&gt;consecutive&lt;/em&gt; days&lt;/strong&gt;. And I didn&amp;#39;t even necessarily mean that each programming language would take 1 day. The &amp;quot;100 days&amp;quot; is really more about limiting the amount of collateral damage to my personal life that this project might cause.&lt;/p&gt;
 &lt;p&gt;On that note, wish me luck! And feel free to &lt;a href=&quot;mailto:log@schemescape.com&quot;&gt;email me&lt;/a&gt; suggestions for programming languages (especially if you know of Project Euler problems to pair with them).&lt;/p&gt;
+&lt;h1 id=&quot;links&quot;&gt;Links&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../100-languages/index.html&quot;&gt;Index of related posts&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-1.html&quot;&gt;Day 1 update&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;GitHub repository tracking my progress&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </content>
 </entry>
 <entry>
@@ -253,64 +285,6 @@
 &lt;p&gt;So what is this new static site generator called? Well, that&amp;#39;s &lt;em&gt;also&lt;/em&gt; not in my top ten concerns right now. The Common Lisp package is just named &lt;code&gt;SSG&lt;/code&gt; as a placeholder. &lt;strong&gt;Hopefully I&amp;#39;ll think of a catchy name eventually&lt;/strong&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;the-end&quot;&gt;The end&lt;/h1&gt;
 &lt;p&gt;And apologies for creating yet another static site generator. At least I didn&amp;#39;t create a new front-end framework for JavaScript!&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>My hobby is... bikeshedding?</title>
-<id>https://log.schemescape.com/posts/misc/my-hobby-is-bikeshedding.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/misc/my-hobby-is-bikeshedding.html"/>
-<updated>2023-11-17T00:00:00.000Z</updated>
-<summary type="text">Am I spending development time on things that matter?</summary>
-<content type="html">&lt;p&gt;Although I&amp;#39;d seen the term thrown around, I hadn&amp;#39;t looked up the definition of &amp;quot;bikeshedding&amp;quot; until recently. DuckDuckGo tells me that &amp;quot;bikeshedding&amp;quot; is:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Futile investment of time and energy in marginal technical issues&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Wait a minute. That accurately describes much (if not most) of this blog.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Bikeshedding is my primary hobby&lt;/strong&gt;, apparently.&lt;/p&gt;
-&lt;h1 id=&quot;a-quick-review&quot;&gt;A quick review&lt;/h1&gt;
-&lt;p&gt;Looking back at my previous posts, I see:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../static-site-generators/comparison.html&quot;&gt;Trying to find a static site generator&lt;/a&gt; that supports my desired workflow, and &lt;a href=&quot;https://log.schemescape.com/posts/misc/../static-site-generators/md2blog-deno.html&quot;&gt;eventually building my own&lt;/a&gt; (instead of just using Hugo)&lt;/li&gt;
-&lt;li&gt;Attempting to speed up my home-grown static site generator because, &lt;a href=&quot;https://log.schemescape.com/posts/misc/../static-site-generators/speeding-up-rebuilds-4.html&quot;&gt;apparently, 50 millisecond rebuilds doesn&amp;#39;t seem optimal&lt;/a&gt; (ignoring the fact that 50 milliseconds is probably actual lightning speed)&lt;/li&gt;
-&lt;li&gt;Avoiding Emscripten&amp;#39;s bloated (and Python-based) tooling to &lt;a href=&quot;https://log.schemescape.com/posts/misc/../webassembly/compiling-graphviz-to-webassembly.html&quot;&gt;generate diagrams&lt;/a&gt; and &lt;a href=&quot;https://log.schemescape.com/posts/misc/../webassembly/passing-strings-to-c.html&quot;&gt;pass strings around&lt;/a&gt; (instead of just using the most popular native-to-browser framework)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../web-development/souring-on-npm.html&quot;&gt;Fretting over the software supply chain of NPM&lt;/a&gt;, and switching to Deno (abandoning one of the largest library ecosystems ever created--N.B. this was before Deno added NPM support)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/rust-first-experience.html&quot;&gt;Whining about the size of the Rust toolchain on Windows&lt;/a&gt; (even though I have a terabyte drive)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/future-proof-languages.html&quot;&gt;&lt;em&gt;Way&lt;/em&gt;&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/future-proof-languages-2.html&quot;&gt;too&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/future-proof-languages-3.html&quot;&gt;much&lt;/a&gt; musing about &amp;quot;future-proof&amp;quot; programming languages (instead of just picking the right tool for the job)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../game-development/browser-based-game-on-steam-2.html&quot;&gt;Porting a browser-based game to Steam without using Electron&lt;/a&gt; because I thought Electron was too bloated (spoiler: I ended up using Electron to add Linux support anyway)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/minimal-dev-env-3.html&quot;&gt;Developing software &lt;em&gt;on&lt;/em&gt; a Raspberry Pi 1B&lt;/a&gt; because &lt;em&gt;it should be possible, right?&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../web-development/interactive-browser-app-without-js-2.html&quot;&gt;Creating a (nearly unplayable) real-time browser-based game that doesn&amp;#39;t use any JavaScript&lt;/a&gt; because modern browsers eat up all my netbook&amp;#39;s memory (even though I mostly use my desktop computer, because it&amp;#39;s convenient)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/misc/../web-development/cheap-hosting.html&quot;&gt;Rewriting software to avoid spending a few dollars per month&lt;/a&gt; (despite that money likely being a rounding error in my monthly finances)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;but-why&quot;&gt;But why?&lt;/h1&gt;
-&lt;p&gt;At the time, I justified most of these plans in terms of economy: &lt;strong&gt;I was optimizing resources in reaction to everything else seeming so bloated&lt;/strong&gt;. I was &lt;em&gt;respecting the user&lt;/em&gt; by minimizing dependencies/system requirements.&lt;/p&gt;
-&lt;p&gt;But in retrospect, I wonder if &lt;strong&gt;I was just focused on optimization because it was often the most straight-forward and unambiguous task&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;That&amp;#39;s not to say that I was necessarily &lt;em&gt;wasting my time&lt;/em&gt;. I learned a ton from these projects. And minimizing resource usage is extremely important for respecting your users... but that only matters when you have users. Otherwise, it&amp;#39;s just premature optimization (assuming a reasonable baseline).&lt;/p&gt;
-&lt;h1 id=&quot;goals&quot;&gt;Goals&lt;/h1&gt;
-&lt;p&gt;I suspect software development can be lucrative because costs scale slowly. Solving a problem for 1 person may take a lot of work, but solving it for 100 (or 1000) additional users often costs very little. Of course, sometimes, I&amp;#39;m just looking to solve my own problem, and I don&amp;#39;t plan on having any &amp;quot;users&amp;quot;.&lt;/p&gt;
-&lt;p&gt;Ultimately, &lt;strong&gt;before I start a project, I should have a target audience and/or goal in mind&lt;/strong&gt;. This seems obvious, but I&amp;#39;m fairly certain that most of my projects began organically, with only a vague notion of what I wanted to achieve.&lt;/p&gt;
-&lt;p&gt;Additionally, &lt;strong&gt;I need to critically evaluate any goals and whether or not they&amp;#39;re worth the effort&lt;/strong&gt;. Creating a Common Lisp-based static site generator in order to learn Lisp because it sounds fun? Probably a good idea! Creating a Common Lisp-based static site generator in order to provide faster incremental and custom templates, for a tool that &lt;a href=&quot;https://blubsblog.bearblog.dev/i-am-the-only-user/&quot;&gt;will likely only ever have one user&lt;/a&gt;? Probably not worth the effort!&lt;/p&gt;
-&lt;h1 id=&quot;looking-forward&quot;&gt;Looking forward&lt;/h1&gt;
-&lt;p&gt;Fittingly, my current hobby of learning Common Lisp started &lt;a href=&quot;https://log.schemescape.com/posts/misc/../programming-languages/learning-lisp-in-2023.html&quot;&gt;because I read about REPL-driven development and wanted to test it out for myself&lt;/a&gt;. In the process, I&amp;#39;ve found many additional reasons to persist with Lisp:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Macros&lt;/strong&gt;, for ergonomically generating code&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Conditions&lt;/strong&gt;, for observing and handling errors at a distance&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Lists&lt;/strong&gt; (of course), a handy, multi-purpose data structure, built into the core of the language&lt;/li&gt;
-&lt;li&gt;With Emacs and SLIME, &lt;strong&gt;a fully-featured editing and debugging experience&lt;/strong&gt; that easily runs on an old netbook&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;A broad ecosystem&lt;/strong&gt;, with numerous implementations and a wide range of libraries&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Lisp is just &lt;em&gt;too&lt;/em&gt; enticing to a dedicated software developer. It&amp;#39;s the most expressive and extensible programming language I&amp;#39;ve encountered, and it&amp;#39;s &lt;em&gt;just popular enough&lt;/em&gt; that learning it doesn&amp;#39;t feel like a waste of time.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;But what is my &lt;em&gt;goal&lt;/em&gt; with learning Common Lisp?&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Originally, I just was curious and wanted to try REPL-driven development, and now I&amp;#39;m used to it--it&amp;#39;s nice, but not indispensable&lt;/li&gt;
-&lt;li&gt;Macros can be handy (in small doses), but I&amp;#39;m pretty sure other languages now support syntax tree-level macros&lt;/li&gt;
-&lt;li&gt;Common Lisp &amp;quot;conditions&amp;quot; (and &amp;quot;restarts&amp;quot;) still seem unique and useful&lt;/li&gt;
-&lt;li&gt;Lists are handy, but they seem inefficient on modern hardware&lt;/li&gt;
-&lt;li&gt;Having the equivalent of a language server that runs comfortably in the terminal on a netbook warms my heart, but fast computers are cheap&lt;/li&gt;
-&lt;li&gt;Having many interoperable Common Lisp implementations sounds future-proof, but am I realistically going to use anything other than SBCL?&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Overall, I like Common Lisp, but now I can&amp;#39;t shake the feeling that using an extensible programming language that fits on netbook is just more bikeshedding.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Most programming language distinctions could probably be classified as &amp;quot;marginal technical issues&amp;quot; for all but the most demanding workloads.&lt;/p&gt;
-&lt;p&gt;The whole world seems to be using Python or JavaScript and they&amp;#39;re &amp;quot;good enough&amp;quot; for most purposes. Should I just hop on the bandwagon and stop fussing over those languages&amp;#39; deficiencies? Well, that depends on the goal...&lt;/p&gt;
 </content>
 </entry>
 </feed>
