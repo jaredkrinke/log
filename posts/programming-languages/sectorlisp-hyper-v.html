@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Running SectorLisp on Hyper-V</title>
+<meta name="description" content="Please find enclosed a SectorLisp VFD file for use in Hyper-V" />
+<meta name="keywords" content="lisp" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Running SectorLisp on Hyper-V",
+  "abstract": "Please find enclosed a SectorLisp VFD file for use in Hyper-V",
+  "keywords": "programming-languages,lisp",
+  "datePublished": "2024-03-18"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+<li><a href="../../posts/lisp/index.html">lisp</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/programming-languages/sectorlisp-hyper-v.html">Running SectorLisp on Hyper-V</a></h1>
+<p><time datetime="2024-03-18">March 18, 2024</time></p>
+</header>
+<p><a href="https://justine.lol/sectorlisp/">SectorLisp</a> is a minimal implementation of Lisp that miraculously fits in a boot sector. I am in no way involved with the project.</p>
+<p>Here&#39;s a link to a <a href="../../assets/sectorlisp-vfd.zip">zip file containing a SectorLisp VFD that works in Hyper-V</a>.</p>
+<h1 id="background">Background</h1>
+<p>The SectorLisp home page provides a link to a (raw) image, but it wasn&#39;t obvious how to load the image into Hyper-V. Rather than run and download random tools from the web, I decided to use a Linux VM (and the &quot;dd&quot; tool) running in Hyper-V to write the SectorLisp image to a virtual floppy disk image (VFD).</p>
+<p>Now, I can just &quot;insert&quot; the SectorLisp VFD into a (generation 1, I assume) Hyper-V VM and it can boot into the SectorLisp prompt. Note that you <em>must</em> use CAPITAL LETTERS for SectorLisp, and it will happily ignore errors. Also, the backspace key doesn&#39;t seem to work properly, so... don&#39;t make any mistakes while typing.</p>
+<p><strong>That&#39;s all. I just wanted to share the VFD in case anyone else might want it.</strong> And, yes, I&#39;m attempting to use SectorLisp in my <a href="100-languages.html">100 programming languages challenge</a>.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
