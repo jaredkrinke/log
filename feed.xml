@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-03-19T03:15:16.024Z</updated>
+<updated>2024-03-20T03:57:17.954Z</updated>
 
 <entry>
 <title>Running SectorLisp on Hyper-V</title>
@@ -17,6 +17,7 @@
 <summary type="text">Please find enclosed a SectorLisp VFD file for use in Hyper-V</summary>
 <content type="html">&lt;p&gt;&lt;a href=&quot;https://justine.lol/sectorlisp/&quot;&gt;SectorLisp&lt;/a&gt; is a minimal implementation of Lisp that miraculously fits in a boot sector. I am in no way involved with the project.&lt;/p&gt;
 &lt;p&gt;Here&amp;#39;s a link to a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../../assets/sectorlisp-vfd.zip&quot;&gt;zip file containing a SectorLisp VFD that works in Hyper-V&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: ... and I just noticed that there&amp;#39;s a &lt;a href=&quot;https://justine.lol/sectorlisp2/&quot;&gt;SectorLisp v2 page&lt;/a&gt; which contains an in-browser REPL. I should just use that instead.&lt;/p&gt;
 &lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
 &lt;p&gt;The SectorLisp home page provides a link to a (raw) image, but it wasn&amp;#39;t obvious how to load the image into Hyper-V. Rather than run and download random tools from the web, I decided to use a Linux VM (and the &amp;quot;dd&amp;quot; tool) running in Hyper-V to write the SectorLisp image to a virtual floppy disk image (VFD).&lt;/p&gt;
 &lt;p&gt;Now, I can just &amp;quot;insert&amp;quot; the SectorLisp VFD into a (generation 1, I assume) Hyper-V VM and it can boot into the SectorLisp prompt. Note that you &lt;em&gt;must&lt;/em&gt; use CAPITAL LETTERS for SectorLisp, and it will happily ignore errors. Also, the backspace key doesn&amp;#39;t seem to work properly, so... don&amp;#39;t make any mistakes while typing.&lt;/p&gt;
