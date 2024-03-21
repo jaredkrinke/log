@@ -24,7 +24,7 @@ Now, obviously, **the list above is not meant as a complaint**. SectorLISP is a 
 
 Having said that, there was one unpleasant surprise: because SectorLISP was designed to run on ancient hardware, **it has a miniscule memory budget**. There is only space for (I think) *at most* 8,192 cons cells. Without tail call optimization and iteration, several of my attempts at printing decimal numbers ran out of memory.
 
-**In the end, I punted on printing in decimal** and decided to print out the result in hexadecimal (which is easily computed from my "list of binary bits" integer representation). I am a miserable failure! But I need to move on.
+It took several attempts, but I eventually found that using unary encoding for numbers (i.e. "n" is encoded as a list of length "n"; for example `(QUOTE (T T T))` is the number 3) resulted in the simplest code with the least consing--but only when the numbers are small! For larger numbers, I saved space using 32-bit binary (two's complement) with the least significant bit first.
 
 ## Links
 * [Solution](https://github.com/jaredkrinke/100-languages/blob/main/p2.lisp) (tested using the simulator on the [SectorLISP v2 page](https://justine.lol/sectorlisp2/))
