@@ -2,7 +2,7 @@
 title: Using SectorLISP for Project Euler
 description: Four days later, I've complete day two of my challenge.
 date: 2024-03-20
-keywords: [100-languages]
+keywords: [100-languages,lisp]
 ---
 I'm [trying to write code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html). Day (ahem) 2: **SectorLISP**!
 
