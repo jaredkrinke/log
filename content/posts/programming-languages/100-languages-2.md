@@ -1,6 +1,6 @@
 ---
 title: Using SectorLISP for Project Euler
-description: Four days later, I've complete day two of my challenge.
+description: Four days later, I've completed day two of my challenge.
 date: 2024-03-20
 keywords: [100-languages,lisp]
 ---
