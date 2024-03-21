@@ -7,14 +7,14 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-03-21T02:57:10.597Z</updated>
+<updated>2024-03-21T03:22:44.627Z</updated>
 
 <entry>
 <title>Using SectorLISP for Project Euler</title>
 <id>https://log.schemescape.com/posts/programming-languages/100-languages-2.html</id>
 <link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-2.html"/>
 <updated>2024-03-20T00:00:00.000Z</updated>
-<summary type="text">Four days later, I&apos;ve complete day two of my challenge.</summary>
+<summary type="text">Four days later, I&apos;ve completed day two of my challenge.</summary>
 <content type="html">&lt;p&gt;I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;trying to write code in 100 different programming languages&lt;/a&gt;. Day (ahem) 2: &lt;strong&gt;SectorLISP&lt;/strong&gt;!&lt;/p&gt;
 &lt;h1 id=&quot;sectorlisp&quot;&gt;SectorLISP&lt;/h1&gt;
 &lt;p&gt;Ever since discovering &lt;a href=&quot;https://justine.lol/sectorlisp2/&quot;&gt;SectorLISP&lt;/a&gt; (a minimal Lisp that fits in a boot sector), I&amp;#39;ve wanted to give it a spin. And it did not disappoint! It was both beautiful and painful.&lt;/p&gt;
