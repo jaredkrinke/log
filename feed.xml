@@ -7,8 +7,36 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-03-20T03:57:17.954Z</updated>
+<updated>2024-03-21T02:54:46.901Z</updated>
 
+<entry>
+<title>Using SectorLISP for Project Euler</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-2.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-2.html"/>
+<updated>2024-03-20T00:00:00.000Z</updated>
+<summary type="text">Four days later, I&apos;ve complete day two of my challenge.</summary>
+<content type="html">&lt;p&gt;I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;trying to write code in 100 different programming languages&lt;/a&gt;. Day (ahem) 2: &lt;strong&gt;SectorLISP&lt;/strong&gt;!&lt;/p&gt;
+&lt;h1 id=&quot;sectorlisp&quot;&gt;SectorLISP&lt;/h1&gt;
+&lt;p&gt;Ever since discovering &lt;a href=&quot;https://justine.lol/sectorlisp2/&quot;&gt;SectorLISP&lt;/a&gt; (a minimal Lisp that fits in a boot sector), I&amp;#39;ve wanted to give it a spin. And it did not disappoint! It was both beautiful and painful.&lt;/p&gt;
+&lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
+&lt;p&gt;Things I missed while using SectorLISP:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Tail call optimization&lt;/li&gt;
+&lt;li&gt;Mutation&lt;/li&gt;
+&lt;li&gt;Integers&lt;/li&gt;
+&lt;li&gt;Iteration&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.lispworks.com/documentation/lw60/CLHS/Body/s_let_l.htm&quot;&gt;&lt;code&gt;LET&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Mercifully, I was using the &amp;quot;friendly&amp;quot; branch of SectorLISP, which at least included an obvious and idiomatic way to implement recursion via &lt;code&gt;DEFINE&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now, obviously, &lt;strong&gt;the list above is not meant as a complaint&lt;/strong&gt;. SectorLISP is a &lt;em&gt;minimal&lt;/em&gt; Lisp, so I was expecting for it to support only the bare minimum. &lt;strong&gt;Rolling your own integer representation and using recursion for iteration are part of the fun!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Having said that, there was one unpleasant surprise: because SectorLISP was designed to run on ancient hardware, &lt;strong&gt;it has a miniscule memory budget&lt;/strong&gt;. There is only space for (I think) &lt;em&gt;at most&lt;/em&gt; 8,192 cons cells. Without tail call optimization and iteration, several of my attempts at printing decimal numbers ran out of memory.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;In the end, I punted on printing in decimal&lt;/strong&gt; and decided to print out the result in hexadecimal (which is easily computed from my &amp;quot;list of binary bits&amp;quot; integer representation). I am a miserable failure! But I need to move on.&lt;/p&gt;
+&lt;h2 id=&quot;links&quot;&gt;Links&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/p2.lisp&quot;&gt;Solution&lt;/a&gt; (tested using the simulator on the &lt;a href=&quot;https://justine.lol/sectorlisp2/&quot;&gt;SectorLISP v2 page&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Running SectorLisp on Hyper-V</title>
 <id>https://log.schemescape.com/posts/programming-languages/sectorlisp-hyper-v.html</id>
@@ -112,50 +140,6 @@
 &lt;p&gt;On my Pi, I generally try to stick to a terminal-mode browser like &lt;a href=&quot;https://w3m.sourceforge.net/&quot;&gt;w3m&lt;/a&gt; because it&amp;#39;s fast and uses very little memory. If I need graphics, I move to &lt;a href=&quot;https://dillo.org/&quot;&gt;Dillo&lt;/a&gt; or &lt;a href=&quot;https://www.netsurf-browser.org/&quot;&gt;NetSurf&lt;/a&gt;. If I need JavaScript, I use &lt;a href=&quot;https://astian.org/midori-browser/&quot;&gt;Midori&lt;/a&gt;, but it is &lt;em&gt;painfully&lt;/em&gt; slow on my Pi. And don&amp;#39;t even ask about Firefox--it couldn&amp;#39;t even load its own landing page on my Pi!&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Having to use a JavaScript-enabled browser on a woefully underpowered device just absolutely killed my enthusiasm for minimalist development&lt;/strong&gt;. Too many sites require JavaScript, and being effectively locked out of a large chunk of the web is too annoying for me at the moment.&lt;/p&gt;
 &lt;p&gt;Oh well, at least I tried.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>SIC-1 is going open source</title>
-<id>https://log.schemescape.com/posts/game-development/sic-1-open-source.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/game-development/sic-1-open-source.html"/>
-<updated>2023-12-19T00:00:00.000Z</updated>
-<summary type="text">Which open source licenses make the most sense for my game?</summary>
-<content type="html">&lt;p&gt;In &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html&quot;&gt;my original retrospective on releasing SIC-1&lt;/a&gt; (a single-instruction zachlike programming game), there were two open questions about the future:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Should I port the game to Linux (on Steam)?&lt;/li&gt;
-&lt;li&gt;Should I release the game under an open source license?&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;The first question has been answered: &lt;a href=&quot;https://log.schemescape.com/posts/game-development/web-game-on-steam-for-linux-2.html&quot;&gt;SIC-1 has been ported to Linux (on Steam)&lt;/a&gt;, but the second had not (until now).&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ve finally decided to release the game under an open source license. &lt;strong&gt;Which license? Good question!&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&quot;motivation&quot;&gt;Motivation&lt;/h1&gt;
-&lt;p&gt;Why release SIC-1 as open source? Up until now, the game has been my baby and there have been no substantial contributions by anyone else.&lt;/p&gt;
-&lt;p&gt;If I was naive, I&amp;#39;d hope that releasing the game as open source would lead to a revival, driven by contributions from excited new authors. But I&amp;#39;m &lt;em&gt;not&lt;/em&gt; naive, and I fully expect that no one else will take the time to read, understand, and modify the code in any significant way.&lt;/p&gt;
-&lt;p&gt;But games are more than just code! There are also assets. Specifically, SIC-1 contains a bunch of English text, both in the form of documentation and narrative. While I don&amp;#39;t expect the characters I&amp;#39;ve developed to get their own spin-off TV series, there is at least &lt;em&gt;one&lt;/em&gt; area where I am hopelessly under-qualified &lt;em&gt;and&lt;/em&gt; multiple people have expressed an actual interest in contributing:&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Translating SIC-1 into additional languages&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;I feel it would be unfair to ask for translations from &lt;em&gt;volunteers&lt;/em&gt; in the case that I retained ownership over the entire game (even though the game is available for free already). Instead, I think it makes sense to open up ownership of the game to &lt;em&gt;everyone&lt;/em&gt;, i.e. release the game as open source.&lt;/p&gt;
-&lt;h1 id=&quot;hypothetical-concerns&quot;&gt;Hypothetical concerns&lt;/h1&gt;
-&lt;p&gt;Given that SIC-1 is free, with source already available, why wasn&amp;#39;t the game already open source? Here was my &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1-retrospective.html#should-i-open-source-sic-1&quot;&gt;original rationale&lt;/a&gt;:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;I don&amp;#39;t want someone else to turn around and sell my game (that I released for free)&lt;/li&gt;
-&lt;li&gt;I&amp;#39;m proud of the music and characters/narrative, and I don&amp;#39;t want other people to be able to profit off of them&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Now that the game has been out on Steam for over a year and I think it&amp;#39;s already past its popularity peak, I feel less concerned about someone else profiting off of the game. The zachlike genre is just not that popular. Even excellent zachlikes &lt;em&gt;from Zachtronics&lt;/em&gt; don&amp;#39;t sell that many copies. And SIC-1 isn&amp;#39;t nearly as good! &lt;strong&gt;No one&amp;#39;s going to get rich off this game.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;As far as the characters and narrative, I can&amp;#39;t imagine anyone repurposing them. And I can just use a copyleft/share-alike license anyway.&lt;/p&gt;
-&lt;p&gt;Having said all of that, I don&amp;#39;t think I&amp;#39;m quite ready to let &lt;em&gt;just anyone&lt;/em&gt; use the music from the &lt;a href=&quot;https://soundcloud.com/schemescape/sets/sic-1-original-soundtrack&quot;&gt;SIC-1 Original Soundtrack&lt;/a&gt;. Unlike code and documentation, background music could fit right into completely unrelated projects--or even &lt;em&gt;events&lt;/em&gt;. &lt;strong&gt;What if 80s-inspired puzzlewave suddenly breaks into the mainstream and then I&amp;#39;m hearing the SIC-1 soundtrack at political rallies?&lt;/strong&gt; Maybe that&amp;#39;s taking this hypothetical situation a bit too far, but, regardless, I&amp;#39;ll probably continue to retain sole ownership over the soundtrack.&lt;/p&gt;
-&lt;h1 id=&quot;copyleft-or-permissive-license&quot;&gt;Copyleft or permissive license?&lt;/h1&gt;
-&lt;p&gt;The main decision I need to make around licensing is between choosing a &lt;a href=&quot;https://en.wikipedia.org/wiki/Copyleft&quot;&gt;copyleft&lt;/a&gt; vs. permissive license (e.g. &lt;a href=&quot;https://en.wikipedia.org/wiki/GNU_General_Public_License&quot;&gt;GPL&lt;/a&gt; vs. &lt;a href=&quot;https://en.wikipedia.org/wiki/MIT_license&quot;&gt;MIT&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;I like the idea of using a copyleft license because it (roughly) requires anyone distributing derivative works release their modifications back to the community. There is one sticking point with the GPL, however: it doesn&amp;#39;t allow linking with closed source code--in my case, this means I couldn&amp;#39;t link with the Steamworks SDK (which provides achievements and friend leaderboards on Steam) without jumping through some hoops (e.g. &lt;a href=&quot;https://github.com/icculus/steamshim&quot;&gt;moving Steam interactions out of process&lt;/a&gt; or requiring contributors sign a &amp;quot;contributor license agreement&amp;quot; allowing distribution on Steam). The &lt;a href=&quot;https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License&quot;&gt;LGPL license &lt;/a&gt; would avoid this problem.&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s another issue with copyleft: what if I want to later use my code in a new game? Of course I can use &lt;em&gt;my&lt;/em&gt; code, but I wouldn&amp;#39;t be able to use any improvements that have been contributed by others. Honestly, however, this seems unfair to those contributors--I&amp;#39;d be (potentially) profiting off of their work.&lt;/p&gt;
-&lt;p&gt;After writing these thoughts down, I think the answer is clear: &lt;strong&gt;I&amp;#39;d prefer to use a copyleft license to protect both my contributions &lt;em&gt;and the contributions of others&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;the-plan&quot;&gt;The plan&lt;/h1&gt;
-&lt;p&gt;Given all of the above, here&amp;#39;s my plan for licensing the various categories of SIC-1 content:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Source code&lt;/strong&gt;: &lt;a href=&quot;https://www.gnu.org/licenses/lgpl-3.0.en.html&quot;&gt;GNU Lesser General Public License&lt;/a&gt; (at least until I have time to incorporate a GPL shim for the Steamworks SDK)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Documentation/narrative&lt;/strong&gt;: &lt;a href=&quot;https://creativecommons.org/licenses/by-sa/4.0/&quot;&gt;Creative Commons Attribution, Share-Alike&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Music&lt;/strong&gt;: &amp;quot;all rights reserved&amp;quot;&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>

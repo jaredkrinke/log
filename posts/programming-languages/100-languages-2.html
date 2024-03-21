@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Using SectorLISP for Project Euler</title>
+<meta name="description" content="Four days later, I&#39;ve complete day two of my challenge." />
+<meta name="keywords" content="100-languages" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Using SectorLISP for Project Euler",
+  "abstract": "Four days later, I've complete day two of my challenge.",
+  "keywords": "programming-languages,100-languages",
+  "datePublished": "2024-03-20"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+<li><a href="../../posts/100-languages/index.html">100-languages</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/programming-languages/100-languages-2.html">Using SectorLISP for Project Euler</a></h1>
+<p><time datetime="2024-03-20">March 20, 2024</time></p>
+</header>
+<p>I&#39;m <a href="https://log.schemescape.com/posts/programming-languages/100-languages.html">trying to write code in 100 different programming languages</a>. Day (ahem) 2: <strong>SectorLISP</strong>!</p>
+<h1 id="sectorlisp">SectorLISP</h1>
+<p>Ever since discovering <a href="https://justine.lol/sectorlisp2/">SectorLISP</a> (a minimal Lisp that fits in a boot sector), I&#39;ve wanted to give it a spin. And it did not disappoint! It was both beautiful and painful.</p>
+<h2 id="notes">Notes</h2>
+<p>Things I missed while using SectorLISP:</p>
+<ul>
+<li>Tail call optimization</li>
+<li>Mutation</li>
+<li>Integers</li>
+<li>Iteration</li>
+<li><a href="https://www.lispworks.com/documentation/lw60/CLHS/Body/s_let_l.htm"><code>LET</code></a></li>
+</ul>
+<p>Mercifully, I was using the &quot;friendly&quot; branch of SectorLISP, which at least included an obvious and idiomatic way to implement recursion via <code>DEFINE</code>.</p>
+<p>Now, obviously, <strong>the list above is not meant as a complaint</strong>. SectorLISP is a <em>minimal</em> Lisp, so I was expecting for it to support only the bare minimum. <strong>Rolling your own integer representation and using recursion for iteration are part of the fun!</strong></p>
+<p>Having said that, there was one unpleasant surprise: because SectorLISP was designed to run on ancient hardware, <strong>it has a miniscule memory budget</strong>. There is only space for (I think) <em>at most</em> 8,192 cons cells. Without tail call optimization and iteration, several of my attempts at printing decimal numbers ran out of memory.</p>
+<p><strong>In the end, I punted on printing in decimal</strong> and decided to print out the result in hexadecimal (which is easily computed from my &quot;list of binary bits&quot; integer representation). I am a miserable failure! But I need to move on.</p>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://github.com/jaredkrinke/100-languages/blob/main/p2.lisp">Solution</a> (tested using the simulator on the <a href="https://justine.lol/sectorlisp2/">SectorLISP v2 page</a>)</li>
+</ul>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
