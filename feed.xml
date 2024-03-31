@@ -7,8 +7,27 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-03-24T04:50:43.632Z</updated>
+<updated>2024-03-31T04:02:34.990Z</updated>
 
+<entry>
+<title>TEC Redshift disc-dumping tool</title>
+<id>https://log.schemescape.com/posts/game-development/tec-redshift-dumper.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/game-development/tec-redshift-dumper.html"/>
+<updated>2024-03-30T00:00:00.000Z</updated>
+<summary type="text">I couldn&apos;t find a tool to dump TEC Redshift discs from Exapunks, so I made one.</summary>
+<content type="html">&lt;p&gt;Leveraging &lt;a href=&quot;https://rami-sabbagh.com/TEC-Redshift-Disk-Specification/&quot;&gt;someone else&amp;#39;s reverse-engineering work&lt;/a&gt;, I made a &lt;a href=&quot;https://jaredkrinke.github.io/tec-redshift-dumper/&quot;&gt;browser-based tool for dumping TEC Redshift discs into EXA code and JSON formats&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I don&amp;#39;t know if anyone else will ever want such a tool, but one now exists, regardless.&lt;/p&gt;
+&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
+&lt;p&gt;For analytical minds, there&amp;#39;s an irresistible genre of games called &amp;quot;zachlikes&amp;quot; (I even &lt;a href=&quot;https://log.schemescape.com/posts/game-development/sic-1.html&quot;&gt;made one&lt;/a&gt;). The best zachlikes come directly from &lt;a href=&quot;https://www.zachtronics.com/index.html&quot;&gt;Zachtronics&lt;/a&gt;, namely:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.zachtronics.com/opus-magnum/&quot;&gt;Opus Magnum&lt;/a&gt;, the appropriately-named &lt;strong&gt;best zachlike ever made&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.zachtronics.com/exapunks&quot;&gt;Exapunks&lt;/a&gt;, the &lt;strong&gt;best &lt;em&gt;programming&lt;/em&gt; zachlike&lt;/strong&gt; (maybe tied with &lt;a href=&quot;https://www.zachtronics.com/tis-100&quot;&gt;TIS-100&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;What does this have to do with anything?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Exapunks is a programming zachlike, and I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/game-development/../programming-languages/100-languages.html&quot;&gt;in dire need of more programming languages&lt;/a&gt;, so obviously I needed to solve a Project Euler problem in Exapunks. Ok, done. Then I wanted to share my code in a source code-like format and couldn&amp;#39;t find an appropriate tool, so I made one.&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s all. End of story.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Wrapping up week 1 of the 100 languages challenge</title>
 <id>https://log.schemescape.com/posts/programming-languages/100-languages-3.html</id>
@@ -157,41 +176,6 @@
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;Main GitHub repository where I&amp;#39;m tracking progress&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/p1.sic1&quot;&gt;Solution&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>100 programming languages in 100 days</title>
-<id>https://log.schemescape.com/posts/programming-languages/100-languages.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages.html"/>
-<updated>2024-03-14T00:00:00.000Z</updated>
-<summary type="text">I&apos;m going to write code in 100 different programming languages. For fun.</summary>
-<content type="html">&lt;p&gt;As usual, this is probably a terrible idea, but I&amp;#39;ve set a poorly conceived personal goal:&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Solve the first 100 problems from &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt; &lt;em&gt;using a different programming language for each one&lt;/em&gt;.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: I&amp;#39;ve created a &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;repository on GitHub to track my progress&lt;/a&gt; and a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../100-languages/index.html&quot;&gt;tag index page&lt;/a&gt; for related blog posts. And I &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-1.html&quot;&gt;just finished day 1&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;reasons-this-is-a-dumb-idea&quot;&gt;Reasons this is a dumb idea&lt;/h1&gt;
-&lt;p&gt;If you&amp;#39;re thinking this is a pointless, trivial exercise, you might be right. Here are some reasons that this is likely &lt;em&gt;not&lt;/em&gt; a good use of my time:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Many Project Euler problems are more about math than programming&lt;/strong&gt;, so I might just end up implementing known mathematical formulas rather than creating and refining algorithms&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Solving one small, isolated problem is definitely not sufficient&lt;/strong&gt; for &lt;em&gt;really&lt;/em&gt; learning a programming language&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;I might end up spending more time setting up development environments&lt;/strong&gt; than actually programming&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I&amp;#39;m sure I could enumerate many more reasons to &lt;em&gt;not&lt;/em&gt; do this.&lt;/p&gt;
-&lt;h1 id=&quot;reasons-this-is-not-a-dumb-idea&quot;&gt;Reasons this is &lt;em&gt;not&lt;/em&gt; a dumb idea&lt;/h1&gt;
-&lt;p&gt;Despite this being an obvious waste of time, I&amp;#39;m still &amp;quot;full steam ahead&amp;quot; because:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;There are lots of programming languages I&amp;#39;d like to sample&lt;/strong&gt;, and this is a great excuse to finally try them&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Each problem is bite-sized&lt;/strong&gt;, so I might actually be able to start and finish something in one of my frequent small pockets of free time&lt;/li&gt;
-&lt;li&gt;It&amp;#39;s such an awful idea, that &lt;strong&gt;I&amp;#39;ll feel zero regret if I abandon the project&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;caveats&quot;&gt;Caveats&lt;/h1&gt;
-&lt;p&gt;I left this section for last, hoping that people wouldn&amp;#39;t make it this far, because the headline is deliberately misleading. &lt;strong&gt;When I mentioned &amp;quot;100 days&amp;quot;, I didn&amp;#39;t mean 100 &lt;em&gt;consecutive&lt;/em&gt; days&lt;/strong&gt;. And I didn&amp;#39;t even necessarily mean that each programming language would take 1 day. The &amp;quot;100 days&amp;quot; is really more about limiting the amount of collateral damage to my personal life that this project might cause.&lt;/p&gt;
-&lt;p&gt;On that note, wish me luck! And feel free to &lt;a href=&quot;mailto:log@schemescape.com&quot;&gt;email me&lt;/a&gt; suggestions for programming languages (especially if you know of Project Euler problems to pair with them).&lt;/p&gt;
-&lt;h1 id=&quot;links&quot;&gt;Links&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../100-languages/index.html&quot;&gt;Index of related posts&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-1.html&quot;&gt;Day 1 update&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;GitHub repository tracking my progress&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </content>
 </entry>
