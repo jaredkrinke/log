@@ -7,8 +7,107 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-03-31T04:02:34.990Z</updated>
+<updated>2024-04-01T04:41:07.612Z</updated>
 
+<entry>
+<title>11 programming languages in one week</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-4.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-4.html"/>
+<updated>2024-03-31T00:00:00.000Z</updated>
+<summary type="text">I spent entirely too much time playing with (mostly) new programming languages this week.</summary>
+<content type="html">&lt;p&gt;I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;trying to write code in 100 different programming languages&lt;/a&gt;. I just finished week 2, and--somehow--I&amp;#39;m ahead of schedule.&lt;/p&gt;
+&lt;p&gt;The full list of languages and links to code are in my &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;100-languages&lt;/a&gt; repository.&lt;/p&gt;
+&lt;h1 id=&quot;summary&quot;&gt;Summary&lt;/h1&gt;
+&lt;p&gt;After two weeks of &amp;quot;staying on (or ahead of) schedule&amp;quot;, I strongly suspect I will &lt;em&gt;not&lt;/em&gt; be continuing at this current pace of writing code in at least one new language per day. It&amp;#39;s fun and oddly addictive, but also fairly time-consuming. &lt;strong&gt;If I don&amp;#39;t slow down, I&amp;#39;ll probably get burned out and abandon the project&lt;/strong&gt; (or need to become a hermit), so I&amp;#39;ll likely slow &lt;em&gt;way&lt;/em&gt; down for the next week.&lt;/p&gt;
+&lt;h1 id=&quot;languages&quot;&gt;Languages&lt;/h1&gt;
+&lt;p&gt;Here are the &lt;strong&gt;languages that were new to me&lt;/strong&gt; at the beginning of the week that I managed to write code in:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/COBOL#COBOL-85&quot;&gt;COBOL-85&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.w3.org/TR/WGSL/&quot;&gt;WebGPU Shading Language&lt;/a&gt; (which I&amp;#39;m still surprised to learn is &amp;quot;WebGPU &lt;em&gt;Shading&lt;/em&gt; Language&amp;quot; and not &amp;quot;WebGPU &lt;em&gt;Shader&lt;/em&gt; Language&amp;quot;, in its official spec)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://webassembly.github.io/spec/core/text/index.html&quot;&gt;WebAssembly Text Format&lt;/a&gt; (I had &lt;em&gt;seen&lt;/em&gt; this before, but never &lt;em&gt;written&lt;/em&gt; it)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://scratch.mit.edu/&quot;&gt;Scratch&lt;/a&gt; (block-based)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Commodore_BASIC&quot;&gt;Commodore Basic 2.0&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://xod.io/&quot;&gt;XOD&lt;/a&gt; (flow-based)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And here are the &lt;strong&gt;languages I&amp;#39;d used before&lt;/strong&gt; (mostly only used a little bit or a long time ago):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.w3.org/TR/xslt-10/&quot;&gt;XSLT&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.perl.org/&quot;&gt;Perl&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/AWK&quot;&gt;AWK&lt;/a&gt; (not 100% sure if I&amp;#39;ve actually used this before, but it seems likely)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Verilog&quot;&gt;Verilog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.zachtronics.com/exapunks/&quot;&gt;EXA&lt;/a&gt; (from a game by &lt;a href=&quot;https://www.zachtronics.com/&quot;&gt;Zachtronics&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The rest of this post is just a collection of my notes from trying out these languages.&lt;/p&gt;
+&lt;h2 id=&quot;xslt-extensible-stylesheet-language-transformations&quot;&gt;XSLT (Extensible Stylesheet Language Transformations)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;I&amp;#39;ve probably written more XSLT than the vast majority of people, because I naively thought that HTML would be permanently recast into XML and XSLT would become the standard template language (that... didn&amp;#39;t happen)&lt;/li&gt;
+&lt;li&gt;Browsers still support XSLT, apparently!&lt;/li&gt;
+&lt;li&gt;XPath is my favorite query language that many (most?) people don&amp;#39;t seem to know about&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;cobol&quot;&gt;COBOL&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;First time using a column-oriented language!&lt;/li&gt;
+&lt;li&gt;It&amp;#39;s not clear to me when periods (&lt;code&gt;.&lt;/code&gt;) are required and when they break things&lt;/li&gt;
+&lt;li&gt;GNU COBOL errors don&amp;#39;t have enough information for me to understand them&lt;/li&gt;
+&lt;li&gt;My solution takes forever to run in COBOL, as compared to JavaScript--not sure why&lt;/li&gt;
+&lt;li&gt;Forgetting an &lt;code&gt;END-IF&lt;/code&gt; just completely changed the meaning of my program, but didn&amp;#39;t produce and errors or warnings&lt;/li&gt;
+&lt;li&gt;So, so verbose&lt;/li&gt;
+&lt;li&gt;Lots of reserved words&lt;/li&gt;
+&lt;li&gt;I dislike the combination of natural language syntax (&lt;code&gt;ADD 1 TO N.&lt;/code&gt;) and things like &lt;code&gt;77 TOTAL PIC S9(15) COMP VALUE ZERO.&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;perl&quot;&gt;Perl&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Kept getting tripped up by scalar vs. array contexts (even with prior experience)&lt;/li&gt;
+&lt;li&gt;I don&amp;#39;t recall the details, but there was a case where I ended up needing parentheses when I thought brackets would be correct&lt;/li&gt;
+&lt;li&gt;&amp;quot;Here docs&amp;quot; are great!&lt;/li&gt;
+&lt;li&gt;I dislike the anonymous function syntax, but I&amp;#39;m glad anonymous functions are supported&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;webgpu-shading-language&quot;&gt;WebGPU Shading Language&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Crashed my GPU several times while running code&lt;/li&gt;
+&lt;li&gt;Lots of JavaScript required to setup computation and read back results&lt;/li&gt;
+&lt;li&gt;The problem I attempted wasn&amp;#39;t a good fit for parallel computation&lt;/li&gt;
+&lt;li&gt;A different parallel-friendly problem I attempted required 64-bit arithmetic which apparently isn&amp;#39;t supported in WGSL&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;awk&quot;&gt;AWK&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Order of &lt;code&gt;for ... in&lt;/code&gt; loop is unspecified&lt;/li&gt;
+&lt;li&gt;Arrays of arrays are not officially supported&lt;/li&gt;
+&lt;li&gt;Relies on mutation in &lt;code&gt;gsub()&lt;/code&gt; -- I think I&amp;#39;d prefer a functional version of AWK&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;webassembly-text-format&quot;&gt;WebAssembly (Text Format)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Interesting syntax: it uses s-expressions, but you can also just write lines of assembly too&lt;/li&gt;
+&lt;li&gt;I would have preferred labels instead of &lt;code&gt;BLOCK&lt;/code&gt; and &lt;code&gt;LOOP&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Resulting binary was tiny! Just 163 bytes!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;scratch&quot;&gt;Scratch&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;I would have enjoyed this as a kid&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;commodore-basic&quot;&gt;Commodore BASIC&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;All arithmetic is apparently floating point -- is it done in software? Because it&amp;#39;s surprisingly slow&lt;/li&gt;
+&lt;li&gt;Line numbers are annoying to deal with, but in the proper historical context they make sense because you entered one line at a time -- today, we&amp;#39;re spoiled with text editors&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;verilog&quot;&gt;Verilog&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;a href=&quot;https://8bitworkshop.com/v3.11.0/?platform=verilog&amp;amp;file=clock_divider.v&quot;&gt;8bitworkshop Verilog IDE&lt;/a&gt; is amazing&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;xod&quot;&gt;XOD&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Laying out all the components using my mouse was painfully tedious, but it resulted in &lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p18.png&quot;&gt;a nice diagram that makes it clear how the solution works&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;exa&quot;&gt;EXA&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.zachtronics.com/exapunks/&quot;&gt;Exapunks&lt;/a&gt; is a great game&lt;/li&gt;
+&lt;li&gt;You can use the T register for temporary storage&lt;/li&gt;
+&lt;li&gt;You can use files for even more storage&lt;/li&gt;
+&lt;li&gt;I still haven&amp;#39;t found a great way to route messages between EXAs, other than only having 2 EXAs in a room&lt;/li&gt;
+&lt;li&gt;I made a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../game-development/tec-redshift-dumper.html&quot;&gt;tool for dumping TEC Redshift discs into a text format&lt;/a&gt; (wait, that was in JavaScript--I used 12 languages this week!)&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>TEC Redshift disc-dumping tool</title>
 <id>https://log.schemescape.com/posts/game-development/tec-redshift-dumper.html</id>
@@ -152,31 +251,6 @@
 &lt;p&gt;The SectorLisp home page provides a link to a (raw) image, but it wasn&amp;#39;t obvious how to load the image into Hyper-V. Rather than run and download random tools from the web, I decided to use a Linux VM (and the &amp;quot;dd&amp;quot; tool) running in Hyper-V to write the SectorLisp image to a virtual floppy disk image (VFD).&lt;/p&gt;
 &lt;p&gt;Now, I can just &amp;quot;insert&amp;quot; the SectorLisp VFD into a (generation 1, I assume) Hyper-V VM and it can boot into the SectorLisp prompt. Note that you &lt;em&gt;must&lt;/em&gt; use CAPITAL LETTERS for SectorLisp, and it will happily ignore errors. Also, the backspace key doesn&amp;#39;t seem to work properly, so... don&amp;#39;t make any mistakes while typing.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;That&amp;#39;s all. I just wanted to share the VFD in case anyone else might want it.&lt;/strong&gt; And, yes, I&amp;#39;m attempting to use SectorLisp in my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;100 programming languages challenge&lt;/a&gt;.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>100 programming languages, day 1</title>
-<id>https://log.schemescape.com/posts/programming-languages/100-languages-1.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-1.html"/>
-<updated>2024-03-16T00:00:00.000Z</updated>
-<summary type="text">Up first: SIC-1 Assembly Language.</summary>
-<content type="html">&lt;p&gt;I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;trying to write code in 100 different programming languages&lt;/a&gt;. Note: I&amp;#39;m not necessarily planning on blogging about each programming language, but I &lt;em&gt;will&lt;/em&gt; try to collect (and share) notes about my experiences, likely in batches.&lt;/p&gt;
-&lt;h1 id=&quot;sic-1-assembly-language&quot;&gt;SIC-1 Assembly Language&lt;/h1&gt;
-&lt;p&gt;In order to ensure progress doesn&amp;#39;t fizzle out immediately, I&amp;#39;m starting with a programming language I know well: &lt;strong&gt;&lt;a href=&quot;https://esolangs.org/wiki/SIC-1_Assembly_Language&quot;&gt;SIC-1 Assembly Language&lt;/a&gt;&lt;/strong&gt;. I&amp;#39;m familiar with this language because I designed both it and the (fictional) 8-bit SIC-1 computer it runs on myself (for a game titled, fittingly, &lt;a href=&quot;https://store.steampowered.com/app/2124440/SIC1/&quot;&gt;SIC-1&lt;/a&gt;). &lt;strong&gt;SIC-1 Assembly Language is basically my take on a usable (though somewhat un-ergonomic) &lt;a href=&quot;https://esolangs.org/wiki/Subleq&quot;&gt;subleq&lt;/a&gt; assembly language&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m mildly familiar with assembly languages, and have written assembly code for MIPS and ATmega (non-professionally), but &lt;strong&gt;most code I write is not performance-sensitive, so I prefer to use more expressive languages&lt;/strong&gt;, despite any potential overhead.&lt;/p&gt;
-&lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Subleq is inconvenient, but straight-forward, however &lt;strong&gt;the SIC-1 is an 8-bit computer with only a single 256 byte address space&lt;/strong&gt;, yielding space for less than 85 instructions, even before adding in any variables&lt;/li&gt;
-&lt;li&gt;Fitting &amp;quot;big int&amp;quot; arithmetic, formatting, and the actual logic into roughly 70 &amp;quot;subtract and maybe branch&amp;quot; instructions&amp;quot; required some creativity&lt;/li&gt;
-&lt;li&gt;The tedium of subleq and my lack of focus led to several bugs, so I had to add a lot of comments to ensure I could remember what all those subleqs were for&lt;/li&gt;
-&lt;li&gt;I had to invent a subroutine calling convention in order to make my solution &amp;quot;fit&amp;quot;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Overall, &lt;strong&gt;subleq is interesting theoretically&lt;/strong&gt; (but not &lt;em&gt;practically&lt;/em&gt;), and, while &lt;strong&gt;the tight constraints of the SIC-1 give me an appreciation for assembly language hacks of yore&lt;/strong&gt;, I&amp;#39;d never want to use subleq for anything substantial (though I&amp;#39;ve heard &lt;a href=&quot;http://users.atw.hu/gerigeri/DawnOS/index.html&quot;&gt;it&amp;#39;s been done&lt;/a&gt;!).&lt;/p&gt;
-&lt;h2 id=&quot;links&quot;&gt;Links&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;Main GitHub repository where I&amp;#39;m tracking progress&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/p1.sic1&quot;&gt;Solution&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>
