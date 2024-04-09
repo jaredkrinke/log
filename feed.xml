@@ -7,8 +7,66 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-04-01T04:41:07.612Z</updated>
+<updated>2024-04-09T03:51:29.610Z</updated>
 
+<entry>
+<title>One quarter of the way to 100 programming languages</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-5.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-5.html"/>
+<updated>2024-04-08T00:00:00.000Z</updated>
+<summary type="text">Or: PostScript is a programming language!?</summary>
+<content type="html">&lt;p&gt;I&amp;#39;m &lt;strong&gt;25% of the way&lt;/strong&gt; to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;having written code in 100 different programming languages&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;See &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;this repository&lt;/a&gt; for proof.&lt;/p&gt;
+&lt;h1 id=&quot;week-3-plus-a-day&quot;&gt;Week 3 (plus a day)&lt;/h1&gt;
+&lt;p&gt;As planned, I slowed down from &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-4.html&quot;&gt;last week&lt;/a&gt;, but I still managed to make it to the 25% mark. That&amp;#39;s 25 languages down, and 75 to go! Now that I&amp;#39;m no longer rushing, I&amp;#39;m enjoying the process of playing with new languages more.&lt;/p&gt;
+&lt;p&gt;All languages were new to me for this week. Notably, &lt;strong&gt;I didn&amp;#39;t even realize that &lt;a href=&quot;https://en.wikipedia.org/wiki/PostScript&quot;&gt;PostScript&lt;/a&gt; was a programming language at all&lt;/strong&gt;! Turns out it&amp;#39;s a &lt;a href=&quot;https://en.wikipedia.org/wiki/Forth_(programming_language)&quot;&gt;Forth&lt;/a&gt;-like (stack-based) procedural language. I&amp;#39;m still feel like I&amp;#39;m struggling with stack-based languages, but it might just be a matter of perspective--compared to straight assembly, Forths are a joy to use!&lt;/p&gt;
+&lt;p&gt;The rest of this post contains notes on the languages I used.&lt;/p&gt;
+&lt;h2 id=&quot;bbc-basic&quot;&gt;BBC BASIC&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;I&amp;#39;ve never seen or used a &lt;a href=&quot;https://en.wikipedia.org/wiki/BBC_Micro&quot;&gt;BBC Micro&lt;/a&gt;&lt;/strong&gt; (the closest I&amp;#39;ve used is a &lt;a href=&quot;https://en.wikipedia.org/wiki/Commodore_64&quot;&gt;Commodore 64&lt;/a&gt;), but it&amp;#39;s famous enough that I wanted to give one an (&lt;a href=&quot;https://bbcmic.ro/&quot;&gt;emulated&lt;/a&gt;) spin.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;BBC BASIC puts Commodore BASIC to shame&lt;/strong&gt; with features like named procedures (finally, no more line numbers!)&lt;/li&gt;
+&lt;li&gt;With respect to solving Project Euler problems, integer arithmetic and division with remainders are welcome additions&lt;/li&gt;
+&lt;li&gt;Despite its age, &lt;a href=&quot;https://www.bbcbasic.co.uk/bbcwin/tutorial/index.html&quot;&gt;excellent documentation&lt;/a&gt; is still available&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;unison&quot;&gt;Unison&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.unison-lang.org/&quot;&gt;Unison&lt;/a&gt; stores and references code in a content-addressed syntax tree format&lt;/strong&gt;, allowing for things like accurate incremental builds. It appears to be designed for distributed systems, so I&amp;#39;m not in the target audience, but it sounded interesting enough that I&amp;#39;ve always wanted to try it.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Having the codebase manager cache and update code automatically is convenient&lt;/li&gt;
+&lt;li&gt;&amp;quot;Watches&amp;quot; and tests allow for &lt;strong&gt;immediate feedback when code is updated&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;The codebase manager also supports &lt;strong&gt;searching for and displaying documentation&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;I struggled a bit with syntax, especially significant whitespace (note to self: only use tab width of 8 for Unison--or just don&amp;#39;t use tabs at all)&lt;/li&gt;
+&lt;li&gt;The docs indicate that &lt;strong&gt;the codebase format is append-only&lt;/strong&gt; -- what happens if you &lt;em&gt;really&lt;/em&gt; need to expunge all traces of some code? Is there &lt;em&gt;code&lt;/em&gt; garbage collection?&lt;/li&gt;
+&lt;li&gt;Integrated tooling like the codebase manager and code versioning sounds interesting, although I&amp;#39;m mostly allergic to additional tooling&lt;/li&gt;
+&lt;li&gt;Unison feels innovative, for sure!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;lil&quot;&gt;Lil&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://beyondloom.com/decker/lil.html&quot;&gt;Lil&lt;/a&gt; is a bespoke scripting language for &lt;a href=&quot;https://beyondloom.com/decker/&quot;&gt;Decker&lt;/a&gt; (a Mac Classic-esque multimedia tool). Despite being a single header of around 1300 lines of (dense) C code, Lil packs an impressive array of features: &lt;strong&gt;immutable data structures, vector programming, and a built-in query language&lt;/strong&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Elements in lists (surrounded by parentheses) are separated by commas, but function arguments (surrounded by &lt;em&gt;brackets&lt;/em&gt;) are &lt;em&gt;not&lt;/em&gt; (I know it&amp;#39;s subjective, but I found this to be fairly annoying)&lt;/li&gt;
+&lt;li&gt;Some operators (e.g. modulus) have their order reversed&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;where&lt;/code&gt; clauses in the query language are actually column (list) expressions&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Performance was a challenge for me&lt;/strong&gt; due to the lack of mutable data structures--I ended up having to repurpose a string because the language doesn&amp;#39;t &lt;em&gt;natively&lt;/em&gt; provide a mutable array (though the host app can--and in the case of Lilt, does--provide mutable data types)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;postscript&quot;&gt;PostScript&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;PostScript isn&amp;#39;t just a document format, it&amp;#39;s a programming language!&lt;/strong&gt; Who knew? Open &lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p24.ps&quot;&gt;my solution&lt;/a&gt; in a document viewer and see for yourself! (Just tried it in GIMP and it works!)&lt;/p&gt;
+&lt;p&gt;I can&amp;#39;t imagine such a security minefield of a format being created today. It&amp;#39;s basically a quilt made out of red flags. PDF has had enough exploits and it&amp;#39;s (supposedly) declarative! &lt;strong&gt;I will probably never open a PostScript file from the web again&lt;/strong&gt; (though I promise I&amp;#39;m too inept at stack-based languages to have created a virus).&lt;/p&gt;
+&lt;p&gt;Regardless, here are my notes about the language:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I had a lot of trouble managing the stack again, but at least you can duplicate a value at any depth in the stack in one command&lt;/li&gt;
+&lt;li&gt;Having branches appear before knowing what kind of conditional they&amp;#39;re for hard for me to read&lt;/li&gt;
+&lt;li&gt;Fortunately, being an old standard means that there is excellent documentation: &lt;a href=&quot;https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf&quot;&gt;PostScript Language Reference Manual&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;fe&quot;&gt;fe&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/rxi/fe&quot;&gt;fe&lt;/a&gt; is a &lt;strong&gt;minimal Lisp that uses a fixed block of memory (no dynamic allocations)&lt;/strong&gt;. It is not to be confused with &lt;a href=&quot;https://fe-lang.org/&quot;&gt;Fe&lt;/a&gt;, whose web site mentions smart contracts.&lt;/p&gt;
+&lt;p&gt;Given that fe is less than 900 lines of readable C, it&amp;#39;s an impressively ergonomic language.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The stand-alone interpreter defaults to 64,000 bytes of memory (in addition to the C stack, obviously)&lt;/li&gt;
+&lt;li&gt;On 64-bit architectures, cons cells are each 16 bytes, so only 4,000 cons cells max&lt;/li&gt;
+&lt;li&gt;Numbers (single-precision floats) are &lt;em&gt;also&lt;/em&gt; stored as objects, which unfortunately means &lt;strong&gt;each 4-byte number takes up 16 bytes&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Macros work, but are missing a few key pieces (gensym, quasiquote, &amp;quot;rest&amp;quot; arguments)&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>11 programming languages in one week</title>
 <id>https://log.schemescape.com/posts/programming-languages/100-languages-4.html</id>
@@ -236,21 +294,6 @@
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/p2.lisp&quot;&gt;Solution&lt;/a&gt; (tested using the simulator on the &lt;a href=&quot;https://justine.lol/sectorlisp2/&quot;&gt;SectorLISP v2 page&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>Running SectorLisp on Hyper-V</title>
-<id>https://log.schemescape.com/posts/programming-languages/sectorlisp-hyper-v.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/sectorlisp-hyper-v.html"/>
-<updated>2024-03-18T00:00:00.000Z</updated>
-<summary type="text">Please find enclosed a SectorLisp VFD file for use in Hyper-V</summary>
-<content type="html">&lt;p&gt;&lt;a href=&quot;https://justine.lol/sectorlisp/&quot;&gt;SectorLisp&lt;/a&gt; is a minimal implementation of Lisp that miraculously fits in a boot sector. I am in no way involved with the project.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s a link to a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../../assets/sectorlisp-vfd.zip&quot;&gt;zip file containing a SectorLisp VFD that works in Hyper-V&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: ... and I just noticed that there&amp;#39;s a &lt;a href=&quot;https://justine.lol/sectorlisp2/&quot;&gt;SectorLisp v2 page&lt;/a&gt; which contains an in-browser REPL. I should just use that instead.&lt;/p&gt;
-&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;The SectorLisp home page provides a link to a (raw) image, but it wasn&amp;#39;t obvious how to load the image into Hyper-V. Rather than run and download random tools from the web, I decided to use a Linux VM (and the &amp;quot;dd&amp;quot; tool) running in Hyper-V to write the SectorLisp image to a virtual floppy disk image (VFD).&lt;/p&gt;
-&lt;p&gt;Now, I can just &amp;quot;insert&amp;quot; the SectorLisp VFD into a (generation 1, I assume) Hyper-V VM and it can boot into the SectorLisp prompt. Note that you &lt;em&gt;must&lt;/em&gt; use CAPITAL LETTERS for SectorLisp, and it will happily ignore errors. Also, the backspace key doesn&amp;#39;t seem to work properly, so... don&amp;#39;t make any mistakes while typing.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;That&amp;#39;s all. I just wanted to share the VFD in case anyone else might want it.&lt;/strong&gt; And, yes, I&amp;#39;m attempting to use SectorLisp in my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;100 programming languages challenge&lt;/a&gt;.&lt;/p&gt;
 </content>
 </entry>
 </feed>
