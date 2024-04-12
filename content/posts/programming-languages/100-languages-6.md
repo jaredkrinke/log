@@ -6,7 +6,7 @@ keywords: [100-languages]
 ---
 I'm still trying to [write code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html). See [this repository](https://github.com/jaredkrinke/100-languages) for a summary table and links to code.
 
-As always, **none of this is groundbreaking**, but it *is* fun to see my code running in places I'd hadn't considered before, like (this time) during the PC boot sequence or [within a PostScript document](100-languages-5.md#postscript).
+As always, **none of this is groundbreaking**, but it *is* fun to see my code running in places I hadn't considered before, like (this time) during the PC boot sequence or [within a PostScript document](100-languages-5.md#postscript).
 
 # Week 4
 The calendar says this week isn't over yet, but I doubt I'll finish any more problems this week. Also, I'm compelled to share my first x86 assembly program.
@@ -47,7 +47,7 @@ Then you can set `al` to a character, `ah` to `0xe`, and execute `int 0x10` to o
 
 Regardless, [here's the final code](https://github.com/jaredkrinke/100-languages/blob/main/src/p26.asm).
 
-To run the code, you can [download the assembled boot sector](https://github.com/jaredkrinke/100-languages/blob/main/src/p26.img) and load it into [v86](https://copy.sh/v86/) (a browser-based x86 emulator). Even better, copy the boot sector onto a USB stick (or floppy drive), and try it on real hardware!
+You can run the code in your browser using [v86](https://copy.sh/v86/) by [clicking this link](https://copy.sh/v86/?profile=custom&fda.url=data:file/octet-stream;base64,uAAAjtiO0LwAfLsAALoAAL4AAIPDAYH76AN0EYnZ6FUAOfB/AuvsicaJ2uvmidDoDQDplQBQg8AwtA7NEFjDUlFTUFa7CgC+AAC6AAD3+1KDxgGD+AB18oP+AHQJWOjU/4PuAevytA6wDc0QsArNEF5YW1law1dWUlFTUL8AALsKALgKADnIfQUPr8Pr97oAAPf5g/oAdB2J0IPHAVC6AACJ5oPGAoPCATn6dNg7BHXyidDrA7gAAIP/AHQGW4PvAev1W1tZWl5fw/Q=). Even better, [download the assembled boot sector](https://github.com/jaredkrinke/100-languages/blob/main/src/p26.img), copy the boot sector onto a USB stick (or floppy drive), and try it on real hardware!
 
 ### Notes
 I'll end with some notes I made while writing x86 assembly
