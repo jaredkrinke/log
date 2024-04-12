@@ -39,7 +39,7 @@
 <p><time datetime="2024-04-11">April 11, 2024</time></p>
 </header>
 <p>I&#39;m still trying to <a href="https://log.schemescape.com/posts/programming-languages/100-languages.html">write code in 100 different programming languages</a>. See <a href="https://github.com/jaredkrinke/100-languages">this repository</a> for a summary table and links to code.</p>
-<p>As always, <strong>none of this is groundbreaking</strong>, but it <em>is</em> fun to see my code running in places I&#39;d hadn&#39;t considered before, like (this time) during the PC boot sequence or <a href="100-languages-5.html#postscript">within a PostScript document</a>.</p>
+<p>As always, <strong>none of this is groundbreaking</strong>, but it <em>is</em> fun to see my code running in places I hadn&#39;t considered before, like (this time) during the PC boot sequence or <a href="100-languages-5.html#postscript">within a PostScript document</a>.</p>
 <h1 id="week-4">Week 4</h1>
 <p>The calendar says this week isn&#39;t over yet, but I doubt I&#39;ll finish any more problems this week. Also, I&#39;m compelled to share my first x86 assembly program.</p>
 <p>After <a href="100-languages-2.html">experiencing SectorLISP</a> on day 2, I&#39;ve been wanting to try my hand at developing for the (in)famous <a href="https://en.wikipedia.org/wiki/Boot_sector#The_IBM_PC_and_compatible_computers">PC boot sector</a>. Thus, I decided to solve Project Euler problem 26 using <strong>16-bit (&quot;real&quot; mode) x86 assembly</strong> (with the BIOS API for text output).</p>
@@ -66,7 +66,7 @@
 <p><strong>The above worked for me on real hardware, QEMU, Blinkenlights, and v86.</strong></p>
 <p>*I will admit that the &quot;simple&quot; port to 16-bit actually took me a while because I forgot to update a line that implicitly depended on word size (<code>add si, 4</code> &rarr; <code>add si, 2</code>).</p>
 <p>Regardless, <a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p26.asm">here&#39;s the final code</a>.</p>
-<p>To run the code, you can <a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p26.img">download the assembled boot sector</a> and load it into <a href="https://copy.sh/v86/">v86</a> (a browser-based x86 emulator). Even better, copy the boot sector onto a USB stick (or floppy drive), and try it on real hardware!</p>
+<p>You can run the code in your browser using <a href="https://copy.sh/v86/">v86</a> by <a href="https://copy.sh/v86/?profile=custom&amp;fda.url=data:file/octet-stream;base64,uAAAjtiO0LwAfLsAALoAAL4AAIPDAYH76AN0EYnZ6FUAOfB/AuvsicaJ2uvmidDoDQDplQBQg8AwtA7NEFjDUlFTUFa7CgC+AAC6AAD3+1KDxgGD+AB18oP+AHQJWOjU/4PuAevytA6wDc0QsArNEF5YW1law1dWUlFTUL8AALsKALgKADnIfQUPr8Pr97oAAPf5g/oAdB2J0IPHAVC6AACJ5oPGAoPCATn6dNg7BHXyidDrA7gAAIP/AHQGW4PvAev1W1tZWl5fw/Q=">clicking this link</a>. Even better, <a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p26.img">download the assembled boot sector</a>, copy the boot sector onto a USB stick (or floppy drive), and try it on real hardware!</p>
 <h3 id="notes">Notes</h3>
 <p>I&#39;ll end with some notes I made while writing x86 assembly</p>
 <ul>

@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-04-12T03:36:57.200Z</updated>
+<updated>2024-04-12T15:20:35.412Z</updated>
 
 <entry>
 <title>Project Euler in your BIOS</title>
@@ -16,7 +16,7 @@
 <updated>2024-04-11T00:00:00.000Z</updated>
 <summary type="text">Or: 100 languages, week 4: return of the boot sector.</summary>
 <content type="html">&lt;p&gt;I&amp;#39;m still trying to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;write code in 100 different programming languages&lt;/a&gt;. See &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;this repository&lt;/a&gt; for a summary table and links to code.&lt;/p&gt;
-&lt;p&gt;As always, &lt;strong&gt;none of this is groundbreaking&lt;/strong&gt;, but it &lt;em&gt;is&lt;/em&gt; fun to see my code running in places I&amp;#39;d hadn&amp;#39;t considered before, like (this time) during the PC boot sequence or &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-5.html#postscript&quot;&gt;within a PostScript document&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As always, &lt;strong&gt;none of this is groundbreaking&lt;/strong&gt;, but it &lt;em&gt;is&lt;/em&gt; fun to see my code running in places I hadn&amp;#39;t considered before, like (this time) during the PC boot sequence or &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-5.html#postscript&quot;&gt;within a PostScript document&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;week-4&quot;&gt;Week 4&lt;/h1&gt;
 &lt;p&gt;The calendar says this week isn&amp;#39;t over yet, but I doubt I&amp;#39;ll finish any more problems this week. Also, I&amp;#39;m compelled to share my first x86 assembly program.&lt;/p&gt;
 &lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-2.html&quot;&gt;experiencing SectorLISP&lt;/a&gt; on day 2, I&amp;#39;ve been wanting to try my hand at developing for the (in)famous &lt;a href=&quot;https://en.wikipedia.org/wiki/Boot_sector#The_IBM_PC_and_compatible_computers&quot;&gt;PC boot sector&lt;/a&gt;. Thus, I decided to solve Project Euler problem 26 using &lt;strong&gt;16-bit (&amp;quot;real&amp;quot; mode) x86 assembly&lt;/strong&gt; (with the BIOS API for text output).&lt;/p&gt;
@@ -43,7 +43,7 @@
 &lt;p&gt;&lt;strong&gt;The above worked for me on real hardware, QEMU, Blinkenlights, and v86.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;*I will admit that the &amp;quot;simple&amp;quot; port to 16-bit actually took me a while because I forgot to update a line that implicitly depended on word size (&lt;code&gt;add si, 4&lt;/code&gt; &amp;rarr; &lt;code&gt;add si, 2&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;Regardless, &lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p26.asm&quot;&gt;here&amp;#39;s the final code&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;To run the code, you can &lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p26.img&quot;&gt;download the assembled boot sector&lt;/a&gt; and load it into &lt;a href=&quot;https://copy.sh/v86/&quot;&gt;v86&lt;/a&gt; (a browser-based x86 emulator). Even better, copy the boot sector onto a USB stick (or floppy drive), and try it on real hardware!&lt;/p&gt;
+&lt;p&gt;You can run the code in your browser using &lt;a href=&quot;https://copy.sh/v86/&quot;&gt;v86&lt;/a&gt; by &lt;a href=&quot;https://copy.sh/v86/?profile=custom&amp;amp;fda.url=data:file/octet-stream;base64,uAAAjtiO0LwAfLsAALoAAL4AAIPDAYH76AN0EYnZ6FUAOfB/AuvsicaJ2uvmidDoDQDplQBQg8AwtA7NEFjDUlFTUFa7CgC+AAC6AAD3+1KDxgGD+AB18oP+AHQJWOjU/4PuAevytA6wDc0QsArNEF5YW1law1dWUlFTUL8AALsKALgKADnIfQUPr8Pr97oAAPf5g/oAdB2J0IPHAVC6AACJ5oPGAoPCATn6dNg7BHXyidDrA7gAAIP/AHQGW4PvAev1W1tZWl5fw/Q=&quot;&gt;clicking this link&lt;/a&gt;. Even better, &lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p26.img&quot;&gt;download the assembled boot sector&lt;/a&gt;, copy the boot sector onto a USB stick (or floppy drive), and try it on real hardware!&lt;/p&gt;
 &lt;h3 id=&quot;notes&quot;&gt;Notes&lt;/h3&gt;
 &lt;p&gt;I&amp;#39;ll end with some notes I made while writing x86 assembly&lt;/p&gt;
 &lt;ul&gt;
@@ -63,7 +63,7 @@
 &lt;p&gt;See &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;this repository&lt;/a&gt; for proof.&lt;/p&gt;
 &lt;h1 id=&quot;week-3-plus-a-day&quot;&gt;Week 3 (plus a day)&lt;/h1&gt;
 &lt;p&gt;As planned, I slowed down from &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-4.html&quot;&gt;last week&lt;/a&gt;, but I still managed to make it to the 25% mark. That&amp;#39;s 25 languages down, and 75 to go! Now that I&amp;#39;m no longer rushing, I&amp;#39;m enjoying the process of playing with new languages more.&lt;/p&gt;
-&lt;p&gt;All languages were new to me for this week. Notably, &lt;strong&gt;I didn&amp;#39;t even realize that &lt;a href=&quot;https://en.wikipedia.org/wiki/PostScript&quot;&gt;PostScript&lt;/a&gt; was a programming language at all&lt;/strong&gt;! Turns out it&amp;#39;s a &lt;a href=&quot;https://en.wikipedia.org/wiki/Forth_(programming_language)&quot;&gt;Forth&lt;/a&gt;-like (stack-based) procedural language. I&amp;#39;m still feel like I&amp;#39;m struggling with stack-based languages, but it might just be a matter of perspective--compared to straight assembly, Forths are a joy to use!&lt;/p&gt;
+&lt;p&gt;All languages were new to me for this week. Notably, &lt;strong&gt;I didn&amp;#39;t even realize that &lt;a href=&quot;https://en.wikipedia.org/wiki/PostScript&quot;&gt;PostScript&lt;/a&gt; was a programming language at all&lt;/strong&gt;! Turns out it&amp;#39;s a &lt;a href=&quot;https://en.wikipedia.org/wiki/Forth_(programming_language)&quot;&gt;Forth&lt;/a&gt;-like (stack-based) procedural language. I still feel like I&amp;#39;m struggling with stack-based languages, but it might just be a matter of perspective--compared to straight assembly, Forths are a joy to use!&lt;/p&gt;
 &lt;p&gt;The rest of this post contains notes on the languages I used.&lt;/p&gt;
 &lt;h2 id=&quot;bbc-basic&quot;&gt;BBC BASIC&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;I&amp;#39;ve never seen or used a &lt;a href=&quot;https://en.wikipedia.org/wiki/BBC_Micro&quot;&gt;BBC Micro&lt;/a&gt;&lt;/strong&gt; (the closest I&amp;#39;ve used is a &lt;a href=&quot;https://en.wikipedia.org/wiki/Commodore_64&quot;&gt;Commodore 64&lt;/a&gt;), but it&amp;#39;s famous enough that I wanted to give one an (&lt;a href=&quot;https://bbcmic.ro/&quot;&gt;emulated&lt;/a&gt;) spin.&lt;/p&gt;
