@@ -22,7 +22,7 @@ Mercifully, I was using the "friendly" branch of SectorLISP, which at least incl
 
 Now, obviously, **the list above is not meant as a complaint**. SectorLISP is a *minimal* Lisp, so I was expecting for it to support only the bare minimum. **Rolling your own integer representation and using recursion for iteration are part of the fun!**
 
-Having said that, there was one unpleasant surprise: because SectorLISP was designed to run on ancient hardware, **it has a miniscule memory budget**. There is only space for (I think) *at most* 8,192 cons cells. Without tail call optimization and iteration, several of my attempts at printing decimal numbers ran out of memory.
+Having said that, there was one unpleasant surprise: because SectorLISP was designed to run on ancient hardware, **it has a miniscule memory budget** (correction: the PC BIOS *always* starts executing the boot sector in 16-bit mode, so this limit is "natural"). There is only space for (I think) *at most* 8,192 cons cells. Without tail call optimization and iteration, several of my attempts at printing decimal numbers ran out of memory.
 
 It took several attempts, but I eventually found that using unary encoding for numbers (i.e. "n" is encoded as a list of length "n"; for example `(QUOTE (T T T))` is the number 3) resulted in the simplest code with the least consing--but only when the numbers are small! For larger numbers, I saved space using 32-bit binary (two's complement) with the least significant bit first.
 
