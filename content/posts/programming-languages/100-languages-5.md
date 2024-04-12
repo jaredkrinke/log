@@ -11,7 +11,7 @@ See [this repository](https://github.com/jaredkrinke/100-languages) for proof.
 # Week 3 (plus a day)
 As planned, I slowed down from [last week](100-languages-4.md), but I still managed to make it to the 25% mark. That's 25 languages down, and 75 to go! Now that I'm no longer rushing, I'm enjoying the process of playing with new languages more.
 
-All languages were new to me for this week. Notably, **I didn't even realize that [PostScript](https://en.wikipedia.org/wiki/PostScript) was a programming language at all**! Turns out it's a [Forth](https://en.wikipedia.org/wiki/Forth_(programming_language))-like (stack-based) procedural language. I'm still feel like I'm struggling with stack-based languages, but it might just be a matter of perspective--compared to straight assembly, Forths are a joy to use!
+All languages were new to me for this week. Notably, **I didn't even realize that [PostScript](https://en.wikipedia.org/wiki/PostScript) was a programming language at all**! Turns out it's a [Forth](https://en.wikipedia.org/wiki/Forth_(programming_language))-like (stack-based) procedural language. I still feel like I'm struggling with stack-based languages, but it might just be a matter of perspective--compared to straight assembly, Forths are a joy to use!
 
 The rest of this post contains notes on the languages I used.
 
