@@ -2,7 +2,7 @@
 title: 100 programming languages, day 1
 description: "Up first: SIC-1 Assembly Language."
 date: 2024-03-16
-keywords: [100-languages]
+keywords: [100-languages,sic1]
 ---
 I'm [trying to write code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html). Note: I'm not necessarily planning on blogging about each programming language, but I *will* try to collect (and share) notes about my experiences, likely in batches.
 
