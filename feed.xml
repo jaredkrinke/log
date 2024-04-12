@@ -7,8 +7,52 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-04-09T03:51:29.610Z</updated>
+<updated>2024-04-12T03:35:02.286Z</updated>
 
+<entry>
+<title>Project Euler in your BIOS</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-6.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-6.html"/>
+<updated>2024-04-11T00:00:00.000Z</updated>
+<summary type="text">Or: 100 languages, week 4: return of the boot sector.</summary>
+<content type="html">&lt;p&gt;I&amp;#39;m still trying to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;write code in 100 different programming languages&lt;/a&gt;. See &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;this repository&lt;/a&gt; for a summary table and links to code.&lt;/p&gt;
+&lt;p&gt;As always, &lt;strong&gt;none of this is groundbreaking&lt;/strong&gt;, but it &lt;em&gt;is&lt;/em&gt; fun to see my code running in places I&amp;#39;d hadn&amp;#39;t considered before, like (this time) during the PC boot sequence or &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-5.html#postscript&quot;&gt;within a PostScript document&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;week-4&quot;&gt;Week 4&lt;/h1&gt;
+&lt;p&gt;The calendar says this week isn&amp;#39;t over yet, but I doubt I&amp;#39;ll finish any more problems this week. Also, I&amp;#39;m compelled to share first x86 assembly program.&lt;/p&gt;
+&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-2.html&quot;&gt;experiencing SectorLISP&lt;/a&gt; on day 2, I&amp;#39;ve been wanting to try my hand at developing for the (in)famous &lt;a href=&quot;https://en.wikipedia.org/wiki/Boot_sector#The_IBM_PC_and_compatible_computers&quot;&gt;PC boot sector&lt;/a&gt;. Thus, I decided to solve Project Euler problem 26 using &lt;strong&gt;16-bit (&amp;quot;real&amp;quot; mode) x86 assembly&lt;/strong&gt; (with the BIOS API for text output).&lt;/p&gt;
+&lt;h2 id=&quot;x86-assembly&quot;&gt;x86 assembly&lt;/h2&gt;
+&lt;h3 id=&quot;32-bit-user-mode&quot;&gt;32-bit, user mode&lt;/h3&gt;
+&lt;p&gt;My first stop was to learn about x86 assembly, and I used &lt;a href=&quot;https://ratfactor.com/assembly-nights&quot;&gt;Assembly Nights on ratfactor.com&lt;/a&gt; to get started. By coincidence, like the Assembly Nights author, I was developing on an old netbook (&lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env-4.html#hello-netbook&quot;&gt;because minimalism&lt;/a&gt;). I used &lt;a href=&quot;https://nasm.us/&quot;&gt;NASM&lt;/a&gt; because it seemed popular, and I&amp;#39;m comfortable with &amp;quot;destination first&amp;quot; syntax.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I learned the bare minimum x86 assembly necessary to implement a solution&lt;/strong&gt; in 32-bit (&amp;quot;protected&amp;quot; mode)--just &lt;code&gt;mov&lt;/code&gt;, &lt;code&gt;push&lt;/code&gt;, &lt;code&gt;pop&lt;/code&gt;, &lt;code&gt;cmp&lt;/code&gt;, &lt;code&gt;call&lt;/code&gt;, &lt;code&gt;ret&lt;/code&gt;, arithmetic, and conditional/unconditional jumps (along with Linux system calls for writing strings and terminating the process).&lt;/p&gt;
+&lt;h3 id=&quot;16-bit-bare-metal--bios&quot;&gt;16-bit, &amp;quot;bare metal&amp;quot; (+ BIOS)&lt;/h3&gt;
+&lt;p&gt;After that, it was just a simple* matter of porting the 32-bit code to 16-bit mode (removing &lt;code&gt;e&lt;/code&gt; from register names and halving the word size). And then I got to experience &lt;strong&gt;the joy of learning about the PC BIOS&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The web is actually littered with examples of &amp;quot;bare metal&amp;quot; x86 programming (aside: does it count as &amp;quot;bare metal&amp;quot; if you&amp;#39;re using the BIOS API?). Annoyingly, &lt;strong&gt;most of the examples I found didn&amp;#39;t actually work&lt;/strong&gt; for reasons I&amp;#39;ll probably never understand. There are also many proclamations of required initialization rituals that I didn&amp;#39;t (and still don&amp;#39;t) understand. Some examples worked in &lt;a href=&quot;https://www.qemu.org/&quot;&gt;QEMU&lt;/a&gt; but not in Hyper-V or &lt;a href=&quot;https://justine.lol/blinkenlights/&quot;&gt;Blinkenlights&lt;/a&gt;. Others inverted that sentence. And then there&amp;#39;s real hardware, which is much more fickle.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Here&amp;#39;s what actually worked for me&lt;/strong&gt;  (about which I&amp;#39;m 100% &lt;em&gt;not&lt;/em&gt; confident):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;Do not&lt;/em&gt; start with &lt;code&gt;cli&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Do&lt;/em&gt; initialize &lt;code&gt;ds&lt;/code&gt; and &lt;code&gt;ss&lt;/code&gt; segment registers&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Do&lt;/em&gt; initialize  the stack pointer (&lt;code&gt;sp&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here&amp;#39;s the code I used (in this case, I chose to have the stack grow down from where boot sector code must start):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-nasm&quot;&gt;    &lt;span class=&quot;hljs-keyword&quot;&gt;mov&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;ax&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;mov&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;ds&lt;/span&gt;, &lt;span class=&quot;hljs-built_in&quot;&gt;ax&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;mov&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;ss&lt;/span&gt;, &lt;span class=&quot;hljs-built_in&quot;&gt;ax&lt;/span&gt;
+    &lt;span class=&quot;hljs-keyword&quot;&gt;mov&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;sp&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;0x7c00&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then you can set &lt;code&gt;al&lt;/code&gt; to a character, &lt;code&gt;ah&lt;/code&gt; to &lt;code&gt;0xe&lt;/code&gt;, and execute &lt;code&gt;int 0x10&lt;/code&gt; to output the character (and be moderately confident that it will actually appear).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The above worked for me on real hardware, QEMU, Blinkenlights, and v86.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;*I will admit that the &amp;quot;simple&amp;quot; port to 16-bit actually took me a while because I forgot to update a line that implicitly depended on word size (&lt;code&gt;add si, 4&lt;/code&gt; &amp;rarr; &lt;code&gt;add si, 2&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;Regardless, &lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p26.asm&quot;&gt;here&amp;#39;s the final code&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To run the code, you can &lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p26.img&quot;&gt;download the assembled boot sector&lt;/a&gt; and load it into &lt;a href=&quot;https://copy.sh/v86/&quot;&gt;v86&lt;/a&gt; (a browser-based x86 emulator). Even better, copy the boot sector onto a USB stick (or floppy drive), and try it on real hardware!&lt;/p&gt;
+&lt;h3 id=&quot;notes&quot;&gt;Notes&lt;/h3&gt;
+&lt;p&gt;I&amp;#39;ll end with some notes I made while writing x86 assembly&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;I had to use &lt;em&gt;every&lt;/em&gt; register&lt;/strong&gt; available to me (not counting &lt;code&gt;bp&lt;/code&gt;, which I think I could have technically gotten away with using)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;I wish I&amp;#39;d done this sooner&lt;/strong&gt;--knowing even just a tiny bit of assembly would have been helpful on numerous occasions&lt;/li&gt;
+&lt;li&gt;Having registers at my disposal &lt;em&gt;almost&lt;/em&gt; made assembly easier to write than Forth (of course, this is more a reflection of my discomfort with stack-based languages--to say nothing of the interactive development benefits a Forth can provide)&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>One quarter of the way to 100 programming languages</title>
 <id>https://log.schemescape.com/posts/programming-languages/100-languages-5.html</id>
@@ -265,34 +309,6 @@
 &lt;ul&gt;
 &lt;li&gt;It&amp;#39;s possible to produce a range of numbers in SQLite!&lt;/li&gt;
 &lt;li&gt;Strings can be automatically coerced to numbers in SQLite&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>Using SectorLISP for Project Euler</title>
-<id>https://log.schemescape.com/posts/programming-languages/100-languages-2.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-2.html"/>
-<updated>2024-03-20T00:00:00.000Z</updated>
-<summary type="text">Four days later, I&apos;ve completed day two of my challenge.</summary>
-<content type="html">&lt;p&gt;I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;trying to write code in 100 different programming languages&lt;/a&gt;. Day (ahem) 2: &lt;strong&gt;SectorLISP&lt;/strong&gt;!&lt;/p&gt;
-&lt;h1 id=&quot;sectorlisp&quot;&gt;SectorLISP&lt;/h1&gt;
-&lt;p&gt;Ever since discovering &lt;a href=&quot;https://justine.lol/sectorlisp2/&quot;&gt;SectorLISP&lt;/a&gt; (a minimal Lisp that fits in a boot sector), I&amp;#39;ve wanted to give it a spin. And it did not disappoint! It was both beautiful and painful.&lt;/p&gt;
-&lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
-&lt;p&gt;Things I missed while using SectorLISP:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Tail call optimization&lt;/li&gt;
-&lt;li&gt;Mutation&lt;/li&gt;
-&lt;li&gt;Integers&lt;/li&gt;
-&lt;li&gt;Iteration&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.lispworks.com/documentation/lw60/CLHS/Body/s_let_l.htm&quot;&gt;&lt;code&gt;LET&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Mercifully, I was using the &amp;quot;friendly&amp;quot; branch of SectorLISP, which at least included an obvious and idiomatic way to implement recursion via &lt;code&gt;DEFINE&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Now, obviously, &lt;strong&gt;the list above is not meant as a complaint&lt;/strong&gt;. SectorLISP is a &lt;em&gt;minimal&lt;/em&gt; Lisp, so I was expecting for it to support only the bare minimum. &lt;strong&gt;Rolling your own integer representation and using recursion for iteration are part of the fun!&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Having said that, there was one unpleasant surprise: because SectorLISP was designed to run on ancient hardware, &lt;strong&gt;it has a miniscule memory budget&lt;/strong&gt;. There is only space for (I think) &lt;em&gt;at most&lt;/em&gt; 8,192 cons cells. Without tail call optimization and iteration, several of my attempts at printing decimal numbers ran out of memory.&lt;/p&gt;
-&lt;p&gt;It took several attempts, but I eventually found that using unary encoding for numbers (i.e. &amp;quot;n&amp;quot; is encoded as a list of length &amp;quot;n&amp;quot;; for example &lt;code&gt;(QUOTE (T T T))&lt;/code&gt; is the number 3) resulted in the simplest code with the least consing--but only when the numbers are small! For larger numbers, I saved space using 32-bit binary (two&amp;#39;s complement) with the least significant bit first.&lt;/p&gt;
-&lt;h2 id=&quot;links&quot;&gt;Links&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/p2.lisp&quot;&gt;Solution&lt;/a&gt; (tested using the simulator on the &lt;a href=&quot;https://justine.lol/sectorlisp2/&quot;&gt;SectorLISP v2 page&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
 </content>
 </entry>
