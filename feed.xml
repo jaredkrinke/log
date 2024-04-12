@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-04-12T03:35:02.286Z</updated>
+<updated>2024-04-12T03:36:57.200Z</updated>
 
 <entry>
 <title>Project Euler in your BIOS</title>
@@ -18,7 +18,7 @@
 <content type="html">&lt;p&gt;I&amp;#39;m still trying to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;write code in 100 different programming languages&lt;/a&gt;. See &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;this repository&lt;/a&gt; for a summary table and links to code.&lt;/p&gt;
 &lt;p&gt;As always, &lt;strong&gt;none of this is groundbreaking&lt;/strong&gt;, but it &lt;em&gt;is&lt;/em&gt; fun to see my code running in places I&amp;#39;d hadn&amp;#39;t considered before, like (this time) during the PC boot sequence or &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-5.html#postscript&quot;&gt;within a PostScript document&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;week-4&quot;&gt;Week 4&lt;/h1&gt;
-&lt;p&gt;The calendar says this week isn&amp;#39;t over yet, but I doubt I&amp;#39;ll finish any more problems this week. Also, I&amp;#39;m compelled to share first x86 assembly program.&lt;/p&gt;
+&lt;p&gt;The calendar says this week isn&amp;#39;t over yet, but I doubt I&amp;#39;ll finish any more problems this week. Also, I&amp;#39;m compelled to share my first x86 assembly program.&lt;/p&gt;
 &lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-2.html&quot;&gt;experiencing SectorLISP&lt;/a&gt; on day 2, I&amp;#39;ve been wanting to try my hand at developing for the (in)famous &lt;a href=&quot;https://en.wikipedia.org/wiki/Boot_sector#The_IBM_PC_and_compatible_computers&quot;&gt;PC boot sector&lt;/a&gt;. Thus, I decided to solve Project Euler problem 26 using &lt;strong&gt;16-bit (&amp;quot;real&amp;quot; mode) x86 assembly&lt;/strong&gt; (with the BIOS API for text output).&lt;/p&gt;
 &lt;h2 id=&quot;x86-assembly&quot;&gt;x86 assembly&lt;/h2&gt;
 &lt;h3 id=&quot;32-bit-user-mode&quot;&gt;32-bit, user mode&lt;/h3&gt;
