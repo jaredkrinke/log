@@ -9,7 +9,7 @@ I'm still trying to [write code in 100 different programming languages](https://
 As always, **none of this is groundbreaking**, but it *is* fun to see my code running in places I'd hadn't considered before, like (this time) during the PC boot sequence or [within a PostScript document](100-languages-5.md#postscript).
 
 # Week 4
-The calendar says this week isn't over yet, but I doubt I'll finish any more problems this week. Also, I'm compelled to share first x86 assembly program.
+The calendar says this week isn't over yet, but I doubt I'll finish any more problems this week. Also, I'm compelled to share my first x86 assembly program.
 
 After [experiencing SectorLISP](100-languages-2.md) on day 2, I've been wanting to try my hand at developing for the (in)famous [PC boot sector](https://en.wikipedia.org/wiki/Boot_sector#The_IBM_PC_and_compatible_computers). Thus, I decided to solve Project Euler problem 26 using **16-bit ("real" mode) x86 assembly** (with the BIOS API for text output).
 
