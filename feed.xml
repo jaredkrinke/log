@@ -7,8 +7,85 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-04-12T15:20:35.412Z</updated>
+<updated>2024-04-29T02:31:54.136Z</updated>
 
+<entry>
+<title>One third of the way to 100 programming languages</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-7.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-7.html"/>
+<updated>2024-04-28T00:00:00.000Z</updated>
+<summary type="text">Or: A tour of the syntax continuum.</summary>
+<content type="html">&lt;p&gt;I&amp;#39;m &lt;em&gt;still&lt;/em&gt; trying to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;write code in 100 different programming languages&lt;/a&gt;. My progress is being recorded in &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;this repository&lt;/a&gt;. I&amp;#39;m roughly one third of the way to 100 languages already!&lt;/p&gt;
+&lt;p&gt;In this update, I explored stack-based languages and (unintentionally) &lt;strong&gt;traveled the programming language syntax continuum, from (almost) no syntax to (almost) &lt;em&gt;only&lt;/em&gt; syntax&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;weeks-4-and-5&quot;&gt;Weeks 4 and 5&lt;/h1&gt;
+&lt;p&gt;Given my previous struggles with Forth-like stack-based languages, I decided to focus on stack-based and/or concatenative languages.&lt;/p&gt;
+&lt;h2 id=&quot;retroforth&quot;&gt;RetroForth&lt;/h2&gt;
+&lt;p&gt;RetroForth bills itself as a &amp;quot;modern, pragmatic Forth&amp;quot;, and I agree with that description. It adds one-character &amp;quot;sigils&amp;quot; to distinguish numbers, strings, definitions, comments, etc. These sigils allegedly simplify the interpreter, and I think this one extra bit of syntax is helpful.&lt;/p&gt;
+&lt;p&gt;Overall, I enjoyed Retro&amp;#39;s take on Forth, and I finally felt like I was making progress on creating simpler, more idiomatic Forth code.&lt;/p&gt;
+&lt;p&gt;Notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Got in infinite loops several times&lt;/li&gt;
+&lt;li&gt;Fatal errors are just numbers and I don&amp;#39;t know where to look them up&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;uxntal&quot;&gt;Uxntal&lt;/h2&gt;
+&lt;p&gt;Ever since reading about &lt;a href=&quot;https://100r.co/site/uxn.html&quot;&gt;uxn&lt;/a&gt;, I&amp;#39;d wanted to see what a simple VM that runs on an NES could look like. After digging in a bit more, I learned that uxn was inspired by Forth--that got my attention!&lt;/p&gt;
+&lt;p&gt;After writing some code in uxn&amp;#39;s assembly language (tal), I&amp;#39;ll say that I mostly like uxn (the virtual machine), but... I don&amp;#39;t like writing tal (the assembly language). There&amp;#39;s a lot of syntax and aesthetic choices that irritate me.&lt;/p&gt;
+&lt;p&gt;Notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Numbers &lt;em&gt;must&lt;/em&gt; be written in lowercase hexadecimal (&lt;strong&gt;decimal is not even allowed!&lt;/strong&gt;)&lt;/li&gt;
+&lt;li&gt;Instructions can set a &amp;quot;keep&amp;quot; bit that causes inputs to remain on the stack&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The instruction set doesn&amp;#39;t include modulus/remainder&lt;/strong&gt; (why!?)&lt;/li&gt;
+&lt;li&gt;Supports both global and local labels, which is convenient&lt;/li&gt;
+&lt;li&gt;Instructions must be UPPERCASE (except for flags), but hexadecimal must be lowercase&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Names like &lt;code&gt;b1&lt;/code&gt; aren&amp;#39;t allowed&lt;/strong&gt; because they&amp;#39;re actually hexadecimal numbers...&lt;/li&gt;
+&lt;li&gt;Mixing 8-bit and 16-bit values on the stack is tedious&lt;/li&gt;
+&lt;li&gt;Must specify &lt;code&gt;&amp;amp;&lt;/code&gt; on relative references, but not &lt;code&gt;@&lt;/code&gt; on global references...&lt;/li&gt;
+&lt;li&gt;Pro tip: don&amp;#39;t DUP relative addresses!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;apl&quot;&gt;APL&lt;/h2&gt;
+&lt;p&gt;After playing with J and K (although I couldn&amp;#39;t actually find an official implementation of K5), it was time to play with their spiritual predecessor, APL.&lt;/p&gt;
+&lt;p&gt;With J, I felt like I was re-learning Perl-compatible regular expressions, but with a much larger menu of ASCII sigils. APL is the same, &lt;strong&gt;except I can&amp;#39;t type (and don&amp;#39;t even know the names of) the sigils&lt;/strong&gt;. Overall, this was probably the most challenging syntax I&amp;#39;ve encountered outside of esoteric programming languages.&lt;/p&gt;
+&lt;h2 id=&quot;factor&quot;&gt;Factor&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Factor is the niftiest concatenative language I&amp;#39;ve tried&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Intriguingly, it borrows heavily from Common Lisp (e.g. restarts, editor integration, multiple dispatch, image-based development). I&amp;#39;d even go as far to say that, in my limited experience, &lt;strong&gt;Factor feels like a concatenative expression of Common Lisp&lt;/strong&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Common Lisp-like restarts!&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://andreaferretti.github.io/factor-tutorial/&quot;&gt;This Factor tutorial&lt;/a&gt; is a great introduction--not just to Forth, but to concatenative languages in general&lt;/li&gt;
+&lt;li&gt;Factor&amp;#39;s compiler validates documented stack effects&lt;/li&gt;
+&lt;li&gt;Factor supports editor integration, e.g. &amp;quot;go to definition&amp;quot;&lt;/li&gt;
+&lt;li&gt;Can save images, refresh files from disk, etc.&lt;/li&gt;
+&lt;li&gt;Built-in help&lt;/li&gt;
+&lt;li&gt;Support for local variables, using &lt;code&gt;::&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;rebol&quot;&gt;Rebol&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Rebol is a minimal, but impressively capable scripting language&lt;/strong&gt;. The entire language, including GUI support is well under 1 MB. How did I not run across Rebol when I was &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env-5.html&quot;&gt;looking for a minimal development environment&lt;/a&gt;!? I only scratched the surface of Rebol, but it felt like exactly what I was looking for.&lt;/p&gt;
+&lt;p&gt;Having said that, I&amp;#39;m uncertain about the future of Rebol--it doesn&amp;#39;t even appear to fully support 64-bit architectures.&lt;/p&gt;
+&lt;p&gt;Notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Entire language is 440 KB!&lt;/li&gt;
+&lt;li&gt;Used the console version&lt;/li&gt;
+&lt;li&gt;Variables in functions don&amp;#39;t default to locals!?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;bash&quot;&gt;Bash&lt;/h2&gt;
+&lt;p&gt;I&amp;#39;ve successfully been avoiding writing Bash recently, but I thought it might be fun to see what math looks like in Bash.&lt;/p&gt;
+&lt;p&gt;Notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ugly syntax (double parentheses, double brackets)&lt;/li&gt;
+&lt;li&gt;Little inconsistencies, e.g. &lt;code&gt;fi&lt;/code&gt; vs &lt;code&gt;done&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Lots of symbols to remember: &lt;code&gt;#&lt;/code&gt;, &lt;code&gt;@&lt;/code&gt;, &lt;code&gt;/&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;But &lt;em&gt;very&lt;/em&gt; widely deployed!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;julia&quot;&gt;Julia&lt;/h2&gt;
+&lt;p&gt;From my uninformed perspective, Julia looks like the language that academics should be using instead of Python. I probably shouldn&amp;#39;t have said that, but there it is.&lt;/p&gt;
+&lt;p&gt;Notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Excellent documentation!&lt;/li&gt;
+&lt;li&gt;Base runtime includes a constant indicating the precision of floating points numbers!&lt;/li&gt;
+&lt;li&gt;Has a REPL, but I didn&amp;#39;t use it&lt;/li&gt;
+&lt;li&gt;Built-in rational type!&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Project Euler in your BIOS</title>
 <id>https://log.schemescape.com/posts/programming-languages/100-languages-6.html</id>
@@ -227,89 +304,6 @@
 &lt;p&gt;&lt;strong&gt;What does this have to do with anything?&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Exapunks is a programming zachlike, and I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/game-development/../programming-languages/100-languages.html&quot;&gt;in dire need of more programming languages&lt;/a&gt;, so obviously I needed to solve a Project Euler problem in Exapunks. Ok, done. Then I wanted to share my code in a source code-like format and couldn&amp;#39;t find an appropriate tool, so I made one.&lt;/p&gt;
 &lt;p&gt;That&amp;#39;s all. End of story.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Wrapping up week 1 of the 100 languages challenge</title>
-<id>https://log.schemescape.com/posts/programming-languages/100-languages-3.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-3.html"/>
-<updated>2024-03-23T00:00:00.000Z</updated>
-<summary type="text">So far I&apos;m on schedule and have sampled each kind of programming language.</summary>
-<content type="html">&lt;p&gt;I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;trying to write code in 100 different programming languages&lt;/a&gt;. Today, I&amp;#39;m wrapping up week 1.&lt;/p&gt;
-&lt;p&gt;The full list of languages and links to code are in my &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;100-languages&lt;/a&gt; repository.&lt;/p&gt;
-&lt;h1 id=&quot;days-1---2&quot;&gt;Days 1 - 2&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;I got off to a pretty rocky start by starting with two languages that run in limited environments&lt;/strong&gt;: &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-1.html&quot;&gt;SIC-1 Assembly Language&lt;/a&gt; (which runs on an 8-bit single-instruction CPU with 256 bytes addressable) and &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-2.html&quot;&gt;SectorLISP&lt;/a&gt; (which has only lists--no integers!--and with a max of a few thousand linked list cells). Economizing solutions was fun, but time-consuming.&lt;/p&gt;
-&lt;h1 id=&quot;days-3---7&quot;&gt;Days 3 - 7&lt;/h1&gt;
-&lt;p&gt;I could have breezed through the first week by using procedural languages I already knew, &lt;strong&gt;but the whole point of this journey is to play with new programming languages with minimal investment&lt;/strong&gt;, so I set two goals for the rest of the week:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Use at least one language of each type (cf. &lt;a href=&quot;https://madhadron.com/programming/seven_ur_languages.html&quot;&gt;The Seven Programming Ur-Languages&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;Explore new languages, or new ways of using languages, when possible&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Here are the languages I ended up using:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://fortran-lang.org/&quot;&gt;Fortran&lt;/a&gt; (procedural language)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.jsoftware.com/#/&quot;&gt;J&lt;/a&gt; (array language)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://gforth.org/&quot;&gt;Gforth&lt;/a&gt; (stack-based language)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Standard_ML&quot;&gt;Standard ML&lt;/a&gt; (functional language)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://squeak.org/&quot;&gt;Squeak&lt;/a&gt;/Smalltalk (object-oriented language)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/SQL&quot;&gt;SQL&lt;/a&gt; (declarative language)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Technically, I think I&amp;#39;ve written Smalltalk and Standard ML code before, but it was a long time ago, and I definitely did not remember anything beyond high level concepts. SQL was the only language I was fluent in (but not for solving math problems!).&lt;/p&gt;
-&lt;h1 id=&quot;doubts-about-this-challenge&quot;&gt;Doubts about this challenge&lt;/h1&gt;
-&lt;p&gt;I&amp;#39;ve tried to make it clear that &lt;strong&gt;I&amp;#39;m not expecting to actually &lt;em&gt;learn&lt;/em&gt; or &lt;em&gt;become proficient in&lt;/em&gt; all of these languages&lt;/strong&gt;--I&amp;#39;m just sampling them and ensuring that I &lt;em&gt;apply&lt;/em&gt; what little I &lt;em&gt;do&lt;/em&gt; learn. Eventually, maybe I&amp;#39;ll dive into a few of the languages that intrigued me the most.&lt;/p&gt;
-&lt;p&gt;Honestly, it&amp;#39;s been fun to dabble in languages I have no business writing code for. In that aspect, this challenge has been a resounding success.&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;However&lt;/em&gt;, sometimes &lt;strong&gt;it feels like this is actually just a challenge to learn 100 different syntaxes&lt;/strong&gt;. In other words, &lt;strong&gt;I might be spending time on the &lt;em&gt;least interesting part&lt;/em&gt; of any programming language: syntax&lt;/strong&gt;. (Not to say syntax isn&amp;#39;t important, just that syntax is &lt;em&gt;almost&lt;/em&gt; never a reason to use or avoid a programming language. For the record, I said &amp;quot;almost never&amp;quot;.)&lt;/p&gt;
-&lt;p&gt;It remains to be seen if syntax overload ends up sinking this adventure, but for now I&amp;#39;m planning to forge ahead.&lt;/p&gt;
-&lt;h1 id=&quot;language-notes&quot;&gt;Language notes&lt;/h1&gt;
-&lt;p&gt;I&amp;#39;ll end this update with some notes about the languages I used.&lt;/p&gt;
-&lt;h2 id=&quot;fortran&quot;&gt;Fortran&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;Fortran is verbose&lt;/strong&gt;. It tries to be precise, but there&amp;#39;s enough historical baggage and implicit behavior that it seems really easy to screw up. I don&amp;#39;t think this particular programming problem played to any of Fortran&amp;#39;s strengths, however, so my perspective is skewed--I was basically writing C in Fortran.&lt;/p&gt;
-&lt;p&gt;Notes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Opted for Fortran 90, with extravagances like &amp;quot;free-form source input&amp;quot; (instead of fixed column input)&lt;/li&gt;
-&lt;li&gt;Requires lots of redundant typing (function names and return types, variable definitions)&lt;/li&gt;
-&lt;li&gt;Native logical/Boolean type!&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://fortran-lang.org/learn/quickstart/gotchas/&quot;&gt;Plenty of gotchas&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;j&quot;&gt;J&lt;/h2&gt;
-&lt;p&gt;I was excited to try an array language, &lt;strong&gt;but &lt;em&gt;wow&lt;/em&gt; was I unprepared for the overwhelming cyclone of syntax&lt;/strong&gt;. Like regular expressions, I&amp;#39;m sure once you&amp;#39;re proficient with J it&amp;#39;s quick to whip up little programs. Also like regular expressions, J seems difficult to parse at a glance. &lt;strong&gt;Trying to wade through dozens of sigils as quickly as possible was probably the worst possible introduction to J&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Despite being in the wrong mindset, I &lt;em&gt;did&lt;/em&gt; enjoy programming in J, because it felt so novel. The closest I&amp;#39;ve used to an array language is probably &lt;a href=&quot;https://numpy.org/&quot;&gt;NumPy&lt;/a&gt;, but J is its own language, designed from the ground up.&lt;/p&gt;
-&lt;p&gt;Notes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;_5&lt;/code&gt; is a negative number and &lt;code&gt;_&lt;/code&gt; is infinity&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;3 : 0&lt;/code&gt; defines a verb (operator) -- hopefully there&amp;#39;s a good reason for this...&lt;/li&gt;
-&lt;li&gt;Unique terminology (&amp;quot;verbs&amp;quot;, &amp;quot;adverbs&amp;quot;, &amp;quot;ravel&amp;quot;) makes it hard to find information in the wiki&lt;/li&gt;
-&lt;li&gt;Search engines don&amp;#39;t seem to understand that &amp;quot;J&amp;quot; is the name of a programming language -- only good way to search was on Stack Overflow with the &lt;code&gt;[j]&lt;/code&gt; tag&lt;/li&gt;
-&lt;li&gt;Comments start with &lt;code&gt;NB.&lt;/code&gt;!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;gforth&quot;&gt;Gforth&lt;/h2&gt;
-&lt;p&gt;After reading a &lt;a href=&quot;https://ratfactor.com/forth/the_programming_language_that_writes_itself.html&quot;&gt;very long and entertaining post about Forth&lt;/a&gt; roughly a year ago, I&amp;#39;ve wanted to give Forth a try. Forth&amp;#39;s minimalism aligns nicely with &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;my own aspirations&lt;/a&gt;. Who knows, maybe Forth will &lt;a href=&quot;http://duskos.org/&quot;&gt;control a post-apocalyptic world&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I was prepared for Forth&amp;#39;s minimal syntax (even more minimal than Lisp) and I knew how to use a stack. &lt;strong&gt;But I underestimated just how &lt;em&gt;exasperatingly tedious&lt;/em&gt; managing the parameter stack would be&lt;/strong&gt;. I&amp;#39;m sure there&amp;#39;s some better solution for temporaries that I skimmed over, but having to &lt;code&gt;SWAP 1 + SWAP&lt;/code&gt;, etc. was inconvenient.&lt;/p&gt;
-&lt;p&gt;Overall, I&amp;#39;m not sure how I feel about Forth outside of the embedded world. I &lt;em&gt;do&lt;/em&gt; hope to implement my own Forth one day--and maybe with the benefit of enlightenment I&amp;#39;ll feel differently.&lt;/p&gt;
-&lt;p&gt;Notes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;I actually kind of enjoyed having no type-checking, not even at run-time--although it&amp;#39;s probably not usually a good idea&lt;/li&gt;
-&lt;li&gt;Interacting with Forth really feels like interacting directly with hardware&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;standard-ml&quot;&gt;Standard ML&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;I love arrow functions, map, reduce, etc.&lt;/strong&gt; -- and I have functional programming languages to thank for those, even when I&amp;#39;m using JavaScript. Having said that, Standard ML was the first language I ran into during this challenge where it felt like I was wasting my time stumbling through syntax. I still don&amp;#39;t know when I need parentheses and when I don&amp;#39;t. As usual, this is not necessarily the fault of the language--just of the environment I&amp;#39;ve created for myself.&lt;/p&gt;
-&lt;p&gt;Having said that (and I&amp;#39;m sure people will disagree), &lt;strong&gt;I prefer Lisp&amp;#39;s regular syntax when compared to something like Standard ML&lt;/strong&gt;. Maybe I&amp;#39;d like Clojure?&lt;/p&gt;
-&lt;h2 id=&quot;squeak&quot;&gt;Squeak&lt;/h2&gt;
-&lt;p&gt;I was prepared for everything to be an object in Squeak. I was excited for a fully introspectable language. Want to know what something does? Just look at its source!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;I was &lt;em&gt;not&lt;/em&gt; prepared for clicking through menus and having to use the mouse all the time&lt;/strong&gt;. I&amp;#39;m also not sold on image-based development being &lt;em&gt;the default&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;In the end, I think there&amp;#39;s a lot of value in a standardized development environment and separating logic into objects, but I think most of those benefits are visible when working in teams or over longer periods of time.&lt;/p&gt;
-&lt;p&gt;Notes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Use the browser&lt;/li&gt;
-&lt;li&gt;Use all your mouse buttons&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;sql&quot;&gt;SQL&lt;/h2&gt;
-&lt;p&gt;Similar to J, &lt;strong&gt;it&amp;#39;s fun to tell the computer &lt;em&gt;what&lt;/em&gt; I want it to do without having to specify the particular steps for &lt;em&gt;how&lt;/em&gt; to do it&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Notes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;It&amp;#39;s possible to produce a range of numbers in SQLite!&lt;/li&gt;
-&lt;li&gt;Strings can be automatically coerced to numbers in SQLite&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>
