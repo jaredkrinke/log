@@ -21,4 +21,4 @@ Overall, **subleq is interesting theoretically** (but not *practically*), and, w
 
 ## Links
 * [Main GitHub repository where I'm tracking progress](https://github.com/jaredkrinke/100-languages)
-* [Solution](https://github.com/jaredkrinke/100-languages/blob/main/p1.sic1)
+* [Solution](https://github.com/jaredkrinke/100-languages/blob/main/src/p1.sic1)

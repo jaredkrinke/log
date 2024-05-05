@@ -27,4 +27,4 @@ Having said that, there was one unpleasant surprise: because SectorLISP was desi
 It took several attempts, but I eventually found that using unary encoding for numbers (i.e. "n" is encoded as a list of length "n"; for example `(QUOTE (T T T))` is the number 3) resulted in the simplest code with the least consing--but only when the numbers are small! For larger numbers, I saved space using 32-bit binary (two's complement) with the least significant bit first.
 
 ## Links
-* [Solution](https://github.com/jaredkrinke/100-languages/blob/main/p2.lisp) (tested using the simulator on the [SectorLISP v2 page](https://justine.lol/sectorlisp2/))
+* [Solution](https://github.com/jaredkrinke/100-languages/blob/main/src/p2.lisp) (tested using the simulator on the [SectorLISP v2 page](https://justine.lol/sectorlisp2/))
