@@ -7,8 +7,163 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-05-05T16:19:49.494Z</updated>
+<updated>2024-05-14T04:46:06.409Z</updated>
 
+<entry>
+<title>50 programming languages in 58 days</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-9.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-9.html"/>
+<updated>2024-05-13T00:00:00.000Z</updated>
+<summary type="text">Here are my notes about a grab bag of programming languages that helped get me half way to sampling 100 programming languages.</summary>
+<content type="html">&lt;p&gt;In the past two months, I&amp;#39;ve &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;written code in 50 different programming languages&lt;/a&gt;. &lt;strong&gt;That&amp;#39;s half way to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;my goal of 100&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;weeks-6---8&quot;&gt;Weeks 6 - 8&lt;/h1&gt;
+&lt;p&gt;After tediously &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/piet-for-project-euler.html&quot;&gt;painting a picture to compute digit factorials&lt;/a&gt;, &lt;strong&gt;I&amp;#39;m trying to be more strategic about pairing programming languages with suitable Project Euler problems&lt;/strong&gt;. Ideally, I can avoid writing &amp;quot;big integer&amp;quot; arithmetic and/or squeezing solutions into a 16-bit address space for the next update. And I&amp;#39;m definitely going to take a break from esoteric programming languages for a bit.&lt;/p&gt;
+&lt;p&gt;Anyway, here are the languages I used:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Turbo_Pascal&quot;&gt;Turbo Pascal&lt;/a&gt; (under DOSBox)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://harelang.org/&quot;&gt;Hare&lt;/a&gt; (floppy disk-sized systems language)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://wren.io/&quot;&gt;Wren&lt;/a&gt; (object-oriented scripting language)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://pkl-lang.org/index.html&quot;&gt;Pkl&lt;/a&gt; (meta-configuration language)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nas.sr/%D9%82%D9%84%D8%A8/&quot;&gt;قلب (Qalb)&lt;/a&gt; (Scheme using Arabic script)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.roc-lang.org/&quot;&gt;Roc&lt;/a&gt; (functional language)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/LingDong-/wax&quot;&gt;wax&lt;/a&gt; (a common subset of most imperative languages)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://urlan.sourceforge.io/boron/&quot;&gt;Boron&lt;/a&gt; (Rebol, but with a smaller scope)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://wy-lang.org/&quot;&gt;文言 (wenyan)&lt;/a&gt; (imperative language using Chinese text)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Self_(programming_language)&quot;&gt;Self&lt;/a&gt; (prototype-based Smalltalk)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.haskell.org/&quot;&gt;Haskell&lt;/a&gt; (functional language)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.idris-lang.org/index.html&quot;&gt;Idris&lt;/a&gt; (dependently-typed functional language)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://nim-lang.org/&quot;&gt;Nim&lt;/a&gt; (vaguely Python-esque compiled language)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://min-lang.org/&quot;&gt;Min&lt;/a&gt; (concatenative language, based on Nim)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://macoy.me/blog/programming/CakelispIntro&quot;&gt;Cakelisp&lt;/a&gt; (s-expression to C compiler)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://fsharp.org/&quot;&gt;F#&lt;/a&gt; (functional language for .NET)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A few languages surprised me (one quite pleasantly and one quite &lt;em&gt;unpleasantly&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;The rest of this post just contains notes from my (minimal) interaction with each language. I&amp;#39;m planning to write a separate post with more general observations. As always, &lt;strong&gt;my observations are from spending at most a few hours with each language, so take my opinions completely encrusted with salt.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;turbo-pascal&quot;&gt;Turbo Pascal&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;I&amp;#39;d always wanted to try Turbo Pascal since two of my heroes helped create it (Anders &amp;quot;Turbo&amp;quot; Heljsberg and Niklaus (&amp;quot;Pascal&amp;quot;) Wirth).&lt;/strong&gt; It was allegedly far ahead of its time, although my only contemporaneous experience was with QBasic, so I can neither confirm nor deny. Regardless, it&amp;#39;s an impressively complete little environment. I highly recommend it for retrocomputing!&lt;/p&gt;
+&lt;p&gt;Notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Keyboard shortcut to compile and run is Ctrl+F9... which is the default DOSBox shortcut for killing DOSBox&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Had to speed up prime test by sieving first 1000 numbers&lt;/li&gt;
+&lt;li&gt;Built-in documentation is handy, but lacking detail&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The IDE is amazing, considering how tiny it is!&lt;/strong&gt; (Aside: someone &lt;a href=&quot;https://github.com/magiblot/turbo&quot;&gt;ported the UI to modern computers&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Can&amp;#39;t have local variables with same name as globals?&lt;/li&gt;
+&lt;li&gt;Annoying to have to declare all variables at top, but that probably makes the language faster to compile&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;hare&quot;&gt;Hare&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Initially, I was confused by the &amp;quot;cannot ignore error here&amp;quot; error, but it turns out it was &lt;em&gt;literally telling me that I needed to handle a potential error code path&lt;/em&gt; (or tell the compiler to crash on error instead)&lt;/li&gt;
+&lt;li&gt;Semicolons required at the end of &lt;code&gt;for&lt;/code&gt; loops and &lt;code&gt;if&lt;/code&gt; conditionals (though the docs say this might change)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docs claim the language fits on a 3.5&amp;quot; floppy&lt;/strong&gt; -- if true that would be impressive!&lt;/li&gt;
+&lt;li&gt;Doesn&amp;#39;t officially support Windows/macOS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;wren&quot;&gt;Wren&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Doesn&amp;#39;t tolerate semicolons&lt;/li&gt;
+&lt;li&gt;Can&amp;#39;t chain methods on separate lines&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sqrt&lt;/code&gt;, &lt;code&gt;floor&lt;/code&gt; are properties instead of functions&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;for&lt;/code&gt; is &amp;quot;for each&amp;quot;, but there is no &amp;quot;step some value up to max&amp;quot; loop built in&lt;/li&gt;
+&lt;li&gt;Fibers!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;pkl&quot;&gt;Pkl&lt;/h2&gt;
+&lt;p&gt;According to its web site, Pkl provides &amp;quot;Configuration that is Programmable, Scalable, and Safe&amp;quot;. Sounds great! Let&amp;#39;s download it. &lt;strong&gt;Eighty four megabytes later&lt;/strong&gt;, you can get a taste of Pkl.&lt;/p&gt;
+&lt;p&gt;Now, I &lt;em&gt;know&lt;/em&gt; I&amp;#39;m in the minority when pining for &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/minimal-dev-env.html&quot;&gt;a minimal development environment&lt;/a&gt;, but how can a &lt;em&gt;configuration language&lt;/em&gt; be 84 MB? Why does a configuration language require its own JIT compiler?&lt;/p&gt;
+&lt;p&gt;I understand that INI files aren&amp;#39;t enough and that YAML doesn&amp;#39;t scale and that JSON probably wouldn&amp;#39;t exist if XML had been simpler and less verbose. But (and I apologize for this)... &lt;strong&gt;Pkl is the Electron of configuration languages&lt;/strong&gt;. That is both a compliment and an insult.&lt;/p&gt;
+&lt;p&gt;End rant.&lt;/p&gt;
+&lt;p&gt;Notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Three times the size of Node.js&lt;/li&gt;
+&lt;li&gt;Nice functional language&lt;/li&gt;
+&lt;li&gt;Had to convert &lt;code&gt;IntSeq&lt;/code&gt; to a &lt;code&gt;List&lt;/code&gt; in order to use &lt;code&gt;map&lt;/code&gt;, &lt;code&gt;filter&lt;/code&gt;, etc.&lt;/li&gt;
+&lt;li&gt;Slower startup than Python...&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;qalb&quot;&gt;Qalb&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Thought-provoking concept!&lt;/li&gt;
+&lt;li&gt;VS Code doesn&amp;#39;t have an RTL mode, so it kept getting confused about where to put tokens&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;roc&quot;&gt;Roc&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Had trouble finding basic documentation (e.g. how to convert between types)&lt;/li&gt;
+&lt;li&gt;Accessing lists requires dealing with Result type for error handling, even when I&amp;#39;ve already checked if the list is long enough (would Idris handle this case?)&lt;/li&gt;
+&lt;li&gt;Requires downloading extra code just for &amp;quot;Hello, world!&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;wax&quot;&gt;wax&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;I like the idea of a meta-language for &amp;quot;write once, use from any language&amp;quot;&lt;/strong&gt; (and I don&amp;#39;t mind s-expressions)&lt;/li&gt;
+&lt;li&gt;Was kind of hoping for AST-level macros, but I didn&amp;#39;t see them...&lt;/li&gt;
+&lt;li&gt;Despite liking Lisps, I think I&amp;#39;d prefer less tedious syntax, especially since there aren&amp;#39;t macros&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;boron&quot;&gt;Boron&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Only 350 KB!&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Reminds me of TCL&lt;/li&gt;
+&lt;li&gt;Didn&amp;#39;t see &amp;quot;reduce&amp;quot; and had an issue with &amp;quot;replace&amp;quot;, so I had to use lots of mutation and iteration&lt;/li&gt;
+&lt;li&gt;Not much documentation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;wenyan&quot;&gt;wenyan&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Machine translating programs back into English is entertaining&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;self&quot;&gt;Self&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Download doesn&amp;#39;t support HTTPS&lt;/li&gt;
+&lt;li&gt;No Windows support&lt;/li&gt;
+&lt;li&gt;32-bit only (at least on Linux)&lt;/li&gt;
+&lt;li&gt;GUI-only...&lt;/li&gt;
+&lt;li&gt;Similar to Smalltalk/Squeak &lt;strong&gt;I had lots of trouble navigating the UI and figuring out what to click/middle-click/right-click on to make things happen&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Excellent tutorial: &lt;a href=&quot;https://sin-ack.github.io/posts/morphic-intro/&quot;&gt;https://sin-ack.github.io/posts/morphic-intro/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Saving to/loading from text files is done via the &lt;code&gt;transporter&lt;/code&gt; object (see tutorial)&lt;/li&gt;
+&lt;li&gt;Took me a long time to figure out how to supply multiple arguments to a method: &amp;quot;Methods can take arguments, and the keywords for each argument after the first must start with a capital letter.&amp;quot;&lt;/li&gt;
+&lt;li&gt;Got a &amp;quot;numeric constant too large&amp;quot; error, but actual arithmetic seamlessly transitions to &amp;quot;big integer&amp;quot; arithmetic&lt;/li&gt;
+&lt;li&gt;No auto-indent!?&lt;/li&gt;
+&lt;li&gt;Seemed very slow&lt;/li&gt;
+&lt;li&gt;Globals in method don&amp;#39;t work until setting &lt;code&gt;parent*&lt;/code&gt; slot, to enable it to search up the hierarchy to &lt;code&gt;globals&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;haskell&quot;&gt;Haskell&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Documentation for the standard library was surprisingly tricky to search for&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;idris&quot;&gt;Idris&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Originally, I wanted to try implementing a solution within the type system, but I just couldn&amp;#39;t figure it out after a few hours of flailing about&lt;/li&gt;
+&lt;li&gt;Couldn&amp;#39;t find standard library functions for operations like &amp;quot;first element of a list&amp;quot; or &amp;quot;check if an item exists within a list&amp;quot;&lt;/li&gt;
+&lt;li&gt;Never figured out how to test anything other than equality in the type system&lt;/li&gt;
+&lt;li&gt;I still don&amp;#39;t understand how &lt;code&gt;Something&lt;/code&gt; and &lt;code&gt;MkSomething&lt;/code&gt; are related for data types&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;nim&quot;&gt;Nim&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Nim is the language that impressed me the most in this batch.&lt;/strong&gt; Everything I thought would be a problem (significant whitespace, choose-your-own-function syntax, intermediate C compliation step) didn&amp;#39;t bother me at all. The small sample of the standard library I played with was a little quirky, but Nim seems like excellent bang for your buck.&lt;/p&gt;
+&lt;p&gt;Notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Release binary was only 120 KB (linked against libc)!&lt;/li&gt;
+&lt;li&gt;Thought I&amp;#39;d dislike the syntax, but it was fine&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Really easy to get started, many things &amp;quot;just worked&amp;quot; (e.g. grabbing a slice of an array)&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Didn&amp;#39;t have to specify too many types, but still ran fast&lt;/li&gt;
+&lt;li&gt;Fast compilation&lt;/li&gt;
+&lt;li&gt;Didn&amp;#39;t like the &amp;quot;hints&amp;quot; it spews out during compilation, even for &lt;code&gt;nim r&lt;/code&gt; (build and run)&lt;/li&gt;
+&lt;li&gt;Why did &lt;code&gt;all&lt;/code&gt; take an anonymous function, but &lt;code&gt;foldl&lt;/code&gt; took just an expression (with &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt; seemingly picked out of thin air) -- is &lt;code&gt;foldl&lt;/code&gt; a macro?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Nim might be a good language for hobby projects because it&amp;#39;s easy, fast, and produces small binaries&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;I wonder what the debugging experience is like -- if it&amp;#39;s decent, I might be writing a lot more Nim in the future!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;min&quot;&gt;Min&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Operators&amp;#39; arguments are named, which helped me (although I think it&amp;#39;s an atypical style for concatenative languages)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;cakelisp&quot;&gt;Cakelisp&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Standard library provides convenient macros like &lt;code&gt;each-in-array&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;I kind of wish I could write my macros using Common Lisp instead of a bespoke Lisp&lt;/li&gt;
+&lt;li&gt;Final binary was only 18 KB!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;f&quot;&gt;F#&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;|&amp;gt;&lt;/code&gt; (pipe operator) is nice, but I couldn&amp;#39;t find it explicitly stated where the argument goes (it appears to be last--but can I change that?)&lt;/li&gt;
+&lt;li&gt;Type inference was convenient--I never had to specify &lt;code&gt;int&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;F# feels like C# without having to specify types... except I have to type &lt;code&gt;Seq&lt;/code&gt; &lt;em&gt;more&lt;/em&gt; than I would have in C#&lt;/li&gt;
+&lt;li&gt;Relatively slow to compile&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Solving Project Euler with a picture, using Piet</title>
 <id>https://log.schemescape.com/posts/programming-languages/piet-for-project-euler.html</id>
@@ -301,105 +456,6 @@ main
 &lt;li&gt;On 64-bit architectures, cons cells are each 16 bytes, so only 4,000 cons cells max&lt;/li&gt;
 &lt;li&gt;Numbers (single-precision floats) are &lt;em&gt;also&lt;/em&gt; stored as objects, which unfortunately means &lt;strong&gt;each 4-byte number takes up 16 bytes&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Macros work, but are missing a few key pieces (gensym, quasiquote, &amp;quot;rest&amp;quot; arguments)&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>11 programming languages in one week</title>
-<id>https://log.schemescape.com/posts/programming-languages/100-languages-4.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-4.html"/>
-<updated>2024-03-31T00:00:00.000Z</updated>
-<summary type="text">I spent entirely too much time playing with (mostly) new programming languages this week.</summary>
-<content type="html">&lt;p&gt;I&amp;#39;m &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;trying to write code in 100 different programming languages&lt;/a&gt;. I just finished week 2, and--somehow--I&amp;#39;m ahead of schedule.&lt;/p&gt;
-&lt;p&gt;The full list of languages and links to code are in my &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;100-languages&lt;/a&gt; repository.&lt;/p&gt;
-&lt;h1 id=&quot;summary&quot;&gt;Summary&lt;/h1&gt;
-&lt;p&gt;After two weeks of &amp;quot;staying on (or ahead of) schedule&amp;quot;, I strongly suspect I will &lt;em&gt;not&lt;/em&gt; be continuing at this current pace of writing code in at least one new language per day. It&amp;#39;s fun and oddly addictive, but also fairly time-consuming. &lt;strong&gt;If I don&amp;#39;t slow down, I&amp;#39;ll probably get burned out and abandon the project&lt;/strong&gt; (or need to become a hermit), so I&amp;#39;ll likely slow &lt;em&gt;way&lt;/em&gt; down for the next week.&lt;/p&gt;
-&lt;h1 id=&quot;languages&quot;&gt;Languages&lt;/h1&gt;
-&lt;p&gt;Here are the &lt;strong&gt;languages that were new to me&lt;/strong&gt; at the beginning of the week that I managed to write code in:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/COBOL#COBOL-85&quot;&gt;COBOL-85&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.w3.org/TR/WGSL/&quot;&gt;WebGPU Shading Language&lt;/a&gt; (which I&amp;#39;m still surprised to learn is &amp;quot;WebGPU &lt;em&gt;Shading&lt;/em&gt; Language&amp;quot; and not &amp;quot;WebGPU &lt;em&gt;Shader&lt;/em&gt; Language&amp;quot;, in its official spec)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://webassembly.github.io/spec/core/text/index.html&quot;&gt;WebAssembly Text Format&lt;/a&gt; (I had &lt;em&gt;seen&lt;/em&gt; this before, but never &lt;em&gt;written&lt;/em&gt; it)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://scratch.mit.edu/&quot;&gt;Scratch&lt;/a&gt; (block-based)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Commodore_BASIC&quot;&gt;Commodore Basic 2.0&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://xod.io/&quot;&gt;XOD&lt;/a&gt; (flow-based)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;And here are the &lt;strong&gt;languages I&amp;#39;d used before&lt;/strong&gt; (mostly only used a little bit or a long time ago):&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.w3.org/TR/xslt-10/&quot;&gt;XSLT&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.perl.org/&quot;&gt;Perl&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/AWK&quot;&gt;AWK&lt;/a&gt; (not 100% sure if I&amp;#39;ve actually used this before, but it seems likely)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Verilog&quot;&gt;Verilog&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.zachtronics.com/exapunks/&quot;&gt;EXA&lt;/a&gt; (from a game by &lt;a href=&quot;https://www.zachtronics.com/&quot;&gt;Zachtronics&lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The rest of this post is just a collection of my notes from trying out these languages.&lt;/p&gt;
-&lt;h2 id=&quot;xslt-extensible-stylesheet-language-transformations&quot;&gt;XSLT (Extensible Stylesheet Language Transformations)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;I&amp;#39;ve probably written more XSLT than the vast majority of people, because I naively thought that HTML would be permanently recast into XML and XSLT would become the standard template language (that... didn&amp;#39;t happen)&lt;/li&gt;
-&lt;li&gt;Browsers still support XSLT, apparently!&lt;/li&gt;
-&lt;li&gt;XPath is my favorite query language that many (most?) people don&amp;#39;t seem to know about&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;cobol&quot;&gt;COBOL&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;First time using a column-oriented language!&lt;/li&gt;
-&lt;li&gt;It&amp;#39;s not clear to me when periods (&lt;code&gt;.&lt;/code&gt;) are required and when they break things&lt;/li&gt;
-&lt;li&gt;GNU COBOL errors don&amp;#39;t have enough information for me to understand them&lt;/li&gt;
-&lt;li&gt;My solution takes forever to run in COBOL, as compared to JavaScript--not sure why&lt;/li&gt;
-&lt;li&gt;Forgetting an &lt;code&gt;END-IF&lt;/code&gt; just completely changed the meaning of my program, but didn&amp;#39;t produce and errors or warnings&lt;/li&gt;
-&lt;li&gt;So, so verbose&lt;/li&gt;
-&lt;li&gt;Lots of reserved words&lt;/li&gt;
-&lt;li&gt;I dislike the combination of natural language syntax (&lt;code&gt;ADD 1 TO N.&lt;/code&gt;) and things like &lt;code&gt;77 TOTAL PIC S9(15) COMP VALUE ZERO.&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;perl&quot;&gt;Perl&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Kept getting tripped up by scalar vs. array contexts (even with prior experience)&lt;/li&gt;
-&lt;li&gt;I don&amp;#39;t recall the details, but there was a case where I ended up needing parentheses when I thought brackets would be correct&lt;/li&gt;
-&lt;li&gt;&amp;quot;Here docs&amp;quot; are great!&lt;/li&gt;
-&lt;li&gt;I dislike the anonymous function syntax, but I&amp;#39;m glad anonymous functions are supported&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;webgpu-shading-language&quot;&gt;WebGPU Shading Language&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Crashed my GPU several times while running code&lt;/li&gt;
-&lt;li&gt;Lots of JavaScript required to setup computation and read back results&lt;/li&gt;
-&lt;li&gt;The problem I attempted wasn&amp;#39;t a good fit for parallel computation&lt;/li&gt;
-&lt;li&gt;A different parallel-friendly problem I attempted required 64-bit arithmetic which apparently isn&amp;#39;t supported in WGSL&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;awk&quot;&gt;AWK&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Order of &lt;code&gt;for ... in&lt;/code&gt; loop is unspecified&lt;/li&gt;
-&lt;li&gt;Arrays of arrays are not officially supported&lt;/li&gt;
-&lt;li&gt;Relies on mutation in &lt;code&gt;gsub()&lt;/code&gt; -- I think I&amp;#39;d prefer a functional version of AWK&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;webassembly-text-format&quot;&gt;WebAssembly (Text Format)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Interesting syntax: it uses s-expressions, but you can also just write lines of assembly too&lt;/li&gt;
-&lt;li&gt;I would have preferred labels instead of &lt;code&gt;BLOCK&lt;/code&gt; and &lt;code&gt;LOOP&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Resulting binary was tiny! Just 163 bytes!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;scratch&quot;&gt;Scratch&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;I would have enjoyed this as a kid&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;commodore-basic&quot;&gt;Commodore BASIC&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;All arithmetic is apparently floating point -- is it done in software? Because it&amp;#39;s surprisingly slow&lt;/li&gt;
-&lt;li&gt;Line numbers are annoying to deal with, but in the proper historical context they make sense because you entered one line at a time -- today, we&amp;#39;re spoiled with text editors&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;verilog&quot;&gt;Verilog&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;The &lt;a href=&quot;https://8bitworkshop.com/v3.11.0/?platform=verilog&amp;amp;file=clock_divider.v&quot;&gt;8bitworkshop Verilog IDE&lt;/a&gt; is amazing&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;xod&quot;&gt;XOD&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Laying out all the components using my mouse was painfully tedious, but it resulted in &lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p18.png&quot;&gt;a nice diagram that makes it clear how the solution works&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;exa&quot;&gt;EXA&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.zachtronics.com/exapunks/&quot;&gt;Exapunks&lt;/a&gt; is a great game&lt;/li&gt;
-&lt;li&gt;You can use the T register for temporary storage&lt;/li&gt;
-&lt;li&gt;You can use files for even more storage&lt;/li&gt;
-&lt;li&gt;I still haven&amp;#39;t found a great way to route messages between EXAs, other than only having 2 EXAs in a room&lt;/li&gt;
-&lt;li&gt;I made a &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../game-development/tec-redshift-dumper.html&quot;&gt;tool for dumping TEC Redshift discs into a text format&lt;/a&gt; (wait, that was in JavaScript--I used 12 languages this week!)&lt;/li&gt;
 &lt;/ul&gt;
 </content>
 </entry>
