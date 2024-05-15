@@ -7,8 +7,57 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-05-14T04:46:06.409Z</updated>
+<updated>2024-05-15T04:25:06.547Z</updated>
 
+<entry>
+<title>Reflections at 50 (programming languages)</title>
+<id>https://log.schemescape.com/posts/programming-languages/50-different-languages.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/50-different-languages.html"/>
+<updated>2024-05-14T00:00:00.000Z</updated>
+<summary type="text">Find out if writing code in 50 different programming languages was a good idea!</summary>
+<content type="html">&lt;p&gt;Over the past two months, I&amp;#39;ve &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../100-languages/index.html&quot;&gt;written code in 50 different programming languages&lt;/a&gt; (with an eventual goal to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;get to 100&lt;/a&gt;). Here are my thoughts thus far.&lt;/p&gt;
+&lt;h1 id=&quot;overview&quot;&gt;Overview&lt;/h1&gt;
+&lt;p&gt;I started this journey because I wanted to &lt;strong&gt;try new programming languages&lt;/strong&gt; in a low-stakes setting. Rather than learn a language in depth, I&amp;#39;m just writing a page of code, &lt;strong&gt;to see what either the programming paradigm or development experience is like&lt;/strong&gt;. Since I&amp;#39;m focused on new (to me) languages/paradigms, the majority of the languages aren&amp;#39;t even in the top 100 programming languages in the &lt;a href=&quot;https://www.tiobe.com/tiobe-index/&quot;&gt;TIOBE Programming Community index&lt;/a&gt;. I&amp;#39;m definitely &lt;em&gt;not&lt;/em&gt; trying to improve my job prospects!&lt;/p&gt;
+&lt;h2 id=&quot;positives&quot;&gt;Positives&lt;/h2&gt;
+&lt;p&gt;Overall, this experiment has been a success. Prior to starting, I thought I&amp;#39;d &lt;em&gt;already&lt;/em&gt; used a wide variety of programming languages, but &lt;strong&gt;I&amp;#39;d never &lt;em&gt;actually used&lt;/em&gt; an array-based language, and I didn&amp;#39;t even know what concatenative languages were&lt;/strong&gt; (thought I&amp;#39;d briefly heard of Forth)! I&amp;#39;d also never experienced column- or line-based input or written right-to-left text.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;If you&amp;#39;ve got the time and desire novel programming experiences, this is a worthwhile journey!&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;negatives&quot;&gt;Negatives&lt;/h2&gt;
+&lt;p&gt;The last sentence implied it, but &lt;strong&gt;repeatedly starting over from scratch--often in new paradigms--takes time&lt;/strong&gt;. I&amp;#39;d say that on average I spent &lt;em&gt;at least&lt;/em&gt; two or three hours with each language--and often more. Frequently, it was worthwhile, but stumbling through Smalltalk-like UI and syntax felt more tedious than educational, for example.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s not obvious, but &lt;strong&gt;I also spent a fair amount of time discovering, selecting, and occasionally shelving languages&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;the-road-ahead&quot;&gt;The road ahead&lt;/h2&gt;
+&lt;p&gt;Additionally, now that I&amp;#39;m 50 languages in, &lt;strong&gt;the novelty is wearing off a bit&lt;/strong&gt;. This is welcome, in that the learning process is less taxing, but I&amp;#39;ll need to ensure this doesn&amp;#39;t just become a slog to 100. If I stop learning and/or enjoying the process, I should quit. &lt;strong&gt;Fifty programming languages is no small feat&lt;/strong&gt;, anyway--though I&amp;#39;ll feel a bit silly having a repository named &amp;quot;100-languages&amp;quot; if I never quite get there.&lt;/p&gt;
+&lt;p&gt;Tangentially related: I feel like &lt;strong&gt;there is a distinct possibility that I will end up creating a new programming language&lt;/strong&gt; either during or after this exercise. The world definitely needs another Lisp (or maybe Forth)!&lt;/p&gt;
+&lt;h2 id=&quot;languages-by-category&quot;&gt;Languages by category&lt;/h2&gt;
+&lt;p&gt;For the record, here is a rough categorization of the languages I&amp;#39;ve used so far (with categories based mostly on &lt;a href=&quot;https://madhadron.com/programming/seven_ur_languages.html&quot;&gt;this article&lt;/a&gt;). Note these classifications are subjective!&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Assembly&lt;/strong&gt;: WebAssembly, x86 (&amp;quot;real&amp;quot;/16-bit), Uxntal&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Imperative&lt;/strong&gt;: Fortran, COBOL, Perl, WebGPU Shading Language, Awk, Commodore BASIC, BBC BASIC, TCL, Bash, Turbo Pascal, Hare, wax, Nim&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Homoiconic&lt;/strong&gt;: SectorLISP, fe, Rebol, Boron, Cakelisp&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Functional&lt;/strong&gt;: Standard ML, Unison, Julia, Pkl, Roc, Haskell, Idris, F#&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Object-oriented&lt;/strong&gt;: Squeak, Wren, Self&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Concatenative&lt;/strong&gt;: Gforth, PostScript, RetroForth, Uxntal, Factor, Min&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Array-based&lt;/strong&gt;: J, Lil, APL&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Declarative&lt;/strong&gt;: SQL, XSLT, Verilog&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Block/flow-based&lt;/strong&gt;: Scratch, XOD&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Esoteric&lt;/strong&gt;: SIC-1 Assembly Language, EXA, Piet, قلب (Qalb), 文言 (wenyan)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Excluding intentionally esoteric ones, &lt;strong&gt;the most mind-bending for me have been concatenative and array-based languages&lt;/strong&gt;, probably due to my inexperience with them. Dependently-typed languages would probably have been mind-bending if I&amp;#39;d spent more time and actually learned them.&lt;/p&gt;
+&lt;h1 id=&quot;programming-language-observations&quot;&gt;Programming language observations&lt;/h1&gt;
+&lt;p&gt;Being a newbie nearly 50 times in quick succession theoretically gives me a unique perspective on programming languages. Here are a few observations.&lt;/p&gt;
+&lt;h2 id=&quot;ramping-up&quot;&gt;Ramping up&lt;/h2&gt;
+&lt;p&gt;Overall, for me as an experienced programmer, &lt;strong&gt;the most helpful thing for ramping up has been, unsurprisingly, quality documentation&lt;/strong&gt;. Specifically: having &lt;strong&gt;searchable documentation that is clearly organized, using familiar language&lt;/strong&gt; (e.g. outlining basic syntax, enumerating control flow options, and diligently documenting the standard library).&lt;/p&gt;
+&lt;p&gt;The languages I struggled most with seemed to focus their documentation too much on tutorials and examples (usually unrelated to what I wanted to do--which is fair) or they used long-winded prose. In one case, the &amp;quot;hello world&amp;quot; example contained a URL that wasn&amp;#39;t even explained--that just made me more confused, rather than less. Thankfully, none of the languages tried to rely on videos or chat apps for &amp;quot;documentation&amp;quot;!&lt;/p&gt;
+&lt;h2 id=&quot;no-one-cares-about-footprint&quot;&gt;No one cares about footprint&lt;/h2&gt;
+&lt;p&gt;It&amp;#39;s disheartening, but most programming languages don&amp;#39;t seem to care about the disk/memory footprints of their environments or, often, their resulting binaries. I don&amp;#39;t enjoy slow software, but, these days, &lt;strong&gt;my old computers are more impacted by bloat than sluggishness&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Hare and Rebol are nice counterexamples, and embeddable scripting languages are also usually pretty light. And let&amp;#39;s not forget the old, but &lt;a href=&quot;https://prog21.dadgum.com/116.html&quot;&gt;famously lightweight Turbo Pascal environment&lt;/a&gt;!&lt;/p&gt;
+&lt;h2 id=&quot;so-so-many-languages&quot;&gt;So, so many languages&lt;/h2&gt;
+&lt;p&gt;Despite my frequent complaints, the quality of virtually all languages I&amp;#39;ve tried is impressive--even the hobby languages are eminently usable! The amount of work involved is staggering.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Perhaps people create new programming languages for the same reason they create art, i.e. because they can&amp;#39;t &lt;em&gt;not&lt;/em&gt; do it?&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&quot;parting-thoughts&quot;&gt;Parting thoughts&lt;/h1&gt;
+&lt;p&gt;Now that I&amp;#39;ve sampled a lot of different programming languages, I&amp;#39;m more confident about matching problems to appropriate languages. In the recent past, I&amp;#39;ve tried to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;find the one true language that I can use for everything&lt;/a&gt;, but that&amp;#39;s honestly misguided--most of the time, at least--and especially for hobby projects in wildly different domains.&lt;/p&gt;
+&lt;p&gt;I guess the good news is that I&amp;#39;ve now convinced myself that &lt;strong&gt;I could &lt;em&gt;probably&lt;/em&gt; make do with &lt;em&gt;any&lt;/em&gt; programming language, so maybe I can finally stop &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../misc/my-hobby-is-bikeshedding.html&quot;&gt;bike-shedding&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;about&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages-2.html&quot;&gt;programming&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages-3.html&quot;&gt;languages&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>50 programming languages in 58 days</title>
 <id>https://log.schemescape.com/posts/programming-languages/100-languages-9.html</id>
@@ -398,64 +447,6 @@ main
 &lt;li&gt;&lt;strong&gt;I had to use &lt;em&gt;every&lt;/em&gt; register&lt;/strong&gt; available to me (not counting &lt;code&gt;bp&lt;/code&gt;, which I think I could have technically gotten away with using)&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;I wish I&amp;#39;d done this sooner&lt;/strong&gt;--knowing even just a tiny bit of assembly would have been helpful on numerous occasions&lt;/li&gt;
 &lt;li&gt;Having registers at my disposal &lt;em&gt;almost&lt;/em&gt; made assembly easier to write than Forth (of course, this is more a reflection of my discomfort with stack-based languages--to say nothing of the interactive development benefits a Forth can provide)&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>One quarter of the way to 100 programming languages</title>
-<id>https://log.schemescape.com/posts/programming-languages/100-languages-5.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-5.html"/>
-<updated>2024-04-08T00:00:00.000Z</updated>
-<summary type="text">Or: PostScript is a programming language!?</summary>
-<content type="html">&lt;p&gt;I&amp;#39;m &lt;strong&gt;25% of the way&lt;/strong&gt; to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;having written code in 100 different programming languages&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;See &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;this repository&lt;/a&gt; for proof.&lt;/p&gt;
-&lt;h1 id=&quot;week-3-plus-a-day&quot;&gt;Week 3 (plus a day)&lt;/h1&gt;
-&lt;p&gt;As planned, I slowed down from &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-4.html&quot;&gt;last week&lt;/a&gt;, but I still managed to make it to the 25% mark. That&amp;#39;s 25 languages down, and 75 to go! Now that I&amp;#39;m no longer rushing, I&amp;#39;m enjoying the process of playing with new languages more.&lt;/p&gt;
-&lt;p&gt;All languages were new to me for this week. Notably, &lt;strong&gt;I didn&amp;#39;t even realize that &lt;a href=&quot;https://en.wikipedia.org/wiki/PostScript&quot;&gt;PostScript&lt;/a&gt; was a programming language at all&lt;/strong&gt;! Turns out it&amp;#39;s a &lt;a href=&quot;https://en.wikipedia.org/wiki/Forth_(programming_language)&quot;&gt;Forth&lt;/a&gt;-like (stack-based) procedural language. I still feel like I&amp;#39;m struggling with stack-based languages, but it might just be a matter of perspective--compared to straight assembly, Forths are a joy to use!&lt;/p&gt;
-&lt;p&gt;The rest of this post contains notes on the languages I used.&lt;/p&gt;
-&lt;h2 id=&quot;bbc-basic&quot;&gt;BBC BASIC&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;I&amp;#39;ve never seen or used a &lt;a href=&quot;https://en.wikipedia.org/wiki/BBC_Micro&quot;&gt;BBC Micro&lt;/a&gt;&lt;/strong&gt; (the closest I&amp;#39;ve used is a &lt;a href=&quot;https://en.wikipedia.org/wiki/Commodore_64&quot;&gt;Commodore 64&lt;/a&gt;), but it&amp;#39;s famous enough that I wanted to give one an (&lt;a href=&quot;https://bbcmic.ro/&quot;&gt;emulated&lt;/a&gt;) spin.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;BBC BASIC puts Commodore BASIC to shame&lt;/strong&gt; with features like named procedures (finally, no more line numbers!)&lt;/li&gt;
-&lt;li&gt;With respect to solving Project Euler problems, integer arithmetic and division with remainders are welcome additions&lt;/li&gt;
-&lt;li&gt;Despite its age, &lt;a href=&quot;https://www.bbcbasic.co.uk/bbcwin/tutorial/index.html&quot;&gt;excellent documentation&lt;/a&gt; is still available&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;unison&quot;&gt;Unison&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.unison-lang.org/&quot;&gt;Unison&lt;/a&gt; stores and references code in a content-addressed syntax tree format&lt;/strong&gt;, allowing for things like accurate incremental builds. It appears to be designed for distributed systems, so I&amp;#39;m not in the target audience, but it sounded interesting enough that I&amp;#39;ve always wanted to try it.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Having the codebase manager cache and update code automatically is convenient&lt;/li&gt;
-&lt;li&gt;&amp;quot;Watches&amp;quot; and tests allow for &lt;strong&gt;immediate feedback when code is updated&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;The codebase manager also supports &lt;strong&gt;searching for and displaying documentation&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;I struggled a bit with syntax, especially significant whitespace (note to self: only use tab width of 8 for Unison--or just don&amp;#39;t use tabs at all)&lt;/li&gt;
-&lt;li&gt;The docs indicate that &lt;strong&gt;the codebase format is append-only&lt;/strong&gt; -- what happens if you &lt;em&gt;really&lt;/em&gt; need to expunge all traces of some code? Is there &lt;em&gt;code&lt;/em&gt; garbage collection?&lt;/li&gt;
-&lt;li&gt;Integrated tooling like the codebase manager and code versioning sounds interesting, although I&amp;#39;m mostly allergic to additional tooling&lt;/li&gt;
-&lt;li&gt;Unison feels innovative, for sure!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;lil&quot;&gt;Lil&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://beyondloom.com/decker/lil.html&quot;&gt;Lil&lt;/a&gt; is a bespoke scripting language for &lt;a href=&quot;https://beyondloom.com/decker/&quot;&gt;Decker&lt;/a&gt; (a Mac Classic-esque multimedia tool). Despite being a single header of around 1300 lines of (dense) C code, Lil packs an impressive array of features: &lt;strong&gt;immutable data structures, vector programming, and a built-in query language&lt;/strong&gt;.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Elements in lists (surrounded by parentheses) are separated by commas, but function arguments (surrounded by &lt;em&gt;brackets&lt;/em&gt;) are &lt;em&gt;not&lt;/em&gt; (I know it&amp;#39;s subjective, but I found this to be fairly annoying)&lt;/li&gt;
-&lt;li&gt;Some operators (e.g. modulus) have their order reversed&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;where&lt;/code&gt; clauses in the query language are actually column (list) expressions&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Performance was a challenge for me&lt;/strong&gt; due to the lack of mutable data structures--I ended up having to repurpose a string because the language doesn&amp;#39;t &lt;em&gt;natively&lt;/em&gt; provide a mutable array (though the host app can--and in the case of Lilt, does--provide mutable data types)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;postscript&quot;&gt;PostScript&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;PostScript isn&amp;#39;t just a document format, it&amp;#39;s a programming language!&lt;/strong&gt; Who knew? Open &lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p24.ps&quot;&gt;my solution&lt;/a&gt; in a document viewer and see for yourself! (Just tried it in GIMP and it works!)&lt;/p&gt;
-&lt;p&gt;I can&amp;#39;t imagine such a security minefield of a format being created today. It&amp;#39;s basically a quilt made out of red flags. PDF has had enough exploits and it&amp;#39;s (supposedly) declarative! &lt;strong&gt;I will probably never open a PostScript file from the web again&lt;/strong&gt; (though I promise I&amp;#39;m too inept at stack-based languages to have created a virus).&lt;/p&gt;
-&lt;p&gt;Regardless, here are my notes about the language:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;I had a lot of trouble managing the stack again, but at least you can duplicate a value at any depth in the stack in one command&lt;/li&gt;
-&lt;li&gt;Having branches appear before knowing what kind of conditional they&amp;#39;re for hard for me to read&lt;/li&gt;
-&lt;li&gt;Fortunately, being an old standard means that there is excellent documentation: &lt;a href=&quot;https://www.adobe.com/jp/print/postscript/pdfs/PLRM.pdf&quot;&gt;PostScript Language Reference Manual&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;fe&quot;&gt;fe&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/rxi/fe&quot;&gt;fe&lt;/a&gt; is a &lt;strong&gt;minimal Lisp that uses a fixed block of memory (no dynamic allocations)&lt;/strong&gt;. It is not to be confused with &lt;a href=&quot;https://fe-lang.org/&quot;&gt;Fe&lt;/a&gt;, whose web site mentions smart contracts.&lt;/p&gt;
-&lt;p&gt;Given that fe is less than 900 lines of readable C, it&amp;#39;s an impressively ergonomic language.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The stand-alone interpreter defaults to 64,000 bytes of memory (in addition to the C stack, obviously)&lt;/li&gt;
-&lt;li&gt;On 64-bit architectures, cons cells are each 16 bytes, so only 4,000 cons cells max&lt;/li&gt;
-&lt;li&gt;Numbers (single-precision floats) are &lt;em&gt;also&lt;/em&gt; stored as objects, which unfortunately means &lt;strong&gt;each 4-byte number takes up 16 bytes&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;Macros work, but are missing a few key pieces (gensym, quasiquote, &amp;quot;rest&amp;quot; arguments)&lt;/li&gt;
 &lt;/ul&gt;
 </content>
 </entry>
