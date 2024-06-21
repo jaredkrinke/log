@@ -7,7 +7,7 @@ date: 2021-10-27
 # Background
 After [investigating many popular static site generators](comparison.md), I wasn't able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage [Metalsmith](https://metalsmith.io/) (and numerous plugins) to get what I wanted. I'm calling the resulting tool **md2blog**.
 
-In this post, I'm going to cover the design of md2blog. Note that md2blog is a work in progress that has not been released yet.
+In this post, I'm going to cover the design of md2blog. Note that md2blog is a work in progress that has not been released yet. **Update**: [md2blog has since been released](https://jaredkrinke.github.io/md2blog/).
 
 # Design goals
 Here's the overarching goal of md2blog:

@@ -7,6 +7,8 @@ date: 2021-09-12 01:00:00
 
 Having already described [my ideal static site generator](overview.md), I'm investigating tools that hopefully meet my needs.
 
+**Update**: I initially [used Eleventy](eleventy-2.md)... but then I [switched to Metalsmith](metalsmith.md) because it was simpler... and then I [abandoned Metalsmith due to huge, overlapping dependencies](metalsmith-downsides.md) and [built md2blog](md2blog-design.md) instead.
+
 # Static site generators in 2021
 Given that I don't want to go back to the [pre-Markdown stone age](pre-markdown.md) of static site generators, what are my options (that don't involve building my own)?
 
@@ -181,7 +183,7 @@ But there's also a lot of oddly specific integrations:
 
 Eleventy looks interesting; sort of like Jekyll, but using Node/JavaScript. This is my #2 choice at this point.
 
-**Update**: I took [an initial look at Eleventy](eleventy.md) and ended up [fully integrating it into this site](eleventy-2.md).
+**Update**: I took [an initial look at Eleventy](eleventy.md) and ended up [fully integrating it into this site](eleventy-2.md)... but then I [switched to Metalsmith](metalsmith.md) because it was simpler... and then I [abandoned Metalsmith due to huge, overlapping dependencies](metalsmith-downsides.md) and [built md2blog](md2blog-design.md) instead.
 
 ## Hexo
 Hexo also requires Node and NPM (similar to Eleventy). Fine.
@@ -230,7 +232,7 @@ Metalsmith's most interesting aspect for me is that it's modular and pluggable, 
 
 Similar to Gulp, I think I'd probably end up frustrated with an endless graph of plugins that interact in bizarre ways, but I *might* be willing to give Metalsmith a try if I find too many gaps in the other generators I've liked so far.
 
-**Update**: I ended up [fully integrating Metalsmith into my site](metalsmith.md) (including [syntax highlighting](metalsmith-syntax-highlighting.md)) because I liked the modular architecture and simple plugins met most of my needs.
+**Update**: I ended up [fully integrating Metalsmith into my site](metalsmith.md) (including [syntax highlighting](metalsmith-syntax-highlighting.md)) because I liked the modular architecture and simple plugins met most of my needs. Eventually, however, I [abandoned Metalsmith due to huge, overlapping dependencies](metalsmith-downsides.md) and [built md2blog](md2blog-design.md) instead.
 
 ## Zola
 Zola is written in Rust, a language which I'm tired of hearing about (similar to Python), but which I actually think I might one day use (unlike Python). A fast, native binary with no dependencies is certainly a strong start for Zola.
