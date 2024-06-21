@@ -68,3 +68,5 @@ For now, I will likely pursue the following:
 That's more work than I had anticipated and the next to last step ("hoping" Proton supports it) is questionable, but I think it's the simplest option that is best aligned with my interests.
 
 Hopefully I don't regret this decision!
+
+**Update**: the plan [mostly worked](web-game-on-steam-for-linux-2.md)!
