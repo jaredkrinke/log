@@ -41,6 +41,7 @@
 <p><time datetime="2021-09-12">September 12, 2021</time></p>
 </header>
 <p>Having already described <a href="overview.html">my ideal static site generator</a>, I&#39;m investigating tools that hopefully meet my needs.</p>
+<p><strong>Update</strong>: I initially <a href="eleventy-2.html">used Eleventy</a>... but then I <a href="metalsmith.html">switched to Metalsmith</a> because it was simpler... and then I <a href="metalsmith-downsides.html">abandoned Metalsmith due to huge, overlapping dependencies</a> and <a href="md2blog-design.html">built md2blog</a> instead.</p>
 <h1 id="static-site-generators-in-2021">Static site generators in 2021</h1>
 <p>Given that I don&#39;t want to go back to the <a href="pre-markdown.html">pre-Markdown stone age</a> of static site generators, what are my options (that don&#39;t involve building my own)?</p>
 <p>Fortunately, we&#39;re living in the golden age of static site generators. A quick web search turned up the following options (most with splashy landing pages, theme repositories, and even glowing testimonials):</p>
@@ -297,7 +298,7 @@
 <li>&quot;Trigger a Netlify Build Every Day with IFTTT&quot; (ok, now things are getting out of hand)</li>
 </ul>
 <p>Eleventy looks interesting; sort of like Jekyll, but using Node/JavaScript. This is my #2 choice at this point.</p>
-<p><strong>Update</strong>: I took <a href="eleventy.html">an initial look at Eleventy</a> and ended up <a href="eleventy-2.html">fully integrating it into this site</a>.</p>
+<p><strong>Update</strong>: I took <a href="eleventy.html">an initial look at Eleventy</a> and ended up <a href="eleventy-2.html">fully integrating it into this site</a>... but then I <a href="metalsmith.html">switched to Metalsmith</a> because it was simpler... and then I <a href="metalsmith-downsides.html">abandoned Metalsmith due to huge, overlapping dependencies</a> and <a href="md2blog-design.html">built md2blog</a> instead.</p>
 <h2 id="hexo">Hexo</h2>
 <p>Hexo also requires Node and NPM (similar to Eleventy). Fine.</p>
 <p>Hexo appears to use the &quot;million plugins&quot; architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like <a href="https://parceljs.org/">Parcel</a> and not <a href="https://webpack.js.org/">webpack</a>, but I do understand &quot;zero configuration&quot; constraints can come back to bite me later.</p>
@@ -327,7 +328,7 @@
 <p>While I didn&#39;t really want to have to write code, at least I&#39;d be able to debug the tool when something didn&#39;t behave as expected.</p>
 <p>Metalsmith&#39;s most interesting aspect for me is that it&#39;s modular and pluggable, similar to <a href="https://gulpjs.com/">Gulp</a>. This could come in handy if I need to extend the existing functionality a little (e.g. to allow embedding of images and diagrams).</p>
 <p>Similar to Gulp, I think I&#39;d probably end up frustrated with an endless graph of plugins that interact in bizarre ways, but I <em>might</em> be willing to give Metalsmith a try if I find too many gaps in the other generators I&#39;ve liked so far.</p>
-<p><strong>Update</strong>: I ended up <a href="metalsmith.html">fully integrating Metalsmith into my site</a> (including <a href="metalsmith-syntax-highlighting.html">syntax highlighting</a>) because I liked the modular architecture and simple plugins met most of my needs.</p>
+<p><strong>Update</strong>: I ended up <a href="metalsmith.html">fully integrating Metalsmith into my site</a> (including <a href="metalsmith-syntax-highlighting.html">syntax highlighting</a>) because I liked the modular architecture and simple plugins met most of my needs. Eventually, however, I <a href="metalsmith-downsides.html">abandoned Metalsmith due to huge, overlapping dependencies</a> and <a href="md2blog-design.html">built md2blog</a> instead.</p>
 <h2 id="zola">Zola</h2>
 <p>Zola is written in Rust, a language which I&#39;m tired of hearing about (similar to Python), but which I actually think I might one day use (unlike Python). A fast, native binary with no dependencies is certainly a strong start for Zola.</p>
 <p>Annoyingly (from a portability aspect), Zola wants me to use <code>+++</code> to demarcate front matter in <a href="https://toml.io/en/">TOML</a> (definitely not my preferred metadata language), but &quot;YAML front matter is also supported to ease porting legacy content&quot; -- hopefully that support doesn&#39;t disappear someday!</p>
