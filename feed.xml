@@ -7,8 +7,45 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-06-21T04:55:36.217Z</updated>
+<updated>2024-06-25T05:06:36.885Z</updated>
 
+<entry>
+<title>100 programming languages in... more than 100 days</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-10.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-10.html"/>
+<updated>2024-06-24T00:00:00.000Z</updated>
+<summary type="text">I made it about half of the way to my goal of writing code in 100 different programming languages in 100 days.</summary>
+<content type="html">&lt;p&gt;In March, I set a lofty goal to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;solve 100 Project Euler problems using 100 different programming languages, all within 100 days&lt;/a&gt;. Slightly over 100 days later, I&amp;#39;ll admit that &lt;strong&gt;I only made it &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-9.html&quot;&gt;slightly beyond&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/50-different-languages.html&quot;&gt;50&lt;/a&gt;&lt;/strong&gt;, although that&amp;#39;s not too bad considering that I quietly set this project aside a few weeks ago.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I&amp;#39;m not abandoning this effort, but I am definitely taking a break from it.&lt;/strong&gt; And I&amp;#39;m not setting it aside because it isn&amp;#39;t fun (though I do wonder if it&amp;#39;s &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../misc/my-hobby-is-bikeshedding.html&quot;&gt;a good use of my time&lt;/a&gt;). At the moment, I just have more important and interesting things to attend to.&lt;/p&gt;
+&lt;h1 id=&quot;conquests&quot;&gt;Conquests&lt;/h1&gt;
+&lt;p&gt;For the record, I&amp;#39;d like to state that, so far, &lt;strong&gt;I&amp;#39;m most proud of the following solutions&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p1.sic1&quot;&gt;SIC-1 Assembly Language&lt;/a&gt;, because it was hard to cram into 253 bytes&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p2.lisp&quot;&gt;SectorLISP&lt;/a&gt;, because I had to implement arithmetic &lt;em&gt;twice&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p17.v&quot;&gt;Verilog&lt;/a&gt;, because hardware&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p19.exa&quot;&gt;EXA&lt;/a&gt;, because &lt;a href=&quot;https://www.zachtronics.com/exapunks/&quot;&gt;Exapunks&lt;/a&gt; is a great game&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p26.asm&quot;&gt;x86 boot sector&lt;/a&gt;, because I didn&amp;#39;t want SectorLISP and SectorForth to have all the fun&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p34-scaled.png&quot;&gt;Piet&lt;/a&gt;, because coding in 2D, using pixels, was hard&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p54.ts&quot;&gt;TypeScript&amp;#39;s type system&lt;/a&gt;, because I wanted to see if it was possible (see &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/extreme-typing-in-typescript.html&quot;&gt;blog post&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;and-a-few-stragglers&quot;&gt;And a few stragglers&lt;/h1&gt;
+&lt;p&gt;With all that said, there are a couple of languages I haven&amp;#39;t yet mentioned on here:&lt;/p&gt;
+&lt;h2 id=&quot;haxe&quot;&gt;Haxe&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;I like the idea of a portable language&lt;/li&gt;
+&lt;li&gt;But I didn&amp;#39;t like the Java-like levels of ceremonial keywords/classes&lt;/li&gt;
+&lt;li&gt;Having said that, I prefer Haxe&amp;#39;s familiar syntax and conveniences over something mroe minimal, like &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-9.html#wax&quot;&gt;wax&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;k&quot;&gt;K&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/JohnEarnest/ok&quot;&gt;oK&lt;/a&gt; is literally the only version of K I could even find&lt;/li&gt;
+&lt;li&gt;oK also only had the only detailed documentation of K that I could find&lt;/li&gt;
+&lt;li&gt;I&amp;#39;m compelled to contrast this with &lt;a href=&quot;https://en.wikipedia.org/wiki/J_(programming_language)&quot;&gt;J&lt;/a&gt; (another array language), which is open source and has plenty of documentation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;thats-all&quot;&gt;That&amp;#39;s all&lt;/h1&gt;
+&lt;p&gt;That was a short update, but it feels good to tie up those loose ends.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Extreme Typing in TypeScript</title>
 <id>https://log.schemescape.com/posts/programming-languages/extreme-typing-in-typescript.html</id>
@@ -524,122 +561,6 @@
 &lt;li&gt;F# feels like C# without having to specify types... except I have to type &lt;code&gt;Seq&lt;/code&gt; &lt;em&gt;more&lt;/em&gt; than I would have in C#&lt;/li&gt;
 &lt;li&gt;Relatively slow to compile&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>Solving Project Euler with a picture, using Piet</title>
-<id>https://log.schemescape.com/posts/programming-languages/piet-for-project-euler.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/piet-for-project-euler.html"/>
-<updated>2024-04-30T00:00:00.000Z</updated>
-<summary type="text">Using a graphical 2D esoteric programming language to do math was SpaceChem-hard.</summary>
-<content type="html">&lt;p&gt;I set an ill-advised goal as part of my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;plan to write code in 100 programming languages&lt;/a&gt; (an ill-advised goal in itself):&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Use &lt;a href=&quot;https://www.dangermouse.net/esoteric/piet.html&quot;&gt;Piet&lt;/a&gt; to solve a nontrivial problem from &lt;a href=&quot;https://projecteuler.net/&quot;&gt;Project Euler&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;(Piet is an esoteric programming language that uses images as code, with pixel count/hue/shade corresponding to instructions for a stack-based virtual machine.)&lt;/p&gt;
-&lt;h1 id=&quot;summary&quot;&gt;Summary&lt;/h1&gt;
-&lt;p&gt;I &lt;em&gt;did&lt;/em&gt; manage to solve &lt;a href=&quot;https://projecteuler.net/problem=34&quot;&gt;problem 34&lt;/a&gt; using Piet, but it required careful planning and some tedious &lt;del&gt;rewrites&lt;/del&gt; repaints.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s the solution, enlarged to show texture:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://log.schemescape.com/posts/programming-languages/../../assets/p34-scaled.png&quot; alt=&quot;Scaled-up solution&quot;/&gt;&lt;/p&gt;
-&lt;h1 id=&quot;approach&quot;&gt;Approach&lt;/h1&gt;
-&lt;p&gt;Problem 34 requires adding up all numbers where the sum of their digits&amp;#39; factorials equals the number itself. I specifically chose this problem because &lt;strong&gt;it is fairly simple and doesn&amp;#39;t require any special input, but is not &lt;em&gt;so&lt;/em&gt; simple that solving it would be trivial&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Given that Piet&amp;#39;s instructions are all context-dependent (the color of an instruction depends on the color of the previous block) and it uses a stack for all arithmetic/input/output/manipulation, I made a plan to tackle the &amp;quot;stack&amp;quot; part first (prior to painting anything):&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Solve the problem in Forth (a stack-based language)&lt;/li&gt;
-&lt;li&gt;Re-solve the problem in Forth using only Piet&amp;#39;s instructions (except for branching, which is done graphically)&lt;/li&gt;
-&lt;li&gt;Translate the Forth-based solution into Piet&lt;/li&gt;
-&lt;li&gt;Add some colored rectangles (because: art)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h1 id=&quot;implementation&quot;&gt;Implementation&lt;/h1&gt;
-&lt;h2 id=&quot;forth-solution&quot;&gt;Forth solution&lt;/h2&gt;
-&lt;p&gt;After a bit of stack-wrangling, I came up with this solution in Forth (which doesn&amp;#39;t use any variables):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-forth&quot;&gt;( Project Euler problem &lt;span class=&quot;hljs-number&quot;&gt;34&lt;/span&gt;, &lt;span class=&quot;hljs-keyword&quot;&gt;in&lt;/span&gt; Forth )
-
-: &lt;span class=&quot;hljs-type&quot;&gt;log&lt;/span&gt; dup . ;
-
-: &lt;span class=&quot;hljs-type&quot;&gt;factorial&lt;/span&gt; ( n &lt;span class=&quot;hljs-comment&quot;&gt;-- n! )&lt;/span&gt;
-    &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; swap &lt;span class=&quot;hljs-keyword&quot;&gt;begin&lt;/span&gt; dup &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &amp;gt; &lt;span class=&quot;hljs-keyword&quot;&gt;while&lt;/span&gt; dup rot * swap &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; - repeat drop ;
-
-: &lt;span class=&quot;hljs-type&quot;&gt;div&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;mod&lt;/span&gt; ( x y &lt;span class=&quot;hljs-comment&quot;&gt;-- q r )&lt;/span&gt;
-    over over / rot rot &lt;span class=&quot;hljs-keyword&quot;&gt;mod&lt;/span&gt; ;
-
-: &lt;span class=&quot;hljs-type&quot;&gt;sum&lt;/span&gt;-digit-factorials ( n &lt;span class=&quot;hljs-comment&quot;&gt;-- sum)&lt;/span&gt;
-    &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; swap &lt;span class=&quot;hljs-keyword&quot;&gt;begin&lt;/span&gt; dup &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &amp;gt; &lt;span class=&quot;hljs-keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt; div-&lt;span class=&quot;hljs-keyword&quot;&gt;mod&lt;/span&gt; factorial rot + swap repeat drop ;
-
-: &lt;span class=&quot;hljs-type&quot;&gt;main&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;loop&lt;/span&gt; ( sum counter &lt;span class=&quot;hljs-comment&quot;&gt;-- sum counter )&lt;/span&gt;
-    dup dup sum-digit-factorials = &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; dup rot + log swap &lt;span class=&quot;hljs-keyword&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; + ;
-
-: &lt;span class=&quot;hljs-type&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;999999&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;do&lt;/span&gt; main-&lt;span class=&quot;hljs-keyword&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;loop&lt;/span&gt; ;
-
-main
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;piet-flavored-forth&quot;&gt;Piet-flavored Forth&lt;/h2&gt;
-&lt;p&gt;Next, I modified the Forth code to use Piet&amp;#39;s primitives (except for branches, which are mostly implemented graphically). This was done in a few steps:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Avoid directly using large numbers (since directly pushing N requires painting N pixels)&lt;/li&gt;
-&lt;li&gt;Replace &lt;code&gt;do&lt;/code&gt; with a &lt;code&gt;while&lt;/code&gt; loop&lt;/li&gt;
-&lt;li&gt;Implement Forth words in Piet, as &amp;quot;macros&amp;quot; (which I will later manually expand when painting the actual Piet image)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Result:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-forth&quot;&gt;( Project Euler problem &lt;span class=&quot;hljs-number&quot;&gt;34&lt;/span&gt;, &lt;span class=&quot;hljs-keyword&quot;&gt;in&lt;/span&gt; Forth, but using Piet primitives )
-
-( Piet macros )
-( : &lt;span class=&quot;hljs-type&quot;&gt;swap&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; roll ; )
-( : &lt;span class=&quot;hljs-type&quot;&gt;rot&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt; roll ; )
-( : &lt;span class=&quot;hljs-type&quot;&gt;rot2&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; roll ; )
-( : &lt;span class=&quot;hljs-type&quot;&gt;over2&lt;/span&gt; dup &lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt; roll dup &lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; roll &lt;span class=&quot;hljs-number&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; roll ; )
-( : = - &lt;span class=&quot;hljs-keyword&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;not&lt;/span&gt;&lt;/span&gt; ; )
-
-( Implementation using Piet primitives (except &lt;span class=&quot;hljs-keyword&quot;&gt;for&lt;/span&gt; loops, which are graphical &lt;span class=&quot;hljs-keyword&quot;&gt;in&lt;/span&gt; Piet) )
-
-: &lt;span class=&quot;hljs-type&quot;&gt;rot2&lt;/span&gt; rot rot ;
-: &lt;span class=&quot;hljs-type&quot;&gt;over2&lt;/span&gt; over over ;
-
-: &lt;span class=&quot;hljs-type&quot;&gt;factorial&lt;/span&gt; ( n &lt;span class=&quot;hljs-comment&quot;&gt;-- n! )&lt;/span&gt;
-    &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; swap &lt;span class=&quot;hljs-keyword&quot;&gt;begin&lt;/span&gt; dup &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &amp;gt; &lt;span class=&quot;hljs-keyword&quot;&gt;while&lt;/span&gt; dup rot * swap &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; - repeat drop ;
-
-: &lt;span class=&quot;hljs-type&quot;&gt;div&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;mod&lt;/span&gt; ( x y &lt;span class=&quot;hljs-comment&quot;&gt;-- q r )&lt;/span&gt;
-    over2 / rot2 &lt;span class=&quot;hljs-keyword&quot;&gt;mod&lt;/span&gt; ;
-
-: &lt;span class=&quot;hljs-type&quot;&gt;sum&lt;/span&gt;-digit-factorials ( n &lt;span class=&quot;hljs-comment&quot;&gt;-- sum)&lt;/span&gt;
-    &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; swap &lt;span class=&quot;hljs-keyword&quot;&gt;begin&lt;/span&gt; dup &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &amp;gt; &lt;span class=&quot;hljs-keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt; div-&lt;span class=&quot;hljs-keyword&quot;&gt;mod&lt;/span&gt; factorial rot + swap repeat drop ;
-
-: &lt;span class=&quot;hljs-type&quot;&gt;main&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;loop&lt;/span&gt; ( sum counter &lt;span class=&quot;hljs-comment&quot;&gt;-- sum counter )&lt;/span&gt;
-    dup dup sum-digit-factorials = &lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; dup rot + swap &lt;span class=&quot;hljs-keyword&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; + ;
-
-: &lt;span class=&quot;hljs-type&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;begin&lt;/span&gt; dup &lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt; * * * * - &lt;span class=&quot;hljs-keyword&quot;&gt;while&lt;/span&gt; main-&lt;span class=&quot;hljs-keyword&quot;&gt;loop&lt;/span&gt; repeat drop . ;
-
-main
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;using-piet-for-real&quot;&gt;Using Piet, for real&lt;/h2&gt;
-&lt;p&gt;For authoring the image, I used &lt;a href=&quot;https://piet.bubbler.one/&quot;&gt;this browser-based Piet editor (and interpreter)&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Translating into Piet was excruciatingly tedious because:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Opcodes are based on the relative hue/lightness of the previous color block, so &lt;strong&gt;correcting a mistake usually entails rewriting the entire rest of the chunk&lt;/strong&gt; (unless you separate everything with ugly white blocks)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;There is no way to add comments to your code&lt;/strong&gt; (other than maybe screenshotting a scaled up image and writing on it)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Branches are represented graphically&lt;/strong&gt; and you have to ensure there is space for e.g. return lines (all using Zoolander-style clockwise-only turns)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Luckily, I only had to correct a handful of mistakes.&lt;/p&gt;
-&lt;p&gt;Here&amp;#39;s what my solution looked like (with points of interest marked):&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://log.schemescape.com/posts/programming-languages/../../assets/p34-notes.png&quot; alt=&quot;Annotated solution&quot;/&gt;&lt;/p&gt;
-&lt;p&gt;Explanation:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Start (&lt;code&gt;main&lt;/code&gt; in the Forth code above)&lt;/li&gt;
-&lt;li&gt;Test for &amp;quot;checked enough numbers to be done&amp;quot; (the program ends near the upper-right; otherwise, run &lt;code&gt;main-loop&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;Check for any digits left in the current number (the loop in &lt;code&gt;sum-digit-factorials&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;Compute quotient and remainder (i.e. extract a digit--still in &lt;code&gt;sum-digit-factorials&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;Compute factorial of digit (&lt;code&gt;factorial&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;Check if sum of digit factorials equals the number (the &lt;code&gt;if&lt;/code&gt; part of &lt;code&gt;main-loop&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;Move on to the next number&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;N.B. I set the limit (#2) lower for the Piet version just to ensure the program ran in a reasonable amount of time. It still produces the correct answer, but I don&amp;#39;t have any mathematical analysis to justify lowering the limit from 7 digits down to 5.&lt;/p&gt;
-&lt;h2 id=&quot;art&quot;&gt;Art&lt;/h2&gt;
-&lt;p&gt;Given that Piet code is an image, the final step is to add prettily colored rectangles. Here is the final &lt;em&gt;unscaled&lt;/em&gt; solution (which you can theoretically run via a Piet interpreter):&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://log.schemescape.com/posts/programming-languages/../../assets/p34.png&quot; alt=&quot;Final solution, actual size&quot;/&gt;&lt;/p&gt;
-&lt;h1 id=&quot;final-thoughts&quot;&gt;Final thoughts&lt;/h1&gt;
-&lt;p&gt;Overall, once I had a Forth-simple solution with a minimum of stack manipulation, translating it into Piet was straight-forward (although I shudder to think about graphically arranging a more complicated Piet program).&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;But the satisfaction of having written a real program in a 2D esoteric language like Piet is real.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;How often can you sit back and visually admire a program? Piet is a wonderfully unique entry in the world of esoteric programming languages!&lt;/p&gt;
-&lt;h1 id=&quot;appendix&quot;&gt;Appendix&lt;/h1&gt;
-&lt;p&gt;To my amazement, someone created a &lt;a href=&quot;https://www.toothycat.net/wiki/wiki.pl?MoonShadow/Piet&quot;&gt;Piet assembler&lt;/a&gt; that can translate from an assembly language into a Piet-compatible image. It&amp;#39;s an incredible achievement, but I wanted to write my Piet solution by hand.&lt;/p&gt;
 </content>
 </entry>
 </feed>
