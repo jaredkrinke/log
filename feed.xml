@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-06-25T05:06:36.885Z</updated>
+<updated>2024-06-25T15:43:11.987Z</updated>
 
 <entry>
 <title>100 programming languages in... more than 100 days</title>
@@ -51,7 +51,7 @@
 <id>https://log.schemescape.com/posts/programming-languages/extreme-typing-in-typescript.html</id>
 <link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/extreme-typing-in-typescript.html"/>
 <updated>2024-06-05T00:00:00.000Z</updated>
-<summary type="text">Solving a Project Euler problem entirely within TypeScript&apos;s type system. Because I couldn&apos;t not do it!</summary>
+<summary type="text">Here&apos;s how to compare poker hands entirely within TypeScript&apos;s type system.</summary>
 <content type="html">&lt;p&gt;&lt;strong&gt;TypeScript brought sanity to the JavaScript world&lt;/strong&gt;, standardizing how JavaScript APIs are documented. TypeScript&amp;#39;s gradual typing system has shown that &lt;strong&gt;a little bit of typing can go a long way&lt;/strong&gt; towards increasing productivity.&lt;/p&gt;
 &lt;p&gt;So if &lt;em&gt;a little bit&lt;/em&gt; of typing is a good thing, then &lt;em&gt;more&lt;/em&gt; must be better, right?&lt;/p&gt;
 &lt;p&gt;Welcome to &lt;strong&gt;Extreme Typing&lt;/strong&gt;.&lt;/p&gt;
