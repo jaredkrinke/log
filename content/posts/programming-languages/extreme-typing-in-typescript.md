@@ -1,6 +1,6 @@
 ---
 title: Extreme Typing in TypeScript
-description: Solving a Project Euler problem entirely within TypeScript's type system. Because I couldn't not do it!
+description: Here's how to compare poker hands entirely within TypeScript's type system.
 date: 2024-06-05
 keywords: [100-languages]
 ---
