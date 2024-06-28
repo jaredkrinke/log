@@ -27,3 +27,4 @@ As of right now (May 26th, at least as far as UTC is concerned), I'm struggling 
 
 For now, I think my best bet is to use the public domain [YAWL](https://github.com/elasticdog/yawl) word list, possibly filtered by some arbitrary frequency cutoff based on the Google Trillion Word Corpus via [Peter Norvig's web site](http://norvig.com/ngrams/). After exploring this a bit, it looks like just ensuring the word is in the top ~300,000 most frequent words may be sufficient to get a set of words that I consider to be legitimate.
 
+**Update**: I did [complete the game](lisp-game-jam-2.md), but the server that ran the game has since been taken offline.

@@ -39,3 +39,4 @@ Battlesnake is a competitive programming game where snakes move around a grid co
 
 Hopefully I'll have more to say about Battlesnake and Common Lisp soon!
 
+**Update**: In actuality, I ended up spending my time on [game](../game-development/lisp-game-jam.md) [jams](../web-development/interactive-browser-app-without-js-2.md) and (you guessed it) [a static site generator](../static-site-generators/lisp-ssg.md).

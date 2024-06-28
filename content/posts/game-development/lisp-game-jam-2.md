@@ -6,11 +6,9 @@ keywords: [lisp]
 ---
 This is a follow-up to [my previous post about discovering Lisp Game Jame (Spring 2023)](lisp-game-jam.md). In the previous post, I described my word game and implementation approach. This post covers how it all went, along with some lessons learned and general thoughts about Common Lisp.
 
-You can play the game here (but note that it's designed for multiplayer):
-
-[https://jaredkrinke.itch.io/13l/](https://jaredkrinke.itch.io/13l/)
-
 Source code is [on GitHub](https://github.com/jaredkrinke/thirteen-letters/).
+
+**Update**: The game is no longer online/running, but you can see [feedback from players who tried the game](https://itch.io/jam/spring-lisp-game-jam-2023/rate/2103016).
 
 # Recap
 I've been [learning Common Lisp](../programming-languages/learning-lisp-in-2023.md) and [Lisp Game Jam (Spring 2023)](https://itch.io/jam/spring-lisp-game-jam-2023) was an appropriate motivator. I wanted to make a simple word scramble game that was played in real time against other players, inside the browser.

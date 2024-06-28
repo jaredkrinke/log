@@ -49,3 +49,5 @@ That new workflow is my motivation for learning Common Lisp. I want to try inter
 Is it a good idea to learn a new programming language and standard library just to explore a new workflow? Maybe not, but I'm not sure there's a great alternative. I'm sure similar REPL-editor integrations exist in other languages, but I also suspect that they're buggier because they've been bolted on, rather than supported from the beginning. Additionally, if I put in the work and am not satisfied with the workflow after all, I can rest assured that I gave it the best possible chance, using standard tools.
 
 Regardless, it should be an interesting adventure!
+
+**Update**: Also see [this post about resources that I found helpful for learning Common Lisp](common-lisp-resources.md).
