@@ -76,3 +76,5 @@ As someone who's familiar with JavaScript, Node, and HTML/CSS, Metalsmith is sim
 * I can even debug it, just by hitting F5 in VS Code
 
 Metalsmith is really giving me the best of both using a pre-built static site generator and creating my own. It's possible that the lack of maintenance will force me to switch to something else eventually, but for now I'm happy with it.
+
+**Update**: I eventually gave in and just [made yet another static site generator](md2blog-design.md).

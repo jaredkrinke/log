@@ -36,7 +36,7 @@ Opinions are great for nudging people into good choices when they might not fore
 ## Templates
 My experience with static site generators until recently was all home-built stuff, so I don't have any experience with standard template languages like Tera, Jinja, or Liquid. I like to think my fresh eyes let me accurately grade the ergonomics of template languages for career developers.
 
-So far, (as with Hugo's templates) I don't like what I see. The syntax is incredibly ugly and verbose. Here's how you mark an input to a template (I was hoping for something more like this JavaScript's template literal syntax):
+So far, (as with Hugo's templates) I don't like what I see. The syntax is incredibly ugly and verbose. Here's how you mark an input to a template (I was hoping for something more like JavaScript's template literal syntax):
 
 ```jinja
 {% block content %}{% endblock %}

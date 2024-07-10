@@ -251,6 +251,6 @@ My next step is to test out Hugo, Eleventy, Zola, etc. to see which one can meet
 **Update**: I tested several static site generators out. My initial reviews are documented below:
 
 * [Hugo](hugo.md) (didn't like the template language)
-* [Eleventy](eleventy.md) ([subsequent update](eleventy-2.md))
+* [Eleventy](eleventy.md) ([I initially used Eleventy](eleventy-2.md), but later switched to Metalsmith--[which I also later abandoned](metalsmith-downsides.md) for [md2blog](md2blog-design.md))
 * [Zola](zola.md): (didn't like TOML or the template language)
-* [Metalsmith](metalsmith.md) (I like Metalsmith a lot and am currently using it)
+* [Metalsmith](metalsmith.md) (I used Metalsmith for a while, but [didn't like the huge dependency tree](metalsmith-downsides.md), so I made [md2blog](md2blog-design.md) instead)
