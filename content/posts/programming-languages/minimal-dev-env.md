@@ -7,7 +7,7 @@ keywords: [minimalism,linux]
 Feel free to [skip over the obligatory whining about today's bloat](#the-plan).
 
 # Back in my day...
-I think the first computer I ever used was a [Commodore 64](https://en.wikipedia.org/wiki/Commodore_64). Wikipedia tells me that it had a 1 MHz processor and 64 KB of RAM, all packed into an "obese keyboard" form factor. Despite being 100,000+ times slower (with a similar fraction of memory) compared to a modern computer, it could run a word processor, play games, and print documents.
+I think the first computer I ever used was a [Commodore 64](https://en.wikipedia.org/wiki/Commodore_64). Wikipedia tells me that it had a 1 MHz processor and 64 KB of RAM, all packed into an "obese keyboard" form factor. Despite being 1,000+ times slower (with hundreds of times less memory) compared to a modern computer, it could run a word processor, play games, and print documents.
 
 Later on, I remember installing Linux on a 1.44 MB floppy disk to turn an aging 486 computer into a network router. Even back then, that was impressive!
 
