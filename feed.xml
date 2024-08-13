@@ -7,8 +7,49 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-08-12T18:02:32.495Z</updated>
+<updated>2024-08-13T02:45:05.495Z</updated>
 
+<entry>
+<title>My new 40-year-old development environment</title>
+<id>https://log.schemescape.com/posts/vintage-computing/40-year-old-dev-environment.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/vintage-computing/40-year-old-dev-environment.html"/>
+<updated>2024-08-12T00:00:00.000Z</updated>
+<summary type="text">I&apos;m going to find out what it was like to develop software in the 8-bit era.</summary>
+<content type="html">&lt;p&gt;Lately, my computing interests have revolved around the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Exploring programming languages (&lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../programming-languages/50-different-languages.html&quot;&gt;50+ so far&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Testing out &lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../programming-languages/minimal-dev-env.html&quot;&gt;minimal development environments&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../retrocomputing/amiga-day-project-euler.html&quot;&gt;Playing with vintage computers&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Thanks to some generosity and good luck, I just acquired a &amp;quot;new&amp;quot; computer on which all three interests can converge:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://log.schemescape.com/posts/vintage-computing/../../assets/c64.jpg&quot; alt=&quot;Commodore 64 with monitor&quot;/&gt;&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s an original Commodore 64. Also known as &lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../programming-languages/minimal-dev-env.html#back-in-my-day&quot;&gt;the first computer I ever used&lt;/a&gt;. It sports a 1 MHz 8-bit CPU and 64 KB of RAM. Aside: despite these outdated specs, &lt;strong&gt;the C64 boots faster than any modern computer&lt;/strong&gt;--it&amp;#39;s practically instantaneous.&lt;/p&gt;
+&lt;p&gt;Given that the C64 is one of the most popular computers of all time (per Guinness), it supports &lt;a href=&quot;https://www.lyonlabs.org/commodore/onrequest/collections.html&quot;&gt;a multitude of programming languages&lt;/a&gt;, including:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Assembly&lt;/li&gt;
+&lt;li&gt;BASIC&lt;/li&gt;
+&lt;li&gt;C&lt;/li&gt;
+&lt;li&gt;COBOL&lt;/li&gt;
+&lt;li&gt;Forth&lt;/li&gt;
+&lt;li&gt;FORTRAN&lt;/li&gt;
+&lt;li&gt;Lisp&lt;/li&gt;
+&lt;li&gt;Logo&lt;/li&gt;
+&lt;li&gt;Pascal&lt;/li&gt;
+&lt;li&gt;Prolog&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There&amp;#39;s even, apparently, &lt;a href=&quot;https://www.lyonlabs.org/commodore/onrequest/nanovm-announce.txt&quot;&gt;a 16 KB minimal JVM&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;the-plan&quot;&gt;The plan&lt;/h1&gt;
+&lt;p&gt;Obviously, the task at hand is to &lt;strong&gt;solve a few Project Euler problems using a mid-80s development environment&lt;/strong&gt;. I&amp;#39;ve &lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../programming-languages/100-languages-4.html#commodore-basic&quot;&gt;already sovled a problem using Commodore BASIC&lt;/a&gt; (using an emulator, since I didn&amp;#39;t have a C64 at the time), so next up I&amp;#39;m looking at the following (likely in this order):&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Blazin&amp;#39; Forth&lt;/strong&gt;, by Scott Ballantyne (1985)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;MicroLisp&lt;/strong&gt;, by Nicholas Vrtis (1986)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;G-Pascal&lt;/strong&gt;, by Nick Gammon (1982)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;blazin-forth&quot;&gt;Blazin&amp;#39; Forth&lt;/h2&gt;
+&lt;p&gt;I&amp;#39;ve actually spent a bit of time tinkering with Blazin&amp;#39; Forth already. So far, it feels like a supremely authentic implementation of Forth. Notably, &lt;strong&gt;Blazin&amp;#39; Forth feels like a self-contained little operating system&lt;/strong&gt;--it even implements its own line-based text editor and block-based storage--no file system needed. Note: in the long run, I&amp;#39;m not sure this is a good tradeoff, but from a self-hosting and bootstrapping perspective, it&amp;#39;s nifty (also: did I mention there&amp;#39;s only 64 KB of RAM?).&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s all I have for now. Until next time!&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>R.I.P. The Living Computers Museum</title>
 <id>https://log.schemescape.com/posts/retrocomputing/rip-living-computers-museum.html</id>
@@ -369,55 +410,6 @@
 &lt;h2 id=&quot;looking-forward&quot;&gt;Looking forward&lt;/h2&gt;
 &lt;p&gt;I&amp;#39;m not precisely sure how much time (and money) I&amp;#39;ll spend investigating the Amiga, but I would really like to get a hard drive so that I sample the true Amiga &lt;em&gt;computer&lt;/em&gt; experience (instead of the game console-esque experience I&amp;#39;ve had thus far).&lt;/p&gt;
 &lt;p&gt;If you have any pointers to Amiga resources (or any advice on what to do with an A500), &lt;a href=&quot;mailto:log@schemescape.com&quot;&gt;send me a mail&lt;/a&gt;. Thanks!&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Reflections at 50 (programming languages)</title>
-<id>https://log.schemescape.com/posts/programming-languages/50-different-languages.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/50-different-languages.html"/>
-<updated>2024-05-14T00:00:00.000Z</updated>
-<summary type="text">Find out if writing code in 50 different programming languages was a good idea!</summary>
-<content type="html">&lt;p&gt;Over the past two months, I&amp;#39;ve &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../100-languages/index.html&quot;&gt;written code in 50 different programming languages&lt;/a&gt; (with an eventual goal to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;get to 100&lt;/a&gt;). Here are my thoughts thus far.&lt;/p&gt;
-&lt;h1 id=&quot;overview&quot;&gt;Overview&lt;/h1&gt;
-&lt;p&gt;I started this journey because I wanted to &lt;strong&gt;try new programming languages&lt;/strong&gt; in a low-stakes setting. Rather than learn a language in depth, I&amp;#39;m just writing a page of code, &lt;strong&gt;to see what either the programming paradigm or development experience is like&lt;/strong&gt;. Since I&amp;#39;m focused on new (to me) languages/paradigms, the majority of the languages aren&amp;#39;t even in the top 100 programming languages in the &lt;a href=&quot;https://www.tiobe.com/tiobe-index/&quot;&gt;TIOBE Programming Community index&lt;/a&gt;. I&amp;#39;m definitely &lt;em&gt;not&lt;/em&gt; trying to improve my job prospects!&lt;/p&gt;
-&lt;h2 id=&quot;positives&quot;&gt;Positives&lt;/h2&gt;
-&lt;p&gt;Overall, this experiment has been a success. Prior to starting, I thought I&amp;#39;d &lt;em&gt;already&lt;/em&gt; used a wide variety of programming languages, but &lt;strong&gt;I&amp;#39;d never &lt;em&gt;actually used&lt;/em&gt; an array-based language, and I didn&amp;#39;t even know what concatenative languages were&lt;/strong&gt; (thought I&amp;#39;d briefly heard of Forth)! I&amp;#39;d also never experienced column- or line-based input or written right-to-left text.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;If you&amp;#39;ve got the time and desire novel programming experiences, this is a worthwhile journey!&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&quot;negatives&quot;&gt;Negatives&lt;/h2&gt;
-&lt;p&gt;The last sentence implied it, but &lt;strong&gt;repeatedly starting over from scratch--often in new paradigms--takes time&lt;/strong&gt;. I&amp;#39;d say that on average I spent &lt;em&gt;at least&lt;/em&gt; two or three hours with each language--and often more. Frequently, it was worthwhile, but stumbling through Smalltalk-like UI and syntax felt more tedious than educational, for example.&lt;/p&gt;
-&lt;p&gt;It&amp;#39;s not obvious, but &lt;strong&gt;I also spent a fair amount of time discovering, selecting, and occasionally shelving languages&lt;/strong&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;the-road-ahead&quot;&gt;The road ahead&lt;/h2&gt;
-&lt;p&gt;Additionally, now that I&amp;#39;m 50 languages in, &lt;strong&gt;the novelty is wearing off a bit&lt;/strong&gt;. This is welcome, in that the learning process is less taxing, but I&amp;#39;ll need to ensure this doesn&amp;#39;t just become a slog to 100. If I stop learning and/or enjoying the process, I should quit. &lt;strong&gt;Fifty programming languages is no small feat&lt;/strong&gt;, anyway--though I&amp;#39;ll feel a bit silly having a repository named &amp;quot;100-languages&amp;quot; if I never quite get there.&lt;/p&gt;
-&lt;p&gt;Tangentially related: I feel like &lt;strong&gt;there is a distinct possibility that I will end up creating a new programming language&lt;/strong&gt; either during or after this exercise. The world definitely needs another Lisp (or maybe Forth)!&lt;/p&gt;
-&lt;h2 id=&quot;languages-by-category&quot;&gt;Languages by category&lt;/h2&gt;
-&lt;p&gt;For the record, here is a rough categorization of the languages I&amp;#39;ve used so far (with categories based mostly on &lt;a href=&quot;https://madhadron.com/programming/seven_ur_languages.html&quot;&gt;this article&lt;/a&gt;). Note these classifications are subjective!&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Assembly&lt;/strong&gt;: WebAssembly, x86 (&amp;quot;real&amp;quot;/16-bit), Uxntal&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Imperative&lt;/strong&gt;: Fortran, COBOL, Perl, WebGPU Shading Language, Awk, Commodore BASIC, BBC BASIC, TCL, Bash, Turbo Pascal, Hare, wax, Nim&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Homoiconic&lt;/strong&gt;: SectorLISP, fe, Rebol, Boron, Cakelisp&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Functional&lt;/strong&gt;: Standard ML, Unison, Julia, Pkl, Roc, Haskell, Idris, F#&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Object-oriented&lt;/strong&gt;: Squeak, Wren, Self&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Concatenative&lt;/strong&gt;: Gforth, PostScript, RetroForth, Uxntal, Factor, Min&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Array-based&lt;/strong&gt;: J, Lil, APL&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Declarative&lt;/strong&gt;: SQL, XSLT, Verilog&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Block/flow-based&lt;/strong&gt;: Scratch, XOD&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Esoteric&lt;/strong&gt;: SIC-1 Assembly Language, EXA, Piet, قلب (Qalb), 文言 (wenyan)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Excluding intentionally esoteric ones, &lt;strong&gt;the most mind-bending for me have been concatenative and array-based languages&lt;/strong&gt;, probably due to my inexperience with them. Dependently-typed languages would probably have been mind-bending if I&amp;#39;d spent more time and actually learned them.&lt;/p&gt;
-&lt;h1 id=&quot;programming-language-observations&quot;&gt;Programming language observations&lt;/h1&gt;
-&lt;p&gt;Being a newbie nearly 50 times in quick succession theoretically gives me a unique perspective on programming languages. Here are a few observations.&lt;/p&gt;
-&lt;h2 id=&quot;ramping-up&quot;&gt;Ramping up&lt;/h2&gt;
-&lt;p&gt;Overall, for me as an experienced programmer, &lt;strong&gt;the most helpful thing for ramping up has been, unsurprisingly, quality documentation&lt;/strong&gt;. Specifically: having &lt;strong&gt;searchable documentation that is clearly organized, using familiar language&lt;/strong&gt; (e.g. outlining basic syntax, enumerating control flow options, and diligently documenting the standard library).&lt;/p&gt;
-&lt;p&gt;The languages I struggled most with seemed to focus their documentation too much on tutorials and examples (usually unrelated to what I wanted to do--which is fair) or they used long-winded prose. In one case, the &amp;quot;hello world&amp;quot; example contained a URL that wasn&amp;#39;t even explained--that just made me more confused, rather than less. Thankfully, none of the languages tried to rely on videos or chat apps for &amp;quot;documentation&amp;quot;!&lt;/p&gt;
-&lt;h2 id=&quot;no-one-cares-about-footprint&quot;&gt;No one cares about footprint&lt;/h2&gt;
-&lt;p&gt;It&amp;#39;s disheartening, but most programming languages don&amp;#39;t seem to care about the disk/memory footprints of their environments or, often, their resulting binaries. I don&amp;#39;t enjoy slow software, but, these days, &lt;strong&gt;my old computers are more impacted by bloat than sluggishness&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Hare and Rebol are nice counterexamples, and embeddable scripting languages are also usually pretty light. And let&amp;#39;s not forget the old, but &lt;a href=&quot;https://prog21.dadgum.com/116.html&quot;&gt;famously lightweight Turbo Pascal environment&lt;/a&gt;!&lt;/p&gt;
-&lt;h2 id=&quot;so-so-many-languages&quot;&gt;So, so many languages&lt;/h2&gt;
-&lt;p&gt;Despite my frequent complaints, the quality of virtually all languages I&amp;#39;ve tried is impressive--even the hobby languages are eminently usable! The amount of work involved is staggering.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Perhaps people create new programming languages for the same reason they create art, i.e. because they can&amp;#39;t &lt;em&gt;not&lt;/em&gt; do it?&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&quot;parting-thoughts&quot;&gt;Parting thoughts&lt;/h1&gt;
-&lt;p&gt;Now that I&amp;#39;ve sampled a lot of different programming languages, I&amp;#39;m more confident about matching problems to appropriate languages. In the recent past, I&amp;#39;ve tried to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;find the one true language that I can use for everything&lt;/a&gt;, but that&amp;#39;s honestly misguided--most of the time, at least--and especially for hobby projects in wildly different domains.&lt;/p&gt;
-&lt;p&gt;I guess the good news is that I&amp;#39;ve now convinced myself that &lt;strong&gt;I could &lt;em&gt;probably&lt;/em&gt; make do with &lt;em&gt;any&lt;/em&gt; programming language, so maybe I can finally stop &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../misc/my-hobby-is-bikeshedding.html&quot;&gt;bike-shedding&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages.html&quot;&gt;about&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages-2.html&quot;&gt;programming&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/future-proof-languages-3.html&quot;&gt;languages&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
 </content>
 </entry>
 </feed>
