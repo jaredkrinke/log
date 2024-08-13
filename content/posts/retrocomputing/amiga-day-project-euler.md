@@ -2,7 +2,7 @@
 title: Celebrating International Amiga Day with Project Euler
 description: "Programming on the ultimate retro-futuristic computer: the Amiga 500."
 date: 2024-05-31
-keywords: [100-languages,programming-languages]
+keywords: [100-languages,programming-languages,vintage-computing]
 ---
 Today is **[International Amiga Day](https://www.lemonamiga.com/forum/viewtopic.php?f=9&t=11833)**, when retrocomputing enthusiasts are required to boot up the [fanciest multimedia computer line to ever fail](https://en.wikipedia.org/wiki/Amiga). I'm not really qualified to comment on the Amiga since the closest thing I'd used until recently was a [Commodore 64](https://en.wikipedia.org/wiki/Commodore_64), but I won't let such a trivial matter as *not being qualified* stop me from spewing uninformed opinions.
 
