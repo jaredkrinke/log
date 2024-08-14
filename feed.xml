@@ -7,8 +7,162 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-08-13T21:20:34.691Z</updated>
+<updated>2024-08-14T02:09:42.574Z</updated>
 
+<entry>
+<title>Blazin&apos; Forth/Starting Forth editor quick reference</title>
+<id>https://log.schemescape.com/posts/vintage-computing/forth-line-editor.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/vintage-computing/forth-line-editor.html"/>
+<updated>2024-08-13T00:00:00.000Z</updated>
+<summary type="text">For my own reference, this is a quick reference table for vintage line/block-based Forth editors.</summary>
+<content type="html">&lt;p&gt;&lt;strong&gt;Blazin&amp;#39; Forth&lt;/strong&gt; is an implementation of Forth for the Commodore 64, published in 1985 by Scott Ballantyne (for free). Its built-in editor is block- and line-based, and the editor is modeled after one described in the first edition of &lt;a href=&quot;https://www.forth.com/starting-forth/&quot;&gt;Starting Forth&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The rest of this post provides quick reference for the editor, because I couldn&amp;#39;t find any such resource on the web. For a &lt;em&gt;tutorial&lt;/em&gt;, see the Starting Forth PDF at the previous link.&lt;/p&gt;
+&lt;h1 id=&quot;forth-editor-quick-reference&quot;&gt;Forth editor quick reference&lt;/h1&gt;
+&lt;h2 id=&quot;block-selectionmanipulation&quot;&gt;Block selection/manipulation&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Word&lt;/th&gt;
+&lt;th align=&quot;center&quot;&gt;Stack&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;LIST&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(n --)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Select&lt;/strong&gt; the given block, &lt;strong&gt;print&lt;/strong&gt; it out, and start the editor&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;N&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
+&lt;td&gt;Move to the &lt;strong&gt;next block&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;B&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
+&lt;td&gt;Move backwards to the &lt;strong&gt;previous block&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;SAVE-BUFFERS&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Save&lt;/strong&gt; modified buffers back to disk blocks&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;EMPTY-BUFFERS&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Discard&lt;/strong&gt; buffers/changes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;LOAD&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(n --)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Load and execute&lt;/strong&gt; the given block&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;h2 id=&quot;line-editing-commands&quot;&gt;Line editing commands&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Word&lt;/th&gt;
+&lt;th align=&quot;center&quot;&gt;Stack&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;L&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Print&lt;/strong&gt; the currently selected block&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;T&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(n --)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Select&lt;/strong&gt; the given line number&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;P&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Replace&lt;/strong&gt; the selected line with the remainder of the input buffer (use 3 spaces to clear the line entirely; leave blank to copy from the insert buffer)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;U&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Insert under&lt;/strong&gt; the current line the rest of the input buffer, shifting any following lines down, and move selection down one line&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;X&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Cut&lt;/strong&gt; the current line, and shift following lines up one line (the line that was removed is placed into the insert buffer--use &lt;code&gt;P&lt;/code&gt;/&lt;code&gt;U&lt;/code&gt; to &amp;quot;paste&amp;quot;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;h2 id=&quot;character-editing-commands&quot;&gt;Character editing commands&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Word&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;F&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Search&lt;/strong&gt; for the rest of the input buffer in the current line&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;I&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Insert&lt;/strong&gt; the rest of the input buffer before the cursor&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;E&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Delete&lt;/strong&gt; the string previously found with &lt;code&gt;F&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;D&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Find and delete&lt;/strong&gt; the rest of the input buffer (combination of &lt;code&gt;F&lt;/code&gt; and &lt;code&gt;E&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;R&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Replace&lt;/strong&gt; previously found text with the rest of the input buffer (combination of &lt;code&gt;E&lt;/code&gt; and &lt;code&gt;I&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;TILL&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Delete everything from the cursor, through the rest of the input buffer&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;h2 id=&quot;miscellaneous-commands&quot;&gt;Miscellaneous commands&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Word&lt;/th&gt;
+&lt;th align=&quot;center&quot;&gt;Stack&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;WIPE&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Clear&lt;/strong&gt; the current block&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;FLUSH&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Save&lt;/strong&gt; buffers back to disk blocks, and free associated buffers&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;COPY&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(src dest --)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Copy block&lt;/strong&gt; from one to another&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;S&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(n --)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Search&lt;/strong&gt; for the rest of the input buffer in this block &lt;em&gt;and following blocks&lt;/em&gt;, while the block number is lower than the specified limit&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;M&lt;/code&gt;&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;(b l --)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Copy current line&lt;/strong&gt; to a new block and associated line&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+</content>
+</entry>
 <entry>
 <title>My new 40-year-old development environment</title>
 <id>https://log.schemescape.com/posts/vintage-computing/40-year-old-dev-environment.html</id>
@@ -376,40 +530,6 @@
 &lt;li&gt;&lt;a href=&quot;https://www.learningtypescript.com/articles/extreme-explorations-of-typescripts-type-system&quot;&gt;Extreme Explorations of TypeScript&amp;#39;s Type System&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/arielhs/ts-arithmetic&quot;&gt;Type Level Arithmetic&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>Celebrating International Amiga Day with Project Euler</title>
-<id>https://log.schemescape.com/posts/retrocomputing/amiga-day-project-euler.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/retrocomputing/amiga-day-project-euler.html"/>
-<updated>2024-05-31T00:00:00.000Z</updated>
-<summary type="text">Programming on the ultimate retro-futuristic computer: the Amiga 500.</summary>
-<content type="html">&lt;p&gt;Today is &lt;strong&gt;&lt;a href=&quot;https://www.lemonamiga.com/forum/viewtopic.php?f=9&amp;amp;t=11833&quot;&gt;International Amiga Day&lt;/a&gt;&lt;/strong&gt;, when retrocomputing enthusiasts are required to boot up the &lt;a href=&quot;https://en.wikipedia.org/wiki/Amiga&quot;&gt;fanciest multimedia computer line to ever fail&lt;/a&gt;. I&amp;#39;m not really qualified to comment on the Amiga since the closest thing I&amp;#39;d used until recently was a &lt;a href=&quot;https://en.wikipedia.org/wiki/Commodore_64&quot;&gt;Commodore 64&lt;/a&gt;, but I won&amp;#39;t let such a trivial matter as &lt;em&gt;not being qualified&lt;/em&gt; stop me from spewing uninformed opinions.&lt;/p&gt;
-&lt;h1 id=&quot;amiga&quot;&gt;Amiga&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;I recently acquired an Amiga 500 and I&amp;#39;ve been having some (mostly Type II) fun retrocomputing on it&lt;/strong&gt;. For a platform that launched in the US around the same time as the original Nintendo Entertainment System, the Amiga is impressive! N.B. The Amiga &lt;em&gt;platform&lt;/em&gt; launched with the Amiga 1000, but I&amp;#39;m using a later &lt;em&gt;model&lt;/em&gt;--the Amiga 500.&lt;/p&gt;
-&lt;p&gt;Unlike the earlier Commodore 64, the Amiga shipped with a bridge to the future: an &lt;a href=&quot;https://en.wikipedia.org/wiki/RS-232&quot;&gt;RS-232 serial port&lt;/a&gt;. This enables:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Copying small files to/from a serial port-equipped modern computer (cf. &lt;a href=&quot;https://ohse.de/uwe/software/lrzsz.html&quot;&gt;lrzsz&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;Dialing into Internet-based &lt;a href=&quot;https://en.wikipedia.org/wiki/Bulletin_board_system&quot;&gt;BBSes&lt;/a&gt;, using a modem emulator (cf. &lt;a href=&quot;https://github.com/go4retro/tcpser&quot;&gt;tcpser&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;Controlling terminal-mode programs on Linux/BSD-based computers&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;With a hard drive, I could theoretically even get on the web&lt;/strong&gt;. Unfortunately, my Amiga 500 only has 1 MB of RAM and no hard drive, so I haven&amp;#39;t gotten beyond single-floppy programs/games yet.&lt;/p&gt;
-&lt;h2 id=&quot;amiga-basic&quot;&gt;Amiga Basic&lt;/h2&gt;
-&lt;p&gt;But, of course, the most urgent task on my plate is to add another programming language to &lt;a href=&quot;https://log.schemescape.com/posts/retrocomputing/../100-languages/index.html&quot;&gt;the pile&lt;/a&gt;, and this brings me to &lt;strong&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Amiga_Basic&quot;&gt;Amiga Basic&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Amiga Basic is included on the &amp;quot;extras&amp;quot; disk of Workbench 1.3 (which came with my A500). Similar to Commodore BASIC, it was written by Microsoft and, also similarly, I didn&amp;#39;t enjoy it. Here are my notes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;There aren&amp;#39;t functions (other than single-line &lt;code&gt;DEF FN&lt;/code&gt; statements which... didn&amp;#39;t work)&lt;/li&gt;
-&lt;li&gt;It supports 32-bit arithmetic... except for &lt;code&gt;MOD&lt;/code&gt; (ask me how I know)&lt;/li&gt;
-&lt;li&gt;The environment is impressively small at 80 KB&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&quot;https://archive.org/details/Amiga_BASIC_1985_Commodore&quot;&gt;Amiga Basic manual &lt;/a&gt; feels very dated--it spends a lot of time discussing UI that feels obvious to modern users, then moves onto &amp;quot;advanced topics&amp;quot;, and only covers everything else in a reference section&lt;/li&gt;
-&lt;li&gt;Thankfully, line numbers aren&amp;#39;t required (as in Commodore BASIC)&lt;/li&gt;
-&lt;li&gt;The UI was fairly slow&lt;/li&gt;
-&lt;li&gt;The interpreter is annoyingly slow&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Overall, I liked the older BBC BASIC better. &lt;strong&gt;And Turbo Pascal beats all BASICs handily!&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&quot;looking-forward&quot;&gt;Looking forward&lt;/h2&gt;
-&lt;p&gt;I&amp;#39;m not precisely sure how much time (and money) I&amp;#39;ll spend investigating the Amiga, but I would really like to get a hard drive so that I sample the true Amiga &lt;em&gt;computer&lt;/em&gt; experience (instead of the game console-esque experience I&amp;#39;ve had thus far).&lt;/p&gt;
-&lt;p&gt;If you have any pointers to Amiga resources (or any advice on what to do with an A500), &lt;a href=&quot;mailto:log@schemescape.com&quot;&gt;send me a mail&lt;/a&gt;. Thanks!&lt;/p&gt;
 </content>
 </entry>
 </feed>

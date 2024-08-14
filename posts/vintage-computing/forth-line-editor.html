@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Blazin&#39; Forth/Starting Forth editor quick reference</title>
+<meta name="description" content="For my own reference, this is a quick reference table for vintage line/block-based Forth editors." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Blazin' Forth/Starting Forth editor quick reference",
+  "abstract": "For my own reference, this is a quick reference table for vintage line/block-based Forth editors.",
+  "keywords": "vintage-computing",
+  "datePublished": "2024-08-13"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/vintage-computing/index.html">vintage-computing</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/vintage-computing/forth-line-editor.html">Blazin&#39; Forth/Starting Forth editor quick reference</a></h1>
+<p><time datetime="2024-08-13">August 13, 2024</time></p>
+</header>
+<p><strong>Blazin&#39; Forth</strong> is an implementation of Forth for the Commodore 64, published in 1985 by Scott Ballantyne (for free). Its built-in editor is block- and line-based, and the editor is modeled after one described in the first edition of <a href="https://www.forth.com/starting-forth/">Starting Forth</a>.</p>
+<p>The rest of this post provides quick reference for the editor, because I couldn&#39;t find any such resource on the web. For a <em>tutorial</em>, see the Starting Forth PDF at the previous link.</p>
+<h1 id="forth-editor-quick-reference">Forth editor quick reference</h1>
+<h2 id="block-selectionmanipulation">Block selection/manipulation</h2>
+<table>
+<thead>
+<tr>
+<th>Word</th>
+<th align="center">Stack</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>LIST</code></td>
+<td align="center">(n --)</td>
+<td><strong>Select</strong> the given block, <strong>print</strong> it out, and start the editor</td>
+</tr>
+<tr>
+<td><code>N</code></td>
+<td align="center">(--)</td>
+<td>Move to the <strong>next block</strong></td>
+</tr>
+<tr>
+<td><code>B</code></td>
+<td align="center">(--)</td>
+<td>Move backwards to the <strong>previous block</strong></td>
+</tr>
+<tr>
+<td><code>SAVE-BUFFERS</code></td>
+<td align="center">(--)</td>
+<td><strong>Save</strong> modified buffers back to disk blocks</td>
+</tr>
+<tr>
+<td><code>EMPTY-BUFFERS</code></td>
+<td align="center">(--)</td>
+<td><strong>Discard</strong> buffers/changes</td>
+</tr>
+<tr>
+<td><code>LOAD</code></td>
+<td align="center">(n --)</td>
+<td><strong>Load and execute</strong> the given block</td>
+</tr>
+</tbody></table>
+<h2 id="line-editing-commands">Line editing commands</h2>
+<table>
+<thead>
+<tr>
+<th>Word</th>
+<th align="center">Stack</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>L</code></td>
+<td align="center">(--)</td>
+<td><strong>Print</strong> the currently selected block</td>
+</tr>
+<tr>
+<td><code>T</code></td>
+<td align="center">(n --)</td>
+<td><strong>Select</strong> the given line number</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td align="center">(--)</td>
+<td><strong>Replace</strong> the selected line with the remainder of the input buffer (use 3 spaces to clear the line entirely; leave blank to copy from the insert buffer)</td>
+</tr>
+<tr>
+<td><code>U</code></td>
+<td align="center">(--)</td>
+<td><strong>Insert under</strong> the current line the rest of the input buffer, shifting any following lines down, and move selection down one line</td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td align="center">(--)</td>
+<td><strong>Cut</strong> the current line, and shift following lines up one line (the line that was removed is placed into the insert buffer--use <code>P</code>/<code>U</code> to &quot;paste&quot;)</td>
+</tr>
+</tbody></table>
+<h2 id="character-editing-commands">Character editing commands</h2>
+<table>
+<thead>
+<tr>
+<th>Word</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>F</code></td>
+<td><strong>Search</strong> for the rest of the input buffer in the current line</td>
+</tr>
+<tr>
+<td><code>I</code></td>
+<td><strong>Insert</strong> the rest of the input buffer before the cursor</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td><strong>Delete</strong> the string previously found with <code>F</code></td>
+</tr>
+<tr>
+<td><code>D</code></td>
+<td><strong>Find and delete</strong> the rest of the input buffer (combination of <code>F</code> and <code>E</code>)</td>
+</tr>
+<tr>
+<td><code>R</code></td>
+<td><strong>Replace</strong> previously found text with the rest of the input buffer (combination of <code>E</code> and <code>I</code>)</td>
+</tr>
+<tr>
+<td><code>TILL</code></td>
+<td>Delete everything from the cursor, through the rest of the input buffer</td>
+</tr>
+</tbody></table>
+<h2 id="miscellaneous-commands">Miscellaneous commands</h2>
+<table>
+<thead>
+<tr>
+<th>Word</th>
+<th align="center">Stack</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>WIPE</code></td>
+<td align="center">(--)</td>
+<td><strong>Clear</strong> the current block</td>
+</tr>
+<tr>
+<td><code>FLUSH</code></td>
+<td align="center">(--)</td>
+<td><strong>Save</strong> buffers back to disk blocks, and free associated buffers</td>
+</tr>
+<tr>
+<td><code>COPY</code></td>
+<td align="center">(src dest --)</td>
+<td><strong>Copy block</strong> from one to another</td>
+</tr>
+<tr>
+<td><code>S</code></td>
+<td align="center">(n --)</td>
+<td><strong>Search</strong> for the rest of the input buffer in this block <em>and following blocks</em>, while the block number is lower than the specified limit</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td align="center">(b l --)</td>
+<td><strong>Copy current line</strong> to a new block and associated line</td>
+</tr>
+</tbody></table>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
