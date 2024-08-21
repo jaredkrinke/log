@@ -45,6 +45,35 @@ Interestingly, after coming to this conclusion, I read through the interview lin
 
 Agreed!
 
+### Improvement: running the current line
+For my workflow, I would usually do the following:
+
+1. Start a definition on a new line
+1. Compile the line
+1. Test the line
+1. Fix/refine the definition by `FORGET`-ing it and then go back to 1
+
+To my surprise, **there was no built-in support for the second step (compiling/running the current line)**. Blazin' Forth doesn't support the [EVALUATE](https://forth-standard.org/standard/core/EVALUATE) word, so I had to fashion my own version:
+
+```forth
+// RL RUNS THE CURRENT EDITOR LINE
+: LINE-INDEX R# @ C/L / ;
+: LINE>OFFSET C/L * ;
+: CURLINE SCR @ BLOCK LINE-INDEX LINE>OFFSET + ;
+: C>TIB TIB SWAP CMOVE ;
+: CL>TIB CURLINE C/L C>TIB C/L #TIB ! ;
+: RL CL>TIB 0 >IN ! INTERPRET ;
+```
+
+#### Explanation
+
+* `LINE-INDEX` (-- line) pushes the index of the currently selected line (0 through 15), using an internal word named `R#` that represents the offset into a block of the current cursor (note: this may be in the middle of a line)
+* `LINE>OFFSET` (line -- offset) pushes the offset of the beginning of the given line (`C/L` is an internal constant for the number of characters per line--64)
+* `CURLINE` (-- address) pushes the address of the current line, in the current block (whose index is in the variable [SCR](https://forth-standard.org/standard/block/SCR), and whose address is obtained via [BLOCK](https://forth-standard.org/standard/block/BLOCK))
+* `C>TIB` (bytes --) copies the given number of bytes to `TIB` (the location of the text input buffer)
+* `CL>TIB` (--) copies the current editor line into the text input buffer (and sets the size of the input, `#TIB` appropriately)
+* `RL` (--?) copies the current line into the text input buffer (see previous), sets the current input buffer index to 0, and runs the line using `INTERPRET`
+
 ## Thinking in Forth
 Despite making some progress in beginning to truly *see* Forth, I still have not reached Forth Enlightenment. Specifically, **I still don't know what to do when a function needs to operate on more than 2 or 3 inputs**.
 
