@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Stumbling along with Blazin&#39; Forth</title>
+<meta name="description" content="Here are some notes on my first attempt at using Blazin&#39; Forth on a Commodore 64." />
+<meta name="keywords" content="100-languages,programming-languages" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Stumbling along with Blazin' Forth",
+  "abstract": "Here are some notes on my first attempt at using Blazin' Forth on a Commodore 64.",
+  "keywords": "vintage-computing,100-languages,programming-languages",
+  "datePublished": "2024-08-20"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/vintage-computing/index.html">vintage-computing</a></li>
+<li><a href="../../posts/100-languages/index.html">100-languages</a></li>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/vintage-computing/blazin-forth.html">Stumbling along with Blazin&#39; Forth</a></h1>
+<p><time datetime="2024-08-20">August 20, 2024</time></p>
+</header>
+<p>After <a href="40-year-old-dev-environment.html">showing off my &quot;new&quot; Commodore 64</a> and posting a <a href="forth-line-editor.html">Forth editor &quot;quick reference&quot;</a>, it should be no surprise that (<a href="../programming-languages/100-languages.html">in pursuit of using 100 programming languages</a>) I sat down and, over the course of several evenings, solved a Project Euler problem using Blazin&#39; Forth (<a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p55.forth">code here</a>).</p>
+<p>Curious about using an old Forth, on old hardware? The rest of this post contains my notes, along with links to resources, in case you&#39;d like to give it a try.</p>
+<h1 id="blazin-forth">Blazin&#39; Forth</h1>
+<p>Blazin&#39; Forth, being 39 years old, doesn&#39;t have a GitHub repository. It doesn&#39;t even have a SourceForge project. In fact, I couldn&#39;t find a canonical web site. The best resources I can point to are:</p>
+<ul>
+<li><a href="https://www.lyonlabs.org/commodore/onrequest/collections.html">An excellent Web 1.0 page about programming languages on the Commodore 64</a> -- there&#39;s a line for Blazin&#39; Forth with links to disk images</li>
+<li><a href="https://jimlawless.net/blog/posts/blazin/">A retrospective interview with Blazin&#39; Forth&#39;s author, Scott Ballantyne</a></li>
+<li><a href="https://archive.org/details/transactor-magazines-v7-i05/page/n59/mode/2up">A contemporaneous article from Transactor Magazine about Blazin&#39; Forth, by its author</a></li>
+</ul>
+<p>Since I haven&#39;t found a convenient way to read .seq files on a modern computer, <a href="https://gist.github.com/jaredkrinke/d8a801274a9a66bb06a0e2c8778624ca">here is an ASCII dump of Blazin&#39; Forth&#39;s documentation</a> (it is copyright 1985 Scott Ballantyne, but &quot;distribution on a not for profit basis is encouraged&quot;).</p>
+<h2 id="running-blazin-forth">Running Blazin&#39; Forth</h2>
+<p>It&#39;s possible to run Blazin&#39; Forth in an emulator such as <a href="https://vice-emu.sourceforge.io/">VICE</a>, but I should note that I ran into some issues when loading and saving screens (saved code blocks). I&#39;m unsure if my issues are due to a bug or a simple mistake on my part, but I didn&#39;t run into any such issues on a real C64.</p>
+<h2 id="learning-forth">Learning Forth</h2>
+<p>I&#39;ve written a small amount of code in a smattering for Forths, but Blazin&#39; Forth really opened my eyes to Forth, for two reasons:</p>
+<ol>
+<li><strong>Blazin&#39; Forth&#39;s documentation (linked above) clarifies a lot of the &quot;whys&quot; of Forth</strong>, and also provides interesting sample code</li>
+<li><strong>Blazin&#39; Forth, as in classic Forth, brings its own operating system</strong>, in the sense that it provides its own durable storage implementation: 1 KB blocks (usable, with a built-in editor, for code <em>or</em> anything else you want)</li>
+</ol>
+<p>Note that, unless you&#39;re well versed in Forth, you&#39;ll probably want to have <a href="https://www.forth.com/starting-forth/">Starting Forth</a> handy while reading Blazin&#39; Forth&#39;s documentation.</p>
+<p>Aside: <strong>I also enjoyed Blazin&#39; Forth&#39;s documentation as a time capsule from the mid-80s</strong>. It mentions Compuserve, a Forth Interest Group, and the software even sports a dedication--something I&#39;m used to seeing in books, but which is curiously absent from most software (modern software, at least).</p>
+<h2 id="block-based-editing----not-my-favorite">Block-based editing -- not my favorite</h2>
+<p>N.B. &quot;Block-based&quot; as in <strong>you&#39;re writing directly to 1 KB blocks on disk</strong>--<em>not</em> as in dragging around blocks in a GUI to create programs (a la <a href="https://scratch.mit.edu/">Scratch</a>).</p>
+<p>This was my first experience using both a line-based interactive editor and with Forth-style block/screen-based programming. <strong>Essentially, you are given ~130 one kilobyte blocks, with each being divided into 16 lines of 64 characters</strong>. The upside is that you don&#39;t need a file system (and Forth can provide a line-based editor). The downside is that now you have to ensure your lines aren&#39;t too long and that there aren&#39;t too many of them (lest you need to spill code onto a subsequent block).</p>
+<p>More irritatingly, <strong>the Commodore 64 provides a 40 column wide display</strong> (with no status bar), so now it&#39;s not even obvious when a 64 character line is getting too long. And even if a line is less than 64 characters, if it&#39;s at least 40 characters, it will wrap when being printed out, potentially causing the first couple of lines to scroll off screen.</p>
+<p>Overall, I found line-based editing to be a decent experience (no more annoying than having to always specify line numbers in Commodore BASIC). Using blocks instead of a file system was cute, but unpleasant--especially due to the mismatch between display width and line width (aside: I wonder if a Commodore 128&#39;s 80-column mode would work with Blazin&#39; Forth?).</p>
+<p>Interestingly, after coming to this conclusion, I read through the interview linked above, and found that <strong>Blazin&#39; Forth&#39;s author actually thinks that files would have been a better choice</strong>:</p>
+<blockquote>
+<p>Today I would probably not implement the Forth block system, I’d use files instead. I never liked that, to tell the truth. It made a certain sense with the 64 disk drives, and the code I wrote is optimized for the rotational speed of those things, but I think it leads to better programming to just store your code in a file with a name.</p>
+</blockquote>
+<p>Agreed!</p>
+<h2 id="thinking-in-forth">Thinking in Forth</h2>
+<p>Despite making some progress in beginning to truly <em>see</em> Forth, I still have not reached Forth Enlightenment. Specifically, <strong>I still don&#39;t know what to do when a function needs to operate on more than 2 or 3 inputs</strong>.</p>
+<p>As an example, I have a word (function) for adding two &quot;big integer&quot; values (represented as arrays of decimal digits, least significant digit first), named <code>N+</code>. The stack annotation for that function is <code>(a1 a2 -- )</code>, meaning it takes the address of two numbers, adds the two numbers, and writes the result into the second number, something like <code>a2 = a1 + a2</code>.</p>
+<p>Internally, this function loops over the digits and adds them, including any carry from the previous digit. The problem I ran into is that <strong>now I&#39;ve got two addresses and a carry to worry about. If I put all of those on the stack, then I feel like I&#39;m constantly shuffling items around</strong> and trying to avoid letting the stack get too deep (reaching down beyond 3 items gets tricky).</p>
+<p><strong>Ideally, I&#39;d like to assign names to the elements on the stack and then just be able to copy them to the top of the stack using those names</strong> -- something like:</p>
+<pre><code class="language-forth">: n+ ( <span class="hljs-built_in">a1</span> <span class="hljs-built_in">a2</span> -- ) <span class="hljs-number">0</span> ( carry ) <span class="hljs-built_in">a1</span> <span class="hljs-built_in">a2</span> + + ( to <span class="hljs-keyword">add</span> the carry, <span class="hljs-built_in">a1</span>, <span class="hljs-keyword">and</span> <span class="hljs-built_in">a2</span> together )
+</code></pre>
+<p>I think newer Forths support syntax like this, but back in the days of Blazin&#39; Forth, the only solutions I see are to either:</p>
+<ul>
+<li>Be smarter about the stack... somehow</li>
+<li>Throw some of the values into variables!</li>
+</ul>
+<p>I went with the second option and just used a variable for the carry. This obviously wouldn&#39;t work in any case where a global variable wouldn&#39;t suffice (e.g. any function that can appear on the call stack multiple times). <strong>But maybe that&#39;s the point of Forth? I know this function will never nest, so perhaps a global is ok?</strong> Clearly, I will need to meditate on this.</p>
+<h2 id="but-theres-much-more">But there&#39;s much more</h2>
+<p>Of course, I only barely scratched the surface of what Blazin&#39; Forth is capable of. There are affordances for turtle graphics, sound generation via the SID chip, device access, etc. It feels like a complete and very capable system! One day, I&#39;d like to try and write a game entirely in Blazin&#39; Forth--though I doubt I&#39;ll ever actually get around to it.</p>
+<p>Regardless, that&#39;s enough rambling. Hopefully I&#39;ve piqued your interest enough that you&#39;ll give Blazin&#39; Forth a try--it&#39;s well worth a look, especially if the Commodore 64 holds a special place in your heart or you have always been curious about Forth.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
