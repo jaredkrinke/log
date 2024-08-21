@@ -69,6 +69,32 @@
 <p>Today I would probably not implement the Forth block system, I’d use files instead. I never liked that, to tell the truth. It made a certain sense with the 64 disk drives, and the code I wrote is optimized for the rotational speed of those things, but I think it leads to better programming to just store your code in a file with a name.</p>
 </blockquote>
 <p>Agreed!</p>
+<h3 id="improvement-running-the-current-line">Improvement: running the current line</h3>
+<p>For my workflow, I would usually do the following:</p>
+<ol>
+<li>Start a definition on a new line</li>
+<li>Compile the line</li>
+<li>Test the line</li>
+<li>Fix/refine the definition by <code>FORGET</code>-ing it and then go back to 1</li>
+</ol>
+<p>To my surprise, <strong>there was no built-in support for the second step (compiling/running the current line)</strong>. Blazin&#39; Forth doesn&#39;t support the <a href="https://forth-standard.org/standard/core/EVALUATE">EVALUATE</a> word, so I had to fashion my own version:</p>
+<pre><code class="language-forth">// RL RUNS THE <span class="hljs-keyword">CURRENT</span> EDITOR <span class="hljs-type">LINE</span>
+: <span class="hljs-type">LINE</span>-<span class="hljs-keyword">INDEX</span> R# @ C/L / ;
+: <span class="hljs-type">LINE</span>&gt;<span class="hljs-keyword">OFFSET</span> C/L * ;
+: CURLINE SCR @ BLOCK <span class="hljs-type">LINE</span>-<span class="hljs-keyword">INDEX</span> <span class="hljs-type">LINE</span>&gt;<span class="hljs-keyword">OFFSET</span> + ;
+: C&gt;TIB TIB SWAP CMOVE ;
+: CL&gt;TIB CURLINE C/L C&gt;TIB C/L #TIB ! ;
+: RL CL&gt;TIB <span class="hljs-number">0</span> &gt;<span class="hljs-keyword">IN</span> ! INTERPRET ;
+</code></pre>
+<h4 id="explanation">Explanation</h4>
+<ul>
+<li><code>LINE-INDEX</code> (-- line) pushes the index of the currently selected line (0 through 15), using an internal word named <code>R#</code> that represents the offset into a block of the current cursor (note: this may be in the middle of a line)</li>
+<li><code>LINE&gt;OFFSET</code> (line -- offset) pushes the offset of the beginning of the given line (<code>C/L</code> is an internal constant for the number of characters per line--64)</li>
+<li><code>CURLINE</code> (-- address) pushes the address of the current line, in the current block (whose index is in the variable <a href="https://forth-standard.org/standard/block/SCR">SCR</a>, and whose address is obtained via <a href="https://forth-standard.org/standard/block/BLOCK">BLOCK</a>)</li>
+<li><code>C&gt;TIB</code> (bytes --) copies the given number of bytes to <code>TIB</code> (the location of the text input buffer)</li>
+<li><code>CL&gt;TIB</code> (--) copies the current editor line into the text input buffer (and sets the size of the input, <code>#TIB</code> appropriately)</li>
+<li><code>RL</code> (--?) copies the current line into the text input buffer (see previous), sets the current input buffer index to 0, and runs the line using <code>INTERPRET</code></li>
+</ul>
 <h2 id="thinking-in-forth">Thinking in Forth</h2>
 <p>Despite making some progress in beginning to truly <em>see</em> Forth, I still have not reached Forth Enlightenment. Specifically, <strong>I still don&#39;t know what to do when a function needs to operate on more than 2 or 3 inputs</strong>.</p>
 <p>As an example, I have a word (function) for adding two &quot;big integer&quot; values (represented as arrays of decimal digits, least significant digit first), named <code>N+</code>. The stack annotation for that function is <code>(a1 a2 -- )</code>, meaning it takes the address of two numbers, adds the two numbers, and writes the result into the second number, something like <code>a2 = a1 + a2</code>.</p>

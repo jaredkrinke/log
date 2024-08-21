@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-08-21T05:01:14.738Z</updated>
+<updated>2024-08-21T18:29:59.666Z</updated>
 
 <entry>
 <title>Stumbling along with Blazin&apos; Forth</title>
@@ -45,6 +45,32 @@
 &lt;p&gt;Today I would probably not implement the Forth block system, I’d use files instead. I never liked that, to tell the truth. It made a certain sense with the 64 disk drives, and the code I wrote is optimized for the rotational speed of those things, but I think it leads to better programming to just store your code in a file with a name.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Agreed!&lt;/p&gt;
+&lt;h3 id=&quot;improvement-running-the-current-line&quot;&gt;Improvement: running the current line&lt;/h3&gt;
+&lt;p&gt;For my workflow, I would usually do the following:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Start a definition on a new line&lt;/li&gt;
+&lt;li&gt;Compile the line&lt;/li&gt;
+&lt;li&gt;Test the line&lt;/li&gt;
+&lt;li&gt;Fix/refine the definition by &lt;code&gt;FORGET&lt;/code&gt;-ing it and then go back to 1&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;To my surprise, &lt;strong&gt;there was no built-in support for the second step (compiling/running the current line)&lt;/strong&gt;. Blazin&amp;#39; Forth doesn&amp;#39;t support the &lt;a href=&quot;https://forth-standard.org/standard/core/EVALUATE&quot;&gt;EVALUATE&lt;/a&gt; word, so I had to fashion my own version:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-forth&quot;&gt;// RL RUNS THE &lt;span class=&quot;hljs-keyword&quot;&gt;CURRENT&lt;/span&gt; EDITOR &lt;span class=&quot;hljs-type&quot;&gt;LINE&lt;/span&gt;
+: &lt;span class=&quot;hljs-type&quot;&gt;LINE&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;INDEX&lt;/span&gt; R# @ C/L / ;
+: &lt;span class=&quot;hljs-type&quot;&gt;LINE&lt;/span&gt;&amp;gt;&lt;span class=&quot;hljs-keyword&quot;&gt;OFFSET&lt;/span&gt; C/L * ;
+: CURLINE SCR @ BLOCK &lt;span class=&quot;hljs-type&quot;&gt;LINE&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;INDEX&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;LINE&lt;/span&gt;&amp;gt;&lt;span class=&quot;hljs-keyword&quot;&gt;OFFSET&lt;/span&gt; + ;
+: C&amp;gt;TIB TIB SWAP CMOVE ;
+: CL&amp;gt;TIB CURLINE C/L C&amp;gt;TIB C/L #TIB ! ;
+: RL CL&amp;gt;TIB &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &amp;gt;&lt;span class=&quot;hljs-keyword&quot;&gt;IN&lt;/span&gt; ! INTERPRET ;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;LINE-INDEX&lt;/code&gt; (-- line) pushes the index of the currently selected line (0 through 15), using an internal word named &lt;code&gt;R#&lt;/code&gt; that represents the offset into a block of the current cursor (note: this may be in the middle of a line)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LINE&amp;gt;OFFSET&lt;/code&gt; (line -- offset) pushes the offset of the beginning of the given line (&lt;code&gt;C/L&lt;/code&gt; is an internal constant for the number of characters per line--64)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CURLINE&lt;/code&gt; (-- address) pushes the address of the current line, in the current block (whose index is in the variable &lt;a href=&quot;https://forth-standard.org/standard/block/SCR&quot;&gt;SCR&lt;/a&gt;, and whose address is obtained via &lt;a href=&quot;https://forth-standard.org/standard/block/BLOCK&quot;&gt;BLOCK&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C&amp;gt;TIB&lt;/code&gt; (bytes --) copies the given number of bytes to &lt;code&gt;TIB&lt;/code&gt; (the location of the text input buffer)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CL&amp;gt;TIB&lt;/code&gt; (--) copies the current editor line into the text input buffer (and sets the size of the input, &lt;code&gt;#TIB&lt;/code&gt; appropriately)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RL&lt;/code&gt; (--?) copies the current line into the text input buffer (see previous), sets the current input buffer index to 0, and runs the line using &lt;code&gt;INTERPRET&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&quot;thinking-in-forth&quot;&gt;Thinking in Forth&lt;/h2&gt;
 &lt;p&gt;Despite making some progress in beginning to truly &lt;em&gt;see&lt;/em&gt; Forth, I still have not reached Forth Enlightenment. Specifically, &lt;strong&gt;I still don&amp;#39;t know what to do when a function needs to operate on more than 2 or 3 inputs&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;As an example, I have a word (function) for adding two &amp;quot;big integer&amp;quot; values (represented as arrays of decimal digits, least significant digit first), named &lt;code&gt;N+&lt;/code&gt;. The stack annotation for that function is &lt;code&gt;(a1 a2 -- )&lt;/code&gt;, meaning it takes the address of two numbers, adds the two numbers, and writes the result into the second number, something like &lt;code&gt;a2 = a1 + a2&lt;/code&gt;.&lt;/p&gt;
@@ -295,7 +321,7 @@
 &lt;ul&gt;
 &lt;li&gt;I like the idea of a portable language&lt;/li&gt;
 &lt;li&gt;But I didn&amp;#39;t like the Java-like levels of ceremonial keywords/classes&lt;/li&gt;
-&lt;li&gt;Having said that, I prefer Haxe&amp;#39;s familiar syntax and conveniences over something mroe minimal, like &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-9.html#wax&quot;&gt;wax&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Having said that, I prefer Haxe&amp;#39;s familiar syntax and conveniences over something more minimal, like &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-9.html#wax&quot;&gt;wax&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;k&quot;&gt;K&lt;/h2&gt;
 &lt;ul&gt;
