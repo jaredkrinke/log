@@ -2,6 +2,7 @@
 title: Blazin' Forth/Starting Forth editor quick reference
 description: For my own reference, this is a quick reference table for vintage line/block-based Forth editors.
 date: 2024-08-13
+keywords: [commodore-64]
 ---
 **Blazin' Forth** is an implementation of Forth for the Commodore 64, published in 1985 by Scott Ballantyne (for free). Its built-in editor is block- and line-based, and the editor is modeled after one described in the first edition of [Starting Forth](https://www.forth.com/starting-forth/).
 

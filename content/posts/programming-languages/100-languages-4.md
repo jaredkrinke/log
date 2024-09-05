@@ -2,7 +2,7 @@
 title: 11 programming languages in one week
 description: I spent entirely too much time playing with (mostly) new programming languages this week.
 date: 2024-03-31
-keywords: [100-languages,webassembly]
+keywords: [100-languages,webassembly,commodore-64]
 ---
 I'm [trying to write code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html). I just finished week 2, and--somehow--I'm ahead of schedule.
 

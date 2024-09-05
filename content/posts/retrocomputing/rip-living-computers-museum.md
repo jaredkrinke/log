@@ -2,7 +2,7 @@
 title: R.I.P. The Living Computers Museum
 description: My favorite museum in the entire world is no more.
 date: 2024-06-30
-keywords: [vintage-computing]
+keywords: [vintage-computing,commodore-64]
 ---
 Given my interest in [old](amiga-day-project-euler.md), [slow](../programming-languages/minimal-dev-env-3.md), and [minimalist](../programming-languages/minimal-dev-env.md) computers, it's unsurprising that I thoroughly enjoyed the [Living Computers Museum](https://en.wikipedia.org/wiki/Living_Computers:_Museum_%2B_Labs). Not only I was able to relive my childhood of playing Marble Madness on a (real) [Commodore 64](https://en.wikipedia.org/wiki/Commodore_64), it was the backdrop to my first experience with the vaunted [Amiga](https://en.wikipedia.org/wiki/Amiga) platform. Astoundingly, it was also possible to toy around with ancient room-sized computers of yore.
 

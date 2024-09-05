@@ -2,6 +2,7 @@
 title: My new 40-year-old development environment
 description: I'm going to find out what it was like to develop software in the 8-bit era.
 date: 2024-08-12
+keywords: [commodore-64]
 ---
 Lately, my computing interests have revolved around the following:
 

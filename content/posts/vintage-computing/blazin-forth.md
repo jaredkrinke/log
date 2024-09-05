@@ -2,7 +2,7 @@
 title: Stumbling along with Blazin' Forth
 description: Here are some notes on my first attempt at using Blazin' Forth on a Commodore 64.
 date: 2024-08-20
-keywords: [100-languages,programming-languages]
+keywords: [100-languages,programming-languages,commodore-64]
 ---
 After [showing off my "new" Commodore 64](40-year-old-dev-environment.md) and posting a [Forth editor "quick reference"](forth-line-editor.md), it should be no surprise that ([in pursuit of using 100 programming languages](../programming-languages/100-languages.md)) I sat down and, over the course of several evenings, solved a Project Euler problem using Blazin' Forth ([code here](https://github.com/jaredkrinke/100-languages/blob/main/src/p55.forth)).
 

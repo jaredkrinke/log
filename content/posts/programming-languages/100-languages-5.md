@@ -2,7 +2,7 @@
 title: One quarter of the way to 100 programming languages
 description: "Or: PostScript is a programming language!?"
 date: 2024-04-08
-keywords: [100-languages]
+keywords: [100-languages,commodore-64]
 ---
 I'm **25% of the way** to [having written code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html).
 
