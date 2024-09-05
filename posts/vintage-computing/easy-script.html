@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Easy Script (Commodore 64) quick reference</title>
+<meta name="description" content="Here&#39;s a quick reference page for Easy Script on the Commodore 64. Because who wouldn&#39;t need this?" />
+<meta name="keywords" content="commodore-64" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Easy Script (Commodore 64) quick reference",
+  "abstract": "Here's a quick reference page for Easy Script on the Commodore 64. Because who wouldn't need this?",
+  "keywords": "vintage-computing,commodore-64",
+  "datePublished": "2024-09-05"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/vintage-computing/index.html">vintage-computing</a></li>
+<li><a href="../../posts/commodore-64/index.html">commodore-64</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/vintage-computing/easy-script.html">Easy Script (Commodore 64) quick reference</a></h1>
+<p><time datetime="2024-09-05">September 5, 2024</time></p>
+</header>
+<p><a href="https://www.c64-wiki.com/wiki/Easy_Script">Easy Script</a> is a word processor for the Commodore 64 that was apparently fairly popular. As a modern computer user, I found it fairly difficult to use. The only comprehensive documentation I could find was <a href="https://archive.org/download/retrokit-manuals/c64/c64-original.zip/Easy%20Script%2064%20%28en%29.pdf">the original manual (on The Internet Archive)</a>.</p>
+<p>Annoyingly, I couldn&#39;t find any sort of <em>useful</em> &quot;quick reference&quot; for Easy Script. Humorously, there is an <a href="https://commodore.software/downloads/download/211-application-manuals/13492-easy-script-quick-reference-card">official Easy Script Quick Reference Card</a>, but it omits salient details, such as <em>how to save documents</em>. So I made my own documentation.</p>
+<p><strong>The rest of this document includes quick reference for Easy Script on the Commodore 64</strong> (also available <a href="https://gist.github.com/jaredkrinke/f77c88449d4616c221bcf7b09be86bbc">as a gist</a>). Note: this is <em>not</em> a tutorial; see the original manual for a tutorial.</p>
+<h1 id="keyboard-shortcuts">Keyboard shortcuts</h1>
+<table>
+<thead>
+<tr>
+<th align="center">Key(s)</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Ctrl+W</td>
+<td>Move to next word</td>
+</tr>
+<tr>
+<td align="center">Ctrl+&larr;</td>
+<td>Move to previous word</td>
+</tr>
+</tbody></table>
+<h1 id="f1-commands">F1 commands</h1>
+<table>
+<thead>
+<tr>
+<th align="center">Key</th>
+<th>Descriptions</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">F</td>
+<td>Save (F2 to scan within document for filename in quotes)</td>
+</tr>
+<tr>
+<td align="center">L</td>
+<td>Load</td>
+</tr>
+<tr>
+<td align="center">O</td>
+<td>Output (see <a href="#printing">Printing</a>)</td>
+</tr>
+<tr>
+<td align="center">I</td>
+<td>Insert mode (instead of the annoying default &quot;overwrite&quot; mode)</td>
+</tr>
+<tr>
+<td align="center">E</td>
+<td>Erase (S for sentence, P for paragraph, R for rest, A for all)</td>
+</tr>
+<tr>
+<td align="center">Space bar</td>
+<td>Go to next screen</td>
+</tr>
+<tr>
+<td align="center">Shift+space bar</td>
+<td>Go to previous screen</td>
+</tr>
+<tr>
+<td align="center">G</td>
+<td>&quot;Go&quot;</td>
+</tr>
+<tr>
+<td align="center">S</td>
+<td>Search</td>
+</tr>
+<tr>
+<td align="center">R</td>
+<td>Select a range of text (Enter to copy/commit) -- then one of the next two</td>
+</tr>
+<tr>
+<td align="center">X</td>
+<td>Move (cut+paste)</td>
+</tr>
+<tr>
+<td align="center">A</td>
+<td>Copy</td>
+</tr>
+<tr>
+<td align="center"><code>[</code></td>
+<td>Start underline (close to stop)</td>
+</tr>
+<tr>
+<td align="center"><code>(</code></td>
+<td>Start bold (close to stop)</td>
+</tr>
+<tr>
+<td align="center"><code>-</code></td>
+<td>&quot;Soft&quot; hyphen</td>
+</tr>
+<tr>
+<td align="center">`</td>
+<td>Superscript (single character)</td>
+</tr>
+<tr>
+<td align="center"><code>,</code></td>
+<td>Subscript (single character)</td>
+</tr>
+<tr>
+<td align="center">Run/stop</td>
+<td>Reset</td>
+</tr>
+</tbody></table>
+<h1 id="format-instructions-f3">Format instructions (F3)</h1>
+<p>Press F3 to get a color-inverted asterisk, indicating a line that won&#39;t be part of the document content. Note that the first comment with a filename in quotes specifies the desired file name of the document (See F1, O, F2 above).</p>
+<table>
+<thead>
+<tr>
+<th>Syntax</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>nb</code></td>
+<td>Comment</td>
+</tr>
+<tr>
+<td><code>lm#:rm#:</code></td>
+<td>Set left margin to # columns, and right margin similarly (set to 1 and 40 for proofreading in &quot;video&quot; mode on the screen)</td>
+</tr>
+<tr>
+<td><code>sp1</code> or <code>sp2</code></td>
+<td>For extra line spacing</td>
+</tr>
+<tr>
+<td><code>ju1</code></td>
+<td>Turn on justification, <code>ju0</code> to turn off</td>
+</tr>
+<tr>
+<td><code>cn1</code></td>
+<td>Turn on centering, <code>cn0</code> to turn off</td>
+</tr>
+<tr>
+<td><code>ps</code></td>
+<td>Pause (while printing)</td>
+</tr>
+</tbody></table>
+<h1 id="printing">Printing</h1>
+<p>F1, O; then V for video/display and P for printer.</p>
+<ul>
+<li>Precede V/P with C for continuous printing</li>
+<li>Toggle continuous printing with Shift+P</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">C</td>
+<td>Continue to next page</td>
+</tr>
+<tr>
+<td align="center">V</td>
+<td>Preview next page/switch to video output</td>
+</tr>
+<tr>
+<td align="center">P</td>
+<td>Switch to print output</td>
+</tr>
+<tr>
+<td align="center">Run/stop</td>
+<td>Stop printing/previewing</td>
+</tr>
+</tbody></table>
+<h1 id="files">Files</h1>
+<p>Assuming drive #8, hit F4, and then:</p>
+<ul>
+<li><code>+8</code> Load directory, then F1, L, F2 to list first file, F2 again for next file, etc.</li>
+</ul>
+<h1 id="notes">Notes</h1>
+<ul>
+<li>Default to 80 columns wide for printing</li>
+<li>Default to 66 lines of text per page</li>
+<li>Preview with F1, O, V -- then run/stop to end preview, cursor keys to move left/right, and Commodore key to scroll</li>
+<li>F5 for caps lock</li>
+</ul>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

@@ -7,8 +7,193 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-08-30T14:47:03.334Z</updated>
+<updated>2024-09-05T21:42:10.350Z</updated>
 
+<entry>
+<title>Easy Script (Commodore 64) quick reference</title>
+<id>https://log.schemescape.com/posts/vintage-computing/easy-script.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/vintage-computing/easy-script.html"/>
+<updated>2024-09-05T00:00:00.000Z</updated>
+<summary type="text">Here&apos;s a quick reference page for Easy Script on the Commodore 64. Because who wouldn&apos;t need this?</summary>
+<content type="html">&lt;p&gt;&lt;a href=&quot;https://www.c64-wiki.com/wiki/Easy_Script&quot;&gt;Easy Script&lt;/a&gt; is a word processor for the Commodore 64 that was apparently fairly popular. As a modern computer user, I found it fairly difficult to use. The only comprehensive documentation I could find was &lt;a href=&quot;https://archive.org/download/retrokit-manuals/c64/c64-original.zip/Easy%20Script%2064%20%28en%29.pdf&quot;&gt;the original manual (on The Internet Archive)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Annoyingly, I couldn&amp;#39;t find any sort of &lt;em&gt;useful&lt;/em&gt; &amp;quot;quick reference&amp;quot; for Easy Script. Humorously, there is an &lt;a href=&quot;https://commodore.software/downloads/download/211-application-manuals/13492-easy-script-quick-reference-card&quot;&gt;official Easy Script Quick Reference Card&lt;/a&gt;, but it omits salient details, such as &lt;em&gt;how to save documents&lt;/em&gt;. So I made my own documentation.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The rest of this document includes quick reference for Easy Script on the Commodore 64&lt;/strong&gt; (also available &lt;a href=&quot;https://gist.github.com/jaredkrinke/f77c88449d4616c221bcf7b09be86bbc&quot;&gt;as a gist&lt;/a&gt;). Note: this is &lt;em&gt;not&lt;/em&gt; a tutorial; see the original manual for a tutorial.&lt;/p&gt;
+&lt;h1 id=&quot;keyboard-shortcuts&quot;&gt;Keyboard shortcuts&lt;/h1&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;center&quot;&gt;Key(s)&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Ctrl+W&lt;/td&gt;
+&lt;td&gt;Move to next word&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Ctrl+&amp;larr;&lt;/td&gt;
+&lt;td&gt;Move to previous word&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;h1 id=&quot;f1-commands&quot;&gt;F1 commands&lt;/h1&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;center&quot;&gt;Key&lt;/th&gt;
+&lt;th&gt;Descriptions&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;F&lt;/td&gt;
+&lt;td&gt;Save (F2 to scan within document for filename in quotes)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;L&lt;/td&gt;
+&lt;td&gt;Load&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;O&lt;/td&gt;
+&lt;td&gt;Output (see &lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/#printing&quot;&gt;Printing&lt;/a&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;I&lt;/td&gt;
+&lt;td&gt;Insert mode (instead of the annoying default &amp;quot;overwrite&amp;quot; mode)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;E&lt;/td&gt;
+&lt;td&gt;Erase (S for sentence, P for paragraph, R for rest, A for all)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Space bar&lt;/td&gt;
+&lt;td&gt;Go to next screen&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Shift+space bar&lt;/td&gt;
+&lt;td&gt;Go to previous screen&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;G&lt;/td&gt;
+&lt;td&gt;&amp;quot;Go&amp;quot;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;S&lt;/td&gt;
+&lt;td&gt;Search&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;R&lt;/td&gt;
+&lt;td&gt;Select a range of text (Enter to copy/commit) -- then one of the next two&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;X&lt;/td&gt;
+&lt;td&gt;Move (cut+paste)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;A&lt;/td&gt;
+&lt;td&gt;Copy&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;&lt;code&gt;[&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Start underline (close to stop)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;&lt;code&gt;(&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Start bold (close to stop)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;&lt;code&gt;-&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&amp;quot;Soft&amp;quot; hyphen&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;`&lt;/td&gt;
+&lt;td&gt;Superscript (single character)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;&lt;code&gt;,&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Subscript (single character)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Run/stop&lt;/td&gt;
+&lt;td&gt;Reset&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;h1 id=&quot;format-instructions-f3&quot;&gt;Format instructions (F3)&lt;/h1&gt;
+&lt;p&gt;Press F3 to get a color-inverted asterisk, indicating a line that won&amp;#39;t be part of the document content. Note that the first comment with a filename in quotes specifies the desired file name of the document (See F1, O, F2 above).&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Syntax&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;nb&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Comment&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;lm#:rm#:&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Set left margin to # columns, and right margin similarly (set to 1 and 40 for proofreading in &amp;quot;video&amp;quot; mode on the screen)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;sp1&lt;/code&gt; or &lt;code&gt;sp2&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;For extra line spacing&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;ju1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Turn on justification, &lt;code&gt;ju0&lt;/code&gt; to turn off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;cn1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Turn on centering, &lt;code&gt;cn0&lt;/code&gt; to turn off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;ps&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Pause (while printing)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;h1 id=&quot;printing&quot;&gt;Printing&lt;/h1&gt;
+&lt;p&gt;F1, O; then V for video/display and P for printer.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Precede V/P with C for continuous printing&lt;/li&gt;
+&lt;li&gt;Toggle continuous printing with Shift+P&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;center&quot;&gt;Key&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;C&lt;/td&gt;
+&lt;td&gt;Continue to next page&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;V&lt;/td&gt;
+&lt;td&gt;Preview next page/switch to video output&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;P&lt;/td&gt;
+&lt;td&gt;Switch to print output&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Run/stop&lt;/td&gt;
+&lt;td&gt;Stop printing/previewing&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;h1 id=&quot;files&quot;&gt;Files&lt;/h1&gt;
+&lt;p&gt;Assuming drive #8, hit F4, and then:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;+8&lt;/code&gt; Load directory, then F1, L, F2 to list first file, F2 again for next file, etc.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Default to 80 columns wide for printing&lt;/li&gt;
+&lt;li&gt;Default to 66 lines of text per page&lt;/li&gt;
+&lt;li&gt;Preview with F1, O, V -- then run/stop to end preview, cursor keys to move left/right, and Commodore key to scroll&lt;/li&gt;
+&lt;li&gt;F5 for caps lock&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Stumbling along with Blazin&apos; Forth</title>
 <id>https://log.schemescape.com/posts/vintage-computing/blazin-forth.html</id>
@@ -294,43 +479,6 @@
 &lt;p&gt;Back in 2020, I was saddened to hear that the museum had &lt;a href=&quot;https://seattlecollegian.com/paul-allens-living-computers-museum-remains-closed-after-years-despite-lifted-covid-restrictions/&quot;&gt;closed its doors&lt;/a&gt;, after the death of its benefactor, Paul Allen. Generously, they left many machines (and even a BBS) accessible over telnet. &lt;strong&gt;In fact, I had logged into the LCM telnet interface roughly one week ago.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;But recently it all went dark. The Living Computers Museum has &lt;a href=&quot;https://hackaday.com/2024/06/25/paul-allens-living-computers-museum-and-labs-to-be-auctioned/&quot;&gt;officially shut down for good and its artifacts are to be auctioned off&lt;/a&gt;. The telnet service, and even the museum&amp;#39;s web site, have all been unceremoniously taken offline. Donated hardware will be sent to the highest bidder (or, worst case, possibly the dump). &lt;strong&gt;It&amp;#39;s a sad day for vintage computing.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;I guess, for now, I will plan on continuing to run my own vintage hardware museum, however inefficient.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>100 programming languages in... more than 100 days</title>
-<id>https://log.schemescape.com/posts/programming-languages/100-languages-10.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-10.html"/>
-<updated>2024-06-24T00:00:00.000Z</updated>
-<summary type="text">I made it about half of the way to my goal of writing code in 100 different programming languages in 100 days.</summary>
-<content type="html">&lt;p&gt;In March, I set a lofty goal to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;solve 100 Project Euler problems using 100 different programming languages, all within 100 days&lt;/a&gt;. Slightly over 100 days later, I&amp;#39;ll admit that &lt;strong&gt;I only made it &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-9.html&quot;&gt;slightly beyond&lt;/a&gt; &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/50-different-languages.html&quot;&gt;50&lt;/a&gt;&lt;/strong&gt;, although that&amp;#39;s not too bad considering that I quietly set this project aside a few weeks ago.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;I&amp;#39;m not abandoning this effort, but I am definitely taking a break from it.&lt;/strong&gt; And I&amp;#39;m not setting it aside because it isn&amp;#39;t fun (though I do wonder if it&amp;#39;s &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../misc/my-hobby-is-bikeshedding.html&quot;&gt;a good use of my time&lt;/a&gt;). At the moment, I just have more important and interesting things to attend to.&lt;/p&gt;
-&lt;h1 id=&quot;conquests&quot;&gt;Conquests&lt;/h1&gt;
-&lt;p&gt;For the record, I&amp;#39;d like to state that, so far, &lt;strong&gt;I&amp;#39;m most proud of the following solutions&lt;/strong&gt;:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p1.sic1&quot;&gt;SIC-1 Assembly Language&lt;/a&gt;, because it was hard to cram into 253 bytes&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p2.lisp&quot;&gt;SectorLISP&lt;/a&gt;, because I had to implement arithmetic &lt;em&gt;twice&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p17.v&quot;&gt;Verilog&lt;/a&gt;, because hardware&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p19.exa&quot;&gt;EXA&lt;/a&gt;, because &lt;a href=&quot;https://www.zachtronics.com/exapunks/&quot;&gt;Exapunks&lt;/a&gt; is a great game&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p26.asm&quot;&gt;x86 boot sector&lt;/a&gt;, because I didn&amp;#39;t want SectorLISP and SectorForth to have all the fun&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p34-scaled.png&quot;&gt;Piet&lt;/a&gt;, because coding in 2D, using pixels, was hard&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p54.ts&quot;&gt;TypeScript&amp;#39;s type system&lt;/a&gt;, because I wanted to see if it was possible (see &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/extreme-typing-in-typescript.html&quot;&gt;blog post&lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;and-a-few-stragglers&quot;&gt;And a few stragglers&lt;/h1&gt;
-&lt;p&gt;With all that said, there are a couple of languages I haven&amp;#39;t yet mentioned on here:&lt;/p&gt;
-&lt;h2 id=&quot;haxe&quot;&gt;Haxe&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;I like the idea of a portable language&lt;/li&gt;
-&lt;li&gt;But I didn&amp;#39;t like the Java-like levels of ceremonial keywords/classes&lt;/li&gt;
-&lt;li&gt;Having said that, I prefer Haxe&amp;#39;s familiar syntax and conveniences over something more minimal, like &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-9.html#wax&quot;&gt;wax&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;k&quot;&gt;K&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/JohnEarnest/ok&quot;&gt;oK&lt;/a&gt; is literally the only version of K I could even find&lt;/li&gt;
-&lt;li&gt;oK also only had the only detailed documentation of K that I could find&lt;/li&gt;
-&lt;li&gt;I&amp;#39;m compelled to contrast this with &lt;a href=&quot;https://en.wikipedia.org/wiki/J_(programming_language)&quot;&gt;J&lt;/a&gt; (another array language), which is open source and has plenty of documentation&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;thats-all&quot;&gt;That&amp;#39;s all&lt;/h1&gt;
-&lt;p&gt;That was a short update, but it feels good to tie up those loose ends.&lt;/p&gt;
 </content>
 </entry>
 </feed>
