@@ -7,8 +7,162 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-09-05T21:42:10.350Z</updated>
+<updated>2024-11-01T04:37:47.361Z</updated>
 
+<entry>
+<title>Three quarters of the way to 100 programming languages</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-12.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-12.html"/>
+<updated>2024-10-31T00:00:00.000Z</updated>
+<summary type="text">Just some more notes on programming languages. And also my first failure!</summary>
+<content type="html">&lt;p&gt;I recently resumed &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;solving the first 100 Project Euler problems using 100 different programming languages&lt;/a&gt;. For reference: &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;here is code for all my solutions so far&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Of note, &lt;strong&gt;I failed to solve a problem using Micro-Lisp on the Commodore 64&lt;/strong&gt;. I think it would have been &lt;em&gt;possible&lt;/em&gt; to solve the problem (even despite the lack of cons cell mutation), but the Commodore 64 keyboard design can lead to two different space characters being emitted when you hit the space bar, depending on timing, and Micro-Lisp only handled one of those characters. The result is that I&amp;#39;d have code that looked correct, but wouldn&amp;#39;t compile. It was, frankly, too annoying for me to continue.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I also finally decided to solve a problem in C&lt;/strong&gt;. On the surface, this might seem pointless since I already know C, but &lt;strong&gt;it gave me an excuse to try calling C code from Zig&lt;/strong&gt; (a language I hadn&amp;#39;t tried before). Overall, the Zig toolchain is extremely impressive! It&amp;#39;s probably the most convenient C (and C++) compiler in existence. And Zig seemed fine, too.&lt;/p&gt;
+&lt;p&gt;Lastly, &lt;strong&gt;I got around to solving a problem using Prolog. It was worth the wait!&lt;/strong&gt; Expect a post on it eventually.&lt;/p&gt;
+&lt;p&gt;Without further rambling, here are my notes:&lt;/p&gt;
+&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;/h1&gt;
+&lt;h2 id=&quot;g-pascal-on-a-commodore-64&quot;&gt;G-Pascal (on a Commodore 64)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Only two types: integer and character (&amp;quot;char&amp;quot;)&lt;/li&gt;
+&lt;li&gt;No pointers or references -- instead use &lt;code&gt;addr := address(array)&lt;/code&gt; and index memory directly with &lt;code&gt;mem[addr]&lt;/code&gt; (integer) or &lt;code&gt;memc[addr]&lt;/code&gt; (char)&lt;/li&gt;
+&lt;li&gt;Docs for newer iteration: &lt;a href=&quot;http://www.gammon.com.au/G-Pascal/pascal_compiler.htm&quot;&gt;http://www.gammon.com.au/G-Pascal/pascal_compiler.htm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&amp;quot;Note that arrays grow downwards in memory, not upwards.&amp;quot;&lt;/li&gt;
+&lt;li&gt;Does &lt;em&gt;not&lt;/em&gt; compile to machine code!&lt;/li&gt;
+&lt;li&gt;Built-in line-based editor includes multi-line insert, search and replace, etc. -- a big step up from Commodore BASIC!&lt;/li&gt;
+&lt;li&gt;Without native compilation or an interactive environment, this wouldn&amp;#39;t be my first choice for programming on a Commodore 64 (but still better than BASIC, thanks to named procedures and functions!)&lt;/li&gt;
+&lt;li&gt;Roughly 7x slower than equivalent C, for my solution (N.B. G-Pascal uses a VM and C compiles to native code)&lt;/li&gt;
+&lt;li&gt;I didn&amp;#39;t notice a way to enter blank lines, so the resulting code looks cluttered.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;micro-lisp-on-a-commodore-64&quot;&gt;Micro-Lisp (on a Commodore 64)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Shift+space &lt;em&gt;looks like&lt;/em&gt; a regular space, but is treated as a different character, leading to confusing errors on lines that look correct&lt;/li&gt;
+&lt;li&gt;No built-in macros or quasiquote&lt;/li&gt;
+&lt;li&gt;No way to modify cons cells&lt;/li&gt;
+&lt;li&gt;Line-based editing of Lisp on a 40 column screen was unpleasant (unclear if worse than BASIC editing?)&lt;/li&gt;
+&lt;li&gt;Indentation was getting lost on input&lt;/li&gt;
+&lt;li&gt;Functions aren&amp;#39;t first class objects&lt;/li&gt;
+&lt;li&gt;Unfortunately, you have to choose between image-based development or entering source code in lines (a la Commodore BASIC) -- you can&amp;#39;t easily develop interactively &lt;em&gt;and still save your source code&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;Sadly, I gave up on C64 Micro-Lisp due to the issues and missing features noted above&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;scheme&quot;&gt;Scheme&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;R6RS appeared to be incompatible with R5RS and R7RS for a &amp;quot;hello world&amp;quot; program&lt;/li&gt;
+&lt;li&gt;Chibi-Scheme&amp;#39;s rational numbers were hundreds of times slower than Chez Scheme/Racket&lt;/li&gt;
+&lt;li&gt;In theory, I should prefer Scheme to Common Lisp (fewer concepts overall, better naming in the standard library), but the different Scheme revisions and implementations I tried were exasperatingly incompatible with one another&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;bcpl&quot;&gt;BCPL&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;The language is conceptually simple, but the syntax was foreign enough that I found it difficult to write&lt;/li&gt;
+&lt;li&gt;Only having a single word-sized data type feels limiting--but I guess that&amp;#39;s the price you pay for a tiny compiler&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;matlab&quot;&gt;MATLAB&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Everything I tried Just Worked!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;moonscript&quot;&gt;MoonScript&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;I like the idea of Lua without so much keyword noise&lt;/li&gt;
+&lt;li&gt;But there are some weird syntactical quirks around function arguments within table constructors that lead me to think that requiring parentheses around function arguments would have been better&lt;/li&gt;
+&lt;li&gt;Seems like &amp;quot;Lua written in Python&amp;quot; -- oh, the docs actually say it&amp;#39;s inspired by CoffeeScript (which I&amp;#39;ve never used)&lt;/li&gt;
+&lt;li&gt;I kept wanting to omit the commas between function arguments for some reason&lt;/li&gt;
+&lt;li&gt;Kind of wish there were built-in functions for appending to a list, concatenating lists, reducing lists, etc.&lt;/li&gt;
+&lt;li&gt;Still don&amp;#39;t like 1-based indexing&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;fennel&quot;&gt;Fennel&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;I like Lisp and have used Lua a fair amount, so I expected to like combining the two&lt;/li&gt;
+&lt;li&gt;But I found mixing Lua semantics and syntax with Lisp was fairly confusing -- I could never decide whether I needed brackets in a macro or not&lt;/li&gt;
+&lt;li&gt;Having Macros for Lua is fun! And Fennel papers over some annoyances in Lua&lt;/li&gt;
+&lt;li&gt;Macros and other minor improvements aren&amp;#39;t enough to justify having a build step/translation layer and having to map between Fennel source and the generated Lua code&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Still&lt;/em&gt; don&amp;#39;t like 1-based indexing&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;erde&quot;&gt;Erde&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Mostly Lua with braces instead of &lt;code&gt;do&lt;/code&gt;/&lt;code&gt;end&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Erde still interprets variables with typos in their names as globals -- I wish this was fixed&lt;/li&gt;
+&lt;li&gt;Overall, I like it better than Lua, but not enough to tolerate a build step&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;purescript&quot;&gt;PureScript&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;a href=&quot;http://try.purescript.org/&quot;&gt;Try PureScript&lt;/a&gt; example renders HTML from code, but I &lt;em&gt;really&lt;/em&gt; dislike the amount of repetition and the lack of support for trailing commas&lt;/li&gt;
+&lt;li&gt;Not a fan of boilerplate scaffolding (via Spago) as the first steps in playing with a new language&lt;/li&gt;
+&lt;li&gt;First result when searching for &amp;quot;sqrt&amp;quot; in Pursuit is in a package that turned out to be deprecated&lt;/li&gt;
+&lt;li&gt;Inconsistent naming of packages and namespaces, e.g. &lt;code&gt;Data.Array&lt;/code&gt; vs &lt;code&gt;Record&lt;/code&gt;, &lt;code&gt;purescript-arrays&lt;/code&gt; (plural) vs. &lt;code&gt;purescript-record&lt;/code&gt; (singular)&lt;/li&gt;
+&lt;li&gt;Doesn&amp;#39;t appear to include a useful standard library by default&lt;/li&gt;
+&lt;li&gt;Why is &amp;quot;append&amp;quot; named &lt;code&gt;snoc&lt;/code&gt;? Is it because it&amp;#39;s like Lisp&amp;#39;s &lt;code&gt;cons&lt;/code&gt; but on the other end?&lt;/li&gt;
+&lt;li&gt;I couldn&amp;#39;t figure out how to enforce a non-empty array via the type system (&lt;code&gt;Data.NonEmpty&lt;/code&gt;? &lt;code&gt;Data.Array.NonEmpty&lt;/code&gt;?)&lt;/li&gt;
+&lt;li&gt;So... slow... at compiling...&lt;/li&gt;
+&lt;li&gt;Really miss array comprehensions...&lt;/li&gt;
+&lt;li&gt;Hard to find documentation that actually works, e.g. I spent over half an hour trying to figure out how to import the &lt;code&gt;Nil&lt;/code&gt; type&lt;/li&gt;
+&lt;li&gt;Seems to warn whenever types aren&amp;#39;t explicitly stated... so why bother with type inference?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;ruby&quot;&gt;Ruby&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Very handy having generators, indefinite ranges, and rational numbers&lt;/li&gt;
+&lt;li&gt;Feels pragmatic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;reason&quot;&gt;Reason&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Hard to find basic examples, e.g. sets or lists of non-primitive types&lt;/li&gt;
+&lt;li&gt;Official API documentation&amp;#39;s search function can&amp;#39;t find &lt;code&gt;float_of_int&lt;/code&gt; (a function that is mentioned in some error messages I received)&lt;/li&gt;
+&lt;li&gt;I literally couldn&amp;#39;t find any documentation of the &amp;quot;pipe last&amp;quot; operator (&lt;code&gt;|&amp;gt;&lt;/code&gt;) (but it &lt;em&gt;does&lt;/em&gt; work)&lt;/li&gt;
+&lt;li&gt;Line comments (&lt;code&gt;//&lt;/code&gt;) result in syntax errors in the &lt;a href=&quot;https://reasonml.github.io/en/try&quot;&gt;in-browser implementation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Also in the browser, error line numbers sometimes aren&amp;#39;t correct (and &amp;quot;this has type X but somewhere wanted Y&amp;quot; isn&amp;#39;t helpful without correct line numbers!)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;t3x0&quot;&gt;T3X/0&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Has two distinct conditionals, &lt;code&gt;IF&lt;/code&gt; and &lt;code&gt;IE&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Pascal syntax and BCPL semantics sounds like a good combination for a minimal or bootstrapping compiler!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;assemblyscript&quot;&gt;AssemblyScript&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;AssemblyScript&amp;#39;s landing page has the best developer experience I&amp;#39;ve encountered (I suspect it is most of Visual Studio Code embedded, along with type info)&lt;/li&gt;
+&lt;li&gt;Really don&amp;#39;t like that it doesn&amp;#39;t have its own file extension (and instead reuses TypeScript&amp;#39;s &amp;quot;.ts&amp;quot;)&lt;/li&gt;
+&lt;li&gt;How does its &amp;quot;standard library&amp;quot; get included? I assume the parts that are used are compiled into each WASM blob&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;minilang&quot;&gt;MiniLang&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Couldn&amp;#39;t find any math functions, e.g. for finding square roots&lt;/li&gt;
+&lt;li&gt;Very nice IDE available on &lt;a href=&quot;https://www.ryugod.com/pages/ide/minilang&quot;&gt;ryugod.com&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;c&quot;&gt;C&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Had to use C99 to get an official 64-bit integer type&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;zig&quot;&gt;Zig&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Having unused variables be an error when trying to narrow down problems is annoying...&lt;/li&gt;
+&lt;li&gt;Being able to compile and reuse C code is convenient!&lt;/li&gt;
+&lt;li&gt;Very impressive for a ~40 MB download&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;clojure&quot;&gt;Clojure&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Slow to compile and run&lt;/li&gt;
+&lt;li&gt;Took me a long time to figure out that &lt;code&gt;(Math/floor ...)&lt;/code&gt; was the simplest way to invoke the standard library&amp;#39;s math functions&lt;/li&gt;
+&lt;li&gt;Hopefully I don&amp;#39;t get a bill in the mail from Oracle for using the JVM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;raku&quot;&gt;Raku&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Handy functional utilities like &lt;code&gt;map&lt;/code&gt; and &lt;code&gt;flatmap&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;But some of those functional utilities have odd names like &lt;code&gt;grep&lt;/code&gt; and &lt;code&gt;elems&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;vala&quot;&gt;Vala&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Raw arrays have no bounds checking!&lt;/li&gt;
+&lt;li&gt;Collection types are implemented in a separate library&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;prolog&quot;&gt;Prolog&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;In SWI Prolog, you can interactively add facts/rules by typing &lt;code&gt;[user]&lt;/code&gt;, entering information, and then sending &amp;quot;end of file&amp;quot; (Ctrl+D on Linux, possibly Ctrl+Z on Windows)&lt;/li&gt;
+&lt;li&gt;SWI-Prolog treats strings in a way that is incompatible with many tutorials I found on the web -- namely, &lt;a href=&quot;https://www.swi-prolog.org/pldoc/man?section=string&quot;&gt;a double-quoted string is a separate data type than a back-ticked string&lt;/a&gt;, which (as far as I understand) uses the traditional data type of a list of character codes (which, I hope, are now actually Unicode code points)&lt;/li&gt;
+&lt;li&gt;Struggled mightily with definite clause grammars -- most examples I found just ended in &amp;quot;not found&amp;quot; errors (often with an arity that I didn&amp;#39;t expect)&lt;/li&gt;
+&lt;li&gt;It took me a &lt;em&gt;really&lt;/em&gt; long time to figure out that &lt;code&gt;use_module(library(dcg/basics)).&lt;/code&gt; should have been &lt;code&gt;:- use_module(library(dcg/basics))&lt;/code&gt; -- the former doesn&amp;#39;t do anything useful (but doesn&amp;#39;t emit any warnings), whereas the latter actually brings a module into scope&lt;/li&gt;
+&lt;li&gt;SWI-Prolog documentation frequently lacks explanations and examples&lt;/li&gt;
+&lt;li&gt;Accessing documentation via &lt;code&gt;help&lt;/code&gt; loads modules as a side effect&lt;/li&gt;
+&lt;li&gt;The actual Sudoku-solving part was just a few lines of readable code&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Easy Script (Commodore 64) quick reference</title>
 <id>https://log.schemescape.com/posts/vintage-computing/easy-script.html</id>
@@ -467,18 +621,6 @@
 &lt;h2 id=&quot;blazin-forth&quot;&gt;Blazin&amp;#39; Forth&lt;/h2&gt;
 &lt;p&gt;I&amp;#39;ve actually spent a bit of time tinkering with Blazin&amp;#39; Forth already. So far, it feels like a supremely authentic implementation of Forth. Notably, &lt;strong&gt;Blazin&amp;#39; Forth feels like a self-contained little operating system&lt;/strong&gt;--it even implements its own line-based text editor and block-based storage--no file system needed. Note: in the long run, I&amp;#39;m not sure this is a good tradeoff, but from a self-hosting and bootstrapping perspective, it&amp;#39;s nifty (also: did I mention there&amp;#39;s only 64 KB of RAM?).&lt;/p&gt;
 &lt;p&gt;That&amp;#39;s all I have for now. Until next time!&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>R.I.P. The Living Computers Museum</title>
-<id>https://log.schemescape.com/posts/retrocomputing/rip-living-computers-museum.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/retrocomputing/rip-living-computers-museum.html"/>
-<updated>2024-06-30T00:00:00.000Z</updated>
-<summary type="text">My favorite museum in the entire world is no more.</summary>
-<content type="html">&lt;p&gt;Given my interest in &lt;a href=&quot;https://log.schemescape.com/posts/retrocomputing/amiga-day-project-euler.html&quot;&gt;old&lt;/a&gt;, &lt;a href=&quot;https://log.schemescape.com/posts/retrocomputing/../programming-languages/minimal-dev-env-3.html&quot;&gt;slow&lt;/a&gt;, and &lt;a href=&quot;https://log.schemescape.com/posts/retrocomputing/../programming-languages/minimal-dev-env.html&quot;&gt;minimalist&lt;/a&gt; computers, it&amp;#39;s unsurprising that I thoroughly enjoyed the &lt;a href=&quot;https://en.wikipedia.org/wiki/Living_Computers:_Museum_%2B_Labs&quot;&gt;Living Computers Museum&lt;/a&gt;. Not only I was able to relive my childhood of playing Marble Madness on a (real) &lt;a href=&quot;https://en.wikipedia.org/wiki/Commodore_64&quot;&gt;Commodore 64&lt;/a&gt;, it was the backdrop to my first experience with the vaunted &lt;a href=&quot;https://en.wikipedia.org/wiki/Amiga&quot;&gt;Amiga&lt;/a&gt; platform. Astoundingly, it was also possible to toy around with ancient room-sized computers of yore.&lt;/p&gt;
-&lt;p&gt;Back in 2020, I was saddened to hear that the museum had &lt;a href=&quot;https://seattlecollegian.com/paul-allens-living-computers-museum-remains-closed-after-years-despite-lifted-covid-restrictions/&quot;&gt;closed its doors&lt;/a&gt;, after the death of its benefactor, Paul Allen. Generously, they left many machines (and even a BBS) accessible over telnet. &lt;strong&gt;In fact, I had logged into the LCM telnet interface roughly one week ago.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;But recently it all went dark. The Living Computers Museum has &lt;a href=&quot;https://hackaday.com/2024/06/25/paul-allens-living-computers-museum-and-labs-to-be-auctioned/&quot;&gt;officially shut down for good and its artifacts are to be auctioned off&lt;/a&gt;. The telnet service, and even the museum&amp;#39;s web site, have all been unceremoniously taken offline. Donated hardware will be sent to the highest bidder (or, worst case, possibly the dump). &lt;strong&gt;It&amp;#39;s a sad day for vintage computing.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;I guess, for now, I will plan on continuing to run my own vintage hardware museum, however inefficient.&lt;/p&gt;
 </content>
 </entry>
 </feed>

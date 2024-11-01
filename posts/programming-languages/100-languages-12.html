@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Three quarters of the way to 100 programming languages</title>
+<meta name="description" content="Just some more notes on programming languages. And also my first failure!" />
+<meta name="keywords" content="100-languages,commodore-64" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Three quarters of the way to 100 programming languages",
+  "abstract": "Just some more notes on programming languages. And also my first failure!",
+  "keywords": "programming-languages,100-languages,commodore-64",
+  "datePublished": "2024-10-31"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+<li><a href="../../posts/100-languages/index.html">100-languages</a></li>
+<li><a href="../../posts/commodore-64/index.html">commodore-64</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/programming-languages/100-languages-12.html">Three quarters of the way to 100 programming languages</a></h1>
+<p><time datetime="2024-10-31">October 31, 2024</time></p>
+</header>
+<p>I recently resumed <a href="100-languages.html">solving the first 100 Project Euler problems using 100 different programming languages</a>. For reference: <a href="https://github.com/jaredkrinke/100-languages">here is code for all my solutions so far</a>.</p>
+<p>Of note, <strong>I failed to solve a problem using Micro-Lisp on the Commodore 64</strong>. I think it would have been <em>possible</em> to solve the problem (even despite the lack of cons cell mutation), but the Commodore 64 keyboard design can lead to two different space characters being emitted when you hit the space bar, depending on timing, and Micro-Lisp only handled one of those characters. The result is that I&#39;d have code that looked correct, but wouldn&#39;t compile. It was, frankly, too annoying for me to continue.</p>
+<p><strong>I also finally decided to solve a problem in C</strong>. On the surface, this might seem pointless since I already know C, but <strong>it gave me an excuse to try calling C code from Zig</strong> (a language I hadn&#39;t tried before). Overall, the Zig toolchain is extremely impressive! It&#39;s probably the most convenient C (and C++) compiler in existence. And Zig seemed fine, too.</p>
+<p>Lastly, <strong>I got around to solving a problem using Prolog. It was worth the wait!</strong> Expect a post on it eventually.</p>
+<p>Without further rambling, here are my notes:</p>
+<h1 id="notes">Notes</h1>
+<h2 id="g-pascal-on-a-commodore-64">G-Pascal (on a Commodore 64)</h2>
+<ul>
+<li>Only two types: integer and character (&quot;char&quot;)</li>
+<li>No pointers or references -- instead use <code>addr := address(array)</code> and index memory directly with <code>mem[addr]</code> (integer) or <code>memc[addr]</code> (char)</li>
+<li>Docs for newer iteration: <a href="http://www.gammon.com.au/G-Pascal/pascal_compiler.htm">http://www.gammon.com.au/G-Pascal/pascal_compiler.htm</a></li>
+<li>&quot;Note that arrays grow downwards in memory, not upwards.&quot;</li>
+<li>Does <em>not</em> compile to machine code!</li>
+<li>Built-in line-based editor includes multi-line insert, search and replace, etc. -- a big step up from Commodore BASIC!</li>
+<li>Without native compilation or an interactive environment, this wouldn&#39;t be my first choice for programming on a Commodore 64 (but still better than BASIC, thanks to named procedures and functions!)</li>
+<li>Roughly 7x slower than equivalent C, for my solution (N.B. G-Pascal uses a VM and C compiles to native code)</li>
+<li>I didn&#39;t notice a way to enter blank lines, so the resulting code looks cluttered.</li>
+</ul>
+<h2 id="micro-lisp-on-a-commodore-64">Micro-Lisp (on a Commodore 64)</h2>
+<ul>
+<li>Shift+space <em>looks like</em> a regular space, but is treated as a different character, leading to confusing errors on lines that look correct</li>
+<li>No built-in macros or quasiquote</li>
+<li>No way to modify cons cells</li>
+<li>Line-based editing of Lisp on a 40 column screen was unpleasant (unclear if worse than BASIC editing?)</li>
+<li>Indentation was getting lost on input</li>
+<li>Functions aren&#39;t first class objects</li>
+<li>Unfortunately, you have to choose between image-based development or entering source code in lines (a la Commodore BASIC) -- you can&#39;t easily develop interactively <em>and still save your source code</em></li>
+<li>Sadly, I gave up on C64 Micro-Lisp due to the issues and missing features noted above</li>
+</ul>
+<h2 id="scheme">Scheme</h2>
+<ul>
+<li>R6RS appeared to be incompatible with R5RS and R7RS for a &quot;hello world&quot; program</li>
+<li>Chibi-Scheme&#39;s rational numbers were hundreds of times slower than Chez Scheme/Racket</li>
+<li>In theory, I should prefer Scheme to Common Lisp (fewer concepts overall, better naming in the standard library), but the different Scheme revisions and implementations I tried were exasperatingly incompatible with one another</li>
+</ul>
+<h2 id="bcpl">BCPL</h2>
+<ul>
+<li>The language is conceptually simple, but the syntax was foreign enough that I found it difficult to write</li>
+<li>Only having a single word-sized data type feels limiting--but I guess that&#39;s the price you pay for a tiny compiler</li>
+</ul>
+<h2 id="matlab">MATLAB</h2>
+<ul>
+<li>Everything I tried Just Worked!</li>
+</ul>
+<h2 id="moonscript">MoonScript</h2>
+<ul>
+<li>I like the idea of Lua without so much keyword noise</li>
+<li>But there are some weird syntactical quirks around function arguments within table constructors that lead me to think that requiring parentheses around function arguments would have been better</li>
+<li>Seems like &quot;Lua written in Python&quot; -- oh, the docs actually say it&#39;s inspired by CoffeeScript (which I&#39;ve never used)</li>
+<li>I kept wanting to omit the commas between function arguments for some reason</li>
+<li>Kind of wish there were built-in functions for appending to a list, concatenating lists, reducing lists, etc.</li>
+<li>Still don&#39;t like 1-based indexing</li>
+</ul>
+<h2 id="fennel">Fennel</h2>
+<ul>
+<li>I like Lisp and have used Lua a fair amount, so I expected to like combining the two</li>
+<li>But I found mixing Lua semantics and syntax with Lisp was fairly confusing -- I could never decide whether I needed brackets in a macro or not</li>
+<li>Having Macros for Lua is fun! And Fennel papers over some annoyances in Lua</li>
+<li>Macros and other minor improvements aren&#39;t enough to justify having a build step/translation layer and having to map between Fennel source and the generated Lua code</li>
+<li><em>Still</em> don&#39;t like 1-based indexing</li>
+</ul>
+<h2 id="erde">Erde</h2>
+<ul>
+<li>Mostly Lua with braces instead of <code>do</code>/<code>end</code></li>
+<li>Erde still interprets variables with typos in their names as globals -- I wish this was fixed</li>
+<li>Overall, I like it better than Lua, but not enough to tolerate a build step</li>
+</ul>
+<h2 id="purescript">PureScript</h2>
+<ul>
+<li>The <a href="http://try.purescript.org/">Try PureScript</a> example renders HTML from code, but I <em>really</em> dislike the amount of repetition and the lack of support for trailing commas</li>
+<li>Not a fan of boilerplate scaffolding (via Spago) as the first steps in playing with a new language</li>
+<li>First result when searching for &quot;sqrt&quot; in Pursuit is in a package that turned out to be deprecated</li>
+<li>Inconsistent naming of packages and namespaces, e.g. <code>Data.Array</code> vs <code>Record</code>, <code>purescript-arrays</code> (plural) vs. <code>purescript-record</code> (singular)</li>
+<li>Doesn&#39;t appear to include a useful standard library by default</li>
+<li>Why is &quot;append&quot; named <code>snoc</code>? Is it because it&#39;s like Lisp&#39;s <code>cons</code> but on the other end?</li>
+<li>I couldn&#39;t figure out how to enforce a non-empty array via the type system (<code>Data.NonEmpty</code>? <code>Data.Array.NonEmpty</code>?)</li>
+<li>So... slow... at compiling...</li>
+<li>Really miss array comprehensions...</li>
+<li>Hard to find documentation that actually works, e.g. I spent over half an hour trying to figure out how to import the <code>Nil</code> type</li>
+<li>Seems to warn whenever types aren&#39;t explicitly stated... so why bother with type inference?</li>
+</ul>
+<h2 id="ruby">Ruby</h2>
+<ul>
+<li>Very handy having generators, indefinite ranges, and rational numbers</li>
+<li>Feels pragmatic</li>
+</ul>
+<h2 id="reason">Reason</h2>
+<ul>
+<li>Hard to find basic examples, e.g. sets or lists of non-primitive types</li>
+<li>Official API documentation&#39;s search function can&#39;t find <code>float_of_int</code> (a function that is mentioned in some error messages I received)</li>
+<li>I literally couldn&#39;t find any documentation of the &quot;pipe last&quot; operator (<code>|&gt;</code>) (but it <em>does</em> work)</li>
+<li>Line comments (<code>//</code>) result in syntax errors in the <a href="https://reasonml.github.io/en/try">in-browser implementation</a></li>
+<li>Also in the browser, error line numbers sometimes aren&#39;t correct (and &quot;this has type X but somewhere wanted Y&quot; isn&#39;t helpful without correct line numbers!)</li>
+</ul>
+<h2 id="t3x0">T3X/0</h2>
+<ul>
+<li>Has two distinct conditionals, <code>IF</code> and <code>IE</code></li>
+<li>Pascal syntax and BCPL semantics sounds like a good combination for a minimal or bootstrapping compiler!</li>
+</ul>
+<h2 id="assemblyscript">AssemblyScript</h2>
+<ul>
+<li>AssemblyScript&#39;s landing page has the best developer experience I&#39;ve encountered (I suspect it is most of Visual Studio Code embedded, along with type info)</li>
+<li>Really don&#39;t like that it doesn&#39;t have its own file extension (and instead reuses TypeScript&#39;s &quot;.ts&quot;)</li>
+<li>How does its &quot;standard library&quot; get included? I assume the parts that are used are compiled into each WASM blob</li>
+</ul>
+<h2 id="minilang">MiniLang</h2>
+<ul>
+<li>Couldn&#39;t find any math functions, e.g. for finding square roots</li>
+<li>Very nice IDE available on <a href="https://www.ryugod.com/pages/ide/minilang">ryugod.com</a></li>
+</ul>
+<h2 id="c">C</h2>
+<ul>
+<li>Had to use C99 to get an official 64-bit integer type</li>
+</ul>
+<h2 id="zig">Zig</h2>
+<ul>
+<li>Having unused variables be an error when trying to narrow down problems is annoying...</li>
+<li>Being able to compile and reuse C code is convenient!</li>
+<li>Very impressive for a ~40 MB download</li>
+</ul>
+<h2 id="clojure">Clojure</h2>
+<ul>
+<li>Slow to compile and run</li>
+<li>Took me a long time to figure out that <code>(Math/floor ...)</code> was the simplest way to invoke the standard library&#39;s math functions</li>
+<li>Hopefully I don&#39;t get a bill in the mail from Oracle for using the JVM</li>
+</ul>
+<h2 id="raku">Raku</h2>
+<ul>
+<li>Handy functional utilities like <code>map</code> and <code>flatmap</code></li>
+<li>But some of those functional utilities have odd names like <code>grep</code> and <code>elems</code></li>
+</ul>
+<h2 id="vala">Vala</h2>
+<ul>
+<li>Raw arrays have no bounds checking!</li>
+<li>Collection types are implemented in a separate library</li>
+</ul>
+<h2 id="prolog">Prolog</h2>
+<ul>
+<li>In SWI Prolog, you can interactively add facts/rules by typing <code>[user]</code>, entering information, and then sending &quot;end of file&quot; (Ctrl+D on Linux, possibly Ctrl+Z on Windows)</li>
+<li>SWI-Prolog treats strings in a way that is incompatible with many tutorials I found on the web -- namely, <a href="https://www.swi-prolog.org/pldoc/man?section=string">a double-quoted string is a separate data type than a back-ticked string</a>, which (as far as I understand) uses the traditional data type of a list of character codes (which, I hope, are now actually Unicode code points)</li>
+<li>Struggled mightily with definite clause grammars -- most examples I found just ended in &quot;not found&quot; errors (often with an arity that I didn&#39;t expect)</li>
+<li>It took me a <em>really</em> long time to figure out that <code>use_module(library(dcg/basics)).</code> should have been <code>:- use_module(library(dcg/basics))</code> -- the former doesn&#39;t do anything useful (but doesn&#39;t emit any warnings), whereas the latter actually brings a module into scope</li>
+<li>SWI-Prolog documentation frequently lacks explanations and examples</li>
+<li>Accessing documentation via <code>help</code> loads modules as a side effect</li>
+<li>The actual Sudoku-solving part was just a few lines of readable code</li>
+</ul>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
