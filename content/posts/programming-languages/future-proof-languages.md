@@ -2,7 +2,7 @@
 title: Future-proof programming languages
 description: My projects are currently on hold while I suffer from programming language analysis paralysis.
 date: 2022-02-11
-keywords: [lisp]
+keywords: [lisp,python]
 ---
 After some rapid progress on projects such as [md2blog](../releases/md2blog-1.1.1.md), everything has come to a screeching halt while I struggle with making future-proof technology choices. This post is specifically about programming languages.
 

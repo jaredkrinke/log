@@ -2,6 +2,7 @@
 title: Generating music using machine learning (part 2)
 description: An unsuccessful (but less unsuccessful than last time) attempt to generate ragtime music.
 date: 2022-05-02
+keywords: [python]
 ---
 In [part 1](generating-music.md), I played around with pre-trained [Music Transformer](https://magenta.tensorflow.org/music-transformer) models, in an attempt to generate a piece of ragtime piano music. The results were interesting, but the musical styles were random (and internally inconsistent).
 

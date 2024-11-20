@@ -2,6 +2,7 @@
 title: Getting started with machine learning
 description: For personal enrichment, I'm playing around with machine learning.
 date: 2022-03-07
+keywords: [python]
 ---
 One of the reasons I decided to give [Python](../programming-languages/python.md) one last try is that Python is popular for machine learning, and machine learning is a topic I'm interested in.
 

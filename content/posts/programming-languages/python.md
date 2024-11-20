@@ -2,6 +2,7 @@
 title: First impressions of Python
 description: Next on my list of programming languages to investigate is Python.
 date: 2022-02-21
+keywords: [python]
 ---
 In [a previous article](future-proof-languages.md), I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they'd still be useful in another decade.
 
