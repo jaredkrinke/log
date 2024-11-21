@@ -7,8 +7,54 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-11-20T19:32:02.666Z</updated>
+<updated>2024-11-21T04:47:59.049Z</updated>
 
+<entry>
+<title>Python is the new BASIC</title>
+<id>https://log.schemescape.com/posts/programming-languages/python-as-a-modern-basic.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/python-as-a-modern-basic.html"/>
+<updated>2024-11-20T00:00:00.000Z</updated>
+<summary type="text">What makes Python the BASIC of today?</summary>
+<content type="html">&lt;p&gt;As far as programming languages go, &lt;a href=&quot;https://en.wikipedia.org/wiki/BASIC&quot;&gt;BASIC&lt;/a&gt; (&amp;quot;Beginners&amp;#39; All-purpose Symbolic Instruction Code&amp;quot;) is... &lt;strong&gt;not a language I would choose today&lt;/strong&gt;. Granted, when it was originally developed in the 60s, line numbers and single-character identifiers were &lt;em&gt;an improvement&lt;/em&gt;. But in its heyday (which I&amp;#39;m going to claim, without evidence, was in the late 70s and early 80s), there were better options (Pascal, Lisp, Forth, even C!). Yet, &lt;strong&gt;BASIC was everywhere! It &lt;em&gt;was&lt;/em&gt; the interface for many old computers, like the Commodore 64.&lt;/strong&gt; Why? I&amp;#39;d say (again, without evidence) it&amp;#39;s because BASIC was designed to be usable by anyone--not just experienced programmers.&lt;/p&gt;
+&lt;p&gt;Today, there&amp;#39;s a &lt;em&gt;different&lt;/em&gt; language with ugly historical baggage that enjoys a strong following, notably amongst people that don&amp;#39;t identify as programmers. That language is Python.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Python is the new BASIC.&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&quot;back-to-basic&quot;&gt;Back to BASIC&lt;/h1&gt;
+&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+&lt;p&gt;BASIC was created at Dartmouth College in 1963 by John G. Kemeny and Thomas E. Kurtz (see &lt;a href=&quot;https://computerhistory.org/blog/in-memoriam-thomas-e-kurtz-1928-2024/&quot;&gt;In Memoriam: Thomas E. Kurtz, 1928–2024&lt;/a&gt;). If you want a historical account, there is an &lt;a href=&quot;https://podcasts.apple.com/us/podcast/keeping-things-basic/id1459202600?i=1000502282724&quot;&gt;Advent of Computing podcast episode about BASIC&lt;/a&gt; that is excellent (as is the entire podcast).&lt;/p&gt;
+&lt;h2 id=&quot;commodore-basic&quot;&gt;Commodore BASIC&lt;/h2&gt;
+&lt;p&gt;My personal history with BASIC goes back to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../vintage-computing/40-year-old-dev-environment.html&quot;&gt;the first computer I ever used, the Commodore 64&lt;/a&gt;. That computer booted directly into BASIC. Although I didn&amp;#39;t realize it at the time, to launch programs, you had to type in BASIC code. &lt;strong&gt;Every user was secretly a programmer!&lt;/strong&gt; I don&amp;#39;t think I wrote any programs beyond &lt;code&gt;10 PRINT &amp;quot;HAHA&amp;quot;&lt;/code&gt;; &lt;code&gt;20 GOTO 10&lt;/code&gt;, but I suppose I at least learned about commands and quotation marks.&lt;/p&gt;
+&lt;h2 id=&quot;qbasic&quot;&gt;QBasic&lt;/h2&gt;
+&lt;p&gt;At some point, I decided that I wanted to make a computer do whatever I wanted, so I needed to learn how to program. Fortunately, my &lt;a href=&quot;https://en.wikipedia.org/wiki/MS-DOS&quot;&gt;MS-DOS&lt;/a&gt; computer included a development environment--impressively fully-featured, in retrospect--named &lt;a href=&quot;https://en.wikipedia.org/wiki/QBasic&quot;&gt;QBasic&lt;/a&gt;. Yes, BASIC (specifically QBasic) was the first programming language I attempted to learn. I don&amp;#39;t think I ever discovered subroutines in QBasic, but I did at least learn about conditionals, loops, and arrays.&lt;/p&gt;
+&lt;p&gt;Regardless, BASIC served its purpose. I, a non-programmer at the time, learned how to write some simple programs without throwing up my hands in despair and swearing off computers forever. &lt;strong&gt;I guess I&amp;#39;m a BASIC success story!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;As an aside, I recently found an old box of floppy disks, including one &amp;quot;double density&amp;quot; disk with my first name written on the label. That disk contained several programs I had written using QBasic, circa 1997. The code was... not good--again, I hadn&amp;#39;t discovered subroutines yet.&lt;/p&gt;
+&lt;h1 id=&quot;back-to-python&quot;&gt;Back to Python&lt;/h1&gt;
+&lt;h2 id=&quot;pros-and-cons&quot;&gt;Pros and cons&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;I don&amp;#39;t actually like Python.&lt;/strong&gt; Despite its &amp;quot;elegant&amp;quot; indentation-based blocks, I find the syntax ugly (format strings, overloading of asterisks, ternary operator with the condition sandwiched in the middle, etc.). Python breaks compatibility more than I&amp;#39;d expect (or perhaps tolerate). The package ecosystem, although broad, gives me supply chain nightmares.&lt;/p&gt;
+&lt;p&gt;Despite my complaints, however, Python has a lot going for it:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It&amp;#39;s &lt;strong&gt;ubiquitous&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It comes with &amp;quot;batteries included&amp;quot;&lt;/strong&gt;, i.e. a comprehensive standard library&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It&amp;#39;s simple&lt;/strong&gt; (or, at least, you can pretend it is, for casual use)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Python is far from perfect, but it is often good enough.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;why-python-is-the-new-basic&quot;&gt;Why Python is the new BASIC&lt;/h2&gt;
+&lt;p&gt;But why is Python the new BASIC? The answer is simple: &lt;strong&gt;Python is the new BASIC because Python is the language that non-programmers always seem to use&lt;/strong&gt;. It&amp;#39;s reached critical mass. Python has won!&lt;/p&gt;
+&lt;p&gt;Of course, that is more of an observation than a reason. I honestly have no idea why people originally gravitated to Python (apologies for implying otherwise), but if I had to guess it would be some combination of the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Python emerged when the world desperately needed a scripting language that was less ugly and error-prone than &lt;a href=&quot;https://www.perl.org/&quot;&gt;Perl&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Python used indentation instead of braces to denote blocks, and this was deemed by the masses as &amp;quot;elegant&amp;quot;--not a good reason in my opinion but, well, I use Lisp, so I&amp;#39;m clearly an outlier&lt;/li&gt;
+&lt;li&gt;Python often includes everything you need, right in the standard library&lt;/li&gt;
+&lt;li&gt;Python was math-friendly enough to gain a foothold in physics, finance, etc. research, thus broadening its ecosystem and influence&lt;/li&gt;
+&lt;li&gt;Python smartly borrowed convenient features from more complex languages, while remaining reasonably simple itself&lt;/li&gt;
+&lt;li&gt;Python was never owned by a litigious corporation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In other words: &lt;strong&gt;some combination of smart design, community management, and happenstance&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;definitive-proof-of-pythons-dominance&quot;&gt;Definitive proof of Python&amp;#39;s dominance&lt;/h2&gt;
+&lt;p&gt;Despite having intentionally avoided Python for my entire adult life, &lt;strong&gt;I recently gave in and wrote a personal utility program in Python&lt;/strong&gt; because I knew Python would have everything I needed and I had confidence that Python was entrenched enough that I&amp;#39;d still be able to use my program for the foreseeable future.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;If even a Python-hater like me defaults to using Python, then I think it&amp;#39;s pretty clear that Python has taken over the world, just as BASIC once did.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;One parting thought: how long will Python&amp;#39;s reign last?&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Three quarters of the way to 100 programming languages</title>
 <id>https://log.schemescape.com/posts/programming-languages/100-languages-12.html</id>
@@ -580,47 +626,6 @@
 &lt;td&gt;&lt;strong&gt;Copy current line&lt;/strong&gt; to a new block and associated line&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
-</content>
-</entry>
-<entry>
-<title>My new 40-year-old development environment</title>
-<id>https://log.schemescape.com/posts/vintage-computing/40-year-old-dev-environment.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/vintage-computing/40-year-old-dev-environment.html"/>
-<updated>2024-08-12T00:00:00.000Z</updated>
-<summary type="text">I&apos;m going to find out what it was like to develop software in the 8-bit era.</summary>
-<content type="html">&lt;p&gt;Lately, my computing interests have revolved around the following:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Exploring programming languages (&lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../programming-languages/50-different-languages.html&quot;&gt;50+ so far&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;Testing out &lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../programming-languages/minimal-dev-env.html&quot;&gt;minimal development environments&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../retrocomputing/amiga-day-project-euler.html&quot;&gt;Playing with vintage computers&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Thanks to some generosity and good luck, I just acquired a &amp;quot;new&amp;quot; computer on which all three interests can converge:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://log.schemescape.com/posts/vintage-computing/../../assets/c64.jpg&quot; alt=&quot;Commodore 64 with monitor&quot;/&gt;&lt;/p&gt;
-&lt;p&gt;That&amp;#39;s an original Commodore 64. Also known as &lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../programming-languages/minimal-dev-env.html#back-in-my-day&quot;&gt;the first computer I ever used&lt;/a&gt;. It sports a 1 MHz 8-bit CPU and 64 KB of RAM. Aside: despite these outdated specs, &lt;strong&gt;the C64 boots faster than any modern computer&lt;/strong&gt;--it&amp;#39;s practically instantaneous.&lt;/p&gt;
-&lt;p&gt;Given that the C64 is one of the most popular computers of all time (per Guinness), it supports &lt;a href=&quot;https://www.lyonlabs.org/commodore/onrequest/collections.html&quot;&gt;a multitude of programming languages&lt;/a&gt;, including:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Assembly&lt;/li&gt;
-&lt;li&gt;BASIC&lt;/li&gt;
-&lt;li&gt;C&lt;/li&gt;
-&lt;li&gt;COBOL&lt;/li&gt;
-&lt;li&gt;Forth&lt;/li&gt;
-&lt;li&gt;FORTRAN&lt;/li&gt;
-&lt;li&gt;Lisp&lt;/li&gt;
-&lt;li&gt;Logo&lt;/li&gt;
-&lt;li&gt;Pascal&lt;/li&gt;
-&lt;li&gt;Prolog&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;There&amp;#39;s even, apparently, &lt;a href=&quot;https://www.lyonlabs.org/commodore/onrequest/nanovm-announce.txt&quot;&gt;a 16 KB minimal JVM&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;the-plan&quot;&gt;The plan&lt;/h1&gt;
-&lt;p&gt;Obviously, the task at hand is to &lt;strong&gt;solve a few Project Euler problems using a mid-80s development environment&lt;/strong&gt;. I&amp;#39;ve &lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../programming-languages/100-languages-4.html#commodore-basic&quot;&gt;already sovled a problem using Commodore BASIC&lt;/a&gt; (using an emulator, since I didn&amp;#39;t have a C64 at the time), so next up I&amp;#39;m looking at the following (likely in this order):&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Blazin&amp;#39; Forth&lt;/strong&gt;, by Scott Ballantyne (1985)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;MicroLisp&lt;/strong&gt;, by Nicholas Vrtis (1986)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;G-Pascal&lt;/strong&gt;, by Nick Gammon (1982)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;blazin-forth&quot;&gt;Blazin&amp;#39; Forth&lt;/h2&gt;
-&lt;p&gt;I&amp;#39;ve actually spent a bit of time tinkering with Blazin&amp;#39; Forth already. So far, it feels like a supremely authentic implementation of Forth. Notably, &lt;strong&gt;Blazin&amp;#39; Forth feels like a self-contained little operating system&lt;/strong&gt;--it even implements its own line-based text editor and block-based storage--no file system needed. Note: in the long run, I&amp;#39;m not sure this is a good tradeoff, but from a self-hosting and bootstrapping perspective, it&amp;#39;s nifty (also: did I mention there&amp;#39;s only 64 KB of RAM?).&lt;/p&gt;
-&lt;p&gt;That&amp;#39;s all I have for now. Until next time!&lt;/p&gt;
 </content>
 </entry>
 </feed>
