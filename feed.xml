@@ -7,8 +7,125 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-11-21T04:47:59.049Z</updated>
+<updated>2024-12-29T17:02:48.306Z</updated>
 
+<entry>
+<title>Yet more programming languages</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-13.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-13.html"/>
+<updated>2024-12-29T00:00:00.000Z</updated>
+<summary type="text">Another throwaway post with brief notes about programming languages.</summary>
+<content type="html">&lt;p&gt;I&amp;#39;m still &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;solving the first 100 Project Euler problems using 100 different programming languages&lt;/a&gt;. For reference: &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;here is code for all my solutions so far&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This is basically a throwaway post with brief notes on the languages I&amp;#39;ve tried since &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-12.html&quot;&gt;the last update&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;/h1&gt;
+&lt;h2 id=&quot;odin&quot;&gt;Odin&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Standard library has a lot of depth&lt;/li&gt;
+&lt;li&gt;Yet another capable C successor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;qbasic&quot;&gt;QBasic&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Honestly, the IDE and integrated help are pretty good!&lt;/li&gt;
+&lt;li&gt;Have to use a &lt;code&gt;LONG&lt;/code&gt; to get a 32-bit integer type&lt;/li&gt;
+&lt;li&gt;Despite having written many QBasic programs in the 90s, this was the first time I used QBasic &lt;code&gt;FUNCTION&lt;/code&gt;s&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;python&quot;&gt;Python&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Python has a standard library function that essentially solves Project Euler problem 80&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;8080-assembly-altair-8800&quot;&gt;8080 assembly (Altair 8800)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;First time I&amp;#39;ve heard of binary-coded decimals&lt;/li&gt;
+&lt;li&gt;Took longer than expected because I hit a bug in &lt;a href=&quot;https://github.com/simh/simh&quot;&gt;SIMH&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Solution easily fits in the 256 bytes of a non-upgraded Altair 8800&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;janet&quot;&gt;Janet&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Having non-list syntax was inconvenient when I wanted to splice into a struct literal&lt;/li&gt;
+&lt;li&gt;Very impressive Clojure-like scripting language for less than 1 MB!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;hazel&quot;&gt;Hazel&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Non-code documentation is hard to find&lt;/li&gt;
+&lt;li&gt;Nice not having to worry about whitespace&lt;/li&gt;
+&lt;li&gt;Annoyingly slow when typing&lt;/li&gt;
+&lt;li&gt;It&amp;#39;s nice to have contextual help/explanations for what you type it, but it&amp;#39;s still not easy to figure out what to type in in the first place&lt;/li&gt;
+&lt;li&gt;Very slow (50,000+ slower than a trivial native code solution), no random-access data structure&lt;/li&gt;
+&lt;li&gt;Hard-coded 20-second time limit on evaluation (which is hard to avoid since it&amp;#39;s so slow...) -- I ended up modifying the time limit in the minified JavaScript source file, as a work around&lt;/li&gt;
+&lt;li&gt;I like the mix of ML and C-style syntax&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;ada&quot;&gt;Ada&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Seems like a lot of boilerplate, but that might be intentional&lt;/li&gt;
+&lt;li&gt;I wasn&amp;#39;t sure how big Ada.Containers.Count_Type could be and it turns out it&amp;#39;s implementation defined--this is surprising for a language that&amp;#39;s supposed to be robust&lt;/li&gt;
+&lt;li&gt;Structure and syntax is similar to Pascal&lt;/li&gt;
+&lt;li&gt;Can only have one top-level procedure per file?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;shen&quot;&gt;Shen&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Lots of details are hidden away in the &amp;quot;Shen Book&amp;quot; -- it&amp;#39;s available, but only in a scanned, non-OCR&amp;#39;d JPEG format&lt;/li&gt;
+&lt;li&gt;None of the implementations I tried actually included the standard library&lt;/li&gt;
+&lt;li&gt;For being portable, the main implementation seems to only target Windows&lt;/li&gt;
+&lt;li&gt;Having Prolog embedded in a Lisp sounded great, but I found it awkward to use since it&amp;#39;s lacking Prolog&amp;#39;s most basic standard library functionality&lt;/li&gt;
+&lt;li&gt;I was skeptical of the lack of quote/quasiquote in a Lisp, but I didn&amp;#39;t actually end up needing either of them!&lt;/li&gt;
+&lt;li&gt;I feel like there are some intriguing ideas in Shen, but overall I found Shen impenetrable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;kitten&quot;&gt;Kitten&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;I liked the idea of a simple, functional, statically typed concatenative language&lt;/li&gt;
+&lt;li&gt;Switching between Forth-style syntax and C (or Python) syntax feels odd (and I don&amp;#39;t like all the commas)&lt;/li&gt;
+&lt;li&gt;Very, very slow to compile and run (N.B. a lot of the startup overhead appears to come from &amp;quot;The Haskell Stack&amp;quot;)&lt;/li&gt;
+&lt;li&gt;Can use absurd amounts of memory in some cases&lt;/li&gt;
+&lt;li&gt;Logical &lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt; and &lt;code&gt;||&lt;/code&gt; have no special meaning, so short-circuiting is implemented using (explicit) anonymous functions&lt;/li&gt;
+&lt;li&gt;Fun to play with!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;lo&quot;&gt;LO&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Dislike &lt;code&gt;0 as i32&lt;/code&gt; for a signed integer type zero (but I discovered that &lt;code&gt;+0&lt;/code&gt; is equivalent)&lt;/li&gt;
+&lt;li&gt;Found some minor compiler bugs&lt;/li&gt;
+&lt;li&gt;Vectors return pointers, so the underlying element can change!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;bend&quot;&gt;Bend&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Number types are only 24-bit (probably normal for GPU work, but pretty small for Project Euler!)&lt;/li&gt;
+&lt;li&gt;Couldn&amp;#39;t seem to run anything on a VM with &amp;lt; 8 GB of memory&lt;/li&gt;
+&lt;li&gt;Have to be &lt;em&gt;very&lt;/em&gt; careful about data types -- there is &lt;em&gt;no&lt;/em&gt; type-checking at all!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;v&quot;&gt;V&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Fast to compile and run&lt;/li&gt;
+&lt;li&gt;Easy to pick up if you&amp;#39;ve used a C-like language&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;futhark&quot;&gt;Futhark&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Just by using &lt;code&gt;map&lt;/code&gt;, I was able to get a parallel program with no extra effort&lt;/li&gt;
+&lt;li&gt;Confirmed the &lt;code&gt;multicore&lt;/code&gt; build ran twice as fast on my dual-core laptop&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;lobster&quot;&gt;Lobster&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Easy to write code, thanks to simple and terse syntax&lt;/li&gt;
+&lt;li&gt;Couldn&amp;#39;t get &amp;quot;exceptions&amp;quot; working at all&lt;/li&gt;
+&lt;li&gt;Didn&amp;#39;t have to specify any types, which was convenient&lt;/li&gt;
+&lt;li&gt;I was excited to see how fast a static, compiled solution was, but... it ended up being slower than Python!&lt;/li&gt;
+&lt;li&gt;(Obviously, running a little bit of math is not the intended use case for Lobster--transpiling to C++ might have sped things up, but I couldn&amp;#39;t get that working)&lt;/li&gt;
+&lt;li&gt;Overall, it felt a bit like Nim&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;dylan&quot;&gt;Dylan&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Developer experience with Open Dylan was not great...&lt;/li&gt;
+&lt;li&gt;Hit tons of issues and warnings just trying to build and run a &amp;quot;hello world&amp;quot; program...&lt;/li&gt;
+&lt;li&gt;Building a &amp;quot;hello world&amp;quot; program the first time took minutes and required creating multiple text files&lt;/li&gt;
+&lt;li&gt;Multiple dispatch, macros, etc. make this feel like Common Lisp, but with conventional syntax -- I&amp;#39;m surprised Dylan wasn&amp;#39;t more popular, honestly!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;quackery&quot;&gt;Quackery&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Ancillary stacks are a nice addition to stack-based languages&lt;/li&gt;
+&lt;li&gt;Feels like a cross between Forth and Lisp, but with arrays instead of lists&lt;/li&gt;
+&lt;li&gt;Quackery doesn&amp;#39;t have variables... but I kind of wish it did&lt;/li&gt;
+&lt;li&gt;The foreword from The Book of Quackery was a fun read&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Python is the new BASIC</title>
 <id>https://log.schemescape.com/posts/programming-languages/python-as-a-modern-basic.html</id>
@@ -472,160 +589,6 @@
 &lt;h2 id=&quot;but-theres-much-more&quot;&gt;But there&amp;#39;s much more&lt;/h2&gt;
 &lt;p&gt;Of course, I only barely scratched the surface of what Blazin&amp;#39; Forth is capable of. There are affordances for turtle graphics, sound generation via the SID chip, device access, etc. It feels like a complete and very capable system! One day, I&amp;#39;d like to try and write a game entirely in Blazin&amp;#39; Forth--though I doubt I&amp;#39;ll ever actually get around to it.&lt;/p&gt;
 &lt;p&gt;Regardless, that&amp;#39;s enough rambling. Hopefully I&amp;#39;ve piqued your interest enough that you&amp;#39;ll give Blazin&amp;#39; Forth a try--it&amp;#39;s well worth a look, especially if the Commodore 64 holds a special place in your heart or you have always been curious about Forth.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Blazin&apos; Forth/Starting Forth editor quick reference</title>
-<id>https://log.schemescape.com/posts/vintage-computing/forth-line-editor.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/vintage-computing/forth-line-editor.html"/>
-<updated>2024-08-13T00:00:00.000Z</updated>
-<summary type="text">For my own reference, this is a quick reference table for vintage line/block-based Forth editors.</summary>
-<content type="html">&lt;p&gt;&lt;strong&gt;Blazin&amp;#39; Forth&lt;/strong&gt; is an implementation of Forth for the Commodore 64, published in 1985 by Scott Ballantyne (for free). Its built-in editor is block- and line-based, and the editor is modeled after one described in the first edition of &lt;a href=&quot;https://www.forth.com/starting-forth/&quot;&gt;Starting Forth&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The rest of this post provides quick reference for the editor, because I couldn&amp;#39;t find any such resource on the web. For a &lt;em&gt;tutorial&lt;/em&gt;, see the Starting Forth PDF at the previous link.&lt;/p&gt;
-&lt;h1 id=&quot;forth-editor-quick-reference&quot;&gt;Forth editor quick reference&lt;/h1&gt;
-&lt;h2 id=&quot;block-selectionmanipulation&quot;&gt;Block selection/manipulation&lt;/h2&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Word&lt;/th&gt;
-&lt;th align=&quot;center&quot;&gt;Stack&lt;/th&gt;
-&lt;th&gt;Description&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;LIST&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(n --)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Select&lt;/strong&gt; the given block, &lt;strong&gt;print&lt;/strong&gt; it out, and start the editor&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;N&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
-&lt;td&gt;Move to the &lt;strong&gt;next block&lt;/strong&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;B&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
-&lt;td&gt;Move backwards to the &lt;strong&gt;previous block&lt;/strong&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;SAVE-BUFFERS&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Save&lt;/strong&gt; modified buffers back to disk blocks&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;EMPTY-BUFFERS&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Discard&lt;/strong&gt; buffers/changes&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;LOAD&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(n --)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Load and execute&lt;/strong&gt; the given block&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;h2 id=&quot;line-editing-commands&quot;&gt;Line editing commands&lt;/h2&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Word&lt;/th&gt;
-&lt;th align=&quot;center&quot;&gt;Stack&lt;/th&gt;
-&lt;th&gt;Description&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;L&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Print&lt;/strong&gt; the currently selected block&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;T&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(n --)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Select&lt;/strong&gt; the given line number&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;P&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Replace&lt;/strong&gt; the selected line with the remainder of the input buffer (use 3 spaces to clear the line entirely; leave blank to copy from the insert buffer)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;U&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Insert under&lt;/strong&gt; the current line the rest of the input buffer, shifting any following lines down, and move selection down one line&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;X&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Cut&lt;/strong&gt; the current line, and shift following lines up one line (the line that was removed is placed into the insert buffer--use &lt;code&gt;P&lt;/code&gt;/&lt;code&gt;U&lt;/code&gt; to &amp;quot;paste&amp;quot;)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;h2 id=&quot;character-editing-commands&quot;&gt;Character editing commands&lt;/h2&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Word&lt;/th&gt;
-&lt;th&gt;Description&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;F&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Search&lt;/strong&gt; for the rest of the input buffer in the current line&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;I&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Insert&lt;/strong&gt; the rest of the input buffer before the cursor&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;E&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Delete&lt;/strong&gt; the string previously found with &lt;code&gt;F&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;D&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Find and delete&lt;/strong&gt; the rest of the input buffer (combination of &lt;code&gt;F&lt;/code&gt; and &lt;code&gt;E&lt;/code&gt;)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;R&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Replace&lt;/strong&gt; previously found text with the rest of the input buffer (combination of &lt;code&gt;E&lt;/code&gt; and &lt;code&gt;I&lt;/code&gt;)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;TILL&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Delete everything from the cursor, through the rest of the input buffer&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;h2 id=&quot;miscellaneous-commands&quot;&gt;Miscellaneous commands&lt;/h2&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Word&lt;/th&gt;
-&lt;th align=&quot;center&quot;&gt;Stack&lt;/th&gt;
-&lt;th&gt;Description&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;WIPE&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Clear&lt;/strong&gt; the current block&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;FLUSH&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(--)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Save&lt;/strong&gt; buffers back to disk blocks, and free associated buffers&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;COPY&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(src dest --)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Copy block&lt;/strong&gt; from one to another&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;S&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(n --)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Search&lt;/strong&gt; for the rest of the input buffer in this block &lt;em&gt;and following blocks&lt;/em&gt;, while the block number is lower than the specified limit&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;M&lt;/code&gt;&lt;/td&gt;
-&lt;td align=&quot;center&quot;&gt;(b l --)&lt;/td&gt;
-&lt;td&gt;&lt;strong&gt;Copy current line&lt;/strong&gt; to a new block and associated line&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
 </content>
 </entry>
 </feed>
