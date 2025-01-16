@@ -7,8 +7,76 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2024-12-29T17:02:48.306Z</updated>
+<updated>2025-01-16T21:26:57.657Z</updated>
 
+<entry>
+<title>New year, new programming languages</title>
+<id>https://log.schemescape.com/posts/programming-languages/100-languages-14.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-14.html"/>
+<updated>2025-01-16T00:00:00.000Z</updated>
+<summary type="text">I finished my dumb project.</summary>
+<content type="html">&lt;p&gt;I just finished &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;solving the first 100 Project Euler problems using 100 different programming languages&lt;/a&gt;. For reference: &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;here is all the code&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I&amp;#39;m planning to write up a summary post at some point&lt;/strong&gt;, but this is just my last throwaway post with brief notes on the languages I&amp;#39;ve tried since &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-13.html&quot;&gt;the last update&lt;/a&gt;. Rye and Nelua were the stars of this round.&lt;/p&gt;
+&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;/h1&gt;
+&lt;h2 id=&quot;ats&quot;&gt;ATS&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Has some bizarre syntax, e.g. &lt;code&gt;:&amp;lt;cloref1&amp;gt;&lt;/code&gt; and &lt;code&gt;t@ype&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Inscrutable error messages, such as &lt;code&gt;the syntactic entity [impqi0de] is needed.&lt;/code&gt; -- what is &lt;code&gt;[impqi0de]&lt;/code&gt;???&lt;/li&gt;
+&lt;li&gt;Another example: copy-pasting &lt;code&gt;fn square (x: double): double = x * x&lt;/code&gt; from the official documentation yields &lt;code&gt;error: ‘PMVtmpltcstmat’ undeclared (first use in this function)&lt;/code&gt;, unless you put &lt;code&gt;#include &amp;quot;share/atspre_staload.hats&amp;quot;&lt;/code&gt; at the top of the file&lt;/li&gt;
+&lt;li&gt;I&amp;#39;ll admit I didn&amp;#39;t attempt to include any proofs in my code, so I didn&amp;#39;t really leverage ATS to its fullest (or, really, any) extent&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;pre-scheme&quot;&gt;Pre-Scheme&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Using the built-in &lt;code&gt;errors&lt;/code&gt; enum resulted in compilation errors&lt;/li&gt;
+&lt;li&gt;Static typing in Scheme is awkward because I couldn&amp;#39;t find a clean way to not return anything&lt;/li&gt;
+&lt;li&gt;Couldn&amp;#39;t find an example of asserting types&lt;/li&gt;
+&lt;li&gt;Unstripped solution binary was ~50 KB (C is great!)&lt;/li&gt;
+&lt;li&gt;Didn&amp;#39;t actually bother deallocating memory (C is great!)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;common-lisp&quot;&gt;Common Lisp&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Interactive development is helpful (and fun)&lt;/li&gt;
+&lt;li&gt;So many cryptic/inconsistent names, e.g. &lt;code&gt;fmakunbound&lt;/code&gt;, &lt;code&gt;mapcon&lt;/code&gt;, &lt;code&gt;clrhash&lt;/code&gt;, &lt;code&gt;prin1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;=&lt;/code&gt; vs. &lt;code&gt;equalp&lt;/code&gt; vs. &lt;code&gt;equal&lt;/code&gt; vs. &lt;code&gt;eql&lt;/code&gt; vs. &lt;code&gt;eq&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;SBCL is fast, but a trivial stand-alone binary is huge and uses ~100 MB of memory&lt;/li&gt;
+&lt;li&gt;Common Lisp isn&amp;#39;t as elegant as Scheme, but the implementations are more mutually compatible than in the Scheme world&lt;/li&gt;
+&lt;li&gt;If there was a fast, &lt;em&gt;low-overhead&lt;/em&gt; Common Lisp, I&amp;#39;d probably use it as my default language for side projects&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;mouse-83&quot;&gt;Mouse-83&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Finally, a programming language with less syntax than Forth!&lt;/li&gt;
+&lt;li&gt;Single-letter variables names make it hard to convey their meaning&lt;/li&gt;
+&lt;li&gt;Overall, if I wanted a language that was easy to implement, I&amp;#39;d probably opt for Forth, Pascal, or Lisp -- a small increase in complexity is worth unlocking greater readability (easy to say in 2025, I know)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;cyber&quot;&gt;Cyber&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Once mature, this could be a fast Lua replacement with more Python-like syntax (and zero-based indexing!)&lt;/li&gt;
+&lt;li&gt;Unfortunately, I hit several bugs in Cyber&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;varyx&quot;&gt;Varyx&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;while&lt;/code&gt; loop only works if there&amp;#39;s a blank line before it&lt;/li&gt;
+&lt;li&gt;Arrays appear to be lists under the hood, with slow (O(n)) access&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;rye&quot;&gt;Rye&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Very compact code&lt;/li&gt;
+&lt;li&gt;Surprisingly fast&lt;/li&gt;
+&lt;li&gt;Missing functional helpers, e.g. &amp;quot;sort by&amp;quot; -- it sounds like these are planned but not implemented&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;rexx&quot;&gt;Rexx&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Logical operator for &amp;quot;exclusive or&amp;quot; is unfortunately the same as C&amp;#39;s &amp;quot;logical and&amp;quot;: &lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;And &lt;code&gt;%&lt;/code&gt; is integer division, with &lt;code&gt;//&lt;/code&gt; being remainder (the opposite of what I&amp;#39;ve seen elsewhere)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;nelua&quot;&gt;Nelua&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Always nice to see my code compile down to &amp;lt; 100 KB executables!&lt;/li&gt;
+&lt;li&gt;It&amp;#39;s like a smaller Nim, but using Lua syntax&lt;/li&gt;
+&lt;li&gt;Mostly &amp;quot;just worked&amp;quot; for me -- very easy to pick up&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Yet more programming languages</title>
 <id>https://log.schemescape.com/posts/programming-languages/100-languages-13.html</id>
@@ -509,86 +577,6 @@
 &lt;li&gt;Preview with F1, O, V -- then run/stop to end preview, cursor keys to move left/right, and Commodore key to scroll&lt;/li&gt;
 &lt;li&gt;F5 for caps lock&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>Stumbling along with Blazin&apos; Forth</title>
-<id>https://log.schemescape.com/posts/vintage-computing/blazin-forth.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/vintage-computing/blazin-forth.html"/>
-<updated>2024-08-20T00:00:00.000Z</updated>
-<summary type="text">Here are some notes on my first attempt at using Blazin&apos; Forth on a Commodore 64.</summary>
-<content type="html">&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/40-year-old-dev-environment.html&quot;&gt;showing off my &amp;quot;new&amp;quot; Commodore 64&lt;/a&gt; and posting a &lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/forth-line-editor.html&quot;&gt;Forth editor &amp;quot;quick reference&amp;quot;&lt;/a&gt;, it should be no surprise that (&lt;a href=&quot;https://log.schemescape.com/posts/vintage-computing/../programming-languages/100-languages.html&quot;&gt;in pursuit of using 100 programming languages&lt;/a&gt;) I sat down and, over the course of several evenings, solved a Project Euler problem using Blazin&amp;#39; Forth (&lt;a href=&quot;https://github.com/jaredkrinke/100-languages/blob/main/src/p55.forth&quot;&gt;code here&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;Curious about using an old Forth, on old hardware? The rest of this post contains my notes, along with links to resources, in case you&amp;#39;d like to give it a try.&lt;/p&gt;
-&lt;h1 id=&quot;blazin-forth&quot;&gt;Blazin&amp;#39; Forth&lt;/h1&gt;
-&lt;p&gt;Blazin&amp;#39; Forth, being 39 years old, doesn&amp;#39;t have a GitHub repository. It doesn&amp;#39;t even have a SourceForge project. In fact, I couldn&amp;#39;t find a canonical web site. The best resources I can point to are:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.lyonlabs.org/commodore/onrequest/collections.html&quot;&gt;An excellent Web 1.0 page about programming languages on the Commodore 64&lt;/a&gt; -- there&amp;#39;s a line for Blazin&amp;#39; Forth with links to disk images&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://jimlawless.net/blog/posts/blazin/&quot;&gt;A retrospective interview with Blazin&amp;#39; Forth&amp;#39;s author, Scott Ballantyne&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://archive.org/details/transactor-magazines-v7-i05/page/n59/mode/2up&quot;&gt;A contemporaneous article from Transactor Magazine about Blazin&amp;#39; Forth, by its author&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Since I haven&amp;#39;t found a convenient way to read .seq files on a modern computer, &lt;a href=&quot;https://gist.github.com/jaredkrinke/d8a801274a9a66bb06a0e2c8778624ca&quot;&gt;here is an ASCII dump of Blazin&amp;#39; Forth&amp;#39;s documentation&lt;/a&gt; (it is copyright 1985 Scott Ballantyne, but &amp;quot;distribution on a not for profit basis is encouraged&amp;quot;).&lt;/p&gt;
-&lt;h2 id=&quot;running-blazin-forth&quot;&gt;Running Blazin&amp;#39; Forth&lt;/h2&gt;
-&lt;p&gt;It&amp;#39;s possible to run Blazin&amp;#39; Forth in an emulator such as &lt;a href=&quot;https://vice-emu.sourceforge.io/&quot;&gt;VICE&lt;/a&gt;, but I should note that I ran into some issues when loading and saving screens (saved code blocks). I&amp;#39;m unsure if my issues are due to a bug or a simple mistake on my part, but I didn&amp;#39;t run into any such issues on a real C64.&lt;/p&gt;
-&lt;h2 id=&quot;learning-forth&quot;&gt;Learning Forth&lt;/h2&gt;
-&lt;p&gt;I&amp;#39;ve written a small amount of code in a smattering for Forths, but Blazin&amp;#39; Forth really opened my eyes to Forth, for two reasons:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Blazin&amp;#39; Forth&amp;#39;s documentation (linked above) clarifies a lot of the &amp;quot;whys&amp;quot; of Forth&lt;/strong&gt;, and also provides interesting sample code&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Blazin&amp;#39; Forth, as in classic Forth, brings its own operating system&lt;/strong&gt;, in the sense that it provides its own durable storage implementation: 1 KB blocks (usable, with a built-in editor, for code &lt;em&gt;or&lt;/em&gt; anything else you want)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Note that, unless you&amp;#39;re well versed in Forth, you&amp;#39;ll probably want to have &lt;a href=&quot;https://www.forth.com/starting-forth/&quot;&gt;Starting Forth&lt;/a&gt; handy while reading Blazin&amp;#39; Forth&amp;#39;s documentation.&lt;/p&gt;
-&lt;p&gt;Aside: &lt;strong&gt;I also enjoyed Blazin&amp;#39; Forth&amp;#39;s documentation as a time capsule from the mid-80s&lt;/strong&gt;. It mentions Compuserve, a Forth Interest Group, and the software even sports a dedication--something I&amp;#39;m used to seeing in books, but which is curiously absent from most software (modern software, at least).&lt;/p&gt;
-&lt;h2 id=&quot;block-based-editing----not-my-favorite&quot;&gt;Block-based editing -- not my favorite&lt;/h2&gt;
-&lt;p&gt;N.B. &amp;quot;Block-based&amp;quot; as in &lt;strong&gt;you&amp;#39;re writing directly to 1 KB blocks on disk&lt;/strong&gt;--&lt;em&gt;not&lt;/em&gt; as in dragging around blocks in a GUI to create programs (a la &lt;a href=&quot;https://scratch.mit.edu/&quot;&gt;Scratch&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;This was my first experience using both a line-based interactive editor and with Forth-style block/screen-based programming. &lt;strong&gt;Essentially, you are given ~130 one kilobyte blocks, with each being divided into 16 lines of 64 characters&lt;/strong&gt;. The upside is that you don&amp;#39;t need a file system (and Forth can provide a line-based editor). The downside is that now you have to ensure your lines aren&amp;#39;t too long and that there aren&amp;#39;t too many of them (lest you need to spill code onto a subsequent block).&lt;/p&gt;
-&lt;p&gt;More irritatingly, &lt;strong&gt;the Commodore 64 provides a 40 column wide display&lt;/strong&gt; (with no status bar), so now it&amp;#39;s not even obvious when a 64 character line is getting too long. And even if a line is less than 64 characters, if it&amp;#39;s at least 40 characters, it will wrap when being printed out, potentially causing the first couple of lines to scroll off screen.&lt;/p&gt;
-&lt;p&gt;Overall, I found line-based editing to be a decent experience (no more annoying than having to always specify line numbers in Commodore BASIC). Using blocks instead of a file system was cute, but unpleasant--especially due to the mismatch between display width and line width (aside: I wonder if a Commodore 128&amp;#39;s 80-column mode would work with Blazin&amp;#39; Forth?).&lt;/p&gt;
-&lt;p&gt;Interestingly, after coming to this conclusion, I read through the interview linked above, and found that &lt;strong&gt;Blazin&amp;#39; Forth&amp;#39;s author actually thinks that files would have been a better choice&lt;/strong&gt;:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Today I would probably not implement the Forth block system, I’d use files instead. I never liked that, to tell the truth. It made a certain sense with the 64 disk drives, and the code I wrote is optimized for the rotational speed of those things, but I think it leads to better programming to just store your code in a file with a name.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Agreed!&lt;/p&gt;
-&lt;h3 id=&quot;improvement-running-the-current-line&quot;&gt;Improvement: running the current line&lt;/h3&gt;
-&lt;p&gt;For my workflow, I would usually do the following:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Start a definition on a new line&lt;/li&gt;
-&lt;li&gt;Compile the line&lt;/li&gt;
-&lt;li&gt;Test the line&lt;/li&gt;
-&lt;li&gt;Fix/refine the definition by &lt;code&gt;FORGET&lt;/code&gt;-ing it and then go back to 1&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;To my surprise, &lt;strong&gt;there was no built-in support for the second step (compiling/running the current line)&lt;/strong&gt;. Blazin&amp;#39; Forth doesn&amp;#39;t support the &lt;a href=&quot;https://forth-standard.org/standard/core/EVALUATE&quot;&gt;EVALUATE&lt;/a&gt; word, so I had to fashion my own version:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-forth&quot;&gt;// RL RUNS THE &lt;span class=&quot;hljs-keyword&quot;&gt;CURRENT&lt;/span&gt; EDITOR &lt;span class=&quot;hljs-type&quot;&gt;LINE&lt;/span&gt;
-: &lt;span class=&quot;hljs-type&quot;&gt;LINE&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;INDEX&lt;/span&gt; R# @ C/L / ;
-: &lt;span class=&quot;hljs-type&quot;&gt;LINE&lt;/span&gt;&amp;gt;&lt;span class=&quot;hljs-keyword&quot;&gt;OFFSET&lt;/span&gt; C/L * ;
-: CURLINE SCR @ BLOCK &lt;span class=&quot;hljs-type&quot;&gt;LINE&lt;/span&gt;-&lt;span class=&quot;hljs-keyword&quot;&gt;INDEX&lt;/span&gt; &lt;span class=&quot;hljs-type&quot;&gt;LINE&lt;/span&gt;&amp;gt;&lt;span class=&quot;hljs-keyword&quot;&gt;OFFSET&lt;/span&gt; + ;
-: C&amp;gt;TIB TIB SWAP CMOVE ;
-: CL&amp;gt;TIB CURLINE C/L C&amp;gt;TIB C/L #TIB ! ;
-: RL CL&amp;gt;TIB &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; &amp;gt;&lt;span class=&quot;hljs-keyword&quot;&gt;IN&lt;/span&gt; ! INTERPRET ;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&quot;explanation&quot;&gt;Explanation&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;LINE-INDEX&lt;/code&gt; (-- line) pushes the index of the currently selected line (0 through 15), using an internal word named &lt;code&gt;R#&lt;/code&gt; that represents the offset into a block of the current cursor (note: this may be in the middle of a line)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;LINE&amp;gt;OFFSET&lt;/code&gt; (line -- offset) pushes the offset of the beginning of the given line (&lt;code&gt;C/L&lt;/code&gt; is an internal constant for the number of characters per line--64)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;CURLINE&lt;/code&gt; (-- address) pushes the address of the current line, in the current block (whose index is in the variable &lt;a href=&quot;https://forth-standard.org/standard/block/SCR&quot;&gt;SCR&lt;/a&gt;, and whose address is obtained via &lt;a href=&quot;https://forth-standard.org/standard/block/BLOCK&quot;&gt;BLOCK&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;C&amp;gt;TIB&lt;/code&gt; (bytes --) copies the given number of bytes to &lt;code&gt;TIB&lt;/code&gt; (the location of the text input buffer)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;CL&amp;gt;TIB&lt;/code&gt; (--) copies the current editor line into the text input buffer (and sets the size of the input, &lt;code&gt;#TIB&lt;/code&gt; appropriately)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;RL&lt;/code&gt; (--?) copies the current line into the text input buffer (see previous), sets the current input buffer index to 0, and runs the line using &lt;code&gt;INTERPRET&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;thinking-in-forth&quot;&gt;Thinking in Forth&lt;/h2&gt;
-&lt;p&gt;Despite making some progress in beginning to truly &lt;em&gt;see&lt;/em&gt; Forth, I still have not reached Forth Enlightenment. Specifically, &lt;strong&gt;I still don&amp;#39;t know what to do when a function needs to operate on more than 2 or 3 inputs&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;As an example, I have a word (function) for adding two &amp;quot;big integer&amp;quot; values (represented as arrays of decimal digits, least significant digit first), named &lt;code&gt;N+&lt;/code&gt;. The stack annotation for that function is &lt;code&gt;(a1 a2 -- )&lt;/code&gt;, meaning it takes the address of two numbers, adds the two numbers, and writes the result into the second number, something like &lt;code&gt;a2 = a1 + a2&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Internally, this function loops over the digits and adds them, including any carry from the previous digit. The problem I ran into is that &lt;strong&gt;now I&amp;#39;ve got two addresses and a carry to worry about. If I put all of those on the stack, then I feel like I&amp;#39;m constantly shuffling items around&lt;/strong&gt; and trying to avoid letting the stack get too deep (reaching down beyond 3 items gets tricky).&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Ideally, I&amp;#39;d like to assign names to the elements on the stack and then just be able to copy them to the top of the stack using those names&lt;/strong&gt; -- something like:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-forth&quot;&gt;: n+ ( &lt;span class=&quot;hljs-built_in&quot;&gt;a1&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;a2&lt;/span&gt; -- ) &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; ( carry ) &lt;span class=&quot;hljs-built_in&quot;&gt;a1&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;a2&lt;/span&gt; + + ( to &lt;span class=&quot;hljs-keyword&quot;&gt;add&lt;/span&gt; the carry, &lt;span class=&quot;hljs-built_in&quot;&gt;a1&lt;/span&gt;, &lt;span class=&quot;hljs-keyword&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;hljs-built_in&quot;&gt;a2&lt;/span&gt; together )
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;I think newer Forths support syntax like this, but back in the days of Blazin&amp;#39; Forth, the only solutions I see are to either:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Be smarter about the stack... somehow&lt;/li&gt;
-&lt;li&gt;Throw some of the values into variables!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I went with the second option and just used a variable for the carry. This obviously wouldn&amp;#39;t work in any case where a global variable wouldn&amp;#39;t suffice (e.g. any function that can appear on the call stack multiple times). &lt;strong&gt;But maybe that&amp;#39;s the point of Forth? I know this function will never nest, so perhaps a global is ok?&lt;/strong&gt; Clearly, I will need to meditate on this.&lt;/p&gt;
-&lt;h2 id=&quot;but-theres-much-more&quot;&gt;But there&amp;#39;s much more&lt;/h2&gt;
-&lt;p&gt;Of course, I only barely scratched the surface of what Blazin&amp;#39; Forth is capable of. There are affordances for turtle graphics, sound generation via the SID chip, device access, etc. It feels like a complete and very capable system! One day, I&amp;#39;d like to try and write a game entirely in Blazin&amp;#39; Forth--though I doubt I&amp;#39;ll ever actually get around to it.&lt;/p&gt;
-&lt;p&gt;Regardless, that&amp;#39;s enough rambling. Hopefully I&amp;#39;ve piqued your interest enough that you&amp;#39;ll give Blazin&amp;#39; Forth a try--it&amp;#39;s well worth a look, especially if the Commodore 64 holds a special place in your heart or you have always been curious about Forth.&lt;/p&gt;
 </content>
 </entry>
 </feed>
