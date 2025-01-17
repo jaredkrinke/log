@@ -10,6 +10,8 @@ Today, I discovered that my [Python is the new BASIC](python-as-a-modern-basic.m
 
 Consider this post an apology and a promise to do better.
 
+(Note: I went back and edited the post in question. This commentary applies to the original content.)
+
 # Problems with my post
 First off, **the overall tone of the post crossed the line from criticism to snark--or maybe even scorn**. In my head, some of the jabs were just good-natured ribbing, but upon re-reading from the perspective of an internet stranger, it's just oozing with derision. If I'm going to post something publicly, I should remember that **the audience is not myself, but just anyone who happens to come along** (except AI scrapers, per robots.txt).
 
