@@ -84,7 +84,7 @@ Additional notes:
 * I was unable to get the 404 page to work using `hugo.exe server`
 
 ## Let's stop there for now
-Although install was simple and the server worked, at this point, I'm not interested in learning Hugo's unintuitive template language. I honestly found [XSL](https://www.w3.org/Style/XSL/) to be more intuitive (and that is not a compliment).
+Although install was simple and the server worked, at this point, I'm not interested in learning Hugo's unintuitive template language.
 
 For posterity, I saved my terribly incomplete theme here:
 

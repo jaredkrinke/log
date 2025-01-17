@@ -22,7 +22,7 @@ My first stop was to learn about x86 assembly, and I used [Assembly Nights on ra
 ### 16-bit, "bare metal" (+ BIOS)
 After that, it was just a simple* matter of porting the 32-bit code to 16-bit mode (removing `e` from register names and halving the word size). And then I got to experience **the joy of learning about the PC BIOS**.
 
-The web is actually littered with examples of "bare metal" x86 programming (aside: does it count as "bare metal" if you're using the BIOS API?). Annoyingly, **most of the examples I found didn't actually work** for reasons I'll probably never understand. There are also many proclamations of required initialization rituals that I didn't (and still don't) understand. Some examples worked in [QEMU](https://www.qemu.org/) but not in Hyper-V or [Blinkenlights](https://justine.lol/blinkenlights/). Others inverted that sentence. And then there's real hardware, which is much more fickle.
+The web is actually littered with examples of "bare metal" x86 programming (aside: does it count as "bare metal" if you're using the BIOS API?). Annoyingly, **most of the examples I found didn't actually work** for me. There are also many proclamations of required initialization rituals that I didn't (and still don't) understand. Some examples worked in [QEMU](https://www.qemu.org/) but not in Hyper-V or [Blinkenlights](https://justine.lol/blinkenlights/). Others inverted that sentence. And then there's real hardware, which is much more fickle.
 
 **Here's what actually worked for me**  (about which I'm 100% *not* confident):
 

@@ -7,6 +7,8 @@ In [a previous article](future-proof-languages.md), I enumerated a bunch of popu
 
 Now, I'm drilling into the most promising candidates. First up is C#.
 
+**Update**: Note that this post is probably woefully out of date. I believe it is now possible to install a smaller toolchain, but I have yet to give it a try. If I do, I will come back and update this post (hopefully with a more positive experience!).
+
 # Setting up a C# development environment
 To my surprise, the [C# compiler](https://github.com/dotnet/roslyn) and [.NET runtime](https://github.com/dotnet/runtime) are both now open source (MIT license). Even more surprising, you can now apparently [deploy self-contained .NET executables to a Raspberry Pi](https://docs.microsoft.com/en-us/dotnet/iot/deployment).
 
@@ -21,9 +23,7 @@ Fighting my instinct to run away from such a massive disk footprint, I went ahea
 # Putting C# and .NET through its paces (or not)
 As an initial test, I'd like to build a self-contained "hello world" web server, running on Windows (32-bit and 64-bit), Linux (x64 Debian and Alpine), and a Raspberry Pi.
 
-Unfortunately, even with multiple .NET frameworks and SDKs installed and running Visual Studio, I was not able to successfully build a self-contained executable (it seemed to think I was using .NET Core, which I don't think I ever installed). After uninstalling the .NET 5.0 SDK, it seems that .NET 4.7.2 was also uninstalled, along with the .NET command line interface (`dotnet`). Reloading my test project prompted me to retarget to a previous .NET version, but then the project wouldn't build at all (even "framework-dependent"). Keep in mind this was a trivial "hello world" *command line* app, as in just `Console.WriteLine("Hello, world!")` inside a class's `Main` function).
-
-Even worse, after throwing up my hands in frustration, I went to uninstall all the .NET and C# components (to start over from scratch) and now Visual Studio's installer is claiming some of the components are required for C++ development, so I guess I'm never getting all that disk space back unless I want to break my C++ development environment.
+Unfortunately, even with multiple .NET frameworks and SDKs installed and running Visual Studio, I was not able to successfully build a self-contained executable (it seemed to think I was using .NET Core, which I don't think I ever installed). After uninstalling the .NET 5.0 SDK, it seems that .NET 4.7.2 was also uninstalled, along with the .NET command line interface (`dotnet`). Reloading my test project prompted me to retarget to a previous .NET version, but then the project wouldn't build at all (even "framework-dependent"). Keep in mind this was a trivial "hello world" *command line* app, as in just `Console.WriteLine("Hello, world!")` inside a class's `Main` function.
 
 # That's unfortunate...
 Despite my concerns around C# being closed source, I found that a lot of the C# tooling is actually open source now. Unfortunately, it still seems to be inextricably tied to Visual Studio and its massive, opaque installation process.

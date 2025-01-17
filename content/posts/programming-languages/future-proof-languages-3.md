@@ -34,16 +34,14 @@ For reference, my Alpine Linux baseline image was around 150 MB. Here are the re
 | Lua | 1 MB | 1 KB | 1 MB | Yes | Unnecessary |
 
 ## SDK size
-Just looking at SDK size, Rust is an outlier. Even compared to a similarly complex language like C++, the Rust SDK is absolutely huge. At the moment, I don't know why the SDK is so big. Even after allowing for a build tool, custom linker, and standard library, the Rust SDK is disappointingly heavy. This unfortunately matches my [previous experience with Rust on Windows](rust-first-experience.md). **Update**: Using the "minimal" profile, the SDK was closer to 650 MB for native compilation and another 150 MB for cross-compilation.
+Obviously, it's not fair to compare the compile-to-native languages to scripting languages, but comparisons within each category seem appropriate. Rust is big (especially if using Microsoft's linker, etc.). Go is the second largest, but it comes with some impressive features: the ability to trivially cross-compile and [a large standard library](https://pkg.go.dev/std). Go's offering seems on par with C#, but with a better "compile to native code" story (and, obviously, larger differences in the programming languages themselves).
 
-Obviously, it's not fair to compare the compile-to-native languages to scripting languages, but comparisons within each category seem appropriate. Go is the second largest, but it comes with some impressive features: the ability to trivially cross-compile and [a large standard library](https://pkg.go.dev/std). Go's offering seems on par with C#, but with a better "compile to native code" story (and, obviously, larger differences in the programming languages themselves).
-
-Zig is larger than I expected for a simple language, but it can cross-compile for different architectures (similar to Go), and [Zig can even compile C/C++ code](https://zig.news/kristoff/compile-a-c-c-project-with-zig-368j), so it's arguably worth the footprint.
+Zig is larger than I expected for a simple language, but it can cross-compile for different architectures (similar to Go), and [Zig can even compile C/C++ code](https://zig.news/kristoff/compile-a-c-c-project-with-zig-368j), so it's arguably worth the footprint (and the download is actually quite small).
 
 Looking at interpreted languages, the results are pretty similar except for Tcl and Lua (both of which don't come with much of a standard library).
 
 ## "Hello, world!" program size
-The Go binary shows one of Go's weaknesses -- it's compiled to native, but it has to include the entire runtime in each binary. This isn't a deal-breaker for me, so I'm not too concerned.
+The Go binary shows one of Go's weaknesses -- it's compiled to native, but it has to include the runtime in each binary. This isn't a deal-breaker for me, so I'm not too concerned.
 
 I *am* curious why the Zig binary is so large, but I haven't investigated any further yet. Given that Zig supports "freestanding" binaries, I'm sure it's possible to create minimal binaries with Zig.
 
@@ -56,7 +54,7 @@ Native languages generally compile to a single binary. I didn't try to get a ful
 
 The other languages show some interesting results: JavaScript and C# appear to be the most bloated, closely followed by SBCL (a Common Lisp implementation). But for JavaScript there are multiple runtimes--80 MB is for Deno, but QuickJS is under 1 MB--so JavaScript supports indirectly optimizing for either size or speed. Lisp has a similar story, although I didn't investigate it in depth. Python was impressively slim (definitely a surprise for me!).
 
-That leaves C# which, sadly, just appears to be bloated. For the record, I couldn't get a Tcl bundle working, but I suspect it would be < 10 MB.
+That leaves C# which, sadly, just appears to be bloated (**update**: I've read it is possible to produce much smaller self-contained C# builds these days, but I haven't tried it yet). For the record, I couldn't get a Tcl bundle working, but I suspect it would be < 10 MB.
 
 ## Developing *on* a Raspberry Pi
 Note: this section is about developing/compiling *on* a Raspberry Pi B.
@@ -88,13 +86,13 @@ Go and Zig have excellent tooling for cross-compiling. And if Zig can eventually
 
 C/C++ support cross-compiling through a painful process of setting up an entire compilation environment for the target. It's tedious and annoying, and I hope I never have to do it again.
 
-As for C#, I suspect there's some way to get them to successfully cross-compile for a Pi, but neither worked for me. I put SBCL in the last category because it seems to require running on the target in order to produce a bundle.
+As for C#, I suspect there's some way to get it to successfully cross-compile for a Pi, but after a few errors I gave up. I put SBCL in the last category because it seems to require running on the target in order to produce a bundle.
 
 # Analysis
 Subjectively, I was least impressed with the following languages, so they've been cut:
 
-* C#: big and bloated, with poor support for Raspberry Pi -- it's a shame because I really like C# and the .NET standard library
-* Lisp: unimpressive bundle size/cross-compiling story -- but honestly, it's too esoteric for me, and the community is highly fragmented
+* C#: big and didn't work out of the box -- it's a shame because I really like C# and the .NET standard library
+* Lisp: unimpressive bundle size/cross-compiling story -- but honestly, it's too esoteric for me, and the community is highly fragmented (**update**: I actually [ended up using Common Lisp for a while, to test out REPL-driven development](learning-lisp-in-2023.md))
 * Tcl: inconvenient tooling and, sadly, not popular enough to ensure it doesn't fade away
 
 I'll tackle the remaining languages in two categories: native/compiled/statically typed vs. interpreted/dynamically typed.
@@ -102,31 +100,31 @@ I'll tackle the remaining languages in two categories: native/compiled/staticall
 ## Native languages
 Here are the remaining native languages, along with my favorite and least favorite qualities:
 
-* C: simple and portable, but requires macros for many abstractions (and has an error-prone standard library)
+* C: simple and portable, but requires textual macros for many abstractions (and has an error-prone standard library)
 * C++: powerful abstractions, but an inconsistent standard library
 * Go: excellent tooling, but I still don't like the overhead of a garbage collector for native code
-* Rust: memory safety without a garbage collector, but the SDK is enormous (and supposedly slow)
-* Zig: efficient tooling, but immature (likely with breaking changes)
+* Rust: memory safety without a garbage collector, but the SDK is is big (and compilation is famously slow)
+* Zig: efficient tooling, but not yet mature
 
 ### C++ and Rust
-If I need powerful abstractions, C++ and Rust are the candidates. At the moment, I'm leaning towards giving Rust a try (despite the gigantic SDK). I'm familiar with C++, and it's certainly capable, but Rust's memory safety guarantees are worth exploring in depth. Hopefully that doesn't end up being a mistake...
+If I need powerful abstractions, C++ and Rust are the candidates. At the moment, I'm leaning towards giving Rust a try (despite the large SDK). I'm familiar with C++, and it's certainly capable, but Rust's memory safety guarantees are worth exploring in depth. Hopefully that doesn't end up being a mistake...
 
 ### C, Go, Zig
-If I'm just looking for a simple and fast language, that would leave C, Go, and Zig. C is almost certainly future-proof for another decade or two and the SDK is reasonably sized. I'm less sure about Go and Zig, despite their efficient tooling. I'm skeptical of Go's niche (native code, but with a garbage collector). Zig seems too immature, but its C/C++ compatibility is attractive.
+If I'm just looking for a simple and fast language, that would leave C, Go, and Zig. Honestly, they all look like good choices.
 
 Overall, Rust's unique combination of safety and speed is compelling, and I'm sure I'll end up using it eventually. I'll probably also need to use C where it's already entrenched.
 
 ## Interpreted languages
 Here are the remaining interpreted/dynamic languages:
 
-* Python: ubiquitous, with a large standard library, but the language has a lot of warts and a history of compatibility problems
+* Python: ubiquitous, with a large standard library
 * JavaScript/TypeScript: the only option for the web, with a convenient type system in TypeScript, but without a standard library and runtime (and the module story is *still* fragmented!)
 * Lua: minimalist, but no standard library
 
 These languages are almost a battery inclusion continuum from "included" to "sold separately".
 
 ### Python
-I don't like Python. But it's everywhere! Now that Python is convenient on Windows, Python is almost a defacto portable shell scripting language (with a lot more). For example, the [Zig bootstrap process](https://github.com/ziglang/zig-bootstrap) requires Python! If it had required Node, people would have lost their minds. I think it's high time I give in and just embrace Python.
+Python is everywhere! Now that Python is convenient on Windows, Python is almost a defacto portable shell scripting language (with a lot more). For example, the [Zig bootstrap process](https://github.com/ziglang/zig-bootstrap) requires Python! If it had required Node, people would have lost their minds. I think it's high time I give in and just embrace Python.
 
 ### JavaScript
 JavaScript has somehow leap-frogged Python to become a convenient language, and TypeScript makes it even better for large projects. But I will admit that Node's API is irritating, and the NPM ecosystem continually has to grapple with the lack of a standard library. Deno's tooling is excellent, but Deno also breaks compatibility left and right. JavaScript is definitely future-proof, but the non-browser runtimes I'm less sure about.
@@ -142,7 +140,7 @@ Realistically, I'm probably going to use all three of these scripting languages,
 * Lua for embedding
 
 # That's all!
-When I started this investigation, I thought Rust was a shoo-in, but it's big and not as stable/polished as I'd expected. It's still at the top of my "native" list, but only because of its unique combination of memory safety and systems-level design.
+When I started this investigation, I thought Rust was a shoo-in. It's still at the top of my "native" list, mostly due to its unique combination of memory safety and systems-level design.
 
 Prior to digging in a bit more, I wanted to continue avoiding Python in favor of JavaScript/TypeScript (running under Deno where possible, and Node otherwise). I've finally given in, and I think I'll be writing a lot more Python in the future. I'd also written off Lua, but its minimalist design dovetails nicely with my minimal development environment aspirations, so I might give Lua another shot. I'll happily continue using JavaScript (really TypeScript) for the web, of course.
 
@@ -154,14 +152,14 @@ The next section is just a collection of notes I made while testing out language
 * Docker images are provided -- would that be the safest way to try it out?
 * Not seeing a Dockerfile on GitHub for ARMv6...
 * What about Mono? Didn't see any packages starting with "mono" on Alpine Linux...
-* Cross-compile for Pi didn't work
+* Cross-compile for Pi didn't work -- sadly, I didn't investigate--I promise to try again someday!
 
 ### Go
 * Set `GOOS` and `GOARCH` to set OS and architecture for cross-compilation
 
 ### Lisp (SBCL)
 * Native package
-* Arrow keys didn't work in interpreter
+* Arrow keys didn't work in interpreter (use `rlwrap`)
 * It seems like producing a self-contained, native executable for a different platform is frequently not supported by Lisps
 
 ### Lua
@@ -177,17 +175,14 @@ The next section is just a collection of notes I made while testing out language
 ### Rust
 * Try with Alpine package first, since it's convenient, and easy to remove
 * Raspberry Pi B Alpine Linux triple: arm-unknown-linux-musleabihf
-* Attempt to cross-compile failed with "linker \`cc\` not found" (and suggestions from the web didn't help)
-* Cross-compiler setup from rustup was Visual Studio-levels of huge (1.5 GB)
+* Attempt to cross-compile failed with "linker \`cc\` not found"
 * Finally found [the trick](https://github.com/KodrAus/rust-cross-compile#cross-compiling-to-linux) for linking during cross-compilation: point Cargo to "rust-lld" (which is installed with the toolchain)
 
 ### Tcl
 * Couldn't figure out how to make a TclKit...
 
 ### Zig
-* No build for armv6l, but old build for armv6kz
-* Crashes on C compile--also very slow to compile
-* Hello world didn't work--also kind of slow to compile
-* Might try bootstrapping from my desktop, but probably too immature at the moment
+* No build for armv6l, but old build for armv6kz (unfortunately, this crashed and was slow)
+* Might try bootstrapping from my desktop
 * Cross compile to Raspberry Pi B with Alpine Linux: `zig build -Dtarget=arm-linux-musleabihf -Dcpu=arm1176jzf_s`
 * Cross-compiling C code [doesn't appear to be possible at the moment](https://github.com/ziglang/zig/issues/4875)

@@ -25,7 +25,7 @@ With all that said, there are a couple of languages I haven't yet mentioned on h
 ## Haxe
 * I like the idea of a portable language
 * But I didn't like the Java-like levels of ceremonial keywords/classes
-* Having said that, I prefer Haxe's familiar syntax and conveniences over something more minimal, like [wax](100-languages-9.md#wax)
+* Having said that, I prefer Haxe's familiar syntax and conveniences over something more minimal
 
 ## K
 * [oK](https://github.com/JohnEarnest/ok) is literally the only version of K I could even find

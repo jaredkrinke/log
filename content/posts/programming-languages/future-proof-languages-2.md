@@ -64,10 +64,6 @@ Eventually, I'll probably compile a big table of these languages, along with an 
 [Deno](https://deno.land/) makes running TypeScript trivially easy, but its list of supported platforms is short (notably, it does not include 32-bit Windows!). [Node](https://nodejs.org/en/) supports 32-bit Windows, but is much less convenient.
 
 ### Python
-Ah, my old nemesis: Python. I've never had a good experience setting up a Python environment. Additionally, the Python 2 to 3 migration (which included unnecessary things like [changing the semantics of the division operator](https://www.python.org/dev/peps/pep-0238/)) is remarkable only in that it didn't kill Python entirely (at least not yet).
-
-Yet Python is consistently one of the most popular programming languages. What am I missing?
-
 Anyway, the [Python installation docs](https://wiki.python.org/moin/BeginnersGuide/Download) recommend seeing if you already have Python installed by typing `python` into a command window. To my surprise, I don't immediately see an "unrecognized command" error. Incredibly, it launches to a Python page in the Microsoft Store (compliments of `%LocalAppData%\Microsoft\WindowsApps\python.exe` -- seriously!?). I'll give it a try since it's a surprisingly reasonable ~100 MB download. It appears to install a Python runtime and the IDLE editor.
 
 Honestly, I'm not thrilled that Microsoft decided to [insert this Python shim into Windows itself](https://devblogs.microsoft.com/python/python-in-the-windows-10-may-2019-update/) just to make it easier for people to find Python, but I guess I'll try it out. Note that I'll almost certainly be using VS Code and the official Python extension for editing and debugging.
@@ -83,7 +79,7 @@ After selecting the .NET runtime and SDK in the Visual Studio installer, I am ap
 
 Since I was curious, I checked out the [.NET SDK for Linux (Debian)](https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian), and it was closer to 500 MB. To my surprise, it was very full-featured, and I was even able to cross-compile for Windows from Linux.
 
-As much as I like C#, the unreasonable disk footprint of its tooling has sent C# to the bottom of the pile.
+As much as I like C#, the unreasonable disk footprint of its tooling has sent C# to the bottom of my pile.
 
 ### C++
 C++ sort of gets a free pass because Linux distributions generally provide the GNU C++ compiler and I already had to install a C++ environment in order to use Rust on Windows. Clang is < 1 GB to install and there are numerous free and/or open source C++ IDEs that are less than 1 GB. Visual Studio for C++ was around 3 GB, which is much too big, but not an immediate disqualifier in light of available alternatives. At least there's a free version now.
@@ -95,7 +91,7 @@ C is similar to C++, with the notable property that it is trivially bootstrap-ab
 Go for Windows is a reasonable ~125 MB download, and VS Code has an official Go extension. I've heard that Go's tooling is excellent and what I've seen thus far (e.g. `go fmt`) is similar to what I liked about [Deno](../web-development/one-month-with-deno.md). It only took a couple of minutes (for me, a complete Go newbie) to get a "hello world" program up and running (with debugging, no less).
 
 ### Rust
-Setting up a Rust environment on Windows [is not pleasant](rust-first-experience.md) because it requires first installing Visual C++ (a multi-gigabyte download). On Linux, installation is a breeze, but that doesn't help me much.
+Setting up a Rust environment on Windows [is not pleasant](rust-first-experience.md) because it requires first installing Visual C++ (a multi-gigabyte download). On Linux, installation is a breeze, but I'm using Windows at the moment.
 
 ### Lisp/Clojure
 Honestly, I haven't investigated this option yet.

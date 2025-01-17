@@ -58,56 +58,44 @@ Notes:
 * Fibers!
 
 ## Pkl
-According to its web site, Pkl provides "Configuration that is Programmable, Scalable, and Safe". Sounds great! Let's download it. **Eighty four megabytes later**, you can get a taste of Pkl.
-
-Now, I *know* I'm in the minority when pining for [a minimal development environment](minimal-dev-env.md), but how can a *configuration language* be 84 MB? Why does a configuration language require its own JIT compiler?
-
-I understand that INI files aren't enough and that YAML doesn't scale and that JSON probably wouldn't exist if XML had been simpler and less verbose. But (and I apologize for this)... **Pkl is the Electron of configuration languages**. That is both a compliment and an insult.
-
-End rant.
+According to its web site, Pkl provides "Configuration that is Programmable, Scalable, and Safe". Sounds great, but I was disappointed to see that this configuration language is > 80 MB. I understand that INI files aren't enough and that YAML doesn't scale. But (and I apologize for this)... **Pkl is the Electron of configuration languages**. That is both a compliment and an insult.
 
 Notes:
 
-* Three times the size of Node.js
 * Nice functional language
 * Had to convert `IntSeq` to a `List` in order to use `map`, `filter`, etc.
-* Slower startup than Python...
+* Slower startup than Python -- not sure why
 
 ## Qalb
 * Thought-provoking concept!
 * VS Code doesn't have an RTL mode, so it kept getting confused about where to put tokens
 
 ## Roc
-* Had trouble finding basic documentation (e.g. how to convert between types)
 * Accessing lists requires dealing with Result type for error handling, even when I've already checked if the list is long enough (would Idris handle this case?)
-* Requires downloading extra code just for "Hello, world!"
+* Requires downloading extra code just for "Hello, world!"?
 
 ## wax
 * **I like the idea of a meta-language for "write once, use from any language"** (and I don't mind s-expressions)
 * Was kind of hoping for AST-level macros, but I didn't see them...
-* Despite liking Lisps, I think I'd prefer less tedious syntax, especially since there aren't macros
 
 ## Boron
 * **Only 350 KB!**
 * Reminds me of TCL
 * Didn't see "reduce" and had an issue with "replace", so I had to use lots of mutation and iteration
-* Not much documentation
 
 ## wenyan
 * Machine translating programs back into English is entertaining
 
 ## Self
-* Download doesn't support HTTPS
-* No Windows support
-* 32-bit only (at least on Linux)
-* GUI-only...
+* Overall, I struggled with Self
+* Couldn't find an HTTPS download
+* Appeared to be 32-bit-only, without Windows support
+* GUI-only?
 * Similar to Smalltalk/Squeak **I had lots of trouble navigating the UI and figuring out what to click/middle-click/right-click on to make things happen**
 * Excellent tutorial: https://sin-ack.github.io/posts/morphic-intro/
 * Saving to/loading from text files is done via the `transporter` object (see tutorial)
 * Took me a long time to figure out how to supply multiple arguments to a method: "Methods can take arguments, and the keywords for each argument after the first must start with a capital letter."
 * Got a "numeric constant too large" error, but actual arithmetic seamlessly transitions to "big integer" arithmetic
-* No auto-indent!?
-* Seemed very slow
 * Globals in method don't work until setting `parent*` slot, to enable it to search up the hierarchy to `globals`
 
 ## Haskell
@@ -117,7 +105,7 @@ Notes:
 * Originally, I wanted to try implementing a solution within the type system, but I just couldn't figure it out after a few hours of flailing about
 * Couldn't find standard library functions for operations like "first element of a list" or "check if an item exists within a list"
 * Never figured out how to test anything other than equality in the type system
-* I still don't understand how `Something` and `MkSomething` are related for data types
+* I still don't understand how `Something` and `MkSomething` are related for data types -- I need to come back to this eventually...
 
 ## Nim
 **Nim is the language that impressed me the most in this batch.** Everything I thought would be a problem (significant whitespace, choose-your-own-function syntax, intermediate C compliation step) didn't bother me at all. The small sample of the standard library I played with was a little quirky, but Nim seems like excellent bang for your buck.

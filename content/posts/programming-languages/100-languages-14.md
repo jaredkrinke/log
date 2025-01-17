@@ -10,10 +10,10 @@ I just finished [solving the first 100 Project Euler problems using 100 differen
 
 # Notes
 ## ATS
-* Has some bizarre syntax, e.g. `:<cloref1>` and `t@ype`
-* Inscrutable error messages, such as `the syntactic entity [impqi0de] is needed.` -- what is `[impqi0de]`???
-* Another example: copy-pasting `fn square (x: double): double = x * x` from the official documentation yields `error: ‘PMVtmpltcstmat’ undeclared (first use in this function)`, unless you put `#include "share/atspre_staload.hats"` at the top of the file
-* I'll admit I didn't attempt to include any proofs in my code, so I didn't really leverage ATS to its fullest (or, really, any) extent
+* I didn't understand some of the syntax, e.g. `:<cloref1>` and `t@ype`
+* Error messages were sometimes surprising, e.g. `the syntactic entity [impqi0de] is needed.` -- what is `[impqi0de]`???
+* Another example: copy-pasting `fn square (x: double): double = x * x` from the official documentation yields `error: ‘PMVtmpltcstmat’ undeclared (first use in this function)` -- solutiong was to put `#include "share/atspre_staload.hats"` at the top of the file (my mistake--but the error was unhelpful)
+* I didn't attempt to include any proofs in my code, so I didn't really leverage ATS to its fullest (or, really, any) extent
 
 ## Pre-Scheme
 * Using the built-in `errors` enum resulted in compilation errors
@@ -26,9 +26,8 @@ I just finished [solving the first 100 Project Euler problems using 100 differen
 * Interactive development is helpful (and fun)
 * So many cryptic/inconsistent names, e.g. `fmakunbound`, `mapcon`, `clrhash`, `prin1`
 * `=` vs. `equalp` vs. `equal` vs. `eql` vs. `eq`
-* SBCL is fast, but a trivial stand-alone binary is huge and uses ~100 MB of memory
+* SBCL is fast, but a trivial stand-alone binary can be big and uses more memory than I would like
 * Common Lisp isn't as elegant as Scheme, but the implementations are more mutually compatible than in the Scheme world
-* If there was a fast, *low-overhead* Common Lisp, I'd probably use it as my default language for side projects
 
 ## Mouse-83
 * Finally, a programming language with less syntax than Forth!
@@ -37,7 +36,6 @@ I just finished [solving the first 100 Project Euler problems using 100 differen
 
 ## Cyber
 * Once mature, this could be a fast Lua replacement with more Python-like syntax (and zero-based indexing!)
-* Unfortunately, I hit several bugs in Cyber
 
 ## Varyx
 * `while` loop only works if there's a blank line before it
@@ -46,7 +44,6 @@ I just finished [solving the first 100 Project Euler problems using 100 differen
 ## Rye
 * Very compact code
 * Surprisingly fast
-* Missing functional helpers, e.g. "sort by" -- it sounds like these are planned but not implemented
 
 ## Rexx
 * Logical operator for "exclusive or" is unfortunately the same as C's "logical and": `&&`

@@ -41,7 +41,7 @@ It remains to be seen if syntax overload ends up sinking this adventure, but for
 I'll end this update with some notes about the languages I used.
 
 ## Fortran
-**Fortran is verbose**. It tries to be precise, but there's enough historical baggage and implicit behavior that it seems really easy to screw up. I don't think this particular programming problem played to any of Fortran's strengths, however, so my perspective is skewed--I was basically writing C in Fortran.
+**Fortran is verbose**. It tries to be precise, but there's enough historical baggage and implicit behavior that I'm sure I'd screw up. I don't think this particular programming problem played to any of Fortran's strengths, however, so my perspective is skewed--I was basically writing C in Fortran.
 
 Notes:
 
@@ -51,7 +51,7 @@ Notes:
 * [Plenty of gotchas](https://fortran-lang.org/learn/quickstart/gotchas/)
 
 ## J
-I was excited to try an array language, **but *wow* was I unprepared for the overwhelming cyclone of syntax**. Like regular expressions, I'm sure once you're proficient with J it's quick to whip up little programs. Also like regular expressions, J seems difficult to parse at a glance. **Trying to wade through dozens of sigils as quickly as possible was probably the worst possible introduction to J**.
+I was excited to try an array language, **but *wow* was I unprepared for the overwhelming cyclone of syntax**. Like regular expressions, I'm sure once you're proficient with J it's quick to whip up little programs. **Trying to wade through dozens of sigils as quickly as possible was probably the worst possible introduction to J**.
 
 Despite being in the wrong mindset, I *did* enjoy programming in J, because it felt so novel. The closest I've used to an array language is probably [NumPy](https://numpy.org/), but J is its own language, designed from the ground up.
 
@@ -68,7 +68,7 @@ After reading a [very long and entertaining post about Forth](https://ratfactor.
 
 I was prepared for Forth's minimal syntax (even more minimal than Lisp) and I knew how to use a stack. **But I underestimated just how *exasperatingly tedious* managing the parameter stack would be**. I'm sure there's some better solution for temporaries that I skimmed over, but having to `SWAP 1 + SWAP`, etc. was inconvenient.
 
-Overall, I'm not sure how I feel about Forth outside of the embedded world. I *do* hope to implement my own Forth one day--and maybe with the benefit of enlightenment I'll feel differently.
+Overall, I'm not sure how I feel about Forth outside of the embedded world. I *do* hope to implement my own Forth one day--and maybe with the benefit of enlightenment I'll feel differently. **Edit**: After having a few more Forth-like languages, I've come to appreciate its simplicity a lot more. Using variables would have made my life a lot easier for this problem!
 
 Notes:
 
@@ -76,9 +76,7 @@ Notes:
 * Interacting with Forth really feels like interacting directly with hardware
 
 ## Standard ML
-**I love arrow functions, map, reduce, etc.** -- and I have functional programming languages to thank for those, even when I'm using JavaScript. Having said that, Standard ML was the first language I ran into during this challenge where it felt like I was wasting my time stumbling through syntax. I still don't know when I need parentheses and when I don't. As usual, this is not necessarily the fault of the language--just of the environment I've created for myself.
-
-Having said that (and I'm sure people will disagree), **I prefer Lisp's regular syntax when compared to something like Standard ML**. Maybe I'd like Clojure?
+**I love arrow functions, map, reduce, etc.** -- and I have functional programming languages to thank for those, even when I'm using JavaScript. Having said that (and I'm sure people will disagree), **I prefer Lisp's regular syntax when compared to something like Standard ML**. Maybe I'd like Clojure?
 
 ## Squeak
 I was prepared for everything to be an object in Squeak. I was excited for a fully introspectable language. Want to know what something does? Just look at its source!

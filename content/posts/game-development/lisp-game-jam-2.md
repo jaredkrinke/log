@@ -64,7 +64,7 @@ I knew this intuitively going into the jam. I even had a plan to pop up a notifi
 
 In retrospect, implementing notifications should have been my top priority after getting the game working. Instead, I focused on creating a "hall of fame" so that players could compete asynchronously on the leaderboard, but this wasn't actually interesting because it was just about play time (how many rounds they sat through by themself) and not skill.
 
-If I ever make another multipler game jam entry, I'll focus on ensuring people are able to actually play against an opponent (even if I have to secretly create a bot or just play the game *all day long*).
+If I ever make another multiplayer game jam entry, I'll focus on ensuring people are able to actually play against an opponent (even if I have to secretly create a bot or just play the game *all day long*).
 
 ## REPL-driven development/developing in production
 Given that my entire motivation to learn Common Lisp was to experiment with REPL-driven development, I decided to try and develop and test as much as possible using Emacs SLIME (over a Swank connection).

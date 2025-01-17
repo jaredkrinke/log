@@ -79,18 +79,18 @@ Java and Perl I have experience with, and frankly, they're too cumbersome, so I 
 # Second round
 After some initial pruning, here is the list with my initial thoughts:
 
-* **JavaScript/TypeScript**: lots of implementations and modern JavaScript is nice, but comes with a ton of baggage; TypeScript brings some sanity to the language
-* **Python**: setting up a Python environment is a recurring nightmare of mine, but it's so popular that I probably need to give it another shot
+* **JavaScript/TypeScript**: lots of implementations and modern JavaScript is nice, but no standard library; TypeScript brings some sanity to the language
+* **Python**: I don't like setting up Python environments, but it's ubiquitous!
 * **C#**: a great language and standard library, but how much of it is open source? Is it portable? Can I run .NET on a Raspberry Pi?
 * **C++**: terribly complex, but modern C++ is surprisingly convenient; the build systems are generally awful, though
 * **C**: probably the most portable and future-proof language ever created, but not very ergonomic
-* **Go**: "goroutines" seem great and I've heard the tooling is nice, but a garbage-collected language with C-like verbosity sounds like the worst of both worlds to me
-* **Rust**: new and popular, with an appealing memory model, but there's really only one implementation and [my first experience setting Rust up on Windows was terrible](rust-first-experience.md)
-* **Ruby**: just as annoying to setup as Python, but less popular
+* **Go**: "goroutines" seem great and I've heard the tooling is nice, but a garbage-collected language with C-like verbosity doesn't sound convenient for quick prototyping
+* **Rust**: new and popular, with an appealing memory model, but there's really only one implementation and [my first experience setting Rust up on Windows did not go well](rust-first-experience.md)
+* **Ruby**: less popular than Python
 * **Haskell**: it's been a while since I used a purely functional programming language
 * **Lisp/Clojure**: I love the simplicity of Lisp (namely Scheme), but I have doubts about it being convenient and portable
 * **Zig**: probably too new and with too many breaking changes, but I like the idea of a more sane alternative to C, and the Zig compiler is very convenient
-* **Lua**: I used to love Lua, but TypeScript just seems so much more popular and productive these days (also: I hate 1-based arrays)
+* **Lua**: I used to love Lua, but TypeScript just seems so much more popular and productive these days
 
 Given that this list is already too long, I'm going to eliminate a few options without proper due diligence (either based on prior experience or based on the belief that similar but superior options exist elsewhere on this list). Apologies to the following languages that have been cut:
 

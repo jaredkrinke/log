@@ -111,7 +111,7 @@ Wait, I have to manage Ruby gem dependencies? Let's consult the [Jekyll site](ht
 
 > gem install bundler jekyll
 
-Alright, it looks like I need a full blown Ruby environment. No thanks!
+Alright, it looks like I need a full blown Ruby environment.
 
 ## Gatsby
 [Gatsby requires Node v12+](https://www.gatsbyjs.com/get-started/) for installation. I realize this isn't "fair", but I actually use Node and NPM, so this isn't a deal-breaker for me.
@@ -130,13 +130,8 @@ Ok, definitely overkill for my purposes. But maybe I can just ignore those featu
 
 ... but I just want plain old HTML.
 
-The alarm bells in my head were deafening at this point and things just kept getting worse. Why can't I copy text from "how it works" page? Why is there a cloud offering for static sites that should just be HTML distributed via a content delivery network?
-
-Cross Gatsby off my list!
-
 ## Hugo
 Hugo is written in Go and [distributed as a single executable](https://gohugo.io/getting-started/installing). It doesn't get any simpler than that! In [their quick-start](https://gohugo.io/getting-started/quick-start/), it looks like posts can be stored in markdown files with front matter for title, date, and draft status:
-
 
 ```yaml
 ---
@@ -163,8 +158,6 @@ Two strikes from the VuePress landing page:
 * "Enjoy the dev experience of Vue + webpack" (since when have I enjoyed webpack?)
 * "VuePress generates pre-rendered static HTML for each page, and runs as an SPA once a page is loaded." (I understand the potential performance benefits, but I don't want JavaScript to be required and I'm sure there is substantial overhead in doing this, even if latency of subsequent page loads is improved)
 
-Moving along.
-
 ## Eleventy
 Eleventy requires Node and NPM which, while not optimal, is something I will tolerate since I already need those for a couple of projects. I do wonder if this will eventually become a burden in the future when Node inevitably falls out of favor.
 
@@ -188,17 +181,9 @@ Eleventy looks interesting; sort of like Jekyll, but using Node/JavaScript. This
 ## Hexo
 Hexo also requires Node and NPM (similar to Eleventy). Fine.
 
-Hexo appears to use the "million plugins" architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like [Parcel](https://parceljs.org/) and not [webpack](https://webpack.js.org/), but I do understand "zero configuration" constraints can come back to bite me later.
+Hexo appears to use the "million plugins" architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like [Parcel](https://parceljs.org/) and not [webpack](https://webpack.js.org/), but I do understand "zero configuration" constraints can come back to bite me later (**update**: as happened in the case of Parcel).
 
 Anyway, [Hexo's default](https://hexo.io/docs/setup) includes EJS, Stylus, and Markdown. I'm not familiar with the first two. Is this going to be geared toward web developers?
-
-Looking into their [documentation on writing content](https://hexo.io/docs/writing), it appears you create a new post using a tool that's not your favorite text editor:
-
-```sh
-hexo new [layout] <title>
-```
-
-I'm not a fan of using a tool to manage my content because such a tool was inevitably created to generate boilerplate code or follow strict conventions. This leads to hassles when migrating to a new system and prevents you from authoring content when you don't have your usual development environment handy. I should be able to author content using just a text editor.
 
 Hexo looks decent, but certainly not any closer to what I want than Hugo or Eleventy. I'll come back to Hexo, if needed.
 
@@ -214,14 +199,12 @@ Docusaurus seems to be targeting technical documentation with support for transl
 [Next.js](https://nextjs.org/) appears to be a framework for server-side rendering using React concepts (e.g. JSX). Even with a [skeleton project](https://github.com/vercel/next.js/tree/canary/examples/blog-starter) available, similar to the Vue-based static site generators I already looked at, I feel like I wouldn't benefit from this tool because I'm not already using Next.js for other purposes.
 
 ## Pelican
-Pelican requires Python. I know that Python is very popular, but I have never really understood the appeal. Sure, having whitespace for identifying blocks looks nice (and is probably more intuitive for people without a C/C++ background), but Python has made too many mistakes in handling compatibility (e.g. [changing the semantics of the division operator](https://www.python.org/dev/peps/pep-0238/)), so I'd prefer to just go on pretending Python never existed.
+Pelican requires Python and (at the time of this writing) I wasn't using Python, so I unfairly didn't give Pelican a try.
 
 ## React Static
 Yet another static site generator that adds *more* complexity:
 
 > React Static gathers your data, and templates together and intelligently splits them into bite-size static files using webpack and javascript. ... Little did you know that when React Static exported your site, it also generated a tiny, optimized, and code-split version of your original React application for every page of your site! After these pages have loaded, React invisibly mounts this application to the existing HTML on the page and...
-
-... and I stopped reading.
 
 ## Metalsmith
 Metalsmith is built on Node and requires you to write actual JavaScript code to build your site.
@@ -232,10 +215,10 @@ Metalsmith's most interesting aspect for me is that it's modular and pluggable, 
 
 Similar to Gulp, I think I'd probably end up frustrated with an endless graph of plugins that interact in bizarre ways, but I *might* be willing to give Metalsmith a try if I find too many gaps in the other generators I've liked so far.
 
-**Update**: I ended up [fully integrating Metalsmith into my site](metalsmith.md) (including [syntax highlighting](metalsmith-syntax-highlighting.md)) because I liked the modular architecture and simple plugins met most of my needs. Eventually, however, I [abandoned Metalsmith due to huge, overlapping dependencies](metalsmith-downsides.md) and [built md2blog](md2blog-design.md) instead.
+**Update**: I ended up [fully integrating Metalsmith into my site](metalsmith.md) (including [syntax highlighting](metalsmith-syntax-highlighting.md)) because I liked the modular architecture and simple plugins met most of my needs. Eventually, however, I [abandoned Metalsmith due to numerous, overlapping dependencies](metalsmith-downsides.md) and [built md2blog](md2blog-design.md) instead.
 
 ## Zola
-Zola is written in Rust, a language which I'm tired of hearing about (similar to Python), but which I actually think I might one day use (unlike Python). A fast, native binary with no dependencies is certainly a strong start for Zola.
+Zola is written in Rust. A fast, native binary with no dependencies is certainly a strong start for Zola.
 
 Annoyingly (from a portability aspect), Zola wants me to use `+++` to demarcate front matter in [TOML](https://toml.io/en/) (definitely not my preferred metadata language), but "YAML front matter is also supported to ease porting legacy content" -- hopefully that support doesn't disappear someday!
 

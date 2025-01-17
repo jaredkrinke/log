@@ -37,13 +37,11 @@ The rest of this post is just a collection of my notes from trying out these lan
 * XPath is my favorite query language that many (most?) people don't seem to know about
 
 ## COBOL
-* First time using a column-oriented language!
+* First time using column-oriented syntax!
 * It's not clear to me when periods (`.`) are required and when they break things
-* GNU COBOL errors don't have enough information for me to understand them
 * My solution takes forever to run in COBOL, as compared to JavaScript--not sure why
 * Forgetting an `END-IF` just completely changed the meaning of my program, but didn't produce and errors or warnings
-* So, so verbose
-* Lots of reserved words
+* Verbose, with lots of reserved words
 * I dislike the combination of natural language syntax (`ADD 1 TO N.`) and things like `77 TOTAL PIC S9(15) COMP VALUE ZERO.`
 
 ## Perl
@@ -73,7 +71,7 @@ The rest of this post is just a collection of my notes from trying out these lan
 
 ## Commodore BASIC
 * All arithmetic is apparently floating point -- is it done in software? Because it's surprisingly slow
-* Line numbers are annoying to deal with, but in the proper historical context they make sense because you entered one line at a time -- today, we're spoiled with text editors
+* Line numbers are annoying to deal with, but in the proper historical context they make sense because you entered one line at a time -- today, we're spoiled with fullscreen text editors
 
 ## Verilog
 * The [8bitworkshop Verilog IDE](https://8bitworkshop.com/v3.11.0/?platform=verilog&file=clock_divider.v) is amazing

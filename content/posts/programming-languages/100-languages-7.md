@@ -24,24 +24,24 @@ Notes:
 ## Uxntal
 Ever since reading about [uxn](https://100r.co/site/uxn.html), I'd wanted to see what a simple VM that runs on an NES could look like. After digging in a bit more, I learned that uxn was inspired by Forth--that got my attention!
 
-After writing some code in uxn's assembly language (tal), I'll say that I mostly like uxn (the virtual machine), but... I don't like writing tal (the assembly language). There's a lot of syntax and aesthetic choices that irritate me.
+After writing some code in uxn's assembly language (tal), I'll say that I mostly like uxn (the virtual machine), but... I struggled with tal.
 
 Notes:
 
-* Numbers *must* be written in lowercase hexadecimal (**decimal is not even allowed!**)
+* Numbers *must* be written in lowercase hexadecimal (decimal not supported)
 * Instructions can set a "keep" bit that causes inputs to remain on the stack
-* **The instruction set doesn't include modulus/remainder** (why!?)
+* The instruction set doesn't include modulus/remainder
 * Supports both global and local labels, which is convenient
 * Instructions must be UPPERCASE (except for flags), but hexadecimal must be lowercase
 * **Names like `b1` aren't allowed** because they're actually hexadecimal numbers...
-* Mixing 8-bit and 16-bit values on the stack is tedious
+* Mixing 8-bit and 16-bit values on the stack is tricky
 * Must specify `&` on relative references, but not `@` on global references...
 * Pro tip: don't DUP relative addresses!
 
 ## APL
 After playing with J and K (although I couldn't actually find an official implementation of K5), it was time to play with their spiritual predecessor, APL.
 
-With J, I felt like I was re-learning Perl-compatible regular expressions, but with a much larger menu of ASCII sigils. APL is the same, **except I can't type (and don't even know the names of) the sigils**. Overall, this was probably the most challenging syntax I've encountered outside of esoteric programming languages.
+With J, I felt like I was re-learning Perl-compatible regular expressions, but with a much larger menu of ASCII sigils. APL is the same, **except I can't type (and don't even know the names of) the sigils**.
 
 ## Factor
 **Factor is the niftiest concatenative language I've tried**.
@@ -59,26 +59,26 @@ Intriguingly, it borrows heavily from Common Lisp (e.g. restarts, editor integra
 ## Rebol
 **Rebol is a minimal, but impressively capable scripting language**. The entire language, including GUI support is well under 1 MB. How did I not run across Rebol when I was [looking for a minimal development environment](minimal-dev-env-5.md)!? I only scratched the surface of Rebol, but it felt like exactly what I was looking for.
 
-Having said that, I'm uncertain about the future of Rebol--it doesn't even appear to fully support 64-bit architectures.
+Having said that, I'm uncertain about the future of Rebol--it doesn't appear to fully support 64-bit architectures.
 
 Notes:
 
 * Entire language is 440 KB!
 * Used the console version
-* Variables in functions don't default to locals!?
+* Variables in functions don't default to locals?
 
 ## Bash
 I've successfully been avoiding writing Bash recently, but I thought it might be fun to see what math looks like in Bash.
 
 Notes:
 
-* Ugly syntax (double parentheses, double brackets)
+* Unpleasant syntax (double parentheses, double brackets)
 * Little inconsistencies, e.g. `fi` vs `done`
 * Lots of symbols to remember: `#`, `@`, `/`
 * But *very* widely deployed!
 
 ## Julia
-From my uninformed perspective, Julia looks like the language that academics should be using instead of Python. I probably shouldn't have said that, but there it is.
+From my uninformed perspective, Julia looks like a great language for academics.
 
 Notes:
 
@@ -86,3 +86,4 @@ Notes:
 * Base runtime includes a constant indicating the precision of floating points numbers!
 * Has a REPL, but I didn't use it
 * Built-in rational type!
+* My solution is horrible and didn't take advantage of any of Julia's nice features...
