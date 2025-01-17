@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-01-17T17:13:02.544Z</updated>
+<updated>2025-01-17T17:25:52.365Z</updated>
 
 <entry>
 <title>I apologize to the Python ecosystem</title>
@@ -18,6 +18,7 @@
 <content type="html">&lt;p&gt;Today, I discovered that my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/python-as-a-modern-basic.html&quot;&gt;Python is the new BASIC&lt;/a&gt; post had been discussed on a popular site. It&amp;#39;s always a joy when people take an interest in your work, right? Well...&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;In the comments, I was rightly roasted.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Consider this post an apology and a promise to do better.&lt;/p&gt;
+&lt;p&gt;(Note: I went back and edited the post in question. This commentary applies to the original content.)&lt;/p&gt;
 &lt;h1 id=&quot;problems-with-my-post&quot;&gt;Problems with my post&lt;/h1&gt;
 &lt;p&gt;First off, &lt;strong&gt;the overall tone of the post crossed the line from criticism to snark--or maybe even scorn&lt;/strong&gt;. In my head, some of the jabs were just good-natured ribbing, but upon re-reading from the perspective of an internet stranger, it&amp;#39;s just oozing with derision. If I&amp;#39;m going to post something publicly, I should remember that &lt;strong&gt;the audience is not myself, but just anyone who happens to come along&lt;/strong&gt; (except AI scrapers, per robots.txt).&lt;/p&gt;
 &lt;p&gt;Additionally, I didn&amp;#39;t clearly articulate my complaints with Python. I think some them are legitimate but, besides being better explained elsewhere, &lt;strong&gt;my issues are not even that relevant&lt;/strong&gt;. The things I like about Python outweigh the things I dislike. And &lt;strong&gt;there is a huge advantage to having a common programming language that everyone understands&lt;/strong&gt; (even if only the basics). I like keeping posts short, and a good way to do that is to stay on topic and cut out (most of) the snark.&lt;/p&gt;
@@ -217,8 +218,9 @@
 <link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/python-as-a-modern-basic.html"/>
 <updated>2024-11-20T00:00:00.000Z</updated>
 <summary type="text">What makes Python the BASIC of today?</summary>
-<content type="html">&lt;p&gt;As far as programming languages go, &lt;a href=&quot;https://en.wikipedia.org/wiki/BASIC&quot;&gt;BASIC&lt;/a&gt; (&amp;quot;Beginners&amp;#39; All-purpose Symbolic Instruction Code&amp;quot;) is... &lt;strong&gt;not a language I would choose today&lt;/strong&gt;. Granted, when it was originally developed in the 60s, line numbers and single-character identifiers were &lt;em&gt;an improvement&lt;/em&gt;. But in its heyday (which I&amp;#39;m going to claim, without evidence, was in the late 70s and early 80s), there were better options (Pascal, Lisp, Forth, even C!). Yet, &lt;strong&gt;BASIC was everywhere! It &lt;em&gt;was&lt;/em&gt; the interface for many old computers, like the Commodore 64.&lt;/strong&gt; Why? I&amp;#39;d say (again, without evidence) it&amp;#39;s because BASIC was designed to be usable by anyone--not just experienced programmers.&lt;/p&gt;
-&lt;p&gt;Today, there&amp;#39;s a &lt;em&gt;different&lt;/em&gt; language with ugly historical baggage that enjoys a strong following, notably amongst people that don&amp;#39;t identify as programmers. That language is Python.&lt;/p&gt;
+<content type="html">&lt;p&gt;(Note: This post has been &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/python-is-good-actually.html&quot;&gt;updated to remove irrelevant snark&lt;/a&gt;.)&lt;/p&gt;
+&lt;p&gt;As far as programming languages go, &lt;a href=&quot;https://en.wikipedia.org/wiki/BASIC&quot;&gt;BASIC&lt;/a&gt; (&amp;quot;Beginners&amp;#39; All-purpose Symbolic Instruction Code&amp;quot;) is... &lt;strong&gt;not a language I would choose today&lt;/strong&gt;. Granted, when it was originally developed in the 60s, line numbers and single-character identifiers were &lt;em&gt;an improvement&lt;/em&gt;. But in its heyday (which I&amp;#39;m going to claim, without evidence, was in the late 70s and early 80s), there were other options I like better (Pascal, Lisp, Forth, even C!). Yet, &lt;strong&gt;BASIC was everywhere! It &lt;em&gt;was&lt;/em&gt; the interface for many old computers, like the Commodore 64.&lt;/strong&gt; Why? I&amp;#39;d say (again, without evidence) it&amp;#39;s because BASIC was designed to be usable by anyone--not just experienced programmers.&lt;/p&gt;
+&lt;p&gt;Today, there&amp;#39;s a &lt;em&gt;different&lt;/em&gt; language which enjoys a strong following, often as a first language. That language is Python.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Python is the new BASIC.&lt;/strong&gt;&lt;/p&gt;
 &lt;h1 id=&quot;back-to-basic&quot;&gt;Back to BASIC&lt;/h1&gt;
 &lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
@@ -227,33 +229,30 @@
 &lt;p&gt;My personal history with BASIC goes back to &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/../vintage-computing/40-year-old-dev-environment.html&quot;&gt;the first computer I ever used, the Commodore 64&lt;/a&gt;. That computer booted directly into BASIC. Although I didn&amp;#39;t realize it at the time, to launch programs, you had to type in BASIC code. &lt;strong&gt;Every user was secretly a programmer!&lt;/strong&gt; I don&amp;#39;t think I wrote any programs beyond &lt;code&gt;10 PRINT &amp;quot;HAHA&amp;quot;&lt;/code&gt;; &lt;code&gt;20 GOTO 10&lt;/code&gt;, but I suppose I at least learned about commands and quotation marks.&lt;/p&gt;
 &lt;h2 id=&quot;qbasic&quot;&gt;QBasic&lt;/h2&gt;
 &lt;p&gt;At some point, I decided that I wanted to make a computer do whatever I wanted, so I needed to learn how to program. Fortunately, my &lt;a href=&quot;https://en.wikipedia.org/wiki/MS-DOS&quot;&gt;MS-DOS&lt;/a&gt; computer included a development environment--impressively fully-featured, in retrospect--named &lt;a href=&quot;https://en.wikipedia.org/wiki/QBasic&quot;&gt;QBasic&lt;/a&gt;. Yes, BASIC (specifically QBasic) was the first programming language I attempted to learn. I don&amp;#39;t think I ever discovered subroutines in QBasic, but I did at least learn about conditionals, loops, and arrays.&lt;/p&gt;
-&lt;p&gt;Regardless, BASIC served its purpose. I, a non-programmer at the time, learned how to write some simple programs without throwing up my hands in despair and swearing off computers forever. &lt;strong&gt;I guess I&amp;#39;m a BASIC success story!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Regardless, BASIC served its purpose. I, with no prior experience, learned how to write some simple programs without throwing up my hands in despair and swearing off computers forever. &lt;strong&gt;I guess I&amp;#39;m a BASIC success story!&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;As an aside, I recently found an old box of floppy disks, including one &amp;quot;double density&amp;quot; disk with my first name written on the label. That disk contained several programs I had written using QBasic, circa 1997. The code was... not good--again, I hadn&amp;#39;t discovered subroutines yet.&lt;/p&gt;
 &lt;h1 id=&quot;back-to-python&quot;&gt;Back to Python&lt;/h1&gt;
-&lt;h2 id=&quot;pros-and-cons&quot;&gt;Pros and cons&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;I don&amp;#39;t actually like Python.&lt;/strong&gt; Despite its &amp;quot;elegant&amp;quot; indentation-based blocks, I find the syntax ugly (format strings, overloading of asterisks, ternary operator with the condition sandwiched in the middle, etc.). Python breaks compatibility more than I&amp;#39;d expect (or perhaps tolerate). The package ecosystem, although broad, gives me supply chain nightmares.&lt;/p&gt;
-&lt;p&gt;Despite my complaints, however, Python has a lot going for it:&lt;/p&gt;
+&lt;p&gt;Although not perfect, Python has a lot going for it:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;It&amp;#39;s &lt;strong&gt;ubiquitous&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;It comes with &amp;quot;batteries included&amp;quot;&lt;/strong&gt;, i.e. a comprehensive standard library&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;It&amp;#39;s simple&lt;/strong&gt; (or, at least, you can pretend it is, for casual use)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Python is far from perfect, but it is often good enough.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Python is often good enough.&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id=&quot;why-python-is-the-new-basic&quot;&gt;Why Python is the new BASIC&lt;/h2&gt;
-&lt;p&gt;But why is Python the new BASIC? The answer is simple: &lt;strong&gt;Python is the new BASIC because Python is the language that non-programmers always seem to use&lt;/strong&gt;. It&amp;#39;s reached critical mass. Python has won!&lt;/p&gt;
+&lt;p&gt;But why is Python the new BASIC? The answer is simple: &lt;strong&gt;Python is the new BASIC because Python is the language that new programmers always seem to use&lt;/strong&gt;. It&amp;#39;s reached critical mass. Python has won!&lt;/p&gt;
 &lt;p&gt;Of course, that is more of an observation than a reason. I honestly have no idea why people originally gravitated to Python (apologies for implying otherwise), but if I had to guess it would be some combination of the following:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Python emerged when the world desperately needed a scripting language that was less ugly and error-prone than &lt;a href=&quot;https://www.perl.org/&quot;&gt;Perl&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Python used indentation instead of braces to denote blocks, and this was deemed by the masses as &amp;quot;elegant&amp;quot;--not a good reason in my opinion but, well, I use Lisp, so I&amp;#39;m clearly an outlier&lt;/li&gt;
+&lt;li&gt;Python emerged when the world desperately needed a scripting language that was more approachable than &lt;a href=&quot;https://www.perl.org/&quot;&gt;Perl&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Python often includes everything you need, right in the standard library&lt;/li&gt;
 &lt;li&gt;Python was math-friendly enough to gain a foothold in physics, finance, etc. research, thus broadening its ecosystem and influence&lt;/li&gt;
-&lt;li&gt;Python smartly borrowed convenient features from more complex languages, while remaining reasonably simple itself&lt;/li&gt;
+&lt;li&gt;Python smartly borrowed convenient features from more complex languages, while retaining a simple look&lt;/li&gt;
 &lt;li&gt;Python was never owned by a litigious corporation&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;In other words: &lt;strong&gt;some combination of smart design, community management, and happenstance&lt;/strong&gt;.&lt;/p&gt;
 &lt;h2 id=&quot;definitive-proof-of-pythons-dominance&quot;&gt;Definitive proof of Python&amp;#39;s dominance&lt;/h2&gt;
-&lt;p&gt;Despite having intentionally avoided Python for my entire adult life, &lt;strong&gt;I recently gave in and wrote a personal utility program in Python&lt;/strong&gt; because I knew Python would have everything I needed and I had confidence that Python was entrenched enough that I&amp;#39;d still be able to use my program for the foreseeable future.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;If even a Python-hater like me defaults to using Python, then I think it&amp;#39;s pretty clear that Python has taken over the world, just as BASIC once did.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Despite preferred other programming languages for my entire adult life, &lt;strong&gt;I recently gave in and wrote a personal utility program in Python&lt;/strong&gt; because I knew Python would have everything I needed and I had confidence that Python was entrenched enough that I&amp;#39;d still be able to use my program for the foreseeable future.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;If even a Python-avoider like me defaults to using Python, then I think it&amp;#39;s pretty clear that Python has taken over the world, just as BASIC once did.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;One parting thought: how long will Python&amp;#39;s reign last?&lt;/p&gt;
 </content>
 </entry>
