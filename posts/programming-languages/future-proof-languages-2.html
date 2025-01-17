@@ -91,8 +91,6 @@
 <h3 id="javascripttypescript">JavaScript/TypeScript</h3>
 <p><a href="https://deno.land/">Deno</a> makes running TypeScript trivially easy, but its list of supported platforms is short (notably, it does not include 32-bit Windows!). <a href="https://nodejs.org/en/">Node</a> supports 32-bit Windows, but is much less convenient.</p>
 <h3 id="python">Python</h3>
-<p>Ah, my old nemesis: Python. I&#39;ve never had a good experience setting up a Python environment. Additionally, the Python 2 to 3 migration (which included unnecessary things like <a href="https://www.python.org/dev/peps/pep-0238/">changing the semantics of the division operator</a>) is remarkable only in that it didn&#39;t kill Python entirely (at least not yet).</p>
-<p>Yet Python is consistently one of the most popular programming languages. What am I missing?</p>
 <p>Anyway, the <a href="https://wiki.python.org/moin/BeginnersGuide/Download">Python installation docs</a> recommend seeing if you already have Python installed by typing <code>python</code> into a command window. To my surprise, I don&#39;t immediately see an &quot;unrecognized command&quot; error. Incredibly, it launches to a Python page in the Microsoft Store (compliments of <code>%LocalAppData%\Microsoft\WindowsApps\python.exe</code> -- seriously!?). I&#39;ll give it a try since it&#39;s a surprisingly reasonable ~100 MB download. It appears to install a Python runtime and the IDLE editor.</p>
 <p>Honestly, I&#39;m not thrilled that Microsoft decided to <a href="https://devblogs.microsoft.com/python/python-in-the-windows-10-may-2019-update/">insert this Python shim into Windows itself</a> just to make it easier for people to find Python, but I guess I&#39;ll try it out. Note that I&#39;ll almost certainly be using VS Code and the official Python extension for editing and debugging.</p>
 <h3 id="c">C#</h3>
@@ -101,7 +99,7 @@
 <p>First, I need to setup a C# development environment. I&#39;m developing on Windows (.NET&#39;s home platform), so this might give me an unrealistically positive impression of C#&#39;s convenience.</p>
 <p>After selecting the .NET runtime and SDK in the Visual Studio installer, I am appalled to see that it requires <em>5 GB</em> of disk space! There&#39;s probably a bunch of extraneous junk I don&#39;t need, but for comparison: Visual Studio Code is ~300 MB and Deno&#39;s TypeScript runtime is ~60 MB.</p>
 <p>Since I was curious, I checked out the <a href="https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian">.NET SDK for Linux (Debian)</a>, and it was closer to 500 MB. To my surprise, it was very full-featured, and I was even able to cross-compile for Windows from Linux.</p>
-<p>As much as I like C#, the unreasonable disk footprint of its tooling has sent C# to the bottom of the pile.</p>
+<p>As much as I like C#, the unreasonable disk footprint of its tooling has sent C# to the bottom of my pile.</p>
 <h3 id="c-1">C++</h3>
 <p>C++ sort of gets a free pass because Linux distributions generally provide the GNU C++ compiler and I already had to install a C++ environment in order to use Rust on Windows. Clang is &lt; 1 GB to install and there are numerous free and/or open source C++ IDEs that are less than 1 GB. Visual Studio for C++ was around 3 GB, which is much too big, but not an immediate disqualifier in light of available alternatives. At least there&#39;s a free version now.</p>
 <h3 id="c-2">C</h3>
@@ -109,7 +107,7 @@
 <h3 id="go">Go</h3>
 <p>Go for Windows is a reasonable ~125 MB download, and VS Code has an official Go extension. I&#39;ve heard that Go&#39;s tooling is excellent and what I&#39;ve seen thus far (e.g. <code>go fmt</code>) is similar to what I liked about <a href="../web-development/one-month-with-deno.html">Deno</a>. It only took a couple of minutes (for me, a complete Go newbie) to get a &quot;hello world&quot; program up and running (with debugging, no less).</p>
 <h3 id="rust">Rust</h3>
-<p>Setting up a Rust environment on Windows <a href="rust-first-experience.html">is not pleasant</a> because it requires first installing Visual C++ (a multi-gigabyte download). On Linux, installation is a breeze, but that doesn&#39;t help me much.</p>
+<p>Setting up a Rust environment on Windows <a href="rust-first-experience.html">is not pleasant</a> because it requires first installing Visual C++ (a multi-gigabyte download). On Linux, installation is a breeze, but I&#39;m using Windows at the moment.</p>
 <h3 id="lispclojure">Lisp/Clojure</h3>
 <p>Honestly, I haven&#39;t investigated this option yet.</p>
 <p>Clojure requires a Java runtime and, at the moment, I don&#39;t really want to install one. I used Java a lot in the past (back when it would pop up messages saying a new version of Java was available, with a possibly ironic exclamation mark), but I don&#39;t want to deal with deploying Java whenever I want to run something.</p>

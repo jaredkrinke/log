@@ -89,16 +89,12 @@
 <li>Fibers!</li>
 </ul>
 <h2 id="pkl">Pkl</h2>
-<p>According to its web site, Pkl provides &quot;Configuration that is Programmable, Scalable, and Safe&quot;. Sounds great! Let&#39;s download it. <strong>Eighty four megabytes later</strong>, you can get a taste of Pkl.</p>
-<p>Now, I <em>know</em> I&#39;m in the minority when pining for <a href="minimal-dev-env.html">a minimal development environment</a>, but how can a <em>configuration language</em> be 84 MB? Why does a configuration language require its own JIT compiler?</p>
-<p>I understand that INI files aren&#39;t enough and that YAML doesn&#39;t scale and that JSON probably wouldn&#39;t exist if XML had been simpler and less verbose. But (and I apologize for this)... <strong>Pkl is the Electron of configuration languages</strong>. That is both a compliment and an insult.</p>
-<p>End rant.</p>
+<p>According to its web site, Pkl provides &quot;Configuration that is Programmable, Scalable, and Safe&quot;. Sounds great, but I was disappointed to see that this configuration language is &gt; 80 MB. I understand that INI files aren&#39;t enough and that YAML doesn&#39;t scale. But (and I apologize for this)... <strong>Pkl is the Electron of configuration languages</strong>. That is both a compliment and an insult.</p>
 <p>Notes:</p>
 <ul>
-<li>Three times the size of Node.js</li>
 <li>Nice functional language</li>
 <li>Had to convert <code>IntSeq</code> to a <code>List</code> in order to use <code>map</code>, <code>filter</code>, etc.</li>
-<li>Slower startup than Python...</li>
+<li>Slower startup than Python -- not sure why</li>
 </ul>
 <h2 id="qalb">Qalb</h2>
 <ul>
@@ -107,22 +103,19 @@
 </ul>
 <h2 id="roc">Roc</h2>
 <ul>
-<li>Had trouble finding basic documentation (e.g. how to convert between types)</li>
 <li>Accessing lists requires dealing with Result type for error handling, even when I&#39;ve already checked if the list is long enough (would Idris handle this case?)</li>
-<li>Requires downloading extra code just for &quot;Hello, world!&quot;</li>
+<li>Requires downloading extra code just for &quot;Hello, world!&quot;?</li>
 </ul>
 <h2 id="wax">wax</h2>
 <ul>
 <li><strong>I like the idea of a meta-language for &quot;write once, use from any language&quot;</strong> (and I don&#39;t mind s-expressions)</li>
 <li>Was kind of hoping for AST-level macros, but I didn&#39;t see them...</li>
-<li>Despite liking Lisps, I think I&#39;d prefer less tedious syntax, especially since there aren&#39;t macros</li>
 </ul>
 <h2 id="boron">Boron</h2>
 <ul>
 <li><strong>Only 350 KB!</strong></li>
 <li>Reminds me of TCL</li>
 <li>Didn&#39;t see &quot;reduce&quot; and had an issue with &quot;replace&quot;, so I had to use lots of mutation and iteration</li>
-<li>Not much documentation</li>
 </ul>
 <h2 id="wenyan">wenyan</h2>
 <ul>
@@ -130,17 +123,15 @@
 </ul>
 <h2 id="self">Self</h2>
 <ul>
-<li>Download doesn&#39;t support HTTPS</li>
-<li>No Windows support</li>
-<li>32-bit only (at least on Linux)</li>
-<li>GUI-only...</li>
+<li>Overall, I struggled with Self</li>
+<li>Couldn&#39;t find an HTTPS download</li>
+<li>Appeared to be 32-bit-only, without Windows support</li>
+<li>GUI-only?</li>
 <li>Similar to Smalltalk/Squeak <strong>I had lots of trouble navigating the UI and figuring out what to click/middle-click/right-click on to make things happen</strong></li>
 <li>Excellent tutorial: <a href="https://sin-ack.github.io/posts/morphic-intro/">https://sin-ack.github.io/posts/morphic-intro/</a></li>
 <li>Saving to/loading from text files is done via the <code>transporter</code> object (see tutorial)</li>
 <li>Took me a long time to figure out how to supply multiple arguments to a method: &quot;Methods can take arguments, and the keywords for each argument after the first must start with a capital letter.&quot;</li>
 <li>Got a &quot;numeric constant too large&quot; error, but actual arithmetic seamlessly transitions to &quot;big integer&quot; arithmetic</li>
-<li>No auto-indent!?</li>
-<li>Seemed very slow</li>
 <li>Globals in method don&#39;t work until setting <code>parent*</code> slot, to enable it to search up the hierarchy to <code>globals</code></li>
 </ul>
 <h2 id="haskell">Haskell</h2>
@@ -152,7 +143,7 @@
 <li>Originally, I wanted to try implementing a solution within the type system, but I just couldn&#39;t figure it out after a few hours of flailing about</li>
 <li>Couldn&#39;t find standard library functions for operations like &quot;first element of a list&quot; or &quot;check if an item exists within a list&quot;</li>
 <li>Never figured out how to test anything other than equality in the type system</li>
-<li>I still don&#39;t understand how <code>Something</code> and <code>MkSomething</code> are related for data types</li>
+<li>I still don&#39;t understand how <code>Something</code> and <code>MkSomething</code> are related for data types -- I need to come back to this eventually...</li>
 </ul>
 <h2 id="nim">Nim</h2>
 <p><strong>Nim is the language that impressed me the most in this batch.</strong> Everything I thought would be a problem (significant whitespace, choose-your-own-function syntax, intermediate C compliation step) didn&#39;t bother me at all. The small sample of the standard library I played with was a little quirky, but Nim seems like excellent bang for your buck.</p>

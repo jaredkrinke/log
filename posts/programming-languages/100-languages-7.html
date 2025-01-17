@@ -52,22 +52,22 @@
 </ul>
 <h2 id="uxntal">Uxntal</h2>
 <p>Ever since reading about <a href="https://100r.co/site/uxn.html">uxn</a>, I&#39;d wanted to see what a simple VM that runs on an NES could look like. After digging in a bit more, I learned that uxn was inspired by Forth--that got my attention!</p>
-<p>After writing some code in uxn&#39;s assembly language (tal), I&#39;ll say that I mostly like uxn (the virtual machine), but... I don&#39;t like writing tal (the assembly language). There&#39;s a lot of syntax and aesthetic choices that irritate me.</p>
+<p>After writing some code in uxn&#39;s assembly language (tal), I&#39;ll say that I mostly like uxn (the virtual machine), but... I struggled with tal.</p>
 <p>Notes:</p>
 <ul>
-<li>Numbers <em>must</em> be written in lowercase hexadecimal (<strong>decimal is not even allowed!</strong>)</li>
+<li>Numbers <em>must</em> be written in lowercase hexadecimal (decimal not supported)</li>
 <li>Instructions can set a &quot;keep&quot; bit that causes inputs to remain on the stack</li>
-<li><strong>The instruction set doesn&#39;t include modulus/remainder</strong> (why!?)</li>
+<li>The instruction set doesn&#39;t include modulus/remainder</li>
 <li>Supports both global and local labels, which is convenient</li>
 <li>Instructions must be UPPERCASE (except for flags), but hexadecimal must be lowercase</li>
 <li><strong>Names like <code>b1</code> aren&#39;t allowed</strong> because they&#39;re actually hexadecimal numbers...</li>
-<li>Mixing 8-bit and 16-bit values on the stack is tedious</li>
+<li>Mixing 8-bit and 16-bit values on the stack is tricky</li>
 <li>Must specify <code>&amp;</code> on relative references, but not <code>@</code> on global references...</li>
 <li>Pro tip: don&#39;t DUP relative addresses!</li>
 </ul>
 <h2 id="apl">APL</h2>
 <p>After playing with J and K (although I couldn&#39;t actually find an official implementation of K5), it was time to play with their spiritual predecessor, APL.</p>
-<p>With J, I felt like I was re-learning Perl-compatible regular expressions, but with a much larger menu of ASCII sigils. APL is the same, <strong>except I can&#39;t type (and don&#39;t even know the names of) the sigils</strong>. Overall, this was probably the most challenging syntax I&#39;ve encountered outside of esoteric programming languages.</p>
+<p>With J, I felt like I was re-learning Perl-compatible regular expressions, but with a much larger menu of ASCII sigils. APL is the same, <strong>except I can&#39;t type (and don&#39;t even know the names of) the sigils</strong>.</p>
 <h2 id="factor">Factor</h2>
 <p><strong>Factor is the niftiest concatenative language I&#39;ve tried</strong>.</p>
 <p>Intriguingly, it borrows heavily from Common Lisp (e.g. restarts, editor integration, multiple dispatch, image-based development). I&#39;d even go as far to say that, in my limited experience, <strong>Factor feels like a concatenative expression of Common Lisp</strong>.</p>
@@ -82,30 +82,31 @@
 </ul>
 <h2 id="rebol">Rebol</h2>
 <p><strong>Rebol is a minimal, but impressively capable scripting language</strong>. The entire language, including GUI support is well under 1 MB. How did I not run across Rebol when I was <a href="minimal-dev-env-5.html">looking for a minimal development environment</a>!? I only scratched the surface of Rebol, but it felt like exactly what I was looking for.</p>
-<p>Having said that, I&#39;m uncertain about the future of Rebol--it doesn&#39;t even appear to fully support 64-bit architectures.</p>
+<p>Having said that, I&#39;m uncertain about the future of Rebol--it doesn&#39;t appear to fully support 64-bit architectures.</p>
 <p>Notes:</p>
 <ul>
 <li>Entire language is 440 KB!</li>
 <li>Used the console version</li>
-<li>Variables in functions don&#39;t default to locals!?</li>
+<li>Variables in functions don&#39;t default to locals?</li>
 </ul>
 <h2 id="bash">Bash</h2>
 <p>I&#39;ve successfully been avoiding writing Bash recently, but I thought it might be fun to see what math looks like in Bash.</p>
 <p>Notes:</p>
 <ul>
-<li>Ugly syntax (double parentheses, double brackets)</li>
+<li>Unpleasant syntax (double parentheses, double brackets)</li>
 <li>Little inconsistencies, e.g. <code>fi</code> vs <code>done</code></li>
 <li>Lots of symbols to remember: <code>#</code>, <code>@</code>, <code>/</code></li>
 <li>But <em>very</em> widely deployed!</li>
 </ul>
 <h2 id="julia">Julia</h2>
-<p>From my uninformed perspective, Julia looks like the language that academics should be using instead of Python. I probably shouldn&#39;t have said that, but there it is.</p>
+<p>From my uninformed perspective, Julia looks like a great language for academics.</p>
 <p>Notes:</p>
 <ul>
 <li>Excellent documentation!</li>
 <li>Base runtime includes a constant indicating the precision of floating points numbers!</li>
 <li>Has a REPL, but I didn&#39;t use it</li>
 <li>Built-in rational type!</li>
+<li>My solution is horrible and didn&#39;t take advantage of any of Julia&#39;s nice features...</li>
 </ul>
 
 <footer>

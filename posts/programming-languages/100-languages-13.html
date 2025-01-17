@@ -59,8 +59,8 @@
 </ul>
 <h2 id="8080-assembly-altair-8800">8080 assembly (Altair 8800)</h2>
 <ul>
-<li>First time I&#39;ve heard of binary-coded decimals</li>
-<li>Took longer than expected because I hit a bug in <a href="https://github.com/simh/simh">SIMH</a></li>
+<li>To my surprise, this is the first time I&#39;ve heard of binary-coded decimals!</li>
+<li>Actually found a bug in <a href="https://github.com/simh/simh">SIMH</a></li>
 <li>Solution easily fits in the 256 bytes of a non-upgraded Altair 8800</li>
 </ul>
 <h2 id="janet">Janet</h2>
@@ -70,43 +70,37 @@
 </ul>
 <h2 id="hazel">Hazel</h2>
 <ul>
-<li>Non-code documentation is hard to find</li>
 <li>Nice not having to worry about whitespace</li>
-<li>Annoyingly slow when typing</li>
-<li>It&#39;s nice to have contextual help/explanations for what you type it, but it&#39;s still not easy to figure out what to type in in the first place</li>
-<li>Very slow (50,000+ slower than a trivial native code solution), no random-access data structure</li>
-<li>Hard-coded 20-second time limit on evaluation (which is hard to avoid since it&#39;s so slow...) -- I ended up modifying the time limit in the minified JavaScript source file, as a work around</li>
+<li>Very slow (50,000+ slower than a trivial native code solution), no random-access data structures</li>
+<li>Hard-coded 20-second time limit on evaluation -- I ended up modifying the time limit in the minified JavaScript source file, as a work around</li>
 <li>I like the mix of ML and C-style syntax</li>
 </ul>
 <h2 id="ada">Ada</h2>
 <ul>
 <li>Seems like a lot of boilerplate, but that might be intentional</li>
-<li>I wasn&#39;t sure how big Ada.Containers.Count_Type could be and it turns out it&#39;s implementation defined--this is surprising for a language that&#39;s supposed to be robust</li>
+<li>I wasn&#39;t sure how big Ada.Containers.Count_Type could be and it turns out it&#39;s implementation defined -- not what I expected!</li>
 <li>Structure and syntax is similar to Pascal</li>
 <li>Can only have one top-level procedure per file?</li>
 </ul>
 <h2 id="shen">Shen</h2>
 <ul>
-<li>Lots of details are hidden away in the &quot;Shen Book&quot; -- it&#39;s available, but only in a scanned, non-OCR&#39;d JPEG format</li>
-<li>None of the implementations I tried actually included the standard library</li>
-<li>For being portable, the main implementation seems to only target Windows</li>
-<li>Having Prolog embedded in a Lisp sounded great, but I found it awkward to use since it&#39;s lacking Prolog&#39;s most basic standard library functionality</li>
+<li>Lots of details are in the &quot;Shen Book&quot;, but it only seems to be available in a scanned, non-OCR&#39;d JPEG format</li>
+<li>None of the implementations I tried seemed to  include the standard library...?</li>
+<li>Having Prolog embedded in a Lisp sounded great, but I found it awkward to use since it&#39;s lacking Prolog&#39;s standard library</li>
 <li>I was skeptical of the lack of quote/quasiquote in a Lisp, but I didn&#39;t actually end up needing either of them!</li>
-<li>I feel like there are some intriguing ideas in Shen, but overall I found Shen impenetrable</li>
+<li>I feel like there are some intriguing ideas in Shen, but overall I found Shen somewhat impenetrable</li>
 </ul>
 <h2 id="kitten">Kitten</h2>
 <ul>
 <li>I liked the idea of a simple, functional, statically typed concatenative language</li>
 <li>Switching between Forth-style syntax and C (or Python) syntax feels odd (and I don&#39;t like all the commas)</li>
-<li>Very, very slow to compile and run (N.B. a lot of the startup overhead appears to come from &quot;The Haskell Stack&quot;)</li>
-<li>Can use absurd amounts of memory in some cases</li>
+<li>Seemed to use a lot of memory</li>
 <li>Logical <code>&amp;&amp;</code> and <code>||</code> have no special meaning, so short-circuiting is implemented using (explicit) anonymous functions</li>
 <li>Fun to play with!</li>
 </ul>
 <h2 id="lo">LO</h2>
 <ul>
 <li>Dislike <code>0 as i32</code> for a signed integer type zero (but I discovered that <code>+0</code> is equivalent)</li>
-<li>Found some minor compiler bugs</li>
 <li>Vectors return pointers, so the underlying element can change!</li>
 </ul>
 <h2 id="bend">Bend</h2>
@@ -123,21 +117,18 @@
 <h2 id="futhark">Futhark</h2>
 <ul>
 <li>Just by using <code>map</code>, I was able to get a parallel program with no extra effort</li>
-<li>Confirmed the <code>multicore</code> build ran twice as fast on my dual-core laptop</li>
+<li>Confirmed the <code>multicore</code> build ran twice as fast on my dual-core laptop!</li>
 </ul>
 <h2 id="lobster">Lobster</h2>
 <ul>
 <li>Easy to write code, thanks to simple and terse syntax</li>
-<li>Couldn&#39;t get &quot;exceptions&quot; working at all</li>
+<li>Couldn&#39;t get &quot;exceptions&quot; working -- never figured out why</li>
 <li>Didn&#39;t have to specify any types, which was convenient</li>
-<li>I was excited to see how fast a static, compiled solution was, but... it ended up being slower than Python!</li>
-<li>(Obviously, running a little bit of math is not the intended use case for Lobster--transpiling to C++ might have sped things up, but I couldn&#39;t get that working)</li>
+<li>I was excited to see how fast a static, compiled solution was, but for some reason it was slower than Python</li>
 <li>Overall, it felt a bit like Nim</li>
 </ul>
 <h2 id="dylan">Dylan</h2>
 <ul>
-<li>Developer experience with Open Dylan was not great...</li>
-<li>Hit tons of issues and warnings just trying to build and run a &quot;hello world&quot; program...</li>
 <li>Building a &quot;hello world&quot; program the first time took minutes and required creating multiple text files</li>
 <li>Multiple dispatch, macros, etc. make this feel like Common Lisp, but with conventional syntax -- I&#39;m surprised Dylan wasn&#39;t more popular, honestly!</li>
 </ul>

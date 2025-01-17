@@ -244,7 +244,7 @@
 <blockquote>
 <p>gem install bundler jekyll</p>
 </blockquote>
-<p>Alright, it looks like I need a full blown Ruby environment. No thanks!</p>
+<p>Alright, it looks like I need a full blown Ruby environment.</p>
 <h2 id="gatsby">Gatsby</h2>
 <p><a href="https://www.gatsbyjs.com/get-started/">Gatsby requires Node v12+</a> for installation. I realize this isn&#39;t &quot;fair&quot;, but I actually use Node and NPM, so this isn&#39;t a deal-breaker for me.</p>
 <p>Diving into <a href="https://www.gatsbyjs.com/how-it-works/">how Gatsby works</a>, I see some alarmingly complex boasts:</p>
@@ -260,8 +260,6 @@
 <p>If you build your site with Gatsby, your site will be a lightning-fast progressive web app (PWA)</p>
 </blockquote>
 <p>... but I just want plain old HTML.</p>
-<p>The alarm bells in my head were deafening at this point and things just kept getting worse. Why can&#39;t I copy text from &quot;how it works&quot; page? Why is there a cloud offering for static sites that should just be HTML distributed via a content delivery network?</p>
-<p>Cross Gatsby off my list!</p>
 <h2 id="hugo">Hugo</h2>
 <p>Hugo is written in Go and <a href="https://gohugo.io/getting-started/installing">distributed as a single executable</a>. It doesn&#39;t get any simpler than that! In <a href="https://gohugo.io/getting-started/quick-start/">their quick-start</a>, it looks like posts can be stored in markdown files with front matter for title, date, and draft status:</p>
 <pre><code class="language-yaml"><span class="hljs-meta">---</span>
@@ -282,7 +280,6 @@
 <li>&quot;Enjoy the dev experience of Vue + webpack&quot; (since when have I enjoyed webpack?)</li>
 <li>&quot;VuePress generates pre-rendered static HTML for each page, and runs as an SPA once a page is loaded.&quot; (I understand the potential performance benefits, but I don&#39;t want JavaScript to be required and I&#39;m sure there is substantial overhead in doing this, even if latency of subsequent page loads is improved)</li>
 </ul>
-<p>Moving along.</p>
 <h2 id="eleventy">Eleventy</h2>
 <p>Eleventy requires Node and NPM which, while not optimal, is something I will tolerate since I already need those for a couple of projects. I do wonder if this will eventually become a burden in the future when Node inevitably falls out of favor.</p>
 <p>The first few pages of documentation don&#39;t discuss themes, which I actually find to be semi-encouraging because that implies that I can just hand-author some minimal HTML templates without having to learn some complex theming system.</p>
@@ -301,12 +298,8 @@
 <p><strong>Update</strong>: I took <a href="eleventy.html">an initial look at Eleventy</a> and ended up <a href="eleventy-2.html">fully integrating it into this site</a>... but then I <a href="metalsmith.html">switched to Metalsmith</a> because it was simpler... and then I <a href="metalsmith-downsides.html">abandoned Metalsmith due to huge, overlapping dependencies</a> and <a href="md2blog-design.html">built md2blog</a> instead.</p>
 <h2 id="hexo">Hexo</h2>
 <p>Hexo also requires Node and NPM (similar to Eleventy). Fine.</p>
-<p>Hexo appears to use the &quot;million plugins&quot; architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like <a href="https://parceljs.org/">Parcel</a> and not <a href="https://webpack.js.org/">webpack</a>, but I do understand &quot;zero configuration&quot; constraints can come back to bite me later.</p>
+<p>Hexo appears to use the &quot;million plugins&quot; architecture that is popular in the Node world. I understand the appeal of isolating each component and not reinventing the wheel, but I usually prefer a more opinionated, top-down approach because it lets everyone have a common setup that they can discuss. For example, I like <a href="https://parceljs.org/">Parcel</a> and not <a href="https://webpack.js.org/">webpack</a>, but I do understand &quot;zero configuration&quot; constraints can come back to bite me later (<strong>update</strong>: as happened in the case of Parcel).</p>
 <p>Anyway, <a href="https://hexo.io/docs/setup">Hexo&#39;s default</a> includes EJS, Stylus, and Markdown. I&#39;m not familiar with the first two. Is this going to be geared toward web developers?</p>
-<p>Looking into their <a href="https://hexo.io/docs/writing">documentation on writing content</a>, it appears you create a new post using a tool that&#39;s not your favorite text editor:</p>
-<pre><code class="language-sh">hexo new [layout] &lt;title&gt;
-</code></pre>
-<p>I&#39;m not a fan of using a tool to manage my content because such a tool was inevitably created to generate boilerplate code or follow strict conventions. This leads to hassles when migrating to a new system and prevents you from authoring content when you don&#39;t have your usual development environment handy. I should be able to author content using just a text editor.</p>
 <p>Hexo looks decent, but certainly not any closer to what I want than Hugo or Eleventy. I&#39;ll come back to Hexo, if needed.</p>
 <h2 id="pagic">Pagic</h2>
 <p>Pagic uses Deno which, while intriguing, isn&#39;t something I&#39;ve actually installed or played with yet. Maybe this is the motivation I need to try Deno?</p>
@@ -316,21 +309,20 @@
 <h2 id="nextjs">Next.js</h2>
 <p><a href="https://nextjs.org/">Next.js</a> appears to be a framework for server-side rendering using React concepts (e.g. JSX). Even with a <a href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter">skeleton project</a> available, similar to the Vue-based static site generators I already looked at, I feel like I wouldn&#39;t benefit from this tool because I&#39;m not already using Next.js for other purposes.</p>
 <h2 id="pelican">Pelican</h2>
-<p>Pelican requires Python. I know that Python is very popular, but I have never really understood the appeal. Sure, having whitespace for identifying blocks looks nice (and is probably more intuitive for people without a C/C++ background), but Python has made too many mistakes in handling compatibility (e.g. <a href="https://www.python.org/dev/peps/pep-0238/">changing the semantics of the division operator</a>), so I&#39;d prefer to just go on pretending Python never existed.</p>
+<p>Pelican requires Python and (at the time of this writing) I wasn&#39;t using Python, so I unfairly didn&#39;t give Pelican a try.</p>
 <h2 id="react-static">React Static</h2>
 <p>Yet another static site generator that adds <em>more</em> complexity:</p>
 <blockquote>
 <p>React Static gathers your data, and templates together and intelligently splits them into bite-size static files using webpack and javascript. ... Little did you know that when React Static exported your site, it also generated a tiny, optimized, and code-split version of your original React application for every page of your site! After these pages have loaded, React invisibly mounts this application to the existing HTML on the page and...</p>
 </blockquote>
-<p>... and I stopped reading.</p>
 <h2 id="metalsmith">Metalsmith</h2>
 <p>Metalsmith is built on Node and requires you to write actual JavaScript code to build your site.</p>
 <p>While I didn&#39;t really want to have to write code, at least I&#39;d be able to debug the tool when something didn&#39;t behave as expected.</p>
 <p>Metalsmith&#39;s most interesting aspect for me is that it&#39;s modular and pluggable, similar to <a href="https://gulpjs.com/">Gulp</a>. This could come in handy if I need to extend the existing functionality a little (e.g. to allow embedding of images and diagrams).</p>
 <p>Similar to Gulp, I think I&#39;d probably end up frustrated with an endless graph of plugins that interact in bizarre ways, but I <em>might</em> be willing to give Metalsmith a try if I find too many gaps in the other generators I&#39;ve liked so far.</p>
-<p><strong>Update</strong>: I ended up <a href="metalsmith.html">fully integrating Metalsmith into my site</a> (including <a href="metalsmith-syntax-highlighting.html">syntax highlighting</a>) because I liked the modular architecture and simple plugins met most of my needs. Eventually, however, I <a href="metalsmith-downsides.html">abandoned Metalsmith due to huge, overlapping dependencies</a> and <a href="md2blog-design.html">built md2blog</a> instead.</p>
+<p><strong>Update</strong>: I ended up <a href="metalsmith.html">fully integrating Metalsmith into my site</a> (including <a href="metalsmith-syntax-highlighting.html">syntax highlighting</a>) because I liked the modular architecture and simple plugins met most of my needs. Eventually, however, I <a href="metalsmith-downsides.html">abandoned Metalsmith due to numerous, overlapping dependencies</a> and <a href="md2blog-design.html">built md2blog</a> instead.</p>
 <h2 id="zola">Zola</h2>
-<p>Zola is written in Rust, a language which I&#39;m tired of hearing about (similar to Python), but which I actually think I might one day use (unlike Python). A fast, native binary with no dependencies is certainly a strong start for Zola.</p>
+<p>Zola is written in Rust. A fast, native binary with no dependencies is certainly a strong start for Zola.</p>
 <p>Annoyingly (from a portability aspect), Zola wants me to use <code>+++</code> to demarcate front matter in <a href="https://toml.io/en/">TOML</a> (definitely not my preferred metadata language), but &quot;YAML front matter is also supported to ease porting legacy content&quot; -- hopefully that support doesn&#39;t disappear someday!</p>
 <p>Zola&#39;s documentation looks pretty good, and they <a href="https://www.getzola.org/documentation/templates/overview/#built-in-templates">explicitly mention support for RSS</a> as a feature.</p>
 <p>Zola makes it onto my short list.</p>

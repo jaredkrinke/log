@@ -40,7 +40,7 @@
 </header>
 <p><a href="https://www.rust-lang.org/">Rust</a> is so popular these days that &quot;written in Rust&quot; is undoubtedly going to become a meme (if it hasn&#39;t already). It&#39;s time I give it a try!</p>
 <h1 id="the-appeal-of-rust">The appeal of Rust</h1>
-<p>I can understand the appeal of Rust. It&#39;s a modern language (meaning it doesn&#39;t have a ton of legacy cruft), it has a unique memory model that prevents certain classes of bugs, yet it still has manual memory management. This is a unique combination.</p>
+<p>I can understand the appeal of Rust. It&#39;s a modern language (meaning it doesn&#39;t have a ton of legacy cruft), it has a unique memory model that prevents certain classes of bugs, yet it still has manual memory management. This is an enticing combination!</p>
 <p>Theoretically, this should allow Rust to be used all the way from memory-constrained embedded systems to high level apps.</p>
 <h1 id="what-about-c">What about C++?</h1>
 <p>Now, I&#39;m not willing to jump to a new language and ecosystem just because it&#39;s shiny and new. Rust&#39;s memory model seems like an improvement over C++, but modern C++ has (in my experience) fewer memory bugs anyway, thanks to smart pointers and the <a href="https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization">RAII</a> pattern.</p>
@@ -50,7 +50,7 @@
 <li>Rust has its own build system, which is also Cargo</li>
 <li>Rust&#39;s compiler is built on LLVM, so it can trivially target WebAssembly</li>
 </ul>
-<p>If I had to pick the worst part of C++ development, I&#39;d say it&#39;s setting up a build system and dealing with dependencies. To me, Cargo is actually the biggest differentiator for Rust as compared to C++.</p>
+<p>If I had to pick the worst part of C++ development, I&#39;d say it&#39;s setting up a build system and dealing with dependencies. Cargo might tip the scales toward Rust, for me!</p>
 <h1 id="installing-rust">Installing Rust</h1>
 <p>It might be unreasonable, but I&#39;d like my programming language of choice to have a development environment that is compact and simple to setup. Aside: this is one of the reasons I enjoy <a href="../web-development/one-month-with-deno.html">Deno</a>: it ships as a single (fairly small) binary.</p>
 <p>Following Rust&#39;s <a href="https://www.rust-lang.org/learn/get-started">getting started instructions</a>, I&#39;m immediately discouraged:</p>
@@ -61,11 +61,8 @@
 <p>The Rust installer indicates that I should install the Windows 10 SDK, so I select that and am horrified to see that it is 2.8 GB.</p>
 <h1 id="recap">Recap</h1>
 <p>Based on the documentation I&#39;ve seen so far, it looks like you have to install nearly 3 GB of C++ tools just to get a working Rust development environment on Windows.</p>
-<p>At this point, I&#39;m speechless. I was willing to tolerate a ~500 MB download for a new programming language, but I&#39;m already up to about six times that size without even getting to the Rust part.</p>
-<p>A quick web search indicates that this requirement is just to provide things like a linker, but I&#39;m certain these tools are much less than 3 GB in size.</p>
-<p>I was also under the impression that Rust was fully open source, so requiring closed source tools to build on Windows seems bizarre (note: MinGW might fill in this gap, but that&#39;s another huge download I&#39;d like to avoid, if possible).</p>
-<h1 id="setting-this-aside-for-now">Setting this aside for now...</h1>
-<p>That&#39;s enough disappointment for one day. I&#39;d still like to give Rust a go, but it looks like first I&#39;m going to have to figure out how to get a working environment without installing gigabytes of unrelated tooling (especially since part of my motivation to try Rust was to avoid having to setup an entire C++ toolchain!).</p>
+<p>At this point, I&#39;m speechless. I was willing to tolerate a ~500 MB download for a new programming language, but I&#39;m already up to about six times that size without even getting to the Rust part. A quick web search indicates that this requirement is just to provide things like a linker, but I&#39;m certain these tools are much less than 3 GB in size.</p>
+<p>Of course, this is really Microsoft&#39;s fault, so it&#39;s unfair for me to blame Rust. <strong>I will restart my Rust adventure on Linux</strong>.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

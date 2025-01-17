@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-01-17T17:25:52.365Z</updated>
+<updated>2025-01-17T23:21:56.282Z</updated>
 
 <entry>
 <title>I apologize to the Python ecosystem</title>
@@ -38,10 +38,10 @@
 &lt;h1 id=&quot;notes&quot;&gt;Notes&lt;/h1&gt;
 &lt;h2 id=&quot;ats&quot;&gt;ATS&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Has some bizarre syntax, e.g. &lt;code&gt;:&amp;lt;cloref1&amp;gt;&lt;/code&gt; and &lt;code&gt;t@ype&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Inscrutable error messages, such as &lt;code&gt;the syntactic entity [impqi0de] is needed.&lt;/code&gt; -- what is &lt;code&gt;[impqi0de]&lt;/code&gt;???&lt;/li&gt;
-&lt;li&gt;Another example: copy-pasting &lt;code&gt;fn square (x: double): double = x * x&lt;/code&gt; from the official documentation yields &lt;code&gt;error: ‘PMVtmpltcstmat’ undeclared (first use in this function)&lt;/code&gt;, unless you put &lt;code&gt;#include &amp;quot;share/atspre_staload.hats&amp;quot;&lt;/code&gt; at the top of the file&lt;/li&gt;
-&lt;li&gt;I&amp;#39;ll admit I didn&amp;#39;t attempt to include any proofs in my code, so I didn&amp;#39;t really leverage ATS to its fullest (or, really, any) extent&lt;/li&gt;
+&lt;li&gt;I didn&amp;#39;t understand some of the syntax, e.g. &lt;code&gt;:&amp;lt;cloref1&amp;gt;&lt;/code&gt; and &lt;code&gt;t@ype&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Error messages were sometimes surprising, e.g. &lt;code&gt;the syntactic entity [impqi0de] is needed.&lt;/code&gt; -- what is &lt;code&gt;[impqi0de]&lt;/code&gt;???&lt;/li&gt;
+&lt;li&gt;Another example: copy-pasting &lt;code&gt;fn square (x: double): double = x * x&lt;/code&gt; from the official documentation yields &lt;code&gt;error: ‘PMVtmpltcstmat’ undeclared (first use in this function)&lt;/code&gt; -- solutiong was to put &lt;code&gt;#include &amp;quot;share/atspre_staload.hats&amp;quot;&lt;/code&gt; at the top of the file (my mistake--but the error was unhelpful)&lt;/li&gt;
+&lt;li&gt;I didn&amp;#39;t attempt to include any proofs in my code, so I didn&amp;#39;t really leverage ATS to its fullest (or, really, any) extent&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;pre-scheme&quot;&gt;Pre-Scheme&lt;/h2&gt;
 &lt;ul&gt;
@@ -56,9 +56,8 @@
 &lt;li&gt;Interactive development is helpful (and fun)&lt;/li&gt;
 &lt;li&gt;So many cryptic/inconsistent names, e.g. &lt;code&gt;fmakunbound&lt;/code&gt;, &lt;code&gt;mapcon&lt;/code&gt;, &lt;code&gt;clrhash&lt;/code&gt;, &lt;code&gt;prin1&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;=&lt;/code&gt; vs. &lt;code&gt;equalp&lt;/code&gt; vs. &lt;code&gt;equal&lt;/code&gt; vs. &lt;code&gt;eql&lt;/code&gt; vs. &lt;code&gt;eq&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;SBCL is fast, but a trivial stand-alone binary is huge and uses ~100 MB of memory&lt;/li&gt;
+&lt;li&gt;SBCL is fast, but a trivial stand-alone binary can be big and uses more memory than I would like&lt;/li&gt;
 &lt;li&gt;Common Lisp isn&amp;#39;t as elegant as Scheme, but the implementations are more mutually compatible than in the Scheme world&lt;/li&gt;
-&lt;li&gt;If there was a fast, &lt;em&gt;low-overhead&lt;/em&gt; Common Lisp, I&amp;#39;d probably use it as my default language for side projects&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;mouse-83&quot;&gt;Mouse-83&lt;/h2&gt;
 &lt;ul&gt;
@@ -69,7 +68,6 @@
 &lt;h2 id=&quot;cyber&quot;&gt;Cyber&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Once mature, this could be a fast Lua replacement with more Python-like syntax (and zero-based indexing!)&lt;/li&gt;
-&lt;li&gt;Unfortunately, I hit several bugs in Cyber&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;varyx&quot;&gt;Varyx&lt;/h2&gt;
 &lt;ul&gt;
@@ -80,7 +78,6 @@
 &lt;ul&gt;
 &lt;li&gt;Very compact code&lt;/li&gt;
 &lt;li&gt;Surprisingly fast&lt;/li&gt;
-&lt;li&gt;Missing functional helpers, e.g. &amp;quot;sort by&amp;quot; -- it sounds like these are planned but not implemented&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;rexx&quot;&gt;Rexx&lt;/h2&gt;
 &lt;ul&gt;
@@ -121,8 +118,8 @@
 &lt;/ul&gt;
 &lt;h2 id=&quot;8080-assembly-altair-8800&quot;&gt;8080 assembly (Altair 8800)&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;First time I&amp;#39;ve heard of binary-coded decimals&lt;/li&gt;
-&lt;li&gt;Took longer than expected because I hit a bug in &lt;a href=&quot;https://github.com/simh/simh&quot;&gt;SIMH&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;To my surprise, this is the first time I&amp;#39;ve heard of binary-coded decimals!&lt;/li&gt;
+&lt;li&gt;Actually found a bug in &lt;a href=&quot;https://github.com/simh/simh&quot;&gt;SIMH&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Solution easily fits in the 256 bytes of a non-upgraded Altair 8800&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;janet&quot;&gt;Janet&lt;/h2&gt;
@@ -132,43 +129,37 @@
 &lt;/ul&gt;
 &lt;h2 id=&quot;hazel&quot;&gt;Hazel&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Non-code documentation is hard to find&lt;/li&gt;
 &lt;li&gt;Nice not having to worry about whitespace&lt;/li&gt;
-&lt;li&gt;Annoyingly slow when typing&lt;/li&gt;
-&lt;li&gt;It&amp;#39;s nice to have contextual help/explanations for what you type it, but it&amp;#39;s still not easy to figure out what to type in in the first place&lt;/li&gt;
-&lt;li&gt;Very slow (50,000+ slower than a trivial native code solution), no random-access data structure&lt;/li&gt;
-&lt;li&gt;Hard-coded 20-second time limit on evaluation (which is hard to avoid since it&amp;#39;s so slow...) -- I ended up modifying the time limit in the minified JavaScript source file, as a work around&lt;/li&gt;
+&lt;li&gt;Very slow (50,000+ slower than a trivial native code solution), no random-access data structures&lt;/li&gt;
+&lt;li&gt;Hard-coded 20-second time limit on evaluation -- I ended up modifying the time limit in the minified JavaScript source file, as a work around&lt;/li&gt;
 &lt;li&gt;I like the mix of ML and C-style syntax&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;ada&quot;&gt;Ada&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Seems like a lot of boilerplate, but that might be intentional&lt;/li&gt;
-&lt;li&gt;I wasn&amp;#39;t sure how big Ada.Containers.Count_Type could be and it turns out it&amp;#39;s implementation defined--this is surprising for a language that&amp;#39;s supposed to be robust&lt;/li&gt;
+&lt;li&gt;I wasn&amp;#39;t sure how big Ada.Containers.Count_Type could be and it turns out it&amp;#39;s implementation defined -- not what I expected!&lt;/li&gt;
 &lt;li&gt;Structure and syntax is similar to Pascal&lt;/li&gt;
 &lt;li&gt;Can only have one top-level procedure per file?&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;shen&quot;&gt;Shen&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Lots of details are hidden away in the &amp;quot;Shen Book&amp;quot; -- it&amp;#39;s available, but only in a scanned, non-OCR&amp;#39;d JPEG format&lt;/li&gt;
-&lt;li&gt;None of the implementations I tried actually included the standard library&lt;/li&gt;
-&lt;li&gt;For being portable, the main implementation seems to only target Windows&lt;/li&gt;
-&lt;li&gt;Having Prolog embedded in a Lisp sounded great, but I found it awkward to use since it&amp;#39;s lacking Prolog&amp;#39;s most basic standard library functionality&lt;/li&gt;
+&lt;li&gt;Lots of details are in the &amp;quot;Shen Book&amp;quot;, but it only seems to be available in a scanned, non-OCR&amp;#39;d JPEG format&lt;/li&gt;
+&lt;li&gt;None of the implementations I tried seemed to  include the standard library...?&lt;/li&gt;
+&lt;li&gt;Having Prolog embedded in a Lisp sounded great, but I found it awkward to use since it&amp;#39;s lacking Prolog&amp;#39;s standard library&lt;/li&gt;
 &lt;li&gt;I was skeptical of the lack of quote/quasiquote in a Lisp, but I didn&amp;#39;t actually end up needing either of them!&lt;/li&gt;
-&lt;li&gt;I feel like there are some intriguing ideas in Shen, but overall I found Shen impenetrable&lt;/li&gt;
+&lt;li&gt;I feel like there are some intriguing ideas in Shen, but overall I found Shen somewhat impenetrable&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;kitten&quot;&gt;Kitten&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;I liked the idea of a simple, functional, statically typed concatenative language&lt;/li&gt;
 &lt;li&gt;Switching between Forth-style syntax and C (or Python) syntax feels odd (and I don&amp;#39;t like all the commas)&lt;/li&gt;
-&lt;li&gt;Very, very slow to compile and run (N.B. a lot of the startup overhead appears to come from &amp;quot;The Haskell Stack&amp;quot;)&lt;/li&gt;
-&lt;li&gt;Can use absurd amounts of memory in some cases&lt;/li&gt;
+&lt;li&gt;Seemed to use a lot of memory&lt;/li&gt;
 &lt;li&gt;Logical &lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt; and &lt;code&gt;||&lt;/code&gt; have no special meaning, so short-circuiting is implemented using (explicit) anonymous functions&lt;/li&gt;
 &lt;li&gt;Fun to play with!&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;lo&quot;&gt;LO&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Dislike &lt;code&gt;0 as i32&lt;/code&gt; for a signed integer type zero (but I discovered that &lt;code&gt;+0&lt;/code&gt; is equivalent)&lt;/li&gt;
-&lt;li&gt;Found some minor compiler bugs&lt;/li&gt;
 &lt;li&gt;Vectors return pointers, so the underlying element can change!&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;bend&quot;&gt;Bend&lt;/h2&gt;
@@ -185,21 +176,18 @@
 &lt;h2 id=&quot;futhark&quot;&gt;Futhark&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Just by using &lt;code&gt;map&lt;/code&gt;, I was able to get a parallel program with no extra effort&lt;/li&gt;
-&lt;li&gt;Confirmed the &lt;code&gt;multicore&lt;/code&gt; build ran twice as fast on my dual-core laptop&lt;/li&gt;
+&lt;li&gt;Confirmed the &lt;code&gt;multicore&lt;/code&gt; build ran twice as fast on my dual-core laptop!&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;lobster&quot;&gt;Lobster&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Easy to write code, thanks to simple and terse syntax&lt;/li&gt;
-&lt;li&gt;Couldn&amp;#39;t get &amp;quot;exceptions&amp;quot; working at all&lt;/li&gt;
+&lt;li&gt;Couldn&amp;#39;t get &amp;quot;exceptions&amp;quot; working -- never figured out why&lt;/li&gt;
 &lt;li&gt;Didn&amp;#39;t have to specify any types, which was convenient&lt;/li&gt;
-&lt;li&gt;I was excited to see how fast a static, compiled solution was, but... it ended up being slower than Python!&lt;/li&gt;
-&lt;li&gt;(Obviously, running a little bit of math is not the intended use case for Lobster--transpiling to C++ might have sped things up, but I couldn&amp;#39;t get that working)&lt;/li&gt;
+&lt;li&gt;I was excited to see how fast a static, compiled solution was, but for some reason it was slower than Python&lt;/li&gt;
 &lt;li&gt;Overall, it felt a bit like Nim&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;dylan&quot;&gt;Dylan&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Developer experience with Open Dylan was not great...&lt;/li&gt;
-&lt;li&gt;Hit tons of issues and warnings just trying to build and run a &amp;quot;hello world&amp;quot; program...&lt;/li&gt;
 &lt;li&gt;Building a &amp;quot;hello world&amp;quot; program the first time took minutes and required creating multiple text files&lt;/li&gt;
 &lt;li&gt;Multiple dispatch, macros, etc. make this feel like Common Lisp, but with conventional syntax -- I&amp;#39;m surprised Dylan wasn&amp;#39;t more popular, honestly!&lt;/li&gt;
 &lt;/ul&gt;
@@ -263,7 +251,7 @@
 <updated>2024-10-31T00:00:00.000Z</updated>
 <summary type="text">Just some more notes on programming languages. And also my first failure!</summary>
 <content type="html">&lt;p&gt;I recently resumed &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;solving the first 100 Project Euler problems using 100 different programming languages&lt;/a&gt;. For reference: &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;here is code for all my solutions so far&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Of note, &lt;strong&gt;I failed to solve a problem using Micro-Lisp on the Commodore 64&lt;/strong&gt;. I think it would have been &lt;em&gt;possible&lt;/em&gt; to solve the problem (even despite the lack of cons cell mutation), but the Commodore 64 keyboard design can lead to two different space characters being emitted when you hit the space bar, depending on timing, and Micro-Lisp only handled one of those characters. The result is that I&amp;#39;d have code that looked correct, but wouldn&amp;#39;t compile. It was, frankly, too annoying for me to continue.&lt;/p&gt;
+&lt;p&gt;Of note, &lt;strong&gt;I failed to solve a problem using Micro-Lisp on the Commodore 64&lt;/strong&gt;. I think it would have been &lt;em&gt;possible&lt;/em&gt; to solve the problem (even despite the lack of cons cell mutation), but the Commodore 64 keyboard design can lead to two different space characters being emitted when you hit the space bar, depending on timing, and Micro-Lisp only handled one of those characters. The result is that I&amp;#39;d have code that looked correct, but wouldn&amp;#39;t compile. I gave up.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;I also finally decided to solve a problem in C&lt;/strong&gt;. On the surface, this might seem pointless since I already know C, but &lt;strong&gt;it gave me an excuse to try calling C code from Zig&lt;/strong&gt; (a language I hadn&amp;#39;t tried before). Overall, the Zig toolchain is extremely impressive! It&amp;#39;s probably the most convenient C (and C++) compiler in existence. And Zig seemed fine, too.&lt;/p&gt;
 &lt;p&gt;Lastly, &lt;strong&gt;I got around to solving a problem using Prolog. It was worth the wait!&lt;/strong&gt; Expect a post on it eventually.&lt;/p&gt;
 &lt;p&gt;Without further rambling, here are my notes:&lt;/p&gt;
@@ -283,19 +271,19 @@
 &lt;h2 id=&quot;micro-lisp-on-a-commodore-64&quot;&gt;Micro-Lisp (on a Commodore 64)&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Shift+space &lt;em&gt;looks like&lt;/em&gt; a regular space, but is treated as a different character, leading to confusing errors on lines that look correct&lt;/li&gt;
-&lt;li&gt;No built-in macros or quasiquote&lt;/li&gt;
+&lt;li&gt;No built-in macros&lt;/li&gt;
 &lt;li&gt;No way to modify cons cells&lt;/li&gt;
 &lt;li&gt;Line-based editing of Lisp on a 40 column screen was unpleasant (unclear if worse than BASIC editing?)&lt;/li&gt;
 &lt;li&gt;Indentation was getting lost on input&lt;/li&gt;
 &lt;li&gt;Functions aren&amp;#39;t first class objects&lt;/li&gt;
 &lt;li&gt;Unfortunately, you have to choose between image-based development or entering source code in lines (a la Commodore BASIC) -- you can&amp;#39;t easily develop interactively &lt;em&gt;and still save your source code&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;Sadly, I gave up on C64 Micro-Lisp due to the issues and missing features noted above&lt;/li&gt;
+&lt;li&gt;Sadly, I gave up on C64 Micro-Lisp due to the issues and missing features noted above -- that&amp;#39;s not to say I wasn&amp;#39;t impressed to be using Lisp on a Commodore 64!&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;scheme&quot;&gt;Scheme&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;R6RS appeared to be incompatible with R5RS and R7RS for a &amp;quot;hello world&amp;quot; program&lt;/li&gt;
 &lt;li&gt;Chibi-Scheme&amp;#39;s rational numbers were hundreds of times slower than Chez Scheme/Racket&lt;/li&gt;
-&lt;li&gt;In theory, I should prefer Scheme to Common Lisp (fewer concepts overall, better naming in the standard library), but the different Scheme revisions and implementations I tried were exasperatingly incompatible with one another&lt;/li&gt;
+&lt;li&gt;In theory, I should prefer Scheme to Common Lisp (fewer concepts overall, better naming in the standard library), but I wish the different Scheme revisions and implementations were more compatible with one other&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;bcpl&quot;&gt;BCPL&lt;/h2&gt;
 &lt;ul&gt;
@@ -309,38 +297,29 @@
 &lt;h2 id=&quot;moonscript&quot;&gt;MoonScript&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;I like the idea of Lua without so much keyword noise&lt;/li&gt;
-&lt;li&gt;But there are some weird syntactical quirks around function arguments within table constructors that lead me to think that requiring parentheses around function arguments would have been better&lt;/li&gt;
-&lt;li&gt;Seems like &amp;quot;Lua written in Python&amp;quot; -- oh, the docs actually say it&amp;#39;s inspired by CoffeeScript (which I&amp;#39;ve never used)&lt;/li&gt;
+&lt;li&gt;But there are some weird syntactical quirks around function arguments within table constructors that lead me to think that requiring parentheses around function arguments might have been better&lt;/li&gt;
+&lt;li&gt;Seems like &amp;quot;Lua written in Python&amp;quot; -- oh, the docs actually say it&amp;#39;s inspired by CoffeeScript&lt;/li&gt;
 &lt;li&gt;I kept wanting to omit the commas between function arguments for some reason&lt;/li&gt;
 &lt;li&gt;Kind of wish there were built-in functions for appending to a list, concatenating lists, reducing lists, etc.&lt;/li&gt;
-&lt;li&gt;Still don&amp;#39;t like 1-based indexing&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;fennel&quot;&gt;Fennel&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;I like Lisp and have used Lua a fair amount, so I expected to like combining the two&lt;/li&gt;
 &lt;li&gt;But I found mixing Lua semantics and syntax with Lisp was fairly confusing -- I could never decide whether I needed brackets in a macro or not&lt;/li&gt;
 &lt;li&gt;Having Macros for Lua is fun! And Fennel papers over some annoyances in Lua&lt;/li&gt;
-&lt;li&gt;Macros and other minor improvements aren&amp;#39;t enough to justify having a build step/translation layer and having to map between Fennel source and the generated Lua code&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Still&lt;/em&gt; don&amp;#39;t like 1-based indexing&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;erde&quot;&gt;Erde&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Mostly Lua with braces instead of &lt;code&gt;do&lt;/code&gt;/&lt;code&gt;end&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Erde still interprets variables with typos in their names as globals -- I wish this was fixed&lt;/li&gt;
-&lt;li&gt;Overall, I like it better than Lua, but not enough to tolerate a build step&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;purescript&quot;&gt;PureScript&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;The &lt;a href=&quot;http://try.purescript.org/&quot;&gt;Try PureScript&lt;/a&gt; example renders HTML from code, but I &lt;em&gt;really&lt;/em&gt; dislike the amount of repetition and the lack of support for trailing commas&lt;/li&gt;
-&lt;li&gt;Not a fan of boilerplate scaffolding (via Spago) as the first steps in playing with a new language&lt;/li&gt;
 &lt;li&gt;First result when searching for &amp;quot;sqrt&amp;quot; in Pursuit is in a package that turned out to be deprecated&lt;/li&gt;
-&lt;li&gt;Inconsistent naming of packages and namespaces, e.g. &lt;code&gt;Data.Array&lt;/code&gt; vs &lt;code&gt;Record&lt;/code&gt;, &lt;code&gt;purescript-arrays&lt;/code&gt; (plural) vs. &lt;code&gt;purescript-record&lt;/code&gt; (singular)&lt;/li&gt;
-&lt;li&gt;Doesn&amp;#39;t appear to include a useful standard library by default&lt;/li&gt;
-&lt;li&gt;Why is &amp;quot;append&amp;quot; named &lt;code&gt;snoc&lt;/code&gt;? Is it because it&amp;#39;s like Lisp&amp;#39;s &lt;code&gt;cons&lt;/code&gt; but on the other end?&lt;/li&gt;
+&lt;li&gt;Doesn&amp;#39;t appear to include a useful standard library by default?&lt;/li&gt;
 &lt;li&gt;I couldn&amp;#39;t figure out how to enforce a non-empty array via the type system (&lt;code&gt;Data.NonEmpty&lt;/code&gt;? &lt;code&gt;Data.Array.NonEmpty&lt;/code&gt;?)&lt;/li&gt;
-&lt;li&gt;So... slow... at compiling...&lt;/li&gt;
-&lt;li&gt;Really miss array comprehensions...&lt;/li&gt;
-&lt;li&gt;Hard to find documentation that actually works, e.g. I spent over half an hour trying to figure out how to import the &lt;code&gt;Nil&lt;/code&gt; type&lt;/li&gt;
+&lt;li&gt;Slow compilation&lt;/li&gt;
 &lt;li&gt;Seems to warn whenever types aren&amp;#39;t explicitly stated... so why bother with type inference?&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;ruby&quot;&gt;Ruby&lt;/h2&gt;
@@ -350,9 +329,7 @@
 &lt;/ul&gt;
 &lt;h2 id=&quot;reason&quot;&gt;Reason&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Hard to find basic examples, e.g. sets or lists of non-primitive types&lt;/li&gt;
 &lt;li&gt;Official API documentation&amp;#39;s search function can&amp;#39;t find &lt;code&gt;float_of_int&lt;/code&gt; (a function that is mentioned in some error messages I received)&lt;/li&gt;
-&lt;li&gt;I literally couldn&amp;#39;t find any documentation of the &amp;quot;pipe last&amp;quot; operator (&lt;code&gt;|&amp;gt;&lt;/code&gt;) (but it &lt;em&gt;does&lt;/em&gt; work)&lt;/li&gt;
 &lt;li&gt;Line comments (&lt;code&gt;//&lt;/code&gt;) result in syntax errors in the &lt;a href=&quot;https://reasonml.github.io/en/try&quot;&gt;in-browser implementation&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Also in the browser, error line numbers sometimes aren&amp;#39;t correct (and &amp;quot;this has type X but somewhere wanted Y&amp;quot; isn&amp;#39;t helpful without correct line numbers!)&lt;/li&gt;
 &lt;/ul&gt;
@@ -364,7 +341,7 @@
 &lt;h2 id=&quot;assemblyscript&quot;&gt;AssemblyScript&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;AssemblyScript&amp;#39;s landing page has the best developer experience I&amp;#39;ve encountered (I suspect it is most of Visual Studio Code embedded, along with type info)&lt;/li&gt;
-&lt;li&gt;Really don&amp;#39;t like that it doesn&amp;#39;t have its own file extension (and instead reuses TypeScript&amp;#39;s &amp;quot;.ts&amp;quot;)&lt;/li&gt;
+&lt;li&gt;I don&amp;#39;t like reusing TypeScript&amp;#39;s file extension&lt;/li&gt;
 &lt;li&gt;How does its &amp;quot;standard library&amp;quot; get included? I assume the parts that are used are compiled into each WASM blob&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;minilang&quot;&gt;MiniLang&lt;/h2&gt;
@@ -402,11 +379,10 @@
 &lt;ul&gt;
 &lt;li&gt;In SWI Prolog, you can interactively add facts/rules by typing &lt;code&gt;[user]&lt;/code&gt;, entering information, and then sending &amp;quot;end of file&amp;quot; (Ctrl+D on Linux, possibly Ctrl+Z on Windows)&lt;/li&gt;
 &lt;li&gt;SWI-Prolog treats strings in a way that is incompatible with many tutorials I found on the web -- namely, &lt;a href=&quot;https://www.swi-prolog.org/pldoc/man?section=string&quot;&gt;a double-quoted string is a separate data type than a back-ticked string&lt;/a&gt;, which (as far as I understand) uses the traditional data type of a list of character codes (which, I hope, are now actually Unicode code points)&lt;/li&gt;
-&lt;li&gt;Struggled mightily with definite clause grammars -- most examples I found just ended in &amp;quot;not found&amp;quot; errors (often with an arity that I didn&amp;#39;t expect)&lt;/li&gt;
 &lt;li&gt;It took me a &lt;em&gt;really&lt;/em&gt; long time to figure out that &lt;code&gt;use_module(library(dcg/basics)).&lt;/code&gt; should have been &lt;code&gt;:- use_module(library(dcg/basics))&lt;/code&gt; -- the former doesn&amp;#39;t do anything useful (but doesn&amp;#39;t emit any warnings), whereas the latter actually brings a module into scope&lt;/li&gt;
-&lt;li&gt;SWI-Prolog documentation frequently lacks explanations and examples&lt;/li&gt;
 &lt;li&gt;Accessing documentation via &lt;code&gt;help&lt;/code&gt; loads modules as a side effect&lt;/li&gt;
 &lt;li&gt;The actual Sudoku-solving part was just a few lines of readable code&lt;/li&gt;
+&lt;li&gt;Getting to use Prolog&amp;#39;s declarative approach was worthwhile, despite my difficulties getting things going&lt;/li&gt;
 &lt;/ul&gt;
 </content>
 </entry>

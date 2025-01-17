@@ -43,10 +43,10 @@
 <h1 id="notes">Notes</h1>
 <h2 id="ats">ATS</h2>
 <ul>
-<li>Has some bizarre syntax, e.g. <code>:&lt;cloref1&gt;</code> and <code>t@ype</code></li>
-<li>Inscrutable error messages, such as <code>the syntactic entity [impqi0de] is needed.</code> -- what is <code>[impqi0de]</code>???</li>
-<li>Another example: copy-pasting <code>fn square (x: double): double = x * x</code> from the official documentation yields <code>error: ‘PMVtmpltcstmat’ undeclared (first use in this function)</code>, unless you put <code>#include &quot;share/atspre_staload.hats&quot;</code> at the top of the file</li>
-<li>I&#39;ll admit I didn&#39;t attempt to include any proofs in my code, so I didn&#39;t really leverage ATS to its fullest (or, really, any) extent</li>
+<li>I didn&#39;t understand some of the syntax, e.g. <code>:&lt;cloref1&gt;</code> and <code>t@ype</code></li>
+<li>Error messages were sometimes surprising, e.g. <code>the syntactic entity [impqi0de] is needed.</code> -- what is <code>[impqi0de]</code>???</li>
+<li>Another example: copy-pasting <code>fn square (x: double): double = x * x</code> from the official documentation yields <code>error: ‘PMVtmpltcstmat’ undeclared (first use in this function)</code> -- solutiong was to put <code>#include &quot;share/atspre_staload.hats&quot;</code> at the top of the file (my mistake--but the error was unhelpful)</li>
+<li>I didn&#39;t attempt to include any proofs in my code, so I didn&#39;t really leverage ATS to its fullest (or, really, any) extent</li>
 </ul>
 <h2 id="pre-scheme">Pre-Scheme</h2>
 <ul>
@@ -61,9 +61,8 @@
 <li>Interactive development is helpful (and fun)</li>
 <li>So many cryptic/inconsistent names, e.g. <code>fmakunbound</code>, <code>mapcon</code>, <code>clrhash</code>, <code>prin1</code></li>
 <li><code>=</code> vs. <code>equalp</code> vs. <code>equal</code> vs. <code>eql</code> vs. <code>eq</code></li>
-<li>SBCL is fast, but a trivial stand-alone binary is huge and uses ~100 MB of memory</li>
+<li>SBCL is fast, but a trivial stand-alone binary can be big and uses more memory than I would like</li>
 <li>Common Lisp isn&#39;t as elegant as Scheme, but the implementations are more mutually compatible than in the Scheme world</li>
-<li>If there was a fast, <em>low-overhead</em> Common Lisp, I&#39;d probably use it as my default language for side projects</li>
 </ul>
 <h2 id="mouse-83">Mouse-83</h2>
 <ul>
@@ -74,7 +73,6 @@
 <h2 id="cyber">Cyber</h2>
 <ul>
 <li>Once mature, this could be a fast Lua replacement with more Python-like syntax (and zero-based indexing!)</li>
-<li>Unfortunately, I hit several bugs in Cyber</li>
 </ul>
 <h2 id="varyx">Varyx</h2>
 <ul>
@@ -85,7 +83,6 @@
 <ul>
 <li>Very compact code</li>
 <li>Surprisingly fast</li>
-<li>Missing functional helpers, e.g. &quot;sort by&quot; -- it sounds like these are planned but not implemented</li>
 </ul>
 <h2 id="rexx">Rexx</h2>
 <ul>
