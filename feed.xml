@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-01-18T05:45:53.004Z</updated>
+<updated>2025-01-18T15:15:45.656Z</updated>
 
 <entry>
 <title>Beyond 100 programming languages</title>
@@ -62,8 +62,8 @@
 &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/MUMPS&quot;&gt;MUMPS&lt;/a&gt;: &amp;quot;Massachusetts General Hospital Utility Multi-Programming System&amp;quot; from the 60s&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/travisdoor/bl&quot;&gt;bl&lt;/a&gt;: &amp;quot;simple programming language created for fun&amp;quot;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/SerenityOS/jakt&quot;&gt;Jakt&lt;/a&gt;: programming language developed as part of the &lt;a href=&quot;https://serenityos.org/&quot;&gt;SerenityOS project&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/xorvoid/sectorc&quot;&gt;SectorC&lt;/a&gt;: a partial C compiler that (somehow) fits in a 512-byte boot sector&lt;/strong&gt;
-&lt;a href=&quot;https://www.beeflang.org/&quot;&gt;Beef&lt;/a&gt;: created for game development, includes a full (Windows-only) IDE&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/xorvoid/sectorc&quot;&gt;SectorC&lt;/a&gt;: a partial C compiler that (somehow) fits in a 512-byte boot sector&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.beeflang.org/&quot;&gt;Beef&lt;/a&gt;: created for game development, includes a full (Windows-only) IDE&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/PL/0&quot;&gt;PL/0&lt;/a&gt;: educational programming language by the creator of Pascal&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://www.freepascal.org/&quot;&gt;FreePascal&lt;/a&gt;: modern day Pascal that supports many targets&lt;/li&gt;
 &lt;/ul&gt;
