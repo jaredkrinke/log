@@ -7,8 +7,86 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-01-17T23:21:56.282Z</updated>
+<updated>2025-01-18T05:45:53.004Z</updated>
 
+<entry>
+<title>Beyond 100 programming languages</title>
+<id>https://log.schemescape.com/posts/programming-languages/beyond-100-languages.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/beyond-100-languages.html"/>
+<updated>2025-01-18T00:00:00.000Z</updated>
+<summary type="text">Here&apos;s a bunch of interesting programming languages that I didn&apos;t get around to trying out.</summary>
+<content type="html">&lt;p&gt;While &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;sampling 100 different programming languages&lt;/a&gt;, I compiled a list of intriguing programming languages. Although I tested out a lot of languages, there are still many I never got around to--not because I didn&amp;#39;t think they were promising--sometimes they just didn&amp;#39;t match what I wanted at the time or they were too similar to other languages I&amp;#39;d recently used.&lt;/p&gt;
+&lt;p&gt;If you&amp;#39;re looking for inspiration for your own programming language experiments, consider these! I have &lt;strong&gt;bolded&lt;/strong&gt; the ones I personally was most interested in.&lt;/p&gt;
+&lt;h1 id=&quot;object-oriented&quot;&gt;Object-oriented&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://pharo.org/&quot;&gt;Pharo&lt;/a&gt;: being a Smalltalk, it includes an entire IDE&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.squirrel-lang.org/&quot;&gt;Squirrel&lt;/a&gt;: object-oriented scripting language for games&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://crystal-lang.org/&quot;&gt;Crystal&lt;/a&gt;: Ruby-like compiled language&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://iolanguage.org/&quot;&gt;io&lt;/a&gt;: minimal, pure object-oriented language&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;functional&quot;&gt;Functional&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Logo_(programming_language)&quot;&gt;Logo&lt;/a&gt;: educational language from the 60s, with turtle graphics&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://elixir-lang.org/&quot;&gt;Elixir&lt;/a&gt;: Erlang-compatible functional language&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://koka-lang.github.io/koka/doc/index.html&quot;&gt;Koka&lt;/a&gt;: functional language with effect types and handlers&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://scrapscript.org/&quot;&gt;Scrapscript&lt;/a&gt;: sounds kind of like Unison on IPFS?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://gren-lang.org/&quot;&gt;Gren&lt;/a&gt;: compiles to JavaScript&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://eyg.run/&quot;&gt;EYG&lt;/a&gt;: provides a structural editor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;lisp&quot;&gt;Lisp&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.newlisp.org/&quot;&gt;newLISP&lt;/a&gt;: reimagined, batteries-included Lisp&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Emacs_Lisp&quot;&gt;Emacs Lisp&lt;/a&gt;: (probably) the world&amp;#39;s most popular Lisp (note: not purely functional, as far as I understand)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://basilisp.readthedocs.io/en/latest/gettingstarted.html&quot;&gt;Basilisp&lt;/a&gt;: Clojure-inspired Lisp that targets Python&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://jank-lang.org/&quot;&gt;jank&lt;/a&gt;: Clojure-inspired language that is compiled via LLVM&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/yuriy-chumak/OL&quot;&gt;Otus Lisp&lt;/a&gt;: very small Scheme implementation&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/coalton-lang/coalton&quot;&gt;Coalton&lt;/a&gt;: statically-typed Lisp&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;logic-programming&quot;&gt;Logic programming&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://www.curry-language.org/&quot;&gt;Curry&lt;/a&gt;: functional logic programming language&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;assembly&quot;&gt;Assembly&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/CHIP-8&quot;&gt;CHIP-8&lt;/a&gt;: the world&amp;#39;s oldest fantasy console?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;imperative-compiled&quot;&gt;Imperative (compiled)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Oberon-2&quot;&gt;Oberon-2&lt;/a&gt;: Pascal-like, possibly with a single-pass compiler?&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.red-lang.org/&quot;&gt;Red&lt;/a&gt;: systems-level, but inspired by Rebol&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://vale.dev/&quot;&gt;Vale&lt;/a&gt;: memory-safe language that is simpler than Rust (but currently incomplete)&lt;/strong&gt; -- I really wanted to try this one, but I think the compiler required Java and I didn&amp;#39;t have a working Java setup at the time&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://borgo-lang.github.io/&quot;&gt;Borgo&lt;/a&gt;: built on Go, but with a more expressive language&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.modular.com/mojo&quot;&gt;Mojo&lt;/a&gt;: Python, but compiled -- note: closed source, as far as I can tell&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://sr.ht/~duangle/scopes/&quot;&gt;Scopes&lt;/a&gt;: another &amp;quot;better C&amp;quot;? -- note: I consider this to be a good thing!&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://dlang.org/&quot;&gt;D&lt;/a&gt;: C++-alternative with an optional garbage collector (and tons of other features)&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/MUMPS&quot;&gt;MUMPS&lt;/a&gt;: &amp;quot;Massachusetts General Hospital Utility Multi-Programming System&amp;quot; from the 60s&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/travisdoor/bl&quot;&gt;bl&lt;/a&gt;: &amp;quot;simple programming language created for fun&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/SerenityOS/jakt&quot;&gt;Jakt&lt;/a&gt;: programming language developed as part of the &lt;a href=&quot;https://serenityos.org/&quot;&gt;SerenityOS project&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/xorvoid/sectorc&quot;&gt;SectorC&lt;/a&gt;: a partial C compiler that (somehow) fits in a 512-byte boot sector&lt;/strong&gt;
+&lt;a href=&quot;https://www.beeflang.org/&quot;&gt;Beef&lt;/a&gt;: created for game development, includes a full (Windows-only) IDE&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/PL/0&quot;&gt;PL/0&lt;/a&gt;: educational programming language by the creator of Pascal&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.freepascal.org/&quot;&gt;FreePascal&lt;/a&gt;: modern day Pascal that supports many targets&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;imperative-interpreted&quot;&gt;Imperative (interpreted)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/PILOT&quot;&gt;PILOT&lt;/a&gt;: imperative language from the 60s&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/antimony-lang/antimony&quot;&gt;Antimony&lt;/a&gt;: aims to be simple&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://elv.sh/&quot;&gt;Elvish&lt;/a&gt;: modern shell scripting language&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://amber-lang.com/&quot;&gt;Amber&lt;/a&gt;: compiles to Bash&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://miniscript.org/&quot;&gt;MiniScript&lt;/a&gt;: a small, new, embeddable scripting language (think: a modern Lua)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;concatenative&quot;&gt;Concatenative&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Joy_(programming_language)&quot;&gt;Joy&lt;/a&gt;: purely functional, but supposedly similar to Forth&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/cesarblum/sectorforth&quot;&gt;SectorForth&lt;/a&gt;: Forth implementation that bootstraps from a 512-byte boot sector&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/luke8086/nf&quot;&gt;nf&lt;/a&gt;: minimal interactive programming language&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;data-driven&quot;&gt;Data-driven&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/matz/streem&quot;&gt;Streem&lt;/a&gt;: prototype stream-based programming language&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>I apologize to the Python ecosystem</title>
 <id>https://log.schemescape.com/posts/programming-languages/python-is-good-actually.html</id>
@@ -242,148 +320,6 @@
 &lt;p&gt;Despite preferred other programming languages for my entire adult life, &lt;strong&gt;I recently gave in and wrote a personal utility program in Python&lt;/strong&gt; because I knew Python would have everything I needed and I had confidence that Python was entrenched enough that I&amp;#39;d still be able to use my program for the foreseeable future.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;If even a Python-avoider like me defaults to using Python, then I think it&amp;#39;s pretty clear that Python has taken over the world, just as BASIC once did.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;One parting thought: how long will Python&amp;#39;s reign last?&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Three quarters of the way to 100 programming languages</title>
-<id>https://log.schemescape.com/posts/programming-languages/100-languages-12.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-12.html"/>
-<updated>2024-10-31T00:00:00.000Z</updated>
-<summary type="text">Just some more notes on programming languages. And also my first failure!</summary>
-<content type="html">&lt;p&gt;I recently resumed &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;solving the first 100 Project Euler problems using 100 different programming languages&lt;/a&gt;. For reference: &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;here is code for all my solutions so far&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Of note, &lt;strong&gt;I failed to solve a problem using Micro-Lisp on the Commodore 64&lt;/strong&gt;. I think it would have been &lt;em&gt;possible&lt;/em&gt; to solve the problem (even despite the lack of cons cell mutation), but the Commodore 64 keyboard design can lead to two different space characters being emitted when you hit the space bar, depending on timing, and Micro-Lisp only handled one of those characters. The result is that I&amp;#39;d have code that looked correct, but wouldn&amp;#39;t compile. I gave up.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;I also finally decided to solve a problem in C&lt;/strong&gt;. On the surface, this might seem pointless since I already know C, but &lt;strong&gt;it gave me an excuse to try calling C code from Zig&lt;/strong&gt; (a language I hadn&amp;#39;t tried before). Overall, the Zig toolchain is extremely impressive! It&amp;#39;s probably the most convenient C (and C++) compiler in existence. And Zig seemed fine, too.&lt;/p&gt;
-&lt;p&gt;Lastly, &lt;strong&gt;I got around to solving a problem using Prolog. It was worth the wait!&lt;/strong&gt; Expect a post on it eventually.&lt;/p&gt;
-&lt;p&gt;Without further rambling, here are my notes:&lt;/p&gt;
-&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;/h1&gt;
-&lt;h2 id=&quot;g-pascal-on-a-commodore-64&quot;&gt;G-Pascal (on a Commodore 64)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Only two types: integer and character (&amp;quot;char&amp;quot;)&lt;/li&gt;
-&lt;li&gt;No pointers or references -- instead use &lt;code&gt;addr := address(array)&lt;/code&gt; and index memory directly with &lt;code&gt;mem[addr]&lt;/code&gt; (integer) or &lt;code&gt;memc[addr]&lt;/code&gt; (char)&lt;/li&gt;
-&lt;li&gt;Docs for newer iteration: &lt;a href=&quot;http://www.gammon.com.au/G-Pascal/pascal_compiler.htm&quot;&gt;http://www.gammon.com.au/G-Pascal/pascal_compiler.htm&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&amp;quot;Note that arrays grow downwards in memory, not upwards.&amp;quot;&lt;/li&gt;
-&lt;li&gt;Does &lt;em&gt;not&lt;/em&gt; compile to machine code!&lt;/li&gt;
-&lt;li&gt;Built-in line-based editor includes multi-line insert, search and replace, etc. -- a big step up from Commodore BASIC!&lt;/li&gt;
-&lt;li&gt;Without native compilation or an interactive environment, this wouldn&amp;#39;t be my first choice for programming on a Commodore 64 (but still better than BASIC, thanks to named procedures and functions!)&lt;/li&gt;
-&lt;li&gt;Roughly 7x slower than equivalent C, for my solution (N.B. G-Pascal uses a VM and C compiles to native code)&lt;/li&gt;
-&lt;li&gt;I didn&amp;#39;t notice a way to enter blank lines, so the resulting code looks cluttered.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;micro-lisp-on-a-commodore-64&quot;&gt;Micro-Lisp (on a Commodore 64)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Shift+space &lt;em&gt;looks like&lt;/em&gt; a regular space, but is treated as a different character, leading to confusing errors on lines that look correct&lt;/li&gt;
-&lt;li&gt;No built-in macros&lt;/li&gt;
-&lt;li&gt;No way to modify cons cells&lt;/li&gt;
-&lt;li&gt;Line-based editing of Lisp on a 40 column screen was unpleasant (unclear if worse than BASIC editing?)&lt;/li&gt;
-&lt;li&gt;Indentation was getting lost on input&lt;/li&gt;
-&lt;li&gt;Functions aren&amp;#39;t first class objects&lt;/li&gt;
-&lt;li&gt;Unfortunately, you have to choose between image-based development or entering source code in lines (a la Commodore BASIC) -- you can&amp;#39;t easily develop interactively &lt;em&gt;and still save your source code&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;Sadly, I gave up on C64 Micro-Lisp due to the issues and missing features noted above -- that&amp;#39;s not to say I wasn&amp;#39;t impressed to be using Lisp on a Commodore 64!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;scheme&quot;&gt;Scheme&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;R6RS appeared to be incompatible with R5RS and R7RS for a &amp;quot;hello world&amp;quot; program&lt;/li&gt;
-&lt;li&gt;Chibi-Scheme&amp;#39;s rational numbers were hundreds of times slower than Chez Scheme/Racket&lt;/li&gt;
-&lt;li&gt;In theory, I should prefer Scheme to Common Lisp (fewer concepts overall, better naming in the standard library), but I wish the different Scheme revisions and implementations were more compatible with one other&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;bcpl&quot;&gt;BCPL&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;The language is conceptually simple, but the syntax was foreign enough that I found it difficult to write&lt;/li&gt;
-&lt;li&gt;Only having a single word-sized data type feels limiting--but I guess that&amp;#39;s the price you pay for a tiny compiler&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;matlab&quot;&gt;MATLAB&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Everything I tried Just Worked!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;moonscript&quot;&gt;MoonScript&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;I like the idea of Lua without so much keyword noise&lt;/li&gt;
-&lt;li&gt;But there are some weird syntactical quirks around function arguments within table constructors that lead me to think that requiring parentheses around function arguments might have been better&lt;/li&gt;
-&lt;li&gt;Seems like &amp;quot;Lua written in Python&amp;quot; -- oh, the docs actually say it&amp;#39;s inspired by CoffeeScript&lt;/li&gt;
-&lt;li&gt;I kept wanting to omit the commas between function arguments for some reason&lt;/li&gt;
-&lt;li&gt;Kind of wish there were built-in functions for appending to a list, concatenating lists, reducing lists, etc.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;fennel&quot;&gt;Fennel&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;I like Lisp and have used Lua a fair amount, so I expected to like combining the two&lt;/li&gt;
-&lt;li&gt;But I found mixing Lua semantics and syntax with Lisp was fairly confusing -- I could never decide whether I needed brackets in a macro or not&lt;/li&gt;
-&lt;li&gt;Having Macros for Lua is fun! And Fennel papers over some annoyances in Lua&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;erde&quot;&gt;Erde&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Mostly Lua with braces instead of &lt;code&gt;do&lt;/code&gt;/&lt;code&gt;end&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Erde still interprets variables with typos in their names as globals -- I wish this was fixed&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;purescript&quot;&gt;PureScript&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;The &lt;a href=&quot;http://try.purescript.org/&quot;&gt;Try PureScript&lt;/a&gt; example renders HTML from code, but I &lt;em&gt;really&lt;/em&gt; dislike the amount of repetition and the lack of support for trailing commas&lt;/li&gt;
-&lt;li&gt;First result when searching for &amp;quot;sqrt&amp;quot; in Pursuit is in a package that turned out to be deprecated&lt;/li&gt;
-&lt;li&gt;Doesn&amp;#39;t appear to include a useful standard library by default?&lt;/li&gt;
-&lt;li&gt;I couldn&amp;#39;t figure out how to enforce a non-empty array via the type system (&lt;code&gt;Data.NonEmpty&lt;/code&gt;? &lt;code&gt;Data.Array.NonEmpty&lt;/code&gt;?)&lt;/li&gt;
-&lt;li&gt;Slow compilation&lt;/li&gt;
-&lt;li&gt;Seems to warn whenever types aren&amp;#39;t explicitly stated... so why bother with type inference?&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;ruby&quot;&gt;Ruby&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Very handy having generators, indefinite ranges, and rational numbers&lt;/li&gt;
-&lt;li&gt;Feels pragmatic&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;reason&quot;&gt;Reason&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Official API documentation&amp;#39;s search function can&amp;#39;t find &lt;code&gt;float_of_int&lt;/code&gt; (a function that is mentioned in some error messages I received)&lt;/li&gt;
-&lt;li&gt;Line comments (&lt;code&gt;//&lt;/code&gt;) result in syntax errors in the &lt;a href=&quot;https://reasonml.github.io/en/try&quot;&gt;in-browser implementation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Also in the browser, error line numbers sometimes aren&amp;#39;t correct (and &amp;quot;this has type X but somewhere wanted Y&amp;quot; isn&amp;#39;t helpful without correct line numbers!)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;t3x0&quot;&gt;T3X/0&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Has two distinct conditionals, &lt;code&gt;IF&lt;/code&gt; and &lt;code&gt;IE&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Pascal syntax and BCPL semantics sounds like a good combination for a minimal or bootstrapping compiler!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;assemblyscript&quot;&gt;AssemblyScript&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;AssemblyScript&amp;#39;s landing page has the best developer experience I&amp;#39;ve encountered (I suspect it is most of Visual Studio Code embedded, along with type info)&lt;/li&gt;
-&lt;li&gt;I don&amp;#39;t like reusing TypeScript&amp;#39;s file extension&lt;/li&gt;
-&lt;li&gt;How does its &amp;quot;standard library&amp;quot; get included? I assume the parts that are used are compiled into each WASM blob&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;minilang&quot;&gt;MiniLang&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Couldn&amp;#39;t find any math functions, e.g. for finding square roots&lt;/li&gt;
-&lt;li&gt;Very nice IDE available on &lt;a href=&quot;https://www.ryugod.com/pages/ide/minilang&quot;&gt;ryugod.com&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;c&quot;&gt;C&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Had to use C99 to get an official 64-bit integer type&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;zig&quot;&gt;Zig&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Having unused variables be an error when trying to narrow down problems is annoying...&lt;/li&gt;
-&lt;li&gt;Being able to compile and reuse C code is convenient!&lt;/li&gt;
-&lt;li&gt;Very impressive for a ~40 MB download&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;clojure&quot;&gt;Clojure&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Slow to compile and run&lt;/li&gt;
-&lt;li&gt;Took me a long time to figure out that &lt;code&gt;(Math/floor ...)&lt;/code&gt; was the simplest way to invoke the standard library&amp;#39;s math functions&lt;/li&gt;
-&lt;li&gt;Hopefully I don&amp;#39;t get a bill in the mail from Oracle for using the JVM&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;raku&quot;&gt;Raku&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Handy functional utilities like &lt;code&gt;map&lt;/code&gt; and &lt;code&gt;flatmap&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;But some of those functional utilities have odd names like &lt;code&gt;grep&lt;/code&gt; and &lt;code&gt;elems&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;vala&quot;&gt;Vala&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Raw arrays have no bounds checking!&lt;/li&gt;
-&lt;li&gt;Collection types are implemented in a separate library&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;prolog&quot;&gt;Prolog&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;In SWI Prolog, you can interactively add facts/rules by typing &lt;code&gt;[user]&lt;/code&gt;, entering information, and then sending &amp;quot;end of file&amp;quot; (Ctrl+D on Linux, possibly Ctrl+Z on Windows)&lt;/li&gt;
-&lt;li&gt;SWI-Prolog treats strings in a way that is incompatible with many tutorials I found on the web -- namely, &lt;a href=&quot;https://www.swi-prolog.org/pldoc/man?section=string&quot;&gt;a double-quoted string is a separate data type than a back-ticked string&lt;/a&gt;, which (as far as I understand) uses the traditional data type of a list of character codes (which, I hope, are now actually Unicode code points)&lt;/li&gt;
-&lt;li&gt;It took me a &lt;em&gt;really&lt;/em&gt; long time to figure out that &lt;code&gt;use_module(library(dcg/basics)).&lt;/code&gt; should have been &lt;code&gt;:- use_module(library(dcg/basics))&lt;/code&gt; -- the former doesn&amp;#39;t do anything useful (but doesn&amp;#39;t emit any warnings), whereas the latter actually brings a module into scope&lt;/li&gt;
-&lt;li&gt;Accessing documentation via &lt;code&gt;help&lt;/code&gt; loads modules as a side effect&lt;/li&gt;
-&lt;li&gt;The actual Sudoku-solving part was just a few lines of readable code&lt;/li&gt;
-&lt;li&gt;Getting to use Prolog&amp;#39;s declarative approach was worthwhile, despite my difficulties getting things going&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>
