@@ -4,7 +4,7 @@ description: "Or: A tour of the syntax continuum."
 date: 2024-04-28
 keywords: [100-languages]
 ---
-I'm *still* trying to [write code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html). My progress is being recorded in [this repository](https://github.com/jaredkrinke/100-languages). I'm roughly one third of the way to 100 languages already!
+I'm *still* trying to [write code in 100 different programming languages](100-languages.md). My progress is being recorded in [this repository](https://github.com/jaredkrinke/100-languages). I'm roughly one third of the way to 100 languages already!
 
 In this update, I explored stack-based languages and (unintentionally) **traveled the programming language syntax continuum, from (almost) no syntax to (almost) *only* syntax**.
 

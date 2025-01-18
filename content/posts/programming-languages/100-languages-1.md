@@ -4,7 +4,7 @@ description: "Up first: SIC-1 Assembly Language."
 date: 2024-03-16
 keywords: [100-languages,sic1]
 ---
-I'm [trying to write code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html). Note: I'm not necessarily planning on blogging about each programming language, but I *will* try to collect (and share) notes about my experiences, likely in batches.
+I'm [trying to write code in 100 different programming languages](100-languages.md). Note: I'm not necessarily planning on blogging about each programming language, but I *will* try to collect (and share) notes about my experiences, likely in batches.
 
 # SIC-1 Assembly Language
 In order to ensure progress doesn't fizzle out immediately, I'm starting with a programming language I know well: **[SIC-1 Assembly Language](https://esolangs.org/wiki/SIC-1_Assembly_Language)**. I'm familiar with this language because I designed both it and the (fictional) 8-bit SIC-1 computer it runs on myself (for a game titled, fittingly, [SIC-1](https://store.steampowered.com/app/2124440/SIC1/)). **SIC-1 Assembly Language is basically my take on a usable (though somewhat un-ergonomic) [subleq](https://esolangs.org/wiki/Subleq) assembly language**.

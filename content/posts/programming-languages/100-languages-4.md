@@ -4,7 +4,7 @@ description: I spent entirely too much time playing with (mostly) new programmin
 date: 2024-03-31
 keywords: [100-languages,webassembly,commodore-64]
 ---
-I'm [trying to write code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html). I just finished week 2, and--somehow--I'm ahead of schedule.
+I'm [trying to write code in 100 different programming languages](100-languages.md). I just finished week 2, and--somehow--I'm ahead of schedule.
 
 The full list of languages and links to code are in my [100-languages](https://github.com/jaredkrinke/100-languages) repository.
 

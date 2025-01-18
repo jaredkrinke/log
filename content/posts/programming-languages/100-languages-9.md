@@ -4,7 +4,7 @@ description: Here are my notes about a grab bag of programming languages that he
 date: 2024-05-13
 keywords: [100-languages]
 ---
-In the past two months, I've [written code in 50 different programming languages](https://github.com/jaredkrinke/100-languages). **That's half way to [my goal of 100](https://log.schemescape.com/posts/programming-languages/100-languages.html)**.
+In the past two months, I've [written code in 50 different programming languages](https://github.com/jaredkrinke/100-languages). **That's half way to [my goal of 100](100-languages.md)**.
 
 # Weeks 6 - 8
 After tediously [painting a picture to compute digit factorials](piet-for-project-euler.md), **I'm trying to be more strategic about pairing programming languages with suitable Project Euler problems**. Ideally, I can avoid writing "big integer" arithmetic and/or squeezing solutions into a 16-bit address space for the next update. And I'm definitely going to take a break from esoteric programming languages for a bit.

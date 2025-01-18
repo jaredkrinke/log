@@ -4,7 +4,7 @@ description: Four days later, I've completed day two of my challenge.
 date: 2024-03-20
 keywords: [100-languages,lisp]
 ---
-I'm [trying to write code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html). Day (ahem) 2: **SectorLISP**!
+I'm [trying to write code in 100 different programming languages](100-languages.md). Day (ahem) 2: **SectorLISP**!
 
 # SectorLISP
 Ever since discovering [SectorLISP](https://justine.lol/sectorlisp2/) (a minimal Lisp that fits in a boot sector), I've wanted to give it a spin. And it did not disappoint! It was both beautiful and painful.

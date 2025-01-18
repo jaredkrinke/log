@@ -4,7 +4,7 @@ description: "Or: 100 languages, week 4: return of the boot sector."
 date: 2024-04-11
 keywords: [100-languages]
 ---
-I'm still trying to [write code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html). See [this repository](https://github.com/jaredkrinke/100-languages) for a summary table and links to code.
+I'm still trying to [write code in 100 different programming languages](100-languages.md). See [this repository](https://github.com/jaredkrinke/100-languages) for a summary table and links to code.
 
 As always, **none of this is groundbreaking**, but it *is* fun to see my code running in places I hadn't considered before, like (this time) during the PC boot sequence or [within a PostScript document](100-languages-5.md#postscript).
 

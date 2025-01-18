@@ -4,7 +4,7 @@ description: So far I'm on schedule and have sampled each kind of programming la
 date: 2024-03-23
 keywords: [100-languages]
 ---
-I'm [trying to write code in 100 different programming languages](https://log.schemescape.com/posts/programming-languages/100-languages.html). Today, I'm wrapping up week 1.
+I'm [trying to write code in 100 different programming languages](100-languages.md). Today, I'm wrapping up week 1.
 
 The full list of languages and links to code are in my [100-languages](https://github.com/jaredkrinke/100-languages) repository.
 
