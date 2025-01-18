@@ -48,7 +48,7 @@ If you're looking for inspiration for your own programming language experiments,
 * [bl](https://github.com/travisdoor/bl): "simple programming language created for fun"
 * [Jakt](https://github.com/SerenityOS/jakt): programming language developed as part of the [SerenityOS project](https://serenityos.org/)
 * **[SectorC](https://github.com/xorvoid/sectorc): a partial C compiler that (somehow) fits in a 512-byte boot sector**
-[Beef](https://www.beeflang.org/): created for game development, includes a full (Windows-only) IDE
+* [Beef](https://www.beeflang.org/): created for game development, includes a full (Windows-only) IDE
 * [PL/0](https://en.wikipedia.org/wiki/PL/0): educational programming language by the creator of Pascal
 * [FreePascal](https://www.freepascal.org/): modern day Pascal that supports many targets
 
