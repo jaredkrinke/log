@@ -8,7 +8,11 @@ As usual, this is probably a terrible idea, but I've set a poorly conceived pers
 
 **Solve the first 100 problems from [Project Euler](https://projecteuler.net/) *using a different programming language for each one*.**
 
-**Update**: I've created a [repository on GitHub to track my progress](https://github.com/jaredkrinke/100-languages) and a [tag index page](../100-languages/index.html) for related blog posts. And I [just finished day 1](100-languages-1.md).
+**Update**: I finished this project in January 2025. Links:
+
+* [Summary of all the languages I used](100-languages-summary.md)
+* [Repository with all of my code](https://github.com/jaredkrinke/100-languages)
+* [Index of all related posts](../100-languages/index.html)
 
 # Reasons this is a dumb idea
 If you're thinking this is a pointless, trivial exercise, you might be right. Here are some reasons that this is likely *not* a good use of my time:
