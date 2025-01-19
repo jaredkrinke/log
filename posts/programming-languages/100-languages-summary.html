@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>100 programming languages in one post</title>
+<meta name="description" content="Here is a summary of the 100 languages I used for Project Euler." />
+<meta name="keywords" content="100-languages" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "100 programming languages in one post",
+  "abstract": "Here is a summary of the 100 languages I used for Project Euler.",
+  "keywords": "programming-languages,100-languages",
+  "datePublished": "2025-01-19"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/programming-languages/index.html">programming-languages</a></li>
+<li><a href="../../posts/100-languages/index.html">100-languages</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/programming-languages/100-languages-summary.html">100 programming languages in one post</a></h1>
+<p><time datetime="2025-01-19">January 19, 2025</time></p>
+</header>
+<p>Now that I&#39;ve finished <a href="100-languages.html">writing code in 100 different programming languages</a>, here is a summary of the (mostly lesser-known) languages I used, along with links to my code and notes, unscientifically grouped into categories. (Obviously, some languages could fit into more than one category, but I decided to list each language only once.)</p>
+<p><strong>The languages I enjoyed the most were the following</strong> (in alphabetical order):</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Intel_8080">8080 assembly</a>: the language of the first home computer kit, the <a href="https://en.wikipedia.org/wiki/Altair_8800">Altair 8800</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Common_Lisp">Common Lisp</a>: a pragmatic Lisp, with numerous compatible implementations</li>
+<li><a href="https://factorcode.org/">Factor</a>: a modern concatenative/stack-oriented language</li>
+<li><a href="https://futhark-lang.org/">Futhark</a>: data-parallel language that&#39;s easy to write</li>
+<li><a href="https://www.jsoftware.com/#/">J</a>: open source array-oriented language</li>
+<li><a href="https://nim-lang.org/">Nim</a>: honestly, <strong>the language I&#39;m most excited to try again</strong></li>
+<li><a href="https://www.dangermouse.net/esoteric/piet.html">Piet</a>: 2D, pixel-based, stack-oriented esoteric language</li>
+<li><a href="https://en.wikipedia.org/wiki/Prolog">Prolog</a>: the most popular language for logic programming</li>
+<li><a href="http://www.rebol.com/">Rebol</a>: a tiny but powerful scripting language that didn&#39;t quite catch on</li>
+<li><a href="https://en.wikipedia.org/wiki/Tcl">Tcl</a>: a scripting language that is beautiful in its simplicity</li>
+<li><a href="https://en.wikipedia.org/wiki/Turbo_Pascal">Turbo Pascal</a>: the world&#39;s tiniest integrated development environment</li>
+<li><a href="https://www.unison-lang.org/">Unison</a>: pioneering content-addressable code management/sharing</li>
+</ul>
+<p>Now, without further ado, here is The List:</p>
+<!-- Make all tables the same size -->
+<style>
+table { width: 100% }
+td:nth-of-type(1) { width: 100% }
+</style>
+
+<h1 id="array">Array</h1>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://en.wikipedia.org/wiki/APL_(programming_language)">APL</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p29.apl">p29.apl</a></td>
+<td align="center"><a href="100-languages-7.html#apl">notes</a></td>
+</tr>
+<tr>
+<td><strong><a href="https://www.jsoftware.com/#/">J</a></strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p4.ijs">p4.ijs</a></td>
+<td align="center"><a href="100-languages-3.html#j">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/K_(programming_language)">K</a> (<a href="http://johnearnest.github.io/ok/index.html">oK</a>)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p53.k">p53.k</a></td>
+<td align="center"><a href="100-languages-10.html#k">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/MATLAB">MATLAB</a> (<a href="https://octave.org/">GNU Octave</a>)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p59.m">p59.m</a></td>
+<td align="center"><a href="100-languages-12.html#matlab">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="assembly">Assembly</h1>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><a href="https://en.wikipedia.org/wiki/Intel_8080">8080 assembly</a> (<a href="https://en.wikipedia.org/wiki/Altair_8800">Altair 8800</a>)</strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p97.asm">p97.asm</a></td>
+<td align="center"><a href="100-languages-13.html#8080-assembly-altair-8800">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.zachtronics.com/exapunks/">EXA</a> (<a href="https://store.steampowered.com/app/948420/EXAPUNKS_TEC_Redshift_Player/">TEC Redshift</a>)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p19.exa">p19.exa</a></td>
+<td align="center"><a href="100-languages-4.html#exa">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://wiki.xxiivv.com/site/uxntal.html">Uxntal</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p28.tal">p28.tal</a></td>
+<td align="center"><a href="100-languages-7.html#uxntal">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://webassembly.org/">WebAssembly</a> (<a href="https://webassembly.github.io/spec/core/text/index.html">Text Format</a>)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p14.wat">p14.wat</a></td>
+<td align="center"><a href="100-languages-4.html#webassembly-text-format">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/X86">x86 assembly</a> (BIOS)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p26.asm">p26.asm</a></td>
+<td align="center"><a href="100-languages-6.html">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="block-based">Block-based</h1>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://scratch.mit.edu/">Scratch</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p15.sb3">p15.sb3</a></td>
+<td align="center"><a href="100-languages-4.html#scratch">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="concatenative">Concatenative</h1>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://jimlawless.net/blog/posts/blazin/">Blazin&#39; Forth</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p55.forth">p55.forth</a></td>
+<td align="center"><a href="../vintage-computing/blazin-forth.html">notes</a></td>
+</tr>
+<tr>
+<td><strong><a href="https://factorcode.org/">Factor</a></strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p30.factor">p30.factor</a></td>
+<td align="center"><a href="100-languages-7.html#factor">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://gforth.org/">Gforth</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p5.fth">p5.fth</a></td>
+<td align="center"><a href="100-languages-3.html#gforth">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://kittenlang.org/">Kitten</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p83.ktn">p83.ktn</a></td>
+<td align="center"><a href="100-languages-13.html#kitten">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://min-lang.org/">Min</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p48.min">p48.min</a></td>
+<td align="center"><a href="100-languages-9.html#min">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/PostScript">PostScript</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p24.ps">p24.ps</a></td>
+<td align="center"><a href="100-languages-5.html#postscript">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/GordonCharlton/Quackery">Quackery</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p90.qky">p90.qky</a></td>
+<td align="center"><a href="100-languages-13.html#quackery">notes</a></td>
+</tr>
+<tr>
+<td><a href="http://retroforth.org/">RetroForth</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p27.forth">p27.forth</a></td>
+<td align="center"><a href="100-languages-7.html#retroforth">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="data-oriented">Data-oriented</h1>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><a href="https://futhark-lang.org/">Futhark</a></strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p94.fut">p94.fut</a></td>
+<td align="center"><a href="100-languages-13.html#futhark">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.w3.org/TR/WGSL/">WebGPU Shading Language</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p12.wgsl">p12.wgsl</a></td>
+<td align="center"><a href="100-languages-4.html#webgpu-shading-language">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="declarative">Declarative</h1>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><a href="https://en.wikipedia.org/wiki/Prolog">Prolog</a> (<a href="https://www.swi-prolog.org/">SWI-Prolog</a>)</strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p96.pro">p96.pro</a></td>
+<td align="center"><a href="100-languages-12.html#prolog">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/SQL">SQL</a> (<a href="https://www.sqlite.org/index.html">SQLite</a>)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p8.sql">p8.sql</a></td>
+<td align="center"><a href="100-languages-3.html#sql">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.w3.org/TR/xslt-10/">XSLT</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p9.xsl">p9.xsl</a></td>
+<td align="center"><a href="100-languages-4.html#xslt-extensible-stylesheet-language-transformations">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="esoteric">Esoteric</h1>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://esolangs.org/wiki/SIC-1_Assembly_Language">SIC-1 Assembly Language</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p1.sic1">p1.sic1</a></td>
+<td align="center"><a href="100-languages-1.html">notes</a></td>
+</tr>
+<tr>
+<td><strong><a href="https://www.dangermouse.net/esoteric/piet.html">Piet</a></strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p34.png">p34.png</a></td>
+<td align="center"><a href="piet-for-project-euler.html">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://nas.sr/%D9%82%D9%84%D8%A8/">قلب</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p39.qlb">p39.qlb</a></td>
+<td align="center"><a href="100-languages-9.html#qalb">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://wy-lang.org/">文言</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p45.wy">p45.wy</a></td>
+<td align="center"><a href="100-languages-9.html#wenyan">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="functional">Functional</h1>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://fsharp.org/">F#</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p50.fs">p50.fs</a></td>
+<td align="center"><a href="100-languages-9.html#f">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.haskell.org/">Haskell</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p44.hs">p44.hs</a></td>
+<td align="center"><a href="100-languages-9.html#haskell">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://hazel.org/">Hazel</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p77.hazel">p77.hazel</a></td>
+<td align="center"><a href="100-languages-13.html#hazel">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.idris-lang.org/index.html">Idris</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p46.idr">p46.idr</a></td>
+<td align="center"><a href="100-languages-9.html#idris">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://pkl-lang.org/index.html">Pkl</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p38.pkl">p38.pkl</a></td>
+<td align="center"><a href="100-languages-9.html#pkl">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.purescript.org/">PureScript</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p64.purs">p64.purs</a></td>
+<td align="center"><a href="100-languages-12.html#purescript">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://reasonml.github.io/en/">Reason</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p66.re">p66.re</a></td>
+<td align="center"><a href="100-languages-12.html#reason">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.roc-lang.org/">Roc</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p40.roc">p40.roc</a></td>
+<td align="center"><a href="100-languages-9.html#roc">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/Standard_ML">Standard ML</a> (<a href="https://sosml.org/">SOSML</a>)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p6.sml">p6.sml</a></td>
+<td align="center"><a href="100-languages-3.html#standard-ml">notes</a></td>
+</tr>
+<tr>
+<td><strong><a href="https://www.unison-lang.org/">Unison</a></strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p21.u">p21.u</a></td>
+<td align="center"><a href="100-languages-5.html#unison">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="hardware-description">Hardware description</h1>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://en.wikipedia.org/wiki/Verilog">Verilog</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p17.v">p17.v</a></td>
+<td align="center"><a href="100-languages-4.html#verilog">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://xod.io/">XOD</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p18.xodball">p18.xodball</a></td>
+<td align="center"><a href="100-languages-4.html#xod">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="homoiconic">Homoiconic</h1>
+<h2 id="lisp-inspired">Lisp-inspired</h2>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://macoy.me/blog/programming/CakelispIntro">Cakelisp</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p49.cake">p49.cake</a></td>
+<td align="center"><a href="100-languages-9.html#cakelisp">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://clojure.org/index">Clojure</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p71.clj">p71.clj</a></td>
+<td align="center"><a href="100-languages-12.html#clojure">notes</a></td>
+</tr>
+<tr>
+<td><strong><a href="https://en.wikipedia.org/wiki/Common_Lisp">Common Lisp</a></strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p84.lisp">p84.lisp</a></td>
+<td align="center"><a href="100-languages-14.html#common-lisp">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/rxi/fe">fe</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p25.fe">p25.fe</a></td>
+<td align="center"><a href="100-languages-5.html#fe">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://fennel-lang.org/">Fennel</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p61.fnl">p61.fnl</a></td>
+<td align="center"><a href="100-languages-12.html#fennel">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://hylang.org/">Hy</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p63.hy">p63.hy</a></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td><a href="https://janet-lang.org/">Janet</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p89.janet">p89.janet</a></td>
+<td align="center"><a href="100-languages-13.html#janet">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://prescheme.org/">PreScheme</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p81.scm">p81.scm</a></td>
+<td align="center"><a href="100-languages-14.html#pre-scheme">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/Scheme_(programming_language)">Scheme</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p57.scm">p57.scm</a></td>
+<td align="center"><a href="100-languages-12.html#scheme">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://justine.lol/sectorlisp2/">SectorLISP</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p2.lisp">p2.lisp</a></td>
+<td align="center"><a href="100-languages-2.html">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://shen-language.github.io/">Shen</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p79.shen">p79.shen</a></td>
+<td align="center"><a href="100-languages-13.html#shen">notes</a></td>
+</tr>
+</tbody></table>
+<h2 id="rebol-inspired">Rebol-inspired</h2>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://urlan.sourceforge.io/boron/">Boron</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p42.b">p42.b</a></td>
+<td align="center"><a href="100-languages-9.html#boron">notes</a></td>
+</tr>
+<tr>
+<td><strong><a href="http://www.rebol.com/">Rebol</a></strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p31.r">p31.r</a></td>
+<td align="center"><a href="100-languages-7.html#rebol">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://ryelang.org/">Rye</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p98.rye">p98.rye</a></td>
+<td align="center"><a href="100-languages-14.html#rye">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="imperative">Imperative</h1>
+<h2 id="scripting">Scripting</h2>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://en.wikipedia.org/wiki/AWK">AWK</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p13.awk">p13.awk</a></td>
+<td align="center"><a href="100-languages-4.html#awk">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.gnu.org/software/bash/">Bash</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p32.sh">p32.sh</a></td>
+<td align="center"><a href="100-languages-7.html#bash">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://cyberscript.dev/">Cyber</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p93.cy">p93.cy</a></td>
+<td align="center"><a href="100-languages-14.html#cyber">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://erde-lang.github.io/">Erde</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p62.erde">p62.erde</a></td>
+<td align="center"><a href="100-languages-12.html#erde">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://beyondloom.com/tools/trylil.html">Lil</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p23.lil">p23.lil</a></td>
+<td align="center"><a href="100-languages-5.html#lil">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://moonscript.org/">MoonScript</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p60.moon">p60.moon</a></td>
+<td align="center"><a href="100-languages-12.html#moonscript">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.perl.org/">Perl</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p11.pl">p11.pl</a></td>
+<td align="center"><a href="100-languages-4.html#perl">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://raku.org/">Raku</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p73.raku">p73.raku</a></td>
+<td align="center"><a href="100-languages-12.html#raku">notes</a></td>
+</tr>
+<tr>
+<td><strong><a href="https://en.wikipedia.org/wiki/Tcl">Tcl</a></strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p22.tcl">p22.tcl</a></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td><a href="https://wren.io/">Wren</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p37.wren">p37.wren</a></td>
+<td align="center"><a href="100-languages-9.html#wren">notes</a></td>
+</tr>
+</tbody></table>
+<h2 id="high-level">High-level</h2>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://en.wikipedia.org/wiki/Dylan_(programming_language)">Dylan</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p88.dylan">p88.dylan</a></td>
+<td align="center"><a href="100-languages-13.html#dylan">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://haxe.org/">Haxe</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p51.hx">p51.hx</a></td>
+<td align="center"><a href="100-languages-10.html#haxe">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://julialang.org/">Julia</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p33.jl">p33.jl</a></td>
+<td align="center"><a href="100-languages-7.html#julia">notes</a></td>
+</tr>
+<tr>
+<td><a href="http://strlen.com/lobster">Lobster</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p87.lobster">p87.lobster</a></td>
+<td align="center"><a href="100-languages-13.html#lobster">notes</a></td>
+</tr>
+<tr>
+<td><strong><a href="https://nim-lang.org/">Nim</a></strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p47.nim">p47.nim</a></td>
+<td align="center"><a href="100-languages-9.html#nim">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.python.org/">Python</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p80.py">p80.py</a></td>
+<td align="center"><a href="100-languages-13.html#python">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.ruby-lang.org/en/">Ruby</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p65.rb">p65.rb</a></td>
+<td align="center"><a href="100-languages-12.html#ruby">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.typescriptlang.org/">TypeScript</a> (type system only)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p54.ts">p54.ts</a></td>
+<td align="center"><a href="extreme-typing-in-typescript.html">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://vlang.io/">V</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p86.v">p86.v</a></td>
+<td align="center"><a href="100-languages-13.html#v">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://vala.dev/">Vala</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p74.vala">p74.vala</a></td>
+<td align="center"><a href="100-languages-12.html#vala">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.vcode.org/">Varyx</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p95.vx">p95.vx</a></td>
+<td align="center"><a href="100-languages-14.html#varyx">notes</a></td>
+</tr>
+</tbody></table>
+<h2 id="low-level">Low-level</h2>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://en.wikipedia.org/wiki/Ada_(programming_language)">Ada</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p78.adb">p78.adb</a></td>
+<td align="center"><a href="100-languages-13.html#ada">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.assemblyscript.org/">AssemblyScript</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p68.ts">p68.ts</a></td>
+<td align="center"><a href="100-languages-12.html#assemblyscript">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://www.cs.bu.edu/~hwxi/atslangweb/">ATS</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p91.dats">p91.dats</a></td>
+<td align="center"><a href="100-languages-14.html#ats">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/HigherOrderCO/bend">Bend</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p85.bend">p85.bend</a></td>
+<td align="center"><a href="100-languages-13.html#bend">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> (C99)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p70.c">p70.c</a></td>
+<td align="center"><a href="100-languages-12.html#c">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://harelang.org/">Hare</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p36.ha">p36.ha</a></td>
+<td align="center"><a href="100-languages-9.html#hare">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/glebbash/LO">LO</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p82.lo">p82.lo</a></td>
+<td align="center"><a href="100-languages-13.html#lo">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/NICUP14/MiniLang">MiniLang</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p69.ml">p69.ml</a></td>
+<td align="center"><a href="100-languages-12.html#minilang">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://nelua.io/">Nelua</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p100.nelua">p100.nelua</a></td>
+<td align="center"><a href="100-languages-14.html#nelua">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://odin-lang.org/">Odin</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p75.odin">p75.odin</a></td>
+<td align="center"><a href="100-languages-13.html#odin">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://t3x.org/t3x/0/">T3X/0</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p67.t">p67.t</a></td>
+<td align="center"><a href="100-languages-12.html#t3x0">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/LingDong-/wax">wax</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p41.wax">p41.wax</a></td>
+<td align="center"><a href="100-languages-9.html#wax">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://ziglang.org/">Zig</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p72.zig">p72.zig</a></td>
+<td align="center"><a href="100-languages-12.html#zig">notes</a></td>
+</tr>
+</tbody></table>
+<h2 id="historical">Historical</h2>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://en.wikipedia.org/wiki/Amiga_Basic">Amiga Basic</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p52.bas">p52.bas</a></td>
+<td align="center"><a href="../retrocomputing/amiga-day-project-euler.html">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/BBC_BASIC">BBC BASIC</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p20.bas">p20.bas</a></td>
+<td align="center"><a href="100-languages-5.html#bbc-basic">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/BCPL">BCPL</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p58.b">p58.b</a></td>
+<td align="center"><a href="100-languages-12.html#bcpl">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/COBOL#COBOL-85">COBOL-85</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p10.cbl">p10.cbl</a></td>
+<td align="center"><a href="100-languages-4.html#cobol">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/Commodore_BASIC">Commodore BASIC</a> (<a href="https://www.c64-wiki.com/wiki/BASIC#BASIC_V2.0_of_C64">2.0</a>)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p16.bas">p16.bas</a></td>
+<td align="center"><a href="100-languages-4.html#commodore-basic">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://fortran-lang.org/">Fortran</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p3.f90">p3.f90</a></td>
+<td align="center"><a href="100-languages-3.html#fortran">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://gammon.com.au/GPascal/">G-Pascal</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p56.pas">p56.pas</a></td>
+<td align="center"><a href="100-languages-12.html#g-pascal-on-a-commodore-64">notes</a></td>
+</tr>
+<tr>
+<td><a href="http://mouse.davidgsimpson.com/mouse83/index.html">Mouse-83</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p92.mou">p92.mou</a></td>
+<td align="center"><a href="100-languages-14.html#mouse-83">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/QBasic">QBasic</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p76.bas">p76.bas</a></td>
+<td align="center"><a href="100-languages-13.html#qbasic">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/Rexx">Rexx</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p99.rex">p99.rex</a></td>
+<td align="center"><a href="100-languages-14.html#rexx">notes</a></td>
+</tr>
+<tr>
+<td><strong><a href="https://en.wikipedia.org/wiki/Turbo_Pascal">Turbo Pascal</a> (<a href="https://archive.org/details/turbopascal7.0">7.0</a>)</strong></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p35.pas">p35.pas</a></td>
+<td align="center"><a href="100-languages-9.html#turbo-pascal">notes</a></td>
+</tr>
+</tbody></table>
+<h1 id="object-oriented">Object-oriented</h1>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th align="center">Code</th>
+<th align="center">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://en.wikipedia.org/wiki/Self_(programming_language)">Self</a></td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p43.self">p43.self</a></td>
+<td align="center"><a href="100-languages-9.html#self">notes</a></td>
+</tr>
+<tr>
+<td><a href="https://squeak.org/">Squeak</a> (<a href="https://squeak.js.org/demo/simple.html">2.2</a>)</td>
+<td align="center"><a href="https://github.com/jaredkrinke/100-languages/blob/main/src/p7.st">p7.st</a></td>
+<td align="center"><a href="100-languages-3.html#squeak">notes</a></td>
+</tr>
+</tbody></table>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
