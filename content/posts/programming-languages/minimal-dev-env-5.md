@@ -9,7 +9,7 @@ In [part 4 of my quest to find a minimal (but comfortable) development environme
 # Why?
 **Why am I back to using an ancient single-board computer** (with a 700 MHz, 32-bit ARM CPU and 512 MB of RAM)? Because I think I can do better this time.
 
-On my previous attempt, I was writing code in C and TypeScript because, frankly, those were the languages I was most familiar (and content) with. Sadly, parsing and analyzing those languages is nontrivial, and I noticed that syntax highlighting and (especially) static analysis were so computationally expensive, that Vim would start to crawl. I could literally watch lines of text appearing like typewriter.
+On my previous attempt, I was writing code in C and TypeScript because, frankly, those were the languages I was most familiar (and content) with. Sadly, parsing and analyzing those languages is nontrivial, and I noticed that syntax highlighting and (especially) static analysis were so computationally expensive, that Vim would start to crawl. I could literally watch lines of text appearing like a typewriter.
 
 So, have I found a magical new language server that runs snappily on an original Pi? No. But kind of.
 
@@ -20,7 +20,7 @@ Of course, to get faster syntax highlighting and whatnot, I had to change a few 
 
 **Out go C and TypeScript, and in comes Common Lisp.**
 
-Emacs is not known for speed, but, when working with Lisp, it gets to cheat a bit. Lisp's syntax is trivial, so parsing is very fast. Additionally, auto-complete is essentially baked into the ["read, evaluate, and print" loop of Lisp development](../programming-languages/learning-lisp-in-2023.md), and Emacs+SLIME adds formatting too.
+Emacs is not known for speed, but, when working with Lisp, it gets to cheat a bit. Lisp's syntax is trivial, so parsing and highlighting are very fast. Additionally, auto-complete is essentially baked into the ["read, evaluate, and print" loop of Lisp development](../programming-languages/learning-lisp-in-2023.md), and Emacs+SLIME adds formatting too.
 
 It does take a while to startup, but once it's running, Emacs with SLIME and SBCL is surprisingly usable on my cute little hardware relic. I played around with some Lisp code and started making plans to write the finale to this series. I'd done it! I'd found a minimal, yet productive, development environment that could run on an endangered architecture!
 
