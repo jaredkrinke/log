@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Did the Google Domains sale to Squarespace open my domain up to phishers?</title>
+<meta name="description" content="That time I got phishing mail from my own domain." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Did the Google Domains sale to Squarespace open my domain up to phishers?",
+  "abstract": "That time I got phishing mail from my own domain.",
+  "keywords": "web-development",
+  "datePublished": "2025-02-07"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/web-development/index.html">web-development</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/web-development/squarespace-phishing.html">Did the Google Domains sale to Squarespace open my domain up to phishers?</a></h1>
+<p><time datetime="2025-02-07">February 7, 2025</time></p>
+</header>
+<p>Today, I randomly checked my spam mail folder and saw a phishing mail <em>sent from my own domain, schemescape.com</em>. I assumed it was marked as spam because it couldn&#39;t be authenticated.</p>
+<p>But, to my surprise, <strong>the mail was verified (via <a href="https://en.wikipedia.org/wiki/Sender_Policy_Framework">SPF</a> and <a href="https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail">DKIM</a>) as being from schemescape.com.</strong></p>
+<p>I&#39;m pretty sure I hadn&#39;t tried to phish myself, so... <strong>what happened?</strong></p>
+<h1 id="background">Background</h1>
+<p>I originally registered schemescape.com using Google Domains and I set up <em>in-bound</em> email forwarding, so I could receive mail at my domain (but not send it).</p>
+<p>On June 15th, 2023, <a href="https://domains.google/">Google announced it was selling its Google Domains business to Squarespace</a>. By July 2024, all domains had been migrated to Squarespace.</p>
+<p>With that context in mind, let&#39;s travel back (forward?) to the present.</p>
+<h1 id="investigation">Investigation</h1>
+<h2 id="mailgun">Mailgun</h2>
+<p>Just to double-check that I didn&#39;t have a Jekyll and Hyde self-phishing situation, I checked the email headers and confirmed that <strong>the mail was sent from a sever I&#39;d never heard of</strong>: <code>a168.a94b46b0.use4.send.mailgun.net</code> (198.244.55.168). So what is Mailgun, and how are they sending mail from <em>my</em> domain?</p>
+<p>Mailgun advertises itself as a &quot;transactional email API service for developers&quot;. I think it&#39;s a legitimate business, so I&#39;m assuming some bad actor is abusing their service. I&#39;ll report the activity to Mailgun, but that only explains how Mailgun is involved.</p>
+<h2 id="spfdkim">SPF/DKIM</h2>
+<p>I don&#39;t know much about email security, but skimming the Wikipedia articles above indicate:</p>
+<ul>
+<li>SPF ensures the sending mail server is authorized to send mail for the domain</li>
+<li>DKIM is used to sign email for the domain</li>
+</ul>
+<p>Poking around my DNS records, <strong>there are two suspicious TXT records</strong>:</p>
+<ul>
+<li>SPF (on schemescape.com): <code>v=spf1 include:mailgun.org ~all</code></li>
+<li>DKIM (on k1._domainkey.schemescape.com): <code> k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXlrH338T643ulCW/ROaqdFhTlU332Av6qpMN69oMhKJeUgPp9RFHIMnRecVJAdLVDM3R6RpAsgNdB8EGv1Xhu3/vPA83H/KtGv8p6s03oVLhDaN3emmPZRi8WHlyDWM/W9VPE0aOvfWB/3ONXLaQrJOT2 /JUZIAnQ7ocfZl74kwIDAQAB</code></li>
+</ul>
+<p><strong>How did these get here?</strong></p>
+<h2 id="squarespace">Squarespace?</h2>
+<p>I certainly never authored those DNS records--I didn&#39;t even know about the <code>_domainkey</code> part of DKIM! Where did they come from?</p>
+<p>At first, I didn&#39;t know if it was Google or Squarespace that created these records on my behalf. <a href="https://forum.squarespace.com/topic/296578-squarespace-email-forwarding-defaults-for-ex-google-domains-mailgun/">A thread on the Squarespace forum</a> had at least one person noting that their mail forwarding records were modified during the Google Domains -&gt; Squarespace transition, which suggest it might be Squarespace&#39;s doing.</p>
+<h2 id="squarespace-1">Squarespace!</h2>
+<p>Fortunately, DNS records are public, and at least once site has been tracking records over time: <a href="https://dnshistory.org/">DNS History (dnshistory.org)</a>. Looking at their history for my domain, I see that <strong>the SPF record from above was added sometime around May 13th, 2024, right around when Squarespace notified me that my domain had been migrated to their service</strong>.</p>
+<p>Given the info above, my best guess is that the Google Domains -&gt; Squarespace transition somehow caused these records to be added, and someone took advantage of this fact to send phishing mail from my domain.</p>
+<h2 id="squarespace-2">Squarespace!!!</h2>
+<p>Annoyingly, <strong>Squarespace seems to <em>require</em> these records for mail forwarding</strong>. Maybe they support both in-bound and out-bound forwarding but there&#39;s no option for in-bound forwarding only (like I had before)? Regardless, my attempts to contact Squarespace to better understand what happened have so far failed to reach a human.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
