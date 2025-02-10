@@ -7,45 +7,116 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-02-08T05:26:26.198Z</updated>
+<updated>2025-02-10T17:48:58.044Z</updated>
 
 <entry>
-<title>Did the Google Domains sale to Squarespace open my domain up to phishers?</title>
-<id>https://log.schemescape.com/posts/web-development/squarespace-phishing.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/web-development/squarespace-phishing.html"/>
-<updated>2025-02-07T00:00:00.000Z</updated>
-<summary type="text">That time I got phishing mail from my own domain.</summary>
-<content type="html">&lt;p&gt;Today, I randomly checked my spam mail folder and saw a phishing mail &lt;em&gt;sent from my own domain, schemescape.com&lt;/em&gt;. I assumed it was marked as spam because it couldn&amp;#39;t be authenticated.&lt;/p&gt;
-&lt;p&gt;But, to my surprise, &lt;strong&gt;the mail was verified (via &lt;a href=&quot;https://en.wikipedia.org/wiki/Sender_Policy_Framework&quot;&gt;SPF&lt;/a&gt; and &lt;a href=&quot;https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail&quot;&gt;DKIM&lt;/a&gt;) as being from schemescape.com.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m pretty sure I hadn&amp;#39;t tried to phish myself, so... &lt;strong&gt;what happened?&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;I originally registered schemescape.com using Google Domains and I set up &lt;em&gt;in-bound&lt;/em&gt; email forwarding, so I could receive mail at my domain (but not send it).&lt;/p&gt;
-&lt;p&gt;On June 15th, 2023, &lt;a href=&quot;https://domains.google/&quot;&gt;Google announced it was selling its Google Domains business to Squarespace&lt;/a&gt;. By July 2024, all domains had been migrated to Squarespace.&lt;/p&gt;
-&lt;p&gt;With that context in mind, let&amp;#39;s travel back (forward?) to the present.&lt;/p&gt;
-&lt;h1 id=&quot;investigation&quot;&gt;Investigation&lt;/h1&gt;
-&lt;h2 id=&quot;mailgun&quot;&gt;Mailgun&lt;/h2&gt;
-&lt;p&gt;Just to double-check that I didn&amp;#39;t have a Jekyll and Hyde self-phishing situation, I checked the email headers and confirmed that &lt;strong&gt;the mail was sent from a sever I&amp;#39;d never heard of&lt;/strong&gt;: &lt;code&gt;a168.a94b46b0.use4.send.mailgun.net&lt;/code&gt; (198.244.55.168). So what is Mailgun, and how are they sending mail from &lt;em&gt;my&lt;/em&gt; domain?&lt;/p&gt;
-&lt;p&gt;Mailgun advertises itself as a &amp;quot;transactional email API service for developers&amp;quot;. I think it&amp;#39;s a legitimate business, so I&amp;#39;m assuming some bad actor is abusing their service. I&amp;#39;ll report the activity to Mailgun, but that only explains how Mailgun is involved.&lt;/p&gt;
-&lt;h2 id=&quot;spfdkim&quot;&gt;SPF/DKIM&lt;/h2&gt;
-&lt;p&gt;I don&amp;#39;t know much about email security, but skimming the Wikipedia articles above indicate:&lt;/p&gt;
+<title>Minimal alerting on Linux for hobby projects</title>
+<id>https://log.schemescape.com/posts/linux/minimal-alerting.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/linux/minimal-alerting.html"/>
+<updated>2025-02-10T00:00:00.000Z</updated>
+<summary type="text">Hacking together the simplest real-time notifications for hobby projects.</summary>
+<content type="html">&lt;p&gt;Occasionally, I have a need for real-time notifications for hobby projects. For example, one time I made a multi-player word scramble game for a game jam, and I wanted to be notified when people connected to the game (so that I could ensure there was at least one worthy opponent).&lt;/p&gt;
+&lt;p&gt;This post covers a (terrible) minimal scheme for setting up these notifications.&lt;/p&gt;
+&lt;h1 id=&quot;overview&quot;&gt;Overview&lt;/h1&gt;
+&lt;p&gt;At a high level, here are the things that need to be built:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Some way to detect relevant events&lt;/li&gt;
+&lt;li&gt;Some way to configure/filter events&lt;/li&gt;
+&lt;li&gt;Some way to &amp;quot;debounce&amp;quot; events (so I don&amp;#39;t get a million notifications)&lt;/li&gt;
+&lt;li&gt;Some way to deliver the notification&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The simplest approach is to just base everything on text files. Let&amp;#39;s get started!&lt;/p&gt;
+&lt;h1 id=&quot;detecting-relevant-events&quot;&gt;Detecting relevant events&lt;/h1&gt;
+&lt;p&gt;There&amp;#39;s no shortcut here. Since I&amp;#39;d like everything to be text-based, I need to instrument my project with text logging. For the game example, I needed to log a message when someone connected to the game server.&lt;/p&gt;
+&lt;p&gt;For my current (unannounced) project, I&amp;#39;m using Python&amp;#39;s built-in logging library, with an obvious string (&amp;quot;ERROR&amp;quot;).&lt;/p&gt;
+&lt;p&gt;Redirecting to a file is sufficient:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;python&lt;/span&gt; app.&lt;span class=&quot;hljs-keyword&quot;&gt;py&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt;&amp;gt;&amp;amp;&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; |tee &lt;span class=&quot;hljs-built_in&quot;&gt;log&lt;/span&gt;.txt
+&lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
-&lt;li&gt;SPF ensures the sending mail server is authorized to send mail for the domain&lt;/li&gt;
-&lt;li&gt;DKIM is used to sign email for the domain&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;2&amp;gt;&amp;amp;1&lt;/code&gt; ensures I get both &amp;quot;standard output&amp;quot; and &amp;quot;standard error&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tee&lt;/code&gt; writes output to a file (&amp;quot;log.txt&amp;quot; in this case) and also displays it (for convenience)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Poking around my DNS records, &lt;strong&gt;there are two suspicious TXT records&lt;/strong&gt;:&lt;/p&gt;
+&lt;h1 id=&quot;configuringfiltering-events&quot;&gt;Configuring/filtering events&lt;/h1&gt;
+&lt;p&gt;Since everything is text, we can just match the live log file for a specific string using &lt;code&gt;tail -c 0 -f&lt;/code&gt; (&lt;code&gt;-f&lt;/code&gt; to follow the file and &lt;code&gt;-c 0&lt;/code&gt; to only track new additions to the file) and &lt;code&gt;grep&lt;/code&gt; (for string searching). Note that there is one trick: &lt;strong&gt;grep needs to search one line at a time, as input arrives&lt;/strong&gt;, using the &lt;code&gt;--line-buffered&lt;/code&gt; flag:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;tail -c &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; -f &lt;span class=&quot;hljs-built_in&quot;&gt;log&lt;/span&gt;.txt |grep --line-buffered -i &lt;span class=&quot;hljs-built_in&quot;&gt;error&lt;/span&gt; &amp;gt; &lt;span class=&quot;hljs-built_in&quot;&gt;errors&lt;/span&gt;.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that I redirect the matches to &amp;quot;errors.txt&amp;quot;.&lt;/p&gt;
+&lt;h1 id=&quot;debouncing-events&quot;&gt;Debouncing events&lt;/h1&gt;
+&lt;p&gt;Now comes the secret sauce.&lt;/p&gt;
+&lt;p&gt;One issue with alerts is that they often arrive in bursts. Rather than get hit with an avalanche of alerts, it&amp;#39;s helpful to &amp;quot;debounce&amp;quot; alerts by limiting the alerts to, say, at most one every 15 minutes (or probably even less frequent).&lt;/p&gt;
+&lt;p&gt;My original solution to this relied on a bunch of custom code, but it turns out that you can build a really simple solution using &lt;code&gt;inotifywait&lt;/code&gt; (from &lt;code&gt;inotify-tools&lt;/code&gt; on Debian) and a trivial shell script. I named the script &amp;quot;ow.sh&amp;quot; (for &amp;quot;on write&amp;quot;):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;#!/usr/bin/env bash&lt;/span&gt;
+
+&lt;span class=&quot;hljs-comment&quot;&gt;# ow.sh (&amp;quot;on write&amp;quot;)&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;# This is a script to &amp;quot;debounce&amp;quot; commands that run when a file/directory is&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;# modified. The command is only run at most every TIMESPAN amount of time&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;# (TIMESPAN format is the same as the sleep command, e.g. 10s, 1m).&lt;/span&gt;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; [ &lt;span class=&quot;hljs-variable&quot;&gt;$#&lt;/span&gt; -le 3 ]; &lt;span class=&quot;hljs-keyword&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;hljs-built_in&quot;&gt;echo&lt;/span&gt; USAGE: &lt;span class=&quot;hljs-variable&quot;&gt;$0&lt;/span&gt; TARGET TIMESPAN COMMAND
+    &lt;span class=&quot;hljs-built_in&quot;&gt;echo&lt;/span&gt;
+    &lt;span class=&quot;hljs-built_in&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Example: &lt;span class=&quot;hljs-variable&quot;&gt;$0&lt;/span&gt; foo.log 15m wall &amp;#x27;Alert!!!&amp;#x27;&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;hljs-built_in&quot;&gt;exit&lt;/span&gt; 1
+&lt;span class=&quot;hljs-keyword&quot;&gt;fi&lt;/span&gt;
+
+target=&lt;span class=&quot;hljs-variable&quot;&gt;$1&lt;/span&gt;
+delay=&lt;span class=&quot;hljs-variable&quot;&gt;$2&lt;/span&gt;
+&lt;span class=&quot;hljs-built_in&quot;&gt;shift&lt;/span&gt; 2
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;while&lt;/span&gt; inotifywait -qq &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;&lt;span class=&quot;hljs-variable&quot;&gt;$target&lt;/span&gt;&amp;quot;&lt;/span&gt;; &lt;span class=&quot;hljs-keyword&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;&lt;span class=&quot;hljs-variable&quot;&gt;$@&lt;/span&gt;&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;hljs-built_in&quot;&gt;sleep&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;&lt;span class=&quot;hljs-variable&quot;&gt;$delay&lt;/span&gt;&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;done&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;All this script does is wait for a file or directory to be modified, run the command, and then sleep the specified amount of time.&lt;/p&gt;
+&lt;p&gt;Example usage:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;ow.sh errors.txt 1m &lt;span class=&quot;hljs-built_in&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Oh no! An alert!&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This will:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;SPF (on schemescape.com): &lt;code&gt;v=spf1 include:mailgun.org ~all&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;DKIM (on k1._domainkey.schemescape.com): &lt;code&gt; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXlrH338T643ulCW/ROaqdFhTlU332Av6qpMN69oMhKJeUgPp9RFHIMnRecVJAdLVDM3R6RpAsgNdB8EGv1Xhu3/vPA83H/KtGv8p6s03oVLhDaN3emmPZRi8WHlyDWM/W9VPE0aOvfWB/3ONXLaQrJOT2 /JUZIAnQ7ocfZl74kwIDAQAB&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Watch &amp;quot;errors.txt&amp;quot;&lt;/li&gt;
+&lt;li&gt;Debounce to at most every 1 minute (&lt;code&gt;1m&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;And run the rest of the command line (&lt;code&gt;echo &amp;quot;Oh no! An alert!&amp;quot;&lt;/code&gt;)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;How did these get here?&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&quot;squarespace&quot;&gt;Squarespace?&lt;/h2&gt;
-&lt;p&gt;I certainly never authored those DNS records--I didn&amp;#39;t even know about the &lt;code&gt;_domainkey&lt;/code&gt; part of DKIM! Where did they come from?&lt;/p&gt;
-&lt;p&gt;At first, I didn&amp;#39;t know if it was Google or Squarespace that created these records on my behalf. &lt;a href=&quot;https://forum.squarespace.com/topic/296578-squarespace-email-forwarding-defaults-for-ex-google-domains-mailgun/&quot;&gt;A thread on the Squarespace forum&lt;/a&gt; had at least one person noting that their mail forwarding records were modified during the Google Domains -&amp;gt; Squarespace transition, which suggest it might be Squarespace&amp;#39;s doing.&lt;/p&gt;
-&lt;h2 id=&quot;squarespace-1&quot;&gt;Squarespace!&lt;/h2&gt;
-&lt;p&gt;Fortunately, DNS records are public, and at least once site has been tracking records over time: &lt;a href=&quot;https://dnshistory.org/&quot;&gt;DNS History (dnshistory.org)&lt;/a&gt;. Looking at their history for my domain, I see that &lt;strong&gt;the SPF record from above was added sometime around May 13th, 2024, right around when Squarespace notified me that my domain had been migrated to their service&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Given the info above, my best guess is that the Google Domains -&amp;gt; Squarespace transition somehow caused these records to be added, and someone took advantage of this fact to send phishing mail from my domain.&lt;/p&gt;
-&lt;h2 id=&quot;squarespace-2&quot;&gt;Squarespace!!!&lt;/h2&gt;
-&lt;p&gt;Annoyingly, &lt;strong&gt;Squarespace seems to &lt;em&gt;require&lt;/em&gt; these records for mail forwarding&lt;/strong&gt;. Maybe they support both in-bound and out-bound forwarding but there&amp;#39;s no option for in-bound forwarding only (like I had before)? Regardless, my attempts to contact Squarespace to better understand what happened have so far failed to reach a human.&lt;/p&gt;
+&lt;h1 id=&quot;delivering-notifications&quot;&gt;Delivering notifications&lt;/h1&gt;
+&lt;p&gt;The last step is to actually deliver notifications. How this is done depends heavily on the environment where the monitoring is happening and where the notifications need to be received.&lt;/p&gt;
+&lt;h2 id=&quot;local-desktop&quot;&gt;Local desktop&lt;/h2&gt;
+&lt;p&gt;If monitoring is happening locally on a full-blown Linux desktop computer, this could be as simple as using &lt;code&gt;notify-send&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;ow.sh errors.txt 15m notify-send &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Oh no, an alert!&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;remote-server&quot;&gt;Remote server&lt;/h2&gt;
+&lt;p&gt;If monitoring is happening on a remote server, then it&amp;#39;s mostly a matter of pulling in the remote output somehow. This can be done using SSH, &lt;code&gt;netcat&lt;/code&gt;, etc.&lt;/p&gt;
+&lt;p&gt;The simplest approach I&amp;#39;ve found is to just tail the remote file locally. So I run the same command &lt;strong&gt;on the server&lt;/strong&gt;, same as above:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;tail&lt;/span&gt; -c 0 -f log.txt |grep --line-buffered -i error &amp;gt; errors.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And then &lt;strong&gt;on my local desktop environment&lt;/strong&gt; I tail the remote file using SSH and write to a local file:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;ssh server &lt;span class=&quot;hljs-built_in&quot;&gt;tail&lt;/span&gt; -c 0 -f /home/user/errors.txt &amp;gt; remote-errors.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that the &lt;code&gt;tail -c 0 -f /home/user/errors.txt&lt;/code&gt; part runs on the server and the &lt;code&gt;&amp;gt; re.txt&lt;/code&gt; part runs locally. Finally, I can use the debouncing script and &lt;code&gt;notify-send&lt;/code&gt;, as before:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;ow.sh remote-errors.txt 15m notify-send &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Oh no, an alert!&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;phone-notifications&quot;&gt;Phone notifications&lt;/h2&gt;
+&lt;p&gt;Phone notifications are where my knowledge runs out. I don&amp;#39;t know the best way to send notifications to a phone, especially in a self-hosted way. In the past, I&amp;#39;ve relied on free tiers of paid services, but I&amp;#39;m hopeful I can eventually figure out something that is fully self-hosted (except for the app itself and associated notification infrastructure).&lt;/p&gt;
+&lt;p&gt;Here are a few ideas:&lt;/p&gt;
+&lt;h3 id=&quot;ifttt&quot;&gt;IFTTT&lt;/h3&gt;
+&lt;p&gt;I haven&amp;#39;t used it in a while, but &lt;a href=&quot;https://ifttt.com/&quot;&gt;IFTTT&lt;/a&gt; (&amp;quot;if this, then that&amp;quot;) had a free tier that could deliver phone notifications via a &lt;code&gt;curl&lt;/code&gt;-able web hook (&lt;a href=&quot;https://help.ifttt.com/hc/en-us/articles/115010230347-Webhooks-service-FAQ&quot;&gt;example on this page&lt;/a&gt;).&lt;/p&gt;
+&lt;h3 id=&quot;ntfysh&quot;&gt;ntfy.sh&lt;/h3&gt;
+&lt;p&gt;I haven&amp;#39;t used it, but &lt;a href=&quot;https://ntfy.sh/&quot;&gt;ntfy.sh&lt;/a&gt; appears to be an open source (and allegedly self-hostable) alternative.&lt;/p&gt;
+&lt;h3 id=&quot;matrix&quot;&gt;Matrix&lt;/h3&gt;
+&lt;p&gt;I strongly suspect there is some way to use &lt;a href=&quot;https://matrix.org/&quot;&gt;Matrix&lt;/a&gt; and an assocaited phone app for notifications, but I haven&amp;#39;t investigated this option yet.&lt;/p&gt;
+&lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
+&lt;p&gt;So there it is, alerting for hobby projects using only:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Output redirection&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tail&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;grep&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Bash&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;inotifywait&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sleep&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;SSH&lt;/li&gt;
+&lt;li&gt;And &lt;code&gt;notify-send&lt;/code&gt; or some phone equivalent&lt;/li&gt;
+&lt;/ul&gt;
 </content>
 </entry>
 <entry>
