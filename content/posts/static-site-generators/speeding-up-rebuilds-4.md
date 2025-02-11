@@ -36,7 +36,7 @@ Analogous to speeding up a static site generator, **the most obvious way to spee
 ## An epiphany around caching
 What if, instead of making a really smart cache, I made a really dumb one?
 
-While planning a scheme for reliably caching the results of arbitrary steps in the processing pipeline (specifically, deciding between simply using files' "last modified time" vs. using their actual content--or a hash--to detect changes), I realized that **most of the challenges evaporated if I scoped the cache a single run of the tool**.
+While planning a scheme for reliably caching the results of arbitrary steps in the processing pipeline (specifically, deciding between simply using files' "last modified time" vs. using their actual content--or a hash--to detect changes), I realized that **most of the challenges evaporated if I scoped the cache to a single run of the tool**.
 
 As noted in a previous post, my primary performance-sensitive workflow is:
 
