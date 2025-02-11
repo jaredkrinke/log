@@ -56,7 +56,7 @@
 <p>Analogous to speeding up a static site generator, <strong>the most obvious way to speed up a <em>software project</em> is to avoid doing unnecessary work</strong> (i.e. avoid starting over from scratch). So I refocused my efforts on wringing maximal performance from md2blog, while staying within its existing design constraints.</p>
 <h2 id="an-epiphany-around-caching">An epiphany around caching</h2>
 <p>What if, instead of making a really smart cache, I made a really dumb one?</p>
-<p>While planning a scheme for reliably caching the results of arbitrary steps in the processing pipeline (specifically, deciding between simply using files&#39; &quot;last modified time&quot; vs. using their actual content--or a hash--to detect changes), I realized that <strong>most of the challenges evaporated if I scoped the cache a single run of the tool</strong>.</p>
+<p>While planning a scheme for reliably caching the results of arbitrary steps in the processing pipeline (specifically, deciding between simply using files&#39; &quot;last modified time&quot; vs. using their actual content--or a hash--to detect changes), I realized that <strong>most of the challenges evaporated if I scoped the cache to a single run of the tool</strong>.</p>
 <p>As noted in a previous post, my primary performance-sensitive workflow is:</p>
 <ol>
 <li>Run md2blog as a live-reloading server</li>
