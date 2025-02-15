@@ -7,8 +7,54 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-02-15T16:12:36.455Z</updated>
+<updated>2025-02-15T22:13:48.661Z</updated>
 
+<entry>
+<title>Static site generators vs. build tools</title>
+<id>https://log.schemescape.com/posts/static-site-generators/ssg-vs-build-tool.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/ssg-vs-build-tool.html"/>
+<updated>2025-02-15T00:00:00.000Z</updated>
+<summary type="text">This is a quick discussion of the differences between static site generators and build tools.</summary>
+<content type="html">&lt;p&gt;Static site generators (like &lt;a href=&quot;https://gohugo.io/&quot;&gt;Hugo&lt;/a&gt;, &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt;, or my latest fascination, &lt;a href=&quot;https://www.getblades.org/&quot;&gt;Blades&lt;/a&gt;) read input (often Markdown files) and produce output (HTML). Build tools (like &lt;a href=&quot;https://en.wikipedia.org/wiki/Make_(software)&quot;&gt;Make&lt;/a&gt;) read input and produce output (or run tools that do so).&lt;/p&gt;
+&lt;p&gt;Static site generators and build tools sound similar. What makes them different?&lt;/p&gt;
+&lt;h1 id=&quot;differences&quot;&gt;Differences&lt;/h1&gt;
+&lt;p&gt;Here are some general differences:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;Delegation&lt;/th&gt;
+&lt;th&gt;Build graph&lt;/th&gt;
+&lt;th&gt;Rebuilds&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Static site generators&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Self-contained, no external tools&lt;/td&gt;
+&lt;td&gt;Inputs are discovered and dynamic outputs are supported&lt;/td&gt;
+&lt;td&gt;Rebuilds restart from scratch&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Build tools&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Delegate compilation to external tools&lt;/td&gt;
+&lt;td&gt;Inputs and outputs are prescriptively listed&lt;/td&gt;
+&lt;td&gt;Intermediate objects are cached to the file system, enabling fast incremental rebuilds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;Let&amp;#39;s consider these each in turn.&lt;/p&gt;
+&lt;h2 id=&quot;delegation&quot;&gt;Delegation&lt;/h2&gt;
+&lt;p&gt;Build tools (like Make) usually delegate processing to external tools (like a C compiler). &lt;strong&gt;This makes build tools more generic&lt;/strong&gt; (they can support multiple languages). Static site generators are less flexible (usually only supporting one or two types of input), so there isn&amp;#39;t much motivation to extract processing into a separate tool.&lt;/p&gt;
+&lt;h2 id=&quot;build-graph&quot;&gt;Build graph&lt;/h2&gt;
+&lt;p&gt;Build tools are generally used to produce specific artifacts that are known ahead of time. Although it&amp;#39;s possible to do so, I can&amp;#39;t think of very many cases where you&amp;#39;d want a build tool to enumerate arbitrary files and producing unknown (or unexpected) outputs.&lt;/p&gt;
+&lt;p&gt;On the other hand, &lt;strong&gt;it&amp;#39;s more convenient to author a few Markdown files and then have a static site generator automatically find them and rebuild the site&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;rebuilds&quot;&gt;Rebuilds&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Because compilers are often slow, it is frequently important for build tools to cache intermediate objects to the file system, to avoid recompiling unchanged items&lt;/strong&gt;. Processing Markdown and generating HTML is generally fast, so there&amp;#39;s less need to cache intermediate data.&lt;/p&gt;
+&lt;p&gt;Additionally, incremental rebuilds &lt;em&gt;require&lt;/em&gt; the build graph to be easy to compute ahead of time. Now, I don&amp;#39;t see a reason why static site generators &lt;em&gt;couldn&amp;#39;t&lt;/em&gt; infer (and cache) a build graph to support incremental rebuilds (in fact, I &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/lisp-ssg.html&quot;&gt;prototyped a generic static site generator with accurate incremental rebuilds&lt;/a&gt;... &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html&quot;&gt;twice&lt;/a&gt;), but it&amp;#39;s not as urgent of a concern for static site generators since building static sites is generally quick (&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html&quot;&gt;unless you&amp;#39;re on slow hardware&lt;/a&gt;).&lt;/p&gt;
+&lt;h1 id=&quot;summary&quot;&gt;Summary&lt;/h1&gt;
+&lt;p&gt;If I had to distill my thoughts into one sentence, I&amp;#39;d say that the build graph is the essential part: &lt;strong&gt;static site generators discover their inputs and produce arbitrary outputs whereas build tools know their outputs ahead of time&lt;/strong&gt;. Oh, and static site generators produce HTML instead of programs, obviously.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;m sure there are exceptions, and you could argue that static site generators are a subset of build tools, but I&amp;#39;m going to dogmatically stick to the bolded claim above.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Minimal alerting on Linux for hobby projects</title>
 <id>https://log.schemescape.com/posts/linux/minimal-alerting.html</id>
@@ -906,71 +952,6 @@ td:nth-of-type(1) { width: 100% }
 &lt;h1 id=&quot;not-just-python&quot;&gt;Not just Python&lt;/h1&gt;
 &lt;p&gt;And it&amp;#39;s not just Python. I&amp;#39;ve also whined about perceived bloat on, ahem, more than one occasion. I&amp;#39;ve complained about compilers not working on the first try. And so on. &lt;strong&gt;There isn&amp;#39;t any value in posting shallow dismissals of projects that took enormous amounts of work to produce&lt;/strong&gt;. I&amp;#39;ll try to stop doing that. &lt;strong&gt;Even if I can&amp;#39;t always make the world better, I can at least try to not make it worse&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;Mea culpa.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>New year, new programming languages</title>
-<id>https://log.schemescape.com/posts/programming-languages/100-languages-14.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/100-languages-14.html"/>
-<updated>2025-01-16T00:00:00.000Z</updated>
-<summary type="text">I finished my dumb project.</summary>
-<content type="html">&lt;p&gt;I just finished &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages.html&quot;&gt;solving the first 100 Project Euler problems using 100 different programming languages&lt;/a&gt;. For reference: &lt;a href=&quot;https://github.com/jaredkrinke/100-languages&quot;&gt;here is all the code&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;I&amp;#39;m planning to write up a summary post at some point&lt;/strong&gt;, but this is just my last throwaway post with brief notes on the languages I&amp;#39;ve tried since &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/100-languages-13.html&quot;&gt;the last update&lt;/a&gt;. Rye and Nelua were the stars of this round.&lt;/p&gt;
-&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;/h1&gt;
-&lt;h2 id=&quot;ats&quot;&gt;ATS&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;I didn&amp;#39;t understand some of the syntax, e.g. &lt;code&gt;:&amp;lt;cloref1&amp;gt;&lt;/code&gt; and &lt;code&gt;t@ype&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Error messages were sometimes surprising, e.g. &lt;code&gt;the syntactic entity [impqi0de] is needed.&lt;/code&gt; -- what is &lt;code&gt;[impqi0de]&lt;/code&gt;???&lt;/li&gt;
-&lt;li&gt;Another example: copy-pasting &lt;code&gt;fn square (x: double): double = x * x&lt;/code&gt; from the official documentation yields &lt;code&gt;error: ‘PMVtmpltcstmat’ undeclared (first use in this function)&lt;/code&gt; -- solutiong was to put &lt;code&gt;#include &amp;quot;share/atspre_staload.hats&amp;quot;&lt;/code&gt; at the top of the file (my mistake--but the error was unhelpful)&lt;/li&gt;
-&lt;li&gt;I didn&amp;#39;t attempt to include any proofs in my code, so I didn&amp;#39;t really leverage ATS to its fullest (or, really, any) extent&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;pre-scheme&quot;&gt;Pre-Scheme&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Using the built-in &lt;code&gt;errors&lt;/code&gt; enum resulted in compilation errors&lt;/li&gt;
-&lt;li&gt;Static typing in Scheme is awkward because I couldn&amp;#39;t find a clean way to not return anything&lt;/li&gt;
-&lt;li&gt;Couldn&amp;#39;t find an example of asserting types&lt;/li&gt;
-&lt;li&gt;Unstripped solution binary was ~50 KB (C is great!)&lt;/li&gt;
-&lt;li&gt;Didn&amp;#39;t actually bother deallocating memory (C is great!)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;common-lisp&quot;&gt;Common Lisp&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Interactive development is helpful (and fun)&lt;/li&gt;
-&lt;li&gt;So many cryptic/inconsistent names, e.g. &lt;code&gt;fmakunbound&lt;/code&gt;, &lt;code&gt;mapcon&lt;/code&gt;, &lt;code&gt;clrhash&lt;/code&gt;, &lt;code&gt;prin1&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;=&lt;/code&gt; vs. &lt;code&gt;equalp&lt;/code&gt; vs. &lt;code&gt;equal&lt;/code&gt; vs. &lt;code&gt;eql&lt;/code&gt; vs. &lt;code&gt;eq&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;SBCL is fast, but a trivial stand-alone binary can be big and uses more memory than I would like&lt;/li&gt;
-&lt;li&gt;Common Lisp isn&amp;#39;t as elegant as Scheme, but the implementations are more mutually compatible than in the Scheme world&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;mouse-83&quot;&gt;Mouse-83&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Finally, a programming language with less syntax than Forth!&lt;/li&gt;
-&lt;li&gt;Single-letter variables names make it hard to convey their meaning&lt;/li&gt;
-&lt;li&gt;Overall, if I wanted a language that was easy to implement, I&amp;#39;d probably opt for Forth, Pascal, or Lisp -- a small increase in complexity is worth unlocking greater readability (easy to say in 2025, I know)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;cyber&quot;&gt;Cyber&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Once mature, this could be a fast Lua replacement with more Python-like syntax (and zero-based indexing!)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;varyx&quot;&gt;Varyx&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;while&lt;/code&gt; loop only works if there&amp;#39;s a blank line before it&lt;/li&gt;
-&lt;li&gt;Arrays appear to be lists under the hood, with slow (O(n)) access&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;rye&quot;&gt;Rye&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Very compact code&lt;/li&gt;
-&lt;li&gt;Surprisingly fast&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;rexx&quot;&gt;Rexx&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Logical operator for &amp;quot;exclusive or&amp;quot; is unfortunately the same as C&amp;#39;s &amp;quot;logical and&amp;quot;: &lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;And &lt;code&gt;%&lt;/code&gt; is integer division, with &lt;code&gt;//&lt;/code&gt; being remainder (the opposite of what I&amp;#39;ve seen elsewhere)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;nelua&quot;&gt;Nelua&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Always nice to see my code compile down to &amp;lt; 100 KB executables!&lt;/li&gt;
-&lt;li&gt;It&amp;#39;s like a smaller Nim, but using Lua syntax&lt;/li&gt;
-&lt;li&gt;Mostly &amp;quot;just worked&amp;quot; for me -- very easy to pick up&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Static site generators vs. build tools</title>
+<meta name="description" content="This is a quick discussion of the differences between static site generators and build tools." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Static site generators vs. build tools",
+  "abstract": "This is a quick discussion of the differences between static site generators and build tools.",
+  "keywords": "static-site-generators",
+  "datePublished": "2025-02-15"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/static-site-generators/index.html">static-site-generators</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/static-site-generators/ssg-vs-build-tool.html">Static site generators vs. build tools</a></h1>
+<p><time datetime="2025-02-15">February 15, 2025</time></p>
+</header>
+<p>Static site generators (like <a href="https://gohugo.io/">Hugo</a>, <a href="https://jaredkrinke.github.io/md2blog/">md2blog</a>, or my latest fascination, <a href="https://www.getblades.org/">Blades</a>) read input (often Markdown files) and produce output (HTML). Build tools (like <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a>) read input and produce output (or run tools that do so).</p>
+<p>Static site generators and build tools sound similar. What makes them different?</p>
+<h1 id="differences">Differences</h1>
+<p>Here are some general differences:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Delegation</th>
+<th>Build graph</th>
+<th>Rebuilds</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Static site generators</strong></td>
+<td>Self-contained, no external tools</td>
+<td>Inputs are discovered and dynamic outputs are supported</td>
+<td>Rebuilds restart from scratch</td>
+</tr>
+<tr>
+<td><strong>Build tools</strong></td>
+<td>Delegate compilation to external tools</td>
+<td>Inputs and outputs are prescriptively listed</td>
+<td>Intermediate objects are cached to the file system, enabling fast incremental rebuilds</td>
+</tr>
+</tbody></table>
+<p>Let&#39;s consider these each in turn.</p>
+<h2 id="delegation">Delegation</h2>
+<p>Build tools (like Make) usually delegate processing to external tools (like a C compiler). <strong>This makes build tools more generic</strong> (they can support multiple languages). Static site generators are less flexible (usually only supporting one or two types of input), so there isn&#39;t much motivation to extract processing into a separate tool.</p>
+<h2 id="build-graph">Build graph</h2>
+<p>Build tools are generally used to produce specific artifacts that are known ahead of time. Although it&#39;s possible to do so, I can&#39;t think of very many cases where you&#39;d want a build tool to enumerate arbitrary files and producing unknown (or unexpected) outputs.</p>
+<p>On the other hand, <strong>it&#39;s more convenient to author a few Markdown files and then have a static site generator automatically find them and rebuild the site</strong>.</p>
+<h2 id="rebuilds">Rebuilds</h2>
+<p><strong>Because compilers are often slow, it is frequently important for build tools to cache intermediate objects to the file system, to avoid recompiling unchanged items</strong>. Processing Markdown and generating HTML is generally fast, so there&#39;s less need to cache intermediate data.</p>
+<p>Additionally, incremental rebuilds <em>require</em> the build graph to be easy to compute ahead of time. Now, I don&#39;t see a reason why static site generators <em>couldn&#39;t</em> infer (and cache) a build graph to support incremental rebuilds (in fact, I <a href="lisp-ssg.html">prototyped a generic static site generator with accurate incremental rebuilds</a>... <a href="speeding-up-rebuilds-2.html">twice</a>), but it&#39;s not as urgent of a concern for static site generators since building static sites is generally quick (<a href="speeding-up-rebuilds.html">unless you&#39;re on slow hardware</a>).</p>
+<h1 id="summary">Summary</h1>
+<p>If I had to distill my thoughts into one sentence, I&#39;d say that the build graph is the essential part: <strong>static site generators discover their inputs and produce arbitrary outputs whereas build tools know their outputs ahead of time</strong>. Oh, and static site generators produce HTML instead of programs, obviously.</p>
+<p>I&#39;m sure there are exceptions, and you could argue that static site generators are a subset of build tools, but I&#39;m going to dogmatically stick to the bolded claim above.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
