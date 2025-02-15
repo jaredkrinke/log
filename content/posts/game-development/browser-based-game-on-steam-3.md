@@ -11,7 +11,7 @@ The good news is that it is indeed possible to ship an HTML/CSS/JavaScript-based
 # Finally, some (brief) answers
 Below is a categorized overview of the questions I had to answer on my journey to a (hopefully!) final Steam build of my WebView2-based game, along with brief answers.
 
-I'm planning to write more in-depth answers in the future. For now, if you're interested in more detail, send an email to any name at this domain.
+I'm planning to write more in-depth answers in the future. For now, if you're interested in more detail, send an email to log@schemescape.com.
 
 ## Installation, environment
 * **Does WebView2 support Windows 7? What about 32-bit Windows?**

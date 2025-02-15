@@ -47,6 +47,6 @@ You may note that I didn't specify any compilers or build tools. That's because 
 I'll admit that it's unreasonable to expect modern programming languages to support development on a Raspberry Pi, but that also means that I'll be *unreasonably impressed* if a programming language is useful in a ridiculously constrained environment like this.
 
 # Wrapping up
-Feel free to let me know if you have any suggestions or if you've attempted anything similar (or want to!). You can email me at any address at the ".com" address in the address bar.
+Feel free to let me know if you have any suggestions or if you've attempted anything similar (or want to!). You can email me at log@schemescape.com.
 
 Wish me luck!
