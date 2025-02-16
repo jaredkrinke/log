@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-02-15T22:13:48.661Z</updated>
+<updated>2025-02-16T05:23:53.269Z</updated>
 
 <entry>
 <title>Static site generators vs. build tools</title>
@@ -146,11 +146,11 @@ delay=&lt;span class=&quot;hljs-variable&quot;&gt;$2&lt;/span&gt;
 &lt;p&gt;Phone notifications are where my knowledge runs out. I don&amp;#39;t know the best way to send notifications to a phone, especially in a self-hosted way. In the past, I&amp;#39;ve relied on free tiers of paid services, but I&amp;#39;m hopeful I can eventually figure out something that is fully self-hosted (except for the app itself and associated notification infrastructure).&lt;/p&gt;
 &lt;p&gt;Here are a few ideas:&lt;/p&gt;
 &lt;h3 id=&quot;ifttt&quot;&gt;IFTTT&lt;/h3&gt;
-&lt;p&gt;I haven&amp;#39;t used it in a while, but &lt;a href=&quot;https://ifttt.com/&quot;&gt;IFTTT&lt;/a&gt; (&amp;quot;if this, then that&amp;quot;) had a free tier that could deliver phone notifications via a &lt;code&gt;curl&lt;/code&gt;-able web hook (&lt;a href=&quot;https://help.ifttt.com/hc/en-us/articles/115010230347-Webhooks-service-FAQ&quot;&gt;example on this page&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;(Edit: IFTTT no longer supports phone notifications via webhook on the free plan.)&lt;/p&gt;
 &lt;h3 id=&quot;ntfysh&quot;&gt;ntfy.sh&lt;/h3&gt;
-&lt;p&gt;I haven&amp;#39;t used it, but &lt;a href=&quot;https://ntfy.sh/&quot;&gt;ntfy.sh&lt;/a&gt; appears to be an open source (and allegedly self-hostable) alternative.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://ntfy.sh/&quot;&gt;ntfy.sh&lt;/a&gt; is an awesome service that allows sending phone notifications without even signing up for an account. Don&amp;#39;t forget to donate!&lt;/p&gt;
 &lt;h3 id=&quot;matrix&quot;&gt;Matrix&lt;/h3&gt;
-&lt;p&gt;I strongly suspect there is some way to use &lt;a href=&quot;https://matrix.org/&quot;&gt;Matrix&lt;/a&gt; and an assocaited phone app for notifications, but I haven&amp;#39;t investigated this option yet.&lt;/p&gt;
+&lt;p&gt;I strongly suspect there is some way to use &lt;a href=&quot;https://matrix.org/&quot;&gt;Matrix&lt;/a&gt; and an associated phone app for notifications, but I haven&amp;#39;t investigated this option yet.&lt;/p&gt;
 &lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
 &lt;p&gt;So there it is, alerting for hobby projects using only:&lt;/p&gt;
 &lt;ul&gt;
