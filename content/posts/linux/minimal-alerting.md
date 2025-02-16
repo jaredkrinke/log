@@ -125,13 +125,13 @@ Phone notifications are where my knowledge runs out. I don't know the best way t
 Here are a few ideas:
 
 ### IFTTT
-I haven't used it in a while, but [IFTTT](https://ifttt.com/) ("if this, then that") had a free tier that could deliver phone notifications via a `curl`-able web hook ([example on this page](https://help.ifttt.com/hc/en-us/articles/115010230347-Webhooks-service-FAQ)).
+(Edit: IFTTT no longer supports phone notifications via webhook on the free plan.)
 
 ### ntfy.sh
-I haven't used it, but [ntfy.sh](https://ntfy.sh/) appears to be an open source (and allegedly self-hostable) alternative.
+[ntfy.sh](https://ntfy.sh/) is an awesome service that allows sending phone notifications without even signing up for an account. Don't forget to donate!
 
 ### Matrix
-I strongly suspect there is some way to use [Matrix](https://matrix.org/) and an assocaited phone app for notifications, but I haven't investigated this option yet.
+I strongly suspect there is some way to use [Matrix](https://matrix.org/) and an associated phone app for notifications, but I haven't investigated this option yet.
 
 # Recap
 So there it is, alerting for hobby projects using only:
