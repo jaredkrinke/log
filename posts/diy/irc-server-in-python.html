@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Minimal IRC server from scratch in Python</title>
+<meta name="description" content="The obvious alternative to using Discord is to write and host my own IRC server!" />
+<meta name="keywords" content="python" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Minimal IRC server from scratch in Python",
+  "abstract": "The obvious alternative to using Discord is to write and host my own IRC server!",
+  "keywords": "diy,python",
+  "datePublished": "2025-02-17"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/diy/index.html">diy</a></li>
+<li><a href="../../posts/python/index.html">python</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/diy/irc-server-in-python.html">Minimal IRC server from scratch in Python</a></h1>
+<p><time datetime="2025-02-17">February 17, 2025</time></p>
+</header>
+<p>This is the story of me prototyping a <a href="https://github.com/jaredkrinke/pirc">minimal IRC server in Python</a>.</p>
+<p>The server is currently running (unencrypted/<code>-notls</code>) on <code>irc.schemescape.com</code> port 6667.</p>
+<h1 id="discord">Discord</h1>
+<p>Discord is the Electron of chat:</p>
+<ul>
+<li>It has the features people want</li>
+<li>It just works</li>
+<li>(Almost) Everyone uses it</li>
+<li>...and <strong>it&#39;s completely unusable on the <a href="../programming-languages/minimal-dev-env-4.html">old</a>, <a href="../programming-languages/minimal-dev-env-3.html">slow</a> computers I toy with</strong></li>
+</ul>
+<p>There are several open source alternatives to Discord, including <a href="https://revolt.chat/">Revolt</a> and <a href="https://gitter.im/">Gitter</a>. Their flagship clients look heavyweight, but <strong>the beauty of open source is that there&#39;s almost always an alternative terminal client</strong>. I&#39;ll investigate those in time. There&#39;s also a decentralized option, <a href="https://matrix.org/">Matrix</a>, which apparently has more than 100 million users. Uh, wow. <strong>I should probably try Matrix!</strong></p>
+<p>But I didn&#39;t realize Matrix had so many users at the time, so I decided to instead try a chat protocol that was <em>designed</em> for old computers.</p>
+<h1 id="internet-relay-chat">Internet Relay Chat</h1>
+<p><a href="https://en.wikipedia.org/wiki/IRC">Wikipedia says IRC was created in 1988</a>. I haven&#39;t used IRC much and, when I have, I found it to be unapproachable.</p>
+<h2 id="problems-with-irc">Problems with IRC</h2>
+<ul>
+<li>There are <strong>commands you have to remember</strong> (and any typo might send your flawed command line straight into the chat window for all to see)</li>
+<li><strong>All IRC servers I&#39;ve used broadcast your hostname when you connect</strong>, unless you setup an account (<em>this guy uses Comcast!!!</em>)</li>
+<li>With IRC, <strong>you generally only receive messages while online</strong>, so you have to stay connected (or use a &quot;bouncer&quot;) if you want to actually see responses</li>
+<li>There isn&#39;t a convenient, free iOS app for IRC, so IRC basically doesn&#39;t exist for many people</li>
+</ul>
+<p>I feel like most of these limitations could be easily overcome.</p>
+<h2 id="solving-ircs-problems">Solving IRC&#39;s problems</h2>
+<p>Obvious solutions:</p>
+<ul>
+<li><strong>Have actual UI for commands</strong>, instead of relying on perfectly-entered text commands</li>
+<li><strong>Hide hostnames by default</strong> (at least from non-operators)</li>
+<li><strong>Store past messages</strong> in a sequential database and allow clients to request old messages -- note: this seems ripe for AI scraper abuse, and it would require opt-in protocol changes</li>
+<li>Build a simple web client, optionally create native phone apps, and, of course, supply a lightweight TUI!</li>
+</ul>
+<p>Once you throw in account management and privacy controls, this could get out of hand quickly. And <strong>Matrix already exists and has probably solved these problems</strong>.</p>
+<h2 id="not-solving-ircs-problems"><em>Not</em> solving IRC&#39;s problems</h2>
+<p>My original motivation for investigating chat apps was to see what it would take to setup my own little chat room. I&#39;m still not convinced I <em>need</em> a chat room, and I&#39;m almost certain it wouldn&#39;t get much use, so let&#39;s cut some corners:</p>
+<ul>
+<li>Bridging multiple servers? Who cares!</li>
+<li>Encryption and user accounts? Not needed, since it&#39;s just for fun!</li>
+<li>Tracking and querying old messages? Maybe just cache the last 10!</li>
+<li>Instead of building any apps, just reuse existing IRC clients!</li>
+<li>Operators? Probably a good idea, but not implemented</li>
+</ul>
+<p>I don&#39;t know if worse is <em>better</em>, but it&#39;s certainly <em>easier</em>!</p>
+<p>And thus, <strong><a href="https://github.com/jaredkrinke/pirc">pirc</a></strong> was born.</p>
+<h2 id="pirc">pirc</h2>
+<p><strong><a href="https://github.com/jaredkrinke/pirc">pirc</a></strong> is basically a learning experiment to see how simple an IRC server can be. <strong>The entire server is in a single ~350 line Python file, with no dependencies beyond the Python standard library</strong>. The code uses a minimum of abstraction (most of the server is one big <code>match</code> statement). It is almost certainly <em>not</em> spec-compliant (since I couldn&#39;t actually determine <em>which</em> IRC spec to work off of--IRC has evolved organically, for better or worse), but it seems to work with <a href="https://hexchat.github.io/">HexChat</a>, <a href="https://irssi.org/">Irssi</a>, and <a href="https://weechat.org/">WeeChat</a>.</p>
+<p>The code is rough, but should be readable, so I won&#39;t attempt to explain it here. Here are some things I learned along the way:</p>
+<ul>
+<li>Python&#39;s <code>socketserver</code> module doesn&#39;t seem to have a simple way to detect when clients disconnect (so I switched to the <code>selectors</code> module instead)</li>
+<li>In Python, <code>textwrap.wrap(&quot;&quot;)</code> returns <code>[]</code> instead of <code>[&quot;&quot;]</code></li>
+<li>I still think IRC should <em>not</em> broadcast hostnames by default (at least to non-operators)</li>
+<li>IRC clients send all commands in CAPITAL letters (e.g. <code>JOIN</code>), <em>except</em> the &quot;message of the day&quot; command (<code>motd</code>), which is sent in lowercase (why!?)</li>
+<li>To my surprise, private messages and messages sent to channels are both <code>PRIVMSG</code> commands (just directed to a channel instead of a nickname)</li>
+</ul>
+<h1 id="test-server">Test server</h1>
+<p>A test server is currently running (unencrypted/<code>-notls</code>) on <code>irc.schemescape.com</code> port 6667.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

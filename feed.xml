@@ -7,8 +7,70 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-02-16T05:23:53.269Z</updated>
+<updated>2025-02-18T04:40:24.438Z</updated>
 
+<entry>
+<title>Minimal IRC server from scratch in Python</title>
+<id>https://log.schemescape.com/posts/diy/irc-server-in-python.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/diy/irc-server-in-python.html"/>
+<updated>2025-02-17T00:00:00.000Z</updated>
+<summary type="text">The obvious alternative to using Discord is to write and host my own IRC server!</summary>
+<content type="html">&lt;p&gt;This is the story of me prototyping a &lt;a href=&quot;https://github.com/jaredkrinke/pirc&quot;&gt;minimal IRC server in Python&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The server is currently running (unencrypted/&lt;code&gt;-notls&lt;/code&gt;) on &lt;code&gt;irc.schemescape.com&lt;/code&gt; port 6667.&lt;/p&gt;
+&lt;h1 id=&quot;discord&quot;&gt;Discord&lt;/h1&gt;
+&lt;p&gt;Discord is the Electron of chat:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It has the features people want&lt;/li&gt;
+&lt;li&gt;It just works&lt;/li&gt;
+&lt;li&gt;(Almost) Everyone uses it&lt;/li&gt;
+&lt;li&gt;...and &lt;strong&gt;it&amp;#39;s completely unusable on the &lt;a href=&quot;https://log.schemescape.com/posts/diy/../programming-languages/minimal-dev-env-4.html&quot;&gt;old&lt;/a&gt;, &lt;a href=&quot;https://log.schemescape.com/posts/diy/../programming-languages/minimal-dev-env-3.html&quot;&gt;slow&lt;/a&gt; computers I toy with&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are several open source alternatives to Discord, including &lt;a href=&quot;https://revolt.chat/&quot;&gt;Revolt&lt;/a&gt; and &lt;a href=&quot;https://gitter.im/&quot;&gt;Gitter&lt;/a&gt;. Their flagship clients look heavyweight, but &lt;strong&gt;the beauty of open source is that there&amp;#39;s almost always an alternative terminal client&lt;/strong&gt;. I&amp;#39;ll investigate those in time. There&amp;#39;s also a decentralized option, &lt;a href=&quot;https://matrix.org/&quot;&gt;Matrix&lt;/a&gt;, which apparently has more than 100 million users. Uh, wow. &lt;strong&gt;I should probably try Matrix!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;But I didn&amp;#39;t realize Matrix had so many users at the time, so I decided to instead try a chat protocol that was &lt;em&gt;designed&lt;/em&gt; for old computers.&lt;/p&gt;
+&lt;h1 id=&quot;internet-relay-chat&quot;&gt;Internet Relay Chat&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/IRC&quot;&gt;Wikipedia says IRC was created in 1988&lt;/a&gt;. I haven&amp;#39;t used IRC much and, when I have, I found it to be unapproachable.&lt;/p&gt;
+&lt;h2 id=&quot;problems-with-irc&quot;&gt;Problems with IRC&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;There are &lt;strong&gt;commands you have to remember&lt;/strong&gt; (and any typo might send your flawed command line straight into the chat window for all to see)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;All IRC servers I&amp;#39;ve used broadcast your hostname when you connect&lt;/strong&gt;, unless you setup an account (&lt;em&gt;this guy uses Comcast!!!&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;With IRC, &lt;strong&gt;you generally only receive messages while online&lt;/strong&gt;, so you have to stay connected (or use a &amp;quot;bouncer&amp;quot;) if you want to actually see responses&lt;/li&gt;
+&lt;li&gt;There isn&amp;#39;t a convenient, free iOS app for IRC, so IRC basically doesn&amp;#39;t exist for many people&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I feel like most of these limitations could be easily overcome.&lt;/p&gt;
+&lt;h2 id=&quot;solving-ircs-problems&quot;&gt;Solving IRC&amp;#39;s problems&lt;/h2&gt;
+&lt;p&gt;Obvious solutions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Have actual UI for commands&lt;/strong&gt;, instead of relying on perfectly-entered text commands&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hide hostnames by default&lt;/strong&gt; (at least from non-operators)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Store past messages&lt;/strong&gt; in a sequential database and allow clients to request old messages -- note: this seems ripe for AI scraper abuse, and it would require opt-in protocol changes&lt;/li&gt;
+&lt;li&gt;Build a simple web client, optionally create native phone apps, and, of course, supply a lightweight TUI!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Once you throw in account management and privacy controls, this could get out of hand quickly. And &lt;strong&gt;Matrix already exists and has probably solved these problems&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;not-solving-ircs-problems&quot;&gt;&lt;em&gt;Not&lt;/em&gt; solving IRC&amp;#39;s problems&lt;/h2&gt;
+&lt;p&gt;My original motivation for investigating chat apps was to see what it would take to setup my own little chat room. I&amp;#39;m still not convinced I &lt;em&gt;need&lt;/em&gt; a chat room, and I&amp;#39;m almost certain it wouldn&amp;#39;t get much use, so let&amp;#39;s cut some corners:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Bridging multiple servers? Who cares!&lt;/li&gt;
+&lt;li&gt;Encryption and user accounts? Not needed, since it&amp;#39;s just for fun!&lt;/li&gt;
+&lt;li&gt;Tracking and querying old messages? Maybe just cache the last 10!&lt;/li&gt;
+&lt;li&gt;Instead of building any apps, just reuse existing IRC clients!&lt;/li&gt;
+&lt;li&gt;Operators? Probably a good idea, but not implemented&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I don&amp;#39;t know if worse is &lt;em&gt;better&lt;/em&gt;, but it&amp;#39;s certainly &lt;em&gt;easier&lt;/em&gt;!&lt;/p&gt;
+&lt;p&gt;And thus, &lt;strong&gt;&lt;a href=&quot;https://github.com/jaredkrinke/pirc&quot;&gt;pirc&lt;/a&gt;&lt;/strong&gt; was born.&lt;/p&gt;
+&lt;h2 id=&quot;pirc&quot;&gt;pirc&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/jaredkrinke/pirc&quot;&gt;pirc&lt;/a&gt;&lt;/strong&gt; is basically a learning experiment to see how simple an IRC server can be. &lt;strong&gt;The entire server is in a single ~350 line Python file, with no dependencies beyond the Python standard library&lt;/strong&gt;. The code uses a minimum of abstraction (most of the server is one big &lt;code&gt;match&lt;/code&gt; statement). It is almost certainly &lt;em&gt;not&lt;/em&gt; spec-compliant (since I couldn&amp;#39;t actually determine &lt;em&gt;which&lt;/em&gt; IRC spec to work off of--IRC has evolved organically, for better or worse), but it seems to work with &lt;a href=&quot;https://hexchat.github.io/&quot;&gt;HexChat&lt;/a&gt;, &lt;a href=&quot;https://irssi.org/&quot;&gt;Irssi&lt;/a&gt;, and &lt;a href=&quot;https://weechat.org/&quot;&gt;WeeChat&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The code is rough, but should be readable, so I won&amp;#39;t attempt to explain it here. Here are some things I learned along the way:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Python&amp;#39;s &lt;code&gt;socketserver&lt;/code&gt; module doesn&amp;#39;t seem to have a simple way to detect when clients disconnect (so I switched to the &lt;code&gt;selectors&lt;/code&gt; module instead)&lt;/li&gt;
+&lt;li&gt;In Python, &lt;code&gt;textwrap.wrap(&amp;quot;&amp;quot;)&lt;/code&gt; returns &lt;code&gt;[]&lt;/code&gt; instead of &lt;code&gt;[&amp;quot;&amp;quot;]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;I still think IRC should &lt;em&gt;not&lt;/em&gt; broadcast hostnames by default (at least to non-operators)&lt;/li&gt;
+&lt;li&gt;IRC clients send all commands in CAPITAL letters (e.g. &lt;code&gt;JOIN&lt;/code&gt;), &lt;em&gt;except&lt;/em&gt; the &amp;quot;message of the day&amp;quot; command (&lt;code&gt;motd&lt;/code&gt;), which is sent in lowercase (why!?)&lt;/li&gt;
+&lt;li&gt;To my surprise, private messages and messages sent to channels are both &lt;code&gt;PRIVMSG&lt;/code&gt; commands (just directed to a channel instead of a nickname)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;test-server&quot;&gt;Test server&lt;/h1&gt;
+&lt;p&gt;A test server is currently running (unencrypted/&lt;code&gt;-notls&lt;/code&gt;) on &lt;code&gt;irc.schemescape.com&lt;/code&gt; port 6667.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Static site generators vs. build tools</title>
 <id>https://log.schemescape.com/posts/static-site-generators/ssg-vs-build-tool.html</id>
@@ -934,24 +996,6 @@ td:nth-of-type(1) { width: 100% }
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/matz/streem&quot;&gt;Streem&lt;/a&gt;: prototype stream-based programming language&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>I apologize to the Python ecosystem</title>
-<id>https://log.schemescape.com/posts/programming-languages/python-is-good-actually.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/programming-languages/python-is-good-actually.html"/>
-<updated>2025-01-17T00:00:00.000Z</updated>
-<summary type="text">I shouldn&apos;t disparage Python or, really, any programming language. Let me try and right my wrongs.</summary>
-<content type="html">&lt;p&gt;Today, I discovered that my &lt;a href=&quot;https://log.schemescape.com/posts/programming-languages/python-as-a-modern-basic.html&quot;&gt;Python is the new BASIC&lt;/a&gt; post had been discussed on a popular site. It&amp;#39;s always a joy when people take an interest in your work, right? Well...&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;In the comments, I was rightly roasted.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Consider this post an apology and a promise to do better.&lt;/p&gt;
-&lt;p&gt;(Note: I went back and edited the post in question. This commentary applies to the original content.)&lt;/p&gt;
-&lt;h1 id=&quot;problems-with-my-post&quot;&gt;Problems with my post&lt;/h1&gt;
-&lt;p&gt;First off, &lt;strong&gt;the overall tone of the post crossed the line from criticism to snark--or maybe even scorn&lt;/strong&gt;. In my head, some of the jabs were just good-natured ribbing, but upon re-reading from the perspective of an internet stranger, it&amp;#39;s just oozing with derision. If I&amp;#39;m going to post something publicly, I should remember that &lt;strong&gt;the audience is not myself, but just anyone who happens to come along&lt;/strong&gt; (except AI scrapers, per robots.txt).&lt;/p&gt;
-&lt;p&gt;Additionally, I didn&amp;#39;t clearly articulate my complaints with Python. I think some them are legitimate but, besides being better explained elsewhere, &lt;strong&gt;my issues are not even that relevant&lt;/strong&gt;. The things I like about Python outweigh the things I dislike. And &lt;strong&gt;there is a huge advantage to having a common programming language that everyone understands&lt;/strong&gt; (even if only the basics). I like keeping posts short, and a good way to do that is to stay on topic and cut out (most of) the snark.&lt;/p&gt;
-&lt;h1 id=&quot;not-just-python&quot;&gt;Not just Python&lt;/h1&gt;
-&lt;p&gt;And it&amp;#39;s not just Python. I&amp;#39;ve also whined about perceived bloat on, ahem, more than one occasion. I&amp;#39;ve complained about compilers not working on the first try. And so on. &lt;strong&gt;There isn&amp;#39;t any value in posting shallow dismissals of projects that took enormous amounts of work to produce&lt;/strong&gt;. I&amp;#39;ll try to stop doing that. &lt;strong&gt;Even if I can&amp;#39;t always make the world better, I can at least try to not make it worse&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Mea culpa.&lt;/p&gt;
 </content>
 </entry>
 </feed>
