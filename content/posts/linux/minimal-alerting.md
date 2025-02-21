@@ -2,7 +2,6 @@
 title: Minimal alerting on Linux for hobby projects
 description: Hacking together the simplest real-time notifications for hobby projects.
 date: 2025-02-10
-keywords: [minimalism]
 ---
 Occasionally, I have a need for real-time notifications for hobby projects. For example, one time I made a multi-player word scramble game for a game jam, and I wanted to be notified when people connected to the game (so that I could ensure there was at least one worthy opponent).
 
