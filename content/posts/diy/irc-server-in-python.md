@@ -6,7 +6,7 @@ keywords: [python]
 ---
 This is the story of me prototyping a [minimal IRC server in Python](https://github.com/jaredkrinke/pirc).
 
-The server is currently running (unencrypted/`-notls`) on `irc.schemescape.com` port 6667.
+The server is currently running (unencrypted/`-notls`) on `irc.schemescape.com` port 6667 (make sure to `/join #general`).
 
 # Discord
 Discord is the Electron of chat:
@@ -66,4 +66,4 @@ The code is rough, but should be readable, so I won't attempt to explain it here
 * To my surprise, private messages and messages sent to channels are both `PRIVMSG` commands (just directed to a channel instead of a nickname)
 
 # Test server
-A test server is currently running (unencrypted/`-notls`) on `irc.schemescape.com` port 6667.
+A test server is currently running (unencrypted/`-notls`) on `irc.schemescape.com` port 6667 (make sure to `/join #general`).
