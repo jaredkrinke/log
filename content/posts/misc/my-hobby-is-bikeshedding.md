@@ -2,7 +2,7 @@
 title: My hobby is... bikeshedding?
 description: Am I spending development time on things that matter?
 date: 2023-11-17
-keywords: [lisp,minimalism]
+keywords: [lisp,minimalism,netbooks]
 ---
 Although I'd seen the term thrown around, I hadn't looked up the definition of "bikeshedding" until recently. DuckDuckGo tells me that "bikeshedding" is:
 

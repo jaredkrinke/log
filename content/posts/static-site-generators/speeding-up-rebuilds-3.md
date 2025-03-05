@@ -2,7 +2,7 @@
 title: Speeding up md2blog, part 3
 description: I made a rookie mistake while trying to optimize my workflow for building this site.
 date: 2023-04-07
-keywords: [md2blog]
+keywords: [md2blog,netbooks]
 ---
 In [part 2](speeding-up-rebuilds-2.md), I added support for incremental builds of this site, based on GNU Make.
 

@@ -2,7 +2,7 @@
 title: Building the fastest static site generator... or not
 description: This is a personal anecdote about the struggle to avoid over-engineering a static site generator.
 date: 2023-11-08
-keywords: [md2blog]
+keywords: [md2blog,netbooks]
 ---
 Well, I did it.
 

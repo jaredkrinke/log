@@ -2,7 +2,7 @@
 title: Minimal dev environment, part 5
 description: I almost found the perfect minimal development environment.
 date: 2024-03-05
-keywords: [minimalism,lisp]
+keywords: [lisp,minimalism,netbooks]
 ---
 In [part 4 of my quest to find a minimal (but comfortable) development environment](minimal-dev-env-4.md), I upgraded from a Raspberry Pi B to an old netbook. But now I'm back to tinkering with the Pi.
 
