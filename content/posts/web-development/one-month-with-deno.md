@@ -2,7 +2,7 @@
 title: One month with Deno (the good parts)
 description: I made the switch from Node to Deno recently. Here's what I've liked after a month of using Deno.
 date: 2021-12-06
-keywords: [deno]
+keywords: [deno,security]
 ---
 # Background
 After [souring on NPM](souring-on-npm.md) (due to unnecessarily huge dependency trees and security concerns), I decided to give [Deno](https://deno.land/) a try. Deno supports sand-boxing, TypeScript, and ES modules out of the box. Deno has a standard library, along with a simple and transparent module registry, and also comes with with handy tools for bundling and static analysis.
@@ -22,7 +22,7 @@ In an ideal world this wouldn't be necessary, but given that hackers have been t
 * With Deno, you might just run the tool with no extra privileges.
   * If the tool just reads from standard input and writes to standard output, great!
   * If the tool has malware that tries to write to the file system or access the network, Deno will block it.
-  * Of course, this isn't 100% safe ([Spectre](https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)) worked from inside the web browser's sand box, after all), but it's much better than nothing!
+  * Of course, this isn't 100% safe ([Spectre](https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)) worked from inside the web browser's sand box, after all), but it's much better than nothing!)
 
 Full details on Deno's permissions are [here](https://deno.land/manual@v1.16.4/getting_started/permissions).
 
