@@ -2,7 +2,7 @@
 title: Future-proof programming languages, part 3
 description: Finally! I've landed on my set of future-proof languages.
 date: 2023-03-03
-keywords: [lisp,python,rust,zig]
+keywords: [lisp,lua,python,rust,zig]
 ---
 In [part 1](future-proof-languages.md), I narrowed down a list of popular programming languages to the ones I liked and that I  thought would still be useful in the future. In [part 2](future-proof-languages-2.md), I recorded some initial impressions, and added a few more languages to the mix.
 

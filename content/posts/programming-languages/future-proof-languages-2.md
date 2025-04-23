@@ -2,7 +2,7 @@
 title: Future-proof programming languages, part 2
 description: More research on future-proof programming languages.
 date: 2023-02-17
-keywords: [lisp,python]
+keywords: [lisp,lua,python]
 ---
 Almost exactly 1 year ago, in [part 1](future-proof-languages.md), I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they'd still be useful in another decade. In the intervening time, I've completed some nontrivial projects in both TypeScript (using both Node and Deno) and Python. I've also spent time contemplating a [minimal development environment](minimal-dev-env.md).
 

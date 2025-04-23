@@ -2,7 +2,7 @@
 title: Three quarters of the way to 100 programming languages
 description: Just some more notes on programming languages. And also my first failure!
 date: 2024-10-31
-keywords: [100-languages,commodore-64,zig]
+keywords: [100-languages,commodore-64,lua,zig]
 ---
 I recently resumed [solving the first 100 Project Euler problems using 100 different programming languages](100-languages.md). For reference: [here is code for all my solutions so far](https://github.com/jaredkrinke/100-languages).
 
