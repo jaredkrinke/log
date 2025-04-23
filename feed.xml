@@ -7,8 +7,90 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-03-14T15:44:11.289Z</updated>
+<updated>2025-04-23T15:41:07.365Z</updated>
 
+<entry>
+<title>A 270 KB static site generator based on Markdown and Lua</title>
+<id>https://log.schemescape.com/posts/static-site-generators/smallest-static-site-generator.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/smallest-static-site-generator.html"/>
+<updated>2025-04-22T00:00:00.000Z</updated>
+<summary type="text">Tired of bloat, I made a new static site generator that is 10x faster and 100x smaller than my last effort. And this one runs on NetBSD.</summary>
+<content type="html">&lt;p&gt;Today, I unveil my most gratuitous static site generator yet: &lt;a href=&quot;https://github.com/jaredkrinke/luasmith&quot;&gt;luasmith&lt;/a&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;It&amp;#39;s ~270 KB&lt;/strong&gt; (static binary + templates for this site, gzip compressed)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It builds my ~140 page site in ~150 ms&lt;/strong&gt; (wall clock time, on an 11-year-old old laptop)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It performs acceptably on a 28-year-old laptop, running NetBSD&lt;/strong&gt; (Pentium 166 MHz)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It&amp;#39;s trivial to compile&lt;/strong&gt;, requiring only a C compiler, &lt;code&gt;make&lt;/code&gt;, and &lt;code&gt;sed&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Obviously, the world does not need another static site generator--and I don&amp;#39;t expect this SSG to become popular. So how did I end up here?&lt;/p&gt;
+&lt;h1 id=&quot;motivation&quot;&gt;Motivation&lt;/h1&gt;
+&lt;p&gt;In a word, my motivation was: &lt;strong&gt;simplicity&lt;/strong&gt;. I wanted an SSG that was:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Simple to understand&lt;/li&gt;
+&lt;li&gt;Simple to bootstrap&lt;/li&gt;
+&lt;li&gt;Simple to maintain&lt;/li&gt;
+&lt;li&gt;Simple to deploy&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;implementation&quot;&gt;Implementation&lt;/h1&gt;
+&lt;p&gt;Here&amp;#39;s my take on the goals above.&lt;/p&gt;
+&lt;h2 id=&quot;simple-to-understand&quot;&gt;Simple to understand&lt;/h2&gt;
+&lt;p&gt;First, I wanted the architecture to be simple:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The build pipeline is just a Lua script (similar to &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Page templates are constructed using Lua&lt;/strong&gt; (via &lt;a href=&quot;https://github.com/leafo/etlua&quot;&gt;etlua&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Metadata on items can be specified in frontmatter using Lua (or a subset of YAML)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Relative links between Markdown files &amp;quot;just work&amp;quot;&lt;/strong&gt; (including links to headings)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Instead of creating a bespoke domain-specific language for defining the structure of a generated site or its templates, you just write some Lua code that glues together a few processing nodes and then supply templates that &lt;em&gt;also&lt;/em&gt; use Lua (e.g. for iteration).&lt;/p&gt;
+&lt;p&gt;Overall, I&amp;#39;d describe the architecture as &amp;quot;&lt;strong&gt;Metalsmith in Lua, with zero runtime dependencies&lt;/strong&gt; (beyond libc)&amp;quot;.&lt;/p&gt;
+&lt;h2 id=&quot;simple-to-bootstrap&quot;&gt;Simple to bootstrap&lt;/h2&gt;
+&lt;p&gt;Given my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/future-proof-languages.html&quot;&gt;musings about future-proof programming languages&lt;/a&gt;, it&amp;#39;s obvious that I&amp;#39;d like to be able to continue to compile and use my software in the future. That is easier said than done! The problem is that identifying languages that will stick around is hard. Twenty years ago, Perl might have been a reasonable choice for an SSG, but today I don&amp;#39;t even remember how to setup a Perl project.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;The best static site generator ever made&lt;/a&gt; is built on TypeScript/JavaScript and &lt;a href=&quot;https://deno.com/&quot;&gt;Deno&lt;/a&gt;. As much as I like Deno, I&amp;#39;m not sure it will be maintained decades down the road. Given that I&amp;#39;ll never know how to get it running on an i586 computer, I have doubts I&amp;#39;d be able to get it running on potential future architectures either.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;To avoid these headaches, I went with the lowest common denominator: C&lt;/strong&gt;. It&amp;#39;s not convenient, it&amp;#39;s not modern, but C works everywhere and I&amp;#39;m certain C will persist (for better or worse).&lt;/p&gt;
+&lt;p&gt;Aside: ideally, I&amp;#39;d be writing as much native code in Rust as possible, to ensure memory safety. Unfortunately, &lt;strong&gt;Rust&amp;#39;s modern approach is at odds with my desire for simplicity&lt;/strong&gt;. The toolchain is huge, the dependency trees are large, and the language is vast. Rust definitely looks like the future of robust low-level software, but &lt;strong&gt;for cozy side projects, I prefer being a simpleton living in the past&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;simple-to-maintain&quot;&gt;Simple to maintain&lt;/h2&gt;
+&lt;p&gt;One frustration I have with the JavaScript ecosystem is that it&amp;#39;s constantly changing. Node, Deno, and Bun do a respectable job of keeping old versions around, but I don&amp;#39;t want to have to worry about breaking changes.&lt;/p&gt;
+&lt;p&gt;On the other hand, C changes very slowly, and previous verisons of Lua are essentially set in stone. Throw in some static linking, and you&amp;#39;ve even got an artifact that should stay usable for a long time.&lt;/p&gt;
+&lt;p&gt;I&amp;#39;ve also minimized the number of (vendored, compile-time) dependencies involved. Here&amp;#39;s the full list:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; for converting Markdown to HTML&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.lua.org/&quot;&gt;Lua&lt;/a&gt; for metadata, scripting, etc.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/leafo/etlua&quot;&gt;etlua&lt;/a&gt; for templates&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;You&amp;#39;ll note that these libraries are doing all of the heavy lifting&lt;/strong&gt;. I&amp;#39;ve basically only written glue code, an entry point, and some infrastructure. And most of the code I wrote is in Lua (which is much easier to write than C--and fast enough for all but the innermost loops).&lt;/p&gt;
+&lt;h2 id=&quot;simple-to-deploy&quot;&gt;Simple to deploy&lt;/h2&gt;
+&lt;p&gt;Static binaries are wonderful. &lt;em&gt;Tiny&lt;/em&gt; static binaries are even wonderful-er. &lt;strong&gt;Just copy over a tiny zip file, unzip it, and you&amp;#39;re done&lt;/strong&gt;. Need I say more?&lt;/p&gt;
+&lt;h1 id=&quot;downsides&quot;&gt;Downsides&lt;/h1&gt;
+&lt;p&gt;Of course, there are downsides to the approach I took:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Writing C code is fraught with peril -- fortunately, the hardest parts were mostly already done by the md4c and Lua authors&lt;/li&gt;
+&lt;li&gt;Syntax highlighting is &lt;em&gt;not&lt;/em&gt; simple -- so I just cut that feature, at least for now&lt;/li&gt;
+&lt;li&gt;The security model of an SSG that uses Lua scripts for everything is... not ideal -- &lt;strong&gt;only use templates you trust!&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Additionally, I haven&amp;#39;t taken the time to setup a proper development and debugging environment for C and Lua. I need to investiage static analysis and debugging tools for Lua, as well as find a tolerable frontend for GDB. This is where I really miss Emacs+SLIME for Common Lisp or VS Code for TypeScript/Python.&lt;/p&gt;
+&lt;h1 id=&quot;future-areas-of-exploration&quot;&gt;Future areas of exploration&lt;/h1&gt;
+&lt;p&gt;Now that I&amp;#39;ve got a static site generator running on a vintage laptop with NetBSD, where am I headed next? I&amp;#39;m not exactly sure, but some ideas follow.&lt;/p&gt;
+&lt;h2 id=&quot;designing-for-the-text-mode-web&quot;&gt;Designing for the text-mode web&lt;/h2&gt;
+&lt;p&gt;At some point, I&amp;#39;d like to redesign my site using an even more minimal theme. In fact, &lt;strong&gt;I&amp;#39;d like to optimize my site for text mode browsers&lt;/strong&gt; like &lt;a href=&quot;https://lynx.browser.org/&quot;&gt;lynx&lt;/a&gt; and &lt;a href=&quot;https://w3m.sourceforge.net/&quot;&gt;w3m&lt;/a&gt;. Why? Because I like using w3m and I want my site to be easy to use within w3m. Or maybe it&amp;#39;s because I hate how bloated modern web browsers have become.&lt;/p&gt;
+&lt;h2 id=&quot;further-simplifying-distribution&quot;&gt;Further simplifying distribution&lt;/h2&gt;
+&lt;p&gt;Distributing native code necessarily requires per-platform packages. Or does it? Can I package and release this minimal static site generator as a multi-OS polyglot binary using &lt;a href=&quot;https://github.com/jart/cosmopolitan&quot;&gt;Cosmopolitan libc&lt;/a&gt;? Note: sadly, I don&amp;#39;t think 32-bit/i386 is supported for now.&lt;/p&gt;
+&lt;h2 id=&quot;simplifying-the-entire-system&quot;&gt;Simplifying the entire system&lt;/h2&gt;
+&lt;p&gt;I&amp;#39;d like to see if I can bootstrap my entire web site&amp;#39;s workflow from &lt;a href=&quot;https://github.com/oasislinux/oasis&quot;&gt;Oasis Linux&lt;/a&gt; (a small, statically linked, Linux-based operating system that is simple, but capable). &lt;strong&gt;Oasis sounds like a modern system that a single person can wrap their head around&lt;/strong&gt; (minus the Linux kernel--though perhaps a simpler kernel could be substitutded...).&lt;/p&gt;
+&lt;h2 id=&quot;blogging-on-vintage-computers&quot;&gt;Blogging on vintage computers&lt;/h2&gt;
+&lt;p&gt;I&amp;#39;m curious how far back I can go as far as vintage computing and still be able to build a static site. Can I build my SSG on Windows 98? DOS? Amiga? Inquiring minds want to know!&lt;/p&gt;
+&lt;h2 id=&quot;incremental-builds&quot;&gt;Incremental builds&lt;/h2&gt;
+&lt;p&gt;Speaking of old, slow computers, I secretly designed this SSG to support incremental rebuilds to ensure that it runs fast even on old hardware. The only issue with this plan is that &lt;strong&gt;md4c is so fast that I&amp;#39;m not sure it&amp;#39;s worth optimizing the build process&lt;/strong&gt;. I can rebuild my entire site from scratch on a 166 MHz laptop in a few seconds.&lt;/p&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Creating a &lt;em&gt;non-bloated&lt;/em&gt; Markdown-based static site generator has been a bucket list item for me--and now it&amp;#39;s done!&lt;/p&gt;
+&lt;p&gt;Beyond personal goals, &lt;strong&gt;I found C+Lua to be a comfortable combination for side projects&lt;/strong&gt;. This came as a surprise! Lua isn&amp;#39;t my favorite language to write (though it&amp;#39;s certainly much simpler to wield than C). Having said that, it&amp;#39;s a beautifully simple language that&amp;#39;s easy to integrate. Despite being primarily driven to Lua by my goal of building a small (in binary size) tool, Lua&amp;#39;s minimalist take on a mostly-normal-looking scripting language won me over because I could literally pick it up and be productive within an hour or two.&lt;/p&gt;
+&lt;p&gt;With that out of the way, &lt;strong&gt;I should probably attend to hobbies other than static site generator performance art&lt;/strong&gt;. Until next time!&lt;/p&gt;
+&lt;h1 id=&quot;resources&quot;&gt;Resources&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/luasmith&quot;&gt;Repository for luasmith&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md&quot;&gt;Tutorial for luasmith&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Did the Google Domains sale to Squarespace open my domain up to phishers?</title>
 <id>https://log.schemescape.com/posts/web-development/squarespace-phishing.html</id>
@@ -196,116 +278,6 @@
 &lt;h1 id=&quot;summary&quot;&gt;Summary&lt;/h1&gt;
 &lt;p&gt;If I had to distill my thoughts into one sentence, I&amp;#39;d say that the build graph is the essential part: &lt;strong&gt;static site generators discover their inputs and produce arbitrary outputs whereas build tools know their outputs ahead of time&lt;/strong&gt;. Oh, and static site generators produce HTML instead of programs, obviously.&lt;/p&gt;
 &lt;p&gt;I&amp;#39;m sure there are exceptions, and you could argue that static site generators are a subset of build tools, but I&amp;#39;m going to dogmatically stick to the bolded claim above.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Minimal alerting on Linux for hobby projects</title>
-<id>https://log.schemescape.com/posts/linux/minimal-alerting.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/linux/minimal-alerting.html"/>
-<updated>2025-02-10T00:00:00.000Z</updated>
-<summary type="text">Hacking together the simplest real-time notifications for hobby projects.</summary>
-<content type="html">&lt;p&gt;Occasionally, I have a need for real-time notifications for hobby projects. For example, one time I made a multi-player word scramble game for a game jam, and I wanted to be notified when people connected to the game (so that I could ensure there was at least one worthy opponent).&lt;/p&gt;
-&lt;p&gt;This post covers a (terrible) minimal scheme for setting up these notifications.&lt;/p&gt;
-&lt;h1 id=&quot;overview&quot;&gt;Overview&lt;/h1&gt;
-&lt;p&gt;At a high level, here are the things that need to be built:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Some way to detect relevant events&lt;/li&gt;
-&lt;li&gt;Some way to configure/filter events&lt;/li&gt;
-&lt;li&gt;Some way to &amp;quot;debounce&amp;quot; events (so I don&amp;#39;t get a million notifications)&lt;/li&gt;
-&lt;li&gt;Some way to deliver the notification&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;The simplest approach is to just base everything on text files. Let&amp;#39;s get started!&lt;/p&gt;
-&lt;h1 id=&quot;detecting-relevant-events&quot;&gt;Detecting relevant events&lt;/h1&gt;
-&lt;p&gt;There&amp;#39;s no shortcut here. Since I&amp;#39;d like everything to be text-based, I need to instrument my project with text logging. For the game example, I needed to log a message when someone connected to the game server.&lt;/p&gt;
-&lt;p&gt;For my current (unannounced) project, I&amp;#39;m using Python&amp;#39;s built-in logging library, with an obvious string (&amp;quot;ERROR&amp;quot;).&lt;/p&gt;
-&lt;p&gt;Redirecting to a file is sufficient:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;python&lt;/span&gt; app.&lt;span class=&quot;hljs-keyword&quot;&gt;py&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt;&amp;gt;&amp;amp;&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt; |tee &lt;span class=&quot;hljs-built_in&quot;&gt;log&lt;/span&gt;.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;2&amp;gt;&amp;amp;1&lt;/code&gt; ensures I get both &amp;quot;standard output&amp;quot; and &amp;quot;standard error&amp;quot;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;tee&lt;/code&gt; writes output to a file (&amp;quot;log.txt&amp;quot; in this case) and also displays it (for convenience)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;configuringfiltering-events&quot;&gt;Configuring/filtering events&lt;/h1&gt;
-&lt;p&gt;Since everything is text, we can just match the live log file for a specific string using &lt;code&gt;tail -c 0 -f&lt;/code&gt; (&lt;code&gt;-f&lt;/code&gt; to follow the file and &lt;code&gt;-c 0&lt;/code&gt; to only track new additions to the file) and &lt;code&gt;grep&lt;/code&gt; (for string searching). Note that there is one trick: &lt;strong&gt;grep needs to search one line at a time, as input arrives&lt;/strong&gt;, using the &lt;code&gt;--line-buffered&lt;/code&gt; flag:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;tail -c &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt; -f &lt;span class=&quot;hljs-built_in&quot;&gt;log&lt;/span&gt;.txt |grep --line-buffered -i &lt;span class=&quot;hljs-built_in&quot;&gt;error&lt;/span&gt; &amp;gt; &lt;span class=&quot;hljs-built_in&quot;&gt;errors&lt;/span&gt;.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Note that I redirect the matches to &amp;quot;errors.txt&amp;quot;.&lt;/p&gt;
-&lt;h1 id=&quot;debouncing-events&quot;&gt;Debouncing events&lt;/h1&gt;
-&lt;p&gt;Now comes the secret sauce.&lt;/p&gt;
-&lt;p&gt;One issue with alerts is that they often arrive in bursts. Rather than get hit with an avalanche of alerts, it&amp;#39;s helpful to &amp;quot;debounce&amp;quot; alerts by limiting the alerts to, say, at most one every 15 minutes (or probably even less frequent).&lt;/p&gt;
-&lt;p&gt;My original solution to this relied on a bunch of custom code, but it turns out that you can build a really simple solution using &lt;code&gt;inotifywait&lt;/code&gt; (from &lt;code&gt;inotify-tools&lt;/code&gt; on Debian) and a trivial shell script. I named the script &amp;quot;ow.sh&amp;quot; (for &amp;quot;on write&amp;quot;):&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;hljs-meta&quot;&gt;#!/usr/bin/env bash&lt;/span&gt;
-
-&lt;span class=&quot;hljs-comment&quot;&gt;# ow.sh (&amp;quot;on write&amp;quot;)&lt;/span&gt;
-&lt;span class=&quot;hljs-comment&quot;&gt;#&lt;/span&gt;
-&lt;span class=&quot;hljs-comment&quot;&gt;# This is a script to &amp;quot;debounce&amp;quot; commands that run when a file/directory is&lt;/span&gt;
-&lt;span class=&quot;hljs-comment&quot;&gt;# modified. The command is only run at most every TIMESPAN amount of time&lt;/span&gt;
-&lt;span class=&quot;hljs-comment&quot;&gt;# (TIMESPAN format is the same as the sleep command, e.g. 10s, 1m).&lt;/span&gt;
-
-&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; [ &lt;span class=&quot;hljs-variable&quot;&gt;$#&lt;/span&gt; -le 3 ]; &lt;span class=&quot;hljs-keyword&quot;&gt;then&lt;/span&gt;
-    &lt;span class=&quot;hljs-built_in&quot;&gt;echo&lt;/span&gt; USAGE: &lt;span class=&quot;hljs-variable&quot;&gt;$0&lt;/span&gt; TARGET TIMESPAN COMMAND
-    &lt;span class=&quot;hljs-built_in&quot;&gt;echo&lt;/span&gt;
-    &lt;span class=&quot;hljs-built_in&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Example: &lt;span class=&quot;hljs-variable&quot;&gt;$0&lt;/span&gt; foo.log 15m wall &amp;#x27;Alert!!!&amp;#x27;&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;hljs-built_in&quot;&gt;exit&lt;/span&gt; 1
-&lt;span class=&quot;hljs-keyword&quot;&gt;fi&lt;/span&gt;
-
-target=&lt;span class=&quot;hljs-variable&quot;&gt;$1&lt;/span&gt;
-delay=&lt;span class=&quot;hljs-variable&quot;&gt;$2&lt;/span&gt;
-&lt;span class=&quot;hljs-built_in&quot;&gt;shift&lt;/span&gt; 2
-
-&lt;span class=&quot;hljs-keyword&quot;&gt;while&lt;/span&gt; inotifywait -qq &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;&lt;span class=&quot;hljs-variable&quot;&gt;$target&lt;/span&gt;&amp;quot;&lt;/span&gt;; &lt;span class=&quot;hljs-keyword&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;&lt;span class=&quot;hljs-variable&quot;&gt;$@&lt;/span&gt;&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;hljs-built_in&quot;&gt;sleep&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;&lt;span class=&quot;hljs-variable&quot;&gt;$delay&lt;/span&gt;&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;hljs-keyword&quot;&gt;done&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;All this script does is wait for a file or directory to be modified, run the command, and then sleep the specified amount of time.&lt;/p&gt;
-&lt;p&gt;Example usage:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;ow.sh errors.txt 1m &lt;span class=&quot;hljs-built_in&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Oh no! An alert!&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This will:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Watch &amp;quot;errors.txt&amp;quot;&lt;/li&gt;
-&lt;li&gt;Debounce to at most every 1 minute (&lt;code&gt;1m&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;And run the rest of the command line (&lt;code&gt;echo &amp;quot;Oh no! An alert!&amp;quot;&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;delivering-notifications&quot;&gt;Delivering notifications&lt;/h1&gt;
-&lt;p&gt;The last step is to actually deliver notifications. How this is done depends heavily on the environment where the monitoring is happening and where the notifications need to be received.&lt;/p&gt;
-&lt;h2 id=&quot;local-desktop&quot;&gt;Local desktop&lt;/h2&gt;
-&lt;p&gt;If monitoring is happening locally on a full-blown Linux desktop computer, this could be as simple as using &lt;code&gt;notify-send&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;ow.sh errors.txt 15m notify-send &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Oh no, an alert!&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;remote-server&quot;&gt;Remote server&lt;/h2&gt;
-&lt;p&gt;If monitoring is happening on a remote server, then it&amp;#39;s mostly a matter of pulling in the remote output somehow. This can be done using SSH, &lt;code&gt;netcat&lt;/code&gt;, etc.&lt;/p&gt;
-&lt;p&gt;The simplest approach I&amp;#39;ve found is to just tail the remote file locally. So I run the same command &lt;strong&gt;on the server&lt;/strong&gt;, same as above:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;&lt;span class=&quot;hljs-built_in&quot;&gt;tail&lt;/span&gt; -c 0 -f log.txt |grep --line-buffered -i error &amp;gt; errors.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;And then &lt;strong&gt;on my local desktop environment&lt;/strong&gt; I tail the remote file using SSH and write to a local file:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;ssh server &lt;span class=&quot;hljs-built_in&quot;&gt;tail&lt;/span&gt; -c 0 -f /home/user/errors.txt &amp;gt; remote-errors.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Note that the &lt;code&gt;tail -c 0 -f /home/user/errors.txt&lt;/code&gt; part runs on the server and the &lt;code&gt;&amp;gt; re.txt&lt;/code&gt; part runs locally. Finally, I can use the debouncing script and &lt;code&gt;notify-send&lt;/code&gt;, as before:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;ow.sh remote-errors.txt 15m notify-send &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;Oh no, an alert!&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;phone-notifications&quot;&gt;Phone notifications&lt;/h2&gt;
-&lt;p&gt;Phone notifications are where my knowledge runs out. I don&amp;#39;t know the best way to send notifications to a phone, especially in a self-hosted way. In the past, I&amp;#39;ve relied on free tiers of paid services, but I&amp;#39;m hopeful I can eventually figure out something that is fully self-hosted (except for the app itself and associated notification infrastructure).&lt;/p&gt;
-&lt;p&gt;Here are a few ideas:&lt;/p&gt;
-&lt;h3 id=&quot;ifttt&quot;&gt;IFTTT&lt;/h3&gt;
-&lt;p&gt;(Edit: IFTTT no longer supports phone notifications via webhook on the free plan.)&lt;/p&gt;
-&lt;h3 id=&quot;ntfysh&quot;&gt;ntfy.sh&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://ntfy.sh/&quot;&gt;ntfy.sh&lt;/a&gt; is an awesome service that allows sending phone notifications without even signing up for an account. Don&amp;#39;t forget to donate!&lt;/p&gt;
-&lt;h3 id=&quot;matrix&quot;&gt;Matrix&lt;/h3&gt;
-&lt;p&gt;I strongly suspect there is some way to use &lt;a href=&quot;https://matrix.org/&quot;&gt;Matrix&lt;/a&gt; and an associated phone app for notifications, but I haven&amp;#39;t investigated this option yet.&lt;/p&gt;
-&lt;h1 id=&quot;recap&quot;&gt;Recap&lt;/h1&gt;
-&lt;p&gt;So there it is, alerting for hobby projects using only:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Output redirection&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;tail&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;grep&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Bash&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;inotifywait&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;sleep&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;SSH&lt;/li&gt;
-&lt;li&gt;And &lt;code&gt;notify-send&lt;/code&gt; or some phone equivalent&lt;/li&gt;
-&lt;/ul&gt;
 </content>
 </entry>
 </feed>
