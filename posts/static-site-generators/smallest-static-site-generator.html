@@ -45,8 +45,27 @@
 <li><strong>It performs acceptably on a 28-year-old laptop, running NetBSD</strong> (Pentium 166 MHz)</li>
 <li><strong>It&#39;s trivial to compile</strong>, requiring only a C compiler, <code>make</code>, and <code>sed</code></li>
 </ul>
-<p>Obviously, the world does not need another static site generator--and I don&#39;t expect this SSG to become popular. So how did I end up here?</p>
+<h1 id="show-me-the-code">Show me the code!</h1>
+<p>It&#39;s like <a href="https://metalsmith.io/">Metalsmith</a> in Lua. See <a href="https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md">the tutorial</a> for more, but here&#39;s an example that converts Markdown to HTML and adds the page&#39;s title to the resulting HTML:</p>
+<pre><code class="language-lua"><span class="hljs-comment">-- Minimal HTML template (used below)</span>
+<span class="hljs-keyword">local</span> outer = <span class="hljs-string">[[
+&lt;html&gt;
+  &lt;head&gt;&lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;&lt;%- content %&gt;&lt;/body&gt;
+&lt;/html&gt;
+]]</span>
+
+<span class="hljs-comment">-- Read content/*.md, convert to HTML,</span>
+<span class="hljs-comment">-- apply template, write to out/*.html</span>
+<span class="hljs-keyword">return</span> {
+  readFromSource(<span class="hljs-string">&quot;content&quot;</span>),
+  processMarkdown(),
+  applyTemplates({ { <span class="hljs-string">&quot;%.html$&quot;</span>, outer } }),
+  writeToDestination(<span class="hljs-string">&quot;out&quot;</span>),
+}
+</code></pre>
 <h1 id="motivation">Motivation</h1>
+<p>Obviously, the world does not need another static site generator--and I don&#39;t expect this SSG to become popular. So how did I end up here?</p>
 <p>In a word, my motivation was: <strong>simplicity</strong>. I wanted an SSG that was:</p>
 <ul>
 <li>Simple to understand</li>

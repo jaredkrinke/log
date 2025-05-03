@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-04-23T15:41:07.365Z</updated>
+<updated>2025-05-03T04:38:27.118Z</updated>
 
 <entry>
 <title>A 270 KB static site generator based on Markdown and Lua</title>
@@ -22,8 +22,27 @@
 &lt;li&gt;&lt;strong&gt;It performs acceptably on a 28-year-old laptop, running NetBSD&lt;/strong&gt; (Pentium 166 MHz)&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;It&amp;#39;s trivial to compile&lt;/strong&gt;, requiring only a C compiler, &lt;code&gt;make&lt;/code&gt;, and &lt;code&gt;sed&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Obviously, the world does not need another static site generator--and I don&amp;#39;t expect this SSG to become popular. So how did I end up here?&lt;/p&gt;
+&lt;h1 id=&quot;show-me-the-code&quot;&gt;Show me the code!&lt;/h1&gt;
+&lt;p&gt;It&amp;#39;s like &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; in Lua. See &lt;a href=&quot;https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md&quot;&gt;the tutorial&lt;/a&gt; for more, but here&amp;#39;s an example that converts Markdown to HTML and adds the page&amp;#39;s title to the resulting HTML:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-lua&quot;&gt;&lt;span class=&quot;hljs-comment&quot;&gt;-- Minimal HTML template (used below)&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;local&lt;/span&gt; outer = &lt;span class=&quot;hljs-string&quot;&gt;[[
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;&amp;lt;title&amp;gt;&amp;lt;%= title %&amp;gt;&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;&amp;lt;%- content %&amp;gt;&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+]]&lt;/span&gt;
+
+&lt;span class=&quot;hljs-comment&quot;&gt;-- Read content/*.md, convert to HTML,&lt;/span&gt;
+&lt;span class=&quot;hljs-comment&quot;&gt;-- apply template, write to out/*.html&lt;/span&gt;
+&lt;span class=&quot;hljs-keyword&quot;&gt;return&lt;/span&gt; {
+  readFromSource(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt;),
+  processMarkdown(),
+  applyTemplates({ { &lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;%.html$&amp;quot;&lt;/span&gt;, outer } }),
+  writeToDestination(&lt;span class=&quot;hljs-string&quot;&gt;&amp;quot;out&amp;quot;&lt;/span&gt;),
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id=&quot;motivation&quot;&gt;Motivation&lt;/h1&gt;
+&lt;p&gt;Obviously, the world does not need another static site generator--and I don&amp;#39;t expect this SSG to become popular. So how did I end up here?&lt;/p&gt;
 &lt;p&gt;In a word, my motivation was: &lt;strong&gt;simplicity&lt;/strong&gt;. I wanted an SSG that was:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Simple to understand&lt;/li&gt;
