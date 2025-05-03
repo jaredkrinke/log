@@ -11,9 +11,31 @@ Today, I unveil my most gratuitous static site generator yet: [luasmith](https:/
 * **It performs acceptably on a 28-year-old laptop, running NetBSD** (Pentium 166 MHz)
 * **It's trivial to compile**, requiring only a C compiler, `make`, and `sed`
 
-Obviously, the world does not need another static site generator--and I don't expect this SSG to become popular. So how did I end up here?
+# Show me the code!
+It's like [Metalsmith](https://metalsmith.io/) in Lua. See [the tutorial](https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md) for more, but here's an example that converts Markdown to HTML and adds the page's title to the resulting HTML:
+
+```lua
+-- Minimal HTML template (used below)
+local outer = [[
+<html>
+  <head><title><%= title %></title></head>
+  <body><%- content %></body>
+</html>
+]]
+
+-- Read content/*.md, convert to HTML,
+-- apply template, write to out/*.html
+return {
+  readFromSource("content"),
+  processMarkdown(),
+  applyTemplates({ { "%.html$", outer } }),
+  writeToDestination("out"),
+}
+```
 
 # Motivation
+Obviously, the world does not need another static site generator--and I don't expect this SSG to become popular. So how did I end up here?
+
 In a word, my motivation was: **simplicity**. I wanted an SSG that was:
 
 * Simple to understand
