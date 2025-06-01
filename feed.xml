@@ -7,8 +7,37 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-05-03T04:38:27.118Z</updated>
+<updated>2025-06-01T15:29:28.981Z</updated>
 
+<entry>
+<title>luasmith gets link-checking and improved Atom feeds</title>
+<id>https://log.schemescape.com/posts/static-site-generators/extending-luasmith.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/extending-luasmith.html"/>
+<updated>2025-06-01T00:00:00.000Z</updated>
+<summary type="text">Feature creep has set in for my ~270 KB static site generator, luasmith.</summary>
+<content type="html">&lt;p&gt;Recently, I created &lt;a href=&quot;https://github.com/jaredkrinke/luasmith&quot;&gt;luasmith&lt;/a&gt;, &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/smallest-static-site-generator.html&quot;&gt;a ~270 KB static site generator&lt;/a&gt;, with a focus on being small and simple. Obviously, I am now recklessly stuffing it with features.&lt;/p&gt;
+&lt;h1 id=&quot;bloat&quot;&gt;&amp;quot;Bloat&amp;quot;&lt;/h1&gt;
+&lt;p&gt;The initial version of luasmith lacked some functionality I valued from &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Checking for broken internal links (including hashes/fragments/anchors)&lt;/li&gt;
+&lt;li&gt;Including post content directly within the Atom feed&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now, the latest release of luasmith includes these features, and there&amp;#39;s good news from a bloat perspective:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;These additions &lt;strong&gt;only added ~3 KB to the (compressed) size of the release&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Generating my blog still takes &amp;lt; 200 ms&lt;/strong&gt;, on an old laptop (though it &lt;em&gt;is&lt;/em&gt; ~20% slower, in relative terms)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;why-now-how&quot;&gt;Why now? How?&lt;/h1&gt;
+&lt;p&gt;The reason luasmith didn&amp;#39;t originally include these features, despite their utility, is that they require &lt;strong&gt;additional parsing&lt;/strong&gt; (well... you could maybe hook into the Markdown parser, but, besides tight coupling, it wouldn&amp;#39;t work outside of Markdown). For link-checking, it&amp;#39;s obvious why parsing is required. For Atom feed content, the reason is that most RSS/Atom readers don&amp;#39;t support adjusting relative links using &lt;a href=&quot;https://www.w3.org/TR/xmlbase/&quot;&gt;xml:base&lt;/a&gt;, so relative links from e.g. &lt;code&gt;posts/topic/foo.html&lt;/code&gt; won&amp;#39;t work without modification when viewed from &lt;code&gt;posts/feed.xml&lt;/code&gt; (which is in a different directory). (My solution is to rewrite relative links.)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Rather than pull in some heavyweight parsing library, I decided to roll my own minimal HTML parser/transformer: &lt;a href=&quot;https://github.com/jaredkrinke/chtml&quot;&gt;chtml&lt;/a&gt;&lt;/strong&gt;. It&amp;#39;s probably deficient and definitely poorly documented, but it seems to work.&lt;/p&gt;
+&lt;h2 id=&quot;lua&quot;&gt;Lua&lt;/h2&gt;
+&lt;p&gt;Once again, I&amp;#39;ve found C and Lua to be a comfortable combination. I wasn&amp;#39;t looking forward to writing string manipulation code in C, but I had no need to fear--I just pushed all string manipulation into the somewhat safer world of Lua. Problem &lt;del&gt;solved&lt;/del&gt; avoided!&lt;/p&gt;
+&lt;p&gt;Having said that, &lt;strong&gt;I&amp;#39;m still trying to decide how I &lt;em&gt;really&lt;/em&gt; feel about Lua&lt;/strong&gt;. On the one hand, I like that I can easily integrate C code, leading to a process where I write performance-critical code in C and everything else in Lua. This combination provides both convenience and performance. &lt;em&gt;But&lt;/em&gt; I am starting to wonder if it would make more sense to just write &lt;em&gt;everything&lt;/em&gt; in a more featureful language and then rely on a JIT to make things fast. Yes, I&amp;#39;m talking about TypeScript/JavaScript and Node.js. &lt;strong&gt;It frustrates me to pull in such a huge engineering effort (V8), just to make my own developer life a bit more convenient&lt;/strong&gt;... but I can see why businesses are constantly making that choice. Of course, I also dislike these businesses&amp;#39; bloated results, so I don&amp;#39;t necessarily &lt;em&gt;agree&lt;/em&gt; with their logic. Like I said: still pondering.&lt;/p&gt;
+&lt;h1 id=&quot;the-last-biggest-challenge&quot;&gt;The last, biggest challenge&lt;/h1&gt;
+&lt;p&gt;Annoyingly, I&amp;#39;m still not at the point where I can fully replace md2blog because I like build-time syntax highlighting for code blocks. md2blog uses &lt;a href=&quot;https://highlightjs.org/&quot;&gt;highlight.js&lt;/a&gt; for syntax highlighting, and it was super convenient to integrate with Node and Deno. But luasmith is built on C and Lua instead of JavaScript, so highlight.js doesn&amp;#39;t really have a place to plug in. Embedding QuickJS just for highlight.js would contradict my simplicity goal, so I need a different solution. Sadly, most syntax highlighting solutions seem to be based on JavaScript. Or Rust, which I am also avoiding for this side project, due to complexity. It&amp;#39;s almost certainly misguided, but, &lt;strong&gt;for hobbies, I&amp;#39;d like to stick to a software stack that I feel like I can at least ever have a hope of understanding in its entirety&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Maybe some day I will work up the nerve to integrate &lt;a href=&quot;https://github.com/tree-sitter/tree-sitter&quot;&gt;Tree-sitter&lt;/a&gt; and a bunch of associated grammars, to add syntax highlighting (bringing luasmith into build-time featuer parity with md2blog), but I&amp;#39;m sure that will massively increase the size and (internal) complexity of luasmith. Or perhaps I can write an optional, external tool that is purpose-built for syntax highlighting. We&amp;#39;ll see...&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>A 270 KB static site generator based on Markdown and Lua</title>
 <id>https://log.schemescape.com/posts/static-site-generators/smallest-static-site-generator.html</id>
@@ -251,52 +280,6 @@
 &lt;/ul&gt;
 &lt;h1 id=&quot;test-server&quot;&gt;Test server&lt;/h1&gt;
 &lt;p&gt;A test server is currently running (unencrypted/&lt;code&gt;-notls&lt;/code&gt;) on &lt;code&gt;irc.schemescape.com&lt;/code&gt; port 6667 (make sure to &lt;code&gt;/join #general&lt;/code&gt;).&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Static site generators vs. build tools</title>
-<id>https://log.schemescape.com/posts/static-site-generators/ssg-vs-build-tool.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/ssg-vs-build-tool.html"/>
-<updated>2025-02-15T00:00:00.000Z</updated>
-<summary type="text">This is a quick discussion of the differences between static site generators and build tools.</summary>
-<content type="html">&lt;p&gt;Static site generators (like &lt;a href=&quot;https://gohugo.io/&quot;&gt;Hugo&lt;/a&gt;, &lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;md2blog&lt;/a&gt;, or my latest fascination, &lt;a href=&quot;https://www.getblades.org/&quot;&gt;Blades&lt;/a&gt;) read input (often Markdown files) and produce output (HTML). Build tools (like &lt;a href=&quot;https://en.wikipedia.org/wiki/Make_(software)&quot;&gt;Make&lt;/a&gt;) read input and produce output (or run tools that do so).&lt;/p&gt;
-&lt;p&gt;Static site generators and build tools sound similar. What makes them different?&lt;/p&gt;
-&lt;h1 id=&quot;differences&quot;&gt;Differences&lt;/h1&gt;
-&lt;p&gt;Here are some general differences:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;Delegation&lt;/th&gt;
-&lt;th&gt;Build graph&lt;/th&gt;
-&lt;th&gt;Rebuilds&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Static site generators&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Self-contained, no external tools&lt;/td&gt;
-&lt;td&gt;Inputs are discovered and dynamic outputs are supported&lt;/td&gt;
-&lt;td&gt;Rebuilds restart from scratch&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Build tools&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Delegate compilation to external tools&lt;/td&gt;
-&lt;td&gt;Inputs and outputs are prescriptively listed&lt;/td&gt;
-&lt;td&gt;Intermediate objects are cached to the file system, enabling fast incremental rebuilds&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-&lt;p&gt;Let&amp;#39;s consider these each in turn.&lt;/p&gt;
-&lt;h2 id=&quot;delegation&quot;&gt;Delegation&lt;/h2&gt;
-&lt;p&gt;Build tools (like Make) usually delegate processing to external tools (like a C compiler). &lt;strong&gt;This makes build tools more generic&lt;/strong&gt; (they can support multiple languages). Static site generators are less flexible (usually only supporting one or two types of input), so there isn&amp;#39;t much motivation to extract processing into a separate tool.&lt;/p&gt;
-&lt;h2 id=&quot;build-graph&quot;&gt;Build graph&lt;/h2&gt;
-&lt;p&gt;Build tools are generally used to produce specific artifacts that are known ahead of time. Although it&amp;#39;s possible to do so, I can&amp;#39;t think of very many cases where you&amp;#39;d want a build tool to enumerate arbitrary files and producing unknown (or unexpected) outputs.&lt;/p&gt;
-&lt;p&gt;On the other hand, &lt;strong&gt;it&amp;#39;s more convenient to author a few Markdown files and then have a static site generator automatically find them and rebuild the site&lt;/strong&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;rebuilds&quot;&gt;Rebuilds&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;Because compilers are often slow, it is frequently important for build tools to cache intermediate objects to the file system, to avoid recompiling unchanged items&lt;/strong&gt;. Processing Markdown and generating HTML is generally fast, so there&amp;#39;s less need to cache intermediate data.&lt;/p&gt;
-&lt;p&gt;Additionally, incremental rebuilds &lt;em&gt;require&lt;/em&gt; the build graph to be easy to compute ahead of time. Now, I don&amp;#39;t see a reason why static site generators &lt;em&gt;couldn&amp;#39;t&lt;/em&gt; infer (and cache) a build graph to support incremental rebuilds (in fact, I &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/lisp-ssg.html&quot;&gt;prototyped a generic static site generator with accurate incremental rebuilds&lt;/a&gt;... &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds-2.html&quot;&gt;twice&lt;/a&gt;), but it&amp;#39;s not as urgent of a concern for static site generators since building static sites is generally quick (&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/speeding-up-rebuilds.html&quot;&gt;unless you&amp;#39;re on slow hardware&lt;/a&gt;).&lt;/p&gt;
-&lt;h1 id=&quot;summary&quot;&gt;Summary&lt;/h1&gt;
-&lt;p&gt;If I had to distill my thoughts into one sentence, I&amp;#39;d say that the build graph is the essential part: &lt;strong&gt;static site generators discover their inputs and produce arbitrary outputs whereas build tools know their outputs ahead of time&lt;/strong&gt;. Oh, and static site generators produce HTML instead of programs, obviously.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;m sure there are exceptions, and you could argue that static site generators are a subset of build tools, but I&amp;#39;m going to dogmatically stick to the bolded claim above.&lt;/p&gt;
 </content>
 </entry>
 </feed>

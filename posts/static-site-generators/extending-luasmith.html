@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>luasmith gets link-checking and improved Atom feeds</title>
+<meta name="description" content="Feature creep has set in for my ~270 KB static site generator, luasmith." />
+<meta name="keywords" content="lua" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "luasmith gets link-checking and improved Atom feeds",
+  "abstract": "Feature creep has set in for my ~270 KB static site generator, luasmith.",
+  "keywords": "static-site-generators,lua",
+  "datePublished": "2025-06-01"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/static-site-generators/index.html">static-site-generators</a></li>
+<li><a href="../../posts/lua/index.html">lua</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/static-site-generators/extending-luasmith.html">luasmith gets link-checking and improved Atom feeds</a></h1>
+<p><time datetime="2025-06-01">June 1, 2025</time></p>
+</header>
+<p>Recently, I created <a href="https://github.com/jaredkrinke/luasmith">luasmith</a>, <a href="smallest-static-site-generator.html">a ~270 KB static site generator</a>, with a focus on being small and simple. Obviously, I am now recklessly stuffing it with features.</p>
+<h1 id="bloat">&quot;Bloat&quot;</h1>
+<p>The initial version of luasmith lacked some functionality I valued from <a href="https://jaredkrinke.github.io/md2blog/">md2blog</a>:</p>
+<ul>
+<li>Checking for broken internal links (including hashes/fragments/anchors)</li>
+<li>Including post content directly within the Atom feed</li>
+</ul>
+<p>Now, the latest release of luasmith includes these features, and there&#39;s good news from a bloat perspective:</p>
+<ul>
+<li>These additions <strong>only added ~3 KB to the (compressed) size of the release</strong></li>
+<li><strong>Generating my blog still takes &lt; 200 ms</strong>, on an old laptop (though it <em>is</em> ~20% slower, in relative terms)</li>
+</ul>
+<h1 id="why-now-how">Why now? How?</h1>
+<p>The reason luasmith didn&#39;t originally include these features, despite their utility, is that they require <strong>additional parsing</strong> (well... you could maybe hook into the Markdown parser, but, besides tight coupling, it wouldn&#39;t work outside of Markdown). For link-checking, it&#39;s obvious why parsing is required. For Atom feed content, the reason is that most RSS/Atom readers don&#39;t support adjusting relative links using <a href="https://www.w3.org/TR/xmlbase/">xml:base</a>, so relative links from e.g. <code>posts/topic/foo.html</code> won&#39;t work without modification when viewed from <code>posts/feed.xml</code> (which is in a different directory). (My solution is to rewrite relative links.)</p>
+<p><strong>Rather than pull in some heavyweight parsing library, I decided to roll my own minimal HTML parser/transformer: <a href="https://github.com/jaredkrinke/chtml">chtml</a></strong>. It&#39;s probably deficient and definitely poorly documented, but it seems to work.</p>
+<h2 id="lua">Lua</h2>
+<p>Once again, I&#39;ve found C and Lua to be a comfortable combination. I wasn&#39;t looking forward to writing string manipulation code in C, but I had no need to fear--I just pushed all string manipulation into the somewhat safer world of Lua. Problem <del>solved</del> avoided!</p>
+<p>Having said that, <strong>I&#39;m still trying to decide how I <em>really</em> feel about Lua</strong>. On the one hand, I like that I can easily integrate C code, leading to a process where I write performance-critical code in C and everything else in Lua. This combination provides both convenience and performance. <em>But</em> I am starting to wonder if it would make more sense to just write <em>everything</em> in a more featureful language and then rely on a JIT to make things fast. Yes, I&#39;m talking about TypeScript/JavaScript and Node.js. <strong>It frustrates me to pull in such a huge engineering effort (V8), just to make my own developer life a bit more convenient</strong>... but I can see why businesses are constantly making that choice. Of course, I also dislike these businesses&#39; bloated results, so I don&#39;t necessarily <em>agree</em> with their logic. Like I said: still pondering.</p>
+<h1 id="the-last-biggest-challenge">The last, biggest challenge</h1>
+<p>Annoyingly, I&#39;m still not at the point where I can fully replace md2blog because I like build-time syntax highlighting for code blocks. md2blog uses <a href="https://highlightjs.org/">highlight.js</a> for syntax highlighting, and it was super convenient to integrate with Node and Deno. But luasmith is built on C and Lua instead of JavaScript, so highlight.js doesn&#39;t really have a place to plug in. Embedding QuickJS just for highlight.js would contradict my simplicity goal, so I need a different solution. Sadly, most syntax highlighting solutions seem to be based on JavaScript. Or Rust, which I am also avoiding for this side project, due to complexity. It&#39;s almost certainly misguided, but, <strong>for hobbies, I&#39;d like to stick to a software stack that I feel like I can at least ever have a hope of understanding in its entirety</strong>.</p>
+<p>Maybe some day I will work up the nerve to integrate <a href="https://github.com/tree-sitter/tree-sitter">Tree-sitter</a> and a bunch of associated grammars, to add syntax highlighting (bringing luasmith into build-time featuer parity with md2blog), but I&#39;m sure that will massively increase the size and (internal) complexity of luasmith. Or perhaps I can write an optional, external tool that is purpose-built for syntax highlighting. We&#39;ll see...</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>
