@@ -7,7 +7,7 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-06-01T15:29:28.981Z</updated>
+<updated>2025-06-02T18:48:55.914Z</updated>
 
 <entry>
 <title>luasmith gets link-checking and improved Atom feeds</title>
@@ -36,6 +36,27 @@
 &lt;h1 id=&quot;the-last-biggest-challenge&quot;&gt;The last, biggest challenge&lt;/h1&gt;
 &lt;p&gt;Annoyingly, I&amp;#39;m still not at the point where I can fully replace md2blog because I like build-time syntax highlighting for code blocks. md2blog uses &lt;a href=&quot;https://highlightjs.org/&quot;&gt;highlight.js&lt;/a&gt; for syntax highlighting, and it was super convenient to integrate with Node and Deno. But luasmith is built on C and Lua instead of JavaScript, so highlight.js doesn&amp;#39;t really have a place to plug in. Embedding QuickJS just for highlight.js would contradict my simplicity goal, so I need a different solution. Sadly, most syntax highlighting solutions seem to be based on JavaScript. Or Rust, which I am also avoiding for this side project, due to complexity. It&amp;#39;s almost certainly misguided, but, &lt;strong&gt;for hobbies, I&amp;#39;d like to stick to a software stack that I feel like I can at least ever have a hope of understanding in its entirety&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;Maybe some day I will work up the nerve to integrate &lt;a href=&quot;https://github.com/tree-sitter/tree-sitter&quot;&gt;Tree-sitter&lt;/a&gt; and a bunch of associated grammars, to add syntax highlighting (bringing luasmith into build-time featuer parity with md2blog), but I&amp;#39;m sure that will massively increase the size and (internal) complexity of luasmith. Or perhaps I can write an optional, external tool that is purpose-built for syntax highlighting. We&amp;#39;ll see...&lt;/p&gt;
+&lt;h2 id=&quot;addendum-with-actual-bloat&quot;&gt;Addendum, with actual bloat&lt;/h2&gt;
+&lt;p&gt;I learned that Tree-sitter &lt;a href=&quot;https://tree-sitter.github.io/tree-sitter/cli/index.html&quot;&gt;has a command line interface&lt;/a&gt;. Problem solved, right? Let&amp;#39;s install and find out:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;$ sudo apt install tree-sitter-cli
+Reading package lists... Done
+...
+The following additional packages will be installed:
+  binaryen clang-15 emscripten gyp libcares2 libclang-common-15-dev libclang-cpp15t64 libclang-rt-15-dev libclang1-15t64 libjs-d3 libjs-inherits libllvm15t64 libnode-dev libnode109 lld-15 llvm-15 llvm-15-dev llvm-15-linker-tools
+  llvm-15-runtime llvm-15-tools node-abbrev node-acorn node-agent-base node-ansi-regex node-ansi-styles node-aproba node-are-we-there-yet node-balanced-match node-brace-expansion node-busboy node-chownr node-cjs-module-lexer node-clone
+  node-color-convert node-color-name node-console-control-strings node-core-util-is node-data-uri-to-buffer node-debug node-defaults node-delegates node-encoding node-fancy-log node-fetch node-fs.realpath node-gauge node-glob
+  node-graceful-fs node-gyp node-has-unicode node-https-proxy-agent node-iconv-lite node-inflight node-inherits node-isarray node-isexe node-jsonparse node-lru-cache node-minimatch node-minipass node-mkdirp node-ms node-nopt node-npmlog
+  node-once node-osenv node-process-nextick-args node-readable-stream node-rimraf node-safe-buffer node-semver node-set-blocking node-signal-exit node-slice-ansi node-string-decoder node-string-width node-strip-ansi node-tar
+  node-time-stamp node-undici node-util-deprecate node-wcwidth.js node-which node-wide-align node-wrappy node-xtend node-yallist nodejs nodejs-doc python3-numpy
+...
+0 upgraded, 91 newly installed, 0 to remove and 75 not upgraded.
+Need to get 228 MB of archives.
+After this operation, 1,594 MB of additional disk space will be used.
+Do you want to continue? [Y/n] n
+Abort.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;That&amp;#39;s nearly 1.6 GB of disk space for a Tree-sitter CLI&lt;/strong&gt;. I&amp;#39;m speechless. I guess it&amp;#39;s written in JavaScript for Node.js, so that explains ~100 MB of it. But why does it need LLVM? Emscripten?? Numpy???&lt;/p&gt;
+&lt;p&gt;I suspect this is mostly related to Node.js native modules (and perhaps how they&amp;#39;re packaged on Debian, specifically), but... &lt;strong&gt;I just can&amp;#39;t deal with this level of bloat&lt;/strong&gt;.&lt;/p&gt;
 </content>
 </entry>
 <entry>

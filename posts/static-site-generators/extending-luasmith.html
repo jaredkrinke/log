@@ -59,6 +59,27 @@
 <h1 id="the-last-biggest-challenge">The last, biggest challenge</h1>
 <p>Annoyingly, I&#39;m still not at the point where I can fully replace md2blog because I like build-time syntax highlighting for code blocks. md2blog uses <a href="https://highlightjs.org/">highlight.js</a> for syntax highlighting, and it was super convenient to integrate with Node and Deno. But luasmith is built on C and Lua instead of JavaScript, so highlight.js doesn&#39;t really have a place to plug in. Embedding QuickJS just for highlight.js would contradict my simplicity goal, so I need a different solution. Sadly, most syntax highlighting solutions seem to be based on JavaScript. Or Rust, which I am also avoiding for this side project, due to complexity. It&#39;s almost certainly misguided, but, <strong>for hobbies, I&#39;d like to stick to a software stack that I feel like I can at least ever have a hope of understanding in its entirety</strong>.</p>
 <p>Maybe some day I will work up the nerve to integrate <a href="https://github.com/tree-sitter/tree-sitter">Tree-sitter</a> and a bunch of associated grammars, to add syntax highlighting (bringing luasmith into build-time featuer parity with md2blog), but I&#39;m sure that will massively increase the size and (internal) complexity of luasmith. Or perhaps I can write an optional, external tool that is purpose-built for syntax highlighting. We&#39;ll see...</p>
+<h2 id="addendum-with-actual-bloat">Addendum, with actual bloat</h2>
+<p>I learned that Tree-sitter <a href="https://tree-sitter.github.io/tree-sitter/cli/index.html">has a command line interface</a>. Problem solved, right? Let&#39;s install and find out:</p>
+<pre><code class="language-txt">$ sudo apt install tree-sitter-cli
+Reading package lists... Done
+...
+The following additional packages will be installed:
+  binaryen clang-15 emscripten gyp libcares2 libclang-common-15-dev libclang-cpp15t64 libclang-rt-15-dev libclang1-15t64 libjs-d3 libjs-inherits libllvm15t64 libnode-dev libnode109 lld-15 llvm-15 llvm-15-dev llvm-15-linker-tools
+  llvm-15-runtime llvm-15-tools node-abbrev node-acorn node-agent-base node-ansi-regex node-ansi-styles node-aproba node-are-we-there-yet node-balanced-match node-brace-expansion node-busboy node-chownr node-cjs-module-lexer node-clone
+  node-color-convert node-color-name node-console-control-strings node-core-util-is node-data-uri-to-buffer node-debug node-defaults node-delegates node-encoding node-fancy-log node-fetch node-fs.realpath node-gauge node-glob
+  node-graceful-fs node-gyp node-has-unicode node-https-proxy-agent node-iconv-lite node-inflight node-inherits node-isarray node-isexe node-jsonparse node-lru-cache node-minimatch node-minipass node-mkdirp node-ms node-nopt node-npmlog
+  node-once node-osenv node-process-nextick-args node-readable-stream node-rimraf node-safe-buffer node-semver node-set-blocking node-signal-exit node-slice-ansi node-string-decoder node-string-width node-strip-ansi node-tar
+  node-time-stamp node-undici node-util-deprecate node-wcwidth.js node-which node-wide-align node-wrappy node-xtend node-yallist nodejs nodejs-doc python3-numpy
+...
+0 upgraded, 91 newly installed, 0 to remove and 75 not upgraded.
+Need to get 228 MB of archives.
+After this operation, 1,594 MB of additional disk space will be used.
+Do you want to continue? [Y/n] n
+Abort.
+</code></pre>
+<p><strong>That&#39;s nearly 1.6 GB of disk space for a Tree-sitter CLI</strong>. I&#39;m speechless. I guess it&#39;s written in JavaScript for Node.js, so that explains ~100 MB of it. But why does it need LLVM? Emscripten?? Numpy???</p>
+<p>I suspect this is mostly related to Node.js native modules (and perhaps how they&#39;re packaged on Debian, specifically), but... <strong>I just can&#39;t deal with this level of bloat</strong>.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>
