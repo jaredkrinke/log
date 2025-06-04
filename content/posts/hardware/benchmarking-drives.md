@@ -24,7 +24,7 @@ It has [a lot of command line options](https://github.com/Microsoft/diskspd/wiki
 
 In my case, I'm just interested in read performance, so I ran the following two commands (the first, `-s`, is for sequential reads and the second, `-r`, is for random reads):
 
-```cmd
+```txt
 diskspd -d10 -c128M -t1 -o1 -Sh -w0 -s d:\tmp.dat
 diskspd -d10 -c128M -t1 -o1 -Sh -w0 -r d:\tmp.dat
 ```

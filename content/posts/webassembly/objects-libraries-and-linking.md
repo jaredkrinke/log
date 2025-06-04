@@ -81,7 +81,7 @@ wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.
 ### Text format
 The output file defaults to "wasm-c-string.o" and here's the (abbreviated) corresponding text format (compliments of the [WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt)'s `wasm2wat` tool):
 
-```wasm
+```wat
 (module
   (type (;0;) (func (param i32) (result i32)))
   (type (;1;) (func (param i32 i32 i32) (result i32)))

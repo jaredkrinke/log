@@ -121,7 +121,7 @@ I removed `-c` and added some new arguments:
 
 Disassembling "add.wasm" yields the following:
 
-```wasm
+```wat
 (module
   (memory (;0;) 2)
   (global $__stack_pointer (mut i32) (i32.const 66560))
@@ -168,7 +168,7 @@ int WASM_EXPORT(add)(int a, int b) {
 
 Output:
 
-```wasm
+```wat
 (module
   (type (;0;) (func (param i32 i32) (result i32)))
   (func $add (type 0) (param i32 i32) (result i32)

@@ -167,7 +167,7 @@ Eleventy will now build my `index.html` file at the root of the output directory
 # Enabling links between pages
 I use relative links between my Markdown files for internal links. For example, the post you're reading is [`eleventy-2.md`](eleventy-2.md) and my previous post on Eleventy is [`eleventy.md`](eleventy.md). Here's how I made that second link:
 
-```markdown
+```md
 [eleventy.md](eleventy.md)
 ```
 

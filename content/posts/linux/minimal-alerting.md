@@ -47,7 +47,7 @@ One issue with alerts is that they often arrive in bursts. Rather than get hit w
 
 My original solution to this relied on a bunch of custom code, but it turns out that you can build a really simple solution using `inotifywait` (from `inotify-tools` on Debian) and a trivial shell script. I named the script "ow.sh" (for "on write"):
 
-```bash
+```sh
 #!/usr/bin/env bash
 
 # ow.sh ("on write")

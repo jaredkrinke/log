@@ -37,7 +37,7 @@ I'll eventually try and use my hand-crafted, minimal semantic HTML, but I suppos
 ## First run
 The directory structure is pretty close to what I already had, so I was already to launch the Hugo server:
 
-```cmd
+```txt
 hugo.exe server -D
 Start building sites … 
 ...
