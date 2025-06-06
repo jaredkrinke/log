@@ -54,6 +54,6 @@ Do you want to continue? [Y/n] n
 Abort.
 ```
 
-**That's nearly 1.6 GB of disk space for a Tree-sitter CLI**. I'm speechless. I guess it's written in JavaScript for Node.js, so that explains ~100 MB of it. But why does it need LLVM? Emscripten?? Numpy???
+**That's nearly 1.6 GB of disk space for a Tree-sitter CLI**. I'm speechless. I guess it's written in JavaScript for Node.js, so that explains ~100 MB of it. But why does it need LLVM? Emscripten?? NumPy???
 
 I suspect this is mostly related to Node.js native modules (and perhaps how they're packaged on Debian, specifically), but... **I just can't deal with this level of bloat**.
