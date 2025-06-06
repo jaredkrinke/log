@@ -67,7 +67,7 @@
 <p>Now comes the secret sauce.</p>
 <p>One issue with alerts is that they often arrive in bursts. Rather than get hit with an avalanche of alerts, it&#39;s helpful to &quot;debounce&quot; alerts by limiting the alerts to, say, at most one every 15 minutes (or probably even less frequent).</p>
 <p>My original solution to this relied on a bunch of custom code, but it turns out that you can build a really simple solution using <code>inotifywait</code> (from <code>inotify-tools</code> on Debian) and a trivial shell script. I named the script &quot;ow.sh&quot; (for &quot;on write&quot;):</p>
-<pre><code class="language-bash"><span class="hljs-meta">#!/usr/bin/env bash</span>
+<pre><code class="language-sh"><span class="hljs-meta">#!/usr/bin/env bash</span>
 
 <span class="hljs-comment"># ow.sh (&quot;on write&quot;)</span>
 <span class="hljs-comment">#</span>

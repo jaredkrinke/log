@@ -51,7 +51,7 @@
 <p>Enter <a href="https://github.com/Microsoft/diskspd/wiki">DiskSpd</a>, an official disk benchmarking tool from Microsoft. It&#39;s just an executable that you download and run (as administrator).</p>
 <p>It has <a href="https://github.com/Microsoft/diskspd/wiki/Command-line-and-parameters">a lot of command line options</a>, but <a href="https://www.windowscentral.com/how-test-hard-drive-performance-diskspd-windows-10">a random article I found directed me to the most relevant ones</a>.</p>
 <p>In my case, I&#39;m just interested in read performance, so I ran the following two commands (the first, <code>-s</code>, is for sequential reads and the second, <code>-r</code>, is for random reads):</p>
-<pre><code class="language-cmd">diskspd -d10 -c128M -t1 -o1 -Sh -w0 -s d:\tmp.dat
+<pre><code class="language-txt">diskspd -d10 -c128M -t1 -o1 -Sh -w0 -s d:\tmp.dat
 diskspd -d10 -c128M -t1 -o1 -Sh -w0 -r d:\tmp.dat
 </code></pre>
 <p>These tests run:</p>

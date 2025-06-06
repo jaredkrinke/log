@@ -67,11 +67,11 @@
 <p>I&#39;ll eventually try and use my hand-crafted, minimal semantic HTML, but I suppose I can start with their suggested initial theme, &quot;Ananke&quot;. It looks like <a href="https://discourse.gohugo.io/t/whats-the-difference-between-themes-and-layouts/4851">themes mainly exist to allow reuse by other people</a>, so I could perhaps even get away without a theme (using layouts exclusively).</p>
 <h2 id="first-run">First run</h2>
 <p>The directory structure is pretty close to what I already had, so I was already to launch the Hugo server:</p>
-<pre><code class="language-cmd">hugo.exe server -D
-<span class="hljs-built_in">Start</span> building sites … 
+<pre><code class="language-txt">hugo.exe server -D
+Start building sites … 
 ...
-<span class="hljs-function">Error: <span class="hljs-title">Error</span> <span class="hljs-title">building</span> <span class="hljs-title">site</span>: <span class="hljs-title">TOCSS</span>: <span class="hljs-title">failed</span> <span class="hljs-title">to</span> <span class="hljs-title">transform</span> &quot;<span class="hljs-title">ananke</span>/<span class="hljs-title">css</span>/<span class="hljs-title">main.css</span>&quot; (<span class="hljs-title">text</span>/<span class="hljs-title">css</span>). <span class="hljs-title">Check</span> <span class="hljs-title">your</span> <span class="hljs-title">Hugo</span> <span class="hljs-title">installation</span>; <span class="hljs-title">you</span> <span class="hljs-title">need</span> <span class="hljs-title">the</span> <span class="hljs-title">extended</span> <span class="hljs-title">version</span> <span class="hljs-title">to</span> <span class="hljs-title">build</span> <span class="hljs-title">SCSS</span>/<span class="hljs-title">SASS</span>.
-<span class="hljs-title">Built</span> <span class="hljs-title">in</span> 213 <span class="hljs-title">ms</span></span>
+Error: Error building site: TOCSS: failed to transform &quot;ananke/css/main.css&quot; (text/css). Check your Hugo installation; you need the extended version to build SCSS/SASS.
+Built in 213 ms
 </code></pre>
 <p>Well, that&#39;s not encouraging. Apparently there&#39;s an extended version that I glossed over and is quietly required for their quick start. I do wonder why there&#39;s a separate build when the difference in size is only 8%. Maybe it&#39;s bundling other non-Go executables that aren&#39;t available everywhere?</p>
 <p>With <em>extended</em> Hugo, the site served up fine and the default theme initially looked adequate, but it had a lot of junk I didn&#39;t want. Observations:</p>

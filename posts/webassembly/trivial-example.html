@@ -144,7 +144,7 @@
 <li><code>-o add.wasm</code> tells the linker to write the output to &quot;add.wasm&quot; (instead of the default &quot;a.out&quot; file)</li>
 </ul>
 <p>Disassembling &quot;add.wasm&quot; yields the following:</p>
-<pre><code class="language-wasm"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
+<pre><code class="language-wat"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">2</span><span class="hljs-punctuation">)</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">global</span> <span class="hljs-variable">$__stack_pointer</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">mut</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">i32.const</span> <span class="hljs-number">66560</span><span class="hljs-punctuation">))</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;memory&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)))</span>
@@ -184,7 +184,7 @@
 }
 </code></pre>
 <p>Output:</p>
-<pre><code class="language-wasm"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
+<pre><code class="language-wat"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)))</span>
   <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$add</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span>
     <span class="hljs-keyword">local.get</span> <span class="hljs-number">1</span>
