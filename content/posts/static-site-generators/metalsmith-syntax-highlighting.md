@@ -150,7 +150,7 @@ int WASM_EXPORT(add)(int a, int b) {
 ```
 
 ### WebAssembly
-```wasm
+```webassembly
 (module
   (type (;0;) (func (param i32 i32) (result i32)))
   (import "env" "__linear_memory" (memory (;0;) 0))

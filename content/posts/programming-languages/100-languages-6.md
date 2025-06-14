@@ -32,7 +32,7 @@ The web is actually littered with examples of "bare metal" x86 programming (asid
 
 Here's the code I used (in this case, I chose to have the stack grow down from where boot sector code must start):
 
-```nasm
+```asm
 	mov ax, 0
 	mov ds, ax
 	mov ss, ax

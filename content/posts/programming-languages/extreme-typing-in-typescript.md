@@ -24,7 +24,7 @@ For my most recent [programming language experiment](100-languages.md), I tackle
 
 The problem encodes 1,000 rounds of Poker and the goal is to determine how many hands the first player wins (following the rules of Poker). Here's a line of sample input:
 
-```txt
+```
 2D 9C AS AH AC 3D 6D 7D TD QD
 ```
 
@@ -50,7 +50,7 @@ Apparently, **it is now possible to parse strings within TypeScript's type syste
 
 In my case, I knew ahead of time the set of all possible characters in the input file, so I was able to define a type that is the union of all possible characters:
 
-```ts
+```typescript
 type RanksDescending = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"];
 type Rank = RanksDescending[number];
 type Suit = "C" | "D" | "H" | "S";
@@ -61,7 +61,7 @@ type Character = "\n" | NonNewline;
 
 Armed with these types, it's possible to **accumulate strings character-by-character, breaking on `\n`** (and using tail calls, as described in the previous link):
 
-```ts
+```typescript
 type SplitLines<Input extends string, Line extends string, Output extends string[]> =
     Input extends ""
         ? [...Output, Line] // Done reading input; add final line
@@ -77,7 +77,7 @@ Each line can then be processed individually.
 ## Parsing cards
 Parsing cards **arguably uses TypeScript features as intended** (to read in two characters):
 
-```ts
+```typescript
 type Card = { rank: Rank, suit: Suit };
 ...
 type ParseCard<S extends string> =
@@ -88,7 +88,7 @@ type ParseCard<S extends string> =
 
 I let the next two steps leak into my "parse lines" code, so ignore `DataFromHand` and `EvaluationFromData` in this code to read 10 cards (5 for each hand):
 
-```ts
+```typescript
 type ProcessLine<L extends string> =
     L extends `${infer A1} ${infer A2} ${infer A3} ${infer A4} ${infer A5} ${infer B1} ${infer B2} ${infer B3} ${infer B4} ${infer B5}`
         ? [
@@ -112,7 +112,7 @@ Using the examples hands from earlier, the result is something like:
 
 Relevant code:
 
-```ts
+```typescript
 type Equal<A, B> = A extends B ? B extends A ? true : false : false;
 ...
 type ArrayLength<A extends any[]> = UnaryToNumber<A>;
@@ -137,7 +137,7 @@ Why "keep" counts of 1 through 4 instead of removing counts of 0? Because this a
 
 Next, I also needed to track whether a hand was a flush or not (N.B. checking all five cards' suits for equality also didn't work unless directly referenced--still no idea why):
 
-```ts
+```typescript
 type Or<A, B> = A extends true ? true : B extends true ? true : false;
 type Or4<A, B, C, D> = Or<A, Or<B, Or<C, D>>>;
 ...
@@ -147,7 +147,7 @@ type Flush<H extends Hand> = Or4<FlushOfSuit<H, "C">, FlushOfSuit<H, "S">, Flush
 
 Final output type for this stage:
 
-```ts
+```typescript
 type DataFromHand<H extends Hand> = { counts: SortedRankCounts<H>, flush: Flush<H> };
 ```
 
@@ -156,7 +156,7 @@ Armed with the sorted ranks and counts of cards (along with a flag indicating a 
 
 Here are a few simple examples that just see how many ranks have a count of N:
 
-```ts
+```typescript
 type And<A, B> = A extends true ? B extends true ? true : false : false;
 ...
 type RankCountOfCount<C> = { count: C };
@@ -172,7 +172,7 @@ type IsFullHouse<D extends Data> = And<HasThreeOfAKind<D>, HasOnePair<D>>;
 
 Identifying straights seemed tricky, so I just hard-coded them all:
 
-```ts
+```typescript
 type IsStraight<D extends Data> =
     D extends { counts: infer DataCounts }
         ? DataCounts extends [{ rank: "A" }, { rank: "5" }, { rank: "4" }, { rank: "3" }, { rank: "2" }] ? true
@@ -191,14 +191,14 @@ type IsStraight<D extends Data> =
 
 But I also needed to supply tie-breakers, so here are some utilities for retrieving the (previously sorted) rank(s) of cardinality N:
 
-```ts
+```typescript
 type RankForNOfAKind<D extends Data, N extends number> = ArrayKeep<RankCountsFromData<D>, RankCountOfCount<N>> extends [{ rank: infer R extends Rank }] ? R : never;
 type RanksForNsOfAKind<D extends Data, N extends number> = RanksFromRankCounts<ArrayKeep<RankCountsFromData<D>, RankCountOfCount<N>>>;
 ```
 
 And I needed to handle the fact that aces can be low *or* high in a straight:
 
-```ts
+```typescript
 type If<C, T, F> = C extends true ? T : F;
 ...
 type RankForStraight<D extends Data> =
@@ -210,7 +210,7 @@ type RankForStraight<D extends Data> =
 
 Finally, here's the closest to a lookup table I was able to create:
 
-```ts
+```typescript
 type EvaluationFromData<D extends Data> =
     If<IsStraightFlush<D>,  { handType: "straightFlush",    tieBreakers: [RankForStraight<D>] },
     If<IsFourOfAKind<D>,    { handType: "fourOfAKind",      tieBreakers: [RankForNOfAKind<D, 4>] },
@@ -228,7 +228,7 @@ The output of this stage is the "type" of the hand (two pair, flush, high card, 
 ## Comparing hands
 Similar to sorting ranks, both ranks and poker hand "types" are compared relatively by walking the ordered array until a "winner" is found. **Despite sounding very simple, it took an entire page of code**:
 
-```ts
+```typescript
 type GreaterRankRecursive<A extends Rank, B extends Rank, R extends Rank[]> =
     R extends [infer First, ...infer Rest extends Rank[]]
         ? A extends First
@@ -279,7 +279,7 @@ type BetterEvaluation<A extends Evaluation, B extends Evaluation> =
 ## Counting wins
 Counting involves numbers, and **I didn't see an obvious way to perform arithmetic in TypeScript's type system**. So I had to ([once again](100-languages-2.md)) implement my own arithmetic. Fortunately, I was able to simply use a unary encoding based on array length (this works for values up to ~500):
 
-```ts
+```typescript
 type UnaryZero = [];
 type UnaryNumber = any[];
 type UnaryToNumber<T extends UnaryNumber> = T extends { length: infer L extends number } ? L : never;
@@ -290,7 +290,7 @@ type UnaryOne = UnaryIncrement<UnaryZero>;
 
 I tracked wins in an array of (unary) zeroes (losses) or ones (wins):
 
-```ts
+```typescript
 type ScoreRound<A extends Evaluation[]> =
     A extends [infer First extends Evaluation, infer Second extends Evaluation]
         ? If<BetterEvaluation<First, Second>,
@@ -311,7 +311,7 @@ Sadly, I wasn't able to solve the entire problem in one go because **TypeScript 
 
 N.B. I used JavaScript to split the input file into batches. Sorry! I am a fraud.
 
-```ts
+```typescript
 type UnarySumRecursive<A extends UnaryNumber[], S extends UnaryNumber> =
     A extends [infer T extends UnaryNumber, ...infer Rest extends UnaryNumber[]]
         ? UnarySumRecursive<Rest, [...T, ...S]>
@@ -332,13 +332,13 @@ In the end, I just needed to hover over the `CorrectAnswer` type in my editor an
 ## On the command line
 It's also possible to have `tsc` emit the answer by forcing a type-checking error by supplying a known-incorrect value:
 
-```ts
+```typescript
 const guess: CorrectAnswer = 42; // Definitely not correct!
 ```
 
 Running `tsc` produces the following output (**spoiler alert!**):
 
-```txt
+```
 error TS2322: Type '42' is not assignable to type '376'.
 ```
 

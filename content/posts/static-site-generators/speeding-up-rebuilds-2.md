@@ -42,7 +42,7 @@ Specifically, there were a few aspects of md2blog's build process that were tric
 ## Enumerating and cleaning files
 In this case, I wanted to avoid listing all posts explicitly in my `Makefile`--I just wanted it to discover all of the files in the file system, a la "classic" md2blog. GNU Make supports enumerating files by letting you delegate that job to the `find` command:
 
-```Makefile
+```makefile
 # Use "find" to enumerate all directories and files under "content/" (excluding "content/" itself)
 INPUT_FILES := $(shell find content -follow -type f -not -name '.*')
 INPUT_DIRECTORIES := $(filter-out content,$(shell find content -follow -type d))
@@ -52,7 +52,7 @@ Note that in the above snippet I also enumerate directories. This is so that I c
 
 How do I "clean" up any extraneous files *before* anything builds? The only reliable solution I could come up with was to sneakily run a command while expanding an usused *simply expanded* (`:=` instead of `=`) variable (note: it must be simply expanded to ensure it is expanded first, and only once):
 
-```Makefile
+```makefile
 INPUT_FILES_POSTS := $(filter content/posts/%.md,$(INPUT_FILES))
 INTERMEDIATE_FILES_POST_METADATA := $(patsubst content/posts/%.md,cache/posts/%.metadata.json,$(INPUT_FILES_POSTS))
 ...
@@ -68,7 +68,7 @@ Aggregating a bunch of posts into a single index sounds like a trivial problem, 
 
 The only solution I could come up with was to pass the large list via the file system. This could either be done using a file that lists the paths, or it could be implicit by searching a directory tree (assuming that the tree has been purged of extraneous files--as I do above).
 
-```Makefile
+```makefile
 cache/posts/index.json: $(INTERMEDIATE_FILES_POST_METADATA) | $(INTERMEDIATE_DIRECTORIES)
 	deno run --allow-read=cache --allow-write=cache index.ts cache/posts $@
 ```
@@ -85,7 +85,7 @@ My current solution to discovering tags that don't also exist as directories run
 
 Here's where I had to hack in a pattern to avoid treating programmatically-discovered tags' index pages as extraneous (for the purposes of cleaning up the output directory):
 
-```Makefile
+```makefile
 OUTPUT_FILES_EXTRANEOUS := $(filter-out $(OUTPUT_FILES) out/posts/%/index.html,$(shell mkdir -p out && find out -type f))
 ```
 

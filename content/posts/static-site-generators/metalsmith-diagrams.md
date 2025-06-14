@@ -55,7 +55,7 @@ Here's a flow chart of my general plan:
 
 That diagram was generated using the following Markdown:
 
-````md
+````markdown
 ```dot2svg
 digraph {
     "Compile Graphviz to WebAssembly" -> "Generate diagrams at build time" -> "???" -> "Profit!";

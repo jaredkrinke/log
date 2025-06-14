@@ -25,7 +25,7 @@ But when I went to install that package, NPM would happily report that it had do
 ## Example: yargs
 For example, I wanted to parse command line arguments, and I had noticed that [yargs](https://www.npmjs.com/package/yargs) was a popular package, so I installed it. According to the previously-linked NPM page, it has 7 dependencies. That's more than I'd like, but let's give it a try:
 
-```txt
+```
 $ npm install yargs
 
 + yargs@17.2.1
@@ -39,7 +39,7 @@ found 0 vulnerabilities
 
 Wait, *sixteen* packages? Apparently NPM only counts direct dependencies on package pages. What all got installed?
 
-```txt
+```
 $ npm ls
 ...
 `-- yargs@17.2.1
@@ -68,7 +68,7 @@ What's `escalade`? Why do I need `emoji-regex` if I'm not planning on using emoj
 
 Well, I'd better get busy reviewing all that JavaScript code. How much code are we talking?
 
-```txt
+```
 $ find -name *.js|xargs wc -l
     10 ./node_modules/ansi-regex/index.js
    163 ./node_modules/ansi-styles/index.js

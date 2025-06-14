@@ -27,7 +27,7 @@ int main(int argc, const char** argv) {
 
 Here's the result:
 
-```txt
+```
 > zig cc hello-c.c -o hello-c.exe
 
 > hello-c.exe
@@ -39,7 +39,7 @@ Success!
 ## Making the binary more portable
 According to ziglearn.org, [Zig targets the host's specific CPU by default](https://ziglearn.org/chapter-3/#cross-compilation). If you plan to distribute programs built with Zig, you'll probably want to choose a more generic architecture, e.g. `i386` or `x86_64`:
 
-```txt
+```
 > zig cc -target i386-windows-gnu hello-c.c -o hello-c.exe 
 ```
 
@@ -61,7 +61,7 @@ int main() {
 
 Build command:
 
-```txt
+```
 > zig cc -target i386-windows-gnu hello-win32.c -o hello-win32.exe 
 
 > hello-win32.exe
@@ -145,7 +145,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 
 And now to build and test:
 
-```txt
+```
 > zig c++ -target i386-windows-gnu hello-window.cpp -o hello-window.exe
 
 > hello-window.exe
@@ -164,7 +164,7 @@ I'm going to work off of the [WebView2 for Win32 tutorial](https://docs.microsof
 
 After trying to compile the sample, I finally managed to stump Zig:
 
-```txt
+```
 > zig c++ -target i386-windows-gnu hello-webview2.cpp -o hello-webview2.exe
 hello-webview2.cpp:5:10: fatal error: 'wil/com.h' file not found
 #include <wil/com.h>
@@ -176,7 +176,7 @@ The sample code uses [WIL](https://github.com/microsoft/wil), and regardless of 
 
 Second attempt, this time with WIL:
 
-```txt
+```
 > zig c++ -target i386-windows-gnu hello-webview2.cpp -I..\wil\include -o hello-webview2.exe
 In file included from hello-webview2.cpp:5:
 ..\wil\include\wil/com.h:14:10: fatal error: 'WeakReference.h' file not found

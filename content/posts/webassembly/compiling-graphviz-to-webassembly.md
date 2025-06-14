@@ -107,7 +107,7 @@ After searching for and finding a [similar issue on GitHub](https://github.com/e
 
 I thought that setting the "AR" environment variable would solve this, but it turned out that the Autotools in use didn't respect that environment variable. My hacky solution to this (and possibly other mismatched tools) was to just move the WASI SDK to the front of my "PATH" variable in my build script:
 
-```sh
+```bash
 export PATH="/opt/wasi-sdk/bin:$PATH"
 ```
 
@@ -198,7 +198,7 @@ TypeError: WebAssembly.instantiate(): Imports argument must be present and must 
 
 That's too bad. I was hoping that my slimmed down Graphviz build wouldn't expect the host to provide any functions. Let's see what's missing:
 
-```sh
+```bash
 $ wasm2wat dot2svg.wasm|findstr /i import
   (import "wasi_snapshot_preview1" "clock_time_get" (func $__wasi_clock_time_get (type 16)))
   (import "wasi_snapshot_preview1" "fd_filestat_get" (func $__wasi_fd_filestat_get (type 1)))

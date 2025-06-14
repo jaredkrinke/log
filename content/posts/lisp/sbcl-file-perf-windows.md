@@ -46,7 +46,7 @@ So if the problem is *not* Windows, maybe the problem is SBCL (or Common Lisp it
 
 Reports:
 
-```txt
+```
 Evaluation took:
   0.054 seconds of real time
   0.046875 seconds of total run time (0.000000 user, 0.046875 system)
@@ -87,7 +87,7 @@ In the past, I've used [Windows Performance Analyzer](https://learn.microsoft.co
 
 Using Windows Performance Recorder's generic profile, I captured a several second trace of file enumeration via SBCL. Opening the trace and looking at the "CPU Usage (Sampled)" chart (and filtering to "sbcl.exe"--with symbol loading enabled), I see the following sample counts by stack:
 
-```txt
+```
 Line #, Process, Stack, Count
 1, sbcl.exe (34020), , 1581
 2, , [Root], 1579
@@ -195,7 +195,7 @@ Here's my sloppy code (note to self: make it more obvious which variables are "n
 
 And now, the moment of truth when I run this modified function:
 
-```txt
+```
 Evaluation took:
   0.002 seconds of real time
   0.015625 seconds of total run time (0.000000 user, 0.015625 system)

@@ -85,7 +85,7 @@ unsigned int WASM_EXPORT(count_as)(const char* string) {
 ### Compiling
 The build command is unchanged [from the last post](c-standard-library-example.md#compiling):
 
-```sh
+```bash
 wasi-sdk/bin/clang -Os --sysroot wasi-sdk/share/wasi-sysroot -nostartfiles -Wl,--no-entry string-example.c -o string-example.wasm
 ```
 
@@ -117,7 +117,7 @@ import fs from "fs";
 ### Result
 Behold the result:
 
-```sh
+```bash
 $ node pass-in-string.js "a string that has lots of the letter 'a' in it" 
 4
 ```
@@ -225,7 +225,7 @@ import fs from "fs";
 
 Output:
 
-```sh
+```bash
 $ node return-string.js 5
 bbbbb
 ```

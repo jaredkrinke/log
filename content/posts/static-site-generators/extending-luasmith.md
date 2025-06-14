@@ -35,7 +35,7 @@ Maybe some day I will work up the nerve to integrate [Tree-sitter](https://githu
 ## Addendum, with actual bloat
 I learned that Tree-sitter [has a command line interface](https://tree-sitter.github.io/tree-sitter/cli/index.html). Problem solved, right? Let's install and find out:
 
-```txt
+```
 $ sudo apt install tree-sitter-cli
 Reading package lists... Done
 ...

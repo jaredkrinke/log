@@ -62,7 +62,7 @@ Note that in this example, I extracted the WASI SDK into a subfolder of my proje
 
 Here's the build command (note: I omitted the `-target` option because I'm using the WASI SDK's Clang, which defaults to targeting `wasm32-wasi`):
 
-```sh
+```bash
 wasi-sdk-12.0\bin\clang.exe -Os --sysroot wasi-sdk-12.0/share/wasi-sysroot -nostartfiles -Wl,--no-entry sine.c -o sine.wasm
 ```
 

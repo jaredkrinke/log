@@ -18,7 +18,7 @@ Fortunately, as noted in [my post about NPM](../web-development/souring-on-npm.m
 
 Deno doesn't magically make it 100% safe to download and run JavaScript code from anywhere, but it at least tries to provide a secure environment by sand boxing JavaScript programs (similar to what is done in a web browser) and only allowing certain operations if permissions are explicitly granted on the command line, e.g.:
 
-```txt
+```
 $ deno run --allow-read=content,out --allow-write=out main.js
 ```
 

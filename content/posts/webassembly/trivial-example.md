@@ -39,7 +39,7 @@ int add(int a, int b) {
 ## Compiling the code
 First, I'm just going to compile (but not link) the code, to see what happens.
 
-```sh
+```bash
 clang -target wasm32 -Os -c add.c
 ```
 
@@ -53,7 +53,7 @@ Since I'm compiling and not linking, this command generates an object file named
 ## Disassembling the object file
 Run the disassembler:
 
-```sh
+```bash
 wasm2wat add.o
 ```
 
@@ -109,7 +109,7 @@ It looks like the C code compiled correctly and the output WAT seems reasonable.
 ## Linking
 Note that my original Clang command specified `-c`, so it only compiled the code and never ran the linker. Let's go all the way this time:
 
-```sh
+```bash
 clang -target wasm32 -Os -nostdlib -Wl,--no-entry add.c -o add.wasm
 ```
 
@@ -121,7 +121,7 @@ I removed `-c` and added some new arguments:
 
 Disassembling "add.wasm" yields the following:
 
-```wat
+```webassembly
 (module
   (memory (;0;) 2)
   (global $__stack_pointer (mut i32) (i32.const 66560))
@@ -168,7 +168,7 @@ int WASM_EXPORT(add)(int a, int b) {
 
 Output:
 
-```wat
+```webassembly
 (module
   (type (;0;) (func (param i32 i32) (result i32)))
   (func $add (type 0) (param i32 i32) (result i32)

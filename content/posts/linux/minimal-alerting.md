@@ -47,7 +47,7 @@ One issue with alerts is that they often arrive in bursts. Rather than get hit w
 
 My original solution to this relied on a bunch of custom code, but it turns out that you can build a really simple solution using `inotifywait` (from `inotify-tools` on Debian) and a trivial shell script. I named the script "ow.sh" (for "on write"):
 
-```sh
+```bash
 #!/usr/bin/env bash
 
 # ow.sh ("on write")
@@ -77,7 +77,7 @@ All this script does is wait for a file or directory to be modified, run the com
 
 Example usage:
 
-```sh
+```bash
 ow.sh errors.txt 1m echo "Oh no! An alert!"
 ```
 
@@ -93,7 +93,7 @@ The last step is to actually deliver notifications. How this is done depends hea
 ## Local desktop
 If monitoring is happening locally on a full-blown Linux desktop computer, this could be as simple as using `notify-send`:
 
-```sh
+```bash
 ow.sh errors.txt 15m notify-send "Oh no, an alert!"
 ```
 
@@ -102,19 +102,19 @@ If monitoring is happening on a remote server, then it's mostly a matter of pull
 
 The simplest approach I've found is to just tail the remote file locally. So I run the same command **on the server**, same as above:
 
-```sh
+```bash
 tail -c 0 -f log.txt |grep --line-buffered -i error > errors.txt
 ```
 
 And then **on my local desktop environment** I tail the remote file using SSH and write to a local file:
 
-```sh
+```bash
 ssh server tail -c 0 -f /home/user/errors.txt > remote-errors.txt
 ```
 
 Note that the `tail -c 0 -f /home/user/errors.txt` part runs on the server and the `> re.txt` part runs locally. Finally, I can use the debouncing script and `notify-send`, as before:
 
-```sh
+```bash
 ow.sh remote-errors.txt 15m notify-send "Oh no, an alert!"
 ```
 

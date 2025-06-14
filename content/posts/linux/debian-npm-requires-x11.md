@@ -13,7 +13,7 @@ Since I've been playing around with Node and NPM on Windows, I decided I should 
 
 Great, I'll just run `sudo apt install nodejs npm` and get started! I was immediately greeted with the following wall of packages:
 
-```txt
+```
 $ sudo apt install nodejs npm
 Reading package lists... Done
 Building dependency tree... Done

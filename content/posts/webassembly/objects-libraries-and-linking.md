@@ -74,14 +74,14 @@ wasm_c_string* WASM_EXPORT(create_wasm_c_string)(const char* source) {
 ### Compiling
 Let's compile this to an object file (using the [WASI SDK](https://github.com/WebAssembly/wasi-sdk)--note the "-c" argument that tells Clang to only output an object file and not invoke the linker):
 
-```sh
+```bash
 wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.c
 ```
 
 ### Text format
 The output file defaults to "wasm-c-string.o" and here's the (abbreviated) corresponding text format (compliments of the [WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt)'s `wasm2wat` tool):
 
-```wat
+```webassembly
 (module
   (type (;0;) (func (param i32) (result i32)))
   (type (;1;) (func (param i32 i32 i32) (result i32)))
@@ -149,7 +149,7 @@ Can I just do the same thing for WebAssembly? It certainly appears so.
 
 If I inspect the WASI SDK, in the WebAssembly sysroot, I actually see both bare objects and archives for the C standard library and friends:
 
-```sh
+```bash
 $ ls wasi-sdk/share/wasi-sysroot/lib/wasm32-wasi
 crt1-command.o  libc++abi.a                         libdl.a       libutil.a
 crt1.o          libc.imports                        libm.a        libwasi-emulated-mman.a
