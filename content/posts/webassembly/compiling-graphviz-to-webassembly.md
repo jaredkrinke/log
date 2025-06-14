@@ -85,7 +85,6 @@ const char* WASM_EXPORT(dot2svg)(const char* graphString) {
 
     return result;
 }
-
 ```
 
 ## Initial attempt at compiling

@@ -96,7 +96,6 @@ The output file defaults to "wasm-c-string.o" and here's the (abbreviated) corre
 ...
   (export "allocate_wasm_c_string" (func $allocate_wasm_c_string))
   (export "create_wasm_c_string" (func $create_wasm_c_string)))
-
 ```
 
 You can see that it's importing memory, a function table, and C standard library functions, and that it's exporting my 2 functions.
@@ -131,7 +130,6 @@ Contents of section Custom:
 00001db: 3234 3962 6436 3733 3261 3830 3434 6434  249bd6732a8044d4
 00001eb: 3537 3039 3265 6439 3332 3736 3837 3234  57092ed932768724
 00001fb: 6136 6630 3629                           a6f06)
-
 ```
 
 Sure enough, there are custom sections related to linking, relocation, and even a curious "producers" section (that apparently exists to [allow analysis of toolchain usage in the wild](https://github.com/WebAssembly/tool-conventions/blob/main/ProducersSection.md)).
