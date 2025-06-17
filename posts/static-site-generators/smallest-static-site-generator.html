@@ -111,7 +111,7 @@
 <p>Of course, there are downsides to the approach I took:</p>
 <ul>
 <li>Writing C code is fraught with peril -- fortunately, the hardest parts were mostly already done by the md4c and Lua authors</li>
-<li>Syntax highlighting is <em>not</em> simple -- so I just cut that feature, at least for now (<strong>update</strong>: syntax highlighting is not supported!)</li>
+<li>Syntax highlighting is <em>not</em> simple -- so I just cut that feature, at least for now (<strong>update</strong>: syntax highlighting is now supported!)</li>
 <li>The security model of an SSG that uses Lua scripts for everything is... not ideal -- <strong>only use templates you trust!</strong></li>
 </ul>
 <p>Additionally, I haven't taken the time to setup a proper development and debugging environment for C and Lua. I need to investiage static analysis and debugging tools for Lua, as well as find a tolerable frontend for GDB. This is where I really miss Emacs+SLIME for Common Lisp or VS Code for TypeScript/Python.</p>
