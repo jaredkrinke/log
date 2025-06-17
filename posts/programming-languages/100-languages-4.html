@@ -40,63 +40,63 @@
 <h1><a href="../../posts/programming-languages/100-languages-4.html">11 programming languages in one week</a></h1>
 <p><time datetime="2024-03-31">March 31, 2024</time></p>
 </header>
-<p>I&#39;m <a href="100-languages.html">trying to write code in 100 different programming languages</a>. I just finished week 2, and--somehow--I&#39;m ahead of schedule.</p>
+<p>I'm <a href="100-languages.html">trying to write code in 100 different programming languages</a>. I just finished week 2, and--somehow--I'm ahead of schedule.</p>
 <p>The full list of languages and links to code are in my <a href="https://github.com/jaredkrinke/100-languages">100-languages</a> repository.</p>
 <h1 id="summary">Summary</h1>
-<p>After two weeks of &quot;staying on (or ahead of) schedule&quot;, I strongly suspect I will <em>not</em> be continuing at this current pace of writing code in at least one new language per day. It&#39;s fun and oddly addictive, but also fairly time-consuming. <strong>If I don&#39;t slow down, I&#39;ll probably get burned out and abandon the project</strong> (or need to become a hermit), so I&#39;ll likely slow <em>way</em> down for the next week.</p>
+<p>After two weeks of &quot;staying on (or ahead of) schedule&quot;, I strongly suspect I will <em>not</em> be continuing at this current pace of writing code in at least one new language per day. It's fun and oddly addictive, but also fairly time-consuming. <strong>If I don't slow down, I'll probably get burned out and abandon the project</strong> (or need to become a hermit), so I'll likely slow <em>way</em> down for the next week.</p>
 <h1 id="languages">Languages</h1>
 <p>Here are the <strong>languages that were new to me</strong> at the beginning of the week that I managed to write code in:</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/COBOL#COBOL-85">COBOL-85</a></li>
-<li><a href="https://www.w3.org/TR/WGSL/">WebGPU Shading Language</a> (which I&#39;m still surprised to learn is &quot;WebGPU <em>Shading</em> Language&quot; and not &quot;WebGPU <em>Shader</em> Language&quot;, in its official spec)</li>
+<li><a href="https://www.w3.org/TR/WGSL/">WebGPU Shading Language</a> (which I'm still surprised to learn is &quot;WebGPU <em>Shading</em> Language&quot; and not &quot;WebGPU <em>Shader</em> Language&quot;, in its official spec)</li>
 <li><a href="https://webassembly.github.io/spec/core/text/index.html">WebAssembly Text Format</a> (I had <em>seen</em> this before, but never <em>written</em> it)</li>
 <li><a href="https://scratch.mit.edu/">Scratch</a> (block-based)</li>
 <li><a href="https://en.wikipedia.org/wiki/Commodore_BASIC">Commodore Basic 2.0</a></li>
 <li><a href="https://xod.io/">XOD</a> (flow-based)</li>
 </ul>
-<p>And here are the <strong>languages I&#39;d used before</strong> (mostly only used a little bit or a long time ago):</p>
+<p>And here are the <strong>languages I'd used before</strong> (mostly only used a little bit or a long time ago):</p>
 <ul>
 <li><a href="https://www.w3.org/TR/xslt-10/">XSLT</a></li>
 <li><a href="https://www.perl.org/">Perl</a></li>
-<li><a href="https://en.wikipedia.org/wiki/AWK">AWK</a> (not 100% sure if I&#39;ve actually used this before, but it seems likely)</li>
+<li><a href="https://en.wikipedia.org/wiki/AWK">AWK</a> (not 100% sure if I've actually used this before, but it seems likely)</li>
 <li><a href="https://en.wikipedia.org/wiki/Verilog">Verilog</a></li>
 <li><a href="https://www.zachtronics.com/exapunks/">EXA</a> (from a game by <a href="https://www.zachtronics.com/">Zachtronics</a>)</li>
 </ul>
 <p>The rest of this post is just a collection of my notes from trying out these languages.</p>
 <h2 id="xslt-extensible-stylesheet-language-transformations">XSLT (Extensible Stylesheet Language Transformations)</h2>
 <ul>
-<li>I&#39;ve probably written more XSLT than the vast majority of people, because I naively thought that HTML would be permanently recast into XML and XSLT would become the standard template language (that... didn&#39;t happen)</li>
+<li>I've probably written more XSLT than the vast majority of people, because I naively thought that HTML would be permanently recast into XML and XSLT would become the standard template language (that... didn't happen)</li>
 <li>Browsers still support XSLT, apparently!</li>
-<li>XPath is my favorite query language that many (most?) people don&#39;t seem to know about</li>
+<li>XPath is my favorite query language that many (most?) people don't seem to know about</li>
 </ul>
 <h2 id="cobol">COBOL</h2>
 <ul>
 <li>First time using column-oriented syntax!</li>
-<li>It&#39;s not clear to me when periods (<code>.</code>) are required and when they break things</li>
+<li>It's not clear to me when periods (<code>.</code>) are required and when they break things</li>
 <li>My solution takes forever to run in COBOL, as compared to JavaScript--not sure why</li>
-<li>Forgetting an <code>END-IF</code> just completely changed the meaning of my program, but didn&#39;t produce and errors or warnings</li>
+<li>Forgetting an <code>END-IF</code> just completely changed the meaning of my program, but didn't produce and errors or warnings</li>
 <li>Verbose, with lots of reserved words</li>
 <li>I dislike the combination of natural language syntax (<code>ADD 1 TO N.</code>) and things like <code>77 TOTAL PIC S9(15) COMP VALUE ZERO.</code></li>
 </ul>
 <h2 id="perl">Perl</h2>
 <ul>
 <li>Kept getting tripped up by scalar vs. array contexts (even with prior experience)</li>
-<li>I don&#39;t recall the details, but there was a case where I ended up needing parentheses when I thought brackets would be correct</li>
+<li>I don't recall the details, but there was a case where I ended up needing parentheses when I thought brackets would be correct</li>
 <li>&quot;Here docs&quot; are great!</li>
-<li>I dislike the anonymous function syntax, but I&#39;m glad anonymous functions are supported</li>
+<li>I dislike the anonymous function syntax, but I'm glad anonymous functions are supported</li>
 </ul>
 <h2 id="webgpu-shading-language">WebGPU Shading Language</h2>
 <ul>
 <li>Crashed my GPU several times while running code</li>
 <li>Lots of JavaScript required to setup computation and read back results</li>
-<li>The problem I attempted wasn&#39;t a good fit for parallel computation</li>
-<li>A different parallel-friendly problem I attempted required 64-bit arithmetic which apparently isn&#39;t supported in WGSL</li>
+<li>The problem I attempted wasn't a good fit for parallel computation</li>
+<li>A different parallel-friendly problem I attempted required 64-bit arithmetic which apparently isn't supported in WGSL</li>
 </ul>
 <h2 id="awk">AWK</h2>
 <ul>
 <li>Order of <code>for ... in</code> loop is unspecified</li>
 <li>Arrays of arrays are not officially supported</li>
-<li>Relies on mutation in <code>gsub()</code> -- I think I&#39;d prefer a functional version of AWK</li>
+<li>Relies on mutation in <code>gsub()</code> -- I think I'd prefer a functional version of AWK</li>
 </ul>
 <h2 id="webassembly-text-format">WebAssembly (Text Format)</h2>
 <ul>
@@ -110,8 +110,8 @@
 </ul>
 <h2 id="commodore-basic">Commodore BASIC</h2>
 <ul>
-<li>All arithmetic is apparently floating point -- is it done in software? Because it&#39;s surprisingly slow</li>
-<li>Line numbers are annoying to deal with, but in the proper historical context they make sense because you entered one line at a time -- today, we&#39;re spoiled with fullscreen text editors</li>
+<li>All arithmetic is apparently floating point -- is it done in software? Because it's surprisingly slow</li>
+<li>Line numbers are annoying to deal with, but in the proper historical context they make sense because you entered one line at a time -- today, we're spoiled with fullscreen text editors</li>
 </ul>
 <h2 id="verilog">Verilog</h2>
 <ul>
@@ -126,7 +126,7 @@
 <li><a href="http://www.zachtronics.com/exapunks/">Exapunks</a> is a great game</li>
 <li>You can use the T register for temporary storage</li>
 <li>You can use files for even more storage</li>
-<li>I still haven&#39;t found a great way to route messages between EXAs, other than only having 2 EXAs in a room</li>
+<li>I still haven't found a great way to route messages between EXAs, other than only having 2 EXAs in a room</li>
 <li>I made a <a href="../game-development/tec-redshift-dumper.html">tool for dumping TEC Redshift discs into a text format</a> (wait, that was in JavaScript--I used 12 languages this week!)</li>
 </ul>
 

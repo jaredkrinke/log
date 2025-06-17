@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>One month with Deno (the good parts)</title>
-<meta name="description" content="I made the switch from Node to Deno recently. Here&#39;s what I&#39;ve liked after a month of using Deno." />
+<meta name="description" content="I made the switch from Node to Deno recently. Here&#039;s what I&#039;ve liked after a month of using Deno." />
 <meta name="keywords" content="deno,security" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -41,10 +41,10 @@
 </header>
 <h1 id="background">Background</h1>
 <p>After <a href="souring-on-npm.html">souring on NPM</a> (due to unnecessarily huge dependency trees and security concerns), I decided to give <a href="https://deno.land/">Deno</a> a try. Deno supports sand-boxing, TypeScript, and ES modules out of the box. Deno has a standard library, along with a simple and transparent module registry, and also comes with with handy tools for bundling and static analysis.</p>
-<h1 id="what-ive-liked-about-deno">What I&#39;ve liked about Deno</h1>
+<h1 id="what-ive-liked-about-deno">What I've liked about Deno</h1>
 <h2 id="sand-boxing">Sand-boxing</h2>
 <p>Deno disallows file system access, network access, and other privileges by default. You can provide fine-grained permissions on the command line, e.g. <code>--allow-read=file.txt</code> will let the script read <code>file.txt</code> in the current directory.</p>
-<p>In an ideal world this wouldn&#39;t be necessary, but given that hackers have been targeting package registries such as NPM, this is a step in the right direction. As an example, say that I want to find a quick tool to convert a file from one format to another. Here are some options for doing this:</p>
+<p>In an ideal world this wouldn't be necessary, but given that hackers have been targeting package registries such as NPM, this is a step in the right direction. As an example, say that I want to find a quick tool to convert a file from one format to another. Here are some options for doing this:</p>
 <ul>
 <li>In the past, you might just try to find a tool for this purpose, download it, and run it.<ul>
 <li>Today, that would be a terrible idea because the tool runs as your user and could, in an extreme example, contain ransomware.</li>
@@ -61,27 +61,27 @@
 <li>With Deno, you might just run the tool with no extra privileges.<ul>
 <li>If the tool just reads from standard input and writes to standard output, great!</li>
 <li>If the tool has malware that tries to write to the file system or access the network, Deno will block it.</li>
-<li>Of course, this isn&#39;t 100% safe (<a href="https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)">Spectre</a> worked from inside the web browser&#39;s sand box, after all), but it&#39;s much better than nothing!)</li>
+<li>Of course, this isn't 100% safe (<a href="https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)">Spectre</a> worked from inside the web browser's sand box, after all), but it's much better than nothing!)</li>
 </ul>
 </li>
 </ul>
-<p>Full details on Deno&#39;s permissions are <a href="https://deno.land/manual@v1.16.4/getting_started/permissions">here</a>.</p>
+<p>Full details on Deno's permissions are <a href="https://deno.land/manual@v1.16.4/getting_started/permissions">here</a>.</p>
 <h2 id="audited-standard-library">Audited standard library</h2>
-<p>One of the reasons that NPM projects tend to have gigantic dependency trees is that JavaScript (unlike most popular programming languages of today) doesn&#39;t really come with a standard library. This meant that common tasks such as parsing command line arguments are farmed out to dependencies, which then of course pull in whatever dependencies those authors felt like using, and so on until you have hundreds of dependencies (yes, that happened to me pretty quickly).</p>
+<p>One of the reasons that NPM projects tend to have gigantic dependency trees is that JavaScript (unlike most popular programming languages of today) doesn't really come with a standard library. This meant that common tasks such as parsing command line arguments are farmed out to dependencies, which then of course pull in whatever dependencies those authors felt like using, and so on until you have hundreds of dependencies (yes, that happened to me pretty quickly).</p>
 <p>Deno brings JavaScript (and TypeScript) into the modern era by <a href="https://deno.land/std@0.117.0">providing a standard library</a> containing code that has been audited by the Deno authors. The library is not yet comprehensive and navigating the documentation is currently unpleasant, but having a set of trusted dependencies that will be maintained by the Deno authors is a relief after coming from the Node/NPM ecosystem.</p>
 <h2 id="native-typescript-support">Native TypeScript support</h2>
-<p>I like JavaScript for prototyping, but I like TypeScript and its tooling more. Honestly, if you know what you&#39;re doing, the compiler should be your friend, helpfully pointing out when you&#39;ve made a typo or not quite lined up types across a function or module boundary. The problem with TypeScript for me has always been setting up a development environment and build scripts.</p>
+<p>I like JavaScript for prototyping, but I like TypeScript and its tooling more. Honestly, if you know what you're doing, the compiler should be your friend, helpfully pointing out when you've made a typo or not quite lined up types across a function or module boundary. The problem with TypeScript for me has always been setting up a development environment and build scripts.</p>
 <p>With Deno, you get the benefits of TypeScript without having to do any special setup. Just use the <code>.ts</code> file extension, and Deno will automatically type-check, compile, and run your code. You can even publish your module as TypeScript and Deno scripts can consume it without doing anything special.</p>
-<p>If you&#39;re interested in TypeScript, but struggled with Node and NPM (and <code>ts-node</code>, etc.), give Deno a try!</p>
+<p>If you're interested in TypeScript, but struggled with Node and NPM (and <code>ts-node</code>, etc.), give Deno a try!</p>
 <h2 id="web-standard-apis">Web standard APIs</h2>
 <p>One of the dreams of Node was to write &quot;isomorphic&quot; code that runs both in Node and the browser. Deno brings this one step closer to reality by embracing browser APIs (e.g. <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">fetch</a>). This is helpful because you can learn about the browser while writing code for Deno and vice versa.</p>
 <h2 id="simple-transparent-module-registry">Simple, transparent module registry</h2>
-<p>A major complaint I have with most package managers and package registries is that they don&#39;t make it easy to see what is inside a package before downloading it. NPM is especially bad here because, by default, installing a package can run arbitrary scripts, so you might get malware just by trying to check and see if a package contains malware (this is your reminder to enable NPM&#39;s <a href="https://docs.npmjs.com/cli/v7/commands/npm-install#ignore-scripts">ignore-scripts</a> setting).</p>
-<p>Deno&#39;s module registry is <a href="https://deno.land/x/">https://deno.land/x/</a> and all it does is mirror code from GitHub when tags are pushed. This means that you can browse the <em>exact</em> code you&#39;ll be downloading prior to actually downloading anything. It also automatically generates documentation from JSDoc comments and helpfully displays the list of (static) external dependencies for a given file.</p>
+<p>A major complaint I have with most package managers and package registries is that they don't make it easy to see what is inside a package before downloading it. NPM is especially bad here because, by default, installing a package can run arbitrary scripts, so you might get malware just by trying to check and see if a package contains malware (this is your reminder to enable NPM's <a href="https://docs.npmjs.com/cli/v7/commands/npm-install#ignore-scripts">ignore-scripts</a> setting).</p>
+<p>Deno's module registry is <a href="https://deno.land/x/">https://deno.land/x/</a> and all it does is mirror code from GitHub when tags are pushed. This means that you can browse the <em>exact</em> code you'll be downloading prior to actually downloading anything. It also automatically generates documentation from JSDoc comments and helpfully displays the list of (static) external dependencies for a given file.</p>
 <p>I do have concerns about tying the module registry so intimately to GitHub, but for now I just like having a transparent registry that takes the guesswork out of auditing dependencies.</p>
 <h2 id="bundlercompiler-script-installer">Bundler/compiler, script installer</h2>
-<p>One theme with Deno is that it has a focus on the entire development experience. Sometimes this is called having &quot;batteries included&quot;. For example, one common problem with scripting languages is that sharing a tool usually requires also sharing the entire runtime environment. E.g. if I want to run a Python script, I need a Python environment (in Python&#39;s case, this is probably even true if I already have Python installed, thanks to frequent breaking changes).</p>
-<p>Deno simplifies this by including a <a href="https://deno.land/manual@v1.16.4/tools/compiler">built in bundler and compiler</a> that packages up a script, its dependencies, and the Deno runtime into a single (~30 MB) download. Obviously, this isn&#39;t efficient if you&#39;re using a lot of Deno tools, but it&#39;s indispensible if you don&#39;t care about Deno and just want to use one specific Deno-based tool.</p>
+<p>One theme with Deno is that it has a focus on the entire development experience. Sometimes this is called having &quot;batteries included&quot;. For example, one common problem with scripting languages is that sharing a tool usually requires also sharing the entire runtime environment. E.g. if I want to run a Python script, I need a Python environment (in Python's case, this is probably even true if I already have Python installed, thanks to frequent breaking changes).</p>
+<p>Deno simplifies this by including a <a href="https://deno.land/manual@v1.16.4/tools/compiler">built in bundler and compiler</a> that packages up a script, its dependencies, and the Deno runtime into a single (~30 MB) download. Obviously, this isn't efficient if you're using a lot of Deno tools, but it's indispensible if you don't care about Deno and just want to use one specific Deno-based tool.</p>
 <p>For a more efficient option, Deno also includes a <a href="https://deno.land/manual@v1.16.4/tools/script_installer">script installer</a> that allows you to just download and install a specific script (and its dependencies), relying on the version of Deno you already have.</p>
 <p>Together, these mean that if someone wants to use your tool, they have two great options (both of which can be supported without third party tools/plugins):</p>
 <ol>
@@ -89,11 +89,11 @@
 <li>Or just install your script with <code>deno install</code> and run it</li>
 </ol>
 <h2 id="built-in-support-for-testing-and-code-coverage">Built-in support for testing and code coverage</h2>
-<p>While <a href="https://deno.land/manual@v1.16.4/testing">Deno&#39;s testing framework</a> isn&#39;t as mature or featureful as some of the Node testing frameworks (although <a href="https://deno.land/manual@v1.16.4/testing#integration-with-testing-libraries">integrations with other libraries exist</a>), there is one advantage: there&#39;s no install or setup required (no more fiddling with dependencies or test scripts!).</p>
+<p>While <a href="https://deno.land/manual@v1.16.4/testing">Deno's testing framework</a> isn't as mature or featureful as some of the Node testing frameworks (although <a href="https://deno.land/manual@v1.16.4/testing#integration-with-testing-libraries">integrations with other libraries exist</a>), there is one advantage: there's no install or setup required (no more fiddling with dependencies or test scripts!).</p>
 <p>For example, if I want to write some quick unit tests for <code>foo.ts</code>, I can just create <code>foo.test.ts</code>, write some tests (see the previous link for example code), and then run <code>deno test</code>. It will find my test file, run the tests, and print out the results.</p>
 <p>I love it when tools just do what I want without any effort!</p>
-<h1 id="but-its-not-all-good">But it&#39;s not all good...</h1>
-<p>Although I&#39;ve found a lot to like about Deno, not everything has been great (or even good... or even acceptable). Stay tuned for part 2: the gripe session.</p>
+<h1 id="but-its-not-all-good">But it's not all good...</h1>
+<p>Although I've found a lot to like about Deno, not everything has been great (or even good... or even acceptable). Stay tuned for part 2: the gripe session.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

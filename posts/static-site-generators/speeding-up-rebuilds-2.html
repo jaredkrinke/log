@@ -40,12 +40,12 @@
 <h1><a href="../../posts/static-site-generators/speeding-up-rebuilds-2.html">Speeding up md2blog, part 2</a></h1>
 <p><time datetime="2023-04-02">April 2, 2023</time></p>
 </header>
-<p>In <a href="speeding-up-rebuilds.html">part 1</a>, I brainstormed some ideas to speed up rebuilds of my static site (because I&#39;ve been <a href="../programming-languages/minimal-dev-env-3.html">playing around with using old/slow computers</a>).</p>
-<p>In this update, I&#39;m going to share a potentially misguided (but functional!) approach to supporting incremental builds using <a href="https://www.gnu.org/software/make/">GNU Make</a>. The code is <a href="https://github.com/jaredkrinke/make-blog">here</a>.</p>
+<p>In <a href="speeding-up-rebuilds.html">part 1</a>, I brainstormed some ideas to speed up rebuilds of my static site (because I've been <a href="../programming-languages/minimal-dev-env-3.html">playing around with using old/slow computers</a>).</p>
+<p>In this update, I'm going to share a potentially misguided (but functional!) approach to supporting incremental builds using <a href="https://www.gnu.org/software/make/">GNU Make</a>. The code is <a href="https://github.com/jaredkrinke/make-blog">here</a>.</p>
 <h1 id="background">Background</h1>
-<p>My static site generator, <a href="md2blog-deno.html">md2blog</a>, is written in TypeScript, simply because I&#39;m used to the language and it&#39;s popular. On my desktop computer, rebuilding this site is trivially fast. But once I switched to a Raspberry Pi 1 B (and now a 12 year-old netbook), the overhead of JavaScript became more noticeable. On my netbook, I&#39;ve been able to get the full rebuild time of this site (only full rebuilds are supported in md2blog) down to about 12 seconds. This is tolerable, but obviously still inefficient. If I&#39;m only adding or modifying a single post, why should I rebuild the entire site?</p>
-<p>Incremental builds should be possible by caching some intermediate state. Originally, I&#39;d hoped to implement a generic solution in TypeScript, but part way through I realized that I was essentially reimplementing Make. So why not just use Make?</p>
-<h1 id="md2blogs-build-process">md2blog&#39;s build process</h1>
+<p>My static site generator, <a href="md2blog-deno.html">md2blog</a>, is written in TypeScript, simply because I'm used to the language and it's popular. On my desktop computer, rebuilding this site is trivially fast. But once I switched to a Raspberry Pi 1 B (and now a 12 year-old netbook), the overhead of JavaScript became more noticeable. On my netbook, I've been able to get the full rebuild time of this site (only full rebuilds are supported in md2blog) down to about 12 seconds. This is tolerable, but obviously still inefficient. If I'm only adding or modifying a single post, why should I rebuild the entire site?</p>
+<p>Incremental builds should be possible by caching some intermediate state. Originally, I'd hoped to implement a generic solution in TypeScript, but part way through I realized that I was essentially reimplementing Make. So why not just use Make?</p>
+<h1 id="md2blogs-build-process">md2blog's build process</h1>
 <p>md2blog is designed to be simple, but complete. This means that the build process is straight-forward:</p>
 <ul>
 <li>Clean up the output directory (delete everything)</li>
@@ -59,49 +59,49 @@
 <li>Generate an archive and tag index pages</li>
 <li>Validate all internal links</li>
 </ul>
-<p>After writing down that list, I&#39;m realizing there are a lot of steps, but they&#39;re mostly just to support implicit tags and various index pages. Regardless, it&#39;s relatively straight-forward.</p>
+<p>After writing down that list, I'm realizing there are a lot of steps, but they're mostly just to support implicit tags and various index pages. Regardless, it's relatively straight-forward.</p>
 <h1 id="using-gnu-make">Using GNU Make</h1>
-<p>Like a good little developer, I&#39;ve shied away from using GNU Make-specific functionality, and have just used the limited subset of Make that is widely supported. But for this project, I ended up needing to dig deep into GNU Make&#39;s functionality to model md2blog&#39;s build process correctly.</p>
-<p>Specifically, there were a few aspects of md2blog&#39;s build process that were tricky to implement using GNU Make:</p>
+<p>Like a good little developer, I've shied away from using GNU Make-specific functionality, and have just used the limited subset of Make that is widely supported. But for this project, I ended up needing to dig deep into GNU Make's functionality to model md2blog's build process correctly.</p>
+<p>Specifically, there were a few aspects of md2blog's build process that were tricky to implement using GNU Make:</p>
 <ul>
 <li>Enumerating posts and their implicit directory structure</li>
 <li>Cleaning up extraneous files in the <code>out</code> directory</li>
 <li>Aggregating all posts into a single archive</li>
-<li>Discovering and handling tags that don&#39;t correspond to any directory (i.e. keywords)</li>
+<li>Discovering and handling tags that don't correspond to any directory (i.e. keywords)</li>
 </ul>
 <h2 id="enumerating-and-cleaning-files">Enumerating and cleaning files</h2>
 <p>In this case, I wanted to avoid listing all posts explicitly in my <code>Makefile</code>--I just wanted it to discover all of the files in the file system, a la &quot;classic&quot; md2blog. GNU Make supports enumerating files by letting you delegate that job to the <code>find</code> command:</p>
-<pre><code class="language-Makefile"><span class="hljs-comment"># Use &quot;find&quot; to enumerate all directories and files under &quot;content/&quot; (excluding &quot;content/&quot; itself)</span>
-INPUT_FILES := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> find content -follow -type f -not -name &#x27;.*&#x27;)</span>
-INPUT_DIRECTORIES := <span class="hljs-variable">$(<span class="hljs-built_in">filter</span>-out content,$(<span class="hljs-built_in">shell</span> find content -follow -type d)</span>)
+<pre><code class="language-makefile"><span class="hl-comment"># Use &quot;find&quot; to enumerate all directories and files under &quot;content/&quot; (excluding &quot;content/&quot; itself)</span>
+<span class="hl-variable">INPUT_FILES</span> <span class="hl-operator">:=</span> <span class="hl-operator">$(</span><span class="hl-function_builtin">shell</span> <span class="hl-identifier">find</span> <span class="hl-identifier">content</span> <span class="hl-default">-follow</span> <span class="hl-default">-type</span> <span class="hl-identifier">f</span> <span class="hl-default">-not</span> <span class="hl-default">-name</span> <span class="hl-string">&apos;.*&apos;</span><span class="hl-operator">)</span>
+<span class="hl-variable">INPUT_DIRECTORIES</span> <span class="hl-operator">:=</span> <span class="hl-operator">$(</span><span class="hl-function_builtin">filter-out</span> <span class="hl-identifier">content</span><span class="hl-default">,</span><span class="hl-operator">$(</span><span class="hl-function_builtin">shell</span> <span class="hl-identifier">find</span> <span class="hl-identifier">content</span> <span class="hl-default">-follow</span> <span class="hl-default">-type</span> <span class="hl-identifier">d</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
 </code></pre>
 <p>Note that in the above snippet I also enumerate directories. This is so that I can recreate the same directory structure in the output directory. I also exclude files beginning with a dot (e.g. swap files).</p>
 <p>How do I &quot;clean&quot; up any extraneous files <em>before</em> anything builds? The only reliable solution I could come up with was to sneakily run a command while expanding an usused <em>simply expanded</em> (<code>:=</code> instead of <code>=</code>) variable (note: it must be simply expanded to ensure it is expanded first, and only once):</p>
-<pre><code class="language-Makefile">INPUT_FILES_POSTS := <span class="hljs-variable">$(<span class="hljs-built_in">filter</span> content/posts/%.md,<span class="hljs-variable">$(INPUT_FILES)</span>)</span>
-INTERMEDIATE_FILES_POST_METADATA := <span class="hljs-variable">$(<span class="hljs-built_in">patsubst</span> content/posts/%.md,cache/posts/%.metadata.json,<span class="hljs-variable">$(INPUT_FILES_POSTS)</span>)</span>
-...
-INTERMEDIATE_FILES_EXTRANEOUS := <span class="hljs-variable">$(<span class="hljs-built_in">filter</span>-out <span class="hljs-variable">$(INTERMEDIATE_FILES)</span>,$(<span class="hljs-built_in">shell</span> mkdir -p cache &amp;&amp; find cache -type f)</span>)
-...
-TIDY_RESULT := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> rm -f <span class="hljs-variable">$(INTERMEDIATE_FILES_EXTRANEOUS)</span>)</span>
+<pre><code class="language-makefile"><span class="hl-variable">INPUT_FILES_POSTS</span> <span class="hl-operator">:=</span> <span class="hl-operator">$(</span><span class="hl-function_builtin">filter</span> <span class="hl-identifier">content/posts/%.md</span><span class="hl-default">,</span><span class="hl-operator">$(</span><span class="hl-variable">INPUT_FILES</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+<span class="hl-variable">INTERMEDIATE_FILES_POST_METADATA</span> <span class="hl-operator">:=</span> <span class="hl-operator">$(</span><span class="hl-function_builtin">patsubst</span> <span class="hl-identifier">content/posts/%.md</span><span class="hl-default">,</span><span class="hl-identifier">cache/posts/%.metadata.json</span><span class="hl-default">,</span><span class="hl-operator">$(</span><span class="hl-variable">INPUT_FILES_POSTS</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+<span class="hl-identifier">...</span>
+<span class="hl-variable">INTERMEDIATE_FILES_EXTRANEOUS</span> <span class="hl-operator">:=</span> <span class="hl-operator">$(</span><span class="hl-function_builtin">filter-out</span> <span class="hl-operator">$(</span><span class="hl-variable">INTERMEDIATE_FILES</span><span class="hl-operator">)</span><span class="hl-default">,</span><span class="hl-operator">$(</span><span class="hl-function_builtin">shell</span> <span class="hl-identifier">mkdir</span> <span class="hl-default">-p</span> <span class="hl-identifier">cache</span> <span class="hl-operator">&amp;</span><span class="hl-operator">&amp;</span> <span class="hl-identifier">find</span> <span class="hl-identifier">cache</span> <span class="hl-default">-type</span> <span class="hl-identifier">f</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+<span class="hl-identifier">...</span>
+<span class="hl-variable">TIDY_RESULT</span> <span class="hl-operator">:=</span> <span class="hl-operator">$(</span><span class="hl-function_builtin">shell</span> <span class="hl-identifier">rm</span> <span class="hl-default">-f</span> <span class="hl-operator">$</span><span class="hl-operator">(</span><span class="hl-identifier">INTERMEDIATE_FILES_EXTRANEOUS</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
 </code></pre>
-<p>This feels like a hack, since it relies on a side-effect of a <code>$(shell ...)</code> expansion, but it&#39;s the best solution I could come up with.</p>
+<p>This feels like a hack, since it relies on a side-effect of a <code>$(shell ...)</code> expansion, but it's the best solution I could come up with.</p>
 <h2 id="aggregating-posts">Aggregating posts</h2>
-<p>Aggregating a bunch of posts into a single index sounds like a trivial problem, and it really should be. But since GNU Make relies on command lines, I&#39;m paranoid that any solution which relies on passing paths to <em>every</em> post via the command line will run into the dreaded command line length limit (which varies significantly in the wild, and isn&#39;t always documented properly).</p>
+<p>Aggregating a bunch of posts into a single index sounds like a trivial problem, and it really should be. But since GNU Make relies on command lines, I'm paranoid that any solution which relies on passing paths to <em>every</em> post via the command line will run into the dreaded command line length limit (which varies significantly in the wild, and isn't always documented properly).</p>
 <p>The only solution I could come up with was to pass the large list via the file system. This could either be done using a file that lists the paths, or it could be implicit by searching a directory tree (assuming that the tree has been purged of extraneous files--as I do above).</p>
-<pre><code class="language-Makefile"><span class="hljs-section">cache/posts/index.json: <span class="hljs-variable">$(INTERMEDIATE_FILES_POST_METADATA)</span> | <span class="hljs-variable">$(INTERMEDIATE_DIRECTORIES)</span></span>
-    deno run --allow-read=cache --allow-write=cache index.ts cache/posts <span class="hljs-variable">$@</span>
+<pre><code class="language-makefile"><span class="hl-identifier">cache/posts/index.json</span><span class="hl-operator">:</span> <span class="hl-operator">$(</span><span class="hl-variable">INTERMEDIATE_FILES_POST_METADATA</span><span class="hl-operator">)</span> <span class="hl-operator">|</span> <span class="hl-operator">$(</span><span class="hl-variable">INTERMEDIATE_DIRECTORIES</span><span class="hl-operator">)</span>
+    <span class="hl-identifier">deno</span> <span class="hl-identifier">run</span> <span class="hl-identifier">--allow-read</span><span class="hl-default">=</span><span class="hl-identifier">cache</span> <span class="hl-identifier">--allow-write</span><span class="hl-default">=</span><span class="hl-identifier">cache</span> <span class="hl-identifier">index.ts</span> <span class="hl-identifier">cache/posts</span> <span class="hl-operator">$</span><span class="hl-variable_builtin">@</span>
 </code></pre>
 <p>Note the order-only prerequisite for <code>$(INTERMEDIATE_DIRECTORIES)</code> that ensures the directory structure is already in place before the script runs.</p>
 <h3 id="aside-on-aigpt">Aside on AI/GPT</h3>
-<p>Given that I was somewhat stumped by this problem, I decided to try asking Bing&#39;s fancy new GPT-based AI chat thingy. Its response was pretty underwhelming. Its first suggestion was to switch from GNU Make to... GNU Make. The second suggestion was to use VPATHs--but that&#39;s a solution to a different problem. And its last suggestion was just clearly copy-pasted--without proper context!--from GNU Make&#39;s documentation.</p>
-<p>Overall, the answer pointed to documentation I had already consulted (so it <em>did</em> find information I had already noted as potentially relevant), but the answer was mostly &quot;just don&#39;t do that, duh!&quot;. Color me not impressed.</p>
-<h2 id="discovering-tags-that-dont-exist-as-directories">Discovering tags that don&#39;t exist as directories</h2>
-<p>My current solution to discovering tags that don&#39;t also exist as directories runs a script that enumerates tags programmatically and then outputs <em>all</em> index pages. This requires also managing the creation and non-cleanup-ification of those directories. Sadly, my current solution has a bug (it doesn&#39;t programmatically clean up extraneous tag indexes), but the scenario (deleting a unique keyword) is rare enough that I haven&#39;t bothered to fix the bug yet.</p>
-<p>Here&#39;s where I had to hack in a pattern to avoid treating programmatically-discovered tags&#39; index pages as extraneous (for the purposes of cleaning up the output directory):</p>
-<pre><code class="language-Makefile">OUTPUT_FILES_EXTRANEOUS := <span class="hljs-variable">$(<span class="hljs-built_in">filter</span>-out <span class="hljs-variable">$(OUTPUT_FILES)</span> out/posts/%/index.html,$(<span class="hljs-built_in">shell</span> mkdir -p out &amp;&amp; find out -type f)</span>)
+<p>Given that I was somewhat stumped by this problem, I decided to try asking Bing's fancy new GPT-based AI chat thingy. Its response was pretty underwhelming. Its first suggestion was to switch from GNU Make to... GNU Make. The second suggestion was to use VPATHs--but that's a solution to a different problem. And its last suggestion was just clearly copy-pasted--without proper context!--from GNU Make's documentation.</p>
+<p>Overall, the answer pointed to documentation I had already consulted (so it <em>did</em> find information I had already noted as potentially relevant), but the answer was mostly &quot;just don't do that, duh!&quot;. Color me not impressed.</p>
+<h2 id="discovering-tags-that-dont-exist-as-directories">Discovering tags that don't exist as directories</h2>
+<p>My current solution to discovering tags that don't also exist as directories runs a script that enumerates tags programmatically and then outputs <em>all</em> index pages. This requires also managing the creation and non-cleanup-ification of those directories. Sadly, my current solution has a bug (it doesn't programmatically clean up extraneous tag indexes), but the scenario (deleting a unique keyword) is rare enough that I haven't bothered to fix the bug yet.</p>
+<p>Here's where I had to hack in a pattern to avoid treating programmatically-discovered tags' index pages as extraneous (for the purposes of cleaning up the output directory):</p>
+<pre><code class="language-makefile"><span class="hl-variable">OUTPUT_FILES_EXTRANEOUS</span> <span class="hl-operator">:=</span> <span class="hl-operator">$(</span><span class="hl-function_builtin">filter-out</span> <span class="hl-operator">$(</span><span class="hl-variable">OUTPUT_FILES</span><span class="hl-operator">)</span> <span class="hl-identifier">out/posts/%/index.html</span><span class="hl-default">,</span><span class="hl-operator">$(</span><span class="hl-function_builtin">shell</span> <span class="hl-identifier">mkdir</span> <span class="hl-default">-p</span> <span class="hl-identifier">out</span> <span class="hl-operator">&amp;</span><span class="hl-operator">&amp;</span> <span class="hl-identifier">find</span> <span class="hl-identifier">out</span> <span class="hl-default">-type</span> <span class="hl-identifier">f</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
 </code></pre>
 <h1 id="performance">Performance</h1>
-<p>So was this all worth it? The answer is: kind of. Here&#39;s a table with the results:</p>
+<p>So was this all worth it? The answer is: kind of. Here's a table with the results:</p>
 <table>
 <thead>
 <tr>
@@ -109,7 +109,8 @@ TIDY_RESULT := <span class="hljs-variable">$(<span class="hljs-built_in">shell</
 <th align="right">Elapsed time</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td align="left">Full rebuild using &quot;classic&quot; md2blog</td>
 <td align="right">12 seconds</td>
 </tr>
@@ -121,17 +122,18 @@ TIDY_RESULT := <span class="hljs-variable">$(<span class="hljs-built_in">shell</
 <td align="left">Incremental build using &quot;make&quot;</td>
 <td align="right">3 seconds</td>
 </tr>
-</tbody></table>
-<p>I haven&#39;t heavily optimized the incremental build process, but as it stands currently, an incremental build using Make is 4x faster, but a full rebuild using Make is 8x slower. If I could get the &quot;full rebuild&quot; time down to a reasonable level, I&#39;d be very happy.</p>
+</tbody>
+</table>
+<p>I haven't heavily optimized the incremental build process, but as it stands currently, an incremental build using Make is 4x faster, but a full rebuild using Make is 8x slower. If I could get the &quot;full rebuild&quot; time down to a reasonable level, I'd be very happy.</p>
 <h2 id="bottlenecks">Bottlenecks</h2>
-<p>The biggest issue with leveraging Make in this case is that it spins up a separate process for each build command, but I&#39;m using a JavaScript runtime that has a significant startup cost. I&#39;m not sure exactly how Deno works internally, but setting up a relatively heavy JavaScript environment for processing markdown and adding syntax highlighting, just for a single file, seems wasteful and slow (even when running in parallel--something that GNU Make enables).</p>
+<p>The biggest issue with leveraging Make in this case is that it spins up a separate process for each build command, but I'm using a JavaScript runtime that has a significant startup cost. I'm not sure exactly how Deno works internally, but setting up a relatively heavy JavaScript environment for processing markdown and adding syntax highlighting, just for a single file, seems wasteful and slow (even when running in parallel--something that GNU Make enables).</p>
 <h2 id="potential-improvements">Potential improvements</h2>
-<p>There&#39;s a silver lining, however. Because Make decomposes each step into a separate command line, I could theoretically replace the underlying tool of the slowest commands with a more efficient implementation (without touching anything else). In my case, the slowest processes are syntax highlighting and processing markdown (in that order). I&#39;m tempted to try using native code implementations of these two steps to see how much startup/process creation overhead that avoids.</p>
-<p>Another solution might be to run a persistent JavaScript server and use a trivial tool to communicate with it. For example, running an HTTP server with Deno and using <code>wget</code> in my command lines to send it processing jobs. I&#39;m not sure if GNU Make has any support for such a server process, but I suspect I could hack something together by launching a server process into the background and just having it spin itself down after some number of seconds of inactivity.</p>
+<p>There's a silver lining, however. Because Make decomposes each step into a separate command line, I could theoretically replace the underlying tool of the slowest commands with a more efficient implementation (without touching anything else). In my case, the slowest processes are syntax highlighting and processing markdown (in that order). I'm tempted to try using native code implementations of these two steps to see how much startup/process creation overhead that avoids.</p>
+<p>Another solution might be to run a persistent JavaScript server and use a trivial tool to communicate with it. For example, running an HTTP server with Deno and using <code>wget</code> in my command lines to send it processing jobs. I'm not sure if GNU Make has any support for such a server process, but I suspect I could hack something together by launching a server process into the background and just having it spin itself down after some number of seconds of inactivity.</p>
 <h1 id="this-post-brought-to-you-by-make-blog">This post brought to you by <strong>make-blog</strong></h1>
-<p>A 9 second improvement for incremental builds doesn&#39;t sound terribly noticeable, but just in the process of authoring this post I&#39;m already finding it useful. Now I can tweak a few words or a bit of formatting and view the result (almost) immediately, even on my super slow twelve year-old netbook.</p>
-<p>I&#39;ll most likely continue using &quot;old&quot; md2blog for officially updating the site prior to publishing (just because I&#39;m paranoid), but I&#39;m still satisfied with my improved local workflow.</p>
-<p>In case anyone&#39;s curious, here is the code:</p>
+<p>A 9 second improvement for incremental builds doesn't sound terribly noticeable, but just in the process of authoring this post I'm already finding it useful. Now I can tweak a few words or a bit of formatting and view the result (almost) immediately, even on my super slow twelve year-old netbook.</p>
+<p>I'll most likely continue using &quot;old&quot; md2blog for officially updating the site prior to publishing (just because I'm paranoid), but I'm still satisfied with my improved local workflow.</p>
+<p>In case anyone's curious, here is the code:</p>
 <ul>
 <li><a href="https://github.com/jaredkrinke/make-blog">make-blog</a></li>
 </ul>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>My ideal static site generator</title>
-<meta name="description" content="A static site generator is essential for hosting a fast and free dev blog. Here&#39;s my theoretical ideal setup." />
+<meta name="description" content="A static site generator is essential for hosting a fast and free dev blog. Here&#039;s my theoretical ideal setup." />
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -37,12 +37,12 @@
 <h1><a href="../../posts/static-site-generators/overview.html">My ideal static site generator</a></h1>
 <p><time datetime="2021-09-11">September 11, 2021</time></p>
 </header>
-<p>In the interest of documenting some of my programming misadventures, I&#39;m creating a developer blog. But first, I need a static site generator.</p>
+<p>In the interest of documenting some of my programming misadventures, I'm creating a developer blog. But first, I need a static site generator.</p>
 <h1 id="motivation">Motivation</h1>
-<p>I&#39;m creating a developer blog for a couple of reasons:</p>
+<p>I'm creating a developer blog for a couple of reasons:</p>
 <ul>
 <li>Writing helps me organize my thoughts (into bulleted lists)</li>
-<li>Documenting my progress means I don&#39;t have to rely solely on my (unreliable) memory</li>
+<li>Documenting my progress means I don't have to rely solely on my (unreliable) memory</li>
 <li>Someone, somewhere with a similar problem <em>might</em> benefit from me writing down my research and solutions</li>
 </ul>
 <p>Now, why do I need a static site generator? Two simple reasons:</p>
@@ -52,9 +52,9 @@
 </ul>
 <h1 id="the-ideal-setup">The ideal setup</h1>
 <h2 id="input">Input</h2>
-<p>Ideally, I&#39;d like to organize content as follows:</p>
+<p>Ideally, I'd like to organize content as follows:</p>
 <ul>
-<li>Content is written using <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> (because it&#39;s succinct and ubiquitous)</li>
+<li>Content is written using <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> (because it's succinct and ubiquitous)</li>
 <li>Each post is stored in a separate, self-contained file (for easy management)<ul>
 <li>One exception: posts should be able to easily reference each other</li>
 <li>Diagrams and images can be directly embedded into posts</li>
@@ -81,22 +81,22 @@
 <li><code>static/</code>: Static files (namely CSS)</li>
 <li><code>templates/</code>: Template/layout files</li>
 </ul>
-<p>Blog posts will use YAML front matter (draft and keywords are optional, but date is not since Git doesn&#39;t preserve file system dates):</p>
-<pre><code class="language-yaml"><span class="hljs-meta">---</span>
-<span class="hljs-attr">title:</span> <span class="hljs-string">Title</span> <span class="hljs-string">of</span> <span class="hljs-string">blog</span> <span class="hljs-string">post</span>
-<span class="hljs-attr">description:</span> <span class="hljs-string">Plain</span> <span class="hljs-string">text</span> <span class="hljs-string">description</span> <span class="hljs-string">of</span> <span class="hljs-string">the</span> <span class="hljs-string">post</span> <span class="hljs-string">(for</span> <span class="hljs-string">HTML</span> <span class="hljs-string">header,</span> <span class="hljs-string">blurbs,</span> <span class="hljs-string">etc.)</span>
-<span class="hljs-attr">keywords:</span> [<span class="hljs-string">search</span>,<span class="hljs-string">keywords</span>]
-<span class="hljs-attr">date:</span> <span class="hljs-string">Publish</span> <span class="hljs-string">date</span>
-<span class="hljs-attr">draft:</span> <span class="hljs-literal">true</span>
-<span class="hljs-meta">---</span>
+<p>Blog posts will use YAML front matter (draft and keywords are optional, but date is not since Git doesn't preserve file system dates):</p>
+<pre><code class="language-yaml"><span class="hl-operator">---</span>
+<span class="hl-string">title</span><span class="hl-operator">:</span> <span class="hl-default">Title of blog post</span>
+<span class="hl-string">description</span><span class="hl-operator">:</span> <span class="hl-default">Plain text description of the post (for HTML header, blurbs, etc.)</span>
+<span class="hl-string">keywords</span><span class="hl-operator">:</span> <span class="hl-operator">[</span><span class="hl-default">s</span><span class="hl-default">e</span><span class="hl-default">a</span><span class="hl-default">r</span><span class="hl-default">c</span><span class="hl-default">h</span><span class="hl-default">,</span><span class="hl-default">k</span><span class="hl-default">e</span><span class="hl-default">y</span><span class="hl-default">w</span><span class="hl-default">o</span><span class="hl-default">r</span><span class="hl-default">d</span><span class="hl-default">s</span><span class="hl-operator">]</span>
+<span class="hl-string">date</span><span class="hl-operator">:</span> <span class="hl-default">Publish date</span>
+<span class="hl-string">draft</span><span class="hl-operator">:</span> <span class="hl-constant_builtin">true</span>
+<span class="hl-operator">---</span>
 </code></pre>
-<p>Note: I&#39;d like to be able to automatically insert keywords into every post within a given topic.</p>
+<p>Note: I'd like to be able to automatically insert keywords into every post within a given topic.</p>
 <h2 id="output">Output</h2>
 <p>The output should be as simple as possible:</p>
 <ul>
 <li>Each post should get its own HTML file (and, optimistically, <a href="https://en.wikipedia.org/wiki/Permalink">permalink</a>)<ul>
 <li>Pages should use plain old HTML, using CSS for styling (no JavaScript required)</li>
-<li>References to other posts should use relative links (so that links don&#39;t break if the site is moved or viewed directly from the file system)</li>
+<li>References to other posts should use relative links (so that links don't break if the site is moved or viewed directly from the file system)</li>
 <li>References should be validated at build time</li>
 <li>Embedded resources should be separated out into unique files (I guess you could call this &quot;no images required&quot;)<ul>
 <li>Diagrams should use the SVG format (to support high resolution displays)</li>
@@ -107,11 +107,11 @@
 <li>Index/archive pages should be generated by aggregating content from multiple posts</li>
 <li>An RSS news feed should be generated</li>
 <li>Non-markdown files (e.g. CSS files, other assets) should pass through, unmodified</li>
-<li>Ideally, I&#39;d like to be able to load the HTML files directly from the file system and have all styling and links work normally (no web server required for testing)</li>
+<li>Ideally, I'd like to be able to load the HTML files directly from the file system and have all styling and links work normally (no web server required for testing)</li>
 </ul>
 <h2 id="hosting">Hosting</h2>
-<p>I&#39;ll store the content in a <a href="https://git-scm.com/">Git</a> repository on <a href="https://github.com/">GitHub</a> for archival purposes.</p>
-<p>The pages will be served using <a href="https://pages.github.com/">GitHub Pages</a> (because it&#39;s fast and free, at least for my purposes).</p>
+<p>I'll store the content in a <a href="https://git-scm.com/">Git</a> repository on <a href="https://github.com/">GitHub</a> for archival purposes.</p>
+<p>The pages will be served using <a href="https://pages.github.com/">GitHub Pages</a> (because it's fast and free, at least for my purposes).</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

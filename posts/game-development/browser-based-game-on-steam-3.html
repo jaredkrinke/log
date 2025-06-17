@@ -39,10 +39,10 @@
 <p><time datetime="2022-11-17">November 17, 2022</time></p>
 </header>
 <p>In <a href="browser-based-game-on-steam-2.html">part 2</a>, I decided to try using <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/">WebView2</a> to port my browser-based game to Steam (in order to avoid having to ship an entire Chrome/Electron runtime with my game).</p>
-<p>The good news is that it is indeed possible to ship an HTML/CSS/JavaScript-based game on Steam using WebView2. The bad news is that I ended up having to write a lot of integration code. I&#39;ll probably never know how much time using <a href="https://www.electronjs.org/">Electron</a>+<a href="https://github.com/greenheartgames/greenworks">Greenworks</a> would have saved me, but I try not to dwell on sunk costs.</p>
+<p>The good news is that it is indeed possible to ship an HTML/CSS/JavaScript-based game on Steam using WebView2. The bad news is that I ended up having to write a lot of integration code. I'll probably never know how much time using <a href="https://www.electronjs.org/">Electron</a>+<a href="https://github.com/greenheartgames/greenworks">Greenworks</a> would have saved me, but I try not to dwell on sunk costs.</p>
 <h1 id="finally-some-brief-answers">Finally, some (brief) answers</h1>
 <p>Below is a categorized overview of the questions I had to answer on my journey to a (hopefully!) final Steam build of my WebView2-based game, along with brief answers.</p>
-<p>I&#39;m planning to write more in-depth answers in the future. For now, if you&#39;re interested in more detail, send an email to <a href="mailto:log@schemescape.com">log@schemescape.com</a>.</p>
+<p>I'm planning to write more in-depth answers in the future. For now, if you're interested in more detail, send an email to <a href="mailto:log@schemescape.com">log@schemescape.com</a>.</p>
 <h2 id="installation-environment">Installation, environment</h2>
 <ul>
 <li><strong>Does WebView2 support Windows 7? What about 32-bit Windows?</strong><ul>
@@ -58,7 +58,7 @@
 </ul>
 </li>
 <li><strong>How do you debug JavaScript code running in the WebView2 app?</strong><ul>
-<li>Use VS Code&#39;s path mapping option: <a href="https://github.com/jaredkrinke/sic1/blob/master/.vscode/launch.json">example</a>.</li>
+<li>Use VS Code's path mapping option: <a href="https://github.com/jaredkrinke/sic1/blob/master/.vscode/launch.json">example</a>.</li>
 </ul>
 </li>
 <li><strong>How do you monitor your game for errors (both JavaScript and native)?</strong><ul>
@@ -68,7 +68,7 @@
 </ul>
 <h2 id="integrating-c-and-javascript">Integrating C++ and JavaScript</h2>
 <ul>
-<li><strong>What is WebView2&#39;s threading model? What happens if the network connection is slow?</strong><ul>
+<li><strong>What is WebView2's threading model? What happens if the network connection is slow?</strong><ul>
 <li>All host object calls come in on your main thread, so you may want to move slow operations to a background (or thread pool) thread, and use the promise-wrapping technique mentioned below for providing asynchronous results.</li>
 </ul>
 </li>
@@ -91,7 +91,7 @@
 </ul>
 <h2 id="steam-integration">Steam integration</h2>
 <ul>
-<li><strong>Is it trivial to take advantage of Steam&#39;s support for cloud saves/syncing?</strong><ul>
+<li><strong>Is it trivial to take advantage of Steam's support for cloud saves/syncing?</strong><ul>
 <li>Nope. I periodically write localStorage to a file that Steam auto-cloud synchronizes.</li>
 </ul>
 </li>
@@ -99,8 +99,8 @@
 <li>Just delete the local save and let Steam restore it on launch.</li>
 </ul>
 </li>
-<li><strong>How do you integrate Steam&#39;s Callback and CallResult APIs with JavaScript?</strong><ul>
-<li>I did this using very careful multi-threaded code and the promise-wrapping idea from the previous bullet. I hope there&#39;s a better way that I just haven&#39;t found yet!</li>
+<li><strong>How do you integrate Steam's Callback and CallResult APIs with JavaScript?</strong><ul>
+<li>I did this using very careful multi-threaded code and the promise-wrapping idea from the previous bullet. I hope there's a better way that I just haven't found yet!</li>
 </ul>
 </li>
 <li><strong>How do you deal with Steam API rate-limiting?</strong><ul>

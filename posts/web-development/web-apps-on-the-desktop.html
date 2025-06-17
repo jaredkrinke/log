@@ -37,17 +37,17 @@
 <h1><a href="../../posts/web-development/web-apps-on-the-desktop.html">Frameworks for porting web apps to the desktop</a></h1>
 <p><time datetime="2022-01-13">January 13, 2022</time></p>
 </header>
-<p>I have a browser-based application that I&#39;d like to transform into a &quot;normal&quot; desktop application.</p>
+<p>I have a browser-based application that I'd like to transform into a &quot;normal&quot; desktop application.</p>
 <h1 id="why">Why?</h1>
-<p>My situation is fairly unique, but here&#39;s my motivation:</p>
+<p>My situation is fairly unique, but here's my motivation:</p>
 <ul>
-<li>My app is already web-based (using HTML, CSS, TypeScript, with a corresponding HTTP API that&#39;s deployed to <a href="https://functions.netlify.com/">Netlify Functions</a>), and I don&#39;t want to rewrite any of my code</li>
-<li>I&#39;m planning to use a distribution service that&#39;s based on plain old desktop executables (this is probably an unusual requirement)</li>
+<li>My app is already web-based (using HTML, CSS, TypeScript, with a corresponding HTTP API that's deployed to <a href="https://functions.netlify.com/">Netlify Functions</a>), and I don't want to rewrite any of my code</li>
+<li>I'm planning to use a distribution service that's based on plain old desktop executables (this is probably an unusual requirement)</li>
 </ul>
 <p>Some more typical reasons for porting from web to desktop might be:</p>
 <ul>
-<li>Wanting to take advantage of libraries, devices, or system APIs that aren&#39;t available in the browser</li>
-<li>Wanting to integrate with native code that (probably due to performance) won&#39;t be ported to WebAssembly</li>
+<li>Wanting to take advantage of libraries, devices, or system APIs that aren't available in the browser</li>
+<li>Wanting to integrate with native code that (probably due to performance) won't be ported to WebAssembly</li>
 </ul>
 <h1 id="why-not">Why not?</h1>
 <p>Some downsides:</p>
@@ -77,7 +77,8 @@
 <th>Examples</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>Electron</td>
 <td>Chromium</td>
 <td>Stable</td>
@@ -105,28 +106,29 @@
 <td><a href="https://github.com/neutralinojs/neutralinojs/blob/main/LICENSE">Many</a></td>
 <td>?</td>
 </tr>
-</tbody></table>
-<p>Note that I&#39;m ignoring native code interop because it&#39;s not relevant to me, but I believe NW.js uses Node and Tauri uses Rust.</p>
+</tbody>
+</table>
+<p>Note that I'm ignoring native code interop because it's not relevant to me, but I believe NW.js uses Node and Tauri uses Rust.</p>
 <h1 id="my-plan">My plan</h1>
 <p>For my purposes:</p>
 <ul>
 <li>I only <em>need</em> to support Windows (at least initially)</li>
 <li>I may not need desktop integration or native code</li>
-<li>I&#39;d like to produce a minimal binary package (i.e. I don&#39;t want to bundle an entire browser runtime if I don&#39;t have to)</li>
+<li>I'd like to produce a minimal binary package (i.e. I don't want to bundle an entire browser runtime if I don't have to)</li>
 </ul>
 <p>Based on that last requirement, Tauri (or maybe Neutralinojs) seemed like the best match, but I had concerns about reliability:</p>
 <ul>
 <li>Tauri is built on <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/">WebView2</a>, which is installed separately from the operating system (so not all Windows computers will have it installed)</li>
-<li>Tauri&#39;s bundler produces installers on Windows that apparently <a href="https://github.com/tauri-apps/tauri/issues/2452">don&#39;t clearly communicate this requirement</a>, possibly leading to broken installs</li>
-<li>This also means that installation inherits the WebView2 runtime&#39;s need for elevated privileges (avoidable by distributing the runtime as well, but that&#39;s basically Electron at that point)</li>
-<li>Obviously, if I want to later expand to Linux and/or macOS (where Tauri uses WebKit) I might run into incompatibilities (although I haven&#39;t heard of any with the web version of my app)</li>
+<li>Tauri's bundler produces installers on Windows that apparently <a href="https://github.com/tauri-apps/tauri/issues/2452">don't clearly communicate this requirement</a>, possibly leading to broken installs</li>
+<li>This also means that installation inherits the WebView2 runtime's need for elevated privileges (avoidable by distributing the runtime as well, but that's basically Electron at that point)</li>
+<li>Obviously, if I want to later expand to Linux and/or macOS (where Tauri uses WebKit) I might run into incompatibilities (although I haven't heard of any with the web version of my app)</li>
 </ul>
 <p>Taken as a whole (and given that WebView2 is relatively new), unless I have some way to ensure the WebView2 runtime will be present, I will likely end up using Electron, despite my reservations around download size and efficiency. At least in my case, there are some mitigating factors:</p>
 <ul>
-<li>This isn&#39;t an app I expect users to have open all the time (so memory usage is less of a concern)</li>
+<li>This isn't an app I expect users to have open all the time (so memory usage is less of a concern)</li>
 <li>There is a simple fallback for anyone who wants to avoid a large download: just use the web version!</li>
 </ul>
-<p>This isn&#39;t the answer I had hoped for, but I&#39;m trying to be pragmatic. Hopefully in the future WebView2 will be installed by default and I can switch to something more lightweight like Tauri.</p>
+<p>This isn't the answer I had hoped for, but I'm trying to be pragmatic. Hopefully in the future WebView2 will be installed by default and I can switch to something more lightweight like Tauri.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

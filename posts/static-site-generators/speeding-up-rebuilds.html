@@ -40,54 +40,54 @@
 <h1><a href="../../posts/static-site-generators/speeding-up-rebuilds.html">Speeding up md2blog</a></h1>
 <p><time datetime="2023-03-07">March 7, 2023</time></p>
 </header>
-<p>I&#39;ve been happily using <a href="md2blog-deno.html">md2blog</a> to generate this site for over a year now, but I recently ran into a problem: it&#39;s not as fast as it could be.</p>
-<p>On my desktop computer, this is no big deal because a clean build only takes a couple of seconds and a live rebuild takes less than 2 seconds. But on my <a href="../programming-languages/minimal-dev-env-3.html">minimal development environment I&#39;ve been playing with</a> (which runs on a Raspberry Pi 1, model B), even after some basic optimization, it still takes 2 minutes to build the site from scratch! I haven&#39;t bothered to attempt a &quot;live&quot; rebuild.</p>
-<p>One reason for this is the fact that md2blog always rebuilds the entire site, regardless of whether or not anything changed. This was a design decision I made solely to simplify the implementation, with the understanding that my site was small enough and my computer fast enough that it wouldn&#39;t matter. Now, my computer is slow.</p>
+<p>I've been happily using <a href="md2blog-deno.html">md2blog</a> to generate this site for over a year now, but I recently ran into a problem: it's not as fast as it could be.</p>
+<p>On my desktop computer, this is no big deal because a clean build only takes a couple of seconds and a live rebuild takes less than 2 seconds. But on my <a href="../programming-languages/minimal-dev-env-3.html">minimal development environment I've been playing with</a> (which runs on a Raspberry Pi 1, model B), even after some basic optimization, it still takes 2 minutes to build the site from scratch! I haven't bothered to attempt a &quot;live&quot; rebuild.</p>
+<p>One reason for this is the fact that md2blog always rebuilds the entire site, regardless of whether or not anything changed. This was a design decision I made solely to simplify the implementation, with the understanding that my site was small enough and my computer fast enough that it wouldn't matter. Now, my computer is slow.</p>
 <h1 id="solutions-to-explore">Solutions to explore</h1>
 <p>Here are some ideas I had for improving performance on low-end devices:</p>
 <ul>
 <li><strong>Hugo</strong>: Give up on JavaScript/Deno/<a href="https://github.com/jaredkrinke/goldsmith">Goldsmith</a> and port everything to <a href="https://gohugo.io/">Hugo</a> (which is implemented in Go and therefore compiled to native code, so probably faster)</li>
 <li><strong>Rust</strong>: Give up on JavaScript and rewrite md2blog (and possibly Goldsmith) in Rust (also compiles to native code, but without a garbage collector, so maybe even faster)</li>
-<li><strong>Caching</strong>: Refactor Goldsmith so that it avoids rebuilding items whose source files haven&#39;t changed</li>
+<li><strong>Caching</strong>: Refactor Goldsmith so that it avoids rebuilding items whose source files haven't changed</li>
 </ul>
 <h2 id="hugo">Hugo</h2>
-<p>Hugo is a popular static site generator. I <a href="hugo.html">tried it out</a> when I was first creating this site, but I hated the template language and the learning curve for creating new themes was fairly steep. Despite my complaints, I admire Hugo&#39;s portability and speed, so I&#39;m willing to give it another shot, so this option remains on the table.</p>
-<p><strong>Update</strong>: I looked into Hugo more, and it doesn&#39;t support deriving taxonomies from file system metadata (namely: parent directory), so I&#39;d have to make some compromises (either to my workflow or the site design) if I wanted to switch to Hugo. Still on the table (just less attractive).</p>
+<p>Hugo is a popular static site generator. I <a href="hugo.html">tried it out</a> when I was first creating this site, but I hated the template language and the learning curve for creating new themes was fairly steep. Despite my complaints, I admire Hugo's portability and speed, so I'm willing to give it another shot, so this option remains on the table.</p>
+<p><strong>Update</strong>: I looked into Hugo more, and it doesn't support deriving taxonomies from file system metadata (namely: parent directory), so I'd have to make some compromises (either to my workflow or the site design) if I wanted to switch to Hugo. Still on the table (just less attractive).</p>
 <h2 id="rust">Rust</h2>
-<p>I&#39;d like to learn Rust because it&#39;s unique as a <em>safe</em> systems language, and redesigning/reimplementing Goldsmith+md2blog in Rust would be a great way to learn the language. Using a compiled language would enable parallel builds (although my Raspberry Pi 1 only has a single CPU core), and I suspect that native Markdown/syntax highlighting libraries would speed things up.</p>
-<p>This would be a large project, but educational enough that I&#39;m open to it.</p>
+<p>I'd like to learn Rust because it's unique as a <em>safe</em> systems language, and redesigning/reimplementing Goldsmith+md2blog in Rust would be a great way to learn the language. Using a compiled language would enable parallel builds (although my Raspberry Pi 1 only has a single CPU core), and I suspect that native Markdown/syntax highlighting libraries would speed things up.</p>
+<p>This would be a large project, but educational enough that I'm open to it.</p>
 <h2 id="caching">Caching</h2>
-<p>It&#39;s hard to estimate the impact of caching intermediate objects and outputs, but done correctly this would at least reduce the number of files written out from roughly 100, down to just a handful.</p>
-<p>This option also has the attractive quality that it doesn&#39;t require reimplementing everything in a new language or framework, so it&#39;s probably the shortest path to performance improvements without functional regressions.</p>
-<p>For now, I&#39;m planning to investigate caching first since it&#39;s the easiest and safest option.</p>
+<p>It's hard to estimate the impact of caching intermediate objects and outputs, but done correctly this would at least reduce the number of files written out from roughly 100, down to just a handful.</p>
+<p>This option also has the attractive quality that it doesn't require reimplementing everything in a new language or framework, so it's probably the shortest path to performance improvements without functional regressions.</p>
+<p>For now, I'm planning to investigate caching first since it's the easiest and safest option.</p>
 <h1 id="adding-caching-to-goldsmith">Adding caching to Goldsmith</h1>
-<p>I never got around to documenting Goldsmith (the base upon which md2blog is built), but it&#39;s essentially &quot;<a href="metalsmith.html">Metalsmith</a> for Deno, with very few dependencies&quot;. Unfortunately, Metalsmith&#39;s data model (which Goldsmith copies) doesn&#39;t trivially lend itself to caching.</p>
-<h2 id="goldsmiths-data-model-vs-caching">Goldsmith&#39;s data model vs. caching</h2>
-<p>Goldsmith&#39;s data model is essentially one giant mutable map of filenames to metadata and content. A sequence of plugins manipulate this map, in order to transform input files to output files (adding/modifying metadata along the way). At the end of the plugin chain, files are written out to disk.</p>
-<p>The problem with this approach is that output files never specify their dependencies. Looking at it from the other direction, if I modify this post&#39;s Markdown file, the only change to Goldsmith&#39;s initial data model is the content of this Markdown file. The problem is that this one input file could impact numerous output files: the post itself, the Atom feed, any category/keyword index pages (especially if keywords are added or removed), the home page, and, of course, the archive page.</p>
+<p>I never got around to documenting Goldsmith (the base upon which md2blog is built), but it's essentially &quot;<a href="metalsmith.html">Metalsmith</a> for Deno, with very few dependencies&quot;. Unfortunately, Metalsmith's data model (which Goldsmith copies) doesn't trivially lend itself to caching.</p>
+<h2 id="goldsmiths-data-model-vs-caching">Goldsmith's data model vs. caching</h2>
+<p>Goldsmith's data model is essentially one giant mutable map of filenames to metadata and content. A sequence of plugins manipulate this map, in order to transform input files to output files (adding/modifying metadata along the way). At the end of the plugin chain, files are written out to disk.</p>
+<p>The problem with this approach is that output files never specify their dependencies. Looking at it from the other direction, if I modify this post's Markdown file, the only change to Goldsmith's initial data model is the content of this Markdown file. The problem is that this one input file could impact numerous output files: the post itself, the Atom feed, any category/keyword index pages (especially if keywords are added or removed), the home page, and, of course, the archive page.</p>
 <h2 id="caching-requirements">Caching requirements</h2>
 <p>In order to rebuild the minimal set of files when a change is detected, I need an accurate dependency graph. There are a couple of pitfalls:</p>
 <ul>
 <li><strong>The pipeline itself can change</strong> (in general for Goldsmith, and in configuration for md2blog)</li>
-<li>Plugins always consume the entire data model (plugins internally may filter the set of files, but that&#39;s an implementation detail)</li>
-<li>Plugins can add/delete files at will (there isn&#39;t even a &quot;rename&quot; operation--it just shows up as two independent operations: add and delete)</li>
+<li>Plugins always consume the entire data model (plugins internally may filter the set of files, but that's an implementation detail)</li>
+<li>Plugins can add/delete files at will (there isn't even a &quot;rename&quot; operation--it just shows up as two independent operations: add and delete)</li>
 </ul>
 <h2 id="brainstorming-dependency-graph-approaches">Brainstorming dependency graph approaches</h2>
 <p>Obviously, I could just mandate that Goldsmith plugins have to accurately enumerate their dependencies when adding or modifying entires in the collection data model. For md2blog, with its fixed pipeline, this should be feasible, but potentially error-prone.</p>
-<p>Another approach would be to automatically gather dependency information for each output by providing the data model wrapped in a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">proxy object</a>. The trick is scoping the proxy object to a single output, and I don&#39;t see a way to accomplish this without changing the plugin contract. One approach might be to create a new class of plugins that <em>only</em> transform/rename files individually. <strong>This would also open the door to parallel processing of these &quot;per-file&quot; plugins</strong>.</p>
-<p>Having the dependency graph computed automatically is preferable, so I&#39;ll try that first.</p>
+<p>Another approach would be to automatically gather dependency information for each output by providing the data model wrapped in a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">proxy object</a>. The trick is scoping the proxy object to a single output, and I don't see a way to accomplish this without changing the plugin contract. One approach might be to create a new class of plugins that <em>only</em> transform/rename files individually. <strong>This would also open the door to parallel processing of these &quot;per-file&quot; plugins</strong>.</p>
+<p>Having the dependency graph computed automatically is preferable, so I'll try that first.</p>
 <h2 id="from-dependencies-to-caching">From dependencies to caching</h2>
-<p>Creating the dependency graph is necessary, but not sufficient. I&#39;ll need to also cache the intermediate results from plugins, along with the timestamps of input files so that I can:</p>
+<p>Creating the dependency graph is necessary, but not sufficient. I'll need to also cache the intermediate results from plugins, along with the timestamps of input files so that I can:</p>
 <ol>
 <li>Check to see which files have changed</li>
-<li>Restart the build pipeline from the deepest point that hasn&#39;t changed</li>
+<li>Restart the build pipeline from the deepest point that hasn't changed</li>
 <li>Add back in unmodified data model entries</li>
 </ol>
 <h2 id="testing">Testing</h2>
-<p>Other than ad-hoc tests, it will probably be a good idea to <strong>run both the new cache-aware pipeline and the old rebuild-the-world approach to ensure there aren&#39;t any differences</strong>.</p>
-<p>I&#39;ll also, of course, need to <strong>ensure that the additional overhead from caching isn&#39;t so large as to negate any of the benefits</strong>, at least on my personal site (I&#39;m not the only md2blog use in the entire world, but there are very few, and I suspect most won&#39;t ever find the updated version).</p>
+<p>Other than ad-hoc tests, it will probably be a good idea to <strong>run both the new cache-aware pipeline and the old rebuild-the-world approach to ensure there aren't any differences</strong>.</p>
+<p>I'll also, of course, need to <strong>ensure that the additional overhead from caching isn't so large as to negate any of the benefits</strong>, at least on my personal site (I'm not the only md2blog use in the entire world, but there are very few, and I suspect most won't ever find the updated version).</p>
 <h1 id="stay-tuned">Stay tuned</h1>
-<p>I have no idea how long this project will take or whether I&#39;ll abandon it, but if I make progress, I&#39;ll be sure to post an update (and link it from here--hopefully the rebuild picks up the change!).</p>
+<p>I have no idea how long this project will take or whether I'll abandon it, but if I make progress, I'll be sure to post an update (and link it from here--hopefully the rebuild picks up the change!).</p>
 <p><strong>Update</strong>: I prototyped <a href="speeding-up-rebuilds-2.html">incremental builds using GNU Make</a>.</p>
 
 <footer>

@@ -44,15 +44,15 @@
 <ol>
 <li>Some way to detect relevant events</li>
 <li>Some way to configure/filter events</li>
-<li>Some way to &quot;debounce&quot; events (so I don&#39;t get a million notifications)</li>
+<li>Some way to &quot;debounce&quot; events (so I don't get a million notifications)</li>
 <li>Some way to deliver the notification</li>
 </ol>
-<p>The simplest approach is to just base everything on text files. Let&#39;s get started!</p>
+<p>The simplest approach is to just base everything on text files. Let's get started!</p>
 <h1 id="detecting-relevant-events">Detecting relevant events</h1>
-<p>There&#39;s no shortcut here. Since I&#39;d like everything to be text-based, I need to instrument my project with text logging. For the game example, I needed to log a message when someone connected to the game server.</p>
-<p>For my current (unannounced) project, I&#39;m using Python&#39;s built-in logging library, with an obvious string (&quot;ERROR&quot;).</p>
+<p>There's no shortcut here. Since I'd like everything to be text-based, I need to instrument my project with text logging. For the game example, I needed to log a message when someone connected to the game server.</p>
+<p>For my current (unannounced) project, I'm using Python's built-in logging library, with an obvious string (&quot;ERROR&quot;).</p>
 <p>Redirecting to a file is sufficient:</p>
-<pre><code><span class="hljs-keyword">python</span> app.<span class="hljs-keyword">py</span> <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> |tee <span class="hljs-built_in">log</span>.txt
+<pre><code>python app.py 2&gt;&amp;1 |tee log.txt
 </code></pre>
 <ul>
 <li><code>2&gt;&amp;1</code> ensures I get both &quot;standard output&quot; and &quot;standard error&quot;</li>
@@ -60,40 +60,40 @@
 </ul>
 <h1 id="configuringfiltering-events">Configuring/filtering events</h1>
 <p>Since everything is text, we can just match the live log file for a specific string using <code>tail -c 0 -f</code> (<code>-f</code> to follow the file and <code>-c 0</code> to only track new additions to the file) and <code>grep</code> (for string searching). Note that there is one trick: <strong>grep needs to search one line at a time, as input arrives</strong>, using the <code>--line-buffered</code> flag:</p>
-<pre><code>tail -c <span class="hljs-number">0</span> -f <span class="hljs-built_in">log</span>.txt |grep --line-buffered -i <span class="hljs-built_in">error</span> &gt; <span class="hljs-built_in">errors</span>.txt
+<pre><code>tail -c 0 -f log.txt |grep --line-buffered -i error &gt; errors.txt
 </code></pre>
 <p>Note that I redirect the matches to &quot;errors.txt&quot;.</p>
 <h1 id="debouncing-events">Debouncing events</h1>
 <p>Now comes the secret sauce.</p>
-<p>One issue with alerts is that they often arrive in bursts. Rather than get hit with an avalanche of alerts, it&#39;s helpful to &quot;debounce&quot; alerts by limiting the alerts to, say, at most one every 15 minutes (or probably even less frequent).</p>
+<p>One issue with alerts is that they often arrive in bursts. Rather than get hit with an avalanche of alerts, it's helpful to &quot;debounce&quot; alerts by limiting the alerts to, say, at most one every 15 minutes (or probably even less frequent).</p>
 <p>My original solution to this relied on a bunch of custom code, but it turns out that you can build a really simple solution using <code>inotifywait</code> (from <code>inotify-tools</code> on Debian) and a trivial shell script. I named the script &quot;ow.sh&quot; (for &quot;on write&quot;):</p>
-<pre><code class="language-sh"><span class="hljs-meta">#!/usr/bin/env bash</span>
+<pre><code class="language-bash"><span class="hl-comment">#!/usr/bin/env bash</span>
 
-<span class="hljs-comment"># ow.sh (&quot;on write&quot;)</span>
-<span class="hljs-comment">#</span>
-<span class="hljs-comment"># This is a script to &quot;debounce&quot; commands that run when a file/directory is</span>
-<span class="hljs-comment"># modified. The command is only run at most every TIMESPAN amount of time</span>
-<span class="hljs-comment"># (TIMESPAN format is the same as the sleep command, e.g. 10s, 1m).</span>
+<span class="hl-comment"># ow.sh (&quot;on write&quot;)</span>
+<span class="hl-comment">#</span>
+<span class="hl-comment"># This is a script to &quot;debounce&quot; commands that run when a file/directory is</span>
+<span class="hl-comment"># modified. The command is only run at most every TIMESPAN amount of time</span>
+<span class="hl-comment"># (TIMESPAN format is the same as the sleep command, e.g. 10s, 1m).</span>
 
-<span class="hljs-keyword">if</span> [ <span class="hljs-variable">$#</span> -le 3 ]; <span class="hljs-keyword">then</span>
-    <span class="hljs-built_in">echo</span> USAGE: <span class="hljs-variable">$0</span> TARGET TIMESPAN COMMAND
-    <span class="hljs-built_in">echo</span>
-    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Example: <span class="hljs-variable">$0</span> foo.log 15m wall &#x27;Alert!!!&#x27;&quot;</span>
-    <span class="hljs-built_in">exit</span> 1
-<span class="hljs-keyword">fi</span>
+<span class="hl-keyword">if</span> <span class="hl-operator">[</span> <span class="hl-operator">$</span><span class="hl-variable_builtin">#</span> <span class="hl-default">-le</span> <span class="hl-number">3</span> <span class="hl-operator">]</span><span class="hl-operator">;</span> <span class="hl-keyword">then</span>
+    <span class="hl-function_builtin">echo</span> <span class="hl-identifier">USAGE</span><span class="hl-default">:</span> <span class="hl-operator">$</span><span class="hl-variable_builtin">0</span> <span class="hl-identifier">TARGET</span> <span class="hl-identifier">TIMESPAN</span> <span class="hl-identifier">COMMAND</span>
+    <span class="hl-function_builtin">echo</span>
+    <span class="hl-function_builtin">echo</span> <span class="hl-string">&quot;Example: $0 foo.log 15m wall &apos;Alert!!!&apos;&quot;</span>
+    <span class="hl-function_builtin">exit</span> <span class="hl-number">1</span>
+<span class="hl-keyword">fi</span>
 
-target=<span class="hljs-variable">$1</span>
-delay=<span class="hljs-variable">$2</span>
-<span class="hljs-built_in">shift</span> 2
+<span class="hl-variable">target</span><span class="hl-operator">=</span><span class="hl-operator">$</span><span class="hl-variable_builtin">1</span>
+<span class="hl-variable">delay</span><span class="hl-operator">=</span><span class="hl-operator">$</span><span class="hl-variable_builtin">2</span>
+<span class="hl-function_builtin">shift</span> <span class="hl-number">2</span>
 
-<span class="hljs-keyword">while</span> inotifywait -qq <span class="hljs-string">&quot;<span class="hljs-variable">$target</span>&quot;</span>; <span class="hljs-keyword">do</span>
-    <span class="hljs-string">&quot;<span class="hljs-variable">$@</span>&quot;</span>
-    <span class="hljs-built_in">sleep</span> <span class="hljs-string">&quot;<span class="hljs-variable">$delay</span>&quot;</span>
-<span class="hljs-keyword">done</span>
+<span class="hl-keyword">while</span> <span class="hl-identifier">inotifywait</span> <span class="hl-default">-qq</span> <span class="hl-string">&quot;$target&quot;</span><span class="hl-operator">;</span> <span class="hl-keyword">do</span>
+    <span class="hl-string">&quot;$@&quot;</span>
+    <span class="hl-identifier">sleep</span> <span class="hl-string">&quot;$delay&quot;</span>
+<span class="hl-keyword">done</span>
 </code></pre>
 <p>All this script does is wait for a file or directory to be modified, run the command, and then sleep the specified amount of time.</p>
 <p>Example usage:</p>
-<pre><code class="language-sh">ow.sh errors.txt 1m <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Oh no! An alert!&quot;</span>
+<pre><code class="language-bash"><span class="hl-identifier">ow</span><span class="hl-default">.</span><span class="hl-identifier">sh</span> <span class="hl-identifier">errors</span><span class="hl-default">.</span><span class="hl-identifier">txt</span> <span class="hl-number">1</span><span class="hl-identifier">m</span> <span class="hl-function_builtin">echo</span> <span class="hl-string">&quot;Oh no! An alert!&quot;</span>
 </code></pre>
 <p>This will:</p>
 <ul>
@@ -105,28 +105,28 @@ delay=<span class="hljs-variable">$2</span>
 <p>The last step is to actually deliver notifications. How this is done depends heavily on the environment where the monitoring is happening and where the notifications need to be received.</p>
 <h2 id="local-desktop">Local desktop</h2>
 <p>If monitoring is happening locally on a full-blown Linux desktop computer, this could be as simple as using <code>notify-send</code>:</p>
-<pre><code class="language-sh">ow.sh errors.txt 15m notify-send <span class="hljs-string">&quot;Oh no, an alert!&quot;</span>
+<pre><code class="language-bash"><span class="hl-identifier">ow</span><span class="hl-default">.</span><span class="hl-identifier">sh</span> <span class="hl-identifier">errors</span><span class="hl-default">.</span><span class="hl-identifier">txt</span> <span class="hl-number">15</span><span class="hl-identifier">m</span> <span class="hl-identifier">notify</span><span class="hl-default">-send</span> <span class="hl-string">&quot;Oh no, an alert!&quot;</span>
 </code></pre>
 <h2 id="remote-server">Remote server</h2>
-<p>If monitoring is happening on a remote server, then it&#39;s mostly a matter of pulling in the remote output somehow. This can be done using SSH, <code>netcat</code>, etc.</p>
-<p>The simplest approach I&#39;ve found is to just tail the remote file locally. So I run the same command <strong>on the server</strong>, same as above:</p>
-<pre><code class="language-sh"><span class="hljs-built_in">tail</span> -c 0 -f log.txt |grep --line-buffered -i error &gt; errors.txt
+<p>If monitoring is happening on a remote server, then it's mostly a matter of pulling in the remote output somehow. This can be done using SSH, <code>netcat</code>, etc.</p>
+<p>The simplest approach I've found is to just tail the remote file locally. So I run the same command <strong>on the server</strong>, same as above:</p>
+<pre><code class="language-bash"><span class="hl-identifier">tail</span> <span class="hl-default">-c</span> <span class="hl-number">0</span> <span class="hl-default">-f</span> <span class="hl-identifier">log</span><span class="hl-default">.</span><span class="hl-identifier">txt</span> <span class="hl-operator">|</span><span class="hl-identifier">grep</span> <span class="hl-default">--line-buffered</span> <span class="hl-default">-i</span> <span class="hl-identifier">error</span> <span class="hl-operator">&gt;</span> <span class="hl-identifier">errors</span><span class="hl-default">.</span><span class="hl-identifier">txt</span>
 </code></pre>
 <p>And then <strong>on my local desktop environment</strong> I tail the remote file using SSH and write to a local file:</p>
-<pre><code class="language-sh">ssh server <span class="hljs-built_in">tail</span> -c 0 -f /home/user/errors.txt &gt; remote-errors.txt
+<pre><code class="language-bash"><span class="hl-identifier">ssh</span> <span class="hl-identifier">server</span> <span class="hl-identifier">tail</span> <span class="hl-default">-c</span> <span class="hl-number">0</span> <span class="hl-default">-f</span> <span class="hl-default">/</span><span class="hl-identifier">home</span><span class="hl-default">/</span><span class="hl-identifier">user</span><span class="hl-default">/</span><span class="hl-identifier">errors</span><span class="hl-default">.</span><span class="hl-identifier">txt</span> <span class="hl-operator">&gt;</span> <span class="hl-identifier">remote</span><span class="hl-default">-errors</span><span class="hl-default">.</span><span class="hl-identifier">txt</span>
 </code></pre>
 <p>Note that the <code>tail -c 0 -f /home/user/errors.txt</code> part runs on the server and the <code>&gt; re.txt</code> part runs locally. Finally, I can use the debouncing script and <code>notify-send</code>, as before:</p>
-<pre><code class="language-sh">ow.sh remote-errors.txt 15m notify-send <span class="hljs-string">&quot;Oh no, an alert!&quot;</span>
+<pre><code class="language-bash"><span class="hl-identifier">ow</span><span class="hl-default">.</span><span class="hl-identifier">sh</span> <span class="hl-identifier">remote</span><span class="hl-default">-errors</span><span class="hl-default">.</span><span class="hl-identifier">txt</span> <span class="hl-number">15</span><span class="hl-identifier">m</span> <span class="hl-identifier">notify</span><span class="hl-default">-send</span> <span class="hl-string">&quot;Oh no, an alert!&quot;</span>
 </code></pre>
 <h2 id="phone-notifications">Phone notifications</h2>
-<p>Phone notifications are where my knowledge runs out. I don&#39;t know the best way to send notifications to a phone, especially in a self-hosted way. In the past, I&#39;ve relied on free tiers of paid services, but I&#39;m hopeful I can eventually figure out something that is fully self-hosted (except for the app itself and associated notification infrastructure).</p>
+<p>Phone notifications are where my knowledge runs out. I don't know the best way to send notifications to a phone, especially in a self-hosted way. In the past, I've relied on free tiers of paid services, but I'm hopeful I can eventually figure out something that is fully self-hosted (except for the app itself and associated notification infrastructure).</p>
 <p>Here are a few ideas:</p>
 <h3 id="ifttt">IFTTT</h3>
 <p>(Edit: IFTTT no longer supports phone notifications via webhook on the free plan.)</p>
 <h3 id="ntfysh">ntfy.sh</h3>
-<p><a href="https://ntfy.sh/">ntfy.sh</a> is an awesome service that allows sending phone notifications without even signing up for an account. Don&#39;t forget to donate!</p>
+<p><a href="https://ntfy.sh/">ntfy.sh</a> is an awesome service that allows sending phone notifications without even signing up for an account. Don't forget to donate!</p>
 <h3 id="matrix">Matrix</h3>
-<p>I strongly suspect there is some way to use <a href="https://matrix.org/">Matrix</a> and an associated phone app for notifications, but I haven&#39;t investigated this option yet.</p>
+<p>I strongly suspect there is some way to use <a href="https://matrix.org/">Matrix</a> and an associated phone app for notifications, but I haven't investigated this option yet.</p>
 <h1 id="recap">Recap</h1>
 <p>So there it is, alerting for hobby projects using only:</p>
 <ul>

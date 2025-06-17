@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Porting a browser-based game to Steam</title>
-<meta name="description" content="I&#39;m researching options for porting a browser-based game to Steam." />
+<meta name="description" content="I&#039;m researching options for porting a browser-based game to Steam." />
 <meta name="keywords" content="steam" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -39,11 +39,11 @@
 <p><time datetime="2022-08-10">August 10, 2022</time></p>
 </header>
 <p>Browser-based games are great because players can pick them up and start playing without having to install anything (assuming reasonable cross-browser compatibility). HTML can also be convenient for UI, especially for laying out text (although handling CSS and rendering quirks can be frustrating).</p>
-<p>Despite the benefits, I&#39;d like to port my most popular browser-based game to Steam, for the following reasons:</p>
+<p>Despite the benefits, I'd like to port my most popular browser-based game to Steam, for the following reasons:</p>
 <ul>
 <li>I want players to be able to sync their data across devices, without forcing them to create a new account (and without me having to host everything)</li>
-<li>I want Steam&#39;s huge user base to be able to access my game (more for convenience than for exposure)</li>
-<li>I might want to build on this experience in the future, for example, if I&#39;d like to sell a game</li>
+<li>I want Steam's huge user base to be able to access my game (more for convenience than for exposure)</li>
+<li>I might want to build on this experience in the future, for example, if I'd like to sell a game</li>
 </ul>
 <h1 id="open-questions">Open questions</h1>
 <p>I have no experience developing for or publishing on Steam, so I have a lot of questions:</p>
@@ -51,37 +51,37 @@
 <li>Which browser-to-native framework should I use (Electron, Tauri, WebView2, etc.)?</li>
 <li>Does Steam have built-in support for browser-based titles? Are any of the above frameworks in the Steamworks Common Redistributables package?</li>
 <li>Which platforms should I support?</li>
-<li>What&#39;s required to take advantage of Steam&#39;s support for cloud saves/syncing?</li>
+<li>What's required to take advantage of Steam's support for cloud saves/syncing?</li>
 <li>How do I test Steam Cloud saves?</li>
 <li>Is there any way to transition user information from the current web site to the Steam release?</li>
 <li>Will it end up costing more than the advertised $100? Is there any way to bring that cost down?</li>
 <li>Is it permissible to promote the Steam version of the game from its current web-based host?</li>
 <li>What sort of analytics does Steam provide for game publishers?</li>
 </ul>
-<p>Answering these questions will take some time, but honestly I think I&#39;d regret not ever trying to port my game to Steam.</p>
+<p>Answering these questions will take some time, but honestly I think I'd regret not ever trying to port my game to Steam.</p>
 <h1 id="first-steps">First steps</h1>
 <p>Steam publishes documentation for Steamworks here:</p>
 <p><a href="https://partner.steamgames.com/doc/home">https://partner.steamgames.com/doc/home</a></p>
 <h2 id="common-redistributables">Common redistributables</h2>
 <p>There is <a href="https://partner.steamgames.com/doc/features/common_redist">a page about common redistributables</a> that says it includes Microsoft Visual C++, .NET, DirectX 9, OpenAL, XNA, and PhysX. This appears to be a comprehensive list.</p>
 <h2 id="platforms">Platforms</h2>
-<p>It&#39;s now possible to download the Steamworks SDK <em>before</em> paying the Steam Direct fee, which is helpful. Within that zip file, it has binaries for 32- and 64-bit Linux and Windows, and macOS. I&#39;m interpreting that list to be the definitive list of supported platforms.</p>
-<p>Note that GPL-licensed libraries can&#39;t be linked with the Steamworks SDK (or probably distributed via Steam period).</p>
+<p>It's now possible to download the Steamworks SDK <em>before</em> paying the Steam Direct fee, which is helpful. Within that zip file, it has binaries for 32- and 64-bit Linux and Windows, and macOS. I'm interpreting that list to be the definitive list of supported platforms.</p>
+<p>Note that GPL-licensed libraries can't be linked with the Steamworks SDK (or probably distributed via Steam period).</p>
 <h2 id="cloud-saves">Cloud saves</h2>
 <p>The Steam SDK <a href="https://partner.steamgames.com/doc/sdk/api">provides a C++ interface</a> for enumerating/reading/writing files to the Steam Cloud. There is also an <a href="https://partner.steamgames.com/doc/features/cloud#steam_auto-cloud">auto-cloud</a> feature that just synchronizes files based on path.</p>
 <p>As far as transitioning data from the browser version to the Steam version, I doubt there is a reliable and automatic way to do so.</p>
 <h3 id="one-note-on-itch">One note on Itch</h3>
-<p>Note: in the past, I investigated using <a href="https://itch.io/">Itch</a>&#39;s launcher to sync user data, but there were many issues:</p>
+<p>Note: in the past, I investigated using <a href="https://itch.io/">Itch</a>'s launcher to sync user data, but there were many issues:</p>
 <ul>
-<li>Obtaining the user identity isn&#39;t possible due to known bugs</li>
+<li>Obtaining the user identity isn't possible due to known bugs</li>
 <li>Storing data is up to the game developer, because Itch (reasonably, in my opinion) does not offer cloud storage for games</li>
 </ul>
 <h2 id="cost">Cost</h2>
-<p>As far as I can tell, Steam&#39;s $100 fee (plus tax) is a one-time fee. Obviously, I&#39;d prefer not to have to shell out this much money, but, luckily, $100 is not going to make or break my financial situation.</p>
+<p>As far as I can tell, Steam's $100 fee (plus tax) is a one-time fee. Obviously, I'd prefer not to have to shell out this much money, but, luckily, $100 is not going to make or break my financial situation.</p>
 <h2 id="advertising-steam-release-within-browser-based-version">Advertising Steam release within browser-based version</h2>
-<p>It seems that there is precedent (e.g. <a href="https://anuke.itch.io/mindustry">Mindustry on Itch</a>) for advertising that the same game is available on Steam, when the Steam version has additional features. I didn&#39;t see anything Itch&#39;s terms of service that prohibit this (nor do I think it <em>should</em> be prohibited).</p>
+<p>It seems that there is precedent (e.g. <a href="https://anuke.itch.io/mindustry">Mindustry on Itch</a>) for advertising that the same game is available on Steam, when the Steam version has additional features. I didn't see anything Itch's terms of service that prohibit this (nor do I think it <em>should</em> be prohibited).</p>
 <h1 id="marketing-and-analytics">Marketing and analytics</h1>
-<p>Steam has <a href="https://partner.steamgames.com/doc/marketing">guidance for marketing games on the platform</a>. It looks like there is support for Google Analytics and some link tracking. For now, I&#39;m just going to put off thinking about marketing because my goal is to share my game, not to get rich off of it.</p>
+<p>Steam has <a href="https://partner.steamgames.com/doc/marketing">guidance for marketing games on the platform</a>. It looks like there is support for Google Analytics and some link tracking. For now, I'm just going to put off thinking about marketing because my goal is to share my game, not to get rich off of it.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

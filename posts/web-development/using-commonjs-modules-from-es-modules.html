@@ -39,38 +39,38 @@
 </header>
 <h1 id="question">Question</h1>
 <p>Is it possible to import a CommonJS module from within an ES module (using <code>import</code> syntax)?</p>
-<p>I thought a quick web search would answer this question, but instead most of the resources I found were about trying to <code>require()</code> ES modules (which you definitely can&#39;t do--use a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports">dynamic import</a> instead).</p>
+<p>I thought a quick web search would answer this question, but instead most of the resources I found were about trying to <code>require()</code> ES modules (which you definitely can't do--use a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports">dynamic import</a> instead).</p>
 <h1 id="background">Background</h1>
-<p>JavaScript didn&#39;t originally have a module system, so various groups have created their own systems, e.g. <a href="http://www.commonjs.org/">CommonJS</a>, <a href="https://github.com/amdjs/amdjs-api">Asynchronous Module Definition (AMD)</a>, and the ironically named <a href="https://github.com/umdjs/umd">Universal Module Definition (UMD)</a>.</p>
-<p>Predictably, there&#39;s now an official <a href="https://tc39.es/ecma262/#sec-modules">ECMAScript Modules</a> format that <del>everyone uses</del> <del>everyone should use</del> some people have started using (<del>because it&#39;s incompatible and they have no choice</del> because it&#39;s part of the official JavaScript/ECMAScript specification). And I won&#39;t even dig into the ES module file extension dumpster fire.</p>
+<p>JavaScript didn't originally have a module system, so various groups have created their own systems, e.g. <a href="http://www.commonjs.org/">CommonJS</a>, <a href="https://github.com/amdjs/amdjs-api">Asynchronous Module Definition (AMD)</a>, and the ironically named <a href="https://github.com/umdjs/umd">Universal Module Definition (UMD)</a>.</p>
+<p>Predictably, there's now an official <a href="https://tc39.es/ecma262/#sec-modules">ECMAScript Modules</a> format that <del>everyone uses</del> <del>everyone should use</del> some people have started using (<del>because it's incompatible and they have no choice</del> because it's part of the official JavaScript/ECMAScript specification). And I won't even dig into the ES module file extension dumpster fire.</p>
 <p>Anyway, back to the question: can I import a CommonJS module into my ES module?</p>
-<h1 id="lets-just-try-it">Let&#39;s just try it...</h1>
-<p>Here&#39;s a CommonJS module:</p>
-<pre><code class="language-javascript"><span class="hljs-built_in">exports</span>.<span class="hljs-property">test</span> = <span class="hljs-string">&quot;works!&quot;</span>;
+<h1 id="lets-just-try-it">Let's just try it...</h1>
+<p>Here's a CommonJS module:</p>
+<pre><code class="language-javascript"><span class="hl-identifier">exports</span><span class="hl-operator">.</span><span class="hl-identifier">test</span> <span class="hl-operator">=</span> <span class="hl-string">&quot;works!&quot;</span><span class="hl-operator">;</span>
 </code></pre>
-<h2 id="proof-that-it-works-from-commonjs-in-node-✔">Proof that it works from CommonJS (in Node) ✔</h2>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> { test } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;./test.js&quot;</span>);
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(test);
-</code></pre>
-<p>Output: <code>works!</code></p>
-<h2 id="how-about-from-an-es-module-in-node-✔">How about from an ES module in Node? ✔</h2>
-<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { test } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./test.js&quot;</span>;
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(test);
+<h2 id="proof-that-it-works-from-commonjs-in-node-">Proof that it works from CommonJS (in Node) ✔</h2>
+<pre><code class="language-javascript"><span class="hl-keyword">const</span> <span class="hl-operator">{</span> <span class="hl-identifier">test</span> <span class="hl-operator">}</span> <span class="hl-operator">=</span> <span class="hl-function">require</span><span class="hl-operator">(</span><span class="hl-string">&quot;./test.js&quot;</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-identifier">console</span><span class="hl-operator">.</span><span class="hl-function_method">log</span><span class="hl-operator">(</span><span class="hl-identifier">test</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 </code></pre>
 <p>Output: <code>works!</code></p>
-<h2 id="how-about-from-an-es-module-in-a-web-page-✖">How about from an ES module in a web page? ✖</h2>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Output: <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;result&quot;</span>&gt;</span>?<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="language-javascript">
-            <span class="hljs-keyword">import</span> { test } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./test.js&quot;</span>;
+<h2 id="how-about-from-an-es-module-in-node-">How about from an ES module in Node? ✔</h2>
+<pre><code class="language-javascript"><span class="hl-keyword">import</span> <span class="hl-operator">{</span> <span class="hl-identifier">test</span> <span class="hl-operator">}</span> <span class="hl-identifier">from</span> <span class="hl-string">&quot;./test.js&quot;</span><span class="hl-operator">;</span>
+<span class="hl-identifier">console</span><span class="hl-operator">.</span><span class="hl-function_method">log</span><span class="hl-operator">(</span><span class="hl-identifier">test</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+</code></pre>
+<p>Output: <code>works!</code></p>
+<h2 id="how-about-from-an-es-module-in-a-web-page-">How about from an ES module in a web page? ✖</h2>
+<pre><code class="language-html"><span class="hl-tag_chars">&lt;</span><span class="hl-tag">html</span><span class="hl-tag_chars">&gt;</span>
+    <span class="hl-tag_chars">&lt;</span><span class="hl-tag">body</span><span class="hl-tag_chars">&gt;</span>
+        <span class="hl-tag_chars">&lt;</span><span class="hl-tag">p</span><span class="hl-tag_chars">&gt;</span><span class="hl-default">O</span><span class="hl-default">u</span><span class="hl-default">t</span><span class="hl-default">p</span><span class="hl-default">u</span><span class="hl-default">t</span><span class="hl-default">:</span> <span class="hl-tag_chars">&lt;</span><span class="hl-tag">span</span> <span class="hl-attribute">id</span><span class="hl-operator">=</span><span class="hl-string">&quot;result&quot;</span><span class="hl-tag_chars">&gt;</span><span class="hl-default">?</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">span</span><span class="hl-tag_chars">&gt;</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">p</span><span class="hl-tag_chars">&gt;</span>
+        <span class="hl-tag_chars">&lt;</span><span class="hl-tag">script</span> <span class="hl-attribute">type</span><span class="hl-operator">=</span><span class="hl-string">&quot;module&quot;</span><span class="hl-tag_chars">&gt;</span>
+            <span class="hl-default">i</span><span class="hl-default">m</span><span class="hl-default">p</span><span class="hl-default">o</span><span class="hl-default">r</span><span class="hl-default">t</span> <span class="hl-default">{</span> <span class="hl-default">t</span><span class="hl-default">e</span><span class="hl-default">s</span><span class="hl-default">t</span> <span class="hl-default">}</span> <span class="hl-default">f</span><span class="hl-default">r</span><span class="hl-default">o</span><span class="hl-default">m</span> <span class="hl-default">&quot;</span><span class="hl-default">.</span><span class="hl-default">/</span><span class="hl-default">t</span><span class="hl-default">e</span><span class="hl-default">s</span><span class="hl-default">t</span><span class="hl-default">.</span><span class="hl-default">j</span><span class="hl-default">s</span><span class="hl-default">&quot;</span><span class="hl-default">;</span>
             
-            <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;result&quot;</span>).<span class="hljs-property">innerText</span> = test;
-        </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+            <span class="hl-default">d</span><span class="hl-default">o</span><span class="hl-default">c</span><span class="hl-default">u</span><span class="hl-default">m</span><span class="hl-default">e</span><span class="hl-default">n</span><span class="hl-default">t</span><span class="hl-default">.</span><span class="hl-default">g</span><span class="hl-default">e</span><span class="hl-default">t</span><span class="hl-default">E</span><span class="hl-default">l</span><span class="hl-default">e</span><span class="hl-default">m</span><span class="hl-default">e</span><span class="hl-default">n</span><span class="hl-default">t</span><span class="hl-default">B</span><span class="hl-default">y</span><span class="hl-default">I</span><span class="hl-default">d</span><span class="hl-default">(</span><span class="hl-default">&quot;</span><span class="hl-default">r</span><span class="hl-default">e</span><span class="hl-default">s</span><span class="hl-default">u</span><span class="hl-default">l</span><span class="hl-default">t</span><span class="hl-default">&quot;</span><span class="hl-default">)</span><span class="hl-default">.</span><span class="hl-attribute_unknown">innerText</span> <span class="hl-operator">=</span> <span class="hl-default">t</span><span class="hl-default">e</span><span class="hl-default">s</span><span class="hl-default">t</span><span class="hl-default">;</span>
+        <span class="hl-tag_chars">&lt;/</span><span class="hl-tag">script</span><span class="hl-tag_chars">&gt;</span>
+    <span class="hl-tag_chars">&lt;/</span><span class="hl-tag">body</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;/</span><span class="hl-tag">html</span><span class="hl-tag_chars">&gt;</span>
 </code></pre>
-<p>Doesn&#39;t work (error: &quot;The requested module &#39;./test.js&#39; does not provide an export named &#39;test&#39;&quot;).</p>
+<p>Doesn't work (error: &quot;The requested module './test.js' does not provide an export named 'test'&quot;).</p>
 <h1 id="final-answer">Final answer</h1>
 <p>You can use <code>import</code> to include a CommonJS module <em>when running in Node</em>, but <em>not</em> when running in a web page.</p>
 

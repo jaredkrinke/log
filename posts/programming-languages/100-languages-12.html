@@ -42,8 +42,8 @@
 <p><time datetime="2024-10-31">October 31, 2024</time></p>
 </header>
 <p>I recently resumed <a href="100-languages.html">solving the first 100 Project Euler problems using 100 different programming languages</a>. For reference: <a href="https://github.com/jaredkrinke/100-languages">here is code for all my solutions so far</a>.</p>
-<p>Of note, <strong>I failed to solve a problem using Micro-Lisp on the Commodore 64</strong>. I think it would have been <em>possible</em> to solve the problem (even despite the lack of cons cell mutation), but the Commodore 64 keyboard design can lead to two different space characters being emitted when you hit the space bar, depending on timing, and Micro-Lisp only handled one of those characters. The result is that I&#39;d have code that looked correct, but wouldn&#39;t compile. I gave up.</p>
-<p><strong>I also finally decided to solve a problem in C</strong>. On the surface, this might seem pointless since I already know C, but <strong>it gave me an excuse to try calling C code from Zig</strong> (a language I hadn&#39;t tried before). Overall, the Zig toolchain is extremely impressive! It&#39;s probably the most convenient C (and C++) compiler in existence. And Zig seemed fine, too.</p>
+<p>Of note, <strong>I failed to solve a problem using Micro-Lisp on the Commodore 64</strong>. I think it would have been <em>possible</em> to solve the problem (even despite the lack of cons cell mutation), but the Commodore 64 keyboard design can lead to two different space characters being emitted when you hit the space bar, depending on timing, and Micro-Lisp only handled one of those characters. The result is that I'd have code that looked correct, but wouldn't compile. I gave up.</p>
+<p><strong>I also finally decided to solve a problem in C</strong>. On the surface, this might seem pointless since I already know C, but <strong>it gave me an excuse to try calling C code from Zig</strong> (a language I hadn't tried before). Overall, the Zig toolchain is extremely impressive! It's probably the most convenient C (and C++) compiler in existence. And Zig seemed fine, too.</p>
 <p>Lastly, <strong>I got around to solving a problem using Prolog. It was worth the wait!</strong> Expect a post on it eventually.</p>
 <p>Without further rambling, here are my notes:</p>
 <h1 id="notes">Notes</h1>
@@ -55,9 +55,9 @@
 <li>&quot;Note that arrays grow downwards in memory, not upwards.&quot;</li>
 <li>Does <em>not</em> compile to machine code!</li>
 <li>Built-in line-based editor includes multi-line insert, search and replace, etc. -- a big step up from Commodore BASIC!</li>
-<li>Without native compilation or an interactive environment, this wouldn&#39;t be my first choice for programming on a Commodore 64 (but still better than BASIC, thanks to named procedures and functions!)</li>
+<li>Without native compilation or an interactive environment, this wouldn't be my first choice for programming on a Commodore 64 (but still better than BASIC, thanks to named procedures and functions!)</li>
 <li>Roughly 7x slower than equivalent C, for my solution (N.B. G-Pascal uses a VM and C compiles to native code)</li>
-<li>I didn&#39;t notice a way to enter blank lines, so the resulting code looks cluttered.</li>
+<li>I didn't notice a way to enter blank lines, so the resulting code looks cluttered.</li>
 </ul>
 <h2 id="micro-lisp-on-a-commodore-64">Micro-Lisp (on a Commodore 64)</h2>
 <ul>
@@ -66,20 +66,20 @@
 <li>No way to modify cons cells</li>
 <li>Line-based editing of Lisp on a 40 column screen was unpleasant (unclear if worse than BASIC editing?)</li>
 <li>Indentation was getting lost on input</li>
-<li>Functions aren&#39;t first class objects</li>
-<li>Unfortunately, you have to choose between image-based development or entering source code in lines (a la Commodore BASIC) -- you can&#39;t easily develop interactively <em>and still save your source code</em></li>
-<li>Sadly, I gave up on C64 Micro-Lisp due to the issues and missing features noted above -- that&#39;s not to say I wasn&#39;t impressed to be using Lisp on a Commodore 64!</li>
+<li>Functions aren't first class objects</li>
+<li>Unfortunately, you have to choose between image-based development or entering source code in lines (a la Commodore BASIC) -- you can't easily develop interactively <em>and still save your source code</em></li>
+<li>Sadly, I gave up on C64 Micro-Lisp due to the issues and missing features noted above -- that's not to say I wasn't impressed to be using Lisp on a Commodore 64!</li>
 </ul>
 <h2 id="scheme">Scheme</h2>
 <ul>
 <li>R6RS appeared to be incompatible with R5RS and R7RS for a &quot;hello world&quot; program</li>
-<li>Chibi-Scheme&#39;s rational numbers were hundreds of times slower than Chez Scheme/Racket</li>
+<li>Chibi-Scheme's rational numbers were hundreds of times slower than Chez Scheme/Racket</li>
 <li>In theory, I should prefer Scheme to Common Lisp (fewer concepts overall, better naming in the standard library), but I wish the different Scheme revisions and implementations were more compatible with one other</li>
 </ul>
 <h2 id="bcpl">BCPL</h2>
 <ul>
 <li>The language is conceptually simple, but the syntax was foreign enough that I found it difficult to write</li>
-<li>Only having a single word-sized data type feels limiting--but I guess that&#39;s the price you pay for a tiny compiler</li>
+<li>Only having a single word-sized data type feels limiting--but I guess that's the price you pay for a tiny compiler</li>
 </ul>
 <h2 id="matlab">MATLAB</h2>
 <ul>
@@ -89,7 +89,7 @@
 <ul>
 <li>I like the idea of Lua without so much keyword noise</li>
 <li>But there are some weird syntactical quirks around function arguments within table constructors that lead me to think that requiring parentheses around function arguments might have been better</li>
-<li>Seems like &quot;Lua written in Python&quot; -- oh, the docs actually say it&#39;s inspired by CoffeeScript</li>
+<li>Seems like &quot;Lua written in Python&quot; -- oh, the docs actually say it's inspired by CoffeeScript</li>
 <li>I kept wanting to omit the commas between function arguments for some reason</li>
 <li>Kind of wish there were built-in functions for appending to a list, concatenating lists, reducing lists, etc.</li>
 </ul>
@@ -108,10 +108,10 @@
 <ul>
 <li>The <a href="http://try.purescript.org/">Try PureScript</a> example renders HTML from code, but I <em>really</em> dislike the amount of repetition and the lack of support for trailing commas</li>
 <li>First result when searching for &quot;sqrt&quot; in Pursuit is in a package that turned out to be deprecated</li>
-<li>Doesn&#39;t appear to include a useful standard library by default?</li>
-<li>I couldn&#39;t figure out how to enforce a non-empty array via the type system (<code>Data.NonEmpty</code>? <code>Data.Array.NonEmpty</code>?)</li>
+<li>Doesn't appear to include a useful standard library by default?</li>
+<li>I couldn't figure out how to enforce a non-empty array via the type system (<code>Data.NonEmpty</code>? <code>Data.Array.NonEmpty</code>?)</li>
 <li>Slow compilation</li>
-<li>Seems to warn whenever types aren&#39;t explicitly stated... so why bother with type inference?</li>
+<li>Seems to warn whenever types aren't explicitly stated... so why bother with type inference?</li>
 </ul>
 <h2 id="ruby">Ruby</h2>
 <ul>
@@ -120,9 +120,9 @@
 </ul>
 <h2 id="reason">Reason</h2>
 <ul>
-<li>Official API documentation&#39;s search function can&#39;t find <code>float_of_int</code> (a function that is mentioned in some error messages I received)</li>
+<li>Official API documentation's search function can't find <code>float_of_int</code> (a function that is mentioned in some error messages I received)</li>
 <li>Line comments (<code>//</code>) result in syntax errors in the <a href="https://reasonml.github.io/en/try">in-browser implementation</a></li>
-<li>Also in the browser, error line numbers sometimes aren&#39;t correct (and &quot;this has type X but somewhere wanted Y&quot; isn&#39;t helpful without correct line numbers!)</li>
+<li>Also in the browser, error line numbers sometimes aren't correct (and &quot;this has type X but somewhere wanted Y&quot; isn't helpful without correct line numbers!)</li>
 </ul>
 <h2 id="t3x0">T3X/0</h2>
 <ul>
@@ -131,13 +131,13 @@
 </ul>
 <h2 id="assemblyscript">AssemblyScript</h2>
 <ul>
-<li>AssemblyScript&#39;s landing page has the best developer experience I&#39;ve encountered (I suspect it is most of Visual Studio Code embedded, along with type info)</li>
-<li>I don&#39;t like reusing TypeScript&#39;s file extension</li>
+<li>AssemblyScript's landing page has the best developer experience I've encountered (I suspect it is most of Visual Studio Code embedded, along with type info)</li>
+<li>I don't like reusing TypeScript's file extension</li>
 <li>How does its &quot;standard library&quot; get included? I assume the parts that are used are compiled into each WASM blob</li>
 </ul>
 <h2 id="minilang">MiniLang</h2>
 <ul>
-<li>Couldn&#39;t find any math functions, e.g. for finding square roots</li>
+<li>Couldn't find any math functions, e.g. for finding square roots</li>
 <li>Very nice IDE available on <a href="https://www.ryugod.com/pages/ide/minilang">ryugod.com</a></li>
 </ul>
 <h2 id="c">C</h2>
@@ -153,8 +153,8 @@
 <h2 id="clojure">Clojure</h2>
 <ul>
 <li>Slow to compile and run</li>
-<li>Took me a long time to figure out that <code>(Math/floor ...)</code> was the simplest way to invoke the standard library&#39;s math functions</li>
-<li>Hopefully I don&#39;t get a bill in the mail from Oracle for using the JVM</li>
+<li>Took me a long time to figure out that <code>(Math/floor ...)</code> was the simplest way to invoke the standard library's math functions</li>
+<li>Hopefully I don't get a bill in the mail from Oracle for using the JVM</li>
 </ul>
 <h2 id="raku">Raku</h2>
 <ul>
@@ -170,10 +170,10 @@
 <ul>
 <li>In SWI Prolog, you can interactively add facts/rules by typing <code>[user]</code>, entering information, and then sending &quot;end of file&quot; (Ctrl+D on Linux, possibly Ctrl+Z on Windows)</li>
 <li>SWI-Prolog treats strings in a way that is incompatible with many tutorials I found on the web -- namely, <a href="https://www.swi-prolog.org/pldoc/man?section=string">a double-quoted string is a separate data type than a back-ticked string</a>, which (as far as I understand) uses the traditional data type of a list of character codes (which, I hope, are now actually Unicode code points)</li>
-<li>It took me a <em>really</em> long time to figure out that <code>use_module(library(dcg/basics)).</code> should have been <code>:- use_module(library(dcg/basics))</code> -- the former doesn&#39;t do anything useful (but doesn&#39;t emit any warnings), whereas the latter actually brings a module into scope</li>
+<li>It took me a <em>really</em> long time to figure out that <code>use_module(library(dcg/basics)).</code> should have been <code>:- use_module(library(dcg/basics))</code> -- the former doesn't do anything useful (but doesn't emit any warnings), whereas the latter actually brings a module into scope</li>
 <li>Accessing documentation via <code>help</code> loads modules as a side effect</li>
 <li>The actual Sudoku-solving part was just a few lines of readable code</li>
-<li>Getting to use Prolog&#39;s declarative approach was worthwhile, despite my difficulties getting things going</li>
+<li>Getting to use Prolog's declarative approach was worthwhile, despite my difficulties getting things going</li>
 </ul>
 
 <footer>

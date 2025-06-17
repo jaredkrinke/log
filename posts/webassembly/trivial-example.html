@@ -37,13 +37,13 @@
 <h1><a href="../../posts/webassembly/trivial-example.html">A trivial WebAssembly example</a></h1>
 <p><time datetime="2021-09-27">September 27, 2021</time></p>
 </header>
-<p>In the last post, I provided an <a href="overview.html">overview of WebAssembly</a>. In this post, I&#39;m going to build and run a complete (but trivial) WebAssembly module in C using <a href="https://llvm.org/">LLVM</a> and <a href="https://clang.llvm.org/">Clang</a>.</p>
+<p>In the last post, I provided an <a href="overview.html">overview of WebAssembly</a>. In this post, I'm going to build and run a complete (but trivial) WebAssembly module in C using <a href="https://llvm.org/">LLVM</a> and <a href="https://clang.llvm.org/">Clang</a>.</p>
 <p>All of the code is here: <a href="https://github.com/jaredkrinke/webassembly-trivial-example">webassembly-trivial-example</a>.</p>
 <h1 id="aside">Aside</h1>
-<p>It looks like someone else was frustrated with Emscripten in the past, so they wrote a post about <a href="http://schellcode.github.io/webassembly-without-emscripten">WebAssembly without Emscripten</a>. Their guide was helpful, but I&#39;m not sure if it&#39;s up to date. I also found their Makefiles to be excessively complex.</p>
+<p>It looks like someone else was frustrated with Emscripten in the past, so they wrote a post about <a href="http://schellcode.github.io/webassembly-without-emscripten">WebAssembly without Emscripten</a>. Their guide was helpful, but I'm not sure if it's up to date. I also found their Makefiles to be excessively complex.</p>
 <h1 id="setup">Setup</h1>
-<p>First, download and install LLVM (I used <a href="https://github.com/llvm/llvm-project/releases/tag/llvmorg-12.0.1">LLVM 12.0.1</a>) from the LLVM GitHub releases page (note: 180 MB download that expands to <em>1.8 GB</em> installed). The programs I&#39;m actually planning to use are <code>clang</code> and <code>wasm-ld</code>.</p>
-<p>I also wanted to inspect the output WebAssembly, so I needed the <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a>, which was a much more reasonable ~2 MB download (note: the Windows version is a gzipped tarball instead of a zip file). I&#39;m going to use <code>wasm2wat</code> for disassembly.</p>
+<p>First, download and install LLVM (I used <a href="https://github.com/llvm/llvm-project/releases/tag/llvmorg-12.0.1">LLVM 12.0.1</a>) from the LLVM GitHub releases page (note: 180 MB download that expands to <em>1.8 GB</em> installed). The programs I'm actually planning to use are <code>clang</code> and <code>wasm-ld</code>.</p>
+<p>I also wanted to inspect the output WebAssembly, so I needed the <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a>, which was a much more reasonable ~2 MB download (note: the Windows version is a gzipped tarball instead of a zip file). I'm going to use <code>wasm2wat</code> for disassembly.</p>
 <h2 id="some-notes-on-c">Some notes on C</h2>
 <p>C compilation is usually done as follows:</p>
 <ol>
@@ -53,16 +53,16 @@
 </ol>
 <p>A decent overview of the most common command line arguments for a <em>different</em> compiler is <a href="https://www.thegeekstuff.com/2012/10/gcc-compiler-options/">here</a>. Many of the options are identical for most C compilers.</p>
 <h1 id="implementing-a-trivial-function">Implementing a trivial function</h1>
-<p>I&#39;m going to start with a very simple example (just to reduce the number of things that could go wrong).</p>
+<p>I'm going to start with a very simple example (just to reduce the number of things that could go wrong).</p>
 <h2 id="source-code">Source code</h2>
 <p>File name: &quot;add.c&quot;:</p>
-<pre><code class="language-c"><span class="hljs-type">int</span> <span class="hljs-title function_">add</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span> {
-    <span class="hljs-keyword">return</span> a + b;
-}
+<pre><code class="language-c"><span class="hl-type">int</span> <span class="hl-function">add</span><span class="hl-operator">(</span><span class="hl-type">int</span> <span class="hl-identifier">a</span><span class="hl-operator">,</span> <span class="hl-type">int</span> <span class="hl-identifier">b</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-keyword">return</span> <span class="hl-identifier">a</span> <span class="hl-operator">+</span> <span class="hl-identifier">b</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 </code></pre>
 <h2 id="compiling-the-code">Compiling the code</h2>
-<p>First, I&#39;m just going to compile (but not link) the code, to see what happens.</p>
-<pre><code class="language-sh">clang -target wasm32 -Os -c add.c
+<p>First, I'm just going to compile (but not link) the code, to see what happens.</p>
+<pre><code class="language-bash"><span class="hl-identifier">clang</span> <span class="hl-default">-target</span> <span class="hl-identifier">wasm32</span> <span class="hl-default">-Os</span> <span class="hl-default">-c</span> <span class="hl-identifier">add</span><span class="hl-default">.</span><span class="hl-identifier">c</span>
 </code></pre>
 <ul>
 <li><code>-target wasm32</code> tells Clang to tell LLVM to produce 32-bit WebAssembly output (note: as of today, <a href="https://github.com/WebAssembly/proposals">64-bit memory support is in progress</a>)</li>
@@ -70,19 +70,19 @@
 <li><code>-c</code> tells Clang to compile, but not link</li>
 <li><code>add.c</code> is the source file</li>
 </ul>
-<p>Since I&#39;m compiling and not linking, this command generates an object file named &quot;add.o&quot;.</p>
+<p>Since I'm compiling and not linking, this command generates an object file named &quot;add.o&quot;.</p>
 <h2 id="disassembling-the-object-file">Disassembling the object file</h2>
 <p>Run the disassembler:</p>
-<pre><code class="language-sh">wasm2wat add.o
+<pre><code class="language-bash"><span class="hl-identifier">wasm2wat</span> <span class="hl-identifier">add</span><span class="hl-default">.</span><span class="hl-identifier">o</span>
 </code></pre>
 <p>And it produces the following surprisingly readable output:</p>
-<pre><code><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;__linear_memory&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">0</span><span class="hljs-punctuation">))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$add</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span>
-    <span class="hljs-keyword">local.get</span> <span class="hljs-number">1</span>
-    <span class="hljs-keyword">local.get</span> <span class="hljs-number">0</span>
-    <span class="hljs-keyword">i32.add</span><span class="hljs-punctuation">))</span>
+<pre><code>(module
+  (type (;0;) (func (param i32 i32) (result i32)))
+  (import &quot;env&quot; &quot;__linear_memory&quot; (memory (;0;) 0))
+  (func $add (type 0) (param i32 i32) (result i32)
+    local.get 1
+    local.get 0
+    i32.add))
 </code></pre>
 <p>MDN has a great <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format">explanation of the Web Assembly text format</a> (&quot;.wat&quot; files). The syntax is based on <a href="https://en.wikipedia.org/wiki/S-expression">S-expressions</a> (similar to <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>). Note that inline comments are delimited by semicolons (e.g. <code>; comment goes here ;</code>), as noted in <a href="https://github.com/WebAssembly/spec/blob/master/interpreter/README.md#s-expression-syntax">this more detailed look at Web Assembly text format syntax.</a>.</p>
 <p>Breaking down the first two lines:</p>
@@ -92,7 +92,7 @@
 <li><code>(;0;)</code> is an empty list (<code>;0;</code> is just a comment) for the name of the type</li>
 <li><code>func</code> denotes a function type<ul>
 <li><code>param</code> denotes a list of function arguments</li>
-<li><code>i32</code> is a <a href="https://en.wikipedia.org/wiki/Two%27s_complement">two&#39;s complement</a> 32-bit integer<ul>
+<li><code>i32</code> is a <a href="https://en.wikipedia.org/wiki/Two%27s_complement">two's complement</a> 32-bit integer<ul>
 <li>Note: there is no corresponding &quot;unsigned&quot; type--instructions themselves indicate the expected sign of operands, as needed (e.g. for division)</li>
 </ul>
 </li>
@@ -118,8 +118,8 @@
 <li><code>func</code> defines a function<ul>
 <li><code>$add</code> is the name of the function (names are prefixed with <code>$</code>)</li>
 <li><code>(type 0)</code> refers to the type zero, defined previously: (i32, i32) =&gt; (i32)</li>
-<li>The function type/signature/prototype is then specified -- I&#39;m not sure why the type needs to be duplicated here</li>
-<li>The function body follows as a series of instructions (here&#39;s the <a href="https://webassembly.github.io/spec/core/syntax/instructions.html">full list of WebAssembly instructions</a>)</li>
+<li>The function type/signature/prototype is then specified -- I'm not sure why the type needs to be duplicated here</li>
+<li>The function body follows as a series of instructions (here's the <a href="https://webassembly.github.io/spec/core/syntax/instructions.html">full list of WebAssembly instructions</a>)</li>
 </ul>
 </li>
 </ul>
@@ -134,22 +134,22 @@
 </ul>
 <p>It looks like the C code compiled correctly and the output WAT seems reasonable. So far, so good.</p>
 <h2 id="linking">Linking</h2>
-<p>Note that my original Clang command specified <code>-c</code>, so it only compiled the code and never ran the linker. Let&#39;s go all the way this time:</p>
-<pre><code class="language-sh">clang -target wasm32 -Os -nostdlib -Wl,--no-entry add.c -o add.wasm
+<p>Note that my original Clang command specified <code>-c</code>, so it only compiled the code and never ran the linker. Let's go all the way this time:</p>
+<pre><code class="language-bash"><span class="hl-identifier">clang</span> <span class="hl-default">-target</span> <span class="hl-identifier">wasm32</span> <span class="hl-default">-Os</span> <span class="hl-default">-nostdlib</span> <span class="hl-default">-Wl</span><span class="hl-default">,</span><span class="hl-default">--no-entry</span> <span class="hl-identifier">add</span><span class="hl-default">.</span><span class="hl-identifier">c</span> <span class="hl-default">-o</span> <span class="hl-identifier">add</span><span class="hl-default">.</span><span class="hl-identifier">wasm</span>
 </code></pre>
 <p>I removed <code>-c</code> and added some new arguments:</p>
 <ul>
-<li><code>-nostdlib</code> indicates that the C standard library should not be used (it&#39;s not needed in this case, and I don&#39;t have it available anyway)</li>
+<li><code>-nostdlib</code> indicates that the C standard library should not be used (it's not needed in this case, and I don't have it available anyway)</li>
 <li><code>-Wl,--no-entry</code> tells the linker that there is no entry point (i.e. no <code>main()</code> or <code>_start()</code> function)</li>
 <li><code>-o add.wasm</code> tells the linker to write the output to &quot;add.wasm&quot; (instead of the default &quot;a.out&quot; file)</li>
 </ul>
 <p>Disassembling &quot;add.wasm&quot; yields the following:</p>
-<pre><code class="language-wat"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">2</span><span class="hljs-punctuation">)</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">global</span> <span class="hljs-variable">$__stack_pointer</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">mut</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">i32.const</span> <span class="hljs-number">66560</span><span class="hljs-punctuation">))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;memory&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)))</span>
+<pre><code class="language-webassembly">(module
+  (memory (;0;) 2)
+  (global $__stack_pointer (mut i32) (i32.const 66560))
+  (export &quot;memory&quot; (memory 0)))
 </code></pre>
-<p>My code disappeared! Of course, this isn&#39;t surprising because my code has no entry point and doesn&#39;t export anything.</p>
+<p>My code disappeared! Of course, this isn't surprising because my code has no entry point and doesn't export anything.</p>
 <h3 id="memory-and-a-stack">Memory and a stack</h3>
 <p>Interestingly, this most recent disassembly shows some other changes:</p>
 <ul>
@@ -162,12 +162,12 @@
 <ul>
 <li>Why is the memory exported? Can the host code read or even modify the stack? (Spoiler: yes)</li>
 <li>Does this stack solely exist to support C semantics (e.g. taking the address of a variable on the stack)? (Probably)<ul>
-<li>Note that <a href="https://github.com/WebAssembly/design/blob/main/Nondeterminism.md">this WebAssembly note</a> indicates the VM&#39;s stack can&#39;t be accessed by a program (&quot;Note that this stack isn&#39;t located in the program-accessible linear memory&quot;)</li>
+<li>Note that <a href="https://github.com/WebAssembly/design/blob/main/Nondeterminism.md">this WebAssembly note</a> indicates the VM's stack can't be accessed by a program (&quot;Note that this stack isn't located in the program-accessible linear memory&quot;)</li>
 </ul>
 </li>
 </ul>
 <h3 id="aside-a-webassembly-critique">Aside: a WebAssembly critique</h3>
-<p>As an aside: while trying to find answers to some of my questions, I ran across an <a href="http://troubles.md/wasm-is-not-a-stack-machine/">incredibly insightful series of posts</a> that retrospectively critique some of WebAssembly&#39;s design decisions.</p>
+<p>As an aside: while trying to find answers to some of my questions, I ran across an <a href="http://troubles.md/wasm-is-not-a-stack-machine/">incredibly insightful series of posts</a> that retrospectively critique some of WebAssembly's design decisions.</p>
 <h3 id="exports">Exports</h3>
 <p>Back to my trivial experiment.</p>
 <p>How do I tell Clang/LLVM that I want to export a function? Consulting the <a href="https://lld.llvm.org/WebAssembly.html">linker documentation</a>, it looks like I can export everything (not my preferred approach) or specify exports either on the command line or with attributes in the code. In code, the two options appear to be:</p>
@@ -175,37 +175,37 @@
 <li>Mark exports with <code>__attribute__((export_name(&quot;nameOfExport&quot;)))</code></li>
 <li>Specify <code>-Wl,--export-dynamic</code> on the Clang command line and mark exports with <code>__attribute__ ((visibility (&quot;default&quot;)))</code></li>
 </ul>
-<p>I kind of wish there was an &quot;always export this symbol by name&quot; option that didn&#39;t require duplicating the name. C preprocessor to the rescue!</p>
-<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT_AS(name) __attribute__((export_name(name)))</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol</span>
+<p>I kind of wish there was an &quot;always export this symbol by name&quot; option that didn't require duplicating the name. C preprocessor to the rescue!</p>
+<pre><code class="language-c"><span class="hl-preprocessor">#define</span> <span class="hl-function">WASM_EXPORT_AS</span><span class="hl-operator">(</span><span class="hl-identifier">name</span><span class="hl-operator">)</span> <span class="hl-keyword">__attribute__</span><span class="hl-operator">(</span><span class="hl-operator">(</span><span class="hl-function">export_name</span><span class="hl-operator">(</span><span class="hl-identifier">name</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+<span class="hl-preprocessor">#define</span> <span class="hl-function">WASM_EXPORT</span><span class="hl-operator">(</span><span class="hl-identifier">symbol</span><span class="hl-operator">)</span> <span class="hl-function">WASM_EXPORT_AS</span><span class="hl-operator">(</span><span class="hl-default">#</span><span class="hl-identifier">symbol</span><span class="hl-operator">)</span> <span class="hl-identifier">symbol</span>
 
-<span class="hljs-type">int</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(add)</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span> {
-    <span class="hljs-keyword">return</span> a + b;
-}
+<span class="hl-type">int</span> <span class="hl-function">WASM_EXPORT</span><span class="hl-operator">(</span><span class="hl-identifier">add</span><span class="hl-operator">)</span><span class="hl-operator">(</span><span class="hl-type">int</span> <span class="hl-identifier">a</span><span class="hl-operator">,</span> <span class="hl-type">int</span> <span class="hl-identifier">b</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-keyword">return</span> <span class="hl-identifier">a</span> <span class="hl-operator">+</span> <span class="hl-identifier">b</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 </code></pre>
 <p>Output:</p>
-<pre><code class="language-wat"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$add</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span>
-    <span class="hljs-keyword">local.get</span> <span class="hljs-number">1</span>
-    <span class="hljs-keyword">local.get</span> <span class="hljs-number">0</span>
-    <span class="hljs-keyword">i32.add</span><span class="hljs-punctuation">)</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">2</span><span class="hljs-punctuation">)</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">global</span> <span class="hljs-variable">$__stack_pointer</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">mut</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">i32.const</span> <span class="hljs-number">66560</span><span class="hljs-punctuation">))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;memory&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-number">0</span><span class="hljs-punctuation">))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;add&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$add</span><span class="hljs-punctuation">)))</span>
+<pre><code class="language-webassembly">(module
+  (type (;0;) (func (param i32 i32) (result i32)))
+  (func $add (type 0) (param i32 i32) (result i32)
+    local.get 1
+    local.get 0
+    i32.add)
+  (memory (;0;) 2)
+  (global $__stack_pointer (mut i32) (i32.const 66560))
+  (export &quot;memory&quot; (memory 0))
+  (export &quot;add&quot; (func $add)))
 </code></pre>
-<p>This looks like what I want. I&#39;ve got my function and it&#39;s being exported (along with a memory region that I&#39;m not actually using in my code).</p>
+<p>This looks like what I want. I've got my function and it's being exported (along with a memory region that I'm not actually using in my code).</p>
 <h2 id="using-the-module">Using the module</h2>
-<p>Now that I&#39;ve got my finished module (<code>add.wasm</code>), I need to host it somewhere.</p>
+<p>Now that I've got my finished module (<code>add.wasm</code>), I need to host it somewhere.</p>
 <h3 id="using-the-module-in-node">Using the module in Node</h3>
-<p>Here&#39;s an example of loading the module and calling <code>add</code> in Node:</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
-(<span class="hljs-keyword">async</span> () =&gt; {
-    <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./add.wasm&quot;</span>));
-    <span class="hljs-keyword">const</span> add = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">add</span>;
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">add</span>(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>));
-})();
+<p>Here's an example of loading the module and calling <code>add</code> in Node:</p>
+<pre><code class="language-javascript"><span class="hl-keyword">const</span> <span class="hl-identifier">fs</span> <span class="hl-operator">=</span> <span class="hl-function">require</span><span class="hl-operator">(</span><span class="hl-string">&apos;fs&apos;</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-operator">(</span><span class="hl-keyword">async</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span>
+    <span class="hl-keyword">const</span> <span class="hl-identifier">module</span> <span class="hl-operator">=</span> <span class="hl-keyword">await</span> <span class="hl-type">WebAssembly</span><span class="hl-operator">.</span><span class="hl-function_method">instantiate</span><span class="hl-operator">(</span><span class="hl-keyword">await</span> <span class="hl-identifier">fs</span><span class="hl-operator">.</span><span class="hl-identifier">promises</span><span class="hl-operator">.</span><span class="hl-function_method">readFile</span><span class="hl-operator">(</span><span class="hl-string">&quot;./add.wasm&quot;</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-keyword">const</span> <span class="hl-identifier">add</span> <span class="hl-operator">=</span> <span class="hl-identifier">module</span><span class="hl-operator">.</span><span class="hl-identifier">instance</span><span class="hl-operator">.</span><span class="hl-identifier">exports</span><span class="hl-operator">.</span><span class="hl-identifier">add</span><span class="hl-operator">;</span>
+    <span class="hl-identifier">console</span><span class="hl-operator">.</span><span class="hl-function_method">log</span><span class="hl-operator">(</span><span class="hl-function">add</span><span class="hl-operator">(</span><span class="hl-number">2</span><span class="hl-operator">,</span> <span class="hl-number">2</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">(</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 </code></pre>
 <ul>
 <li><code>await fs.promises.readFile(&quot;./add.wasm&quot;)</code> initiates a file read and resumes upon completion</li>
@@ -214,22 +214,22 @@
 <li><code>add(2, 2)</code> returns 4, as expected</li>
 </ul>
 <h3 id="using-the-module-in-a-web-page">Using the module in a web page</h3>
-<p>Here&#39;s a web page for my trivial example:</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>The value of 2 + 2 is <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;result&quot;</span>&gt;</span>?<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<p>Here's a web page for my trivial example:</p>
+<pre><code class="language-html"><span class="hl-tag_chars">&lt;</span><span class="hl-tag">html</span><span class="hl-tag_chars">&gt;</span>
+    <span class="hl-tag_chars">&lt;</span><span class="hl-tag">body</span><span class="hl-tag_chars">&gt;</span>
+        <span class="hl-tag_chars">&lt;</span><span class="hl-tag">p</span><span class="hl-tag_chars">&gt;</span><span class="hl-default">T</span><span class="hl-default">h</span><span class="hl-default">e</span> <span class="hl-default">v</span><span class="hl-default">a</span><span class="hl-default">l</span><span class="hl-default">u</span><span class="hl-default">e</span> <span class="hl-default">o</span><span class="hl-default">f</span> <span class="hl-default">2</span> <span class="hl-default">+</span> <span class="hl-default">2</span> <span class="hl-default">i</span><span class="hl-default">s</span> <span class="hl-tag_chars">&lt;</span><span class="hl-tag">span</span> <span class="hl-attribute">id</span><span class="hl-operator">=</span><span class="hl-string">&quot;result&quot;</span><span class="hl-tag_chars">&gt;</span><span class="hl-default">?</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">span</span><span class="hl-tag_chars">&gt;</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">p</span><span class="hl-tag_chars">&gt;</span>
 
-        <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
-            (<span class="hljs-keyword">async</span> () =&gt; {
-                <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiateStreaming</span>(<span class="hljs-title function_">fetch</span>(<span class="hljs-string">&quot;./add.wasm&quot;</span>));
-                <span class="hljs-keyword">const</span> add = <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-property">add</span>;
-                <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;result&quot;</span>).<span class="hljs-property">innerText</span> = <span class="hljs-title function_">add</span>(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>);
-            })();
-        </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+        <span class="hl-tag_chars">&lt;</span><span class="hl-tag">script</span><span class="hl-tag_chars">&gt;</span>
+            <span class="hl-operator">(</span><span class="hl-keyword">async</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span>
+                <span class="hl-keyword">const</span> <span class="hl-identifier">module</span> <span class="hl-operator">=</span> <span class="hl-keyword">await</span> <span class="hl-type">WebAssembly</span><span class="hl-operator">.</span><span class="hl-function_method">instantiateStreaming</span><span class="hl-operator">(</span><span class="hl-function">fetch</span><span class="hl-operator">(</span><span class="hl-string">&quot;./add.wasm&quot;</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+                <span class="hl-keyword">const</span> <span class="hl-identifier">add</span> <span class="hl-operator">=</span> <span class="hl-identifier">module</span><span class="hl-operator">.</span><span class="hl-identifier">instance</span><span class="hl-operator">.</span><span class="hl-identifier">exports</span><span class="hl-operator">.</span><span class="hl-identifier">add</span><span class="hl-operator">;</span>
+                <span class="hl-identifier">document</span><span class="hl-operator">.</span><span class="hl-function_method">getElementById</span><span class="hl-operator">(</span><span class="hl-string">&quot;result&quot;</span><span class="hl-operator">)</span><span class="hl-operator">.</span><span class="hl-identifier">innerText</span> <span class="hl-operator">=</span> <span class="hl-function">add</span><span class="hl-operator">(</span><span class="hl-number">2</span><span class="hl-operator">,</span> <span class="hl-number">2</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+            <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">(</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+        <span class="hl-tag_chars">&lt;/</span><span class="hl-tag">script</span><span class="hl-tag_chars">&gt;</span>
+    <span class="hl-tag_chars">&lt;/</span><span class="hl-tag">body</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;/</span><span class="hl-tag">html</span><span class="hl-tag_chars">&gt;</span>
 </code></pre>
-<p>Note that using <code>fetch</code> isn&#39;t supported from the file system, so I used <a href="https://github.com/http-party/http-server">a trivial HTTP server</a> for local testing.</p>
+<p>Note that using <code>fetch</code> isn't supported from the file system, so I used <a href="https://github.com/http-party/http-server">a trivial HTTP server</a> for local testing.</p>
 <ul>
 <li><code>fetch(&quot;./add.wasm&quot;)</code> initiates a request to load the module by relative path</li>
 <li><code>const module = await WebAssembly.instantiateStreaming(...);</code> starts instantiating the module and resumes upon completion</li>
@@ -237,15 +237,15 @@
 <li><code>document.getElementById(&quot;result&quot;).innerText = add(2, 2);</code> updates the &quot;result&quot; span with the result of the call to <code>add</code></li>
 </ul>
 <p>To my surprise, everything worked on the first try.</p>
-<p>I was also able to confirm that the module&#39;s memory was exported (<code>module.instance.exports.memory</code>) and could be read from within my browser&#39;s dev tools window. I&#39;m still not clear on why LLVM decided to export the memory by default.</p>
-<h1 id="thats-it">That&#39;s it!</h1>
+<p>I was also able to confirm that the module's memory was exported (<code>module.instance.exports.memory</code>) and could be read from within my browser's dev tools window. I'm still not clear on why LLVM decided to export the memory by default.</p>
+<h1 id="thats-it">That's it!</h1>
 <p>The end result of all this was actually pretty simple. Here are some links for reference:</p>
 <ul>
 <li><a href="https://github.com/jaredkrinke/webassembly-trivial-example">GitHub repository with all the code and build commands</a></li>
 <li><a href="https://jaredkrinke.github.io/webassembly-trivial-example/">Live demo of the module hosted in a web page</a> (using <code>WebAssembly.instantiate()</code> instead of <code>instantiateStreaming()</code> for compatibility with older browsers)</li>
 </ul>
-<p>Remembering how to use a C compiler on the command line, and deciphering LLVM&#39;s export semantics took a bit more time than I would have liked, but I learned a lot about WebAssembly in the process.</p>
-<p>Next up, I&#39;ll see if I can get the C standard library working.</p>
+<p>Remembering how to use a C compiler on the command line, and deciphering LLVM's export semantics took a bit more time than I would have liked, but I learned a lot about WebAssembly in the process.</p>
+<p>Next up, I'll see if I can get the C standard library working.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

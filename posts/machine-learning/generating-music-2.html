@@ -41,16 +41,16 @@
 <p>In <a href="generating-music.html">part 1</a>, I played around with pre-trained <a href="https://magenta.tensorflow.org/music-transformer">Music Transformer</a> models, in an attempt to generate a piece of ragtime piano music. The results were interesting, but the musical styles were random (and internally inconsistent).</p>
 <p>In this part, I attempt to train my own Music Transformer model, using a ragtime-focused corpus.</p>
 <h1 id="first-attempt">First attempt</h1>
-<p>Initially, I tried to generate music using the official Music Transformer environment, <a href="https://magenta.tensorflow.org/">Magenta</a>, following instructions in <a href="https://groups.google.com/a/tensorflow.org/g/magenta-discuss/c/tRrth7wXF6U">an email thread about using transfer learning with Music Transformer&#39;s pre-trained checkpoints</a>. I hit several issues:</p>
+<p>Initially, I tried to generate music using the official Music Transformer environment, <a href="https://magenta.tensorflow.org/">Magenta</a>, following instructions in <a href="https://groups.google.com/a/tensorflow.org/g/magenta-discuss/c/tRrth7wXF6U">an email thread about using transfer learning with Music Transformer's pre-trained checkpoints</a>. I hit several issues:</p>
 <ul>
 <li><a href="https://github.com/magenta/magenta/issues/1962">Magenta install fails for Python &gt;= 3.8 </a> (worked around via <a href="https://www.anaconda.com/">Anaconda</a>)</li>
 <li>The default optimizer (<code>AdafactorOptimizer</code>) appeared to be incompatible with the version of Tensorflow Magenta installed (worked around via <code>--hparams=optimizer=Adam,...</code>)</li>
-<li>I couldn&#39;t use my GPU to train because it didn&#39;t have enough memory</li>
+<li>I couldn't use my GPU to train because it didn't have enough memory</li>
 <li><a href="https://github.com/magenta/magenta/issues/1862">Tensor2Tensor terminated on &quot;key not found&quot; errors</a> (worked around with a newer version, as noted in the linked GitHub issue)</li>
 </ul>
 <h2 id="results">Results</h2>
-<p>After training for roughly a day (2,500 steps), the <a href="../../assets/music-generation/mt-train-2500.mid">resulting MIDI</a> sounds mostly like random noise. It&#39;s not clear to me if this was due to a bug in my pipeline or if I just needed to spend a lot more time training.</p>
-<p>Ultimately, I decided I didn&#39;t understand the Magenta and Tensor2Tensor libraries well enough to make much progress (without investing an excessive amount of time), and I&#39;d spent enough time troubleshooting issues already. <a href="https://github.com/jaredkrinke/music-transformer-fine-tuning">My training scripts are here</a>.</p>
+<p>After training for roughly a day (2,500 steps), the <a href="../../assets/music-generation/mt-train-2500.mid">resulting MIDI</a> sounds mostly like random noise. It's not clear to me if this was due to a bug in my pipeline or if I just needed to spend a lot more time training.</p>
+<p>Ultimately, I decided I didn't understand the Magenta and Tensor2Tensor libraries well enough to make much progress (without investing an excessive amount of time), and I'd spent enough time troubleshooting issues already. <a href="https://github.com/jaredkrinke/music-transformer-fine-tuning">My training scripts are here</a>.</p>
 <h1 id="second-attempt">Second attempt</h1>
 <p>Rather than give up on transformer-based music generation entirely, I searched around for a simpler codebase that I might be able to more easily understand and/or adapt. Here are a few I ran across:</p>
 <ul>
@@ -59,22 +59,22 @@
 </a></li>
 <li><a href="https://github.com/bearpelican/musicautobot">MusicAutobot</a> by <a href="https://github.com/bearpelican">Andrew Shaw</a></li>
 </ul>
-<p>The first one is a noted as a re-implementation from scratch of the ideas from the transformer/attention research papers (mostly the same ones I&#39;d been looking at) using Tensorflow/Keras. The codebase seemed small enough that I could probably understand it all without too much trouble.</p>
-<p>I decided to move forward with the transformer-xl repository. I didn&#39;t hit any issues with setup, which was a welcome development.</p>
+<p>The first one is a noted as a re-implementation from scratch of the ideas from the transformer/attention research papers (mostly the same ones I'd been looking at) using Tensorflow/Keras. The codebase seemed small enough that I could probably understand it all without too much trouble.</p>
+<p>I decided to move forward with the transformer-xl repository. I didn't hit any issues with setup, which was a welcome development.</p>
 <h2 id="training">Training</h2>
 <p>As an initial test, I tried training on a fairly small corpus of 58 Scott Joplin MIDIs. I was able to decrease the batch size slightly to support training on my roughly 7 year old GPU. Training for 100 epochs only took about 7 hours.</p>
-<p>Note: although there was a preprocessing step to convert the MIDI files to another format, I didn&#39;t notice any data generation/augmentation, as in the Magenta codebase.</p>
+<p>Note: although there was a preprocessing step to convert the MIDI files to another format, I didn't notice any data generation/augmentation, as in the Magenta codebase.</p>
 <h2 id="initial-results">Initial results</h2>
-<p>Generating results was surprisingly slow (compared to using Magenta), but I haven&#39;t investigated the reason for that yet.</p>
+<p>Generating results was surprisingly slow (compared to using Magenta), but I haven't investigated the reason for that yet.</p>
 <p>Regardless, the results sounded a (little) bit like music--a huge improvement from my previous attempt (which was just noise). Examples:</p>
 <ul>
 <li><a href="../../assets/music-generation/train-100-1.midi">Example 1</a>: occasional glimpses of music</li>
 <li><a href="../../assets/music-generation/train-100-2.midi">Example 2</a>: pleasant notes with essentially no rhythm</li>
 <li><a href="../../assets/music-generation/train-100-3.midi">Example 3</a>: repetitive, again with inconsistent rhythm</li>
 </ul>
-<p>Unfortunately, the results after 250 epochs weren&#39;t noticeably any better. It&#39;s possible that the small corpus isn&#39;t sufficient for training this model.</p>
+<p>Unfortunately, the results after 250 epochs weren't noticeably any better. It's possible that the small corpus isn't sufficient for training this model.</p>
 <h1 id="next-steps">Next steps</h1>
-<p>I started this project for fun, but after struggling with Python environments and coming to the realization that I have insufficient compute resources available, I&#39;m reconsidering whether or not this is a good use of my time.</p>
+<p>I started this project for fun, but after struggling with Python environments and coming to the realization that I have insufficient compute resources available, I'm reconsidering whether or not this is a good use of my time.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

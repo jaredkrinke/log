@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Test-driving Metalsmith for a simple dev blog</title>
-<meta name="description" content="I&#39;m testing out static site generators for my new dev blog. Here&#39;s my experience fully integrating Metalsmith." />
+<meta name="description" content="I&#039;m testing out static site generators for my new dev blog. Here&#039;s my experience fully integrating Metalsmith." />
 <meta name="keywords" content="metalsmith" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -38,48 +38,48 @@
 <h1><a href="../../posts/static-site-generators/metalsmith.html">Test-driving Metalsmith for a simple dev blog</a></h1>
 <p><time datetime="2021-09-18">September 18, 2021</time></p>
 </header>
-<p>I&#39;m testing out <a href="comparison.html">the most promising static site generators</a> to see which is closest to <a href="overview.html">my ideal setup</a>. Next up is <a href="https://metalsmith.io/">Metalsmith</a>.</p>
-<p>Spoiler: I really like Metalsmith&#39;s modular design, so much so that I&#39;m now using Metalsmith for this blog.</p>
+<p>I'm testing out <a href="comparison.html">the most promising static site generators</a> to see which is closest to <a href="overview.html">my ideal setup</a>. Next up is <a href="https://metalsmith.io/">Metalsmith</a>.</p>
+<p>Spoiler: I really like Metalsmith's modular design, so much so that I'm now using Metalsmith for this blog.</p>
 <h1 id="metalsmith">Metalsmith</h1>
-<p>Metalsmith is a Node-based static site generator with a modular architecture that relies on many small plugins (similar in style to <a href="https://gulpjs.com/">gulp</a>). Installation is done via NPM (but note that you&#39;ll likely need to track down and install many plugins).</p>
+<p>Metalsmith is a Node-based static site generator with a modular architecture that relies on many small plugins (similar in style to <a href="https://gulpjs.com/">gulp</a>). Installation is done via NPM (but note that you'll likely need to track down and install many plugins).</p>
 <h2 id="architecture">Architecture</h2>
-<p>Metalsmith is configured using plain old JavaScript code and building the site is just a matter of running your script, which is especially nice for debugging issues. See their &quot;elevator pitch&quot; on the <a href="https://metalsmith.io/">Metalsmith home page</a> for an example. It&#39;s refreshingly simple and transparent, but you&#39;ll need to install plugins and write some code to get a test server with live reloading (unlike many other modern static site generators that support this out the box).</p>
-<p>While vetting and adding plugins is tedious, I like the fact that Metalsmith doesn&#39;t install 500+ packages by default (... like Eleventy).</p>
-<p>Thanks to <a href="https://github.com/jstransformers/jstransformer">jstransformer</a>, Metalsmith supports a wide variety of template languages. I&#39;m not a fan of <a href="https://liquidjs.com/">Liquid</a> or <a href="https://mozilla.github.io/nunjucks/">Nunjucks</a>, but I&#39;m trying out <a href="https://handlebarsjs.com/">Handlebars</a> because I find it more intuitive and less verbose. So far, it seems easier to maintain than the plain JavaScript templates I used with <a href="eleventy-2.html">Eleventy</a>.</p>
+<p>Metalsmith is configured using plain old JavaScript code and building the site is just a matter of running your script, which is especially nice for debugging issues. See their &quot;elevator pitch&quot; on the <a href="https://metalsmith.io/">Metalsmith home page</a> for an example. It's refreshingly simple and transparent, but you'll need to install plugins and write some code to get a test server with live reloading (unlike many other modern static site generators that support this out the box).</p>
+<p>While vetting and adding plugins is tedious, I like the fact that Metalsmith doesn't install 500+ packages by default (... like Eleventy).</p>
+<p>Thanks to <a href="https://github.com/jstransformers/jstransformer">jstransformer</a>, Metalsmith supports a wide variety of template languages. I'm not a fan of <a href="https://liquidjs.com/">Liquid</a> or <a href="https://mozilla.github.io/nunjucks/">Nunjucks</a>, but I'm trying out <a href="https://handlebarsjs.com/">Handlebars</a> because I find it more intuitive and less verbose. So far, it seems easier to maintain than the plain JavaScript templates I used with <a href="eleventy-2.html">Eleventy</a>.</p>
 <h2 id="themes">Themes?</h2>
-<p>If you don&#39;t want to author your own HTML templates, Metalsmith honestly doesn&#39;t seem like a good choice. It&#39;s possible to construct a Metalsmith &quot;theme&quot; by combining plugins, configuration, and templates, but really what you&#39;re providing is an entire skeleton project (with a <code>package.json</code> file, build scripts, and so on). This means the result is less portable and more difficult to integrate (unless you&#39;re starting from scratch and don&#39;t have any opinions or constraints).</p>
-<p>Other static site generators (e.g. Hugo) abstract out the concept of a theme (along with standard metadata that themes can leverage), so you don&#39;t have to mix code and configuration together with HTML templates and CSS styling. This seems better for people who don&#39;t want total control of every character in their final HTML output.</p>
+<p>If you don't want to author your own HTML templates, Metalsmith honestly doesn't seem like a good choice. It's possible to construct a Metalsmith &quot;theme&quot; by combining plugins, configuration, and templates, but really what you're providing is an entire skeleton project (with a <code>package.json</code> file, build scripts, and so on). This means the result is less portable and more difficult to integrate (unless you're starting from scratch and don't have any opinions or constraints).</p>
+<p>Other static site generators (e.g. Hugo) abstract out the concept of a theme (along with standard metadata that themes can leverage), so you don't have to mix code and configuration together with HTML templates and CSS styling. This seems better for people who don't want total control of every character in their final HTML output.</p>
 <h2 id="setup">Setup</h2>
-<p><a href="https://metalsmith.io/#introduction">Metalsmith&#39;s home page</a> has a sample script right at the top you can look at, but you&#39;ll end up with a bunch of <code>require(...)</code>s followed by something like this:</p>
-<pre><code class="language-javascript"><span class="hljs-title class_">Metalsmith</span>(__dirname)
-    .<span class="hljs-title function_">metadata</span>({
-        <span class="hljs-attr">site</span>: {
-            <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Schemescape&quot;</span>,
-            <span class="hljs-attr">url</span>: <span class="hljs-string">&quot;https://log.schemescape.com/&quot;</span>,
-            <span class="hljs-attr">description</span>: <span class="hljs-string">&quot;Development log of a life-long coder&quot;</span>,
-        },
-    })
-    .<span class="hljs-title function_">source</span>(<span class="hljs-string">&quot;./content&quot;</span>)
-    .<span class="hljs-title function_">destination</span>(<span class="hljs-string">&quot;./out&quot;</span>)
-    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">collections</span>({
-        <span class="hljs-attr">posts</span>: {
-            <span class="hljs-attr">pattern</span>: <span class="hljs-string">&quot;posts/**/*.md&quot;</span>,
-            <span class="hljs-attr">sortBy</span>: <span class="hljs-string">&quot;date&quot;</span>,
-            <span class="hljs-attr">reverse</span>: <span class="hljs-literal">true</span>,
-        }
-    }))
-    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">markdown</span>())
-    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">layouts</span>({
-        <span class="hljs-attr">directory</span>: <span class="hljs-string">&quot;templates&quot;</span>,
-        <span class="hljs-attr">default</span>: <span class="hljs-string">&quot;default.hbs&quot;</span>,
-    }))
-    ...
-    .<span class="hljs-title function_">build</span>(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> { <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err; });
+<p><a href="https://metalsmith.io/#introduction">Metalsmith's home page</a> has a sample script right at the top you can look at, but you'll end up with a bunch of <code>require(...)</code>s followed by something like this:</p>
+<pre><code class="language-javascript"><span class="hl-function">Metalsmith</span><span class="hl-operator">(</span><span class="hl-identifier">__dirname</span><span class="hl-operator">)</span>
+    <span class="hl-operator">.</span><span class="hl-function_method">metadata</span><span class="hl-operator">(</span><span class="hl-operator">{</span>
+        <span class="hl-identifier">site</span><span class="hl-operator">:</span> <span class="hl-operator">{</span>
+            <span class="hl-identifier">title</span><span class="hl-operator">:</span> <span class="hl-string">&quot;Schemescape&quot;</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">url</span><span class="hl-operator">:</span> <span class="hl-string">&quot;https://log.schemescape.com/&quot;</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">description</span><span class="hl-operator">:</span> <span class="hl-string">&quot;Development log of a life-long coder&quot;</span><span class="hl-operator">,</span>
+        <span class="hl-operator">}</span><span class="hl-operator">,</span>
+    <span class="hl-operator">}</span><span class="hl-operator">)</span>
+    <span class="hl-operator">.</span><span class="hl-function_method">source</span><span class="hl-operator">(</span><span class="hl-string">&quot;./content&quot;</span><span class="hl-operator">)</span>
+    <span class="hl-operator">.</span><span class="hl-function_method">destination</span><span class="hl-operator">(</span><span class="hl-string">&quot;./out&quot;</span><span class="hl-operator">)</span>
+    <span class="hl-operator">.</span><span class="hl-function_method">use</span><span class="hl-operator">(</span><span class="hl-function">collections</span><span class="hl-operator">(</span><span class="hl-operator">{</span>
+        <span class="hl-identifier">posts</span><span class="hl-operator">:</span> <span class="hl-operator">{</span>
+            <span class="hl-identifier">pattern</span><span class="hl-operator">:</span> <span class="hl-string">&quot;posts/**/*.md&quot;</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">sortBy</span><span class="hl-operator">:</span> <span class="hl-string">&quot;date&quot;</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">reverse</span><span class="hl-operator">:</span> <span class="hl-keyword">true</span><span class="hl-operator">,</span>
+        <span class="hl-operator">}</span>
+    <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">.</span><span class="hl-function_method">use</span><span class="hl-operator">(</span><span class="hl-function">markdown</span><span class="hl-operator">(</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">.</span><span class="hl-function_method">use</span><span class="hl-operator">(</span><span class="hl-function">layouts</span><span class="hl-operator">(</span><span class="hl-operator">{</span>
+        <span class="hl-identifier">directory</span><span class="hl-operator">:</span> <span class="hl-string">&quot;templates&quot;</span><span class="hl-operator">,</span>
+        <span class="hl-keyword">default</span><span class="hl-operator">:</span> <span class="hl-string">&quot;default.hbs&quot;</span><span class="hl-operator">,</span>
+    <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">.</span><span class="hl-operator">.</span><span class="hl-operator">.</span>
+    <span class="hl-operator">.</span><span class="hl-function_method">build</span><span class="hl-operator">(</span><span class="hl-identifier">err</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span> <span class="hl-keyword">if</span> <span class="hl-operator">(</span><span class="hl-identifier">err</span><span class="hl-operator">)</span> <span class="hl-keyword">throw</span> <span class="hl-identifier">err</span><span class="hl-operator">;</span> <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 </code></pre>
-<p>If you just want to build a dev blog like everyone else, it does feel like a lot of boilerplate code, but I like that it forces you to consider and understand each step of the process. Some of the other static site generators were too proactive and did things I didn&#39;t expect or understand (or want). With Metalsmith, it only does exactly what you tell it.</p>
-<p>But there&#39;s a dark side to Metalsmith&#39;s simple model, and that&#39;s that Metalsmith has to be taught to do even the most basic things. For example, I&#39;m building my site on Windows, which has the unfortunate property of using backslashes for path separators. Metalsmith doesn&#39;t seem to know or care about this detail, so I had to actually write code to switch to web-friendly forward slashes when creating links between files in different directories.</p>
+<p>If you just want to build a dev blog like everyone else, it does feel like a lot of boilerplate code, but I like that it forces you to consider and understand each step of the process. Some of the other static site generators were too proactive and did things I didn't expect or understand (or want). With Metalsmith, it only does exactly what you tell it.</p>
+<p>But there's a dark side to Metalsmith's simple model, and that's that Metalsmith has to be taught to do even the most basic things. For example, I'm building my site on Windows, which has the unfortunate property of using backslashes for path separators. Metalsmith doesn't seem to know or care about this detail, so I had to actually write code to switch to web-friendly forward slashes when creating links between files in different directories.</p>
 <h3 id="plugins-plugins-plugins">Plugins, plugins, plugins</h3>
-<p>Metalsmith&#39;s modular architecture with a very simple core library means you need plugins--a lot of plugins. Fortunately, most of the functionality I was interested in already existed in the form of published plugins (some official, some third party). Here are the ones I used:</p>
+<p>Metalsmith's modular architecture with a very simple core library means you need plugins--a lot of plugins. Fortunately, most of the functionality I was interested in already existed in the form of published plugins (some official, some third party). Here are the ones I used:</p>
 <table>
 <thead>
 <tr>
@@ -87,7 +87,8 @@
 <th>Purpose</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><a href="https://github.com/segmentio/metalsmith-markdown">metalsmith-markdown</a>*</td>
 <td>Translates Markdown to HTML (using <a href="https://marked.js.org/">Marked</a>)</td>
 </tr>
@@ -139,8 +140,9 @@
 <td><a href="https://github.com/FWeinb/metalsmith-watch">metalsmith-watch</a></td>
 <td>Triggers rebuilds when files are updated (needed for live reloading)</td>
 </tr>
-</tbody></table>
-<p>Note that some of the plugins I installed had dependencies flagged by NPM as having vulnerabilities. I reviewed the notices and none seemed concerning for my use case (e.g. all of the input is code/content I wrote and I don&#39;t plan on targeting myself for a regular expression denial of service attack).</p>
+</tbody>
+</table>
+<p>Note that some of the plugins I installed had dependencies flagged by NPM as having vulnerabilities. I reviewed the notices and none seemed concerning for my use case (e.g. all of the input is code/content I wrote and I don't plan on targeting myself for a regular expression denial of service attack).</p>
 <h3 id="missing-plugins">Missing plugins</h3>
 <p>Despite all these great plugins, I did end up needing to add a little extra functionality. Theoretically, these could be packaged into plugins.</p>
 <ul>
@@ -152,17 +154,17 @@
 <p>Here are a couple of snags I hit while integrating Metalsmith into my site.</p>
 <h3 id="inflexible-directory-structure">Inflexible directory structure</h3>
 <p>For how simple Metalsmith is, I figured it would allow for a flexible directory structure, but Metalsmith actually only allows a single source directory by default. This is a problem for my directory structure because I separated all of my content (Markdown files) from files needed to build the web site (scripts, templates, but also CSS). Fortunately, the <a href="https://github.com/TheHydroImpulse/metalsmith-static">metalsmith-static</a> plugin handle this scenario:</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> assets = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;metalsmith-static&quot;</span>);
+<pre><code class="language-javascript"><span class="hl-keyword">const</span> <span class="hl-identifier">assets</span> <span class="hl-operator">=</span> <span class="hl-function">require</span><span class="hl-operator">(</span><span class="hl-string">&quot;metalsmith-static&quot;</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 
-<span class="hljs-title class_">Metalsmith</span>
-...
-    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">assets</span>({
-        <span class="hljs-attr">src</span>: <span class="hljs-string">&quot;static&quot;</span>,
-        <span class="hljs-attr">dest</span>: <span class="hljs-string">&quot;.&quot;</span>,
-    }))
+<span class="hl-identifier">Metalsmith</span>
+<span class="hl-operator">.</span><span class="hl-operator">.</span><span class="hl-operator">.</span>
+    <span class="hl-operator">.</span><span class="hl-function_method">use</span><span class="hl-operator">(</span><span class="hl-function">assets</span><span class="hl-operator">(</span><span class="hl-operator">{</span>
+        <span class="hl-identifier">src</span><span class="hl-operator">:</span> <span class="hl-string">&quot;static&quot;</span><span class="hl-operator">,</span>
+        <span class="hl-identifier">dest</span><span class="hl-operator">:</span> <span class="hl-string">&quot;.&quot;</span><span class="hl-operator">,</span>
+    <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
 </code></pre>
-<h3 id="destination-paths-arent-available">Destination paths aren&#39;t available</h3>
-<p>Somewhere in Metalsmith&#39;s pipeline, it knows where a file is going to end up, but for some inexplicable reason, this information isn&#39;t available to templates or plugins. In my case, it&#39;s easy to infer the destination (although I had to deal with Windows&#39; annoying path-separating backslashes), so it wasn&#39;t a big deal, but this really isn&#39;t something I should have had to think about.</p>
+<h3 id="destination-paths-arent-available">Destination paths aren't available</h3>
+<p>Somewhere in Metalsmith's pipeline, it knows where a file is going to end up, but for some inexplicable reason, this information isn't available to templates or plugins. In my case, it's easy to infer the destination (although I had to deal with Windows' annoying path-separating backslashes), so it wasn't a big deal, but this really isn't something I should have had to think about.</p>
 <h3 id="plugin-ordering">Plugin ordering</h3>
 <p>Since plugins enrich and mutate files and metadata along the way, the ordering of plugins matters. One annoying interaction was between the &quot;layouts&quot; (templating) and &quot;feed&quot; (RSS) plugins:</p>
 <ul>
@@ -172,32 +174,32 @@
 <p>The fix in this case was to run &quot;layouts&quot; after &quot;feed&quot; but tell &quot;layouts&quot; to only process HTML files (and not &quot;feed.xml&quot;).</p>
 <p>This all makes sense if you think about how Metalsmith plugins receive a set of files, manipulate them, and then pass them on to the next plugin, but other generators do a good job of insulating me from mistakes like this.</p>
 <h3 id="handling-internal-links">Handling internal links</h3>
-<p>I&#39;m still surprised that using relative links to Markdown files for internal linking between posts isn&#39;t well supported by the static site generators I&#39;ve tried so far (Metalsmith included). I ended up having to extend the <a href="https://marked.js.org/using_pro#renderer">Marked renderer</a> to enable internal links:</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> marked = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;marked&quot;</span>);
-<span class="hljs-comment">// ...</span>
-<span class="hljs-comment">// Translate relative Markdown links to point to corresponding HTML output files</span>
-<span class="hljs-keyword">const</span> markdownRenderer = <span class="hljs-keyword">new</span> marked.<span class="hljs-title class_">Renderer</span>();
-<span class="hljs-keyword">const</span> baseLinkRenderer = markdownRenderer.<span class="hljs-property">link</span>;
-markdownRenderer.<span class="hljs-property">link</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">href, title, text</span>) {
-    <span class="hljs-keyword">return</span> baseLinkRenderer.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>,
-        href.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/^([^/][^:]*)\.md(#[^#]+)?$/</span>, <span class="hljs-string">&quot;../$1/$2&quot;</span>),
-        title,
-        text);
-};
-<span class="hljs-comment">// ...</span>
-<span class="hljs-title class_">Metalsmith</span>
-<span class="hljs-comment">// ...</span>
-    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">markdown</span>({ <span class="hljs-attr">renderer</span>: markdownRenderer }))
-    .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">permalinks</span>())
+<p>I'm still surprised that using relative links to Markdown files for internal linking between posts isn't well supported by the static site generators I've tried so far (Metalsmith included). I ended up having to extend the <a href="https://marked.js.org/using_pro#renderer">Marked renderer</a> to enable internal links:</p>
+<pre><code class="language-javascript"><span class="hl-keyword">const</span> <span class="hl-identifier">marked</span> <span class="hl-operator">=</span> <span class="hl-function">require</span><span class="hl-operator">(</span><span class="hl-string">&quot;marked&quot;</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-comment">// ...</span>
+<span class="hl-comment">// Translate relative Markdown links to point to corresponding HTML output files</span>
+<span class="hl-keyword">const</span> <span class="hl-identifier">markdownRenderer</span> <span class="hl-operator">=</span> <span class="hl-keyword">new</span> <span class="hl-identifier">marked</span><span class="hl-operator">.</span><span class="hl-function_method">Renderer</span><span class="hl-operator">(</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-keyword">const</span> <span class="hl-identifier">baseLinkRenderer</span> <span class="hl-operator">=</span> <span class="hl-identifier">markdownRenderer</span><span class="hl-operator">.</span><span class="hl-identifier">link</span><span class="hl-operator">;</span>
+<span class="hl-identifier">markdownRenderer</span><span class="hl-operator">.</span><span class="hl-identifier">link</span> <span class="hl-operator">=</span> <span class="hl-keyword">function</span> <span class="hl-operator">(</span><span class="hl-identifier">href</span><span class="hl-operator">,</span> <span class="hl-identifier">title</span><span class="hl-operator">,</span> <span class="hl-identifier">text</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-keyword">return</span> <span class="hl-identifier">baseLinkRenderer</span><span class="hl-operator">.</span><span class="hl-function_method">call</span><span class="hl-operator">(</span><span class="hl-keyword">this</span><span class="hl-operator">,</span>
+        <span class="hl-identifier">href</span><span class="hl-operator">.</span><span class="hl-function_method">replace</span><span class="hl-operator">(</span><span class="hl-regex">/^([^/</span><span class="hl-operator">]</span><span class="hl-operator">[</span><span class="hl-operator">^</span><span class="hl-operator">:</span><span class="hl-operator">]</span><span class="hl-operator">*</span><span class="hl-operator">)</span><span class="hl-default">\</span><span class="hl-operator">.</span><span class="hl-function_method">md</span><span class="hl-operator">(</span><span class="hl-default">#</span><span class="hl-operator">[</span><span class="hl-operator">^</span><span class="hl-default">#</span><span class="hl-operator">]</span><span class="hl-operator">+</span><span class="hl-operator">)</span><span class="hl-operator">?</span><span class="hl-default">$</span><span class="hl-operator">/</span><span class="hl-operator">,</span> <span class="hl-string">&quot;../$1/$2&quot;</span><span class="hl-operator">)</span><span class="hl-operator">,</span>
+        <span class="hl-identifier">title</span><span class="hl-operator">,</span>
+        <span class="hl-identifier">text</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span><span class="hl-operator">;</span>
+<span class="hl-comment">// ...</span>
+<span class="hl-identifier">Metalsmith</span>
+<span class="hl-comment">// ...</span>
+    <span class="hl-operator">.</span><span class="hl-function_method">use</span><span class="hl-operator">(</span><span class="hl-function">markdown</span><span class="hl-operator">(</span><span class="hl-operator">{</span> <span class="hl-identifier">renderer</span><span class="hl-operator">:</span> <span class="hl-identifier">markdownRenderer</span> <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">.</span><span class="hl-function_method">use</span><span class="hl-operator">(</span><span class="hl-function">permalinks</span><span class="hl-operator">(</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
 </code></pre>
 <p><strong>Update</strong>: I realized I also want to be able to link to a heading <em>within</em> another post (examples: <a href="#architecture">link to Architecture heading in this post</a>; <a href="comparison.html#metalsmith">link to my initial impression of Metalsmith in a different post</a>). The code above has been updated to handle this case.</p>
 <h3 id="syntax-highlighting">Syntax highlighting</h3>
 <p><strong>Update</strong>: I added a <a href="metalsmith-syntax-highlighting.html">separate post on adding syntax highlighting</a>.</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>Overall, I really liked that Metalsmith just did exactly what I asked, even if I didn&#39;t initially know what, precisely, I wanted. I was able to find plugins for almost everything to get started (including local testing with live reloading). Importantly, I also feel like I fully understand what Metalsmith is doing, so I don&#39;t have to worry about later discovering that it was processing files multiple times (something that did happen with Eleventy).</p>
-<p>Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that&#39;s part of my <a href="overview.html">my ideal workflow</a>).</p>
-<p>One comment on Handlebars: this isn&#39;t a review of Handlebars, but I did find Handlebars to be a surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose. Only annoyance is that the automatic indentation isn&#39;t always what you want (e.g. in the case of <code>&lt;pre&gt;</code> blocks).</p>
-<p>Overall, I&#39;m very happy with Metalsmith, and it&#39;s likely that I will be using it moving forward. <strong>Update</strong>: I switched from Eleventy to Metalsmith.</p>
+<p>Overall, I really liked that Metalsmith just did exactly what I asked, even if I didn't initially know what, precisely, I wanted. I was able to find plugins for almost everything to get started (including local testing with live reloading). Importantly, I also feel like I fully understand what Metalsmith is doing, so I don't have to worry about later discovering that it was processing files multiple times (something that did happen with Eleventy).</p>
+<p>Additionally, because Metalsmith is so simple to extend, I can actually foresee myself writing a plugin to, say, add inline diagrams that are automatically converted to SVG at build time (a feature that's part of my <a href="overview.html">my ideal workflow</a>).</p>
+<p>One comment on Handlebars: this isn't a review of Handlebars, but I did find Handlebars to be a surprisingly agreeable template language. This is actually high praise coming from me, since I find most template languages to be hideous and verbose. Only annoyance is that the automatic indentation isn't always what you want (e.g. in the case of <code>&lt;pre&gt;</code> blocks).</p>
+<p>Overall, I'm very happy with Metalsmith, and it's likely that I will be using it moving forward. <strong>Update</strong>: I switched from Eleventy to Metalsmith.</p>
 <p>For reference, all of my code is here:
 <a href="https://github.com/jaredkrinke/md2blog">https://github.com/jaredkrinke/md2blog</a></p>
 

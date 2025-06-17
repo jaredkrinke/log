@@ -39,22 +39,22 @@
 <p><time datetime="2025-01-16">January 16, 2025</time></p>
 </header>
 <p>I just finished <a href="100-languages.html">solving the first 100 Project Euler problems using 100 different programming languages</a>. For reference: <a href="https://github.com/jaredkrinke/100-languages">here is all the code</a>.</p>
-<p><strong>I&#39;m planning to write up a summary post at some point</strong>, but this is just my last throwaway post with brief notes on the languages I&#39;ve tried since <a href="100-languages-13.html">the last update</a>. Rye and Nelua were the stars of this round.</p>
+<p><strong>I'm planning to write up a summary post at some point</strong>, but this is just my last throwaway post with brief notes on the languages I've tried since <a href="100-languages-13.html">the last update</a>. Rye and Nelua were the stars of this round.</p>
 <h1 id="notes">Notes</h1>
 <h2 id="ats">ATS</h2>
 <ul>
-<li>I didn&#39;t understand some of the syntax, e.g. <code>:&lt;cloref1&gt;</code> and <code>t@ype</code></li>
+<li>I didn't understand some of the syntax, e.g. <code>:&lt;cloref1&gt;</code> and <code>t@ype</code></li>
 <li>Error messages were sometimes surprising, e.g. <code>the syntactic entity [impqi0de] is needed.</code> -- what is <code>[impqi0de]</code>???</li>
 <li>Another example: copy-pasting <code>fn square (x: double): double = x * x</code> from the official documentation yields <code>error: ‘PMVtmpltcstmat’ undeclared (first use in this function)</code> -- solutiong was to put <code>#include &quot;share/atspre_staload.hats&quot;</code> at the top of the file (my mistake--but the error was unhelpful)</li>
-<li>I didn&#39;t attempt to include any proofs in my code, so I didn&#39;t really leverage ATS to its fullest (or, really, any) extent</li>
+<li>I didn't attempt to include any proofs in my code, so I didn't really leverage ATS to its fullest (or, really, any) extent</li>
 </ul>
 <h2 id="pre-scheme">Pre-Scheme</h2>
 <ul>
 <li>Using the built-in <code>errors</code> enum resulted in compilation errors</li>
-<li>Static typing in Scheme is awkward because I couldn&#39;t find a clean way to not return anything</li>
-<li>Couldn&#39;t find an example of asserting types</li>
+<li>Static typing in Scheme is awkward because I couldn't find a clean way to not return anything</li>
+<li>Couldn't find an example of asserting types</li>
 <li>Unstripped solution binary was ~50 KB (C is great!)</li>
-<li>Didn&#39;t actually bother deallocating memory (C is great!)</li>
+<li>Didn't actually bother deallocating memory (C is great!)</li>
 </ul>
 <h2 id="common-lisp">Common Lisp</h2>
 <ul>
@@ -62,13 +62,13 @@
 <li>So many cryptic/inconsistent names, e.g. <code>fmakunbound</code>, <code>mapcon</code>, <code>clrhash</code>, <code>prin1</code></li>
 <li><code>=</code> vs. <code>equalp</code> vs. <code>equal</code> vs. <code>eql</code> vs. <code>eq</code></li>
 <li>SBCL is fast, but a trivial stand-alone binary can be big and uses more memory than I would like</li>
-<li>Common Lisp isn&#39;t as elegant as Scheme, but the implementations are more mutually compatible than in the Scheme world</li>
+<li>Common Lisp isn't as elegant as Scheme, but the implementations are more mutually compatible than in the Scheme world</li>
 </ul>
 <h2 id="mouse-83">Mouse-83</h2>
 <ul>
 <li>Finally, a programming language with less syntax than Forth!</li>
 <li>Single-letter variables names make it hard to convey their meaning</li>
-<li>Overall, if I wanted a language that was easy to implement, I&#39;d probably opt for Forth, Pascal, or Lisp -- a small increase in complexity is worth unlocking greater readability (easy to say in 2025, I know)</li>
+<li>Overall, if I wanted a language that was easy to implement, I'd probably opt for Forth, Pascal, or Lisp -- a small increase in complexity is worth unlocking greater readability (easy to say in 2025, I know)</li>
 </ul>
 <h2 id="cyber">Cyber</h2>
 <ul>
@@ -76,7 +76,7 @@
 </ul>
 <h2 id="varyx">Varyx</h2>
 <ul>
-<li><code>while</code> loop only works if there&#39;s a blank line before it</li>
+<li><code>while</code> loop only works if there's a blank line before it</li>
 <li>Arrays appear to be lists under the hood, with slow (O(n)) access</li>
 </ul>
 <h2 id="rye">Rye</h2>
@@ -86,13 +86,13 @@
 </ul>
 <h2 id="rexx">Rexx</h2>
 <ul>
-<li>Logical operator for &quot;exclusive or&quot; is unfortunately the same as C&#39;s &quot;logical and&quot;: <code>&amp;&amp;</code></li>
-<li>And <code>%</code> is integer division, with <code>//</code> being remainder (the opposite of what I&#39;ve seen elsewhere)</li>
+<li>Logical operator for &quot;exclusive or&quot; is unfortunately the same as C's &quot;logical and&quot;: <code>&amp;&amp;</code></li>
+<li>And <code>%</code> is integer division, with <code>//</code> being remainder (the opposite of what I've seen elsewhere)</li>
 </ul>
 <h2 id="nelua">Nelua</h2>
 <ul>
 <li>Always nice to see my code compile down to &lt; 100 KB executables!</li>
-<li>It&#39;s like a smaller Nim, but using Lua syntax</li>
+<li>It's like a smaller Nim, but using Lua syntax</li>
 <li>Mostly &quot;just worked&quot; for me -- very easy to pick up</li>
 </ul>
 

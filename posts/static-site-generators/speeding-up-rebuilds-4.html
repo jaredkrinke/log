@@ -43,21 +43,21 @@
 <p><strong>I have successfully staved off the urge (at least temporarily) to create <a href="pre-markdown.html">yet</a> <a href="md2blog-design.html">another</a> static site generator</strong> by instead making <a href="https://jaredkrinke.github.io/md2blog/">md2blog</a> (my zero-config dev blog generator) <em>just fast enough</em> for my workflow that it seems pointless to bother improving upon its performance.</p>
 <p>Spoiler: adding trivial caching and bypassing the file system shrunk live rebuild times by ~80%--down to <strong>50 milliseconds</strong> on my (decade old) desktop computer. Updates now appear in roughly the amount of time it takes me to shift the focus of my eyes from my text editor to the adjacent browser.</p>
 <h1 id="background">Background</h1>
-<p>Possibly as a reaction to <a href="../game-development/web-game-on-steam-for-linux-2.html">releasing a piece of software based on Electron</a>, I&#39;ve been playing with a <a href="../programming-languages/minimal-dev-env-4.html">minimal development environment, running on an old netbook</a>. Unfortunately, my static site generator was taking roughly 6 seconds (on the netbook) to perform live rebuilds of my site (~90 pages), and I&#39;m generally not patient with poorly optimized software.</p>
-<p>Fortunately, after <a href="speeding-up-rebuilds-3.html">a few tweaks</a>, I was able to reduce that time down to around 900 milliseconds. Sub-second updates are acceptable (impressive, even--on a netbook), but I couldn&#39;t shake the feeling that it could be <em>a lot</em> faster.</p>
+<p>Possibly as a reaction to <a href="../game-development/web-game-on-steam-for-linux-2.html">releasing a piece of software based on Electron</a>, I've been playing with a <a href="../programming-languages/minimal-dev-env-4.html">minimal development environment, running on an old netbook</a>. Unfortunately, my static site generator was taking roughly 6 seconds (on the netbook) to perform live rebuilds of my site (~90 pages), and I'm generally not patient with poorly optimized software.</p>
+<p>Fortunately, after <a href="speeding-up-rebuilds-3.html">a few tweaks</a>, I was able to reduce that time down to around 900 milliseconds. Sub-second updates are acceptable (impressive, even--on a netbook), but I couldn't shake the feeling that it could be <em>a lot</em> faster.</p>
 <h1 id="plans-for-a-new-static-site-generator">Plans for a new static site generator</h1>
 <p><strong>The most obvious way to speed up rebuilds of a static site is to avoid doing unnecessary work</strong>. Given that <a href="speeding-up-rebuilds.html">a previous experiment of mine</a> showed it was only necessary to rebuild roughly 5 pages when updating (or adding) a single blog post, I started making plans for an extensible static site generator (similar to <a href="https://github.com/jaredkrinke/goldsmith">Goldsmith</a>/<a href="metalsmith.html">Metalsmith</a>) <em>with an accurate dependency graph</em>.</p>
-<p>Since I&#39;m <a href="../programming-languages/learning-lisp-in-2023.html">learning Lisp</a>, I started planning to rebuild md2blog in Common Lisp. With an accurate dependency graph, compilation to native code, and the ability to process Markdown/syntax highlighting in parallel, I was fairly certain I could significantly improve live rebuild times.</p>
+<p>Since I'm <a href="../programming-languages/learning-lisp-in-2023.html">learning Lisp</a>, I started planning to rebuild md2blog in Common Lisp. With an accurate dependency graph, compilation to native code, and the ability to process Markdown/syntax highlighting in parallel, I was fairly certain I could significantly improve live rebuild times.</p>
 <p>Additionally, Common Lisp would trivially allow for beautiful s-expression-based templates, interactive debugging and introspection, and even automatic detection of pipeline/code updates.</p>
 <p><strong>I could build the most extensible--and fastest--static site generator ever!</strong></p>
 <h1 id="or-i-could-do-something-else">Or I could do something else</h1>
-<p>But I already have a perfectly functional (and tolerably fast) static site generator. <strong>And I&#39;m (nearly) the only user</strong>. Is it really a good use of my time to build the same thing, just faster and in Lisp? It would certainly be educational, and a great way to learn Common Lisp, but finding Common Lisp libraries for Markdown processing, syntax highlighting, JSON validation, cache storage, and file system monitoring sounds... daunting.</p>
+<p>But I already have a perfectly functional (and tolerably fast) static site generator. <strong>And I'm (nearly) the only user</strong>. Is it really a good use of my time to build the same thing, just faster and in Lisp? It would certainly be educational, and a great way to learn Common Lisp, but finding Common Lisp libraries for Markdown processing, syntax highlighting, JSON validation, cache storage, and file system monitoring sounds... daunting.</p>
 <p>I still maintain that static site generators are a perfect first project for learning a programming language (and its ecosystem). It forces you to interact with the file system, understand data flows, find relevant libraries, and maybe even build a web server. In the end, you can produce a fast and efficient web site.</p>
-<p>But I&#39;ve already done this at least four times and I&#39;m probably past the point of diminishing returns. Is this a project that&#39;s really worth spending a few weeks of my spare time on?</p>
+<p>But I've already done this at least four times and I'm probably past the point of diminishing returns. Is this a project that's really worth spending a few weeks of my spare time on?</p>
 <p>Analogous to speeding up a static site generator, <strong>the most obvious way to speed up a <em>software project</em> is to avoid doing unnecessary work</strong> (i.e. avoid starting over from scratch). So I refocused my efforts on wringing maximal performance from md2blog, while staying within its existing design constraints.</p>
 <h2 id="an-epiphany-around-caching">An epiphany around caching</h2>
 <p>What if, instead of making a really smart cache, I made a really dumb one?</p>
-<p>While planning a scheme for reliably caching the results of arbitrary steps in the processing pipeline (specifically, deciding between simply using files&#39; &quot;last modified time&quot; vs. using their actual content--or a hash--to detect changes), I realized that <strong>most of the challenges evaporated if I scoped the cache to a single run of the tool</strong>.</p>
+<p>While planning a scheme for reliably caching the results of arbitrary steps in the processing pipeline (specifically, deciding between simply using files' &quot;last modified time&quot; vs. using their actual content--or a hash--to detect changes), I realized that <strong>most of the challenges evaporated if I scoped the cache to a single run of the tool</strong>.</p>
 <p>As noted in a previous post, my primary performance-sensitive workflow is:</p>
 <ol>
 <li>Run md2blog as a live-reloading server</li>
@@ -66,13 +66,13 @@
 <li>Wait for updated content to render in my browser</li>
 <li>Go to 2</li>
 </ol>
-<p>I.e. <strong>it&#39;s all one run of md2blog</strong>.</p>
+<p>I.e. <strong>it's all one run of md2blog</strong>.</p>
 <p>As an experiment, I added a trivial in-memory Markdown cache and found that this One Weird Trick removed plugin processing as the primary bottleneck. The largest remaining bottleneck was the file system itself (writing out all the file contents to disk).</p>
 <h2 id="an-epiphany-around-the-file-system">An epiphany around the file system</h2>
-<p><strong>Why am I even waiting on the file system?</strong> md2blog reads in files and then all subsequent processing is done in memory. Since I&#39;m already running my own web server, <strong>I can just serve HTTP requests straight out of memory</strong> while files are written to disk in the background!</p>
+<p><strong>Why am I even waiting on the file system?</strong> md2blog reads in files and then all subsequent processing is done in memory. Since I'm already running my own web server, <strong>I can just serve HTTP requests straight out of memory</strong> while files are written to disk in the background!</p>
 <p>That removed the final obvious bottleneck.</p>
 <h1 id="results">Results</h1>
-<p>Here&#39;s a table of approximate &quot;live rebuild&quot; times from:</p>
+<p>Here's a table of approximate &quot;live rebuild&quot; times from:</p>
 <ul>
 <li>md2blog 1.1.1: no optimizations whatsoever</li>
 <li>md2blog 1.2.0: syntax highlighting cached and link-checking moved to the background</li>
@@ -86,7 +86,8 @@
 <th align="right">Desktop (ms)</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>v1.1.1</td>
 <td align="right">6000</td>
 <td align="right">1200</td>
@@ -101,9 +102,10 @@
 <td align="right">200</td>
 <td align="right">50</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>As noted in the spoiler, on my desktop computer (with an 11 year-old processor), updates appear almost instantaneously (fortunately, my site has simple HTML and no JavaScript, so rendering is also fast).</p>
-<p>I&#39;m fairly certain this is still <em>not</em> the fastest static site generator in existence. Maybe the fastest full-featured, JavaScript-based one? Regardless, it is clearly <em>fast enough</em>--at least for now.</p>
+<p>I'm fairly certain this is still <em>not</em> the fastest static site generator in existence. Maybe the fastest full-featured, JavaScript-based one? Regardless, it is clearly <em>fast enough</em>--at least for now.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

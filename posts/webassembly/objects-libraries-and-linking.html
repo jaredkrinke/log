@@ -37,7 +37,7 @@
 <h1><a href="../../posts/webassembly/objects-libraries-and-linking.html">WebAssembly objects, libraries, and linking (for C code)</a></h1>
 <p><time datetime="2021-10-06">October 6, 2021</time></p>
 </header>
-<p>In the interest of reusing <a href="passing-strings-to-c.html">some C string handling code I wrote for use in WebAssembly</a>, I&#39;m researching how object files, libraries, and linking work in WebAssembly.</p>
+<p>In the interest of reusing <a href="passing-strings-to-c.html">some C string handling code I wrote for use in WebAssembly</a>, I'm researching how object files, libraries, and linking work in WebAssembly.</p>
 <h1 id="background">Background</h1>
 <p>For native C code, the following file types and concepts are used:</p>
 <ul>
@@ -50,7 +50,7 @@
 <p>How does the Clang/LLVM toolchain map these concepts to WebAssembly?</p>
 <h1 id="webassembly-object-files">WebAssembly object files</h1>
 <p>To my surprise, WebAssembly actually publishes <a href="https://github.com/WebAssembly/tool-conventions/blob/main/Linking.md">conventions for creating and linking object files</a>.</p>
-<p>I certainly didn&#39;t read that entire document, but I did note that object files are just WebAssembly modules, with custom sections (note: custom sections are only supported in binary &quot;.wasm&quot; format, and not text &quot;.wat&quot; format).</p>
+<p>I certainly didn't read that entire document, but I did note that object files are just WebAssembly modules, with custom sections (note: custom sections are only supported in binary &quot;.wasm&quot; format, and not text &quot;.wat&quot; format).</p>
 <h2 id="example">Example</h2>
 <p>My WebAssembly string library is very simple:</p>
 <ul>
@@ -61,110 +61,110 @@
 </ul>
 </li>
 </ul>
-<p>Note that this example requires consumers of the library providing <code>malloc()</code> and <code>free()</code> to the JavaScript host. I don&#39;t export these from my library because I want consumers to be able to supply their own allocator.</p>
+<p>Note that this example requires consumers of the library providing <code>malloc()</code> and <code>free()</code> to the JavaScript host. I don't export these from my library because I want consumers to be able to supply their own allocator.</p>
 <h3 id="c-source-code">C source code</h3>
-<p>Here&#39;s the header file (&quot;wasm-c-string.h&quot;):</p>
-<pre><code class="language-c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> {</span>
-    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> length;
-    <span class="hljs-type">char</span> buffer[];
-} wasm_c_string;
+<p>Here's the header file (&quot;wasm-c-string.h&quot;):</p>
+<pre><code class="language-c"><span class="hl-keyword">typedef</span> <span class="hl-type">struct</span> <span class="hl-operator">{</span>
+    <span class="hl-type">unsigned</span> <span class="hl-type">int</span> <span class="hl-identifier">length</span><span class="hl-operator">;</span>
+    <span class="hl-type">char</span> <span class="hl-identifier">buffer</span><span class="hl-operator">[</span><span class="hl-operator">]</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span> <span class="hl-identifier">wasm_c_string</span><span class="hl-operator">;</span>
 
-<span class="hljs-comment">// Allocates an empty wasm_c_string. When done, use &quot;free&quot; to release.</span>
-<span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">allocate_wasm_c_string</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> length)</span>;
+<span class="hl-comment">// Allocates an empty wasm_c_string. When done, use &quot;free&quot; to release.</span>
+<span class="hl-keyword">extern</span> <span class="hl-identifier">wasm_c_string</span><span class="hl-operator">*</span> <span class="hl-function">allocate_wasm_c_string</span><span class="hl-operator">(</span><span class="hl-type">unsigned</span> <span class="hl-type">int</span> <span class="hl-identifier">length</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 
-<span class="hljs-comment">// Creates a new wasm_c_string from an existing C string. When done, use &quot;free&quot; to release.</span>
-<span class="hljs-keyword">extern</span> wasm_c_string* <span class="hljs-title function_">create_wasm_c_string</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* source)</span>;
+<span class="hl-comment">// Creates a new wasm_c_string from an existing C string. When done, use &quot;free&quot; to release.</span>
+<span class="hl-keyword">extern</span> <span class="hl-identifier">wasm_c_string</span><span class="hl-operator">*</span> <span class="hl-function">create_wasm_c_string</span><span class="hl-operator">(</span><span class="hl-keyword">const</span> <span class="hl-type">char</span><span class="hl-operator">*</span> <span class="hl-identifier">source</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 </code></pre>
 <p>And the source file (&quot;wasm-c-string.c&quot;):</p>
-<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;malloc.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;wasm-c-string.h&quot;</span></span>
+<pre><code class="language-c"><span class="hl-preprocessor">#include</span> <span class="hl-string">&lt;malloc.h&gt;</span>
+<span class="hl-preprocessor">#include</span> <span class="hl-string">&lt;string.h&gt;</span>
+<span class="hl-preprocessor">#include</span> <span class="hl-string">&quot;wasm-c-string.h&quot;</span>
 
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT_AS(name) __attribute__((export_name(name)))</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol</span>
+<span class="hl-preprocessor">#define</span> <span class="hl-function">WASM_EXPORT_AS</span><span class="hl-operator">(</span><span class="hl-identifier">name</span><span class="hl-operator">)</span> <span class="hl-keyword">__attribute__</span><span class="hl-operator">(</span><span class="hl-operator">(</span><span class="hl-function">export_name</span><span class="hl-operator">(</span><span class="hl-identifier">name</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+<span class="hl-preprocessor">#define</span> <span class="hl-function">WASM_EXPORT</span><span class="hl-operator">(</span><span class="hl-identifier">symbol</span><span class="hl-operator">)</span> <span class="hl-function">WASM_EXPORT_AS</span><span class="hl-operator">(</span><span class="hl-default">#</span><span class="hl-identifier">symbol</span><span class="hl-operator">)</span> <span class="hl-identifier">symbol</span>
 
-wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(allocate_wasm_c_string)</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> length)</span> {
-    wasm_c_string* str = (wasm_c_string*)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>) + length);
-    str-&gt;length = (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)length;
-    <span class="hljs-keyword">return</span> str;
-}
+<span class="hl-identifier">wasm_c_string</span><span class="hl-operator">*</span> <span class="hl-function">WASM_EXPORT</span><span class="hl-operator">(</span><span class="hl-identifier">allocate_wasm_c_string</span><span class="hl-operator">)</span><span class="hl-operator">(</span><span class="hl-type">unsigned</span> <span class="hl-type">int</span> <span class="hl-identifier">length</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-identifier">wasm_c_string</span><span class="hl-operator">*</span> <span class="hl-identifier">str</span> <span class="hl-operator">=</span> <span class="hl-operator">(</span><span class="hl-identifier">wasm_c_string</span><span class="hl-operator">*</span><span class="hl-operator">)</span><span class="hl-function_builtin">malloc</span><span class="hl-operator">(</span><span class="hl-keyword">sizeof</span><span class="hl-operator">(</span><span class="hl-type">unsigned</span> <span class="hl-type">int</span><span class="hl-operator">)</span> <span class="hl-operator">+</span> <span class="hl-identifier">length</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-identifier">str</span><span class="hl-operator">-</span><span class="hl-operator">&gt;</span><span class="hl-identifier">length</span> <span class="hl-operator">=</span> <span class="hl-operator">(</span><span class="hl-type">unsigned</span> <span class="hl-type">int</span><span class="hl-operator">)</span><span class="hl-identifier">length</span><span class="hl-operator">;</span>
+    <span class="hl-keyword">return</span> <span class="hl-identifier">str</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 
-wasm_c_string* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(create_wasm_c_string)</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* source)</span> {
-    <span class="hljs-type">const</span> <span class="hljs-type">size_t</span> sourceLength = <span class="hljs-built_in">strlen</span>(source);
-    wasm_c_string* str = allocate_wasm_c_string((<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)sourceLength);
-    <span class="hljs-built_in">memcpy</span>(&amp;str-&gt;buffer[<span class="hljs-number">0</span>], source, sourceLength);
-    <span class="hljs-keyword">return</span> str;
-}
+<span class="hl-identifier">wasm_c_string</span><span class="hl-operator">*</span> <span class="hl-function">WASM_EXPORT</span><span class="hl-operator">(</span><span class="hl-identifier">create_wasm_c_string</span><span class="hl-operator">)</span><span class="hl-operator">(</span><span class="hl-keyword">const</span> <span class="hl-type">char</span><span class="hl-operator">*</span> <span class="hl-identifier">source</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-keyword">const</span> <span class="hl-type">size_t</span> <span class="hl-identifier">sourceLength</span> <span class="hl-operator">=</span> <span class="hl-function_builtin">strlen</span><span class="hl-operator">(</span><span class="hl-identifier">source</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-identifier">wasm_c_string</span><span class="hl-operator">*</span> <span class="hl-identifier">str</span> <span class="hl-operator">=</span> <span class="hl-function">allocate_wasm_c_string</span><span class="hl-operator">(</span><span class="hl-operator">(</span><span class="hl-type">unsigned</span> <span class="hl-type">int</span><span class="hl-operator">)</span><span class="hl-identifier">sourceLength</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-function_builtin">memcpy</span><span class="hl-operator">(</span><span class="hl-operator">&amp;</span><span class="hl-identifier">str</span><span class="hl-operator">-</span><span class="hl-operator">&gt;</span><span class="hl-identifier">buffer</span><span class="hl-operator">[</span><span class="hl-number">0</span><span class="hl-operator">]</span><span class="hl-operator">,</span> <span class="hl-identifier">source</span><span class="hl-operator">,</span> <span class="hl-identifier">sourceLength</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-keyword">return</span> <span class="hl-identifier">str</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 </code></pre>
 <h3 id="compiling">Compiling</h3>
-<p>Let&#39;s compile this to an object file (using the <a href="https://github.com/WebAssembly/wasi-sdk">WASI SDK</a>--note the &quot;-c&quot; argument that tells Clang to only output an object file and not invoke the linker):</p>
-<pre><code class="language-sh">wasi-sdk\\bin\\clang -Os --sysroot wasi-sdk/share/wasi-sysroot -c wasm-c-string.c
+<p>Let's compile this to an object file (using the <a href="https://github.com/WebAssembly/wasi-sdk">WASI SDK</a>--note the &quot;-c&quot; argument that tells Clang to only output an object file and not invoke the linker):</p>
+<pre><code class="language-bash"><span class="hl-identifier">wasi</span><span class="hl-default">-sdk</span><span class="hl-default">\</span><span class="hl-default">\</span><span class="hl-identifier">bin</span><span class="hl-default">\</span><span class="hl-default">\</span><span class="hl-identifier">clang</span> <span class="hl-default">-Os</span> <span class="hl-default">--sysroot</span> <span class="hl-identifier">wasi</span><span class="hl-default">-sdk</span><span class="hl-default">/</span><span class="hl-identifier">share</span><span class="hl-default">/</span><span class="hl-identifier">wasi</span><span class="hl-default">-sysroot</span> <span class="hl-default">-c</span> <span class="hl-identifier">wasm</span><span class="hl-default">-c-string</span><span class="hl-default">.</span><span class="hl-identifier">c</span>
 </code></pre>
 <h3 id="text-format">Text format</h3>
-<p>The output file defaults to &quot;wasm-c-string.o&quot; and here&#39;s the (abbreviated) corresponding text format (compliments of the <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a>&#39;s <code>wasm2wat</code> tool):</p>
-<pre><code class="language-wat"><span class="hljs-punctuation">(</span><span class="hljs-keyword">module</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-comment">(;1;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;__linear_memory&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">memory</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">0</span><span class="hljs-punctuation">))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;__indirect_function_table&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">table</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-number">0</span> funcref<span class="hljs-punctuation">))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;malloc&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-comment">(;0;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;strlen&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-comment">(;1;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;env&quot;</span> <span class="hljs-string">&quot;memcpy&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-comment">(;2;)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">1</span><span class="hljs-punctuation">)))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$allocate_wasm_c_string</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span>
+<p>The output file defaults to &quot;wasm-c-string.o&quot; and here's the (abbreviated) corresponding text format (compliments of the <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a>'s <code>wasm2wat</code> tool):</p>
+<pre><code class="language-webassembly">(module
+  (type (;0;) (func (param i32) (result i32)))
+  (type (;1;) (func (param i32 i32 i32) (result i32)))
+  (import &quot;env&quot; &quot;__linear_memory&quot; (memory (;0;) 0))
+  (import &quot;env&quot; &quot;__indirect_function_table&quot; (table (;0;) 0 funcref))
+  (import &quot;env&quot; &quot;malloc&quot; (func (;0;) (type 0)))
+  (import &quot;env&quot; &quot;strlen&quot; (func (;1;) (type 0)))
+  (import &quot;env&quot; &quot;memcpy&quot; (func (;2;) (type 1)))
+  (func $allocate_wasm_c_string (type 0) (param i32) (result i32)
 ...
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$create_wasm_c_string</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">type</span> <span class="hljs-number">0</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">param</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">result</span> <span class="hljs-type">i32</span><span class="hljs-punctuation">)</span>
+  (func $create_wasm_c_string (type 0) (param i32) (result i32)
 ...
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;allocate_wasm_c_string&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$allocate_wasm_c_string</span><span class="hljs-punctuation">))</span>
-  <span class="hljs-punctuation">(</span><span class="hljs-keyword">export</span> <span class="hljs-string">&quot;create_wasm_c_string&quot;</span> <span class="hljs-punctuation">(</span><span class="hljs-keyword">func</span> <span class="hljs-title function_">$create_wasm_c_string</span><span class="hljs-punctuation">)))</span>
+  (export &quot;allocate_wasm_c_string&quot; (func $allocate_wasm_c_string))
+  (export &quot;create_wasm_c_string&quot; (func $create_wasm_c_string)))
 </code></pre>
-<p>You can see that it&#39;s importing memory, a function table, and C standard library functions, and that it&#39;s exporting my 2 functions.</p>
+<p>You can see that it's importing memory, a function table, and C standard library functions, and that it's exporting my 2 functions.</p>
 <h3 id="custom-sections">Custom sections</h3>
-<p>But wait, the object file conventions document indicates that there are custom sections that can&#39;t be represented in the text format. So let&#39;s use <code>wasm-objdump</code> (also from WABT):</p>
-<pre><code><span class="hljs-string">$</span> <span class="hljs-string">wasm-objdump</span> <span class="hljs-string">-s</span> <span class="hljs-string">wasm-c-string.o</span>
+<p>But wait, the object file conventions document indicates that there are custom sections that can't be represented in the text format. So let's use <code>wasm-objdump</code> (also from WABT):</p>
+<pre><code>$ wasm-objdump -s wasm-c-string.o
 
-<span class="hljs-attr">wasm-c-string.o:</span>    <span class="hljs-string">file</span> <span class="hljs-string">format</span> <span class="hljs-string">wasm</span> <span class="hljs-number">0x1</span>
+wasm-c-string.o:	file format wasm 0x1
 
-<span class="hljs-string">...</span>
+...
 
-<span class="hljs-attr">Contents of section Custom:</span>
-<span class="hljs-attr">0000119:</span> <span class="hljs-string">076c</span> <span class="hljs-string">696e</span> <span class="hljs-string">6b69</span> <span class="hljs-number">6e67</span> <span class="hljs-number">0208 </span><span class="hljs-string">be80</span> <span class="hljs-number">8080 </span><span class="hljs-number">0005</span>  <span class="hljs-string">.linking........</span>
-<span class="hljs-attr">0000129:</span> <span class="hljs-string">00a4</span> <span class="hljs-number">0103 </span><span class="hljs-number">1661 </span><span class="hljs-string">6c6c</span> <span class="hljs-string">6f63</span> <span class="hljs-number">6174 </span><span class="hljs-string">655f</span> <span class="hljs-number">7761</span>  <span class="hljs-string">.....allocate_wa</span>
-<span class="hljs-attr">0000139:</span> <span class="hljs-string">736d</span> <span class="hljs-string">5f63</span> <span class="hljs-string">5f73</span> <span class="hljs-number">7472 </span><span class="hljs-string">696e</span> <span class="hljs-number">6700 </span><span class="hljs-number">1000 </span><span class="hljs-string">00a4</span>  <span class="hljs-string">sm_c_string.....</span>
-<span class="hljs-attr">0000149:</span> <span class="hljs-number">0104 </span><span class="hljs-number">1463 </span><span class="hljs-number">7265 </span><span class="hljs-number">6174 </span><span class="hljs-string">655f</span> <span class="hljs-number">7761 </span><span class="hljs-string">736d</span> <span class="hljs-string">5f63</span>  <span class="hljs-string">...create_wasm_c</span>
-<span class="hljs-attr">0000159:</span> <span class="hljs-string">5f73</span> <span class="hljs-number">7472 </span><span class="hljs-string">696e</span> <span class="hljs-number">6700 </span><span class="hljs-number">1001 </span><span class="hljs-number">0010 </span><span class="hljs-number">02</span>         <span class="hljs-string">_string......</span>
+Contents of section Custom:
+0000119: 076c 696e 6b69 6e67 0208 be80 8080 0005  .linking........
+0000129: 00a4 0103 1661 6c6c 6f63 6174 655f 7761  .....allocate_wa
+0000139: 736d 5f63 5f73 7472 696e 6700 1000 00a4  sm_c_string.....
+0000149: 0104 1463 7265 6174 655f 7761 736d 5f63  ...create_wasm_c
+0000159: 5f73 7472 696e 6700 1001 0010 02         _string......
 
-<span class="hljs-attr">Contents of section Custom:</span>
-<span class="hljs-attr">000016c:</span> <span class="hljs-string">0a72</span> <span class="hljs-string">656c</span> <span class="hljs-string">6f63</span> <span class="hljs-number">2e43</span> <span class="hljs-string">4f44</span> <span class="hljs-number">4504 </span><span class="hljs-number">0400 </span><span class="hljs-string">0b01</span>  <span class="hljs-string">.reloc.CODE.....</span>
-<span class="hljs-attr">000017c:</span> <span class="hljs-number">0021 </span><span class="hljs-number">0300 </span><span class="hljs-string">2c01</span> <span class="hljs-number">0042 </span><span class="hljs-number">04</span>                   <span class="hljs-string">.!..,..B.</span>
+Contents of section Custom:
+000016c: 0a72 656c 6f63 2e43 4f44 4504 0400 0b01  .reloc.CODE.....
+000017c: 0021 0300 2c01 0042 04                   .!..,..B.
 
-<span class="hljs-attr">Contents of section Custom:</span>
-<span class="hljs-attr">000018b:</span> <span class="hljs-number">0970 </span><span class="hljs-string">726f</span> <span class="hljs-number">6475 </span><span class="hljs-number">6365 </span><span class="hljs-number">7273 </span><span class="hljs-string">010c</span> <span class="hljs-number">7072 </span><span class="hljs-string">6f63</span>  <span class="hljs-string">.producers..proc</span>
-<span class="hljs-attr">000019b:</span> <span class="hljs-number">6573 </span><span class="hljs-number">7365 </span><span class="hljs-string">642d</span> <span class="hljs-number">6279 </span><span class="hljs-number">0105 </span><span class="hljs-string">636c</span> <span class="hljs-string">616e</span> <span class="hljs-number">6756  </span><span class="hljs-string">essed-by..clangV</span>
-<span class="hljs-attr">00001ab:</span> <span class="hljs-number">3131 </span><span class="hljs-number">2e30</span> <span class="hljs-number">2e30</span> <span class="hljs-number">2028 </span><span class="hljs-number">6874 </span><span class="hljs-number">7470 </span><span class="hljs-string">733a</span> <span class="hljs-string">2f2f</span>  <span class="hljs-number">11.0</span><span class="hljs-number">.0</span> <span class="hljs-string">(https://</span>
-<span class="hljs-attr">00001bb:</span> <span class="hljs-number">6769 </span><span class="hljs-number">7468 </span><span class="hljs-number">7562 </span><span class="hljs-number">2e63</span> <span class="hljs-string">6f6d</span> <span class="hljs-string">2f6c</span> <span class="hljs-string">6c76</span> <span class="hljs-string">6d2f</span>  <span class="hljs-string">github.com/llvm/</span>
-<span class="hljs-attr">00001cb:</span> <span class="hljs-string">6c6c</span> <span class="hljs-string">766d</span> <span class="hljs-string">2d70</span> <span class="hljs-string">726f</span> <span class="hljs-string">6a65</span> <span class="hljs-number">6374 </span><span class="hljs-number">2031 </span><span class="hljs-number">3736  </span><span class="hljs-string">llvm-project</span> <span class="hljs-number">176</span>
-<span class="hljs-attr">00001db:</span> <span class="hljs-number">3234 </span><span class="hljs-number">3962 </span><span class="hljs-number">6436 </span><span class="hljs-number">3733 </span><span class="hljs-number">3261 </span><span class="hljs-number">3830 </span><span class="hljs-number">3434 </span><span class="hljs-number">6434  </span><span class="hljs-string">249bd6732a8044d4</span>
-<span class="hljs-attr">00001eb:</span> <span class="hljs-number">3537 </span><span class="hljs-number">3039 </span><span class="hljs-number">3265 </span><span class="hljs-number">6439 </span><span class="hljs-number">3332 </span><span class="hljs-number">3736 </span><span class="hljs-number">3837 </span><span class="hljs-number">3234  </span><span class="hljs-string">57092ed932768724</span>
-<span class="hljs-attr">00001fb:</span> <span class="hljs-number">6136 </span><span class="hljs-number">6630 </span><span class="hljs-number">3629                           </span><span class="hljs-string">a6f06)</span>
+Contents of section Custom:
+000018b: 0970 726f 6475 6365 7273 010c 7072 6f63  .producers..proc
+000019b: 6573 7365 642d 6279 0105 636c 616e 6756  essed-by..clangV
+00001ab: 3131 2e30 2e30 2028 6874 7470 733a 2f2f  11.0.0 (https://
+00001bb: 6769 7468 7562 2e63 6f6d 2f6c 6c76 6d2f  github.com/llvm/
+00001cb: 6c6c 766d 2d70 726f 6a65 6374 2031 3736  llvm-project 176
+00001db: 3234 3962 6436 3733 3261 3830 3434 6434  249bd6732a8044d4
+00001eb: 3537 3039 3265 6439 3332 3736 3837 3234  57092ed932768724
+00001fb: 6136 6630 3629                           a6f06)
 </code></pre>
 <p>Sure enough, there are custom sections related to linking, relocation, and even a curious &quot;producers&quot; section (that apparently exists to <a href="https://github.com/WebAssembly/tool-conventions/blob/main/ProducersSection.md">allow analysis of toolchain usage in the wild</a>).</p>
 <h1 id="webassembly-libraries">WebAssembly libraries</h1>
 <p>For something as simple as my 20 line C library, I could probably just distribute the C header and the compiled WebAssembly object file (which is actually a WebAssembly module with custom sections) and be done. What if I have a larger library?</p>
 <h2 id="dynamic-libraries">Dynamic libraries</h2>
-<p>Once again, to my surprise, WebAssembly publishes <a href="https://github.com/WebAssembly/tool-conventions/blob/main/DynamicLinking.md">conventions for dynamically loading libraries</a>, but the document notes there is no stable ABI. That&#39;s ok, I didn&#39;t really need dynamic libraries right now anyway.</p>
+<p>Once again, to my surprise, WebAssembly publishes <a href="https://github.com/WebAssembly/tool-conventions/blob/main/DynamicLinking.md">conventions for dynamically loading libraries</a>, but the document notes there is no stable ABI. That's ok, I didn't really need dynamic libraries right now anyway.</p>
 <h2 id="static-libraries">Static libraries</h2>
 <p>Static libraries for native C code are often just archives (using the <a href="https://en.wikipedia.org/wiki/Ar_%28Unix%29"><code>ar</code></a> archiver tool), perhaps with some additional information to describe the library.</p>
 <p>Can I just do the same thing for WebAssembly? It certainly appears so.</p>
 <p>If I inspect the WASI SDK, in the WebAssembly sysroot, I actually see both bare objects and archives for the C standard library and friends:</p>
-<pre><code class="language-sh">$ <span class="hljs-built_in">ls</span> wasi-sdk/share/wasi-sysroot/lib/wasm32-wasi
-crt1-command.o  libc++abi.a                         libdl.a       libutil.a
-crt1.o          libc.imports                        libm.a        libwasi-emulated-mman.a
-crt1-reactor.o  libc-printscan-long-double.a        libpthread.a  libwasi-emulated-signal.a
-libc++.a        libc-printscan-no-floating-point.a  libresolv.a   libxnet.a
-libc.a          libcrypt.a                          librt.a
+<pre><code class="language-bash"><span class="hl-operator">$</span> <span class="hl-identifier">ls</span> <span class="hl-identifier">wasi</span><span class="hl-default">-sdk</span><span class="hl-default">/</span><span class="hl-identifier">share</span><span class="hl-default">/</span><span class="hl-identifier">wasi</span><span class="hl-default">-sysroot</span><span class="hl-default">/</span><span class="hl-identifier">lib</span><span class="hl-default">/</span><span class="hl-identifier">wasm32</span><span class="hl-default">-wasi</span>
+<span class="hl-identifier">crt1</span><span class="hl-default">-command</span><span class="hl-default">.</span><span class="hl-identifier">o</span>  <span class="hl-identifier">libc</span><span class="hl-default">+</span><span class="hl-default">+</span><span class="hl-identifier">abi</span><span class="hl-default">.</span><span class="hl-identifier">a</span>                         <span class="hl-identifier">libdl</span><span class="hl-default">.</span><span class="hl-identifier">a</span>       <span class="hl-identifier">libutil</span><span class="hl-default">.</span><span class="hl-identifier">a</span>
+<span class="hl-identifier">crt1</span><span class="hl-default">.</span><span class="hl-identifier">o</span>          <span class="hl-identifier">libc</span><span class="hl-default">.</span><span class="hl-identifier">imports</span>                        <span class="hl-identifier">libm</span><span class="hl-default">.</span><span class="hl-identifier">a</span>        <span class="hl-identifier">libwasi</span><span class="hl-default">-emulated-mman</span><span class="hl-default">.</span><span class="hl-identifier">a</span>
+<span class="hl-identifier">crt1</span><span class="hl-default">-reactor</span><span class="hl-default">.</span><span class="hl-identifier">o</span>  <span class="hl-identifier">libc</span><span class="hl-default">-printscan-long-double</span><span class="hl-default">.</span><span class="hl-identifier">a</span>        <span class="hl-identifier">libpthread</span><span class="hl-default">.</span><span class="hl-identifier">a</span>  <span class="hl-identifier">libwasi</span><span class="hl-default">-emulated-signal</span><span class="hl-default">.</span><span class="hl-identifier">a</span>
+<span class="hl-identifier">libc</span><span class="hl-default">+</span><span class="hl-default">+</span><span class="hl-default">.</span><span class="hl-identifier">a</span>        <span class="hl-identifier">libc</span><span class="hl-default">-printscan-no-floating-point</span><span class="hl-default">.</span><span class="hl-identifier">a</span>  <span class="hl-identifier">libresolv</span><span class="hl-default">.</span><span class="hl-identifier">a</span>   <span class="hl-identifier">libxnet</span><span class="hl-default">.</span><span class="hl-identifier">a</span>
+<span class="hl-identifier">libc</span><span class="hl-default">.</span><span class="hl-identifier">a</span>          <span class="hl-identifier">libcrypt</span><span class="hl-default">.</span><span class="hl-identifier">a</span>                          <span class="hl-identifier">librt</span><span class="hl-default">.</span><span class="hl-identifier">a</span>
 </code></pre>
-<p>What&#39;s in one of these archives? <code>ar -t libc.a</code> shows a bunch of object files. If I extract an object named &quot;ccos.o&quot; with <code>ar -x libc.a ccos.o</code>, I can use <code>wasm-objdump</code> or <code>wasm2wat</code> to see that it&#39;s just a regular WebAssembly object file.</p>
-<p>I&#39;m impressed that the people working on WebAssembly resisted the urge to create entirely new tools, and instead just decided to leverage existing UNIX tools that have been around for a long time.</p>
+<p>What's in one of these archives? <code>ar -t libc.a</code> shows a bunch of object files. If I extract an object named &quot;ccos.o&quot; with <code>ar -x libc.a ccos.o</code>, I can use <code>wasm-objdump</code> or <code>wasm2wat</code> to see that it's just a regular WebAssembly object file.</p>
+<p>I'm impressed that the people working on WebAssembly resisted the urge to create entirely new tools, and instead just decided to leverage existing UNIX tools that have been around for a long time.</p>
 <h1 id="linking">Linking</h1>
 <p>The <a href="https://lld.llvm.org/WebAssembly.html">documentation for wasm-ld</a> is brief, but it does have most of the information you need.</p>
 <p>The main tricks are:</p>
@@ -175,7 +175,7 @@ libc.a          libcrypt.a                          librt.a
 <h1 id="summary">Summary</h1>
 <p>It turns out that the toolchain for WebAssembly libraries in C is similar to what one would use for native compilation:</p>
 <ul>
-<li>Publish header files (.h) to define the library&#39;s interface</li>
+<li>Publish header files (.h) to define the library's interface</li>
 <li>Compile source files (.c) to object files (.o) using <code>clang</code></li>
 <li>If needed, consolidate multiple object files into an archive (.a) using <code>ar</code></li>
 <li>Publish either a single object file or (more likely) an archive for users to consume</li>

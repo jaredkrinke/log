@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Blazin&#39; Forth/Starting Forth editor quick reference</title>
+<title>Blazin&#039; Forth/Starting Forth editor quick reference</title>
 <meta name="description" content="For my own reference, this is a quick reference table for vintage line/block-based Forth editors." />
 <meta name="keywords" content="commodore-64" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -35,11 +35,11 @@
 <main>
 <article>
 <header>
-<h1><a href="../../posts/vintage-computing/forth-line-editor.html">Blazin&#39; Forth/Starting Forth editor quick reference</a></h1>
+<h1><a href="../../posts/vintage-computing/forth-line-editor.html">Blazin&#039; Forth/Starting Forth editor quick reference</a></h1>
 <p><time datetime="2024-08-13">August 13, 2024</time></p>
 </header>
-<p><strong>Blazin&#39; Forth</strong> is an implementation of Forth for the Commodore 64, published in 1985 by Scott Ballantyne (for free). Its built-in editor is block- and line-based, and the editor is modeled after one described in the first edition of <a href="https://www.forth.com/starting-forth/">Starting Forth</a>.</p>
-<p>The rest of this post provides quick reference for the editor, because I couldn&#39;t find any such resource on the web. For a <em>tutorial</em>, see the Starting Forth PDF at the previous link.</p>
+<p><strong>Blazin' Forth</strong> is an implementation of Forth for the Commodore 64, published in 1985 by Scott Ballantyne (for free). Its built-in editor is block- and line-based, and the editor is modeled after one described in the first edition of <a href="https://www.forth.com/starting-forth/">Starting Forth</a>.</p>
+<p>The rest of this post provides quick reference for the editor, because I couldn't find any such resource on the web. For a <em>tutorial</em>, see the Starting Forth PDF at the previous link.</p>
 <h1 id="forth-editor-quick-reference">Forth editor quick reference</h1>
 <h2 id="block-selectionmanipulation">Block selection/manipulation</h2>
 <table>
@@ -50,7 +50,8 @@
 <th>Description</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>LIST</code></td>
 <td align="center">(n --)</td>
 <td><strong>Select</strong> the given block, <strong>print</strong> it out, and start the editor</td>
@@ -80,7 +81,8 @@
 <td align="center">(n --)</td>
 <td><strong>Load and execute</strong> the given block</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <h2 id="line-editing-commands">Line editing commands</h2>
 <table>
 <thead>
@@ -90,7 +92,8 @@
 <th>Description</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>L</code></td>
 <td align="center">(--)</td>
 <td><strong>Print</strong> the currently selected block</td>
@@ -115,7 +118,8 @@
 <td align="center">(--)</td>
 <td><strong>Cut</strong> the current line, and shift following lines up one line (the line that was removed is placed into the insert buffer--use <code>P</code>/<code>U</code> to &quot;paste&quot;)</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <h2 id="character-editing-commands">Character editing commands</h2>
 <table>
 <thead>
@@ -124,7 +128,8 @@
 <th>Description</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>F</code></td>
 <td><strong>Search</strong> for the rest of the input buffer in the current line</td>
 </tr>
@@ -148,7 +153,8 @@
 <td><code>TILL</code></td>
 <td>Delete everything from the cursor, through the rest of the input buffer</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <h2 id="miscellaneous-commands">Miscellaneous commands</h2>
 <table>
 <thead>
@@ -158,7 +164,8 @@
 <th>Description</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>WIPE</code></td>
 <td align="center">(--)</td>
 <td><strong>Clear</strong> the current block</td>
@@ -183,7 +190,8 @@
 <td align="center">(b l --)</td>
 <td><strong>Copy current line</strong> to a new block and associated line</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

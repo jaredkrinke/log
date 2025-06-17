@@ -43,77 +43,77 @@
 <p>(Piet is an esoteric programming language that uses images as code, with pixel count/hue/shade corresponding to instructions for a stack-based virtual machine.)</p>
 <h1 id="summary">Summary</h1>
 <p>I <em>did</em> manage to solve <a href="https://projecteuler.net/problem=34">problem 34</a> using Piet, but it required careful planning and some tedious <del>rewrites</del> repaints.</p>
-<p>Here&#39;s the solution, enlarged to show texture:</p>
+<p>Here's the solution, enlarged to show texture:</p>
 <p><img src="../../assets/p34-scaled.png" alt="Scaled-up solution"></p>
 <h1 id="approach">Approach</h1>
-<p>Problem 34 requires adding up all numbers where the sum of their digits&#39; factorials equals the number itself. I specifically chose this problem because <strong>it is fairly simple and doesn&#39;t require any special input, but is not <em>so</em> simple that solving it would be trivial</strong>.</p>
-<p>Given that Piet&#39;s instructions are all context-dependent (the color of an instruction depends on the color of the previous block) and it uses a stack for all arithmetic/input/output/manipulation, I made a plan to tackle the &quot;stack&quot; part first (prior to painting anything):</p>
+<p>Problem 34 requires adding up all numbers where the sum of their digits' factorials equals the number itself. I specifically chose this problem because <strong>it is fairly simple and doesn't require any special input, but is not <em>so</em> simple that solving it would be trivial</strong>.</p>
+<p>Given that Piet's instructions are all context-dependent (the color of an instruction depends on the color of the previous block) and it uses a stack for all arithmetic/input/output/manipulation, I made a plan to tackle the &quot;stack&quot; part first (prior to painting anything):</p>
 <ol>
 <li>Solve the problem in Forth (a stack-based language)</li>
-<li>Re-solve the problem in Forth using only Piet&#39;s instructions (except for branching, which is done graphically)</li>
+<li>Re-solve the problem in Forth using only Piet's instructions (except for branching, which is done graphically)</li>
 <li>Translate the Forth-based solution into Piet</li>
 <li>Add some colored rectangles (because: art)</li>
 </ol>
 <h1 id="implementation">Implementation</h1>
 <h2 id="forth-solution">Forth solution</h2>
-<p>After a bit of stack-wrangling, I came up with this solution in Forth (which doesn&#39;t use any variables):</p>
-<pre><code class="language-forth">( Project Euler problem <span class="hljs-number">34</span>, <span class="hljs-keyword">in</span> Forth )
+<p>After a bit of stack-wrangling, I came up with this solution in Forth (which doesn't use any variables):</p>
+<pre><code class="language-forth"><span class="hl-comment">( Project Euler problem 34, in Forth )</span>
 
-: <span class="hljs-type">log</span> dup . ;
+<span class="hl-operator">:</span> <span class="hl-identifier">log</span> <span class="hl-keyword">dup</span> <span class="hl-keyword">.</span> <span class="hl-operator">;</span>
 
-: <span class="hljs-type">factorial</span> ( n <span class="hljs-comment">-- n! )</span>
-    <span class="hljs-number">1</span> swap <span class="hljs-keyword">begin</span> dup <span class="hljs-number">0</span> &gt; <span class="hljs-keyword">while</span> dup rot * swap <span class="hljs-number">1</span> - repeat drop ;
+<span class="hl-operator">:</span> <span class="hl-identifier">factorial</span> <span class="hl-comment">( n -- n! )</span>
+    <span class="hl-identifier">1</span> <span class="hl-keyword">swap</span> <span class="hl-keyword">begin</span> <span class="hl-keyword">dup</span> <span class="hl-identifier">0</span> <span class="hl-identifier">&gt;</span> <span class="hl-keyword">while</span> <span class="hl-keyword">dup</span> <span class="hl-keyword">rot</span> <span class="hl-identifier">*</span> <span class="hl-keyword">swap</span> <span class="hl-identifier">1</span> <span class="hl-identifier">-</span> <span class="hl-identifier">repeat</span> <span class="hl-keyword">drop</span> <span class="hl-operator">;</span>
 
-: <span class="hljs-type">div</span>-<span class="hljs-keyword">mod</span> ( x y <span class="hljs-comment">-- q r )</span>
-    over over / rot rot <span class="hljs-keyword">mod</span> ;
+<span class="hl-operator">:</span> <span class="hl-identifier">div-mod</span> <span class="hl-comment">( x y -- q r )</span>
+    <span class="hl-keyword">over</span> <span class="hl-keyword">over</span> <span class="hl-identifier">/</span> <span class="hl-keyword">rot</span> <span class="hl-keyword">rot</span> <span class="hl-keyword">mod</span> <span class="hl-operator">;</span>
 
-: <span class="hljs-type">sum</span>-digit-factorials ( n <span class="hljs-comment">-- sum)</span>
-    <span class="hljs-number">0</span> swap <span class="hljs-keyword">begin</span> dup <span class="hljs-number">0</span> &gt; <span class="hljs-keyword">while</span> <span class="hljs-number">10</span> div-<span class="hljs-keyword">mod</span> factorial rot + swap repeat drop ;
+<span class="hl-operator">:</span> <span class="hl-identifier">sum-digit-factorials</span> <span class="hl-comment">( n -- sum)</span>
+    <span class="hl-identifier">0</span> <span class="hl-keyword">swap</span> <span class="hl-keyword">begin</span> <span class="hl-keyword">dup</span> <span class="hl-identifier">0</span> <span class="hl-identifier">&gt;</span> <span class="hl-keyword">while</span> <span class="hl-identifier">10</span> <span class="hl-identifier">div-mod</span> <span class="hl-identifier">factorial</span> <span class="hl-keyword">rot</span> <span class="hl-identifier">+</span> <span class="hl-keyword">swap</span> <span class="hl-identifier">repeat</span> <span class="hl-keyword">drop</span> <span class="hl-operator">;</span>
 
-: <span class="hljs-type">main</span>-<span class="hljs-keyword">loop</span> ( sum counter <span class="hljs-comment">-- sum counter )</span>
-    dup dup sum-digit-factorials = <span class="hljs-keyword">if</span> dup rot + log swap <span class="hljs-keyword">then</span> <span class="hljs-number">1</span> + ;
+<span class="hl-operator">:</span> <span class="hl-identifier">main-loop</span> <span class="hl-comment">( sum counter -- sum counter )</span>
+    <span class="hl-keyword">dup</span> <span class="hl-keyword">dup</span> <span class="hl-identifier">sum-digit-factorials</span> <span class="hl-identifier">=</span> <span class="hl-keyword">if</span> <span class="hl-keyword">dup</span> <span class="hl-keyword">rot</span> <span class="hl-identifier">+</span> <span class="hl-identifier">log</span> <span class="hl-keyword">swap</span> <span class="hl-keyword">then</span> <span class="hl-identifier">1</span> <span class="hl-identifier">+</span> <span class="hl-operator">;</span>
 
-: <span class="hljs-type">main</span> <span class="hljs-number">0</span> <span class="hljs-number">3</span> <span class="hljs-number">999999</span> <span class="hljs-number">0</span> <span class="hljs-keyword">do</span> main-<span class="hljs-keyword">loop</span> <span class="hljs-keyword">loop</span> ;
+<span class="hl-operator">:</span> <span class="hl-identifier">main</span> <span class="hl-identifier">0</span> <span class="hl-identifier">3</span> <span class="hl-identifier">999999</span> <span class="hl-identifier">0</span> <span class="hl-keyword">do</span> <span class="hl-identifier">main-loop</span> <span class="hl-keyword">loop</span> <span class="hl-operator">;</span>
 
-main
+<span class="hl-identifier">main</span>
 </code></pre>
 <h2 id="piet-flavored-forth">Piet-flavored Forth</h2>
-<p>Next, I modified the Forth code to use Piet&#39;s primitives (except for branches, which are mostly implemented graphically). This was done in a few steps:</p>
+<p>Next, I modified the Forth code to use Piet's primitives (except for branches, which are mostly implemented graphically). This was done in a few steps:</p>
 <ol>
 <li>Avoid directly using large numbers (since directly pushing N requires painting N pixels)</li>
 <li>Replace <code>do</code> with a <code>while</code> loop</li>
 <li>Implement Forth words in Piet, as &quot;macros&quot; (which I will later manually expand when painting the actual Piet image)</li>
 </ol>
 <p>Result:</p>
-<pre><code class="language-forth">( Project Euler problem <span class="hljs-number">34</span>, <span class="hljs-keyword">in</span> Forth, but using Piet primitives )
+<pre><code class="language-forth"><span class="hl-comment">( Project Euler problem 34, in Forth, but using Piet primitives )</span>
 
-( Piet macros )
-( : <span class="hljs-type">swap</span> <span class="hljs-number">2</span> <span class="hljs-number">1</span> roll ; )
-( : <span class="hljs-type">rot</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span> roll ; )
-( : <span class="hljs-type">rot2</span> <span class="hljs-number">3</span> <span class="hljs-number">1</span> roll ; )
-( : <span class="hljs-type">over2</span> dup <span class="hljs-number">3</span> <span class="hljs-number">2</span> roll dup <span class="hljs-number">3</span> <span class="hljs-number">1</span> roll <span class="hljs-number">4</span> <span class="hljs-number">1</span> roll ; )
-( : = - <span class="hljs-keyword"><span class="hljs-keyword">not</span></span> ; )
+<span class="hl-comment">( Piet macros )</span>
+<span class="hl-comment">( : swap 2 1 roll ; )</span>
+<span class="hl-comment">( : rot 3 2 roll ; )</span>
+<span class="hl-comment">( : rot2 3 1 roll ; )</span>
+<span class="hl-comment">( : over2 dup 3 2 roll dup 3 1 roll 4 1 roll ; )</span>
+<span class="hl-comment">( : = - not ; )</span>
 
-( Implementation using Piet primitives (except <span class="hljs-keyword">for</span> loops, which are graphical <span class="hljs-keyword">in</span> Piet) )
+<span class="hl-comment">( Implementation using Piet primitives (except for loops, which are graphical in Piet)</span> <span class="hl-default">)</span>
 
-: <span class="hljs-type">rot2</span> rot rot ;
-: <span class="hljs-type">over2</span> over over ;
+<span class="hl-operator">:</span> <span class="hl-identifier">rot2</span> <span class="hl-keyword">rot</span> <span class="hl-keyword">rot</span> <span class="hl-operator">;</span>
+<span class="hl-operator">:</span> <span class="hl-identifier">over2</span> <span class="hl-keyword">over</span> <span class="hl-keyword">over</span> <span class="hl-operator">;</span>
 
-: <span class="hljs-type">factorial</span> ( n <span class="hljs-comment">-- n! )</span>
-    <span class="hljs-number">1</span> swap <span class="hljs-keyword">begin</span> dup <span class="hljs-number">0</span> &gt; <span class="hljs-keyword">while</span> dup rot * swap <span class="hljs-number">1</span> - repeat drop ;
+<span class="hl-operator">:</span> <span class="hl-identifier">factorial</span> <span class="hl-comment">( n -- n! )</span>
+    <span class="hl-identifier">1</span> <span class="hl-keyword">swap</span> <span class="hl-keyword">begin</span> <span class="hl-keyword">dup</span> <span class="hl-identifier">0</span> <span class="hl-identifier">&gt;</span> <span class="hl-keyword">while</span> <span class="hl-keyword">dup</span> <span class="hl-keyword">rot</span> <span class="hl-identifier">*</span> <span class="hl-keyword">swap</span> <span class="hl-identifier">1</span> <span class="hl-identifier">-</span> <span class="hl-identifier">repeat</span> <span class="hl-keyword">drop</span> <span class="hl-operator">;</span>
 
-: <span class="hljs-type">div</span>-<span class="hljs-keyword">mod</span> ( x y <span class="hljs-comment">-- q r )</span>
-    over2 / rot2 <span class="hljs-keyword">mod</span> ;
+<span class="hl-operator">:</span> <span class="hl-identifier">div-mod</span> <span class="hl-comment">( x y -- q r )</span>
+    <span class="hl-identifier">over2</span> <span class="hl-identifier">/</span> <span class="hl-identifier">rot2</span> <span class="hl-keyword">mod</span> <span class="hl-operator">;</span>
 
-: <span class="hljs-type">sum</span>-digit-factorials ( n <span class="hljs-comment">-- sum)</span>
-    <span class="hljs-number">0</span> swap <span class="hljs-keyword">begin</span> dup <span class="hljs-number">0</span> &gt; <span class="hljs-keyword">while</span> <span class="hljs-number">10</span> div-<span class="hljs-keyword">mod</span> factorial rot + swap repeat drop ;
+<span class="hl-operator">:</span> <span class="hl-identifier">sum-digit-factorials</span> <span class="hl-comment">( n -- sum)</span>
+    <span class="hl-identifier">0</span> <span class="hl-keyword">swap</span> <span class="hl-keyword">begin</span> <span class="hl-keyword">dup</span> <span class="hl-identifier">0</span> <span class="hl-identifier">&gt;</span> <span class="hl-keyword">while</span> <span class="hl-identifier">10</span> <span class="hl-identifier">div-mod</span> <span class="hl-identifier">factorial</span> <span class="hl-keyword">rot</span> <span class="hl-identifier">+</span> <span class="hl-keyword">swap</span> <span class="hl-identifier">repeat</span> <span class="hl-keyword">drop</span> <span class="hl-operator">;</span>
 
-: <span class="hljs-type">main</span>-<span class="hljs-keyword">loop</span> ( sum counter <span class="hljs-comment">-- sum counter )</span>
-    dup dup sum-digit-factorials = <span class="hljs-keyword">if</span> dup rot + swap <span class="hljs-keyword">then</span> <span class="hljs-number">1</span> + ;
+<span class="hl-operator">:</span> <span class="hl-identifier">main-loop</span> <span class="hl-comment">( sum counter -- sum counter )</span>
+    <span class="hl-keyword">dup</span> <span class="hl-keyword">dup</span> <span class="hl-identifier">sum-digit-factorials</span> <span class="hl-identifier">=</span> <span class="hl-keyword">if</span> <span class="hl-keyword">dup</span> <span class="hl-keyword">rot</span> <span class="hl-identifier">+</span> <span class="hl-keyword">swap</span> <span class="hl-keyword">then</span> <span class="hl-identifier">1</span> <span class="hl-identifier">+</span> <span class="hl-operator">;</span>
 
-: <span class="hljs-type">main</span> <span class="hljs-number">0</span> <span class="hljs-number">3</span> <span class="hljs-keyword">begin</span> dup <span class="hljs-number">10</span> <span class="hljs-number">10</span> <span class="hljs-number">10</span> <span class="hljs-number">10</span> <span class="hljs-number">10</span> * * * * - <span class="hljs-keyword">while</span> main-<span class="hljs-keyword">loop</span> repeat drop . ;
+<span class="hl-operator">:</span> <span class="hl-identifier">main</span> <span class="hl-identifier">0</span> <span class="hl-identifier">3</span> <span class="hl-keyword">begin</span> <span class="hl-keyword">dup</span> <span class="hl-identifier">10</span> <span class="hl-identifier">10</span> <span class="hl-identifier">10</span> <span class="hl-identifier">10</span> <span class="hl-identifier">10</span> <span class="hl-identifier">*</span> <span class="hl-identifier">*</span> <span class="hl-identifier">*</span> <span class="hl-identifier">*</span> <span class="hl-identifier">-</span> <span class="hl-keyword">while</span> <span class="hl-identifier">main-loop</span> <span class="hl-identifier">repeat</span> <span class="hl-keyword">drop</span> <span class="hl-keyword">.</span> <span class="hl-operator">;</span>
 
-main
+<span class="hl-identifier">main</span>
 </code></pre>
 <h2 id="using-piet-for-real">Using Piet, for real</h2>
 <p>For authoring the image, I used <a href="https://piet.bubbler.one/">this browser-based Piet editor (and interpreter)</a>.</p>
@@ -124,7 +124,7 @@ main
 <li><strong>Branches are represented graphically</strong> and you have to ensure there is space for e.g. return lines (all using Zoolander-style clockwise-only turns)</li>
 </ul>
 <p>Luckily, I only had to correct a handful of mistakes.</p>
-<p>Here&#39;s what my solution looked like (with points of interest marked):</p>
+<p>Here's what my solution looked like (with points of interest marked):</p>
 <p><img src="../../assets/p34-notes.png" alt="Annotated solution"></p>
 <p>Explanation:</p>
 <ol>
@@ -136,7 +136,7 @@ main
 <li>Check if sum of digit factorials equals the number (the <code>if</code> part of <code>main-loop</code>)</li>
 <li>Move on to the next number</li>
 </ol>
-<p>N.B. I set the limit (#2) lower for the Piet version just to ensure the program ran in a reasonable amount of time. It still produces the correct answer, but I don&#39;t have any mathematical analysis to justify lowering the limit from 7 digits down to 5.</p>
+<p>N.B. I set the limit (#2) lower for the Piet version just to ensure the program ran in a reasonable amount of time. It still produces the correct answer, but I don't have any mathematical analysis to justify lowering the limit from 7 digits down to 5.</p>
 <h2 id="art">Art</h2>
 <p>Given that Piet code is an image, the final step is to add prettily colored rectangles. Here is the final <em>unscaled</em> solution (which you can theoretically run via a Piet interpreter):</p>
 <p><img src="../../assets/p34.png" alt="Final solution, actual size"></p>
@@ -145,7 +145,7 @@ main
 <p><strong>But the satisfaction of having written a real program in a 2D esoteric language like Piet is real.</strong></p>
 <p>How often can you sit back and visually admire a program? Piet is a wonderfully unique entry in the world of esoteric programming languages!</p>
 <h1 id="appendix">Appendix</h1>
-<p>To my amazement, someone created a <a href="https://www.toothycat.net/wiki/wiki.pl?MoonShadow/Piet">Piet assembler</a> that can translate from an assembly language into a Piet-compatible image. It&#39;s an incredible achievement, but I wanted to write my Piet solution by hand.</p>
+<p>To my amazement, someone created a <a href="https://www.toothycat.net/wiki/wiki.pl?MoonShadow/Piet">Piet assembler</a> that can translate from an assembly language into a Piet-compatible image. It's an incredible achievement, but I wanted to write my Piet solution by hand.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

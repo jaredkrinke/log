@@ -38,9 +38,9 @@
 <h1><a href="../../posts/programming-languages/100-languages-9.html">50 programming languages in 58 days</a></h1>
 <p><time datetime="2024-05-13">May 13, 2024</time></p>
 </header>
-<p>In the past two months, I&#39;ve <a href="https://github.com/jaredkrinke/100-languages">written code in 50 different programming languages</a>. <strong>That&#39;s half way to <a href="100-languages.html">my goal of 100</a></strong>.</p>
+<p>In the past two months, I've <a href="https://github.com/jaredkrinke/100-languages">written code in 50 different programming languages</a>. <strong>That's half way to <a href="100-languages.html">my goal of 100</a></strong>.</p>
 <h1 id="weeks-6---8">Weeks 6 - 8</h1>
-<p>After tediously <a href="piet-for-project-euler.html">painting a picture to compute digit factorials</a>, <strong>I&#39;m trying to be more strategic about pairing programming languages with suitable Project Euler problems</strong>. Ideally, I can avoid writing &quot;big integer&quot; arithmetic and/or squeezing solutions into a 16-bit address space for the next update. And I&#39;m definitely going to take a break from esoteric programming languages for a bit.</p>
+<p>After tediously <a href="piet-for-project-euler.html">painting a picture to compute digit factorials</a>, <strong>I'm trying to be more strategic about pairing programming languages with suitable Project Euler problems</strong>. Ideally, I can avoid writing &quot;big integer&quot; arithmetic and/or squeezing solutions into a 16-bit address space for the next update. And I'm definitely going to take a break from esoteric programming languages for a bit.</p>
 <p>Anyway, here are the languages I used:</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Turbo_Pascal">Turbo Pascal</a> (under DOSBox)</li>
@@ -61,16 +61,16 @@
 <li><a href="https://fsharp.org/">F#</a> (functional language for .NET)</li>
 </ul>
 <p>A few languages surprised me (one quite pleasantly and one quite <em>unpleasantly</em>).</p>
-<p>The rest of this post just contains notes from my (minimal) interaction with each language. I&#39;m planning to write a separate post with more general observations. As always, <strong>my observations are from spending at most a few hours with each language, so take my opinions completely encrusted with salt.</strong></p>
+<p>The rest of this post just contains notes from my (minimal) interaction with each language. I'm planning to write a separate post with more general observations. As always, <strong>my observations are from spending at most a few hours with each language, so take my opinions completely encrusted with salt.</strong></p>
 <h2 id="turbo-pascal">Turbo Pascal</h2>
-<p><strong>I&#39;d always wanted to try Turbo Pascal since two of my heroes helped create it (Anders &quot;Turbo&quot; Heljsberg and Niklaus (&quot;Pascal&quot;) Wirth).</strong> It was allegedly far ahead of its time, although my only contemporaneous experience was with QBasic, so I can neither confirm nor deny. Regardless, it&#39;s an impressively complete little environment. I highly recommend it for retrocomputing!</p>
+<p><strong>I'd always wanted to try Turbo Pascal since two of my heroes helped create it (Anders &quot;Turbo&quot; Heljsberg and Niklaus (&quot;Pascal&quot;) Wirth).</strong> It was allegedly far ahead of its time, although my only contemporaneous experience was with QBasic, so I can neither confirm nor deny. Regardless, it's an impressively complete little environment. I highly recommend it for retrocomputing!</p>
 <p>Notes:</p>
 <ul>
 <li><strong>Keyboard shortcut to compile and run is Ctrl+F9... which is the default DOSBox shortcut for killing DOSBox</strong></li>
 <li>Had to speed up prime test by sieving first 1000 numbers</li>
 <li>Built-in documentation is handy, but lacking detail</li>
 <li><strong>The IDE is amazing, considering how tiny it is!</strong> (Aside: someone <a href="https://github.com/magiblot/turbo">ported the UI to modern computers</a>)</li>
-<li>Can&#39;t have local variables with same name as globals?</li>
+<li>Can't have local variables with same name as globals?</li>
 <li>Annoying to have to declare all variables at top, but that probably makes the language faster to compile</li>
 </ul>
 <h2 id="hare">Hare</h2>
@@ -78,18 +78,18 @@
 <li>Initially, I was confused by the &quot;cannot ignore error here&quot; error, but it turns out it was <em>literally telling me that I needed to handle a potential error code path</em> (or tell the compiler to crash on error instead)</li>
 <li>Semicolons required at the end of <code>for</code> loops and <code>if</code> conditionals (though the docs say this might change)</li>
 <li><strong>Docs claim the language fits on a 3.5&quot; floppy</strong> -- if true that would be impressive!</li>
-<li>Doesn&#39;t officially support Windows/macOS</li>
+<li>Doesn't officially support Windows/macOS</li>
 </ul>
 <h2 id="wren">Wren</h2>
 <ul>
-<li>Doesn&#39;t tolerate semicolons</li>
-<li>Can&#39;t chain methods on separate lines</li>
+<li>Doesn't tolerate semicolons</li>
+<li>Can't chain methods on separate lines</li>
 <li><code>sqrt</code>, <code>floor</code> are properties instead of functions</li>
 <li><code>for</code> is &quot;for each&quot;, but there is no &quot;step some value up to max&quot; loop built in</li>
 <li>Fibers!</li>
 </ul>
 <h2 id="pkl">Pkl</h2>
-<p>According to its web site, Pkl provides &quot;Configuration that is Programmable, Scalable, and Safe&quot;. Sounds great, but I was disappointed to see that this configuration language is &gt; 80 MB. I understand that INI files aren&#39;t enough and that YAML doesn&#39;t scale. But (and I apologize for this)... <strong>Pkl is the Electron of configuration languages</strong>. That is both a compliment and an insult.</p>
+<p>According to its web site, Pkl provides &quot;Configuration that is Programmable, Scalable, and Safe&quot;. Sounds great, but I was disappointed to see that this configuration language is &gt; 80 MB. I understand that INI files aren't enough and that YAML doesn't scale. But (and I apologize for this)... <strong>Pkl is the Electron of configuration languages</strong>. That is both a compliment and an insult.</p>
 <p>Notes:</p>
 <ul>
 <li>Nice functional language</li>
@@ -99,23 +99,23 @@
 <h2 id="qalb">Qalb</h2>
 <ul>
 <li>Thought-provoking concept!</li>
-<li>VS Code doesn&#39;t have an RTL mode, so it kept getting confused about where to put tokens</li>
+<li>VS Code doesn't have an RTL mode, so it kept getting confused about where to put tokens</li>
 </ul>
 <h2 id="roc">Roc</h2>
 <ul>
-<li>Accessing lists requires dealing with Result type for error handling, even when I&#39;ve already checked if the list is long enough (would Idris handle this case?)</li>
+<li>Accessing lists requires dealing with Result type for error handling, even when I've already checked if the list is long enough (would Idris handle this case?)</li>
 <li>Requires downloading extra code just for &quot;Hello, world!&quot;?</li>
 </ul>
 <h2 id="wax">wax</h2>
 <ul>
-<li><strong>I like the idea of a meta-language for &quot;write once, use from any language&quot;</strong> (and I don&#39;t mind s-expressions)</li>
-<li>Was kind of hoping for AST-level macros, but I didn&#39;t see them...</li>
+<li><strong>I like the idea of a meta-language for &quot;write once, use from any language&quot;</strong> (and I don't mind s-expressions)</li>
+<li>Was kind of hoping for AST-level macros, but I didn't see them...</li>
 </ul>
 <h2 id="boron">Boron</h2>
 <ul>
 <li><strong>Only 350 KB!</strong></li>
 <li>Reminds me of TCL</li>
-<li>Didn&#39;t see &quot;reduce&quot; and had an issue with &quot;replace&quot;, so I had to use lots of mutation and iteration</li>
+<li>Didn't see &quot;reduce&quot; and had an issue with &quot;replace&quot;, so I had to use lots of mutation and iteration</li>
 </ul>
 <h2 id="wenyan">wenyan</h2>
 <ul>
@@ -124,7 +124,7 @@
 <h2 id="self">Self</h2>
 <ul>
 <li>Overall, I struggled with Self</li>
-<li>Couldn&#39;t find an HTTPS download</li>
+<li>Couldn't find an HTTPS download</li>
 <li>Appeared to be 32-bit-only, without Windows support</li>
 <li>GUI-only?</li>
 <li>Similar to Smalltalk/Squeak <strong>I had lots of trouble navigating the UI and figuring out what to click/middle-click/right-click on to make things happen</strong></li>
@@ -132,7 +132,7 @@
 <li>Saving to/loading from text files is done via the <code>transporter</code> object (see tutorial)</li>
 <li>Took me a long time to figure out how to supply multiple arguments to a method: &quot;Methods can take arguments, and the keywords for each argument after the first must start with a capital letter.&quot;</li>
 <li>Got a &quot;numeric constant too large&quot; error, but actual arithmetic seamlessly transitions to &quot;big integer&quot; arithmetic</li>
-<li>Globals in method don&#39;t work until setting <code>parent*</code> slot, to enable it to search up the hierarchy to <code>globals</code></li>
+<li>Globals in method don't work until setting <code>parent*</code> slot, to enable it to search up the hierarchy to <code>globals</code></li>
 </ul>
 <h2 id="haskell">Haskell</h2>
 <ul>
@@ -140,28 +140,28 @@
 </ul>
 <h2 id="idris">Idris</h2>
 <ul>
-<li>Originally, I wanted to try implementing a solution within the type system, but I just couldn&#39;t figure it out after a few hours of flailing about</li>
-<li>Couldn&#39;t find standard library functions for operations like &quot;first element of a list&quot; or &quot;check if an item exists within a list&quot;</li>
+<li>Originally, I wanted to try implementing a solution within the type system, but I just couldn't figure it out after a few hours of flailing about</li>
+<li>Couldn't find standard library functions for operations like &quot;first element of a list&quot; or &quot;check if an item exists within a list&quot;</li>
 <li>Never figured out how to test anything other than equality in the type system</li>
-<li>I still don&#39;t understand how <code>Something</code> and <code>MkSomething</code> are related for data types -- I need to come back to this eventually...</li>
+<li>I still don't understand how <code>Something</code> and <code>MkSomething</code> are related for data types -- I need to come back to this eventually...</li>
 </ul>
 <h2 id="nim">Nim</h2>
-<p><strong>Nim is the language that impressed me the most in this batch.</strong> Everything I thought would be a problem (significant whitespace, choose-your-own-function syntax, intermediate C compliation step) didn&#39;t bother me at all. The small sample of the standard library I played with was a little quirky, but Nim seems like excellent bang for your buck.</p>
+<p><strong>Nim is the language that impressed me the most in this batch.</strong> Everything I thought would be a problem (significant whitespace, choose-your-own-function syntax, intermediate C compliation step) didn't bother me at all. The small sample of the standard library I played with was a little quirky, but Nim seems like excellent bang for your buck.</p>
 <p>Notes:</p>
 <ul>
 <li>Release binary was only 120 KB (linked against libc)!</li>
-<li>Thought I&#39;d dislike the syntax, but it was fine</li>
+<li>Thought I'd dislike the syntax, but it was fine</li>
 <li><strong>Really easy to get started, many things &quot;just worked&quot; (e.g. grabbing a slice of an array)</strong></li>
-<li>Didn&#39;t have to specify too many types, but still ran fast</li>
+<li>Didn't have to specify too many types, but still ran fast</li>
 <li>Fast compilation</li>
-<li>Didn&#39;t like the &quot;hints&quot; it spews out during compilation, even for <code>nim r</code> (build and run)</li>
+<li>Didn't like the &quot;hints&quot; it spews out during compilation, even for <code>nim r</code> (build and run)</li>
 <li>Why did <code>all</code> take an anonymous function, but <code>foldl</code> took just an expression (with <code>a</code> and <code>b</code> seemingly picked out of thin air) -- is <code>foldl</code> a macro?</li>
-<li><strong>Nim might be a good language for hobby projects because it&#39;s easy, fast, and produces small binaries</strong></li>
-<li>I wonder what the debugging experience is like -- if it&#39;s decent, I might be writing a lot more Nim in the future!</li>
+<li><strong>Nim might be a good language for hobby projects because it's easy, fast, and produces small binaries</strong></li>
+<li>I wonder what the debugging experience is like -- if it's decent, I might be writing a lot more Nim in the future!</li>
 </ul>
 <h2 id="min">Min</h2>
 <ul>
-<li>Operators&#39; arguments are named, which helped me (although I think it&#39;s an atypical style for concatenative languages)</li>
+<li>Operators' arguments are named, which helped me (although I think it's an atypical style for concatenative languages)</li>
 </ul>
 <h2 id="cakelisp">Cakelisp</h2>
 <ul>
@@ -171,7 +171,7 @@
 </ul>
 <h2 id="f">F#</h2>
 <ul>
-<li><code>|&gt;</code> (pipe operator) is nice, but I couldn&#39;t find it explicitly stated where the argument goes (it appears to be last--but can I change that?)</li>
+<li><code>|&gt;</code> (pipe operator) is nice, but I couldn't find it explicitly stated where the argument goes (it appears to be last--but can I change that?)</li>
 <li>Type inference was convenient--I never had to specify <code>int</code></li>
 <li>F# feels like C# without having to specify types... except I have to type <code>Seq</code> <em>more</em> than I would have in C#</li>
 <li>Relatively slow to compile</li>

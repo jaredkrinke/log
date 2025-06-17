@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Compiling Graphviz to WebAssembly (without Emscripten)</title>
-<meta name="description" content="In order to automatically generate diagrams for my site that&#39;s built with Node, I compiled Graphviz to WebAssembly. Here&#39;s my experience." />
+<meta name="description" content="In order to automatically generate diagrams for my site that&#039;s built with Node, I compiled Graphviz to WebAssembly. Here&#039;s my experience." />
 <meta name="keywords" content="diagrams" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -40,13 +40,13 @@
 </header>
 <p>After successfully <a href="passing-strings-to-c.html">passed strings back and forth between WebAssembly and JavaScript</a>, and <a href="c-standard-library-example.html">linked against a C standard library</a> (all without Emscripten... or Python), I felt ready to try compiling a substantial library to WebAssembly for use in Node.</p>
 <h1 id="graphviz">Graphviz</h1>
-<p>Specifically, I wanted to be able to automatically generate diagrams (in <a href="https://en.wikipedia.org/wiki/Scalable_Vector_Graphics">SVG</a> format) from text descriptions when building my static site using <a href="../static-site-generators/metalsmith.html">Metalsmith/Node</a>. <a href="https://graphviz.org/">Graphviz</a> is an old package of tools and libraries (written in C) that I&#39;ve successfully used in the past.</p>
+<p>Specifically, I wanted to be able to automatically generate diagrams (in <a href="https://en.wikipedia.org/wiki/Scalable_Vector_Graphics">SVG</a> format) from text descriptions when building my static site using <a href="../static-site-generators/metalsmith.html">Metalsmith/Node</a>. <a href="https://graphviz.org/">Graphviz</a> is an old package of tools and libraries (written in C) that I've successfully used in the past.</p>
 <p>Graphviz diagrams are described in a language called <a href="https://graphviz.org/doc/info/lang.html">DOT</a>. Example:</p>
-<pre><code class="language-dot">digraph {
-    <span class="hljs-selector-tag">a</span> -&gt; <span class="hljs-selector-tag">b</span>;
-}
+<pre><code class="language-dot"><span class="hl-keyword">digraph</span> <span class="hl-operator">{</span>
+    <span class="hl-identifier">a</span> <span class="hl-operator">-</span><span class="hl-operator">&gt;</span> <span class="hl-identifier">b</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 </code></pre>
-<p>Graphviz supports multiple layout engines, but I&#39;ve only ever needed to use the default <a href="https://graphviz.org/docs/layouts/dot/">dot</a> engine (yes, it&#39;s the same name, just in lower case).</p>
+<p>Graphviz supports multiple layout engines, but I've only ever needed to use the default <a href="https://graphviz.org/docs/layouts/dot/">dot</a> engine (yes, it's the same name, just in lower case).</p>
 <h2 id="prior-ports">Prior ports</h2>
 <p>The Graphviz site <a href="https://graphviz.org/resources/">lists a number of previous ports of Graphviz</a>, including a couple that are relevant for Node:</p>
 <ul>
@@ -56,64 +56,64 @@
 <p>Honestly, either one of these would have probably worked for my original purpose, but I chose to compile Graphviz myself for a few reasons:</p>
 <ul>
 <li>I wanted to experiment with compiling an existing C library to WebAssembly</li>
-<li>I hoped that if I ripped out functionality I didn&#39;t need (e.g. export to <em>any format except SVG</em>), I might end up with a smaller WebAssembly module</li>
+<li>I hoped that if I ripped out functionality I didn't need (e.g. export to <em>any format except SVG</em>), I might end up with a smaller WebAssembly module</li>
 <li>I thought that a simple DOT-to-SVG function would avoid taking dependencies on &quot;virtual&quot; file I/O, etc. (which I assumed is how Emscripten worked)</li>
 </ul>
 <h1 id="dot2svgwasm">dot2svg.wasm</h1>
-<p>Given that I&#39;m only interested in DOT diagram description to SVG, I decided to export a single function named <code>dot2svg</code> (along with exporting <code>malloc</code>/<code>free</code>/memory). There were a few reasons for this:</p>
+<p>Given that I'm only interested in DOT diagram description to SVG, I decided to export a single function named <code>dot2svg</code> (along with exporting <code>malloc</code>/<code>free</code>/memory). There were a few reasons for this:</p>
 <ul>
 <li>The module should be smaller since it only contains the minimum essential code</li>
-<li>I may be able to avoid dealing with build errors in code that I don&#39;t need</li>
-<li>Theoretically, I can avoid dealing with file input/output, since everything is just strings in memory (spoiler: this didn&#39;t quite work out)</li>
+<li>I may be able to avoid dealing with build errors in code that I don't need</li>
+<li>Theoretically, I can avoid dealing with file input/output, since everything is just strings in memory (spoiler: this didn't quite work out)</li>
 </ul>
-<p>The module&#39;s C code is pretty simple. Other than memory management functions, there&#39;s only one export and it takes a C string (in DOT format), renders to SVG, and returns a newly allocated string with the SVG content (the JavaScript host is responsible for freeing the string after it&#39;s been decoded).</p>
-<p>Here&#39;s the C code for my module:</p>
-<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;malloc.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;gvc.h&gt;</span></span>
+<p>The module's C code is pretty simple. Other than memory management functions, there's only one export and it takes a C string (in DOT format), renders to SVG, and returns a newly allocated string with the SVG content (the JavaScript host is responsible for freeing the string after it's been decoded).</p>
+<p>Here's the C code for my module:</p>
+<pre><code class="language-c"><span class="hl-preprocessor">#include</span> <span class="hl-string">&lt;malloc.h&gt;</span>
+<span class="hl-preprocessor">#include</span> <span class="hl-string">&lt;string.h&gt;</span>
+<span class="hl-preprocessor">#include</span> <span class="hl-string">&lt;gvc.h&gt;</span>
 
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT_AS(name) __attribute__((export_name(name)))</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> WASM_EXPORT(symbol) WASM_EXPORT_AS(#symbol) symbol</span>
+<span class="hl-preprocessor">#define</span> <span class="hl-function">WASM_EXPORT_AS</span><span class="hl-operator">(</span><span class="hl-identifier">name</span><span class="hl-operator">)</span> <span class="hl-keyword">__attribute__</span><span class="hl-operator">(</span><span class="hl-operator">(</span><span class="hl-function">export_name</span><span class="hl-operator">(</span><span class="hl-identifier">name</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+<span class="hl-preprocessor">#define</span> <span class="hl-function">WASM_EXPORT</span><span class="hl-operator">(</span><span class="hl-identifier">symbol</span><span class="hl-operator">)</span> <span class="hl-function">WASM_EXPORT_AS</span><span class="hl-operator">(</span><span class="hl-default">#</span><span class="hl-identifier">symbol</span><span class="hl-operator">)</span> <span class="hl-identifier">symbol</span>
 
-<span class="hljs-comment">// WebAssembly exports</span>
-<span class="hljs-comment">// Memory management helpers</span>
-<span class="hljs-type">void</span>* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(allocate)</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> size)</span> {
-    <span class="hljs-keyword">return</span> <span class="hljs-built_in">malloc</span>(size);
-}
+<span class="hl-comment">// WebAssembly exports</span>
+<span class="hl-comment">// Memory management helpers</span>
+<span class="hl-type">void</span><span class="hl-operator">*</span> <span class="hl-function">WASM_EXPORT</span><span class="hl-operator">(</span><span class="hl-identifier">allocate</span><span class="hl-operator">)</span><span class="hl-operator">(</span><span class="hl-type">unsigned</span> <span class="hl-type">int</span> <span class="hl-identifier">size</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-keyword">return</span> <span class="hl-function_builtin">malloc</span><span class="hl-operator">(</span><span class="hl-identifier">size</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 
-<span class="hljs-type">void</span> <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(deallocate)</span><span class="hljs-params">(<span class="hljs-type">void</span>* allocation)</span> {
-    <span class="hljs-built_in">free</span>(allocation);
-}
+<span class="hl-type">void</span> <span class="hl-function">WASM_EXPORT</span><span class="hl-operator">(</span><span class="hl-identifier">deallocate</span><span class="hl-operator">)</span><span class="hl-operator">(</span><span class="hl-type">void</span><span class="hl-operator">*</span> <span class="hl-identifier">allocation</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-function_builtin">free</span><span class="hl-operator">(</span><span class="hl-identifier">allocation</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 
-<span class="hljs-comment">// Main export</span>
-<span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title function_">WASM_EXPORT</span><span class="hljs-params">(dot2svg)</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* graphString)</span> {
-    <span class="hljs-comment">// Use Graphviz for converting dot to SVG</span>
-    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* result = <span class="hljs-literal">NULL</span>;
-    GVC_t* context = gvContextPlugins(lt_preloaded_symbols, <span class="hljs-literal">false</span>);
-    <span class="hljs-keyword">if</span> (context) {
-        Agraph_t* graph = agmemread(graphString);
-        <span class="hljs-keyword">if</span> (graph) {
-            <span class="hljs-keyword">if</span> (gvLayout(context, graph, <span class="hljs-string">&quot;dot&quot;</span>) == <span class="hljs-number">0</span>) {
-                <span class="hljs-type">char</span> *svg;
-                <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> svgLength;
-                gvRenderData(context, graph, <span class="hljs-string">&quot;svg&quot;</span>, &amp;svg, &amp;svgLength);
-                <span class="hljs-keyword">if</span> (svg) {
-                    result = strdup(svg);
-                    gvFreeRenderData(svg);
-                }
-                gvFreeLayout(context, graph);
-            }
-            agfree(graph, <span class="hljs-literal">NULL</span>);
-        }
-        gvFreeContext(context);
-    }
+<span class="hl-comment">// Main export</span>
+<span class="hl-keyword">const</span> <span class="hl-type">char</span><span class="hl-operator">*</span> <span class="hl-function">WASM_EXPORT</span><span class="hl-operator">(</span><span class="hl-identifier">dot2svg</span><span class="hl-operator">)</span><span class="hl-operator">(</span><span class="hl-keyword">const</span> <span class="hl-type">char</span><span class="hl-operator">*</span> <span class="hl-identifier">graphString</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-comment">// Use Graphviz for converting dot to SVG</span>
+    <span class="hl-keyword">const</span> <span class="hl-type">char</span><span class="hl-operator">*</span> <span class="hl-identifier">result</span> <span class="hl-operator">=</span> <span class="hl-constant_builtin">NULL</span><span class="hl-operator">;</span>
+    <span class="hl-identifier">GVC_t</span><span class="hl-operator">*</span> <span class="hl-identifier">context</span> <span class="hl-operator">=</span> <span class="hl-function">gvContextPlugins</span><span class="hl-operator">(</span><span class="hl-identifier">lt_preloaded_symbols</span><span class="hl-operator">,</span> <span class="hl-keyword">false</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-keyword">if</span> <span class="hl-operator">(</span><span class="hl-identifier">context</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+        <span class="hl-identifier">Agraph_t</span><span class="hl-operator">*</span> <span class="hl-identifier">graph</span> <span class="hl-operator">=</span> <span class="hl-function">agmemread</span><span class="hl-operator">(</span><span class="hl-identifier">graphString</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+        <span class="hl-keyword">if</span> <span class="hl-operator">(</span><span class="hl-identifier">graph</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+            <span class="hl-keyword">if</span> <span class="hl-operator">(</span><span class="hl-function">gvLayout</span><span class="hl-operator">(</span><span class="hl-identifier">context</span><span class="hl-operator">,</span> <span class="hl-identifier">graph</span><span class="hl-operator">,</span> <span class="hl-string">&quot;dot&quot;</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">=</span> <span class="hl-number">0</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+                <span class="hl-type">char</span> <span class="hl-operator">*</span><span class="hl-identifier">svg</span><span class="hl-operator">;</span>
+                <span class="hl-type">unsigned</span> <span class="hl-type">int</span> <span class="hl-identifier">svgLength</span><span class="hl-operator">;</span>
+                <span class="hl-function">gvRenderData</span><span class="hl-operator">(</span><span class="hl-identifier">context</span><span class="hl-operator">,</span> <span class="hl-identifier">graph</span><span class="hl-operator">,</span> <span class="hl-string">&quot;svg&quot;</span><span class="hl-operator">,</span> <span class="hl-operator">&amp;</span><span class="hl-identifier">svg</span><span class="hl-operator">,</span> <span class="hl-operator">&amp;</span><span class="hl-identifier">svgLength</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+                <span class="hl-keyword">if</span> <span class="hl-operator">(</span><span class="hl-identifier">svg</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+                    <span class="hl-identifier">result</span> <span class="hl-operator">=</span> <span class="hl-function">strdup</span><span class="hl-operator">(</span><span class="hl-identifier">svg</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+                    <span class="hl-function">gvFreeRenderData</span><span class="hl-operator">(</span><span class="hl-identifier">svg</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+                <span class="hl-operator">}</span>
+                <span class="hl-function">gvFreeLayout</span><span class="hl-operator">(</span><span class="hl-identifier">context</span><span class="hl-operator">,</span> <span class="hl-identifier">graph</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+            <span class="hl-operator">}</span>
+            <span class="hl-function">agfree</span><span class="hl-operator">(</span><span class="hl-identifier">graph</span><span class="hl-operator">,</span> <span class="hl-constant_builtin">NULL</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+        <span class="hl-operator">}</span>
+        <span class="hl-function">gvFreeContext</span><span class="hl-operator">(</span><span class="hl-identifier">context</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-operator">}</span>
 
-    <span class="hljs-keyword">return</span> result;
-}
+    <span class="hl-keyword">return</span> <span class="hl-identifier">result</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 </code></pre>
 <h2 id="initial-attempt-at-compiling">Initial attempt at compiling</h2>
-<p>First, I cloned the Graphviz repository (actually, I added it as a submodule--anticipating the need to make changes) and ran it&#39;s &quot;autogen.sh&quot; script. For the record, I&#39;m using Debian <a href="https://www.debian.org/releases/stretch/">Stretch</a> on the <a href="https://docs.microsoft.com/en-us/windows/wsl/">Windows Subsystem for Linux</a>.</p>
-<p>Being familiar with <a href="https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html">GNU Autotools</a>, I hoped that I&#39;d then be able to simply run Graphviz&#39;s &quot;configure&quot; script with appropriate arguments (&quot;--host=wasm32&quot;?) and environment variables (&quot;CC=/opt/wasi-sdk/bin/clang&quot;?) and everything would build fine.</p>
+<p>First, I cloned the Graphviz repository (actually, I added it as a submodule--anticipating the need to make changes) and ran it's &quot;autogen.sh&quot; script. For the record, I'm using Debian <a href="https://www.debian.org/releases/stretch/">Stretch</a> on the <a href="https://docs.microsoft.com/en-us/windows/wsl/">Windows Subsystem for Linux</a>.</p>
+<p>Being familiar with <a href="https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html">GNU Autotools</a>, I hoped that I'd then be able to simply run Graphviz's &quot;configure&quot; script with appropriate arguments (&quot;--host=wasm32&quot;?) and environment variables (&quot;CC=/opt/wasi-sdk/bin/clang&quot;?) and everything would build fine.</p>
 <p>I hit a few snags:</p>
 <ul>
 <li>Some of the Graphviz source code is actually C++, so I needed to set the &quot;CXX=/opt/wasi-sdk/bin/clang++&quot; variable as well</li>
@@ -123,21 +123,21 @@
 </ul>
 <p>That last one required some investigation.</p>
 <h2 id="archive-index-error">Archive index error</h2>
-<p>After searching for and finding a <a href="https://github.com/emscripten-core/emscripten/issues/9329">similar issue on GitHub</a>, I learned that that <code>wasm-ld</code> error means that you created the archive with the wrong tool set. In my case, it was using GNU <code>ar</code> instead of LLVM <code>ar</code>. That makes sense because I didn&#39;t tell the build to use a different <code>ar</code>, and GNU <code>ar</code> was on my path.</p>
-<p>I thought that setting the &quot;AR&quot; environment variable would solve this, but it turned out that the Autotools in use didn&#39;t respect that environment variable. My hacky solution to this (and possibly other mismatched tools) was to just move the WASI SDK to the front of my &quot;PATH&quot; variable in my build script:</p>
-<pre><code class="language-sh"><span class="hljs-built_in">export</span> PATH=<span class="hljs-string">&quot;/opt/wasi-sdk/bin:<span class="hljs-variable">$PATH</span>&quot;</span>
+<p>After searching for and finding a <a href="https://github.com/emscripten-core/emscripten/issues/9329">similar issue on GitHub</a>, I learned that that <code>wasm-ld</code> error means that you created the archive with the wrong tool set. In my case, it was using GNU <code>ar</code> instead of LLVM <code>ar</code>. That makes sense because I didn't tell the build to use a different <code>ar</code>, and GNU <code>ar</code> was on my path.</p>
+<p>I thought that setting the &quot;AR&quot; environment variable would solve this, but it turned out that the Autotools in use didn't respect that environment variable. My hacky solution to this (and possibly other mismatched tools) was to just move the WASI SDK to the front of my &quot;PATH&quot; variable in my build script:</p>
+<pre><code class="language-bash"><span class="hl-function_builtin">export</span> <span class="hl-identifier">PATH</span><span class="hl-default">=</span><span class="hl-string">&quot;/opt/wasi-sdk/bin:$PATH&quot;</span>
 </code></pre>
 <h2 id="more-issues">More issues</h2>
-<p>Now I started to run into more WASI-related issues. WASI is still in development and may not ever support the entire C library. That&#39;s fine, and I knew that going in, but I thought that Graphviz wouldn&#39;t be relying on some of the more obscure parts of the C library (and hopefully very few OS-specific features). Sadly, this is not the case.</p>
+<p>Now I started to run into more WASI-related issues. WASI is still in development and may not ever support the entire C library. That's fine, and I knew that going in, but I thought that Graphviz wouldn't be relying on some of the more obscure parts of the C library (and hopefully very few OS-specific features). Sadly, this is not the case.</p>
 <p>Here are the problems I ran into:</p>
 <ul>
 <li>&quot;setjmp.h&quot;: apparently some Graphviz code uses one of my least favorite headers in the entire C standard library: &quot;setjmp.h&quot;<ul>
 <li>This header provides non-local jumps that are sometimes used as an ugly substitute for exceptions</li>
-<li>Unsurprisingly, WASI doesn&#39;t support this (I don&#39;t even think it <em>should</em>)</li>
+<li>Unsurprisingly, WASI doesn't support this (I don't even think it <em>should</em>)</li>
 <li>My solution was to just hope that <code>longjmp</code> never gets called and link in my own no-op versions of <code>setjmp</code> and <code>longjmp</code></li>
 </ul>
 </li>
-<li>&quot;sys/wait.h&quot;: this is a POSIX header that Graphviz doesn&#39;t need (e.g. on Windows)<ul>
+<li>&quot;sys/wait.h&quot;: this is a POSIX header that Graphviz doesn't need (e.g. on Windows)<ul>
 <li>My work-around was to create a dummy header that tricked Graphviz into thinking the one file including this header was on Windows</li>
 <li>The contents of my dummy header: <code>#define _WIN32</code></li>
 </ul>
@@ -155,94 +155,94 @@
 <p>At this point, I was (mostly) able to compile the libraries I needed, but not link.</p>
 <p>Also, at this point, I was starting to appreciate just how much Emscripten must handle to support building stuff like this without any modifications. Maybe my main takeaway will just be to use Emscripten in the future?</p>
 <h2 id="slimming-down-graphviz">Slimming down Graphviz</h2>
-<p>For my purposes, I only needed to be able to parse DOT input, using the &quot;dot&quot; layout engine, and output to SVG. But Graphviz&#39;s default library has support for many outputs, including <a href="https://www.adobe.com/products/postscript.html">Adobe PostScript</a>, which I <em>definitely</em> have no plans to use. These defaults are encoded directly into &quot;graphviz/plugin/core/gvplugin_core.c&quot;.</p>
-<p>In order to reduce the list down to just SVG, I needed to create my own &quot;plugin&quot; that only supported DOT and SVG. Here&#39;s what that looked like:</p>
-<pre><code class="language-c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;gvplugin.h&gt;</span></span>
+<p>For my purposes, I only needed to be able to parse DOT input, using the &quot;dot&quot; layout engine, and output to SVG. But Graphviz's default library has support for many outputs, including <a href="https://www.adobe.com/products/postscript.html">Adobe PostScript</a>, which I <em>definitely</em> have no plans to use. These defaults are encoded directly into &quot;graphviz/plugin/core/gvplugin_core.c&quot;.</p>
+<p>In order to reduce the list down to just SVG, I needed to create my own &quot;plugin&quot; that only supported DOT and SVG. Here's what that looked like:</p>
+<pre><code class="language-c"><span class="hl-preprocessor">#include</span> <span class="hl-string">&lt;gvplugin.h&gt;</span>
 
-<span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin_installed_t</span> gvdevice_dot_types[];
-<span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin_installed_t</span> gvdevice_svg_types[];
-<span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin_installed_t</span> gvrender_dot_types[];
-<span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin_installed_t</span> gvrender_svg_types[];
-<span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin_installed_t</span> gvloadimage_core_types[];
+<span class="hl-keyword">extern</span> <span class="hl-identifier">gvplugin_installed_t</span> <span class="hl-identifier">gvdevice_dot_types</span><span class="hl-operator">[</span><span class="hl-operator">]</span><span class="hl-operator">;</span>
+<span class="hl-keyword">extern</span> <span class="hl-identifier">gvplugin_installed_t</span> <span class="hl-identifier">gvdevice_svg_types</span><span class="hl-operator">[</span><span class="hl-operator">]</span><span class="hl-operator">;</span>
+<span class="hl-keyword">extern</span> <span class="hl-identifier">gvplugin_installed_t</span> <span class="hl-identifier">gvrender_dot_types</span><span class="hl-operator">[</span><span class="hl-operator">]</span><span class="hl-operator">;</span>
+<span class="hl-keyword">extern</span> <span class="hl-identifier">gvplugin_installed_t</span> <span class="hl-identifier">gvrender_svg_types</span><span class="hl-operator">[</span><span class="hl-operator">]</span><span class="hl-operator">;</span>
+<span class="hl-keyword">extern</span> <span class="hl-identifier">gvplugin_installed_t</span> <span class="hl-identifier">gvloadimage_core_types</span><span class="hl-operator">[</span><span class="hl-operator">]</span><span class="hl-operator">;</span>
 
-<span class="hljs-type">static</span> <span class="hljs-type">gvplugin_api_t</span> apis[] = {
-    {API_device, gvdevice_dot_types},
-    {API_device, gvdevice_svg_types},
-    {API_render, gvrender_dot_types},
-    {API_render, gvrender_svg_types},
+<span class="hl-keyword">static</span> <span class="hl-identifier">gvplugin_api_t</span> <span class="hl-identifier">apis</span><span class="hl-operator">[</span><span class="hl-operator">]</span> <span class="hl-operator">=</span> <span class="hl-operator">{</span>
+    <span class="hl-operator">{</span><span class="hl-identifier">API_device</span><span class="hl-operator">,</span> <span class="hl-identifier">gvdevice_dot_types</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+    <span class="hl-operator">{</span><span class="hl-identifier">API_device</span><span class="hl-operator">,</span> <span class="hl-identifier">gvdevice_svg_types</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+    <span class="hl-operator">{</span><span class="hl-identifier">API_render</span><span class="hl-operator">,</span> <span class="hl-identifier">gvrender_dot_types</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+    <span class="hl-operator">{</span><span class="hl-identifier">API_render</span><span class="hl-operator">,</span> <span class="hl-identifier">gvrender_svg_types</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
 
-    {(<span class="hljs-type">api_t</span>)<span class="hljs-number">0</span>, <span class="hljs-number">0</span>},
-};
+    <span class="hl-operator">{</span><span class="hl-operator">(</span><span class="hl-identifier">api_t</span><span class="hl-operator">)</span><span class="hl-number">0</span><span class="hl-operator">,</span> <span class="hl-number">0</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+<span class="hl-operator">}</span><span class="hl-operator">;</span>
 
-<span class="hljs-type">gvplugin_library_t</span> gvplugin_core_LTX_library = { <span class="hljs-string">&quot;core&quot;</span>, apis };
+<span class="hl-identifier">gvplugin_library_t</span> <span class="hl-identifier">gvplugin_core_LTX_library</span> <span class="hl-operator">=</span> <span class="hl-operator">{</span> <span class="hl-string">&quot;core&quot;</span><span class="hl-operator">,</span> <span class="hl-identifier">apis</span> <span class="hl-operator">}</span><span class="hl-operator">;</span>
 
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> IMPORT <span class="hljs-comment">/* nothing */</span></span>
+<span class="hl-preprocessor">#define</span> <span class="hl-identifier">IMPORT</span> <span class="hl-comment">/* nothing */</span>
 
-IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin_library_t</span> gvplugin_dot_layout_LTX_library;
-IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin_library_t</span> gvplugin_core_LTX_library;
+<span class="hl-identifier">IMPORT</span> <span class="hl-keyword">extern</span> <span class="hl-identifier">gvplugin_library_t</span> <span class="hl-identifier">gvplugin_dot_layout_LTX_library</span><span class="hl-operator">;</span>
+<span class="hl-identifier">IMPORT</span> <span class="hl-keyword">extern</span> <span class="hl-identifier">gvplugin_library_t</span> <span class="hl-identifier">gvplugin_core_LTX_library</span><span class="hl-operator">;</span>
 
-<span class="hljs-type">lt_symlist_t</span> lt_preloaded_symbols[] = {
-    { <span class="hljs-string">&quot;gvplugin_dot_layout_LTX_library&quot;</span>, (<span class="hljs-type">void</span>*)(&amp;gvplugin_dot_layout_LTX_library) },
-    { <span class="hljs-string">&quot;gvplugin_core_LTX_library&quot;</span>, (<span class="hljs-type">void</span>*)(&amp;gvplugin_core_LTX_library) },
-    { <span class="hljs-number">0</span>, <span class="hljs-number">0</span> }
-};
+<span class="hl-identifier">lt_symlist_t</span> <span class="hl-identifier">lt_preloaded_symbols</span><span class="hl-operator">[</span><span class="hl-operator">]</span> <span class="hl-operator">=</span> <span class="hl-operator">{</span>
+    <span class="hl-operator">{</span> <span class="hl-string">&quot;gvplugin_dot_layout_LTX_library&quot;</span><span class="hl-operator">,</span> <span class="hl-operator">(</span><span class="hl-type">void</span><span class="hl-operator">*</span><span class="hl-operator">)</span><span class="hl-operator">(</span><span class="hl-operator">&amp;</span><span class="hl-identifier">gvplugin_dot_layout_LTX_library</span><span class="hl-operator">)</span> <span class="hl-operator">}</span><span class="hl-operator">,</span>
+    <span class="hl-operator">{</span> <span class="hl-string">&quot;gvplugin_core_LTX_library&quot;</span><span class="hl-operator">,</span> <span class="hl-operator">(</span><span class="hl-type">void</span><span class="hl-operator">*</span><span class="hl-operator">)</span><span class="hl-operator">(</span><span class="hl-operator">&amp;</span><span class="hl-identifier">gvplugin_core_LTX_library</span><span class="hl-operator">)</span> <span class="hl-operator">}</span><span class="hl-operator">,</span>
+    <span class="hl-operator">{</span> <span class="hl-number">0</span><span class="hl-operator">,</span> <span class="hl-number">0</span> <span class="hl-operator">}</span>
+<span class="hl-operator">}</span><span class="hl-operator">;</span>
 </code></pre>
-<p>This also had the benefit of removing a number of dependencies (including some that weren&#39;t yet building successfully for me yet).</p>
+<p>This also had the benefit of removing a number of dependencies (including some that weren't yet building successfully for me yet).</p>
 <h2 id="one-last-link-error">One last link error</h2>
-<p>At this point, I was down to a final error from the linker. It turns out that, somewhere in Graphviz, it uses the <code>tmpfile</code> function. For now, I just decided to add a dummy implementation and hope that it wasn&#39;t being used for anything important:</p>
-<pre><code class="language-c">FILE* <span class="hljs-title function_">tmpfile</span><span class="hljs-params">()</span> {
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
+<p>At this point, I was down to a final error from the linker. It turns out that, somewhere in Graphviz, it uses the <code>tmpfile</code> function. For now, I just decided to add a dummy implementation and hope that it wasn't being used for anything important:</p>
+<pre><code class="language-c"><span class="hl-type">FILE</span><span class="hl-operator">*</span> <span class="hl-function_builtin">tmpfile</span><span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-keyword">return</span> <span class="hl-number">0</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 </code></pre>
 <h2 id="successful-build">Successful build</h2>
 <p>Finally, I was able to successfully build &quot;dot2svg.wasm&quot;. The uncompressed file size ended up being around 660 KB--a bit larger than I hoped, but not huge.</p>
 <p>Now I just have to run that function... right?</p>
 <h1 id="javascript-side">JavaScript side</h1>
-<p>Given that I already had code to pass strings back and forth, I hoped I could just call the <code>dot2svg</code> export and bask in the glorious result. But I wasn&#39;t quite there yet.</p>
+<p>Given that I already had code to pass strings back and forth, I hoped I could just call the <code>dot2svg</code> export and bask in the glorious result. But I wasn't quite there yet.</p>
 <h2 id="imports">Imports</h2>
 <p>On the first run, I got the following error:</p>
-<pre><code><span class="hljs-symbol">TypeError:</span> WebAssembly.<span class="hljs-keyword">instantiate(): </span>Imports argument must <span class="hljs-keyword">be </span>present <span class="hljs-keyword">and </span>must <span class="hljs-keyword">be </span>an object
+<pre><code>TypeError: WebAssembly.instantiate(): Imports argument must be present and must be an object
 </code></pre>
-<p>That&#39;s too bad. I was hoping that my slimmed down Graphviz build wouldn&#39;t expect the host to provide any functions. Let&#39;s see what&#39;s missing:</p>
-<pre><code class="language-sh">$ wasm2wat dot2svg.wasm|findstr /i import
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;clock_time_get&quot;</span> (func <span class="hljs-variable">$__wasi_clock_time_get</span> (<span class="hljs-built_in">type</span> 16)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_filestat_get&quot;</span> (func <span class="hljs-variable">$__wasi_fd_filestat_get</span> (<span class="hljs-built_in">type</span> 1)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;proc_exit&quot;</span> (func <span class="hljs-variable">$__wasi_proc_exit</span> (<span class="hljs-built_in">type</span> 10)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_fdstat_get&quot;</span> (func <span class="hljs-variable">$__wasi_fd_fdstat_get</span> (<span class="hljs-built_in">type</span> 1)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;path_open&quot;</span> (func <span class="hljs-variable">$__wasi_path_open</span> (<span class="hljs-built_in">type</span> 17)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;path_filestat_get&quot;</span> (func <span class="hljs-variable">$__wasi_path_filestat_get</span> (<span class="hljs-built_in">type</span> 7)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_close&quot;</span> (func <span class="hljs-variable">$__wasi_fd_close</span> (<span class="hljs-built_in">type</span> 0)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;environ_sizes_get&quot;</span> (func <span class="hljs-variable">$__wasi_environ_sizes_get</span> (<span class="hljs-built_in">type</span> 1)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;environ_get&quot;</span> (func <span class="hljs-variable">$__wasi_environ_get</span> (<span class="hljs-built_in">type</span> 1)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_seek&quot;</span> (func <span class="hljs-variable">$__wasi_fd_seek</span> (<span class="hljs-built_in">type</span> 18)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_write&quot;</span> (func <span class="hljs-variable">$__wasi_fd_write</span> (<span class="hljs-built_in">type</span> 4)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_read&quot;</span> (func <span class="hljs-variable">$__wasi_fd_read</span> (<span class="hljs-built_in">type</span> 4)))
-  (import <span class="hljs-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hljs-string">&quot;fd_fdstat_set_flags&quot;</span> (func <span class="hljs-variable">$__wasi_fd_fdstat_set_flags</span> (<span class="hljs-built_in">type</span> 1)))
+<p>That's too bad. I was hoping that my slimmed down Graphviz build wouldn't expect the host to provide any functions. Let's see what's missing:</p>
+<pre><code class="language-bash"><span class="hl-operator">$</span> <span class="hl-identifier">wasm2wat</span> <span class="hl-identifier">dot2svg</span><span class="hl-default">.</span><span class="hl-identifier">wasm</span><span class="hl-operator">|</span><span class="hl-identifier">findstr</span> <span class="hl-default">/</span><span class="hl-identifier">i</span> <span class="hl-identifier">import</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;clock_time_get&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_clock_time_get</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">16</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;fd_filestat_get&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_fd_filestat_get</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">1</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;proc_exit&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_proc_exit</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">10</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;fd_fdstat_get&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_fd_fdstat_get</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">1</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;path_open&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_path_open</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">17</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;path_filestat_get&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_path_filestat_get</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">7</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;fd_close&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_fd_close</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">0</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;environ_sizes_get&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_environ_sizes_get</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">1</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;environ_get&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_environ_get</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">1</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;fd_seek&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_fd_seek</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">18</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;fd_write&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_fd_write</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">4</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;fd_read&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_fd_read</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">4</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+  <span class="hl-operator">(</span><span class="hl-identifier">import</span> <span class="hl-string">&quot;wasi_snapshot_preview1&quot;</span> <span class="hl-string">&quot;fd_fdstat_set_flags&quot;</span> <span class="hl-operator">(</span><span class="hl-identifier">func</span> <span class="hl-operator">$</span><span class="hl-variable">__wasi_fd_fdstat_set_flags</span> <span class="hl-operator">(</span><span class="hl-function_builtin">type</span> <span class="hl-number">1</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
 </code></pre>
 <h2 id="do-the-imports-really-matter">Do the imports really matter?</h2>
-<p>That&#39;s a longer list than I expected. Ok, well let&#39;s see if they&#39;re <em>really</em> needed by providing no-op implementations:</p>
-<pre><code class="language-javascript">    <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title function_">instantiate</span>(<span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;./dot2svg.wasm&quot;</span>), {
-        <span class="hljs-attr">wasi_snapshot_preview1</span>: {
-            <span class="hljs-comment">// Not implemented</span>
-            <span class="hljs-attr">clock_time_get</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">environ_get</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">environ_sizes_get</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">fd_close</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">fd_fdstat_get</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">fd_fdstat_set_flags</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">fd_filestat_get</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">fd_read</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">fd_seek</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">fd_write</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">path_filestat_get</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">path_open</span>: <span class="hljs-function">() =&gt;</span> {},
-            <span class="hljs-attr">proc_exit</span>: <span class="hljs-function">() =&gt;</span> {},
-        },
-    });
+<p>That's a longer list than I expected. Ok, well let's see if they're <em>really</em> needed by providing no-op implementations:</p>
+<pre><code class="language-javascript">    <span class="hl-keyword">const</span> <span class="hl-identifier">module</span> <span class="hl-operator">=</span> <span class="hl-keyword">await</span> <span class="hl-type">WebAssembly</span><span class="hl-operator">.</span><span class="hl-function_method">instantiate</span><span class="hl-operator">(</span><span class="hl-keyword">await</span> <span class="hl-identifier">fs</span><span class="hl-operator">.</span><span class="hl-identifier">promises</span><span class="hl-operator">.</span><span class="hl-function_method">readFile</span><span class="hl-operator">(</span><span class="hl-string">&quot;./dot2svg.wasm&quot;</span><span class="hl-operator">)</span><span class="hl-operator">,</span> <span class="hl-operator">{</span>
+        <span class="hl-identifier">wasi_snapshot_preview1</span><span class="hl-operator">:</span> <span class="hl-operator">{</span>
+            <span class="hl-comment">// Not implemented</span>
+            <span class="hl-identifier">clock_time_get</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">environ_get</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">environ_sizes_get</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">fd_close</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">fd_fdstat_get</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">fd_fdstat_set_flags</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">fd_filestat_get</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">fd_read</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">fd_seek</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">fd_write</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">path_filestat_get</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">path_open</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">proc_exit</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span><span class="hl-operator">}</span><span class="hl-operator">,</span>
+        <span class="hl-operator">}</span><span class="hl-operator">,</span>
+    <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 </code></pre>
 <p>Unfortunately, with those no-op functions, my test script just seemed to spin.</p>
 <h2 id="fd_write">fd_write</h2>
-<p>Debugging showed that <code>fd_write</code> was being called repeatedly. That makes me think that WASI actually needs <code>fd_write</code> to do something. With absolutely zero context, the function name sounds like it&#39;s writing to a file descriptor.</p>
+<p>Debugging showed that <code>fd_write</code> was being called repeatedly. That makes me think that WASI actually needs <code>fd_write</code> to do something. With absolutely zero context, the function name sounds like it's writing to a file descriptor.</p>
 <p>After some digging, I found a helpful note in the (otherwise inscrutable) <a href="https://github.com/WebAssembly/WASI/blob/main/phases/snapshot/docs.md#-fd_writefd-fd-iovs-ciovec_array---resultsize-errno">WASI documentation</a>:</p>
 <blockquote>
 <p>fd_write(fd: fd, iovs: ciovec_array) -&gt; Result&lt;size, errno&gt;</p>
@@ -250,81 +250,81 @@ IMPORT <span class="hljs-keyword">extern</span> <span class="hljs-type">gvplugin
 </blockquote>
 <h3 id="writev">writev</h3>
 <p>Fortunately, <code>writev(2)</code> is <a href="https://linux.die.net/man/2/writev">extensively documented</a>.</p>
-<p>The first argument is indeed a file descriptor. Debugging my test app showed that the function was being called with file descriptor 2, which is Standard Error. It&#39;s my opinion that libraries shouldn&#39;t directly write anything to Standard Output or Error, but I didn&#39;t write Graphviz. A quick scan of the Graphviz source indicated that I couldn&#39;t easily disable console logging.</p>
+<p>The first argument is indeed a file descriptor. Debugging my test app showed that the function was being called with file descriptor 2, which is Standard Error. It's my opinion that libraries shouldn't directly write anything to Standard Output or Error, but I didn't write Graphviz. A quick scan of the Graphviz source indicated that I couldn't easily disable console logging.</p>
 <p>The second argument to <code>writev</code> is an array of I/O vectors defined as follows:</p>
-<pre><code class="language-c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iovec</span> {</span>
-    <span class="hljs-type">void</span>  *iov_base;    <span class="hljs-comment">/* Starting address */</span>
-    <span class="hljs-type">size_t</span> iov_len;     <span class="hljs-comment">/* Number of bytes to transfer */</span>
-};
+<pre><code class="language-c"><span class="hl-type">struct</span> <span class="hl-identifier">iovec</span> <span class="hl-operator">{</span>
+    <span class="hl-type">void</span>  <span class="hl-operator">*</span><span class="hl-identifier">iov_base</span><span class="hl-operator">;</span>    <span class="hl-comment">/* Starting address */</span>
+    <span class="hl-type">size_t</span> <span class="hl-identifier">iov_len</span><span class="hl-operator">;</span>     <span class="hl-comment">/* Number of bytes to transfer */</span>
+<span class="hl-operator">}</span><span class="hl-operator">;</span>
 </code></pre>
 <p>And the return value is just the number of bytes written.</p>
 <h3 id="javascript-implementation">JavaScript implementation</h3>
-<p>Assuming that <code>fd_write</code> is the same (assuming 32-bit WebAssembly), this isn&#39;t too bad to implement (and I decided to forward to the console for testing purposes). The only remaining trick is that <code>fd_write</code> supplies the memory address for the return value as the third argument and directly returns a status code (zero for success).</p>
-<p>Here&#39;s a simple implementation:</p>
-<pre><code class="language-javascript"><span class="hljs-attr">fd_write</span>: <span class="hljs-function">(<span class="hljs-params">fileDescriptor, ioVectorsBaseAddress, ioVectorsCount, returnBytesWrittenAddress</span>) =&gt;</span> {
-    <span class="hljs-comment">// Read IO vectors</span>
-    <span class="hljs-keyword">const</span> view = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DataView</span>(memory.<span class="hljs-property">buffer</span>);
-    <span class="hljs-keyword">const</span> ioVectors = [];
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>, address = ioVectorsBaseAddress; i &lt; ioVectorsCount; i++, address += <span class="hljs-number">8</span>) {
-        ioVectors.<span class="hljs-title function_">push</span>({
-            <span class="hljs-attr">sourceAddress</span>: view.<span class="hljs-title function_">getUint32</span>(address, <span class="hljs-literal">true</span>),
-            <span class="hljs-attr">sizeInBytes</span>: view.<span class="hljs-title function_">getUint32</span>(address + <span class="hljs-number">4</span>, <span class="hljs-literal">true</span>),
-        });
-    }
+<p>Assuming that <code>fd_write</code> is the same (assuming 32-bit WebAssembly), this isn't too bad to implement (and I decided to forward to the console for testing purposes). The only remaining trick is that <code>fd_write</code> supplies the memory address for the return value as the third argument and directly returns a status code (zero for success).</p>
+<p>Here's a simple implementation:</p>
+<pre><code class="language-javascript"><span class="hl-identifier">fd_write</span><span class="hl-operator">:</span> <span class="hl-operator">(</span><span class="hl-identifier">fileDescriptor</span><span class="hl-operator">,</span> <span class="hl-identifier">ioVectorsBaseAddress</span><span class="hl-operator">,</span> <span class="hl-identifier">ioVectorsCount</span><span class="hl-operator">,</span> <span class="hl-identifier">returnBytesWrittenAddress</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span>
+    <span class="hl-comment">// Read IO vectors</span>
+    <span class="hl-keyword">const</span> <span class="hl-identifier">view</span> <span class="hl-operator">=</span> <span class="hl-keyword">new</span> <span class="hl-type">DataView</span><span class="hl-operator">(</span><span class="hl-identifier">memory</span><span class="hl-operator">.</span><span class="hl-identifier">buffer</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-keyword">const</span> <span class="hl-identifier">ioVectors</span> <span class="hl-operator">=</span> <span class="hl-operator">[</span><span class="hl-operator">]</span><span class="hl-operator">;</span>
+    <span class="hl-keyword">for</span> <span class="hl-operator">(</span><span class="hl-keyword">let</span> <span class="hl-identifier">i</span> <span class="hl-operator">=</span> <span class="hl-number">0</span><span class="hl-operator">,</span> <span class="hl-identifier">address</span> <span class="hl-operator">=</span> <span class="hl-identifier">ioVectorsBaseAddress</span><span class="hl-operator">;</span> <span class="hl-identifier">i</span> <span class="hl-operator">&lt;</span> <span class="hl-identifier">ioVectorsCount</span><span class="hl-operator">;</span> <span class="hl-identifier">i</span><span class="hl-operator">+</span><span class="hl-operator">+</span><span class="hl-operator">,</span> <span class="hl-identifier">address</span> <span class="hl-operator">+</span><span class="hl-operator">=</span> <span class="hl-number">8</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+        <span class="hl-identifier">ioVectors</span><span class="hl-operator">.</span><span class="hl-function_method">push</span><span class="hl-operator">(</span><span class="hl-operator">{</span>
+            <span class="hl-identifier">sourceAddress</span><span class="hl-operator">:</span> <span class="hl-identifier">view</span><span class="hl-operator">.</span><span class="hl-function_method">getUint32</span><span class="hl-operator">(</span><span class="hl-identifier">address</span><span class="hl-operator">,</span> <span class="hl-keyword">true</span><span class="hl-operator">)</span><span class="hl-operator">,</span>
+            <span class="hl-identifier">sizeInBytes</span><span class="hl-operator">:</span> <span class="hl-identifier">view</span><span class="hl-operator">.</span><span class="hl-function_method">getUint32</span><span class="hl-operator">(</span><span class="hl-identifier">address</span> <span class="hl-operator">+</span> <span class="hl-number">4</span><span class="hl-operator">,</span> <span class="hl-keyword">true</span><span class="hl-operator">)</span><span class="hl-operator">,</span>
+        <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-operator">}</span>
 
-    <span class="hljs-comment">// Calculate total size</span>
-    <span class="hljs-keyword">const</span> totalSizeInBytes = ioVectors.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">sum, ioVector</span>) =&gt;</span> sum + ioVector.<span class="hljs-property">sizeInBytes</span>, <span class="hljs-number">0</span>);
+    <span class="hl-comment">// Calculate total size</span>
+    <span class="hl-keyword">const</span> <span class="hl-identifier">totalSizeInBytes</span> <span class="hl-operator">=</span> <span class="hl-identifier">ioVectors</span><span class="hl-operator">.</span><span class="hl-function_method">reduce</span><span class="hl-operator">(</span><span class="hl-operator">(</span><span class="hl-identifier">sum</span><span class="hl-operator">,</span> <span class="hl-identifier">ioVector</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-identifier">sum</span> <span class="hl-operator">+</span> <span class="hl-identifier">ioVector</span><span class="hl-operator">.</span><span class="hl-identifier">sizeInBytes</span><span class="hl-operator">,</span> <span class="hl-number">0</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 
-    <span class="hljs-comment">// Forward STDOUT and STDERR to console</span>
-    <span class="hljs-keyword">const</span> standardOutput = <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">const</span> standardError = <span class="hljs-number">2</span>;
-    <span class="hljs-keyword">switch</span> (fileDescriptor) {
-        <span class="hljs-keyword">case</span> <span class="hljs-attr">standardOutput</span>:
-        <span class="hljs-keyword">case</span> <span class="hljs-attr">standardError</span>:
-            {
-                <span class="hljs-comment">// Copy to buffer</span>
-                <span class="hljs-keyword">const</span> buffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(totalSizeInBytes);
-                <span class="hljs-keyword">let</span> offset = <span class="hljs-number">0</span>;
-                ioVectors.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">ioVector</span> =&gt;</span> {
-                    buffer.<span class="hljs-title function_">set</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(memory.<span class="hljs-property">buffer</span>, ioVector.<span class="hljs-property">sourceAddress</span>, ioVector.<span class="hljs-property">sizeInBytes</span>), offset);
-                    offset += ioVector.<span class="hljs-property">sizeInBytes</span>;
-                });
+    <span class="hl-comment">// Forward STDOUT and STDERR to console</span>
+    <span class="hl-keyword">const</span> <span class="hl-identifier">standardOutput</span> <span class="hl-operator">=</span> <span class="hl-number">1</span><span class="hl-operator">;</span>
+    <span class="hl-keyword">const</span> <span class="hl-identifier">standardError</span> <span class="hl-operator">=</span> <span class="hl-number">2</span><span class="hl-operator">;</span>
+    <span class="hl-keyword">switch</span> <span class="hl-operator">(</span><span class="hl-identifier">fileDescriptor</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+        <span class="hl-keyword">case</span> <span class="hl-identifier">standardOutput</span><span class="hl-operator">:</span>
+        <span class="hl-keyword">case</span> <span class="hl-identifier">standardError</span><span class="hl-operator">:</span>
+            <span class="hl-operator">{</span>
+                <span class="hl-comment">// Copy to buffer</span>
+                <span class="hl-keyword">const</span> <span class="hl-identifier">buffer</span> <span class="hl-operator">=</span> <span class="hl-keyword">new</span> <span class="hl-type">Uint8Array</span><span class="hl-operator">(</span><span class="hl-identifier">totalSizeInBytes</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+                <span class="hl-keyword">let</span> <span class="hl-identifier">offset</span> <span class="hl-operator">=</span> <span class="hl-number">0</span><span class="hl-operator">;</span>
+                <span class="hl-identifier">ioVectors</span><span class="hl-operator">.</span><span class="hl-function_method">forEach</span><span class="hl-operator">(</span><span class="hl-identifier">ioVector</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span>
+                    <span class="hl-identifier">buffer</span><span class="hl-operator">.</span><span class="hl-keyword">set</span><span class="hl-operator">(</span><span class="hl-keyword">new</span> <span class="hl-type">Uint8Array</span><span class="hl-operator">(</span><span class="hl-identifier">memory</span><span class="hl-operator">.</span><span class="hl-identifier">buffer</span><span class="hl-operator">,</span> <span class="hl-identifier">ioVector</span><span class="hl-operator">.</span><span class="hl-identifier">sourceAddress</span><span class="hl-operator">,</span> <span class="hl-identifier">ioVector</span><span class="hl-operator">.</span><span class="hl-identifier">sizeInBytes</span><span class="hl-operator">)</span><span class="hl-operator">,</span> <span class="hl-identifier">offset</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+                    <span class="hl-identifier">offset</span> <span class="hl-operator">+</span><span class="hl-operator">=</span> <span class="hl-identifier">ioVector</span><span class="hl-operator">.</span><span class="hl-identifier">sizeInBytes</span><span class="hl-operator">;</span>
+                <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 
-                <span class="hljs-comment">// Note: Adds an extra new line...</span>
-                <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(textDecoder.<span class="hljs-title function_">decode</span>(buffer));
-            }
-            <span class="hljs-keyword">break</span>;
+                <span class="hl-comment">// Note: Adds an extra new line...</span>
+                <span class="hl-identifier">console</span><span class="hl-operator">.</span><span class="hl-function_method">log</span><span class="hl-operator">(</span><span class="hl-identifier">textDecoder</span><span class="hl-operator">.</span><span class="hl-function_method">decode</span><span class="hl-operator">(</span><span class="hl-identifier">buffer</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+            <span class="hl-operator">}</span>
+            <span class="hl-keyword">break</span><span class="hl-operator">;</span>
 
-        <span class="hljs-attr">default</span>:
-            <span class="hljs-comment">// Do nothing</span>
-            <span class="hljs-keyword">break</span>;
-    }
+        <span class="hl-keyword">default</span><span class="hl-operator">:</span>
+            <span class="hl-comment">// Do nothing</span>
+            <span class="hl-keyword">break</span><span class="hl-operator">;</span>
+    <span class="hl-operator">}</span>
 
-    <span class="hljs-comment">// Set return value to total size of writes</span>
-    view.<span class="hljs-title function_">setUint32</span>(returnBytesWrittenAddress, totalSizeInBytes, <span class="hljs-literal">true</span>);
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// Success</span>
-},
+    <span class="hl-comment">// Set return value to total size of writes</span>
+    <span class="hl-identifier">view</span><span class="hl-operator">.</span><span class="hl-function_method">setUint32</span><span class="hl-operator">(</span><span class="hl-identifier">returnBytesWrittenAddress</span><span class="hl-operator">,</span> <span class="hl-identifier">totalSizeInBytes</span><span class="hl-operator">,</span> <span class="hl-keyword">true</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-keyword">return</span> <span class="hl-number">0</span><span class="hl-operator">;</span> <span class="hl-comment">// Success</span>
+<span class="hl-operator">}</span><span class="hl-operator">,</span>
 </code></pre>
 <h2 id="success">Success!</h2>
 <p>With the above imports, <a href="https://github.com/jaredkrinke/wasm-c-string">my string-passing library</a>, and the following code:</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> dotString = process.<span class="hljs-property">argv</span>[<span class="hljs-number">2</span>] ?? <span class="hljs-string">&quot;digraph { a -&gt; b }&quot;</span>;
-<span class="hljs-title function_">createCString</span>(<span class="hljs-variable language_">module</span>, dotString, <span class="hljs-function">(<span class="hljs-params">dotStringAddress</span>) =&gt;</span> {
-    <span class="hljs-keyword">const</span> svgString = <span class="hljs-title function_">receiveCString</span>(<span class="hljs-variable language_">module</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">instance</span>.<span class="hljs-property">exports</span>.<span class="hljs-title function_">dot2svg</span>(dotStringAddress));
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(svgString);
-});
+<pre><code class="language-javascript"><span class="hl-keyword">const</span> <span class="hl-identifier">dotString</span> <span class="hl-operator">=</span> <span class="hl-identifier">process</span><span class="hl-operator">.</span><span class="hl-identifier">argv</span><span class="hl-operator">[</span><span class="hl-number">2</span><span class="hl-operator">]</span> <span class="hl-operator">?</span><span class="hl-operator">?</span> <span class="hl-string">&quot;digraph { a -&gt; b }&quot;</span><span class="hl-operator">;</span>
+<span class="hl-function">createCString</span><span class="hl-operator">(</span><span class="hl-identifier">module</span><span class="hl-operator">,</span> <span class="hl-identifier">dotString</span><span class="hl-operator">,</span> <span class="hl-operator">(</span><span class="hl-identifier">dotStringAddress</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-operator">{</span>
+    <span class="hl-keyword">const</span> <span class="hl-identifier">svgString</span> <span class="hl-operator">=</span> <span class="hl-function">receiveCString</span><span class="hl-operator">(</span><span class="hl-identifier">module</span><span class="hl-operator">,</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-identifier">module</span><span class="hl-operator">.</span><span class="hl-identifier">instance</span><span class="hl-operator">.</span><span class="hl-identifier">exports</span><span class="hl-operator">.</span><span class="hl-function_method">dot2svg</span><span class="hl-operator">(</span><span class="hl-identifier">dotStringAddress</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-identifier">console</span><span class="hl-operator">.</span><span class="hl-function_method">log</span><span class="hl-operator">(</span><span class="hl-identifier">svgString</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 </code></pre>
 <p>I was finally able to generate the following test graph SVG:</p>
 <p><img src="../../assets/graphviz-test-graph.svg" alt="digraph { a -&gt; b }"></p>
 <p>Additionally, if I deliberately insert a syntax error into the graph, I see the error logged to my console, so output forwarding is even working.</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>There&#39;s still work I need to do around theming, packaging, and more, but as a proof of concept, it looks like compiling a C library to WebAssembly with minimal tooling beyond Clang and LLVM is certainly possible, with some perseverance.</p>
+<p>There's still work I need to do around theming, packaging, and more, but as a proof of concept, it looks like compiling a C library to WebAssembly with minimal tooling beyond Clang and LLVM is certainly possible, with some perseverance.</p>
 <p>Lessons learned:</p>
 <ul>
-<li>Always first check to see if someone has already ported the library you&#39;re interested in--if they have, and you can tolerate their dependencies, you&#39;ll save significant effort</li>
-<li>You can&#39;t assume that a &quot;simple&quot; C library won&#39;t have surprising dependencies (e.g. Graphviz depending on PostScript headers by default)</li>
+<li>Always first check to see if someone has already ported the library you're interested in--if they have, and you can tolerate their dependencies, you'll save significant effort</li>
+<li>You can't assume that a &quot;simple&quot; C library won't have surprising dependencies (e.g. Graphviz depending on PostScript headers by default)</li>
 <li>Compiling typical C libraries to WebAssembly on Windows is painful (not discussed here, but I actually did that first, before moving to Linux for a more compiler-friendly environment)</li>
 <li>Emscripten will probably save you time dealing with obscure or unsupported-by-WASI headers</li>
-<li>WASI itself might require additional support code (there is a <a href="https://wasi.dev/polyfill/">poorly documented browser polyfill for WASI</a>, but I haven&#39;t tested it)</li>
+<li>WASI itself might require additional support code (there is a <a href="https://wasi.dev/polyfill/">poorly documented browser polyfill for WASI</a>, but I haven't tested it)</li>
 </ul>
 <h1 id="resources">Resources</h1>
 <ul>

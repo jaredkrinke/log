@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>A Common Lisp static site generator, because why not?</title>
-<meta name="description" content="The static site generator that almost wasn&#39;t, but then was." />
+<meta name="description" content="The static site generator that almost wasn&#039;t, but then was." />
 <meta name="keywords" content="lisp" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -44,16 +44,16 @@
 </blockquote>
 <p><strong>This is the inevitable follow-up post where I describe the new static site generator I ended up building</strong>, this time using Common Lisp.</p>
 <h1 id="motivation">Motivation</h1>
-<p>I&#39;ll discuss differentiators next, but my personal motivation for creating this static site generator is some combination of the following:</p>
+<p>I'll discuss differentiators next, but my personal motivation for creating this static site generator is some combination of the following:</p>
 <ul>
-<li><a href="../programming-languages/learning-lisp-in-2023.html">I&#39;ve been learning Common Lisp</a> (to sample REPL-driven development, macros, etc.) and I wanted to build a small-but-nontrivial project to help me learn (aside: I&#39;m also curious about performance with <a href="https://www.sbcl.org/">SBCL</a>)</li>
+<li><a href="../programming-languages/learning-lisp-in-2023.html">I've been learning Common Lisp</a> (to sample REPL-driven development, macros, etc.) and I wanted to build a small-but-nontrivial project to help me learn (aside: I'm also curious about performance with <a href="https://www.sbcl.org/">SBCL</a>)</li>
 <li>I wanted to try building an extensible static site generator (like <a href="metalsmith.html">Metalsmith</a>) that natively supports incremental rebuilds</li>
 </ul>
 <p>In other words: <strong>for fun</strong>.</p>
 <h1 id="differentiators">Differentiators</h1>
 <p>Fun is fun, but am I just reinventing the wheel? Hopefully not. I fully expect no one else will use this static site generator (assuming I even <em>complete</em> it), but I think it does have a unique combination of features, including:</p>
 <ul>
-<li>Being based around a <strong>completely generic and extensible pipeline</strong> (sort of a &quot;static site generator toolkit&quot;, similar to Metalsmith)--theoretically, it&#39;s not even limited to web pages (or even the file system)</li>
+<li>Being based around a <strong>completely generic and extensible pipeline</strong> (sort of a &quot;static site generator toolkit&quot;, similar to Metalsmith)--theoretically, it's not even limited to web pages (or even the file system)</li>
 <li>Having <strong>fast incremental rebuilds</strong> natively supported, without having to prescriptively list the inputs and outputs of each step</li>
 <li>Using a <strong>template system that is based entirely on list processing</strong> (the &quot;Lisp&quot; part of &quot;Common Lisp&quot;)</li>
 <li>Providing a <strong>built-in debugger</strong> (this one is kind of cheating since it comes for free with Common Lisp)</li>
@@ -61,7 +61,7 @@
 <h1 id="architecture">Architecture</h1>
 <h2 id="pipeline">Pipeline</h2>
 <p>For maximum flexibility, this static site generator is based on a generic processing pipeline, represented as a <strong>directed acyclic graph of processing nodes</strong>.</p>
-<p>Here&#39;s a description of a blog pipeline, with one bullet per node:</p>
+<p>Here's a description of a blog pipeline, with one bullet per node:</p>
 <ul>
 <li>Enumerate files from the input directory</li>
 <li>Extract front matter (metadata) from Markdown files</li>
@@ -74,7 +74,7 @@
 <p>In image form (note: the pipeline definition in code is shown later):</p>
 <p><img src="assets/pipeline-blog.svg" alt="Blog pipeline diagram"></p>
 <h2 id="node-types">Node types</h2>
-<p>So far, this sounds like Metalsmith&#39;s declarative JSON-based &quot;plugin chain&quot;. Here&#39;s the twist:</p>
+<p>So far, this sounds like Metalsmith's declarative JSON-based &quot;plugin chain&quot;. Here's the twist:</p>
 <p>There are two main node types:</p>
 <ul>
 <li><strong>Aggregate nodes</strong>: Similar to Metalsmith plugins, these nodes operate over the entire set of files/items and produce multiple outputs (and can remove items, too), i.e. they are M:N (M inputs and N outputs)</li>
@@ -82,7 +82,7 @@
 </ul>
 <p>For example, here are two hypothetical nodes: an aggregate node that combines metadata from two Markdown posts (&quot;post1.md&quot; and &quot;post2.md&quot;) into a single index (&quot;index.json&quot;), and a transform node that converts Markdown to HTML -- note that the transform node processes each item in isolation.</p>
 <p><img src="assets/node-aggregate.svg" alt="Aggregate node diagram"> <img src="assets/node-transform.svg" alt="Transform node diagram"></p>
-<p>Explicitly expressing 1:N transform nodes is the primary innovation (although I&#39;m sure--at least I hope--this has been done before, somewhere). Here are the benefits:</p>
+<p>Explicitly expressing 1:N transform nodes is the primary innovation (although I'm sure--at least I hope--this has been done before, somewhere). Here are the benefits:</p>
 <ul>
 <li><strong>Single-item transformations can be run in parallel</strong></li>
 <li><strong>Only <em>new or modified</em> input items need to be transformed</strong> when rebuilding (updating)</li>
@@ -92,11 +92,11 @@
 <p>Internally, the processing pipeline actually operates over &quot;changes&quot;. For example, if a file gets added or modified in the source directory, an <code>:update</code> event is propagated down the pipeline; if a file is deleted, a <code>:delete</code> event is sent. There are two additional node types that operate directly upon changes:</p>
 <ul>
 <li><strong>Source nodes</strong>: Create changes (e.g. based on seeing if the contents of a directory have changed)</li>
-<li><strong>Sink nodes</strong>: Consume changes (e.g. write <code>:update</code>&#39;d files to disk or remove <code>:delete</code>&#39;d files)</li>
+<li><strong>Sink nodes</strong>: Consume changes (e.g. write <code>:update</code>'d files to disk or remove <code>:delete</code>'d files)</li>
 </ul>
 <p>Each node maintains a snapshot of inputs and outputs and they will only run when their input actually changes (item contents and/or metadata). Transform nodes also maintain a map of inputs <em>to</em> outputs (to handle deletions, implicit or explicit).</p>
 <h3 id="node-types-example">Node types example</h3>
-<p>Here&#39;s the blog pipeline from before with each node type in parentheses:</p>
+<p>Here's the blog pipeline from before with each node type in parentheses:</p>
 <ul>
 <li>Enumerate files (<strong>source node</strong>)</li>
 <li>Extract front matter (metadata) (<strong>transform node</strong>)</li>
@@ -115,23 +115,23 @@
 <li><strong>Metadata</strong>: an bag of arbitrary properties (currently using an association list)</li>
 </ul>
 <h2 id="templateshtml-representation">Templates/HTML representation</h2>
-<p><strong>I hate most static site generators because I hate the template languages they use</strong>. Especially the one Hugo uses. Sometimes, it&#39;s just the verbose syntax for inserting a value that I dislike. Other times, it&#39;s the bespoke conditional/loop syntax that I grudgingly have to learn.</p>
-<p>A corollary to <a href="https://en.wikipedia.org/wiki/Greenspun&#39;s_tenth_rule">Greenspun&#39;s tenth rule</a> seems appropriate:</p>
+<p><strong>I hate most static site generators because I hate the template languages they use</strong>. Especially the one Hugo uses. Sometimes, it's just the verbose syntax for inserting a value that I dislike. Other times, it's the bespoke conditional/loop syntax that I grudgingly have to learn.</p>
+<p>A corollary to <a href="https://en.wikipedia.org/wiki/Greenspun%27s_tenth_rule">Greenspun's tenth rule</a> seems appropriate:</p>
 <blockquote>
 <p>Any sufficiently complicated <del>C or Fortran program</del> <em>HTML template language</em> contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp.</p>
 </blockquote>
-<p>The obvious solution is to simply embrace Common Lisp&#39;s list processing. Here&#39;s an example of the list format I&#39;m using:</p>
-<pre><code class="language-lisp">(<span class="hljs-symbol">:p</span> <span class="hljs-string">&quot;Here is a &quot;</span>
-    (<span class="hljs-symbol">:a</span> <span class="hljs-symbol">:href</span> <span class="hljs-string">&quot;https://log.schemescape.com/&quot;</span> <span class="hljs-string">&quot;link!&quot;</span>))
+<p>The obvious solution is to simply embrace Common Lisp's list processing. Here's an example of the list format I'm using:</p>
+<pre><code class="language-lisp"><span class="hl-operator">(</span><span class="hl-default">:</span><span class="hl-identifier">p</span> <span class="hl-string">&quot;Here is a &quot;</span>
+    <span class="hl-operator">(</span><span class="hl-default">:</span><span class="hl-identifier">a</span> <span class="hl-default">:</span><span class="hl-identifier">href</span> <span class="hl-string">&quot;https://log.schemescape.com/&quot;</span> <span class="hl-string">&quot;link!&quot;</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
 </code></pre>
 <p>Rendered to HTML:</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Here is a <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://log.schemescape.com/&quot;</span>&gt;</span>link!<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<pre><code class="language-html"><span class="hl-tag_chars">&lt;</span><span class="hl-tag">p</span><span class="hl-tag_chars">&gt;</span><span class="hl-default">H</span><span class="hl-default">e</span><span class="hl-default">r</span><span class="hl-default">e</span> <span class="hl-default">i</span><span class="hl-default">s</span> <span class="hl-default">a</span> <span class="hl-tag_chars">&lt;</span><span class="hl-tag">a</span> <span class="hl-attribute">href</span><span class="hl-operator">=</span><span class="hl-string">&quot;https://log.schemescape.com/&quot;</span><span class="hl-tag_chars">&gt;</span><span class="hl-default">l</span><span class="hl-default">i</span><span class="hl-default">n</span><span class="hl-default">k</span><span class="hl-default">!</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">a</span><span class="hl-tag_chars">&gt;</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">p</span><span class="hl-tag_chars">&gt;</span>
 </code></pre>
-<p>So that&#39;s the &quot;list&quot; part.</p>
-<p>The &quot;processing&quot; part is <strong>literally just Common Lisp code</strong>. No weird syntax, just a standardized language that&#39;s been kicking around for decades. Although I haven&#39;t implemented it yet, this should also make validating relative links at build-time trivial since I only need to walk lists (something Lisp does with ease).</p>
-<p>For the record, I did not use <a href="https://edicl.github.io/cl-who/">CL-WHO</a> because it doesn&#39;t escape strings by default and I didn&#39;t use <a href="https://github.com/ruricolist/spinneret">Spinneret</a> because it has ~20 dependencies.</p>
+<p>So that's the &quot;list&quot; part.</p>
+<p>The &quot;processing&quot; part is <strong>literally just Common Lisp code</strong>. No weird syntax, just a standardized language that's been kicking around for decades. Although I haven't implemented it yet, this should also make validating relative links at build-time trivial since I only need to walk lists (something Lisp does with ease).</p>
+<p>For the record, I did not use <a href="https://edicl.github.io/cl-who/">CL-WHO</a> because it doesn't escape strings by default and I didn't use <a href="https://github.com/ruricolist/spinneret">Spinneret</a> because it has ~20 dependencies.</p>
 <h1 id="current-status">Current status</h1>
-<p>Here&#39;s what I&#39;ve implemented so far:</p>
+<p>Here's what I've implemented so far:</p>
 <ul>
 <li>Pipeline, node, and item representation</li>
 <li>Directory enumeration</li>
@@ -139,7 +139,7 @@
 <li>HTML templates</li>
 <li>Prototype blog pipeline (minus an Atom feed and site map)</li>
 </ul>
-<p>There&#39;s quite a bit of work remaining:</p>
+<p>There's quite a bit of work remaining:</p>
 <ul>
 <li>Parallel transformations (should be trivial with <a href="https://github.com/lmj/lparallel">lparallel</a>)</li>
 <li>Find and integrate a more robust Markdown parser</li>
@@ -150,30 +150,30 @@
 <li>Document everything</li>
 </ul>
 <h2 id="performance">Performance</h2>
-<p>Given that the implementation is incomplete, I don&#39;t want to read too much into its performance. For my site, I expect it to be fast because updating a single blog post will only require rebuilding the edited post, possibly the index/archive/post index pages, and possibly the Atom feed (<strong>roughly a 30x reduction in the number of files being written</strong> for my smallish site).</p>
-<p>On my netbook where I finally got md2blog live rebuilds down to 200ms, the prototype blog could complete an incremental rebuild for a single post update in 80ms--and that&#39;s with a slow (and brittle) Markdown processor that needs to be replaced.</p>
+<p>Given that the implementation is incomplete, I don't want to read too much into its performance. For my site, I expect it to be fast because updating a single blog post will only require rebuilding the edited post, possibly the index/archive/post index pages, and possibly the Atom feed (<strong>roughly a 30x reduction in the number of files being written</strong> for my smallish site).</p>
+<p>On my netbook where I finally got md2blog live rebuilds down to 200ms, the prototype blog could complete an incremental rebuild for a single post update in 80ms--and that's with a slow (and brittle) Markdown processor that needs to be replaced.</p>
 <h2 id="code">Code</h2>
-<p><strong>Currently, the code is a complete mess</strong>. It&#39;s all one big file with a million TODOs and at least one gratuitous macro. It&#39;s a work-in-progress, and code cleanup isn&#39;t even in my top ten concerns right now.</p>
-<p>Honestly, I don&#39;t even want to share the code because it&#39;s so ugly, but since you can easily find it, I&#39;ll just save you the trouble:</p>
+<p><strong>Currently, the code is a complete mess</strong>. It's all one big file with a million TODOs and at least one gratuitous macro. It's a work-in-progress, and code cleanup isn't even in my top ten concerns right now.</p>
+<p>Honestly, I don't even want to share the code because it's so ugly, but since you can easily find it, I'll just save you the trouble:</p>
 <p><a href="https://github.com/jaredkrinke/cl-stuff/blob/main/ssg/ssg.lisp">https://github.com/jaredkrinke/cl-stuff/blob/main/ssg/ssg.lisp</a></p>
 <h3 id="pipeline-example">Pipeline example</h3>
 <p>Here is an example of the previous blog pipeline expressed in code:</p>
-<pre><code class="language-lisp">(<span class="hljs-name">defparameter</span> *pipeline*
-  &#x27;((source :children (front-matter))
-    (front-matter :children (markdown
-                             index-posts))
-    (markdown :children (template-posts))
-    (template-posts :children (lhtml))
-    (index-posts :children (template-indexes))
-    (template-indexes :children (lhtml))
-    (lhtml :children (destination))
-    (destination)))
+<pre><code class="language-lisp"><span class="hl-operator">(</span><span class="hl-keyword">defparameter</span> <span class="hl-operator">*</span><span class="hl-identifier">pipeline</span><span class="hl-operator">*</span>
+  <span class="hl-default">&apos;</span><span class="hl-operator">(</span><span class="hl-operator">(</span><span class="hl-identifier">source</span> <span class="hl-default">:</span><span class="hl-identifier">children</span> <span class="hl-operator">(</span><span class="hl-identifier">front-matter</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">(</span><span class="hl-identifier">front-matter</span> <span class="hl-default">:</span><span class="hl-identifier">children</span> <span class="hl-operator">(</span><span class="hl-identifier">markdown</span>
+                             <span class="hl-identifier">index-posts</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">(</span><span class="hl-identifier">markdown</span> <span class="hl-default">:</span><span class="hl-identifier">children</span> <span class="hl-operator">(</span><span class="hl-identifier">template-posts</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">(</span><span class="hl-identifier">template-posts</span> <span class="hl-default">:</span><span class="hl-identifier">children</span> <span class="hl-operator">(</span><span class="hl-identifier">lhtml</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">(</span><span class="hl-identifier">index-posts</span> <span class="hl-default">:</span><span class="hl-identifier">children</span> <span class="hl-operator">(</span><span class="hl-identifier">template-indexes</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">(</span><span class="hl-identifier">template-indexes</span> <span class="hl-default">:</span><span class="hl-identifier">children</span> <span class="hl-operator">(</span><span class="hl-identifier">lhtml</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">(</span><span class="hl-identifier">lhtml</span> <span class="hl-default">:</span><span class="hl-identifier">children</span> <span class="hl-operator">(</span><span class="hl-identifier">destination</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+    <span class="hl-operator">(</span><span class="hl-identifier">destination</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
 </code></pre>
 <p>The first symbol in each list is the name of a node class. Arcs/arrows can be added via either <code>:children</code> or <code>:parents</code>. I prefer to use <code>:children</code> because it seems more intuitive to think of the way items flow through the pipeline (source -&gt; front-matter -&gt; markdown -&gt; template-posts -&gt; lhtml -&gt; destination).</p>
 <h2 id="name">Name</h2>
-<p>So what is this new static site generator called? Well, that&#39;s <em>also</em> not in my top ten concerns right now. The Common Lisp package is just named <code>SSG</code> as a placeholder. <strong>Hopefully I&#39;ll think of a catchy name eventually</strong>.</p>
+<p>So what is this new static site generator called? Well, that's <em>also</em> not in my top ten concerns right now. The Common Lisp package is just named <code>SSG</code> as a placeholder. <strong>Hopefully I'll think of a catchy name eventually</strong>.</p>
 <h1 id="the-end">The end</h1>
-<p>And apologies for creating yet another static site generator. At least I didn&#39;t create a new front-end framework for JavaScript!</p>
+<p>And apologies for creating yet another static site generator. At least I didn't create a new front-end framework for JavaScript!</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

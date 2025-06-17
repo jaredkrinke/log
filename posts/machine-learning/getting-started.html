@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Getting started with machine learning</title>
-<meta name="description" content="For personal enrichment, I&#39;m playing around with machine learning." />
+<meta name="description" content="For personal enrichment, I&#039;m playing around with machine learning." />
 <meta name="keywords" content="python" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -38,24 +38,24 @@
 <h1><a href="../../posts/machine-learning/getting-started.html">Getting started with machine learning</a></h1>
 <p><time datetime="2022-03-07">March 7, 2022</time></p>
 </header>
-<p>One of the reasons I decided to give <a href="../programming-languages/python.html">Python</a> one last try is that Python is popular for machine learning, and machine learning is a topic I&#39;m interested in.</p>
+<p>One of the reasons I decided to give <a href="../programming-languages/python.html">Python</a> one last try is that Python is popular for machine learning, and machine learning is a topic I'm interested in.</p>
 <h1 id="why">Why?</h1>
 <p>Why am I interested in machine learning?</p>
 <ul>
-<li>It&#39;s an area of computer science that has advanced significantly since I studied CS in school</li>
+<li>It's an area of computer science that has advanced significantly since I studied CS in school</li>
 <li>It has many unique practical applications (speech recognition, language translation, machine vision, generative art)</li>
 <li>I recently acquired a GPU that (as far as I know) is capable of accelerating machine learning pipelines</li>
 </ul>
 <h1 id="first-steps">First steps</h1>
-<p>As an introduction, I&#39;m following MIT&#39;s <a href="https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/about">Introduction to Machine Learning (2020)</a> class. It&#39;s in Python and builds on <a href="https://numpy.org/">NumPy</a>. The first 4 weeks focus on linear classifiers for binary classification.</p>
+<p>As an introduction, I'm following MIT's <a href="https://openlearninglibrary.mit.edu/courses/course-v1:MITx+6.036+1T2019/about">Introduction to Machine Learning (2020)</a> class. It's in Python and builds on <a href="https://numpy.org/">NumPy</a>. The first 4 weeks focus on linear classifiers for binary classification.</p>
 <p>Although my math is rusty, my biggest struggle is actually with the NumPy API. Here is my list of grievances:</p>
 <ul>
 <li>NumPy implicitly &quot;broadcasts&quot; arrays into compatible shapes<ul>
-<li>I assume this is for convenience, but all it&#39;s done for me is silently hide bugs in my code</li>
+<li>I assume this is for convenience, but all it's done for me is silently hide bugs in my code</li>
 </ul>
 </li>
 <li>NumPy sometimes silently removes dimensions<ul>
-<li>Again, this is probably for convenience, but all it&#39;s done is trip me up -- I really wish <code>keepdims</code> defaulted to <code>True</code></li>
+<li>Again, this is probably for convenience, but all it's done is trip me up -- I really wish <code>keepdims</code> defaulted to <code>True</code></li>
 </ul>
 </li>
 <li>The API has a lot of cruft (e.g. a <code>matrix</code> class that is no longer recommended for matrix computation)</li>
@@ -63,10 +63,10 @@
 </ul>
 <h1 id="experimentation">Experimentation</h1>
 <h2 id="using-a-sample-data-set">Using a sample data set</h2>
-<p>To get a better handle on NumPy, I&#39;d like to actually attempt to create a linear classifier from scratch. A quick search led me to a <a href="https://jamesmccaffrey.wordpress.com/2018/03/14/datasets-for-binary-classification/">page with links to data sets for binary classification problems</a>. I&#39;m using <a href="https://archive.ics.uci.edu/ml/datasets/banknote+authentication">UCI Machine Learning Repository&#39;s &quot;banknote authentication&quot; data set</a> because the data format is simple (4 predictor variables and a 0 or 1 for the classification).</p>
-<p>To my surprise, simple algorithms (e.g. selecting random parameters) were able to correctly classify over 95% of examples. For what it&#39;s worth, my code is posted <a href="https://github.com/jaredkrinke/ml/tree/main/binary-classification">here</a>.</p>
+<p>To get a better handle on NumPy, I'd like to actually attempt to create a linear classifier from scratch. A quick search led me to a <a href="https://jamesmccaffrey.wordpress.com/2018/03/14/datasets-for-binary-classification/">page with links to data sets for binary classification problems</a>. I'm using <a href="https://archive.ics.uci.edu/ml/datasets/banknote+authentication">UCI Machine Learning Repository's &quot;banknote authentication&quot; data set</a> because the data format is simple (4 predictor variables and a 0 or 1 for the classification).</p>
+<p>To my surprise, simple algorithms (e.g. selecting random parameters) were able to correctly classify over 95% of examples. For what it's worth, my code is posted <a href="https://github.com/jaredkrinke/ml/tree/main/binary-classification">here</a>.</p>
 <h2 id="solving-a-problem-from-scratch">Solving a problem from scratch</h2>
-<p>I&#39;d like to try solving a real world problem from scratch, but I don&#39;t really have a problem in mind that lends itself to binary classification. For what it&#39;s worth, here are some Kaggle data sets that might eventually inspire me:</p>
+<p>I'd like to try solving a real world problem from scratch, but I don't really have a problem in mind that lends itself to binary classification. For what it's worth, here are some Kaggle data sets that might eventually inspire me:</p>
 <ul>
 <li><a href="https://www.kaggle.com/vivovinco/nba-player-stats">NBA players</a></li>
 <li><a href="https://www.kaggle.com/hacker-news/hacker-news">Hacker News data</a></li>

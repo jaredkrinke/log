@@ -40,12 +40,12 @@
 <h1><a href="../../posts/programming-languages/future-proof-languages-2.html">Future-proof programming languages, part 2</a></h1>
 <p><time datetime="2023-02-17">February 17, 2023</time></p>
 </header>
-<p>Almost exactly 1 year ago, in <a href="future-proof-languages.html">part 1</a>, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they&#39;d still be useful in another decade. In the intervening time, I&#39;ve completed some nontrivial projects in both TypeScript (using both Node and Deno) and Python. I&#39;ve also spent time contemplating a <a href="minimal-dev-env.html">minimal development environment</a>.</p>
-<p>In this post, I&#39;m going to add a few more items to my programming language wishlist, add a few more programming languages to my candidate list, and then briefly describe my initial experiences with a few of those languages.</p>
+<p>Almost exactly 1 year ago, in <a href="future-proof-languages.html">part 1</a>, I enumerated a bunch of popular programming languages and tried to quickly determine which ones seemed like they'd still be useful in another decade. In the intervening time, I've completed some nontrivial projects in both TypeScript (using both Node and Deno) and Python. I've also spent time contemplating a <a href="minimal-dev-env.html">minimal development environment</a>.</p>
+<p>In this post, I'm going to add a few more items to my programming language wishlist, add a few more programming languages to my candidate list, and then briefly describe my initial experiences with a few of those languages.</p>
 <h1 id="disclaimer">Disclaimer</h1>
-<p>I don&#39;t have a lot of experience with most of these programming languages. I&#39;ve written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to <a href="mailto:log@schemescape.com">log@schemescape.com</a>.</p>
+<p>I don't have a lot of experience with most of these programming languages. I've written a lot of code in various languages (mostly C, C++, C#, TypeScript, and Lua), but I am by no means an expert at assessing programming languages. Feel free to send corrections to <a href="mailto:log@schemescape.com">log@schemescape.com</a>.</p>
 <h1 id="there-can-be-more-than-one">There can be more than one</h1>
-<p>Note: I&#39;ve come to terms with the fact that I&#39;ll probably end up needing to use several of these languages for different purposes, namely I&#39;ll want to have one fast, ahead-of-time compiled language for performance-critical projects, and something simpler and more dynamic (while still low-overhead) for most everything else.</p>
+<p>Note: I've come to terms with the fact that I'll probably end up needing to use several of these languages for different purposes, namely I'll want to have one fast, ahead-of-time compiled language for performance-critical projects, and something simpler and more dynamic (while still low-overhead) for most everything else.</p>
 <h1 id="wishlist">Wishlist</h1>
 <p>In part 1, I <a href="future-proof-languages.html#indicators">listed</a> some indicators of a future-proof programming language, along with a wishlist of conveniences/ergonomics. Here are some additions (in <strong>bold</strong>) to my &quot;programming language wishlist&quot;:</p>
 <ul>
@@ -61,11 +61,11 @@
 <li><strong>Not subject to the whims of a single company</strong></li>
 <li><strong><del>Easy</del> Possible to bootstrap</strong></li>
 </ul>
-<p>Most these additions are in response to what I&#39;ve seen while investigating a few languages. Specifically:</p>
+<p>Most these additions are in response to what I've seen while investigating a few languages. Specifically:</p>
 <ul>
-<li>Python and Clojure don&#39;t appear to be trivial deploy (especially for Python with dependencies)</li>
+<li>Python and Clojure don't appear to be trivial deploy (especially for Python with dependencies)</li>
 <li>C# and Go are tied to for-profit companies, both of which are known for canning unprofitable projects (one notoriously so)</li>
-<li>Small languages written in C, like Lua, would be easy to bootstrap in the future, should the need arise (e.g. if I want to move to a new or old platform that isn&#39;t already supported)</li>
+<li>Small languages written in C, like Lua, would be easy to bootstrap in the future, should the need arise (e.g. if I want to move to a new or old platform that isn't already supported)</li>
 </ul>
 <h1 id="additional-candidates">Additional candidates</h1>
 <p>My original (pruned) list of candidate languages included:</p>
@@ -80,50 +80,50 @@
 <li>Lisp/Clojure</li>
 <li>Zig</li>
 </ul>
-<p>I&#39;m going to add a few more languages:</p>
+<p>I'm going to add a few more languages:</p>
 <ul>
-<li><strong>Tcl</strong>: I&#39;ve only briefly used Tcl in the past, but it seems great for command line &quot;glue&quot;, and the language itself (at least what I&#39;ve experienced) is beautifully simple</li>
+<li><strong>Tcl</strong>: I've only briefly used Tcl in the past, but it seems great for command line &quot;glue&quot;, and the language itself (at least what I've experienced) is beautifully simple</li>
 <li><strong>Lua</strong>: I originally discarded Lua because in the past I found its quirks to be too annoying, but that experience was mostly 10+ years ago, and there have been multiple major updates since then</li>
 </ul>
-<p>Aside: I&#39;m intrigued by <a href="https://vale.dev/">The Vale Programming Language</a>, but it&#39;s not even close to done yet.</p>
+<p>Aside: I'm intrigued by <a href="https://vale.dev/">The Vale Programming Language</a>, but it's not even close to done yet.</p>
 <h1 id="some-early-observations">Some early observations</h1>
-<p>Eventually, I&#39;ll probably compile a big table of these languages, along with an assessment with respect to each of my criteria, but for now I&#39;ve just got a few initial notes.</p>
+<p>Eventually, I'll probably compile a big table of these languages, along with an assessment with respect to each of my criteria, but for now I've just got a few initial notes.</p>
 <h2 id="compilerruntime-installation">Compiler/runtime installation</h2>
 <h3 id="javascripttypescript">JavaScript/TypeScript</h3>
 <p><a href="https://deno.land/">Deno</a> makes running TypeScript trivially easy, but its list of supported platforms is short (notably, it does not include 32-bit Windows!). <a href="https://nodejs.org/en/">Node</a> supports 32-bit Windows, but is much less convenient.</p>
 <h3 id="python">Python</h3>
-<p>Anyway, the <a href="https://wiki.python.org/moin/BeginnersGuide/Download">Python installation docs</a> recommend seeing if you already have Python installed by typing <code>python</code> into a command window. To my surprise, I don&#39;t immediately see an &quot;unrecognized command&quot; error. Incredibly, it launches to a Python page in the Microsoft Store (compliments of <code>%LocalAppData%\Microsoft\WindowsApps\python.exe</code> -- seriously!?). I&#39;ll give it a try since it&#39;s a surprisingly reasonable ~100 MB download. It appears to install a Python runtime and the IDLE editor.</p>
-<p>Honestly, I&#39;m not thrilled that Microsoft decided to <a href="https://devblogs.microsoft.com/python/python-in-the-windows-10-may-2019-update/">insert this Python shim into Windows itself</a> just to make it easier for people to find Python, but I guess I&#39;ll try it out. Note that I&#39;ll almost certainly be using VS Code and the official Python extension for editing and debugging.</p>
+<p>Anyway, the <a href="https://wiki.python.org/moin/BeginnersGuide/Download">Python installation docs</a> recommend seeing if you already have Python installed by typing <code>python</code> into a command window. To my surprise, I don't immediately see an &quot;unrecognized command&quot; error. Incredibly, it launches to a Python page in the Microsoft Store (compliments of <code>%LocalAppData%\Microsoft\WindowsApps\python.exe</code> -- seriously!?). I'll give it a try since it's a surprisingly reasonable ~100 MB download. It appears to install a Python runtime and the IDLE editor.</p>
+<p>Honestly, I'm not thrilled that Microsoft decided to <a href="https://devblogs.microsoft.com/python/python-in-the-windows-10-may-2019-update/">insert this Python shim into Windows itself</a> just to make it easier for people to find Python, but I guess I'll try it out. Note that I'll almost certainly be using VS Code and the official Python extension for editing and debugging.</p>
 <h3 id="c">C#</h3>
 <p>To my surprise, the <a href="https://github.com/dotnet/roslyn">C# compiler</a> and <a href="https://github.com/dotnet/runtime">.NET runtime</a> are both now open source (MIT license). Even more surprising, you can now apparently <a href="https://docs.microsoft.com/en-us/dotnet/iot/deployment">deploy self-contained .NET executables to a Raspberry Pi</a>.</p>
-<p>C# is a great language and the .NET standard library is probably the most thoughtfully crafted standard library I&#39;ve ever used. So is my search over? Is C# the answer?</p>
-<p>First, I need to setup a C# development environment. I&#39;m developing on Windows (.NET&#39;s home platform), so this might give me an unrealistically positive impression of C#&#39;s convenience.</p>
-<p>After selecting the .NET runtime and SDK in the Visual Studio installer, I am appalled to see that it requires <em>5 GB</em> of disk space! There&#39;s probably a bunch of extraneous junk I don&#39;t need, but for comparison: Visual Studio Code is ~300 MB and Deno&#39;s TypeScript runtime is ~60 MB.</p>
+<p>C# is a great language and the .NET standard library is probably the most thoughtfully crafted standard library I've ever used. So is my search over? Is C# the answer?</p>
+<p>First, I need to setup a C# development environment. I'm developing on Windows (.NET's home platform), so this might give me an unrealistically positive impression of C#'s convenience.</p>
+<p>After selecting the .NET runtime and SDK in the Visual Studio installer, I am appalled to see that it requires <em>5 GB</em> of disk space! There's probably a bunch of extraneous junk I don't need, but for comparison: Visual Studio Code is ~300 MB and Deno's TypeScript runtime is ~60 MB.</p>
 <p>Since I was curious, I checked out the <a href="https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian">.NET SDK for Linux (Debian)</a>, and it was closer to 500 MB. To my surprise, it was very full-featured, and I was even able to cross-compile for Windows from Linux.</p>
 <p>As much as I like C#, the unreasonable disk footprint of its tooling has sent C# to the bottom of my pile.</p>
 <h3 id="c-1">C++</h3>
-<p>C++ sort of gets a free pass because Linux distributions generally provide the GNU C++ compiler and I already had to install a C++ environment in order to use Rust on Windows. Clang is &lt; 1 GB to install and there are numerous free and/or open source C++ IDEs that are less than 1 GB. Visual Studio for C++ was around 3 GB, which is much too big, but not an immediate disqualifier in light of available alternatives. At least there&#39;s a free version now.</p>
+<p>C++ sort of gets a free pass because Linux distributions generally provide the GNU C++ compiler and I already had to install a C++ environment in order to use Rust on Windows. Clang is &lt; 1 GB to install and there are numerous free and/or open source C++ IDEs that are less than 1 GB. Visual Studio for C++ was around 3 GB, which is much too big, but not an immediate disqualifier in light of available alternatives. At least there's a free version now.</p>
 <h3 id="c-2">C</h3>
 <p>C is similar to C++, with the notable property that it is trivially bootstrap-able on some popular architectures using the <a href="https://bellard.org/tcc/">Tiny C Compiler</a>.</p>
 <h3 id="go">Go</h3>
-<p>Go for Windows is a reasonable ~125 MB download, and VS Code has an official Go extension. I&#39;ve heard that Go&#39;s tooling is excellent and what I&#39;ve seen thus far (e.g. <code>go fmt</code>) is similar to what I liked about <a href="../web-development/one-month-with-deno.html">Deno</a>. It only took a couple of minutes (for me, a complete Go newbie) to get a &quot;hello world&quot; program up and running (with debugging, no less).</p>
+<p>Go for Windows is a reasonable ~125 MB download, and VS Code has an official Go extension. I've heard that Go's tooling is excellent and what I've seen thus far (e.g. <code>go fmt</code>) is similar to what I liked about <a href="../web-development/one-month-with-deno.html">Deno</a>. It only took a couple of minutes (for me, a complete Go newbie) to get a &quot;hello world&quot; program up and running (with debugging, no less).</p>
 <h3 id="rust">Rust</h3>
-<p>Setting up a Rust environment on Windows <a href="rust-first-experience.html">is not pleasant</a> because it requires first installing Visual C++ (a multi-gigabyte download). On Linux, installation is a breeze, but I&#39;m using Windows at the moment.</p>
+<p>Setting up a Rust environment on Windows <a href="rust-first-experience.html">is not pleasant</a> because it requires first installing Visual C++ (a multi-gigabyte download). On Linux, installation is a breeze, but I'm using Windows at the moment.</p>
 <h3 id="lispclojure">Lisp/Clojure</h3>
-<p>Honestly, I haven&#39;t investigated this option yet.</p>
-<p>Clojure requires a Java runtime and, at the moment, I don&#39;t really want to install one. I used Java a lot in the past (back when it would pop up messages saying a new version of Java was available, with a possibly ironic exclamation mark), but I don&#39;t want to deal with deploying Java whenever I want to run something.</p>
-<p>Some other Lisp options include <a href="https://racket-lang.org/">Racket</a> (which I&#39;ve briefly used in the past) and <a href="http://www.sbcl.org/">SBCL</a> (which I have no experience with, but seems more popular).</p>
+<p>Honestly, I haven't investigated this option yet.</p>
+<p>Clojure requires a Java runtime and, at the moment, I don't really want to install one. I used Java a lot in the past (back when it would pop up messages saying a new version of Java was available, with a possibly ironic exclamation mark), but I don't want to deal with deploying Java whenever I want to run something.</p>
+<p>Some other Lisp options include <a href="https://racket-lang.org/">Racket</a> (which I've briefly used in the past) and <a href="http://www.sbcl.org/">SBCL</a> (which I have no experience with, but seems more popular).</p>
 <h3 id="zig">Zig</h3>
 <p>Zig is a smallish download, with a developer-friendly command line interface that appears to be on par with Go and Deno.</p>
 <h3 id="tcl">Tcl</h3>
-<p>Tcl is a trivially small download. I&#39;ll need to see how adding libraries (namely <a href="https://www.tcl.tk/software/tcllib/">Tcllib</a>) works.</p>
+<p>Tcl is a trivially small download. I'll need to see how adding libraries (namely <a href="https://www.tcl.tk/software/tcllib/">Tcllib</a>) works.</p>
 <h3 id="lua">Lua</h3>
-<p>While Lua binaries are available, Lua is more of a library that&#39;s meant to be embedded in an application. I thought there was a simple command line wrapper for Windows, but the main one I&#39;ve found for Windows (<a href="https://github.com/rjpcomputing/luaforwindows">Lua for windows</a>) appears to be unmaintained. It&#39;s possible <a href="https://luarocks.org/">LuaRocks</a> might be what I&#39;m looking for, but I&#39;m not sure yet.</p>
+<p>While Lua binaries are available, Lua is more of a library that's meant to be embedded in an application. I thought there was a simple command line wrapper for Windows, but the main one I've found for Windows (<a href="https://github.com/rjpcomputing/luaforwindows">Lua for windows</a>) appears to be unmaintained. It's possible <a href="https://luarocks.org/">LuaRocks</a> might be what I'm looking for, but I'm not sure yet.</p>
 <p>The good news is that I could easily bootstrap my own Lua shell (similar to what <a href="https://blubsblog.bearblog.dev/writing-software-that-will-still-build-and-run-in-20-years/">Blub describes in a blog post</a>).</p>
 <h1 id="closing-thoughts">Closing thoughts</h1>
 <p>Based on intuition and my experiences thus far, a few languages are at the bottom of the pack:</p>
 <ul>
-<li><strong>C++</strong>: A complicated language, with an inscrutable standard library, still without a good module or build system -- but I have a lot of experience with it, and it&#39;s definitely not going anywhere</li>
+<li><strong>C++</strong>: A complicated language, with an inscrutable standard library, still without a good module or build system -- but I have a lot of experience with it, and it's definitely not going anywhere</li>
 <li><strong>Zig</strong>: The most promising &quot;better C&quot;, with great tooling, but still immature</li>
 </ul>
 <p>A few languages are lingering in the middle:</p>
@@ -131,14 +131,14 @@
 <li><strong>C#</strong>: A great language, with probably the best standard library, but the toolchain is enormous</li>
 <li><strong>C</strong>: Arguably the most portable language, just with a mostly awful standard library</li>
 <li><strong>Rust</strong>: Supposedly even more complicated than C++, but at least it provides memory safety and a build system</li>
-<li><strong>Lisp</strong>: An interesting and versatile language, but is it <em>used</em> as much as it&#39;s <em>discussed</em>?</li>
-<li><strong>Lua</strong>: Almost as portable as C, but I&#39;m not sure I want to bring my own everything</li>
+<li><strong>Lisp</strong>: An interesting and versatile language, but is it <em>used</em> as much as it's <em>discussed</em>?</li>
+<li><strong>Lua</strong>: Almost as portable as C, but I'm not sure I want to bring my own everything</li>
 </ul>
 <p>And then there are a few languages near the top of my list:</p>
 <ul>
-<li><strong>JavaScript/TypeScript</strong>: A convenient language, made better by Deno&#39;s tooling and standard library, but still fairly volatile and without an official ecosystem-wide standard library</li>
+<li><strong>JavaScript/TypeScript</strong>: A convenient language, made better by Deno's tooling and standard library, but still fairly volatile and without an official ecosystem-wide standard library</li>
 <li><strong>Python</strong>: An ugly pile of hacks that is adored by many and is ubiquitous -- do I just need to get over my aversion to Python? Has deployment been solved yet?</li>
-<li><strong>Go</strong>: Great tooling, a simple language, memory safety, and an allegedly great standard library -- I&#39;d never considered Go before, but it has a lot of attractive qualities</li>
+<li><strong>Go</strong>: Great tooling, a simple language, memory safety, and an allegedly great standard library -- I'd never considered Go before, but it has a lot of attractive qualities</li>
 <li><strong>Tcl</strong>: A beautifully simple language with a tiny footprint and great for gluing things together -- but will it be forgotten in another decade or two?</li>
 </ul>
 

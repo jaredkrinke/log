@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Embedding VS Code&#39;s Monaco Editor using a CDN</title>
-<meta name="description" content="Here&#39;s how to load VS Code&#39;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing." />
+<title>Embedding VS Code&#039;s Monaco Editor using a CDN</title>
+<meta name="description" content="Here&#039;s how to load VS Code&#039;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing." />
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -34,10 +34,10 @@
 <main>
 <article>
 <header>
-<h1><a href="../../posts/web-development/embedding-monaco-from-cdn.html">Embedding VS Code&#39;s Monaco Editor using a CDN</a></h1>
+<h1><a href="../../posts/web-development/embedding-monaco-from-cdn.html">Embedding VS Code&#039;s Monaco Editor using a CDN</a></h1>
 <p><time datetime="2021-11-02">November 2, 2021</time></p>
 </header>
-<p>Here&#39;s how to load Visual Studio Code&#39;s Monaco Editor from a CDN and embed it in a static web page, with automatic resizing of the editor component:</p>
+<p>Here's how to load Visual Studio Code's Monaco Editor from a CDN and embed it in a static web page, with automatic resizing of the editor component:</p>
 <ul>
 <li><a href="https://github.com/jaredkrinke/monaco-editor-from-cdn">Source code</a></li>
 <li><a href="https://jaredkrinke.github.io/monaco-editor-from-cdn/">Live demo</a></li>
@@ -46,94 +46,94 @@
 <p><a href="https://code.visualstudio.com/">Visual Studio Code</a> unseated <a href="https://www.vim.org/">Vim</a> as my favorite text editor a few years ago.</p>
 <p>Surprisingly, VS Code manages to have acceptable performance (even on my very old laptop) despite being built on JavaScript. The (MIT-licensed) editor component is called <a href="https://microsoft.github.io/monaco-editor/index.html">Monaco Editor</a>, and it runs in most desktop browsers.</p>
 <h1 id="samples">Samples</h1>
-<p>So what&#39;s the easiest way to embed Monaco Editor in a web page for building simple tools?</p>
-<p>There&#39;s an official repository for <a href="https://github.com/Microsoft/monaco-editor-samples/">Monaco Editor samples</a>, but they all seem to assume you&#39;re using NPM, WebPack, etc., and hosting the scripts yourself. <strong>What if you just want to throw together a quick web page with an editor component, hosted as a single static HTML page?</strong></p>
+<p>So what's the easiest way to embed Monaco Editor in a web page for building simple tools?</p>
+<p>There's an official repository for <a href="https://github.com/Microsoft/monaco-editor-samples/">Monaco Editor samples</a>, but they all seem to assume you're using NPM, WebPack, etc., and hosting the scripts yourself. <strong>What if you just want to throw together a quick web page with an editor component, hosted as a single static HTML page?</strong></p>
 <h1 id="loading-from-a-cdn">Loading from a CDN</h1>
 <p>Fortunately, there is a (very well hidden) page (which has since been deleted--not sure why) discussing <a href="https://github.com/microsoft/monaco-editor/blob/a73ab1223b22570420706e020a2cc7c4043e7174/docs/integrate-amd-cross.md">integrating the AMD version of the Monaco Editor in a cross-domain setup</a>:</p>
 <blockquote>
 <p>If you are hosting your .js on a different domain <strong>(e.g. on a CDN)</strong> than the HTML, you should know that the Monaco Editor creates web workers for smart language features. Cross-domain web workers are not allowed, but here is how you can proxy their loading and get them to work</p>
 </blockquote>
-<p>That sounds like what I&#39;m looking for!</p>
-<p>Specifically, I&#39;m going to combine one of the <a href="https://github.com/microsoft/monaco-editor/blob/main/samples/browser-amd-editor/index.html">browser-amd-editor</a> official samples with Option 1 from the page above.</p>
+<p>That sounds like what I'm looking for!</p>
+<p>Specifically, I'm going to combine one of the <a href="https://github.com/microsoft/monaco-editor/blob/main/samples/browser-amd-editor/index.html">browser-amd-editor</a> official samples with Option 1 from the page above.</p>
 <h1 id="automatic-resizing">Automatic resizing</h1>
-<p>There&#39;s one line in the sample I find irritating:</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;container&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width: 800px; height: 600px; border: 1px solid grey&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<p>There's one line in the sample I find irritating:</p>
+<pre><code class="language-html"><span class="hl-tag_chars">&lt;</span><span class="hl-tag">div</span> <span class="hl-attribute">id</span><span class="hl-operator">=</span><span class="hl-string">&quot;container&quot;</span> <span class="hl-attribute">style</span><span class="hl-operator">=</span><span class="hl-string">&quot;</span><span class="hl-property">width</span><span class="hl-operator">:</span> <span class="hl-number">800px</span><span class="hl-operator">;</span> <span class="hl-property">height</span><span class="hl-operator">:</span> <span class="hl-number">600px</span><span class="hl-operator">;</span> <span class="hl-property">border</span><span class="hl-operator">:</span> <span class="hl-number">1px</span> <span class="hl-constant_builtin">solid</span> <span class="hl-constant_builtin">grey</span><span class="hl-string">&quot;</span><span class="hl-tag_chars">&gt;</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">div</span><span class="hl-tag_chars">&gt;</span>
 </code></pre>
 <p><strong>Why is the size being manually specified in pixels?</strong> Is that necessary?</p>
-<p>There&#39;s a <a href="https://github.com/Microsoft/monaco-editor/issues/28">long thread in a Monaco Editor issue</a> that goes into the details, but basically the editor component needs to be notified of size changes (no idea why) and, at least in 2016, there was no way for the editor to subscribe to size updates.</p>
-<p>But it&#39;s 2021 as of this post, so can we use <a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">ResizeObserver</a> (global support is at <a href="https://caniuse.com/resizeobserver">92%</a> as of this post)? Apparently not, because the implementations of ResizeObserver use inconsistent property names (insert facepalm here).</p>
+<p>There's a <a href="https://github.com/Microsoft/monaco-editor/issues/28">long thread in a Monaco Editor issue</a> that goes into the details, but basically the editor component needs to be notified of size changes (no idea why) and, at least in 2016, there was no way for the editor to subscribe to size updates.</p>
+<p>But it's 2021 as of this post, so can we use <a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">ResizeObserver</a> (global support is at <a href="https://caniuse.com/resizeobserver">92%</a> as of this post)? Apparently not, because the implementations of ResizeObserver use inconsistent property names (insert facepalm here).</p>
 <p>Fortunately, the trusty old <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/resize_event">resize</a> event is sufficient for my purposes:</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> editorElement = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;editor&quot;</span>);
-<span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;resize&quot;</span>, <span class="hljs-function">() =&gt;</span> editor.<span class="hljs-title function_">layout</span>({
-    <span class="hljs-attr">width</span>: editorElement.<span class="hljs-property">offsetWidth</span>,
-    <span class="hljs-attr">height</span>: editorElement.<span class="hljs-property">offsetHeight</span>
-}));
+<pre><code class="language-javascript"><span class="hl-keyword">const</span> <span class="hl-identifier">editorElement</span> <span class="hl-operator">=</span> <span class="hl-identifier">document</span><span class="hl-operator">.</span><span class="hl-function_method">getElementById</span><span class="hl-operator">(</span><span class="hl-string">&quot;editor&quot;</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-identifier">window</span><span class="hl-operator">.</span><span class="hl-function_method">addEventListener</span><span class="hl-operator">(</span><span class="hl-string">&quot;resize&quot;</span><span class="hl-operator">,</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-identifier">editor</span><span class="hl-operator">.</span><span class="hl-function_method">layout</span><span class="hl-operator">(</span><span class="hl-operator">{</span>
+    <span class="hl-identifier">width</span><span class="hl-operator">:</span> <span class="hl-identifier">editorElement</span><span class="hl-operator">.</span><span class="hl-identifier">offsetWidth</span><span class="hl-operator">,</span>
+    <span class="hl-identifier">height</span><span class="hl-operator">:</span> <span class="hl-identifier">editorElement</span><span class="hl-operator">.</span><span class="hl-identifier">offsetHeight</span>
+<span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 </code></pre>
 <h1 id="complete-example">Complete example</h1>
 <p>The full code is in this repository: <a href="https://github.com/jaredkrinke/monaco-editor-from-cdn">monaco-editor-from-cdn</a>.</p>
-<p>Here&#39;s a <a href="https://jaredkrinke.github.io/monaco-editor-from-cdn/">live demo</a>.</p>
-<p>Here&#39;s a copy-paste of the code:</p>
-<pre><code class="language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span> /&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Monaco Editor from CDN example, with automatic resizing<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css">
-<span class="hljs-comment">/* Flex column layout, with the editor taking up all available screen space */</span>
-<span class="hljs-selector-tag">html</span>, <span class="hljs-selector-tag">body</span> {
-    <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
-    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
-    <span class="hljs-attribute">overflow</span>: hidden;
-}
+<p>Here's a <a href="https://jaredkrinke.github.io/monaco-editor-from-cdn/">live demo</a>.</p>
+<p>Here's a copy-paste of the code:</p>
+<pre><code class="language-html"><span class="hl-tag_doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="hl-tag_chars">&lt;</span><span class="hl-tag">html</span> <span class="hl-attribute">lang</span><span class="hl-operator">=</span><span class="hl-string">&quot;en&quot;</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;</span><span class="hl-tag">head</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;</span><span class="hl-tag_single">meta</span> <span class="hl-attribute">charset</span><span class="hl-operator">=</span><span class="hl-string">&quot;utf-8&quot;</span> <span class="hl-tag_chars">/&gt;</span>
+<span class="hl-tag_chars">&lt;</span><span class="hl-tag">title</span><span class="hl-tag_chars">&gt;</span><span class="hl-default">M</span><span class="hl-default">o</span><span class="hl-default">n</span><span class="hl-default">a</span><span class="hl-default">c</span><span class="hl-default">o</span> <span class="hl-default">E</span><span class="hl-default">d</span><span class="hl-default">i</span><span class="hl-default">t</span><span class="hl-default">o</span><span class="hl-default">r</span> <span class="hl-default">f</span><span class="hl-default">r</span><span class="hl-default">o</span><span class="hl-default">m</span> <span class="hl-default">C</span><span class="hl-default">D</span><span class="hl-default">N</span> <span class="hl-default">e</span><span class="hl-default">x</span><span class="hl-default">a</span><span class="hl-default">m</span><span class="hl-default">p</span><span class="hl-default">l</span><span class="hl-default">e</span><span class="hl-default">,</span> <span class="hl-default">w</span><span class="hl-default">i</span><span class="hl-default">t</span><span class="hl-default">h</span> <span class="hl-default">a</span><span class="hl-default">u</span><span class="hl-default">t</span><span class="hl-default">o</span><span class="hl-default">m</span><span class="hl-default">a</span><span class="hl-default">t</span><span class="hl-default">i</span><span class="hl-default">c</span> <span class="hl-default">r</span><span class="hl-default">e</span><span class="hl-default">s</span><span class="hl-default">i</span><span class="hl-default">z</span><span class="hl-default">i</span><span class="hl-default">n</span><span class="hl-default">g</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">title</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;</span><span class="hl-tag">style</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-comment">/* Flex column layout, with the editor taking up all available screen space */</span>
+<span class="hl-tag">html</span><span class="hl-operator">,</span> <span class="hl-tag">body</span> <span class="hl-operator">{</span>
+    <span class="hl-property">height</span><span class="hl-operator">:</span> <span class="hl-number">100%</span><span class="hl-operator">;</span>
+    <span class="hl-property">margin</span><span class="hl-operator">:</span> <span class="hl-number">0</span><span class="hl-operator">;</span>
+    <span class="hl-property">overflow</span><span class="hl-operator">:</span> <span class="hl-constant_builtin">hidden</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 
-<span class="hljs-selector-tag">body</span> {
-    <span class="hljs-attribute">display</span>: flex;
-    <span class="hljs-attribute">flex-direction</span>: column;
-}
+<span class="hl-tag">body</span> <span class="hl-operator">{</span>
+    <span class="hl-property">display</span><span class="hl-operator">:</span> <span class="hl-constant_builtin">flex</span><span class="hl-operator">;</span>
+    <span class="hl-property">flex-direction</span><span class="hl-operator">:</span> <span class="hl-constant_builtin">column</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
 
-<span class="hljs-selector-id">#editor</span> {
-    <span class="hljs-attribute">flex-grow</span>: <span class="hljs-number">1</span>;
-    <span class="hljs-attribute">border</span>: solid <span class="hljs-number">1px</span> gray;
-    <span class="hljs-attribute">overflow</span>: hidden;
-}
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Monaco Editor, loaded via CDN<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+<span class="hl-operator">#</span><span class="hl-identifier">editor</span> <span class="hl-operator">{</span>
+    <span class="hl-property">flex-grow</span><span class="hl-operator">:</span> <span class="hl-number">1</span><span class="hl-operator">;</span>
+    <span class="hl-property">border</span><span class="hl-operator">:</span> <span class="hl-constant_builtin">solid</span> <span class="hl-number">1px</span> <span class="hl-constant_builtin">gray</span><span class="hl-operator">;</span>
+    <span class="hl-property">overflow</span><span class="hl-operator">:</span> <span class="hl-constant_builtin">hidden</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span>
+<span class="hl-tag_chars">&lt;/</span><span class="hl-tag">style</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;/</span><span class="hl-tag">head</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;</span><span class="hl-tag">body</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;</span><span class="hl-tag">h1</span><span class="hl-tag_chars">&gt;</span><span class="hl-default">M</span><span class="hl-default">o</span><span class="hl-default">n</span><span class="hl-default">a</span><span class="hl-default">c</span><span class="hl-default">o</span> <span class="hl-default">E</span><span class="hl-default">d</span><span class="hl-default">i</span><span class="hl-default">t</span><span class="hl-default">o</span><span class="hl-default">r</span><span class="hl-default">,</span> <span class="hl-default">l</span><span class="hl-default">o</span><span class="hl-default">a</span><span class="hl-default">d</span><span class="hl-default">e</span><span class="hl-default">d</span> <span class="hl-default">v</span><span class="hl-default">i</span><span class="hl-default">a</span> <span class="hl-default">C</span><span class="hl-default">D</span><span class="hl-default">N</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">h1</span><span class="hl-tag_chars">&gt;</span>
 
-<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;editor&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hl-tag_chars">&lt;</span><span class="hl-tag">div</span> <span class="hl-attribute">id</span><span class="hl-operator">=</span><span class="hl-string">&quot;editor&quot;</span><span class="hl-tag_chars">&gt;</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">div</span><span class="hl-tag_chars">&gt;</span>
 
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/loader.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
-<span class="hljs-comment">// Proxy Monaco Editor workers using a data URL (adapted from: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md)</span>
-<span class="hljs-built_in">require</span>.<span class="hljs-title function_">config</span>({ <span class="hljs-attr">paths</span>: { <span class="hljs-string">&quot;vs&quot;</span>: <span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/&quot;</span> }});
+<span class="hl-tag_chars">&lt;</span><span class="hl-tag">script</span> <span class="hl-attribute">src</span><span class="hl-operator">=</span><span class="hl-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/loader.min.js&quot;</span><span class="hl-tag_chars">&gt;</span><span class="hl-tag_chars">&lt;/</span><span class="hl-tag">script</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;</span><span class="hl-tag">script</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-comment">// Proxy Monaco Editor workers using a data URL (adapted from: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-amd-cross.md)</span>
+<span class="hl-identifier">require</span><span class="hl-operator">.</span><span class="hl-function_method">config</span><span class="hl-operator">(</span><span class="hl-operator">{</span> <span class="hl-identifier">paths</span><span class="hl-operator">:</span> <span class="hl-operator">{</span> <span class="hl-string">&quot;vs&quot;</span><span class="hl-operator">:</span> <span class="hl-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/&quot;</span> <span class="hl-operator">}</span><span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 
-<span class="hljs-variable language_">window</span>.<span class="hljs-property">MonacoEnvironment</span> = {
-    <span class="hljs-attr">getWorkerUrl</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params">workerId, label</span>) {
-        <span class="hljs-keyword">return</span> <span class="hljs-string">`data:text/javascript;charset=utf-8,<span class="hljs-subst">${<span class="hljs-built_in">encodeURIComponent</span>(<span class="hljs-string">`
-            self.MonacoEnvironment = { baseUrl: &quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/&quot; };
-            importScripts(&quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/base/worker/workerMain.min.js&quot;);`</span>
-        )}</span>`</span>;
-    }
-};
+<span class="hl-identifier">window</span><span class="hl-operator">.</span><span class="hl-identifier">MonacoEnvironment</span> <span class="hl-operator">=</span> <span class="hl-operator">{</span>
+    <span class="hl-identifier">getWorkerUrl</span><span class="hl-operator">:</span> <span class="hl-keyword">function</span><span class="hl-operator">(</span><span class="hl-identifier">workerId</span><span class="hl-operator">,</span> <span class="hl-identifier">label</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+        <span class="hl-keyword">return</span> <span class="hl-string">`data:text/javascript;charset=utf-8,${encodeURIComponent(`</span>
+            <span class="hl-identifier">self</span><span class="hl-operator">.</span><span class="hl-identifier">MonacoEnvironment</span> <span class="hl-operator">=</span> <span class="hl-operator">{</span> <span class="hl-identifier">baseUrl</span><span class="hl-operator">:</span> <span class="hl-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/&quot;</span> <span class="hl-operator">}</span><span class="hl-operator">;</span>
+            <span class="hl-function">importScripts</span><span class="hl-operator">(</span><span class="hl-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/base/worker/workerMain.min.js&quot;</span><span class="hl-operator">)</span><span class="hl-operator">;</span><span class="hl-string">`
+        )}`</span><span class="hl-operator">;</span>
+    <span class="hl-operator">}</span>
+<span class="hl-operator">}</span><span class="hl-operator">;</span>
 
-<span class="hljs-built_in">require</span>([<span class="hljs-string">&quot;vs/editor/editor.main&quot;</span>], <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
-    <span class="hljs-comment">// Create the editor with some sample JavaScript code</span>
-    <span class="hljs-keyword">var</span> editor = monaco.<span class="hljs-property">editor</span>.<span class="hljs-title function_">create</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;editor&quot;</span>), {
-        <span class="hljs-attr">value</span>: <span class="hljs-string">&quot;// code goes here\n&quot;</span>,
-        <span class="hljs-attr">language</span>: <span class="hljs-string">&quot;javascript&quot;</span>
-    });
+<span class="hl-function">require</span><span class="hl-operator">(</span><span class="hl-operator">[</span><span class="hl-string">&quot;vs/editor/editor.main&quot;</span><span class="hl-operator">]</span><span class="hl-operator">,</span> <span class="hl-keyword">function</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-comment">// Create the editor with some sample JavaScript code</span>
+    <span class="hl-keyword">var</span> <span class="hl-identifier">editor</span> <span class="hl-operator">=</span> <span class="hl-identifier">monaco</span><span class="hl-operator">.</span><span class="hl-identifier">editor</span><span class="hl-operator">.</span><span class="hl-function_method">create</span><span class="hl-operator">(</span><span class="hl-identifier">document</span><span class="hl-operator">.</span><span class="hl-function_method">getElementById</span><span class="hl-operator">(</span><span class="hl-string">&quot;editor&quot;</span><span class="hl-operator">)</span><span class="hl-operator">,</span> <span class="hl-operator">{</span>
+        <span class="hl-identifier">value</span><span class="hl-operator">:</span> <span class="hl-string">&quot;// code goes here\n&quot;</span><span class="hl-operator">,</span>
+        <span class="hl-identifier">language</span><span class="hl-operator">:</span> <span class="hl-string">&quot;javascript&quot;</span>
+    <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
 
-    <span class="hljs-comment">// Resize the editor when the window size changes</span>
-    <span class="hljs-keyword">const</span> editorElement = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&quot;editor&quot;</span>);
-    <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;resize&quot;</span>, <span class="hljs-function">() =&gt;</span> editor.<span class="hljs-title function_">layout</span>({
-        <span class="hljs-attr">width</span>: editorElement.<span class="hljs-property">offsetWidth</span>,
-        <span class="hljs-attr">height</span>: editorElement.<span class="hljs-property">offsetHeight</span>
-    }));
-});
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+    <span class="hl-comment">// Resize the editor when the window size changes</span>
+    <span class="hl-keyword">const</span> <span class="hl-identifier">editorElement</span> <span class="hl-operator">=</span> <span class="hl-identifier">document</span><span class="hl-operator">.</span><span class="hl-function_method">getElementById</span><span class="hl-operator">(</span><span class="hl-string">&quot;editor&quot;</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+    <span class="hl-identifier">window</span><span class="hl-operator">.</span><span class="hl-function_method">addEventListener</span><span class="hl-operator">(</span><span class="hl-string">&quot;resize&quot;</span><span class="hl-operator">,</span> <span class="hl-operator">(</span><span class="hl-operator">)</span> <span class="hl-operator">=</span><span class="hl-operator">&gt;</span> <span class="hl-identifier">editor</span><span class="hl-operator">.</span><span class="hl-function_method">layout</span><span class="hl-operator">(</span><span class="hl-operator">{</span>
+        <span class="hl-identifier">width</span><span class="hl-operator">:</span> <span class="hl-identifier">editorElement</span><span class="hl-operator">.</span><span class="hl-identifier">offsetWidth</span><span class="hl-operator">,</span>
+        <span class="hl-identifier">height</span><span class="hl-operator">:</span> <span class="hl-identifier">editorElement</span><span class="hl-operator">.</span><span class="hl-identifier">offsetHeight</span>
+    <span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-tag_chars">&lt;/</span><span class="hl-tag">script</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;/</span><span class="hl-tag">body</span><span class="hl-tag_chars">&gt;</span>
+<span class="hl-tag_chars">&lt;/</span><span class="hl-tag">html</span><span class="hl-tag_chars">&gt;</span>
 </code></pre>
 
 <footer>

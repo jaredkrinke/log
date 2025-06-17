@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>NPM requires X11 on Debian. Wait, what?</title>
-<meta name="description" content="Here&#39;s a rant about that time I tried to install NPM on Debian." />
+<meta name="description" content="Here&#039;s a rant about that time I tried to install NPM on Debian." />
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -39,11 +39,11 @@
 </header>
 <h1 id="debian">Debian</h1>
 <p><a href="https://www.debian.org/">Debian</a> has been my preferred Linux distribution for a long time (longer than <a href="https://ubuntu.com/">Ubuntu</a> has even existed).</p>
-<p>The main reason I like Debian is that its <a href="https://manpages.debian.org/buster/apt/apt.8.en.html">apt</a> package manager has been the most reliable package manager I&#39;ve ever dealt with, especially when it comes to removing and/or upgrading packages.</p>
+<p>The main reason I like Debian is that its <a href="https://manpages.debian.org/buster/apt/apt.8.en.html">apt</a> package manager has been the most reliable package manager I've ever dealt with, especially when it comes to removing and/or upgrading packages.</p>
 <h1 id="npm">NPM</h1>
-<p>Since I&#39;ve been playing around with Node and NPM on Windows, I decided I should see if one of my tools works on Linux. Fortunately, I was on Debian 11, which ships with a not-<em>completely</em>-out-of-date Node v12 runtime.</p>
-<p>Great, I&#39;ll just run <code>sudo apt install nodejs npm</code> and get started! I was immediately greeted with the following wall of packages:</p>
-<pre><code class="language-txt">$ sudo apt install nodejs npm
+<p>Since I've been playing around with Node and NPM on Windows, I decided I should see if one of my tools works on Linux. Fortunately, I was on Debian 11, which ships with a not-<em>completely</em>-out-of-date Node v12 runtime.</p>
+<p>Great, I'll just run <code>sudo apt install nodejs npm</code> and get started! I was immediately greeted with the following wall of packages:</p>
+<pre><code>$ sudo apt install nodejs npm
 Reading package lists... Done
 Building dependency tree... Done
 Reading state information... Done
@@ -71,18 +71,18 @@ The following additional packages will be installed:
   node-which node-wide-align node-wrappy node-write-file-atomic node-yallist nodejs-doc perl-openssl-defaults python3-pkg-resources termit x11-common x11-utils x11-xserver-utils xdg-utils xkb-data
 </code></pre>
 <h1 id="why">Why?</h1>
-<p>That&#39;s a lot more packages than I was expecting. Wait, <code>x11-common</code>? <code>x11-xserver-utils</code>? What&#39;s going on here?</p>
-<p>It turns out that <a href="https://packages.debian.org/bullseye/npm">Debian&#39;s package for NPM</a> depends on something called <a href="https://packages.debian.org/bullseye/node-opener">node-opener</a>, which depends on <a href="https://packages.debian.org/bullseye/xdg-utils">xdg-utils</a>, which is described as &quot;desktop integration utilities from freedesktop.org&quot;. Uh oh. Yeah, that depends on X11.</p>
+<p>That's a lot more packages than I was expecting. Wait, <code>x11-common</code>? <code>x11-xserver-utils</code>? What's going on here?</p>
+<p>It turns out that <a href="https://packages.debian.org/bullseye/npm">Debian's package for NPM</a> depends on something called <a href="https://packages.debian.org/bullseye/node-opener">node-opener</a>, which depends on <a href="https://packages.debian.org/bullseye/xdg-utils">xdg-utils</a>, which is described as &quot;desktop integration utilities from freedesktop.org&quot;. Uh oh. Yeah, that depends on X11.</p>
 <p><strong>Why in the world does a command line package manager depend on a GUI environment?</strong></p>
 <h1 id="node-opener">node-opener</h1>
 <p>So what is this <code>node-opener</code> thing, and does NPM really require it?</p>
-<p>The <a href="https://github.com/domenic/opener">package&#39;s web site</a> describes it as &quot;Opens stuff, like webpages and files and executables, cross-platform&quot;. I&#39;m still not seeing the relation to NPM. Looking at the code, it&#39;s just a script that calls <code>xdg-open</code> on Linux (and other commands on Windows and Mac).</p>
-<p><a href="https://github.com/npm/cli/blob/04eb43f2b2a387987b61a7318908cf18f03d97e0/lib/utils/open-url.js">Peering into NPM&#39;s source code</a>, I see that it does in fact seem to <code>require(&#39;opener&#39;)</code>. That&#39;s disappointing.</p>
+<p>The <a href="https://github.com/domenic/opener">package's web site</a> describes it as &quot;Opens stuff, like webpages and files and executables, cross-platform&quot;. I'm still not seeing the relation to NPM. Looking at the code, it's just a script that calls <code>xdg-open</code> on Linux (and other commands on Windows and Mac).</p>
+<p><a href="https://github.com/npm/cli/blob/04eb43f2b2a387987b61a7318908cf18f03d97e0/lib/utils/open-url.js">Peering into NPM's source code</a>, I see that it does in fact seem to <code>require('opener')</code>. That's disappointing.</p>
 <h1 id="nodesource-to-the-rescue">NodeSource to the rescue?</h1>
 <p>The official nodejs.org site <a href="https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions">mentions</a> binary distributions <a href="https://github.com/nodesource/distributions/blob/master/README.md">from NodeSource</a>. NodeSource helpfully suggests downloading and running their setup script as root.</p>
-<p>The script appears to mostly do reasonable things like checking for required packages and then updating apt&#39;s <code>sources.list</code> file, and I guess I&#39;m trusting them with the binaries they&#39;re providing, so I&#39;ll give it a try. They do provide manual install instructions as well.</p>
+<p>The script appears to mostly do reasonable things like checking for required packages and then updating apt's <code>sources.list</code> file, and I guess I'm trusting them with the binaries they're providing, so I'll give it a try. They do provide manual install instructions as well.</p>
 <h1 id="success">Success</h1>
-<p>I can&#39;t say I&#39;m pleased with this setup, but NodeSource&#39;s Node package did in fact work and now I&#39;ve got <code>node</code> and <code>npm</code> commands running fine without an X11 installation.</p>
+<p>I can't say I'm pleased with this setup, but NodeSource's Node package did in fact work and now I've got <code>node</code> and <code>npm</code> commands running fine without an X11 installation.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

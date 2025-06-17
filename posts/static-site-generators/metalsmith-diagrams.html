@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Generating SVG diagrams automatically with Metalsmith</title>
-<meta name="description" content="Metalsmith is used to build this static site. Here&#39;s how Graphviz was integrated to automatically generate diagrams." />
+<meta name="description" content="Metalsmith is used to build this static site. Here&#039;s how Graphviz was integrated to automatically generate diagrams." />
 <meta name="keywords" content="metalsmith,diagrams" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -39,9 +39,9 @@
 <h1><a href="../../posts/static-site-generators/metalsmith-diagrams.html">Generating SVG diagrams automatically with Metalsmith</a></h1>
 <p><time datetime="2021-10-10">October 10, 2021</time></p>
 </header>
-<p>Now that I&#39;ve <a href="../webassembly/compiling-graphviz-to-webassembly.html">compiled Graphviz to a WebAssembly module</a>, I&#39;m going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.</p>
+<p>Now that I've <a href="../webassembly/compiling-graphviz-to-webassembly.html">compiled Graphviz to a WebAssembly module</a>, I'm going to use it to automatically generate SVG diagrams when I build my static site using Metalsmith.</p>
 <h1 id="the-plan">The plan</h1>
-<p>Here&#39;s a flow chart of my general plan:</p>
+<p>Here's a flow chart of my general plan:</p>
 <div>
 <svg width="312pt" height="260pt"
  viewBox="0.00 0.00 311.67 260.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -85,68 +85,67 @@
 </g>
 </svg>
 </div>
-
 <p>That diagram was generated using the following Markdown:</p>
-<pre><code class="language-md"><span class="hljs-code">```dot2svg
+<pre><code class="language-markdown"><span class="hl-code">```dot2svg
 digraph {
     &quot;Compile Graphviz to WebAssembly&quot; -&gt; &quot;Generate diagrams at build time&quot; -&gt; &quot;???&quot; -&gt; &quot;Profit!&quot;;
 }
-```</span>
-</code></pre>
+```
+</span></code></pre>
 <h1 id="extending-the-marked-renderer">Extending the Marked renderer</h1>
 <p>As shown in the example near the top of this post, my plan is to piggyback on Markdown code blocks, using a special language tag <code>dot2svg</code>. For all other code blocks (and on error), I simply defer to the default code block rendering function:</p>
-<pre><code class="language-javascript"><span class="hljs-comment">// Generate diagrams with dot2svg</span>
-<span class="hljs-keyword">const</span> baseCodeRenderer = markdownRenderer.<span class="hljs-property">code</span>;
-<span class="hljs-keyword">const</span> dotConverter = <span class="hljs-keyword">await</span> <span class="hljs-title function_">createDOTToSVGAsync</span>();
-markdownRenderer.<span class="hljs-property">code</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">code, language, escaped</span>) {
-    <span class="hljs-keyword">if</span> (language === <span class="hljs-string">&quot;dot2svg&quot;</span>) {
-        <span class="hljs-keyword">const</span> svg = dotConverter.<span class="hljs-title function_">dotToSVG</span>(code);
-        <span class="hljs-keyword">if</span> (svg) {
-            <span class="hljs-keyword">return</span> svg;
-        } <span class="hljs-keyword">else</span> {
-            <span class="hljs-comment">// On error, just treat the code block like normal</span>
-            language = <span class="hljs-string">&quot;&quot;</span>;
-        }
-    }
-    <span class="hljs-keyword">return</span> baseCodeRenderer.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>, code, language, escaped);
-};
+<pre><code class="language-javascript"><span class="hl-comment">// Generate diagrams with dot2svg</span>
+<span class="hl-keyword">const</span> <span class="hl-identifier">baseCodeRenderer</span> <span class="hl-operator">=</span> <span class="hl-identifier">markdownRenderer</span><span class="hl-operator">.</span><span class="hl-identifier">code</span><span class="hl-operator">;</span>
+<span class="hl-keyword">const</span> <span class="hl-identifier">dotConverter</span> <span class="hl-operator">=</span> <span class="hl-keyword">await</span> <span class="hl-function">createDOTToSVGAsync</span><span class="hl-operator">(</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-identifier">markdownRenderer</span><span class="hl-operator">.</span><span class="hl-identifier">code</span> <span class="hl-operator">=</span> <span class="hl-keyword">function</span> <span class="hl-operator">(</span><span class="hl-identifier">code</span><span class="hl-operator">,</span> <span class="hl-identifier">language</span><span class="hl-operator">,</span> <span class="hl-identifier">escaped</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-keyword">if</span> <span class="hl-operator">(</span><span class="hl-identifier">language</span> <span class="hl-operator">=</span><span class="hl-operator">=</span><span class="hl-operator">=</span> <span class="hl-string">&quot;dot2svg&quot;</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+        <span class="hl-keyword">const</span> <span class="hl-identifier">svg</span> <span class="hl-operator">=</span> <span class="hl-identifier">dotConverter</span><span class="hl-operator">.</span><span class="hl-function_method">dotToSVG</span><span class="hl-operator">(</span><span class="hl-identifier">code</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+        <span class="hl-keyword">if</span> <span class="hl-operator">(</span><span class="hl-identifier">svg</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+            <span class="hl-keyword">return</span> <span class="hl-identifier">svg</span><span class="hl-operator">;</span>
+        <span class="hl-operator">}</span> <span class="hl-keyword">else</span> <span class="hl-operator">{</span>
+            <span class="hl-comment">// On error, just treat the code block like normal</span>
+            <span class="hl-identifier">language</span> <span class="hl-operator">=</span> <span class="hl-string">&quot;&quot;</span><span class="hl-operator">;</span>
+        <span class="hl-operator">}</span>
+    <span class="hl-operator">}</span>
+    <span class="hl-keyword">return</span> <span class="hl-identifier">baseCodeRenderer</span><span class="hl-operator">.</span><span class="hl-function_method">call</span><span class="hl-operator">(</span><span class="hl-keyword">this</span><span class="hl-operator">,</span> <span class="hl-identifier">code</span><span class="hl-operator">,</span> <span class="hl-identifier">language</span><span class="hl-operator">,</span> <span class="hl-identifier">escaped</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span><span class="hl-operator">;</span>
 </code></pre>
 <h1 id="styling">Styling</h1>
-<p>The above rendering code worked (and didn&#39;t break my <a href="metalsmith-syntax-highlighting.html">syntax highlighting</a>), but there were a few tweaks I had in mind:</p>
+<p>The above rendering code worked (and didn't break my <a href="metalsmith-syntax-highlighting.html">syntax highlighting</a>), but there were a few tweaks I had in mind:</p>
 <ul>
 <li>Remove the <a href="https://www.w3.org/TR/xml/#sec-prolog-dtd">XML prolog and document type declaration</a><ul>
-<li>Since I&#39;m inlining my SVG in HTML, this information is redundant</li>
+<li>Since I'm inlining my SVG in HTML, this information is redundant</li>
 </ul>
 </li>
-<li>Replace Graphviz&#39;s default styling (annoyingly hard-coded via <code>fill</code> and <code>stroke</code> attributes on each element) with CSS classes<ul>
+<li>Replace Graphviz's default styling (annoyingly hard-coded via <code>fill</code> and <code>stroke</code> attributes on each element) with CSS classes<ul>
 <li>This allows me to style the graphs using my CSS stylesheet</li>
-<li>In my case, I&#39;m replacing the <code>fill=&quot;white&quot; stroke=&quot;black&quot;</code> attributes with a single CSS class: <code>class=&quot;diagram-black-white&quot;</code></li>
+<li>In my case, I'm replacing the <code>fill=&quot;white&quot; stroke=&quot;black&quot;</code> attributes with a single CSS class: <code>class=&quot;diagram-black-white&quot;</code></li>
 </ul>
 </li>
 </ul>
 <p>Fortunately, both of these transformations can be done with regular expression replacements:</p>
-<pre><code class="language-javascript">...
-<span class="hljs-keyword">if</span> (svg) {
-    <span class="hljs-comment">// Remove XML prolog, since we&#x27;re inlining</span>
-    <span class="hljs-comment">// Also convert default styles to CSS classes, for custom styling</span>
-    <span class="hljs-keyword">return</span> svg
-        .<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/^.*?&lt;svg /</span>s, <span class="hljs-string">&quot;&lt;svg &quot;</span>)
-        .<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/fill=&quot;([^&quot;]+)&quot; stroke=&quot;([^&quot;]+)&quot;/g</span>, <span class="hljs-string">&quot;class=\&quot;diagram-$2-$1\&quot;&quot;</span>);
-} <span class="hljs-keyword">else</span> {
-...
+<pre><code class="language-javascript"><span class="hl-operator">.</span><span class="hl-operator">.</span><span class="hl-operator">.</span>
+<span class="hl-keyword">if</span> <span class="hl-operator">(</span><span class="hl-identifier">svg</span><span class="hl-operator">)</span> <span class="hl-operator">{</span>
+    <span class="hl-comment">// Remove XML prolog, since we&apos;re inlining</span>
+    <span class="hl-comment">// Also convert default styles to CSS classes, for custom styling</span>
+    <span class="hl-keyword">return</span> <span class="hl-identifier">svg</span>
+        <span class="hl-operator">.</span><span class="hl-function_method">replace</span><span class="hl-operator">(</span><span class="hl-regex">/^.*?&lt;svg /</span><span class="hl-identifier">s</span><span class="hl-operator">,</span> <span class="hl-string">&quot;&lt;svg &quot;</span><span class="hl-operator">)</span>
+        <span class="hl-operator">.</span><span class="hl-function_method">replace</span><span class="hl-operator">(</span><span class="hl-regex">/fill=&quot;([^&quot;]+)&quot; stroke=&quot;([^&quot;]+)&quot;/g</span><span class="hl-operator">,</span> <span class="hl-string">&quot;class=\&quot;diagram-$2-$1\&quot;&quot;</span><span class="hl-operator">)</span><span class="hl-operator">;</span>
+<span class="hl-operator">}</span> <span class="hl-keyword">else</span> <span class="hl-operator">{</span>
+<span class="hl-operator">.</span><span class="hl-operator">.</span><span class="hl-operator">.</span>
 </code></pre>
 <p>Now, I can just style everything with CSS:</p>
-<pre><code class="language-css"><span class="hljs-comment">/* Diagrams */</span>
-svg text { fill: <span class="hljs-number">#eee</span>; }
-<span class="hljs-selector-class">.diagram-transparent-white</span> { stroke: none; fill: none; }
-ellipse<span class="hljs-selector-class">.diagram-black-none</span> { stroke: <span class="hljs-number">#ccc</span>; fill: <span class="hljs-number">#444</span>; }
-<span class="hljs-selector-class">.diagram-black-none</span> { stroke: <span class="hljs-number">#999</span>; fill:none; }
-<span class="hljs-selector-class">.diagram-black-black</span> { stroke: <span class="hljs-number">#999</span>; fill: <span class="hljs-number">#333</span>; }
+<pre><code class="language-css"><span class="hl-comment">/* Diagrams */</span>
+<span class="hl-identifier">svg</span> <span class="hl-identifier">text</span> <span class="hl-operator">{</span> <span class="hl-identifier">fill</span><span class="hl-operator">:</span> <span class="hl-number">#eee</span><span class="hl-operator">;</span> <span class="hl-operator">}</span>
+<span class="hl-operator">.</span><span class="hl-identifier">diagram-transparent-white</span> <span class="hl-operator">{</span> <span class="hl-identifier">stroke</span><span class="hl-operator">:</span> <span class="hl-constant_builtin">none</span><span class="hl-operator">;</span> <span class="hl-identifier">fill</span><span class="hl-operator">:</span> <span class="hl-constant_builtin">none</span><span class="hl-operator">;</span> <span class="hl-operator">}</span>
+<span class="hl-function_builtin">ellipse</span><span class="hl-operator">.</span><span class="hl-identifier">diagram-black-none</span> <span class="hl-operator">{</span> <span class="hl-identifier">stroke</span><span class="hl-operator">:</span> <span class="hl-number">#ccc</span><span class="hl-operator">;</span> <span class="hl-identifier">fill</span><span class="hl-operator">:</span> <span class="hl-number">#444</span><span class="hl-operator">;</span> <span class="hl-operator">}</span>
+<span class="hl-operator">.</span><span class="hl-identifier">diagram-black-none</span> <span class="hl-operator">{</span> <span class="hl-identifier">stroke</span><span class="hl-operator">:</span> <span class="hl-number">#999</span><span class="hl-operator">;</span> <span class="hl-identifier">fill</span><span class="hl-operator">:</span><span class="hl-constant_builtin">none</span><span class="hl-operator">;</span> <span class="hl-operator">}</span>
+<span class="hl-operator">.</span><span class="hl-identifier">diagram-black-black</span> <span class="hl-operator">{</span> <span class="hl-identifier">stroke</span><span class="hl-operator">:</span> <span class="hl-number">#999</span><span class="hl-operator">;</span> <span class="hl-identifier">fill</span><span class="hl-operator">:</span> <span class="hl-number">#333</span><span class="hl-operator">;</span> <span class="hl-operator">}</span>
 </code></pre>
-<h1 id="thats-it">That&#39;s it!</h1>
+<h1 id="thats-it">That's it!</h1>
 <p>To my surprise, this entire integration went smoothly, and only took an hour or so. It remains to be seen how useful these diagrams will be, but at least now if I ever feel the need to insert a superfluous diagram, the functionality will be there.</p>
 <p>For reference, all of the code used to generate this site (along with the content) is in <a href="https://github.com/jaredkrinke/md2blog">this repository</a>.</p>
-<p><strong>Update</strong>: I&#39;ve removed this feature from my static site generator for the time being because it&#39;s unclear what license covers Graphviz (the web site and source code are not in sync).</p>
+<p><strong>Update</strong>: I've removed this feature from my static site generator for the time being because it's unclear what license covers Graphviz (the web site and source code are not in sync).</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

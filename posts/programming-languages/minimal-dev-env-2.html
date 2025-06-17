@@ -43,34 +43,34 @@
 <p>In <a href="minimal-dev-env.html">part 1</a>, I was yearning for simpler times, when entire operating systems could fit on a single digit number of 1.44 MB floppy disks.</p>
 <p>What did my initial &quot;minimal development environment&quot; research uncover?</p>
 <h1 id="platforms">Platforms</h1>
-<p>Although it&#39;s probably possible to run some useful software on a tiny or old platforms (e.g. a microcontroller or Game Boy), the smallest platform I seriously considered was a <a href="https://www.raspberrypi.com/">Raspberry Pi</a> (for the simple reason that I inherited one and hadn&#39;t been using it). My Raspberry Pi is a model B with 512 MB of RAM, apparently from 2012.</p>
+<p>Although it's probably possible to run some useful software on a tiny or old platforms (e.g. a microcontroller or Game Boy), the smallest platform I seriously considered was a <a href="https://www.raspberrypi.com/">Raspberry Pi</a> (for the simple reason that I inherited one and hadn't been using it). My Raspberry Pi is a model B with 512 MB of RAM, apparently from 2012.</p>
 <h1 id="operating-systems">Operating systems</h1>
-<p>While investigating operating systems, I immediately had to confront the fact that I&#39;m not looking for a <em>truly</em> minimal operating system. The following OSes intrigued me, but they&#39;re a little too restrictive/esoteric for my current goals:</p>
+<p>While investigating operating systems, I immediately had to confront the fact that I'm not looking for a <em>truly</em> minimal operating system. The following OSes intrigued me, but they're a little too restrictive/esoteric for my current goals:</p>
 <ul>
 <li><a href="http://collapseos.org/">Collapse OS</a> runs on Z80-based hardware with 64 KB or less of RAM</li>
 <li><a href="https://sr.ht/~vdupras/duskos/">Dusk OS</a> runs on x86 hardware, and can bootstrap itself into a <a href="https://en.wikipedia.org/wiki/Forth_(programming_language)">Forth</a>-based shell with an &quot;Almost C&quot; compiler in just a few thousand lines of code</li>
 <li><a href="https://www.fiwix.org/">Fiwix</a> uses a (relatively) small kernel (50k lines of code), but strives to be Linux-compatible</li>
 <li><a href="https://minix3.org/">MINIX</a> uses an educational kernel that has apparently made its way into Intel products, but the project is <a href="https://github.com/o-oconnell/minixfromscratch">no longer maintained</a></li>
 </ul>
-<p>In the end, I decided to focus on more popular platforms: Linux, FreeBSD, OpenBSD, and NetBSD. (Although I&#39;d really like to explore Dusk OS in the future.)</p>
+<p>In the end, I decided to focus on more popular platforms: Linux, FreeBSD, OpenBSD, and NetBSD. (Although I'd really like to explore Dusk OS in the future.)</p>
 <p>To my surprise, it looked like the smallest full-featured option (in terms of disk footprint, and ignoring &quot;nano&quot; installs that lack functionality) was probably <a href="https://www.alpinelinux.org/">Alpine Linux</a>. A command-line only development environment on Debian weighed in at over 1.5 GB (!), but I was able to set up a somewhat comfortable C development environment on Alpine Linux in under 300 MB! (Although <a href="https://wiki.alpinelinux.org/wiki/Raspberry_Pi">installing Alpine Linux on a Raspberry Pi</a> is tedious.)</p>
-<p>I&#39;m a little nervous to adopt Alpine Linux without haven&#39;t a good grasp of how updates (especially kernel updates) work, but so far it just feels like exactly what I was looking for.</p>
+<p>I'm a little nervous to adopt Alpine Linux without haven't a good grasp of how updates (especially kernel updates) work, but so far it just feels like exactly what I was looking for.</p>
 <h1 id="software">Software</h1>
 <p>With a minimal Alpine Linux install on a Raspberry Pi model B, I investigated various console applications.</p>
 <h2 id="web-browser">Web browser</h2>
-<p>There are a lot of console web browser options today. I tried: <a href="https://lynx.browser.org/">Lynx</a>, <a href="http://elinks.or.cz/">ELinks</a>, <a href="https://w3m.sourceforge.net/">w3m</a>, and a few that I don&#39;t remember. In the past, I used ELinks because it seemed to have the most functionality, but as of today, my favorite is w3m. I liked its rendering the best, and it&#39;s comfortable to use from the keyboard, thanks to vi-inspired key bindings. I will say that w3m has a steep learning curve (there aren&#39;t any user-friendly menus, at least that I found), so it might not be a great choice for everyone.</p>
-<p>For the record: Lynx was oddly slow and ELinks&#39;s menus seemed a little glitchy.</p>
-<p>Unfortunately, using the modern web from the console is not a pleasant experience. I ran into sites with huge navigation lists that I&#39;d have to page through, sites that require JavaScript to render anything, etc. </p>
+<p>There are a lot of console web browser options today. I tried: <a href="https://lynx.browser.org/">Lynx</a>, <a href="http://elinks.or.cz/">ELinks</a>, <a href="https://w3m.sourceforge.net/">w3m</a>, and a few that I don't remember. In the past, I used ELinks because it seemed to have the most functionality, but as of today, my favorite is w3m. I liked its rendering the best, and it's comfortable to use from the keyboard, thanks to vi-inspired key bindings. I will say that w3m has a steep learning curve (there aren't any user-friendly menus, at least that I found), so it might not be a great choice for everyone.</p>
+<p>For the record: Lynx was oddly slow and ELinks's menus seemed a little glitchy.</p>
+<p>Unfortunately, using the modern web from the console is not a pleasant experience. I ran into sites with huge navigation lists that I'd have to page through, sites that require JavaScript to render anything, etc.</p>
 <h2 id="terminal-multiplexer">Terminal multiplexer</h2>
-<p>I realize that <a href="https://github.com/tmux/tmux/wiki">tmux</a> has a lot of momentum, but I&#39;ve been using <a href="https://www.gnu.org/software/screen/">GNU Screen</a> because I&#39;m already familiar with it. tmux <em>does</em> seem to have some nice features (e.g. retaining panes across detach/reattach), so it&#39;s probably what I&#39;d use today if I was starting from scratch.</p>
-<p>There&#39;s also <a href="https://zellij.dev/">Zellij</a>, which has some interesting ideas (namely floating windows), wrapped up in what appears to be a user-friendly interface. I haven&#39;t tried it yet, however.</p>
+<p>I realize that <a href="https://github.com/tmux/tmux/wiki">tmux</a> has a lot of momentum, but I've been using <a href="https://www.gnu.org/software/screen/">GNU Screen</a> because I'm already familiar with it. tmux <em>does</em> seem to have some nice features (e.g. retaining panes across detach/reattach), so it's probably what I'd use today if I was starting from scratch.</p>
+<p>There's also <a href="https://zellij.dev/">Zellij</a>, which has some interesting ideas (namely floating windows), wrapped up in what appears to be a user-friendly interface. I haven't tried it yet, however.</p>
 <h2 id="rss-reader">RSS reader</h2>
-<p>One motivation for setting up a simpler development environment is to slow down and reduce distractions. With some freed up &quot;focus&quot; time, I&#39;d like to get back to using RSS feeds to keep up to date on blogs I enjoy. <a href="https://newsboat.org/">Newsboat</a> is an excellent console RSS reader.</p>
+<p>One motivation for setting up a simpler development environment is to slow down and reduce distractions. With some freed up &quot;focus&quot; time, I'd like to get back to using RSS feeds to keep up to date on blogs I enjoy. <a href="https://newsboat.org/">Newsboat</a> is an excellent console RSS reader.</p>
 <h2 id="irc">IRC</h2>
-<p>And why stop at RSS? Let&#39;s go all the way back to 1988 and use <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a>! I don&#39;t like how <a href="https://discord.com/">Discord</a> has monopolized chat-based communities, but IRC is fairly tedious to set up, and the command-based interface is unfriendly (the last thing I want to do is embarrass myself by mistyping a command and having everyone see it as a chat message!).</p>
-<p>I have <a href="https://irssi.org/">irssi</a> installed, but I haven&#39;t really used it enough to say whether this is a good choice for IRC (or if IRC is even a good choice at all).</p>
+<p>And why stop at RSS? Let's go all the way back to 1988 and use <a href="https://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a>! I don't like how <a href="https://discord.com/">Discord</a> has monopolized chat-based communities, but IRC is fairly tedious to set up, and the command-based interface is unfriendly (the last thing I want to do is embarrass myself by mistyping a command and having everyone see it as a chat message!).</p>
+<p>I have <a href="https://irssi.org/">irssi</a> installed, but I haven't really used it enough to say whether this is a good choice for IRC (or if IRC is even a good choice at all).</p>
 <h2 id="code-editor">Code editor</h2>
-<p>I haven&#39;t investigated editor options in depth yet. The main features I&#39;m looking for are:</p>
+<p>I haven't investigated editor options in depth yet. The main features I'm looking for are:</p>
 <ul>
 <li>Runs in console mode</li>
 <li>Comfortable editing</li>
@@ -83,8 +83,8 @@
 </ul>
 </li>
 </ul>
-<p>Right now, I&#39;m using <a href="https://www.vim.org/">Vim</a>, with nothing but default syntax highlighting and &quot;Ctrl+N&quot; as a minimal auto-complete. This was great in the 90s, but I&#39;m more productive with advanced language features.</p>
-<p>Here are a few options I&#39;m planning to investigate:</p>
+<p>Right now, I'm using <a href="https://www.vim.org/">Vim</a>, with nothing but default syntax highlighting and &quot;Ctrl+N&quot; as a minimal auto-complete. This was great in the 90s, but I'm more productive with advanced language features.</p>
+<p>Here are a few options I'm planning to investigate:</p>
 <ul>
 <li>Vim with <a href="https://en.wikipedia.org/wiki/Ctags">Ctags</a> (ideally automated)</li>
 <li>Vim/<a href="https://neovim.io/">NeoVim</a> with an actual <a href="https://microsoft.github.io/language-server-protocol/">language server</a></li>
@@ -93,15 +93,15 @@
 <li>and maybe even <a href="https://www.gnu.org/software/emacs/">Emacs</a></li>
 </ul>
 <h1 id="but-am-i-making-a-mistake">But... am I making a mistake?</h1>
-<p>After a couple of days using this setup, I&#39;m already starting to question my decision to use the console.</p>
-<h2 id="console-web-experience-isnt-great">Console web experience isn&#39;t great</h2>
-<p>The biggest issue is that the web is really hard to use from a terminal. It&#39;s difficult to quickly scan headings and identify distinct content areas using only text (specifically: text that wasn&#39;t designed to be used from the console). I guess I didn&#39;t realize how helpful subtle font size/color changes are for quickly scanning content.</p>
+<p>After a couple of days using this setup, I'm already starting to question my decision to use the console.</p>
+<h2 id="console-web-experience-isnt-great">Console web experience isn't great</h2>
+<p>The biggest issue is that the web is really hard to use from a terminal. It's difficult to quickly scan headings and identify distinct content areas using only text (specifically: text that wasn't designed to be used from the console). I guess I didn't realize how helpful subtle font size/color changes are for quickly scanning content.</p>
 <h2 id="sometimes-the-mouse-is-handy">Sometimes the mouse is handy</h2>
-<p>Then there&#39;s mouse support. I use the keyboard extensively, but the mouse is sometimes faster for selecting text and interacting with UI elements that aren&#39;t in a simple order/hierarchy. <a href="https://man.archlinux.org/man/gpm.8.en.html">GPM</a> helps, but it&#39;s kind of clunky, and doesn&#39;t help when I need to scroll text while using the mouse.</p>
+<p>Then there's mouse support. I use the keyboard extensively, but the mouse is sometimes faster for selecting text and interacting with UI elements that aren't in a simple order/hierarchy. <a href="https://man.archlinux.org/man/gpm.8.en.html">GPM</a> helps, but it's kind of clunky, and doesn't help when I need to scroll text while using the mouse.</p>
 <h2 id="lack-of-consistency">Lack of consistency</h2>
-<p>Finally, there is very little user interface consistency between most console tools. Many include vi-like key bindings (either by default or with customizations), but that&#39;s often where the consistency ends. I guess I didn&#39;t realize how much I&#39;d come to rely on standard GUI elements like menus, tooltips, and buttons. I <em>do</em> think that a searchable &quot;command palette&quot; would go a long way toward making console tools easier to use, but I&#39;m not planning on implementing those myself. Using Emacs for everything might help with consistency, but I&#39;m skeptical of the performance and robustness of huge pile of Emacs extensions.</p>
+<p>Finally, there is very little user interface consistency between most console tools. Many include vi-like key bindings (either by default or with customizations), but that's often where the consistency ends. I guess I didn't realize how much I'd come to rely on standard GUI elements like menus, tooltips, and buttons. I <em>do</em> think that a searchable &quot;command palette&quot; would go a long way toward making console tools easier to use, but I'm not planning on implementing those myself. Using Emacs for everything might help with consistency, but I'm skeptical of the performance and robustness of huge pile of Emacs extensions.</p>
 <h1 id="to-be-continued">To be continued...</h1>
-<p>Next up, I&#39;m planning to document my misadventures in getting <a href="https://jaredkrinke.github.io/md2blog/">md2blog</a> (my <a href="https://deno.land/">Deno</a>-based static site generator) running on a Raspberry Pi B (a platform that Deno doesn&#39;t support).</p>
+<p>Next up, I'm planning to document my misadventures in getting <a href="https://jaredkrinke.github.io/md2blog/">md2blog</a> (my <a href="https://deno.land/">Deno</a>-based static site generator) running on a Raspberry Pi B (a platform that Deno doesn't support).</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

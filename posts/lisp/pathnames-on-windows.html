@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Creating Windows-style paths (backslash-separated) from pathnames in Common Lisp</title>
-<meta name="description" content="I spent far too long trying to figure out how to do this, so I&#39;m documenting it here, in case anyone else has trouble finding the answer." />
+<meta name="description" content="I spent far too long trying to figure out how to do this, so I&#039;m documenting it here, in case anyone else has trouble finding the answer." />
 <meta name="keywords" content="lisp" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -37,28 +37,28 @@
 <h1><a href="../../posts/lisp/pathnames-on-windows.html">Creating Windows-style paths (backslash-separated) from pathnames in Common Lisp</a></h1>
 <p><time datetime="2023-10-04">October 4, 2023</time></p>
 </header>
-<p>Use <code>uiop/filesystem:native-namestring</code>. That&#39;s the answer.</p>
+<p>Use <code>uiop/filesystem:native-namestring</code>. That's the answer.</p>
 <p>The rest of this post is just additional context/whining.</p>
 <h1 id="background">Background</h1>
-<p>Common Lisp was born in an era of surprising file system diversity. Nowadays, Windows is mocked for using something other than a forward slash as a path separator, but old Macs used colons and I&#39;ve seen references to <code>&gt;</code> being used on more exotic platforms.</p>
+<p>Common Lisp was born in an era of surprising file system diversity. Nowadays, Windows is mocked for using something other than a forward slash as a path separator, but old Macs used colons and I've seen references to <code>&gt;</code> being used on more exotic platforms.</p>
 <p>Common Lisp handles this difference (and many other differences that never even occurred to me, such as types and versions) by abstracting everything into a platform-independent concept called a <a href="http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/Body/glo_p.html#pathname">pathname</a>.</p>
 <h2 id="example-pathname">Example pathname</h2>
-<p>Here&#39;s how to create a (relative) pathname for &quot;the directory &#39;foo&#39;, which is located in the parent directory&quot;:</p>
-<pre><code class="language-lisp"> (<span class="hljs-name">make-pathname</span> <span class="hljs-symbol">:directory</span> &#x27;(<span class="hljs-symbol">:relative</span> <span class="hljs-symbol">:up</span> <span class="hljs-string">&quot;foo&quot;</span>))
+<p>Here's how to create a (relative) pathname for &quot;the directory 'foo', which is located in the parent directory&quot;:</p>
+<pre><code class="language-lisp"> <span class="hl-operator">(</span><span class="hl-identifier">make-pathname</span> <span class="hl-default">:</span><span class="hl-identifier">directory</span> <span class="hl-default">&apos;</span><span class="hl-operator">(</span><span class="hl-default">:</span><span class="hl-identifier">relative</span> <span class="hl-default">:</span><span class="hl-identifier">up</span> <span class="hl-string">&quot;foo&quot;</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
 </code></pre>
 <h2 id="the-problem">The problem</h2>
 <p>While working on a tiny Common Lisp project, my program needed to run a command in a subprocess (using <code>uiop:run-program</code>) with a directory passed as an argument. <strong>I had assumed that <code>format</code>-ing a pathname on Windows would result in a Windows-compatible string</strong> (or at least that <code>namestring</code> would), e.g. &quot;..\foo\&quot; for the example code above.</p>
-<p>For reasons I won&#39;t yet understand, <strong>this is <em>not</em> how things work on SBCL</strong>! Instead, forward slashes are used: &quot;../foo/&quot;. This works fine for some programs (including Git, apparently), but I doubt it&#39;s robust in general, considering some (mostly old) Windows programs use the forward slash to indicate command-line flags (instead of using a hyphen).</p>
+<p>For reasons I won't yet understand, <strong>this is <em>not</em> how things work on SBCL</strong>! Instead, forward slashes are used: &quot;../foo/&quot;. This works fine for some programs (including Git, apparently), but I doubt it's robust in general, considering some (mostly old) Windows programs use the forward slash to indicate command-line flags (instead of using a hyphen).</p>
 <h2 id="but-why">But why?</h2>
-<p>I thought the point of pathnames was to support a platform-independent notion of a file path/name, so it&#39;s not clear to me why they don&#39;t <code>format</code> by default into a form that&#39;s compatible with the host environment.</p>
-<p>Even more surprising, after spending way too much time browsing the <a href="http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/FrontMatter/index.html">Common Lisp HyperSpec</a>, I couldn&#39;t even find anything in Common Lisp&#39;s standard library for this scenario. Why can I create and manipulate pathnames but not actually pass them to the operating system? That&#39;s a serious question--if you know the answer, please tell me!</p>
+<p>I thought the point of pathnames was to support a platform-independent notion of a file path/name, so it's not clear to me why they don't <code>format</code> by default into a form that's compatible with the host environment.</p>
+<p>Even more surprising, after spending way too much time browsing the <a href="http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/FrontMatter/index.html">Common Lisp HyperSpec</a>, I couldn't even find anything in Common Lisp's standard library for this scenario. Why can I create and manipulate pathnames but not actually pass them to the operating system? That's a serious question--if you know the answer, please tell me!</p>
 <h1 id="uiop-to-the-rescue">UIOP to the rescue</h1>
-<p>Given that (ANSI) Common Lisp hasn&#39;t been updated since 1994, I don&#39;t see this situation changing, but the good news is that Common Lisp implementations fill in this gap and <a href="https://asdf.common-lisp.dev/uiop.html">UIOP</a> abstracts away the implementations&#39; different approaches/naming schemes.</p>
+<p>Given that (ANSI) Common Lisp hasn't been updated since 1994, I don't see this situation changing, but the good news is that Common Lisp implementations fill in this gap and <a href="https://asdf.common-lisp.dev/uiop.html">UIOP</a> abstracts away the implementations' different approaches/naming schemes.</p>
 <p>So that leads us to the solution: <code>uiop/filesystem:native-namestring</code>. Example:</p>
-<pre><code class="language-lisp"> (<span class="hljs-name">uiop/filesystem</span><span class="hljs-symbol">:native-namestring</span> (<span class="hljs-name">make-pathname</span> <span class="hljs-symbol">:directory</span> &#x27;(<span class="hljs-symbol">:relative</span> <span class="hljs-symbol">:up</span> <span class="hljs-string">&quot;foo&quot;</span>)))
+<pre><code class="language-lisp"> <span class="hl-operator">(</span><span class="hl-identifier">uiop</span><span class="hl-operator">/</span><span class="hl-identifier">filesystem</span><span class="hl-default">:</span><span class="hl-identifier">native-namestring</span> <span class="hl-operator">(</span><span class="hl-identifier">make-pathname</span> <span class="hl-default">:</span><span class="hl-identifier">directory</span> <span class="hl-default">&apos;</span><span class="hl-operator">(</span><span class="hl-default">:</span><span class="hl-identifier">relative</span> <span class="hl-default">:</span><span class="hl-identifier">up</span> <span class="hl-string">&quot;foo&quot;</span><span class="hl-operator">)</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
 </code></pre>
 <p>Result:</p>
-<pre><code><span class="hljs-string">&quot;..<span class="hljs-subst">\\</span>foo<span class="hljs-subst">\\</span>&quot;</span>
+<pre><code>&quot;..\\foo\\&quot;
 </code></pre>
 <p>Problem solved!</p>
 <p>The only lingering question for me is: why is <code>native-namestring</code> in <code>uiop/filesystem</code> instead of <code>uiop/pathname</code>?</p>

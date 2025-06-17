@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Generating music using machine learning</title>
-<meta name="description" content="Let&#39;s see if I can use Google Brain&#39;s Music Transformer to generate ragtime music." />
+<meta name="description" content="Let&#039;s see if I can use Google Brain&#039;s Music Transformer to generate ragtime music." />
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -37,18 +37,18 @@
 <h1><a href="../../posts/machine-learning/generating-music.html">Generating music using machine learning</a></h1>
 <p><time datetime="2022-04-26">April 26, 2022</time></p>
 </header>
-<p>Recent music generation results (e.g. <a href="https://magenta.tensorflow.org/music-transformer">Music Transformer: Generating Music with Long-Term Structure</a>) are part of what piqued my interest in machine learning. After <a href="mitx-6.036.html">following an introduction to machine learning</a>, it&#39;s time for some experimentation.</p>
+<p>Recent music generation results (e.g. <a href="https://magenta.tensorflow.org/music-transformer">Music Transformer: Generating Music with Long-Term Structure</a>) are part of what piqued my interest in machine learning. After <a href="mitx-6.036.html">following an introduction to machine learning</a>, it's time for some experimentation.</p>
 <p>First up: generating a <a href="https://en.wikipedia.org/wiki/Ragtime">ragtime</a> piano piece.</p>
 <h1 id="approaches">Approaches</h1>
-<p>The most compelling generated music I&#39;ve seen thus far comes from Google Brain, namely their <a href="https://magenta.tensorflow.org/performance-rnn">Performance RNN</a> and <a href="https://magenta.tensorflow.org/music-transformer">Music Transformer</a> papers. The associated GitHub repositories appear to contain models that have been pre-trained on various corpora (e.g. a <a href="https://www.piano-e-competition.com/">piano competition&#39;s MIDI recordings</a>). It&#39;s also possible to train using a new corpus. The trained models can generate continuations based on a primer or generate unconditioned music &quot;from scratch&quot;.</p>
-<p>Here are several approaches I&#39;m investigating for generating a ragtime piece:</p>
+<p>The most compelling generated music I've seen thus far comes from Google Brain, namely their <a href="https://magenta.tensorflow.org/performance-rnn">Performance RNN</a> and <a href="https://magenta.tensorflow.org/music-transformer">Music Transformer</a> papers. The associated GitHub repositories appear to contain models that have been pre-trained on various corpora (e.g. a <a href="https://www.piano-e-competition.com/">piano competition's MIDI recordings</a>). It's also possible to train using a new corpus. The trained models can generate continuations based on a primer or generate unconditioned music &quot;from scratch&quot;.</p>
+<p>Here are several approaches I'm investigating for generating a ragtime piece:</p>
 <ol>
 <li>Condition pre-trained Performance RNN and Music Transformer models with existing ragtime music (either an intro or the first few measures) and generate a continuation</li>
 <li>Train a new model on a corpus of ragtime music, and then do unconditioned generation</li>
 <li>Train a new model on a ragtime corpus and generate a continuation from a ragtime primer</li>
 <li>Train a new model on a ragtime corpus and generate a continuation from an arbitrary primer</li>
 </ol>
-<p>I don&#39;t have any intuition for how large of a corpus is required to generate a decent model, so it&#39;s possible that options 2 - 4 won&#39;t be feasible for me (either because finding/generating such a training corpus is too difficult or the compute required to train the model is beyond what my computer can handle).</p>
+<p>I don't have any intuition for how large of a corpus is required to generate a decent model, so it's possible that options 2 - 4 won't be feasible for me (either because finding/generating such a training corpus is too difficult or the compute required to train the model is beyond what my computer can handle).</p>
 <h1 id="using-pre-trained-models">Using pre-trained models</h1>
 <p>Without installing anything locally, you can use the <a href="https://colab.research.google.com/notebooks/magenta/piano_transformer/piano_transformer.ipynb">Music Transformer notebook</a> to generate music. There are several options:</p>
 <ul>
@@ -57,12 +57,12 @@
 <li>Generate accompaniment for a (monophonic) melody</li>
 </ul>
 <h2 id="unconditional-generation">Unconditional generation</h2>
-<p>Without providing a primer, I don&#39;t think it&#39;s possible to indicate what genre of music you&#39;d like to generate. For example, the clip I got sounds like some sort of <a href="../../assets/music-generation/mt-unconditioned.mid">boogie-woogie folk march</a>. Obviously this isn&#39;t the genre that I was looking for (or, really, than anyone was looking for). Rather than continuing on randomly like this, I&#39;ll investigate primed generation.</p>
+<p>Without providing a primer, I don't think it's possible to indicate what genre of music you'd like to generate. For example, the clip I got sounds like some sort of <a href="../../assets/music-generation/mt-unconditioned.mid">boogie-woogie folk march</a>. Obviously this isn't the genre that I was looking for (or, really, than anyone was looking for). Rather than continuing on randomly like this, I'll investigate primed generation.</p>
 <h2 id="continuations">Continuations</h2>
 <p>The notebook linked above also supports providing a primer, either from a provided list or by uploading a MIDI file directly in the UI.</p>
 <h3 id="cropping-midi-primers">Cropping MIDI primers</h3>
-<p>The primer is included in the output, so I assume it should be reasonably short. My original plan was to edit down an existing ragtime MIDI using <a href="https://musescore.org/en">MuseScore</a>, but MuseScore&#39;s output appears to be incompatible with the <a href="http://craffel.github.io/pretty-midi/">pretty_midi</a> module that the notebook uses, resulting in the following error:</p>
-<pre><code>pretty_midi\pretty_midi.py:<span class="hljs-number">97</span>: RuntimeWarning: Tempo, Key <span class="hljs-keyword">or</span> <span class="hljs-type">Time</span> signature change events <span class="hljs-built_in">found</span> <span class="hljs-keyword">on</span> non-zero tracks. This <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> a <span class="hljs-keyword">valid</span> <span class="hljs-keyword">type</span> <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">type</span> <span class="hljs-number">1</span> MIDI file. Tempo, Key <span class="hljs-keyword">or</span> <span class="hljs-type">Time</span> Signature may be wrong.
+<p>The primer is included in the output, so I assume it should be reasonably short. My original plan was to edit down an existing ragtime MIDI using <a href="https://musescore.org/en">MuseScore</a>, but MuseScore's output appears to be incompatible with the <a href="http://craffel.github.io/pretty-midi/">pretty_midi</a> module that the notebook uses, resulting in the following error:</p>
+<pre><code>pretty_midi\pretty_midi.py:97: RuntimeWarning: Tempo, Key or Time signature change events found on non-zero tracks. This is not a valid type 0 or type 1 MIDI file. Tempo, Key or Time Signature may be wrong.
 </code></pre>
 <p>My workaround was to switch to using <a href="https://www.audacityteam.org/">Audacity</a> to crop my MIDI primer (and this worked without issue).</p>
 <h3 id="example-continuations">Example continuations</h3>
@@ -97,7 +97,7 @@
 </ul>
 <h2 id="reflecting-on-pre-trained-models">Reflecting on pre-trained models</h2>
 <p>Unsurprisingly, the generic pre-trained models I used, while undoubtedly impressive, seem best suited for exploration and amusement, rather than producing something focused on a particular genre.</p>
-<p>I suspect that the best path forward for this experiment is to train a new ragtime-focused model on a corpus of typical ragtime MIDIs. As noted earlier, it&#39;s possible I won&#39;t be able to find either a large enough corpus or enough compute power to produce a reasonable model, but if I <em>do</em> succeed, I think the results will be more consistently rag-like.</p>
+<p>I suspect that the best path forward for this experiment is to train a new ragtime-focused model on a corpus of typical ragtime MIDIs. As noted earlier, it's possible I won't be able to find either a large enough corpus or enough compute power to produce a reasonable model, but if I <em>do</em> succeed, I think the results will be more consistently rag-like.</p>
 
 <footer>
 <p>&crarr; <a href="../../index.html">Back to home</a></p>

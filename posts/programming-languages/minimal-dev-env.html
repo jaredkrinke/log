@@ -40,39 +40,39 @@
 <h1><a href="../../posts/programming-languages/minimal-dev-env.html">In search of a minimal development environment</a></h1>
 <p><time datetime="2023-02-11">February 11, 2023</time></p>
 </header>
-<p>Feel free to <a href="#the-plan">skip over the obligatory whining about today&#39;s bloat</a>.</p>
+<p>Feel free to <a href="#the-plan">skip over the obligatory whining about today's bloat</a>.</p>
 <h1 id="back-in-my-day">Back in my day...</h1>
 <p>I think the first computer I ever used was a <a href="https://en.wikipedia.org/wiki/Commodore_64">Commodore 64</a>. Wikipedia tells me that it had a 1 MHz processor and 64 KB of RAM, all packed into an &quot;obese keyboard&quot; form factor. Despite being 1,000+ times slower (with hundreds of times less memory) compared to a modern computer, it could run a word processor, play games, and print documents.</p>
 <p>Later on, I remember installing Linux on a 1.44 MB floppy disk to turn an aging 486 computer into a network router. Even back then, that was impressive!</p>
 <p>A few years later, I remember working on a simple arcade game which used OpenGL for graphics... developed partly on a computer that was command line-only! I have fond memories of using <a href="https://www.gnu.org/software/screen/">GNU Screen</a> and <a href="https://www.vim.org/">Vim</a>, along with <a href="https://en.wikipedia.org/wiki/Man_page">man pages</a>, to write the code. Aside: I remember using <a href="https://en.wikipedia.org/wiki/Concurrent_Versions_System">CVS</a>, but <em>not</em> fondly.</p>
 <h1 id="contrast-with-today">Contrast with today</h1>
-<p>Fast-forward to 2023, and I&#39;ve been contemplating porting my <a href="../game-development/sic-1.html">single-instruction programming game</a> to <a href="https://www.electronjs.org/">Electron</a> (possibly the heaviest popular app framework of all time), to support Linux (and ideally macOS) builds on Steam.</p>
-<p>For the record, SIC-1 started out as a trim 25 KB zip file (although it has ballooned to 10 MB, mostly due to <a href="https://en.wikipedia.org/wiki/Pulse-code_modulation">PCM</a> music). Browsers provide a deceptive environment. With a few kilobytes of HTML, CSS, and JavaScript, you can build surprisingly complex (and fast) apps. Of course, the browser itself is hundreds of megabytes, so it&#39;s actually a pretty hefty runtime. How hefty? Ask me after I use Electron.</p>
-<p>Is it any surprise I&#39;m craving a bit of simplicity?</p>
+<p>Fast-forward to 2023, and I've been contemplating porting my <a href="../game-development/sic-1.html">single-instruction programming game</a> to <a href="https://www.electronjs.org/">Electron</a> (possibly the heaviest popular app framework of all time), to support Linux (and ideally macOS) builds on Steam.</p>
+<p>For the record, SIC-1 started out as a trim 25 KB zip file (although it has ballooned to 10 MB, mostly due to <a href="https://en.wikipedia.org/wiki/Pulse-code_modulation">PCM</a> music). Browsers provide a deceptive environment. With a few kilobytes of HTML, CSS, and JavaScript, you can build surprisingly complex (and fast) apps. Of course, the browser itself is hundreds of megabytes, so it's actually a pretty hefty runtime. How hefty? Ask me after I use Electron.</p>
+<p>Is it any surprise I'm craving a bit of simplicity?</p>
 <h1 id="the-plan">The plan</h1>
 <p>So what am I going to do about bloat?</p>
-<p>This is probably a terrible idea, but I&#39;d like to set up a minimal development environment. And I really do mean &quot;minimal&quot;, i.e.:</p>
+<p>This is probably a terrible idea, but I'd like to set up a minimal development environment. And I really do mean &quot;minimal&quot;, i.e.:</p>
 <ul>
 <li>Command line only</li>
 <li>Runs acceptably on a slow computer (possibly a <a href="https://en.wikipedia.org/wiki/Raspberry_Pi">Raspberry Pi</a> 1)</li>
 <li>Minimal disk footprint</li>
 <li>As full-featured as possible, given the previous constraints</li>
 </ul>
-<p>Of course, &quot;minimal disk footprint&quot; and &quot;as full-featured as possible&quot; are opposing goals, so this plan isn&#39;t well-defined--I&#39;m content to just see where it leads me.</p>
+<p>Of course, &quot;minimal disk footprint&quot; and &quot;as full-featured as possible&quot; are opposing goals, so this plan isn't well-defined--I'm content to just see where it leads me.</p>
 <h1 id="the-software">The software</h1>
 <p>I suspect the following software will play a part:</p>
 <ul>
-<li><a href="https://www.alpinelinux.org/">Alpine Linux</a> or a minimal <a href="https://www.debian.org/">Debian</a> installation (or <a href="https://www.freebsd.org/">FreeBSD</a>? <a href="https://minix3.org/">MINIX 3</a>? I&#39;m open to suggestions)</li>
+<li><a href="https://www.alpinelinux.org/">Alpine Linux</a> or a minimal <a href="https://www.debian.org/">Debian</a> installation (or <a href="https://www.freebsd.org/">FreeBSD</a>? <a href="https://minix3.org/">MINIX 3</a>? I'm open to suggestions)</li>
 <li>Vim (or <a href="https://neovim.io/">NeoVim</a>?)</li>
 <li>GNU Screen (or <a href="https://github.com/tmux/tmux">tmux</a>?)</li>
 <li>A terminal mode web browser (<a href="https://lynx.browser.org/">Lynx</a>?)</li>
 <li>Maybe a terminal mode <a href="https://en.wikipedia.org/wiki/RSS">RSS</a> reader or <a href="https://mastodon.social/">Mastodon</a> client, just for fun</li>
 </ul>
 <h1 id="the-programming-language">The programming language</h1>
-<p>You may note that I didn&#39;t specify any compilers or build tools. That&#39;s because I&#39;d like to use this minimal environment to test out some of my <a href="../programming-languages/future-proof-languages.html">future-proof programming language candidates</a>.</p>
-<p>I&#39;ll admit that it&#39;s unreasonable to expect modern programming languages to support development on a Raspberry Pi, but that also means that I&#39;ll be <em>unreasonably impressed</em> if a programming language is useful in a ridiculously constrained environment like this.</p>
+<p>You may note that I didn't specify any compilers or build tools. That's because I'd like to use this minimal environment to test out some of my <a href="../programming-languages/future-proof-languages.html">future-proof programming language candidates</a>.</p>
+<p>I'll admit that it's unreasonable to expect modern programming languages to support development on a Raspberry Pi, but that also means that I'll be <em>unreasonably impressed</em> if a programming language is useful in a ridiculously constrained environment like this.</p>
 <h1 id="wrapping-up">Wrapping up</h1>
-<p>Feel free to let me know if you have any suggestions or if you&#39;ve attempted anything similar (or want to!). You can email me at <a href="mailto:log@schemescape.com">log@schemescape.com</a>.</p>
+<p>Feel free to let me know if you have any suggestions or if you've attempted anything similar (or want to!). You can email me at <a href="mailto:log@schemescape.com">log@schemescape.com</a>.</p>
 <p>Wish me luck!</p>
 
 <footer>

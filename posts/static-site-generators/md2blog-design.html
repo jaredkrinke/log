@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Designing md2blog, a zero-config static site generator for dev blogs</title>
-<meta name="description" content="Here&#39;s the design of my in-progress static site generator, md2blog." />
+<meta name="description" content="Here&#039;s the design of my in-progress static site generator, md2blog." />
 <meta name="keywords" content="metalsmith,md2blog" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link rel="stylesheet" href="../../css/style.css" />
@@ -40,10 +40,10 @@
 <p><time datetime="2021-10-27">October 27, 2021</time></p>
 </header>
 <h1 id="background">Background</h1>
-<p>After <a href="comparison.html">investigating many popular static site generators</a>, I wasn&#39;t able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage <a href="https://metalsmith.io/">Metalsmith</a> (and numerous plugins) to get what I wanted. I&#39;m calling the resulting tool <strong>md2blog</strong>.</p>
-<p>In this post, I&#39;m going to cover the design of md2blog. Note that md2blog is a work in progress that has not been released yet. <strong>Update</strong>: <a href="https://jaredkrinke.github.io/md2blog/">md2blog has since been released</a>.</p>
+<p>After <a href="comparison.html">investigating many popular static site generators</a>, I wasn't able to find a convenient static site generator that met my needs out of the box. Fortunately, I was able to leverage <a href="https://metalsmith.io/">Metalsmith</a> (and numerous plugins) to get what I wanted. I'm calling the resulting tool <strong>md2blog</strong>.</p>
+<p>In this post, I'm going to cover the design of md2blog. Note that md2blog is a work in progress that has not been released yet. <strong>Update</strong>: <a href="https://jaredkrinke.github.io/md2blog/">md2blog has since been released</a>.</p>
 <h1 id="design-goals">Design goals</h1>
-<p>Here&#39;s the overarching goal of md2blog:</p>
+<p>Here's the overarching goal of md2blog:</p>
 <blockquote>
 <p>Convert a <em>self-contained, organized</em> pile of <a href="https://daringfireball.net/projects/markdown/">Markdown</a> posts into a <em>minimal, but fully functional</em> static blog, requiring <em>zero configuration</em>.</p>
 </blockquote>
@@ -60,9 +60,9 @@
 <li><strong>Syntax highlighting</strong> is automatically added to code blocks</li>
 <li>An <a href="https://validator.w3.org/feed/docs/atom.html">Atom</a>/RSS news feed is automatically generated</li>
 </ul>
-<p>Note that &quot;zero configuration&quot; implies that md2blog is highly opinionated, to the point that there are no options to configure. <strong>Instead of fiddling with options and themes, the user&#39;s focus is strictly on writing and publishing content.</strong></p>
+<p>Note that &quot;zero configuration&quot; implies that md2blog is highly opinionated, to the point that there are no options to configure. <strong>Instead of fiddling with options and themes, the user's focus is strictly on writing and publishing content.</strong></p>
 <h1 id="input">Input</h1>
-<p>Here&#39;s a more detailed look at building a dev blog with md2blog.</p>
+<p>Here's a more detailed look at building a dev blog with md2blog.</p>
 <h2 id="directory-structure">Directory structure</h2>
 <ul>
 <li><code>content/</code>: Root directory that contains all source content for the site<ul>
@@ -85,12 +85,12 @@
 </li>
 </ul>
 <h2 id="sitejson">site.json</h2>
-<p>Here&#39;s an example <code>site.json</code> file:</p>
-<pre><code class="language-json"><span class="hljs-punctuation">{</span>
-    <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;My dev blog&quot;</span><span class="hljs-punctuation">,</span>
-    <span class="hljs-attr">&quot;url&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://mydevblog.com/&quot;</span><span class="hljs-punctuation">,</span>
-    <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;A very good dev blog indeed&quot;</span>
-<span class="hljs-punctuation">}</span>
+<p>Here's an example <code>site.json</code> file:</p>
+<pre><code class="language-json"><span class="hl-operator">{</span>
+    <span class="hl-string">&quot;title&quot;</span><span class="hl-operator">:</span> <span class="hl-string">&quot;My dev blog&quot;</span><span class="hl-operator">,</span>
+    <span class="hl-string">&quot;url&quot;</span><span class="hl-operator">:</span> <span class="hl-string">&quot;https://mydevblog.com/&quot;</span><span class="hl-operator">,</span>
+    <span class="hl-string">&quot;description&quot;</span><span class="hl-operator">:</span> <span class="hl-string">&quot;A very good dev blog indeed&quot;</span>
+<span class="hl-operator">}</span>
 </code></pre>
 <p>Schema:</p>
 <table>
@@ -102,7 +102,8 @@
 <th>Note</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>title</code></td>
 <td>string</td>
 <td>Required</td>
@@ -120,20 +121,21 @@
 <td>Optional</td>
 <td></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>Note that the site <em>will</em> generally work without specifying a URL, but the Atom feed will be forced to use relative links instead of absolute URLs.</p>
 <h2 id="posts">Posts</h2>
 <p>Posts are written in Markdown and use YAML for front matter.</p>
 <h3 id="front-matter">Front matter</h3>
-<p>Here&#39;s an example showing all of the supported YAML front matter properties (<code>keywords</code> and <code>draft</code> are optional, the rest are required):</p>
-<pre><code class="language-yaml"><span class="hljs-meta">---</span>
-<span class="hljs-attr">title:</span> <span class="hljs-string">First</span> <span class="hljs-string">post</span>
-<span class="hljs-attr">description:</span> <span class="hljs-string">First</span> <span class="hljs-string">post</span> <span class="hljs-string">on</span> <span class="hljs-string">my</span> <span class="hljs-string">blog,</span> <span class="hljs-string">with</span> <span class="hljs-string">a</span> <span class="hljs-string">relative</span> <span class="hljs-string">link.</span>
-<span class="hljs-attr">date:</span> <span class="hljs-number">2021-10-26</span>
-<span class="hljs-attr">keywords:</span> [<span class="hljs-string">additional-tag</span>]
-<span class="hljs-attr">draft:</span> <span class="hljs-literal">true</span>
-<span class="hljs-meta">---</span>
-<span class="hljs-string">(Markdown</span> <span class="hljs-string">content</span> <span class="hljs-string">follows...)</span>
+<p>Here's an example showing all of the supported YAML front matter properties (<code>keywords</code> and <code>draft</code> are optional, the rest are required):</p>
+<pre><code class="language-yaml"><span class="hl-operator">---</span>
+<span class="hl-string">title</span><span class="hl-operator">:</span> <span class="hl-default">First post</span>
+<span class="hl-string">description</span><span class="hl-operator">:</span> <span class="hl-default">First post on my blog, with a relative link.</span>
+<span class="hl-string">date</span><span class="hl-operator">:</span> <span class="hl-number_timestamp">2021-10-26</span>
+<span class="hl-string">keywords</span><span class="hl-operator">:</span> <span class="hl-operator">[</span><span class="hl-default">a</span><span class="hl-default">d</span><span class="hl-default">d</span><span class="hl-default">i</span><span class="hl-default">t</span><span class="hl-default">i</span><span class="hl-default">o</span><span class="hl-default">n</span><span class="hl-default">a</span><span class="hl-default">l</span><span class="hl-default">-</span><span class="hl-default">t</span><span class="hl-default">a</span><span class="hl-default">g</span><span class="hl-operator">]</span>
+<span class="hl-string">draft</span><span class="hl-operator">:</span> <span class="hl-constant_builtin">true</span>
+<span class="hl-operator">---</span>
+<span class="hl-default">(</span><span class="hl-default">M</span><span class="hl-default">a</span><span class="hl-default">r</span><span class="hl-default">k</span><span class="hl-default">d</span><span class="hl-default">o</span><span class="hl-default">w</span><span class="hl-default">n</span> <span class="hl-default">c</span><span class="hl-default">o</span><span class="hl-default">n</span><span class="hl-default">t</span><span class="hl-default">e</span><span class="hl-default">n</span><span class="hl-default">t</span> <span class="hl-default">f</span><span class="hl-default">o</span><span class="hl-default">l</span><span class="hl-default">l</span><span class="hl-default">o</span><span class="hl-default">w</span><span class="hl-default">s</span><span class="hl-default">.</span><span class="hl-default">.</span><span class="hl-default">.</span><span class="hl-default">)</span>
 </code></pre>
 <p>Schema:</p>
 <table>
@@ -145,7 +147,8 @@
 <th>Note</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>title</code></td>
 <td>string</td>
 <td>Required</td>
@@ -175,28 +178,29 @@
 <td>Optional</td>
 <td>If <code>true</code>, the post will only be built when serving locally</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <h3 id="content">Content</h3>
-<p>Here&#39;s example Markdown content, demonstrating relative links (these links get translated to the corresponding HTML files and checked at build time; they also work in VS Code&#39;s and GitHub&#39;s Markdown previewers):</p>
-<pre><code class="language-md"><span class="hljs-section"># Relative links</span>
-Here&#x27;s a relative link to another post in this category: [<span class="hljs-string">link</span>](<span class="hljs-link">post2.md</span>)!
+<p>Here's example Markdown content, demonstrating relative links (these links get translated to the corresponding HTML files and checked at build time; they also work in VS Code's and GitHub's Markdown previewers):</p>
+<pre><code class="language-markdown"><span class="hl-heading_h1"># Relative links</span>
+<span class="hl-default">H</span><span class="hl-default">e</span><span class="hl-default">r</span><span class="hl-default">e</span><span class="hl-default">&apos;</span><span class="hl-default">s</span> <span class="hl-default">a</span> <span class="hl-default">r</span><span class="hl-default">e</span><span class="hl-default">l</span><span class="hl-default">a</span><span class="hl-default">t</span><span class="hl-default">i</span><span class="hl-default">v</span><span class="hl-default">e</span> <span class="hl-default">l</span><span class="hl-default">i</span><span class="hl-default">n</span><span class="hl-default">k</span> <span class="hl-default">t</span><span class="hl-default">o</span> <span class="hl-default">a</span><span class="hl-default">n</span><span class="hl-default">o</span><span class="hl-default">t</span><span class="hl-default">h</span><span class="hl-default">e</span><span class="hl-default">r</span> <span class="hl-default">p</span><span class="hl-default">o</span><span class="hl-default">s</span><span class="hl-default">t</span> <span class="hl-default">i</span><span class="hl-default">n</span> <span class="hl-default">t</span><span class="hl-default">h</span><span class="hl-default">i</span><span class="hl-default">s</span> <span class="hl-default">c</span><span class="hl-default">a</span><span class="hl-default">t</span><span class="hl-default">e</span><span class="hl-default">g</span><span class="hl-default">o</span><span class="hl-default">r</span><span class="hl-default">y</span><span class="hl-default">:</span> <span class="hl-link">[link](post2.md)</span><span class="hl-default">!</span>
 
-And here&#x27;s one to another category, with an anchor: [<span class="hljs-string">link 2</span>](<span class="hljs-link">../category2/post3.md#some-section</span>).
+<span class="hl-default">A</span><span class="hl-default">n</span><span class="hl-default">d</span> <span class="hl-default">h</span><span class="hl-default">e</span><span class="hl-default">r</span><span class="hl-default">e</span><span class="hl-default">&apos;</span><span class="hl-default">s</span> <span class="hl-default">o</span><span class="hl-default">n</span><span class="hl-default">e</span> <span class="hl-default">t</span><span class="hl-default">o</span> <span class="hl-default">a</span><span class="hl-default">n</span><span class="hl-default">o</span><span class="hl-default">t</span><span class="hl-default">h</span><span class="hl-default">e</span><span class="hl-default">r</span> <span class="hl-default">c</span><span class="hl-default">a</span><span class="hl-default">t</span><span class="hl-default">e</span><span class="hl-default">g</span><span class="hl-default">o</span><span class="hl-default">r</span><span class="hl-default">y</span><span class="hl-default">,</span> <span class="hl-default">w</span><span class="hl-default">i</span><span class="hl-default">t</span><span class="hl-default">h</span> <span class="hl-default">a</span><span class="hl-default">n</span> <span class="hl-default">a</span><span class="hl-default">n</span><span class="hl-default">c</span><span class="hl-default">h</span><span class="hl-default">o</span><span class="hl-default">r</span><span class="hl-default">:</span> <span class="hl-link">[link 2](../category2/post3.md#some-section)</span><span class="hl-default">.</span>
 
-<span class="hljs-section"># Image</span>
-Here&#x27;s an image:
-![<span class="hljs-string">test</span>](<span class="hljs-link">../../assets/test.png</span>)
+<span class="hl-heading_h1"># Image</span>
+<span class="hl-default">H</span><span class="hl-default">e</span><span class="hl-default">r</span><span class="hl-default">e</span><span class="hl-default">&apos;</span><span class="hl-default">s</span> <span class="hl-default">a</span><span class="hl-default">n</span> <span class="hl-default">i</span><span class="hl-default">m</span><span class="hl-default">a</span><span class="hl-default">g</span><span class="hl-default">e</span><span class="hl-default">:</span>
+<span class="hl-link">![test](../../assets/test.png)</span>
 </code></pre>
 <p>Finally, here is an example of including a code block (specifying the language is recommended, but optional):</p>
-<pre><code class="language-md"><span class="hljs-section"># Code block</span>
-Here&#x27;s some code:
+<pre><code class="language-markdown"><span class="hl-heading_h1"># Code block</span>
+<span class="hl-default">H</span><span class="hl-default">e</span><span class="hl-default">r</span><span class="hl-default">e</span><span class="hl-default">&apos;</span><span class="hl-default">s</span> <span class="hl-default">s</span><span class="hl-default">o</span><span class="hl-default">m</span><span class="hl-default">e</span> <span class="hl-default">c</span><span class="hl-default">o</span><span class="hl-default">d</span><span class="hl-default">e</span><span class="hl-default">:</span>
 
-<span class="hljs-code">```javascript
+<span class="hl-code">```javascript
 const add = (a, b) =&gt; a + b;
-```</span>
-</code></pre>
+```
+</span></code></pre>
 <h1 id="output">Output</h1>
-<p>All output is written to the <code>out/</code> directory. Here&#39;s what the output might look like for the example above:</p>
+<p>All output is written to the <code>out/</code> directory. Here's what the output might look like for the example above:</p>
 <ul>
 <li><code>index.html</code>: Home page</li>
 <li><code>404.html</code>: Error page</li>

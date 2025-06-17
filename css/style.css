@@ -96,52 +96,46 @@ nav > strong { font-weight: bold; color: #ff80ff; }
 h1, h2, h3, h4, h5 { color: #ff80ff; }
 a:link { color: #55ffff; }
 a:visited { color: #4af0f0; }
-/* Also b5cea8 or 7dce52 or 7bbf56 */
 
 /* Syntax highlighting */
-.hljs-comment { color: #41c641; }
+.hl-comment { color: #41c641; }
 
-.hljs-tag,
-.hljs-punctuation { color: #a1a1a1; }
+.hl-preprocessor { color: #ff80ff; }
 
-.hljs-literal { color: #4af0f0; }
+.hl-tag,
+.hl-tag_single,
+.hl-function,
+.hl-function_builtin,
+.hl-heading,
+.hl-label,
+.hl-function_method { color: #71f4f4; }
 
-.hljs-title.class_,
-.hljs-tag .hljs-name,
-.hljs-tag .hljs-attr { color: #44dd44; }
+.hl-reference,
+.hl-variable,
+.hl-variable_builtin,
+.hl-code,
+.hl-embedded,
+.hl-identifier { color: #f0f0f0; }
 
-.hljs-attr,
-.hljs-symbol,
-.hljs-variable,
-.hljs-template-variable,
-.hljs-link,
-.hljs-selector-attr,
-.hljs-selector-pseudo { color: #55ffff; }
+.hl-operator { color: #a1a1a1; }
 
-.hljs-keyword,
-.hljs-attribute,
-.hljs-selector-tag,
-.hljs-meta .hljs-keyword,
-.hljs-doctag,
-.hljs-name { color: #4af0f0; }
+.hl-annotation,
+.hl-class,
+.hl-type,
+.hl-keyword { color: #0fbdbd; }
 
-.hljs-type,
-.hljs-string,
-.hljs-number,
-.hljs-quote,
-.hljs-template-tag,
-.hljs-deletion,
-.hljs-title,
-.hljs-section,
-.hljs-meta { color: #ff80ff; }
+.hl-attribute,
+.hl-constant,
+.hl-constant_builtin { color: #55ffff; }
 
-.hljs-regexp,
-.hljs-meta .hljs-string { color: #f372f3; }
+.hl-bold,
+.hl-italic,
+.hl-number,
+.hl-underline,
+.hl-string { color: #f372f3; }
 
-.hljs-title.function_,
-.hljs-built_in,
-.hljs-bullet,
-.hljs-code,
-.hljs-addition,
-.hljs-selector-id,
-.hljs-selector-class { color: #ffffff; }
+.hl-link,
+.hl-list,
+.hl-error,
+.hl-regex { color: #ef43ef; }
+
