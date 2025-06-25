@@ -7,8 +7,71 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-06-01T00:00:00.000Z</updated>
+<updated>2025-06-25T00:00:00.000Z</updated>
 
+<entry>
+<title>Syntax highlighting for 150 languages in &lt; 200 KB</title>
+<id>https://log.schemescape.com/posts/static-site-generators/luasmith-syntax-highlighting.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/luasmith-syntax-highlighting.html"/>
+<updated>2025-06-25T00:00:00.000Z</updated>
+<summary type="text">It&#039;s not bloat if I actually use it, right?</summary>
+<content type="html">&lt;h1 id=&quot;luasmith&quot;&gt;luasmith&lt;/h1&gt;
+&lt;p&gt;After &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/smallest-static-site-generator.html&quot;&gt;creating a 270 KB static site generator&lt;/a&gt; and &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/extending-luasmith.html&quot;&gt;adding link-checking with minimal bloat&lt;/a&gt;, the feature creep continues: &lt;a href=&quot;https://github.com/jaredkrinke/luasmith&quot;&gt;luasmith&lt;/a&gt; now supports syntax highlighting for ~150 languages--&lt;strong&gt;and it only increased the gzipped download by about 180 KB&lt;/strong&gt;!&lt;/p&gt;
+&lt;p&gt;This post briefly describes my path to adding lightweight and customizable syntax highlighting.&lt;/p&gt;
+&lt;h2 id=&quot;self-hosting&quot;&gt;Self-hosting&lt;/h2&gt;
+&lt;p&gt;Aside: this site is now built using luasmith (instead of &lt;a href=&quot;https://github.com/jaredkrinke/md2blog&quot;&gt;md2blog&lt;/a&gt;)! Syntax highlighting was the last missing feature.&lt;/p&gt;
+&lt;h1 id=&quot;research&quot;&gt;Research&lt;/h1&gt;
+&lt;h2 id=&quot;initial-research&quot;&gt;Initial research&lt;/h2&gt;
+&lt;p&gt;My initial research was fruitless:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://highlightjs.org/&quot;&gt;highlight.js&lt;/a&gt; is what I used in md2blog, but it requires JavaScript (or at least a JS regular expression engine) so it couldn&#039;t be simply integrated into Lua-based luasmith&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://tree-sitter.github.io/tree-sitter/&quot;&gt;Tree-sitter&lt;/a&gt; is the undisputed king of high performance syntax highlighting, but it didn&#039;t appear to provide an interpreter (instead relying on code generation and a C compiler) -- and, honestly, it seems like overkill for coloring a few code samples on my tiny site&lt;/li&gt;
+&lt;li&gt;Most other highlighters were implemented in JavaScript, Rust, or Go which, like highlight.js would significantly complicate luasmith&#039;s build process&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;What I needed was something either Lua-native or small but easily extensible.&lt;/p&gt;
+&lt;h2 id=&quot;lpeg-and-scintillua&quot;&gt;LPeg and Scintillua&lt;/h2&gt;
+&lt;p&gt;The most obvious starting point for parsing in Lua is &lt;a href=&quot;https://www.inf.puc-rio.br/~roberto/lpeg/&quot;&gt;LPeg&lt;/a&gt;, by none other than the original creator of Lua. While investigating LPeg-based highlighters, I ran across &lt;a href=&quot;https://orbitalquark.github.io/scintillua/&quot;&gt;Scintillua&lt;/a&gt;, which supports an impressive number of languages with a minimalist approach--it&#039;s even apparently used in the lightweight &lt;a href=&quot;https://github.com/martanne/vis&quot;&gt;vis&lt;/a&gt; editor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Given Scintillua uses one tenth the code of highlight.js and it&#039;s Lua-native, it was exactly what I was looking for.&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&quot;implementation&quot;&gt;Implementation&lt;/h1&gt;
+&lt;p&gt;Rather than ship a zip with 100+ Lua files from Scintillua, I decided to embed all those scripts directly into the executable (with the ability to locally override them, as needed). The only trick was that Scintillua, in its library form, implements its own file search and load system based on probing files with Lua&#039;s &lt;code&gt;loadfile&lt;/code&gt; function. I ended up wrapping &lt;code&gt;loadfile&lt;/code&gt; with some code to detect Scintillua&#039;s calls and point them at the embedded strings (which are lazily loaded into Lua).&lt;/p&gt;
+&lt;p&gt;In the end, adding in LPeg, Scintillua, almost all its grammars, and glue code only added around 175 KB to the (gzip-compressed) tarball (a 67% increase--not as bad as I originally feared). Even better, syntax highlighting for my blog only increased the generation time by around 50%.&lt;/p&gt;
+&lt;p&gt;Finally, I have a small, simple static site generator that does what I want!&lt;/p&gt;
+&lt;h1 id=&quot;bonus-authoring-an-etlua-grammar&quot;&gt;Bonus: authoring an etlua grammar&lt;/h1&gt;
+&lt;p&gt;One aspect of Scintillua that hooked me was that adding new grammars simply required writing some Lua code, using the LPeg library. I had not actually used LPeg before, but &lt;a href=&quot;https://www.inf.puc-rio.br/~roberto/lpeg/&quot;&gt;its documentation&lt;/a&gt; was easy to understand (and there&#039;s also &lt;a href=&quot;https://leafo.net/guides/parsing-expression-grammars.html&quot;&gt;a great LPeg tutorial on leafo.net&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Given that luasmith uses &lt;a href=&quot;https://github.com/leafo/etlua&quot;&gt;etlua&lt;/a&gt; for templates, I thought it would be fun to write a syntax highlighter for etlua.&lt;/p&gt;
+&lt;h2 id=&quot;structure&quot;&gt;Structure&lt;/h2&gt;
+&lt;p&gt;Scintillua&#039;s documentation provides &lt;a href=&quot;https://orbitalquark.github.io/scintillua/api.html#embedded-lexers&quot;&gt;information and examples for embedding one parser within another&lt;/a&gt;. In the case of etlua, I&#039;m assuming Lua code will always be embedded in HTML, so an etlua parser should simply be an HTML parser with Lua embedded between &lt;code&gt;&amp;lt;%&lt;/code&gt; ... &lt;code&gt;%&amp;gt;&lt;/code&gt; tags. The author of Scintillua even pointed out to me that there&#039;s already a very similar parser: &lt;a href=&quot;https://github.com/orbitalquark/scintillua/blob/default/lexers/rhtml.lua&quot;&gt;RHTML&lt;/a&gt; (Ruby in HTML).&lt;/p&gt;
+&lt;h2 id=&quot;implementation-1&quot;&gt;Implementation&lt;/h2&gt;
+&lt;p&gt;Using the RHTML parser as a starting point, it was simply a matter of including the appropriate start and end tags (note: LPeg uses Lua metatables for repurposing arithmetic operations as parsing expression grammar building blocks, e.g. &lt;code&gt;^-1&lt;/code&gt; means &amp;quot;at most one&amp;quot;, &lt;code&gt;*&lt;/code&gt; means &amp;quot;concatenation/and&amp;quot;, and &lt;code&gt;+&lt;/code&gt; means &amp;quot;alternation/or&amp;quot; -- and &lt;code&gt;lpeg.P(...)&lt;/code&gt; just matches string literals). Here&#039;s the trivial parser:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-lua&quot;&gt;&lt;span class=&quot;hl-keyword&quot;&gt;local&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lexer&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lexer&lt;/span&gt;
+&lt;span class=&quot;hl-keyword&quot;&gt;local&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lpeg&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lpeg&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;S&lt;/span&gt;
+
+&lt;span class=&quot;hl-comment&quot;&gt;-- Base on the existing HTML parser&lt;/span&gt;
+&lt;span class=&quot;hl-keyword&quot;&gt;local&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lex&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lexer&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;inherit&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lexer&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;apos;html&amp;apos;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;hl-comment&quot;&gt;-- Embed the existing Lua parser&lt;/span&gt;
+&lt;span class=&quot;hl-keyword&quot;&gt;local&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lua&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lexer&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;apos;lua&amp;apos;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;hl-comment&quot;&gt;-- Specify `&amp;lt;%` and `%&amp;gt;` (and highlight the tags as &amp;quot;preprocessor directives&amp;quot;)&lt;/span&gt;
+&lt;span class=&quot;hl-keyword&quot;&gt;local&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;start_rule&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lex&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;tag&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;lexer&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;PREPROCESSOR&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-string&quot;&gt;&amp;apos;&amp;lt;%&amp;apos;&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;apos;=&amp;apos;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;hl-function&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;apos;-&amp;apos;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;hl-number&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;hl-keyword&quot;&gt;local&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;end_rule&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lex&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;tag&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;lexer&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;PREPROCESSOR&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-function&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;apos;-&amp;apos;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;hl-number&quot;&gt;-1&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;hl-string&quot;&gt;&amp;apos;%&amp;gt;&amp;apos;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;hl-comment&quot;&gt;-- Highlight contained code as Lua&lt;/span&gt;
+&lt;span class=&quot;hl-identifier&quot;&gt;lex&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;embed&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;lua&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;start_rule&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;end_rule&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;hl-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;lex&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;result&quot;&gt;Result&lt;/h2&gt;
+&lt;p&gt;Finally, here is an example of a highlighted etlua template:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-etlua&quot;&gt;&lt;span class=&quot;hl-tag&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;ul&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hl-preprocessor&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;hl-keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;hl-keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;hl-function&quot;&gt;ipairs&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;sortBy&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-string&quot;&gt;&amp;quot;date&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-keyword&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;hl-keyword&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;hl-preprocessor&quot;&gt;-%&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hl-tag&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;hl-attribute&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;quot;&amp;lt;%= item.path %&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hl-preprocessor&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;hl-preprocessor&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;li&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hl-preprocessor&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;hl-keyword&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;hl-preprocessor&quot;&gt;-%&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hl-tag&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;ul&lt;/span&gt;&lt;span class=&quot;hl-tag&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Not too bad for a few lines of Lua!&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>luasmith gets link-checking and improved Atom feeds</title>
 <id>https://log.schemescape.com/posts/static-site-generators/extending-luasmith.html</id>
@@ -75,7 +138,7 @@ Abort.
 &lt;h1 id=&quot;show-me-the-code&quot;&gt;Show me the code!&lt;/h1&gt;
 &lt;p&gt;It&#039;s like &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; in Lua. See &lt;a href=&quot;https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md&quot;&gt;the tutorial&lt;/a&gt; for more, but here&#039;s an example that converts Markdown to HTML and adds the page&#039;s title to the resulting HTML:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-lua&quot;&gt;&lt;span class=&quot;hl-comment&quot;&gt;-- Minimal HTML template (used below)&lt;/span&gt;
-&lt;span class=&quot;hl-keyword&quot;&gt;local&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;outer&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-string_longstring&quot;&gt;[[
+&lt;span class=&quot;hl-keyword&quot;&gt;local&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;outer&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-string&quot;&gt;[[
 &amp;lt;html&amp;gt;
   &amp;lt;head&amp;gt;&amp;lt;title&amp;gt;&amp;lt;%= title %&amp;gt;&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;
   &amp;lt;body&amp;gt;&amp;lt;%- content %&amp;gt;&amp;lt;/body&amp;gt;
@@ -244,68 +307,6 @@ Abort.
 &lt;h1 id=&quot;the-future&quot;&gt;The future&lt;/h1&gt;
 &lt;p&gt;Are my netbook days over? Maybe not! At some unknown point in the past, I had acquired a second netbook: an &lt;a href=&quot;https://en.wikipedia.org/wiki/Asus_EeeBook&quot;&gt;Asus EeeBook X205&lt;/a&gt;. It&#039;s not upgradable, but it&#039;s already equipped with 2 GB of RAM. I&#039;m sure the puny 32 GB hard drive will become a problem at some point, but I&#039;m going to throw Linux on and see what happens--it&#039;s not like there&#039;s enough space to install Windows 10 updates anyway!&lt;/p&gt;
 &lt;p&gt;So there you go: my personal netbook history.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Minimal IRC server from scratch in Python</title>
-<id>https://log.schemescape.com/posts/diy/irc-server-in-python.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/diy/irc-server-in-python.html"/>
-<updated>2025-02-17T00:00:00.000Z</updated>
-<summary type="text">The obvious alternative to using Discord is to write and host my own IRC server!</summary>
-<content type="html">&lt;p&gt;This is the story of me prototyping a &lt;a href=&quot;https://github.com/jaredkrinke/pirc&quot;&gt;minimal IRC server in Python&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The server is currently running (unencrypted/&lt;code&gt;-notls&lt;/code&gt;) on &lt;code&gt;irc.schemescape.com&lt;/code&gt; port 6667 (make sure to &lt;code&gt;/join #general&lt;/code&gt;).&lt;/p&gt;
-&lt;h1 id=&quot;discord&quot;&gt;Discord&lt;/h1&gt;
-&lt;p&gt;Discord is the Electron of chat:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;It has the features people want&lt;/li&gt;
-&lt;li&gt;It just works&lt;/li&gt;
-&lt;li&gt;(Almost) Everyone uses it&lt;/li&gt;
-&lt;li&gt;...and &lt;strong&gt;it&#039;s completely unusable on the &lt;a href=&quot;https://log.schemescape.com/posts/diy/../programming-languages/minimal-dev-env-4.html&quot;&gt;old&lt;/a&gt;, &lt;a href=&quot;https://log.schemescape.com/posts/diy/../programming-languages/minimal-dev-env-3.html&quot;&gt;slow&lt;/a&gt; computers I toy with&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;There are several open source alternatives to Discord, including &lt;a href=&quot;https://revolt.chat/&quot;&gt;Revolt&lt;/a&gt; and &lt;a href=&quot;https://gitter.im/&quot;&gt;Gitter&lt;/a&gt;. Their flagship clients look heavyweight, but &lt;strong&gt;the beauty of open source is that there&#039;s almost always an alternative terminal client&lt;/strong&gt;. I&#039;ll investigate those in time. There&#039;s also a decentralized option, &lt;a href=&quot;https://matrix.org/&quot;&gt;Matrix&lt;/a&gt;, which apparently has more than 100 million users. Uh, wow. &lt;strong&gt;I should probably try Matrix!&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;But I didn&#039;t realize Matrix had so many users at the time, so I decided to instead try a chat protocol that was &lt;em&gt;designed&lt;/em&gt; for old computers.&lt;/p&gt;
-&lt;h1 id=&quot;internet-relay-chat&quot;&gt;Internet Relay Chat&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/IRC&quot;&gt;Wikipedia says IRC was created in 1988&lt;/a&gt;. I haven&#039;t used IRC much and, when I have, I found it to be unapproachable.&lt;/p&gt;
-&lt;h2 id=&quot;problems-with-irc&quot;&gt;Problems with IRC&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;There are &lt;strong&gt;commands you have to remember&lt;/strong&gt; (and any typo might send your flawed command line straight into the chat window for all to see)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;All IRC servers I&#039;ve used broadcast your hostname when you connect&lt;/strong&gt;, unless you setup an account (&lt;em&gt;this guy uses Comcast!!!&lt;/em&gt;)&lt;/li&gt;
-&lt;li&gt;With IRC, &lt;strong&gt;you generally only receive messages while online&lt;/strong&gt;, so you have to stay connected (or use a &amp;quot;bouncer&amp;quot;) if you want to actually see responses&lt;/li&gt;
-&lt;li&gt;There isn&#039;t a convenient, free iOS app for IRC, so IRC basically doesn&#039;t exist for many people&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I feel like most of these limitations could be easily overcome.&lt;/p&gt;
-&lt;h2 id=&quot;solving-ircs-problems&quot;&gt;Solving IRC&#039;s problems&lt;/h2&gt;
-&lt;p&gt;Obvious solutions:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Have actual UI for commands&lt;/strong&gt;, instead of relying on perfectly-entered text commands&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Hide hostnames by default&lt;/strong&gt; (at least from non-operators)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Store past messages&lt;/strong&gt; in a sequential database and allow clients to request old messages -- note: this seems ripe for AI scraper abuse, and it would require opt-in protocol changes&lt;/li&gt;
-&lt;li&gt;Build a simple web client, optionally create native phone apps, and, of course, supply a lightweight TUI!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Once you throw in account management and privacy controls, this could get out of hand quickly. And &lt;strong&gt;Matrix already exists and has probably solved these problems&lt;/strong&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;not-solving-ircs-problems&quot;&gt;&lt;em&gt;Not&lt;/em&gt; solving IRC&#039;s problems&lt;/h2&gt;
-&lt;p&gt;My original motivation for investigating chat apps was to see what it would take to setup my own little chat room. I&#039;m still not convinced I &lt;em&gt;need&lt;/em&gt; a chat room, and I&#039;m almost certain it wouldn&#039;t get much use, so let&#039;s cut some corners:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Bridging multiple servers? Who cares!&lt;/li&gt;
-&lt;li&gt;Encryption and user accounts? Not needed, since it&#039;s just for fun!&lt;/li&gt;
-&lt;li&gt;Tracking and querying old messages? Maybe just cache the last 10!&lt;/li&gt;
-&lt;li&gt;Instead of building any apps, just reuse existing IRC clients!&lt;/li&gt;
-&lt;li&gt;Operators? Probably a good idea, but not implemented&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I don&#039;t know if worse is &lt;em&gt;better&lt;/em&gt;, but it&#039;s certainly &lt;em&gt;easier&lt;/em&gt;!&lt;/p&gt;
-&lt;p&gt;And thus, &lt;strong&gt;&lt;a href=&quot;https://github.com/jaredkrinke/pirc&quot;&gt;pirc&lt;/a&gt;&lt;/strong&gt; was born.&lt;/p&gt;
-&lt;h2 id=&quot;pirc&quot;&gt;pirc&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/jaredkrinke/pirc&quot;&gt;pirc&lt;/a&gt;&lt;/strong&gt; is basically a learning experiment to see how simple an IRC server can be. &lt;strong&gt;The entire server is in a single ~350 line Python file, with no dependencies beyond the Python standard library&lt;/strong&gt;. The code uses a minimum of abstraction (most of the server is one big &lt;code&gt;match&lt;/code&gt; statement). It is almost certainly &lt;em&gt;not&lt;/em&gt; spec-compliant (since I couldn&#039;t actually determine &lt;em&gt;which&lt;/em&gt; IRC spec to work off of--IRC has evolved organically, for better or worse), but it seems to work with &lt;a href=&quot;https://hexchat.github.io/&quot;&gt;HexChat&lt;/a&gt;, &lt;a href=&quot;https://irssi.org/&quot;&gt;Irssi&lt;/a&gt;, and &lt;a href=&quot;https://weechat.org/&quot;&gt;WeeChat&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The code is rough, but should be readable, so I won&#039;t attempt to explain it here. Here are some things I learned along the way:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Python&#039;s &lt;code&gt;socketserver&lt;/code&gt; module doesn&#039;t seem to have a simple way to detect when clients disconnect (so I switched to the &lt;code&gt;selectors&lt;/code&gt; module instead)&lt;/li&gt;
-&lt;li&gt;In Python, &lt;code&gt;textwrap.wrap(&amp;quot;&amp;quot;)&lt;/code&gt; returns &lt;code&gt;[]&lt;/code&gt; instead of &lt;code&gt;[&amp;quot;&amp;quot;]&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;I still think IRC should &lt;em&gt;not&lt;/em&gt; broadcast hostnames by default (at least to non-operators)&lt;/li&gt;
-&lt;li&gt;IRC clients send all commands in CAPITAL letters (e.g. &lt;code&gt;JOIN&lt;/code&gt;), &lt;em&gt;except&lt;/em&gt; the &amp;quot;message of the day&amp;quot; command (&lt;code&gt;motd&lt;/code&gt;), which is sent in lowercase (why!?)&lt;/li&gt;
-&lt;li&gt;To my surprise, private messages and messages sent to channels are both &lt;code&gt;PRIVMSG&lt;/code&gt; commands (just directed to a channel instead of a nickname)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;test-server&quot;&gt;Test server&lt;/h1&gt;
-&lt;p&gt;A test server is currently running (unencrypted/&lt;code&gt;-notls&lt;/code&gt;) on &lt;code&gt;irc.schemescape.com&lt;/code&gt; port 6667 (make sure to &lt;code&gt;/join #general&lt;/code&gt;).&lt;/p&gt;
 </content>
 </entry>
 </feed>

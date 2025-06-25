@@ -48,7 +48,7 @@
 <h1 id="show-me-the-code">Show me the code!</h1>
 <p>It's like <a href="https://metalsmith.io/">Metalsmith</a> in Lua. See <a href="https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md">the tutorial</a> for more, but here's an example that converts Markdown to HTML and adds the page's title to the resulting HTML:</p>
 <pre><code class="language-lua"><span class="hl-comment">-- Minimal HTML template (used below)</span>
-<span class="hl-keyword">local</span> <span class="hl-identifier">outer</span> <span class="hl-operator">=</span> <span class="hl-string_longstring">[[
+<span class="hl-keyword">local</span> <span class="hl-identifier">outer</span> <span class="hl-operator">=</span> <span class="hl-string">[[
 &lt;html&gt;
   &lt;head&gt;&lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;&lt;/head&gt;
   &lt;body&gt;&lt;%- content %&gt;&lt;/body&gt;

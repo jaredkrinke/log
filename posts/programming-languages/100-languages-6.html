@@ -57,10 +57,10 @@
 <li><em>Do</em> initialize  the stack pointer (<code>sp</code>)</li>
 </ul>
 <p>Here's the code I used (in this case, I chose to have the stack grow down from where boot sector code must start):</p>
-<pre><code class="language-asm">    <span class="hl-function_builtin_instruction">mov</span> <span class="hl-constant_builtin_register">ax</span><span class="hl-operator">,</span> <span class="hl-number">0</span>
-    <span class="hl-function_builtin_instruction">mov</span> <span class="hl-identifier">ds</span><span class="hl-operator">,</span> <span class="hl-constant_builtin_register">ax</span>
-    <span class="hl-function_builtin_instruction">mov</span> <span class="hl-identifier">ss</span><span class="hl-operator">,</span> <span class="hl-constant_builtin_register">ax</span>
-    <span class="hl-function_builtin_instruction">mov</span> <span class="hl-identifier">sp</span><span class="hl-operator">,</span> <span class="hl-number">0x7c00</span>
+<pre><code class="language-asm">    <span class="hl-function">mov</span> <span class="hl-constant">ax</span><span class="hl-operator">,</span> <span class="hl-number">0</span>
+    <span class="hl-function">mov</span> <span class="hl-identifier">ds</span><span class="hl-operator">,</span> <span class="hl-constant">ax</span>
+    <span class="hl-function">mov</span> <span class="hl-identifier">ss</span><span class="hl-operator">,</span> <span class="hl-constant">ax</span>
+    <span class="hl-function">mov</span> <span class="hl-identifier">sp</span><span class="hl-operator">,</span> <span class="hl-number">0x7c00</span>
 </code></pre>
 <p>Then you can set <code>al</code> to a character, <code>ah</code> to <code>0xe</code>, and execute <code>int 0x10</code> to output the character (and be moderately confident that it will actually appear).</p>
 <p><strong>The above worked for me on real hardware, QEMU, Blinkenlights, and v86.</strong></p>

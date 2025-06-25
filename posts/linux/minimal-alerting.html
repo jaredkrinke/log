@@ -75,16 +75,16 @@
 <span class="hl-comment"># modified. The command is only run at most every TIMESPAN amount of time</span>
 <span class="hl-comment"># (TIMESPAN format is the same as the sleep command, e.g. 10s, 1m).</span>
 
-<span class="hl-keyword">if</span> <span class="hl-operator">[</span> <span class="hl-operator">$</span><span class="hl-variable_builtin">#</span> <span class="hl-default">-le</span> <span class="hl-number">3</span> <span class="hl-operator">]</span><span class="hl-operator">;</span> <span class="hl-keyword">then</span>
-    <span class="hl-function_builtin">echo</span> <span class="hl-identifier">USAGE</span><span class="hl-default">:</span> <span class="hl-operator">$</span><span class="hl-variable_builtin">0</span> <span class="hl-identifier">TARGET</span> <span class="hl-identifier">TIMESPAN</span> <span class="hl-identifier">COMMAND</span>
-    <span class="hl-function_builtin">echo</span>
-    <span class="hl-function_builtin">echo</span> <span class="hl-string">&quot;Example: $0 foo.log 15m wall &apos;Alert!!!&apos;&quot;</span>
-    <span class="hl-function_builtin">exit</span> <span class="hl-number">1</span>
+<span class="hl-keyword">if</span> <span class="hl-operator">[</span> <span class="hl-operator">$</span><span class="hl-variable">#</span> <span class="hl-default">-le</span> <span class="hl-number">3</span> <span class="hl-operator">]</span><span class="hl-operator">;</span> <span class="hl-keyword">then</span>
+    <span class="hl-function">echo</span> <span class="hl-identifier">USAGE</span><span class="hl-default">:</span> <span class="hl-operator">$</span><span class="hl-variable">0</span> <span class="hl-identifier">TARGET</span> <span class="hl-identifier">TIMESPAN</span> <span class="hl-identifier">COMMAND</span>
+    <span class="hl-function">echo</span>
+    <span class="hl-function">echo</span> <span class="hl-string">&quot;Example: $0 foo.log 15m wall &apos;Alert!!!&apos;&quot;</span>
+    <span class="hl-function">exit</span> <span class="hl-number">1</span>
 <span class="hl-keyword">fi</span>
 
-<span class="hl-variable">target</span><span class="hl-operator">=</span><span class="hl-operator">$</span><span class="hl-variable_builtin">1</span>
-<span class="hl-variable">delay</span><span class="hl-operator">=</span><span class="hl-operator">$</span><span class="hl-variable_builtin">2</span>
-<span class="hl-function_builtin">shift</span> <span class="hl-number">2</span>
+<span class="hl-variable">target</span><span class="hl-operator">=</span><span class="hl-operator">$</span><span class="hl-variable">1</span>
+<span class="hl-variable">delay</span><span class="hl-operator">=</span><span class="hl-operator">$</span><span class="hl-variable">2</span>
+<span class="hl-function">shift</span> <span class="hl-number">2</span>
 
 <span class="hl-keyword">while</span> <span class="hl-identifier">inotifywait</span> <span class="hl-default">-qq</span> <span class="hl-string">&quot;$target&quot;</span><span class="hl-operator">;</span> <span class="hl-keyword">do</span>
     <span class="hl-string">&quot;$@&quot;</span>
@@ -93,7 +93,7 @@
 </code></pre>
 <p>All this script does is wait for a file or directory to be modified, run the command, and then sleep the specified amount of time.</p>
 <p>Example usage:</p>
-<pre><code class="language-bash"><span class="hl-identifier">ow</span><span class="hl-default">.</span><span class="hl-identifier">sh</span> <span class="hl-identifier">errors</span><span class="hl-default">.</span><span class="hl-identifier">txt</span> <span class="hl-number">1</span><span class="hl-identifier">m</span> <span class="hl-function_builtin">echo</span> <span class="hl-string">&quot;Oh no! An alert!&quot;</span>
+<pre><code class="language-bash"><span class="hl-identifier">ow</span><span class="hl-default">.</span><span class="hl-identifier">sh</span> <span class="hl-identifier">errors</span><span class="hl-default">.</span><span class="hl-identifier">txt</span> <span class="hl-number">1</span><span class="hl-identifier">m</span> <span class="hl-function">echo</span> <span class="hl-string">&quot;Oh no! An alert!&quot;</span>
 </code></pre>
 <p>This will:</p>
 <ul>
