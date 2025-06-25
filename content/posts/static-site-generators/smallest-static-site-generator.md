@@ -6,10 +6,10 @@ keywords: [lua]
 ---
 Today, I unveil my most gratuitous static site generator yet: [luasmith](https://github.com/jaredkrinke/luasmith).
 
-* **It's ~270 KB** (static binary + templates for this site, gzip compressed)
-* **It builds my ~140 page site in ~150 ms** (wall clock time, on an 11-year-old old laptop)
+* **It's ~~270 KB~~ 450 KB** (static binary + templates for this site, gzip compressed)
+* **It builds my ~140 page site in ~~150 ms~~ 300 ms** (wall clock time, on an 11-year-old old laptop)
 * **It performs acceptably on a 28-year-old laptop, running NetBSD** (Pentium 166 MHz)
-* **It's trivial to compile**, requiring only a C compiler, `make`, and `sed`
+* **It's trivial to compile**, requiring only a C compiler, `make`, `sed`, and `sh`
 
 # Show me the code!
 It's like [Metalsmith](https://metalsmith.io/) in Lua. See [the tutorial](https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md) for more, but here's an example that converts Markdown to HTML and adds the page's title to the resulting HTML:
@@ -52,7 +52,7 @@ First, I wanted the architecture to be simple:
 * The build pipeline is just a Lua script (similar to [Metalsmith](https://metalsmith.io/))
 * **Page templates are constructed using Lua** (via [etlua](https://github.com/leafo/etlua))
 * Metadata on items can be specified in frontmatter using Lua (or a subset of YAML)
-* **Relative links between Markdown files "just work"** (including links to headings)
+* **Relative links between Markdown files "just work"** and are checked at build time (including links to headings)
 
 Instead of creating a bespoke domain-specific language for defining the structure of a generated site or its templates, you just write some Lua code that glues together a few processing nodes and then supply templates that *also* use Lua (e.g. for iteration).
 
@@ -78,6 +78,11 @@ I've also minimized the number of (vendored, compile-time) dependencies involved
 * [Lua](https://www.lua.org/) for metadata, scripting, etc.
 * [etlua](https://github.com/leafo/etlua) for templates
 
+**Update**: Added in a few more for syntax highlighting:
+
+* [LPeg](https://www.inf.puc-rio.br/~roberto/lpeg/)
+* [Scintillua](https://github.com/orbitalquark/scintillua)
+
 **You'll note that these libraries are doing all of the heavy lifting**. I've basically only written glue code, an entry point, and some infrastructure. And most of the code I wrote is in Lua (which is much easier to write than C--and fast enough for all but the innermost loops).
 
 ## Simple to deploy
@@ -87,7 +92,7 @@ Static binaries are wonderful. *Tiny* static binaries are even wonderful-er. **J
 Of course, there are downsides to the approach I took:
 
 * Writing C code is fraught with peril -- fortunately, the hardest parts were mostly already done by the md4c and Lua authors
-* Syntax highlighting is *not* simple -- so I just cut that feature, at least for now
+* Syntax highlighting is *not* simple -- so I just cut that feature, at least for now (**update**: syntax highlighting is now supported!)
 * The security model of an SSG that uses Lua scripts for everything is... not ideal -- **only use templates you trust!**
 
 Additionally, I haven't taken the time to setup a proper development and debugging environment for C and Lua. I need to investiage static analysis and debugging tools for Lua, as well as find a tolerable frontend for GDB. This is where I really miss Emacs+SLIME for Common Lisp or VS Code for TypeScript/Python.
