@@ -32,6 +32,8 @@ Annoyingly, I'm still not at the point where I can fully replace md2blog because
 
 Maybe some day I will work up the nerve to integrate [Tree-sitter](https://github.com/tree-sitter/tree-sitter) and a bunch of associated grammars, to add syntax highlighting (bringing luasmith into build-time featuer parity with md2blog), but I'm sure that will massively increase the size and (internal) complexity of luasmith. Or perhaps I can write an optional, external tool that is purpose-built for syntax highlighting. We'll see...
 
+**Update**: Syntax highlighting [is now implemlented in luasmith](luasmith-syntax-highlighting.md).
+
 ## Addendum, with actual bloat
 I learned that Tree-sitter [has a command line interface](https://tree-sitter.github.io/tree-sitter/cli/index.html). Problem solved, right? Let's install and find out:
 

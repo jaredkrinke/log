@@ -11,6 +11,8 @@ Today, I unveil my most gratuitous static site generator yet: [luasmith](https:/
 * **It performs acceptably on a 28-year-old laptop, running NetBSD** (Pentium 166 MHz)
 * **It's trivial to compile**, requiring only a C compiler, `make`, `sed`, and `sh`
 
+**Update**: This site is now [built using luasmith](https://github.com/jaredkrinke/luasmith/tree/main/themes/md2blog).
+
 # Show me the code!
 It's like [Metalsmith](https://metalsmith.io/) in Lua. See [the tutorial](https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md) for more, but here's an example that converts Markdown to HTML and adds the page's title to the resulting HTML:
 
