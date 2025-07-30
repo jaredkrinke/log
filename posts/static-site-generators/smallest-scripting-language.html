@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>The smallest embeddable scripting language, part 1</title>
+<meta name="description" content="My search for a small, simple embeddedable scripting language." />
+<meta name="keywords" content="lua,lisp" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "The smallest embeddable scripting language, part 1",
+  "abstract": "My search for a small, simple embeddedable scripting language.",
+  "keywords": "static-site-generators,lua,lisp",
+  "datePublished": "2025-07-29"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/static-site-generators/index.html">static-site-generators</a></li>
+<li><a href="../../posts/lua/index.html">lua</a></li>
+<li><a href="../../posts/lisp/index.html">lisp</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/static-site-generators/smallest-scripting-language.html">The smallest embeddable scripting language, part 1</a></h1>
+<p><time datetime="2025-07-29">July 29, 2025</time></p>
+</header>
+<h1 id="background">Background</h1>
+<p><strong>I like small software</strong> because I hate bloat. Sadly, bloat is pervasive in this era of Chrome-powered text editors.</p>
+<p><strong>I also like extensible software</strong> because it lets you add the features you actually use without bloating the vanilla version for everyone else.</p>
+<p>As an example, take a look at <a href="smallest-static-site-generator.html">my &lt; 1 MB static site generator</a>. <strong>It's ~40 times smaller than <a href="https://gohugo.io/">Hugo</a></strong>, yet it has features that Hugo doesn't conveniently support (e.g. preserving relative Markdown links and categorizing posts based on directory). (To be fair, it also lacks zillions of features that Hugo supports--but which I don't need.)</p>
+<p>At the heart of small and extensible software lies some sort of flexble configuration/extension scheme. In theory, something declarative would be preferable, but, <strong>in practice, this usually involves an embedded (and, yes, Turing-complete) scripting language</strong>.</p>
+<h1 id="goal">Goal</h1>
+<p>Getting to the point, I want to find the smallest comfortable scripting language that can be easily embedded into minimal software. When I say &quot;smallest&quot;, I mean:</p>
+<ul>
+<li>Small number of orthogonal language features (to make it easy to learn)</li>
+<li>Small implementation code size (to ensure it doesn't work against my goal of producing small software)</li>
+</ul>
+<p>I'll admit that optimizing for code size in this era of terabyte drives doesn't seem important on the surface. However, I find that <strong>a small implementation size is a convenient proxy for these more virtuous aspects</strong>:</p>
+<ul>
+<li>Simpler and easier to understand implementation</li>
+<li>Few or zero third-party dependencies</li>
+<li>Smaller surface area for bugs</li>
+<li>And sometimes improved portability, especially with older/slower platforms</li>
+</ul>
+<p>Oh, and even more unreasonably, I want the scripting language's <em>implementation language</em> to also be simple and portable, so I'm only looking at C-based implementations.</p>
+<h1 id="the-contenders">The contenders</h1>
+<p>After some unscientific research, these are the languages that looked most promising to me:</p>
+<ul>
+<li><a href="https://www.lua.org/">Lua</a></li>
+<li>JavaScript (<a href="https://bellard.org/quickjs/">QuickJS</a>, <a href="https://github.com/svaarala/duktape">Duktape</a>)</li>
+<li>Python (<a href="https://micropython.org/">MicroPython</a>)</li>
+<li><a href="https://www.tcl-lang.org/">Tcl</a></li>
+<li>Lisp (<a href="https://tinyscheme.sourceforge.net/home.html">TinyScheme</a>, <a href="https://github.com/yuriy-chumak/OL">Otus Lisp</a>, <a href="https://github.com/owl-lisp/owl">Owl Lisp</a>, <a href="https://ccrma.stanford.edu/software/snd/snd/s7.html">s7</a>)</li>
+<li><a href="https://janet-lang.org/">Janet</a></li>
+<li><a href="https://wren.io/">Wren</a></li>
+</ul>
+<p>Obviously, Python and JavaScript are the most popular languages in the list, but both languages are big--and getting bigger every day! Also, it's unclear how helpful their ecosystems would be when I'm planning to pull in smaller and less broadly supported implementations like MicroPython and QuickJS.</p>
+<p>Lua is arguably the king of embedded scripting languages, but I feel like a simpler language in the vein of Lisp or Scheme could be both smaller and more capable.</p>
+<h2 id="others">Others</h2>
+<p>There are also a few languages I like but don't quite fit what I'm looking for right now:</p>
+<ul>
+<li><a href="https://beyondloom.com/decker/lil.html">lil</a>: bonus points for sporting an awk implementation, but, without mutable data structures, I struggled to get acceptable performance</li>
+<li><a href="https://github.com/rxi/fe">fe</a>: only supports ~4000 cons cells</li>
+</ul>
+<h1 id="code-size-data">Code size data</h1>
+<p>As a first pass, here are the sizes of size-optimized (<code>-Os</code>) REPL executables:</p>
+<table>
+<thead>
+<tr>
+<th align="center">Implementation</th>
+<th align="center">Language</th>
+<th align="right">Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">TinyScheme</td>
+<td align="center">Scheme</td>
+<td align="right">75 KB</td>
+</tr>
+<tr>
+<td align="center">Wren</td>
+<td align="center">Wren</td>
+<td align="right">160 KB</td>
+</tr>
+<tr>
+<td align="center">Lua 5.2</td>
+<td align="center">Lua</td>
+<td align="right">175 KB</td>
+</tr>
+<tr>
+<td align="center">Duktape</td>
+<td align="center">JavaScript</td>
+<td align="right">350 KB</td>
+</tr>
+<tr>
+<td align="center">Otus Lisp</td>
+<td align="center">Scheme</td>
+<td align="right">500 KB</td>
+</tr>
+<tr>
+<td align="center">QuickJS</td>
+<td align="center">JavaScript</td>
+<td align="right">700 KB</td>
+</tr>
+<tr>
+<td align="center">Owl Lisp</td>
+<td align="center">Scheme</td>
+<td align="right">700 KB</td>
+</tr>
+<tr>
+<td align="center">Janet</td>
+<td align="center">Janet</td>
+<td align="right">850 KB</td>
+</tr>
+<tr>
+<td align="center">s7</td>
+<td align="center">Scheme</td>
+<td align="right">1500 KB</td>
+</tr>
+<tr>
+<td align="center">Tcl</td>
+<td align="center">Tcl</td>
+<td align="right">1700 KB</td>
+</tr>
+<tr>
+<td align="center">MicroPython</td>
+<td align="center">Python</td>
+<td align="right">?</td>
+</tr>
+</tbody>
+</table>
+<p>Note: I didn't actually build MicroPython myself because its source code is &gt; 100 MB (!). The homepage claims a 256 KB binary size, but I can't confirm that figure.</p>
+<h1 id="analysis">Analysis</h1>
+<h2 id="lua">Lua</h2>
+<p>An impressive showing by Lua! I have numerous complaints with Lua (conflating arrays with dictionaries, verbose syntax, and, yes, one-based indexing), but Lua's tiny code size is amazing! Even throwing in JIT compilation (via <a href="https://luajit.org/">LuaJIT</a>) and parsing expression grammars (via <a href="https://www.inf.puc-rio.br/~roberto/lpeg/">LPeg</a>), the binary is still tiny.</p>
+<p><strong>Honestly, Lua's &quot;bang for your buck&quot; is going to be hard to beat.</strong> No wonder it's so popular!</p>
+<h2 id="tinyscheme">TinyScheme</h2>
+<p>The only embeddable language implementation that handily beats Lua in terms of code size is TinyScheme. Unfortunately, the ecosystem for TinyScheme is practically nonexistent--it's not even mentioned in <a href="https://get.scheme.org/">the big list of Scheme implementations on scheme.org</a>! <strong>There <em>is</em> an interesting runtime for TinyScheme named <a href="http://www.geonius.com/software/tsion/">TSION</a> that is based on an I/O event loop that ends up around 280 KB in total</strong>. Honestly, that's impressive enough that I should try building something with it.</p>
+<h2 id="wren">Wren</h2>
+<p><strong>To my surprise, Wren manages to be smaller than Lua!</strong> I don't enjoy the ceremony of it's strict object-oriented nature, but I suspect it might result in more orderly code than classless languages like Lua and (original) JavaScript.</p>
+<p>My main concern with Wren, however, is that the classes that make up pretty much everything are fairly rigid--you can't just add properties whenever you feel like it. This sounds like a great design for something like a game where you have neat and tidy objects and interfaces, but for extensibility, configuration, and prototyping I'm drawn more towards Lua and JavaScript's more flexible data types--despite how messy they can get. Of course, if Wren's rigid types can prevent things from blowing up at run-time as frequently as happens in Lua and JavaScript, it might be a good trade-off.</p>
+<p><strong>I'll need to play with Wren some more to form an actual opinion.</strong></p>
+<h2 id="javascript">JavaScript</h2>
+<p>As much as I like the good parts of modern JavaScript, the language as a whole has a lot of cruft that probably adds unnecessary bulk to implementations (e.g. block scoping, two-byte characters, the <code>arguments</code> object). Ignoring old features, the language is also evolving at a feverish pace. I <em>do</em> like object destrucuring and template literals, though. For now, I'm setting aside the wild world of JavaScript.</p>
+<h2 id="other-schemes-and-tcl">Other Schemes (and Tcl)</h2>
+<p>I'm surprised at how big the other Scheme implementations are. The main draw of Scheme for me is its simplicity, yet somehow most Schemes are JavaScript-sized. Same story for Tcl.</p>
+<h2 id="janet">Janet</h2>
+<p>And now we come to Janet. <strong>Janet feels like a more batteries-included Lua, with Lisp/Clojure-inspired syntax</strong>. Sure it's a bit heftier, but it packs:</p>
+<ul>
+<li>Parsing expression grammars</li>
+<li>Immutable data structures</li>
+<li>Macros</li>
+<li>Destructuring</li>
+<li>Multithreading</li>
+<li>Networking</li>
+<li>An event loop</li>
+<li>And more!</li>
+</ul>
+<p>I don't actually like the Clojure-inspired not-quite-as-regular-as-a-real-Lisp syntax, and I know from experience that any sort of math equations are hard to read and write in prefix notation.</p>
+<p><strong>But Janet throws in practically everything you might want from a &quot;small&quot; language and is still as small as many Scheme implementations!</strong></p>
+<p>Obviously, Lisps aren't popular, but their regular syntax becomes soothing after a while. The consistent sytnax also supports structural editing more simply than other languages (not to mention live editing!). And sometimes it just seems like Lisps attract developers who care about clarity in written code.</p>
+<p>So I'm a bit torn. Janet has a lot of what I want, but I can't shake the feeling that it has <em>too many</em> features for someone who's claiming to be looking for the smallest comfortable embeddedable scripting language.</p>
+<p><strong>Similar to Wren and TinyScheme, I'm going to need to spend some more time with Janet.</strong></p>
+<h1 id="end-of-part-1">End of part 1</h1>
+<p>Now I will abruptly end this post after only considering code size because I honestly haven't spent enough time with some of the languages to be able to comment on their level of &quot;comfort&quot; (or, rather, my level of comfort with using <em>them</em>).</p>
+<p><strong>I suspect that the ultimate answer will be the one that is already staring me in the face: Lua.</strong> Despite this, I'd like to explore other options a bit more, just in case I'm missing something truly special.</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

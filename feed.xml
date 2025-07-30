@@ -7,8 +7,157 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-06-25T00:00:00.000Z</updated>
+<updated>2025-07-29T00:00:00.000Z</updated>
 
+<entry>
+<title>The smallest embeddable scripting language, part 1</title>
+<id>https://log.schemescape.com/posts/static-site-generators/smallest-scripting-language.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/smallest-scripting-language.html"/>
+<updated>2025-07-29T00:00:00.000Z</updated>
+<summary type="text">My search for a small, simple embeddedable scripting language.</summary>
+<content type="html">&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;I like small software&lt;/strong&gt; because I hate bloat. Sadly, bloat is pervasive in this era of Chrome-powered text editors.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I also like extensible software&lt;/strong&gt; because it lets you add the features you actually use without bloating the vanilla version for everyone else.&lt;/p&gt;
+&lt;p&gt;As an example, take a look at &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/smallest-static-site-generator.html&quot;&gt;my &amp;lt; 1 MB static site generator&lt;/a&gt;. &lt;strong&gt;It&#039;s ~40 times smaller than &lt;a href=&quot;https://gohugo.io/&quot;&gt;Hugo&lt;/a&gt;&lt;/strong&gt;, yet it has features that Hugo doesn&#039;t conveniently support (e.g. preserving relative Markdown links and categorizing posts based on directory). (To be fair, it also lacks zillions of features that Hugo supports--but which I don&#039;t need.)&lt;/p&gt;
+&lt;p&gt;At the heart of small and extensible software lies some sort of flexble configuration/extension scheme. In theory, something declarative would be preferable, but, &lt;strong&gt;in practice, this usually involves an embedded (and, yes, Turing-complete) scripting language&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;goal&quot;&gt;Goal&lt;/h1&gt;
+&lt;p&gt;Getting to the point, I want to find the smallest comfortable scripting language that can be easily embedded into minimal software. When I say &amp;quot;smallest&amp;quot;, I mean:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Small number of orthogonal language features (to make it easy to learn)&lt;/li&gt;
+&lt;li&gt;Small implementation code size (to ensure it doesn&#039;t work against my goal of producing small software)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I&#039;ll admit that optimizing for code size in this era of terabyte drives doesn&#039;t seem important on the surface. However, I find that &lt;strong&gt;a small implementation size is a convenient proxy for these more virtuous aspects&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Simpler and easier to understand implementation&lt;/li&gt;
+&lt;li&gt;Few or zero third-party dependencies&lt;/li&gt;
+&lt;li&gt;Smaller surface area for bugs&lt;/li&gt;
+&lt;li&gt;And sometimes improved portability, especially with older/slower platforms&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Oh, and even more unreasonably, I want the scripting language&#039;s &lt;em&gt;implementation language&lt;/em&gt; to also be simple and portable, so I&#039;m only looking at C-based implementations.&lt;/p&gt;
+&lt;h1 id=&quot;the-contenders&quot;&gt;The contenders&lt;/h1&gt;
+&lt;p&gt;After some unscientific research, these are the languages that looked most promising to me:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.lua.org/&quot;&gt;Lua&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;JavaScript (&lt;a href=&quot;https://bellard.org/quickjs/&quot;&gt;QuickJS&lt;/a&gt;, &lt;a href=&quot;https://github.com/svaarala/duktape&quot;&gt;Duktape&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Python (&lt;a href=&quot;https://micropython.org/&quot;&gt;MicroPython&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.tcl-lang.org/&quot;&gt;Tcl&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Lisp (&lt;a href=&quot;https://tinyscheme.sourceforge.net/home.html&quot;&gt;TinyScheme&lt;/a&gt;, &lt;a href=&quot;https://github.com/yuriy-chumak/OL&quot;&gt;Otus Lisp&lt;/a&gt;, &lt;a href=&quot;https://github.com/owl-lisp/owl&quot;&gt;Owl Lisp&lt;/a&gt;, &lt;a href=&quot;https://ccrma.stanford.edu/software/snd/snd/s7.html&quot;&gt;s7&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://janet-lang.org/&quot;&gt;Janet&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://wren.io/&quot;&gt;Wren&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Obviously, Python and JavaScript are the most popular languages in the list, but both languages are big--and getting bigger every day! Also, it&#039;s unclear how helpful their ecosystems would be when I&#039;m planning to pull in smaller and less broadly supported implementations like MicroPython and QuickJS.&lt;/p&gt;
+&lt;p&gt;Lua is arguably the king of embedded scripting languages, but I feel like a simpler language in the vein of Lisp or Scheme could be both smaller and more capable.&lt;/p&gt;
+&lt;h2 id=&quot;others&quot;&gt;Others&lt;/h2&gt;
+&lt;p&gt;There are also a few languages I like but don&#039;t quite fit what I&#039;m looking for right now:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://beyondloom.com/decker/lil.html&quot;&gt;lil&lt;/a&gt;: bonus points for sporting an awk implementation, but, without mutable data structures, I struggled to get acceptable performance&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/rxi/fe&quot;&gt;fe&lt;/a&gt;: only supports ~4000 cons cells&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;code-size-data&quot;&gt;Code size data&lt;/h1&gt;
+&lt;p&gt;As a first pass, here are the sizes of size-optimized (&lt;code&gt;-Os&lt;/code&gt;) REPL executables:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&quot;center&quot;&gt;Implementation&lt;/th&gt;
+&lt;th align=&quot;center&quot;&gt;Language&lt;/th&gt;
+&lt;th align=&quot;right&quot;&gt;Size&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;TinyScheme&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;Scheme&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;75 KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Wren&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;Wren&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;160 KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Lua 5.2&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;Lua&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;175 KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Duktape&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;JavaScript&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;350 KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Otus Lisp&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;Scheme&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;500 KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;QuickJS&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;JavaScript&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;700 KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Owl Lisp&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;Scheme&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;700 KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Janet&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;Janet&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;850 KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;s7&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;Scheme&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;1500 KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;Tcl&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;Tcl&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;1700 KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&quot;center&quot;&gt;MicroPython&lt;/td&gt;
+&lt;td align=&quot;center&quot;&gt;Python&lt;/td&gt;
+&lt;td align=&quot;right&quot;&gt;?&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Note: I didn&#039;t actually build MicroPython myself because its source code is &amp;gt; 100 MB (!). The homepage claims a 256 KB binary size, but I can&#039;t confirm that figure.&lt;/p&gt;
+&lt;h1 id=&quot;analysis&quot;&gt;Analysis&lt;/h1&gt;
+&lt;h2 id=&quot;lua&quot;&gt;Lua&lt;/h2&gt;
+&lt;p&gt;An impressive showing by Lua! I have numerous complaints with Lua (conflating arrays with dictionaries, verbose syntax, and, yes, one-based indexing), but Lua&#039;s tiny code size is amazing! Even throwing in JIT compilation (via &lt;a href=&quot;https://luajit.org/&quot;&gt;LuaJIT&lt;/a&gt;) and parsing expression grammars (via &lt;a href=&quot;https://www.inf.puc-rio.br/~roberto/lpeg/&quot;&gt;LPeg&lt;/a&gt;), the binary is still tiny.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Honestly, Lua&#039;s &amp;quot;bang for your buck&amp;quot; is going to be hard to beat.&lt;/strong&gt; No wonder it&#039;s so popular!&lt;/p&gt;
+&lt;h2 id=&quot;tinyscheme&quot;&gt;TinyScheme&lt;/h2&gt;
+&lt;p&gt;The only embeddable language implementation that handily beats Lua in terms of code size is TinyScheme. Unfortunately, the ecosystem for TinyScheme is practically nonexistent--it&#039;s not even mentioned in &lt;a href=&quot;https://get.scheme.org/&quot;&gt;the big list of Scheme implementations on scheme.org&lt;/a&gt;! &lt;strong&gt;There &lt;em&gt;is&lt;/em&gt; an interesting runtime for TinyScheme named &lt;a href=&quot;http://www.geonius.com/software/tsion/&quot;&gt;TSION&lt;/a&gt; that is based on an I/O event loop that ends up around 280 KB in total&lt;/strong&gt;. Honestly, that&#039;s impressive enough that I should try building something with it.&lt;/p&gt;
+&lt;h2 id=&quot;wren&quot;&gt;Wren&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;To my surprise, Wren manages to be smaller than Lua!&lt;/strong&gt; I don&#039;t enjoy the ceremony of it&#039;s strict object-oriented nature, but I suspect it might result in more orderly code than classless languages like Lua and (original) JavaScript.&lt;/p&gt;
+&lt;p&gt;My main concern with Wren, however, is that the classes that make up pretty much everything are fairly rigid--you can&#039;t just add properties whenever you feel like it. This sounds like a great design for something like a game where you have neat and tidy objects and interfaces, but for extensibility, configuration, and prototyping I&#039;m drawn more towards Lua and JavaScript&#039;s more flexible data types--despite how messy they can get. Of course, if Wren&#039;s rigid types can prevent things from blowing up at run-time as frequently as happens in Lua and JavaScript, it might be a good trade-off.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I&#039;ll need to play with Wren some more to form an actual opinion.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;javascript&quot;&gt;JavaScript&lt;/h2&gt;
+&lt;p&gt;As much as I like the good parts of modern JavaScript, the language as a whole has a lot of cruft that probably adds unnecessary bulk to implementations (e.g. block scoping, two-byte characters, the &lt;code&gt;arguments&lt;/code&gt; object). Ignoring old features, the language is also evolving at a feverish pace. I &lt;em&gt;do&lt;/em&gt; like object destrucuring and template literals, though. For now, I&#039;m setting aside the wild world of JavaScript.&lt;/p&gt;
+&lt;h2 id=&quot;other-schemes-and-tcl&quot;&gt;Other Schemes (and Tcl)&lt;/h2&gt;
+&lt;p&gt;I&#039;m surprised at how big the other Scheme implementations are. The main draw of Scheme for me is its simplicity, yet somehow most Schemes are JavaScript-sized. Same story for Tcl.&lt;/p&gt;
+&lt;h2 id=&quot;janet&quot;&gt;Janet&lt;/h2&gt;
+&lt;p&gt;And now we come to Janet. &lt;strong&gt;Janet feels like a more batteries-included Lua, with Lisp/Clojure-inspired syntax&lt;/strong&gt;. Sure it&#039;s a bit heftier, but it packs:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Parsing expression grammars&lt;/li&gt;
+&lt;li&gt;Immutable data structures&lt;/li&gt;
+&lt;li&gt;Macros&lt;/li&gt;
+&lt;li&gt;Destructuring&lt;/li&gt;
+&lt;li&gt;Multithreading&lt;/li&gt;
+&lt;li&gt;Networking&lt;/li&gt;
+&lt;li&gt;An event loop&lt;/li&gt;
+&lt;li&gt;And more!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I don&#039;t actually like the Clojure-inspired not-quite-as-regular-as-a-real-Lisp syntax, and I know from experience that any sort of math equations are hard to read and write in prefix notation.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;But Janet throws in practically everything you might want from a &amp;quot;small&amp;quot; language and is still as small as many Scheme implementations!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Obviously, Lisps aren&#039;t popular, but their regular syntax becomes soothing after a while. The consistent sytnax also supports structural editing more simply than other languages (not to mention live editing!). And sometimes it just seems like Lisps attract developers who care about clarity in written code.&lt;/p&gt;
+&lt;p&gt;So I&#039;m a bit torn. Janet has a lot of what I want, but I can&#039;t shake the feeling that it has &lt;em&gt;too many&lt;/em&gt; features for someone who&#039;s claiming to be looking for the smallest comfortable embeddedable scripting language.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Similar to Wren and TinyScheme, I&#039;m going to need to spend some more time with Janet.&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&quot;end-of-part-1&quot;&gt;End of part 1&lt;/h1&gt;
+&lt;p&gt;Now I will abruptly end this post after only considering code size because I honestly haven&#039;t spent enough time with some of the languages to be able to comment on their level of &amp;quot;comfort&amp;quot; (or, rather, my level of comfort with using &lt;em&gt;them&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I suspect that the ultimate answer will be the one that is already staring me in the face: Lua.&lt;/strong&gt; Despite this, I&#039;d like to explore other options a bit more, just in case I&#039;m missing something truly special.&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>Syntax highlighting for 150 languages in &lt; 200 KB</title>
 <id>https://log.schemescape.com/posts/static-site-generators/luasmith-syntax-highlighting.html</id>
@@ -278,37 +427,6 @@ Abort.
 &lt;p&gt;Regardless, I moved my domain away from Squarespace (to Porkbun). It&#039;s not like I &lt;em&gt;chose&lt;/em&gt; to use Squarespace in the first place--Google chose for me.&lt;/p&gt;
 &lt;h1 id=&quot;corrections&quot;&gt;Corrections?&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;If you &lt;em&gt;are&lt;/em&gt; an email security expert and notice any mistakes in my understanding or logic above, &lt;em&gt;please&lt;/em&gt; email me at &lt;a href=&quot;mailto:log@schemescape.com&quot;&gt;log@schemescape.com&lt;/a&gt;!&lt;/strong&gt; I would love both to be wrong (because then there&#039;s not a problem) and to be corrected (so I can learn).&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>Farewell to a netbook</title>
-<id>https://log.schemescape.com/posts/hardware/farewell-to-a-netbook.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/hardware/farewell-to-a-netbook.html"/>
-<updated>2025-03-04T00:00:00.000Z</updated>
-<summary type="text">Remembering a forgotten device class that actually aligned with my needs.</summary>
-<content type="html">&lt;p&gt;Today, I bid farewell to my &lt;a href=&quot;https://en.wikipedia.org/wiki/Dell_Inspiron_Mini_Series#Dell_Inspiron_Mini_(1018)&quot;&gt;Dell Inspiron Mini 1018&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;netbooks&quot;&gt;Netbooks&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://hackaday.com/2020/06/04/netbooks-the-form-factor-time-forgot/&quot;&gt;Netbooks enjoyed a meteoric rise and fall&lt;/a&gt; in the late 2000s and early 2010s. Basically, they were minimally viable laptops that were maximally affordable. For anyone who wanted a cheapo laptop, they were great! Sure, they were slow, and cramped, and slow. But they were cheap!&lt;/p&gt;
-&lt;p&gt;Actually, that&#039;s not fair. Netbooks were slower than their contemporaries, but anything clocked over 1 GHz isn&#039;t &amp;quot;slow&amp;quot;. That still should be enough for most reasonable workloads, if not for bloat. But I digress.&lt;/p&gt;
-&lt;h1 id=&quot;personal-history&quot;&gt;Personal history&lt;/h1&gt;
-&lt;p&gt;I don&#039;t specifically recall when I picked up my netbook, but it was probably in 2010 or 2011. It came with a 1.66 GHz Intel Atom N455 processor, 1 GB of DDR3 RAM, and a spinning hard drive.&lt;/p&gt;
-&lt;p&gt;It came preloaded with Windows 7 Starter, which ran... adequately. I used the netbook on the couch and it was pleasant. Just imagine a clunky tablet with a keyboard and no touchscreen.&lt;/p&gt;
-&lt;p&gt;Then at some point, I realized that I didn&#039;t really need a laptop, so I loaned it to someone else for work.&lt;/p&gt;
-&lt;h2 id=&quot;end-of-life&quot;&gt;End of life&lt;/h2&gt;
-&lt;p&gt;Later, I recovered the device and I updated the operating system to Windows 10. Big mistake. Windows 10 performance on this device was abysmal. It took nearly one full minute to open a web browser. It turns out that a 1 GB of RAM is woefully insufficient for Windows 10. Instead of being pleasant, the device became frustrating. Oh well, I still didn&#039;t &lt;em&gt;really&lt;/em&gt; need a laptop, so I stuck it in a closet and forgot about it.&lt;/p&gt;
-&lt;p&gt;That could have been the end.&lt;/p&gt;
-&lt;h2 id=&quot;rebirth&quot;&gt;Rebirth&lt;/h2&gt;
-&lt;p&gt;Eventually, 2023 rolled around, and &lt;a href=&quot;https://log.schemescape.com/posts/hardware/../programming-languages/minimal-dev-env.html&quot;&gt;I was pining for simpler times&lt;/a&gt;. Why do we keep buying faster computers that mostly perform the same functions as their ancestors? (This was before Windows 11&#039;s TPM 2.0 requirement.) After experimenting with an original Raspberry Pi B (now &lt;em&gt;those&lt;/em&gt; are slow!) I pulled the netbook back out of my closet and &lt;a href=&quot;https://log.schemescape.com/posts/hardware/../programming-languages/minimal-dev-env-4.html&quot;&gt;set it up as a minimal development environment&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Unlike Windows 10, Linux scales down fairly nicely to moderately old hardware. Using Alpine Linux, I was able to setup a comfortable terminal-only development environment for C. Using the w3m browser, I was able to read &lt;a href=&quot;https://gigamonkeys.com/book/&quot;&gt;Practical Common Lisp&lt;/a&gt; so that I could &lt;a href=&quot;https://log.schemescape.com/posts/hardware/../programming-languages/learning-lisp-in-2023.html&quot;&gt;test out REPL-driven programming in Lisp&lt;/a&gt;. Almost all Common Lisp code I&#039;ve ever written was authored in Emacs on this junky old netbook--and it never felt slow!&lt;/p&gt;
-&lt;h2 id=&quot;the-net&quot;&gt;The Net&lt;/h2&gt;
-&lt;p&gt;Unfortunately, 1 GB of RAM isn&#039;t sufficient for browsing many modern web sites. As much as I enjoy terminal mode browsers, having proportional fonts, colors, and a mouse are convenient. Dillo and NetSurf can help, but many sites require JavaScript, and sandboxing the enormous JavaScript runtime is just no longer possible on a 1 GB device.&lt;/p&gt;
-&lt;p&gt;Despite being &lt;em&gt;built&lt;/em&gt; to &amp;quot;surf the net&amp;quot;, most netbooks can&#039;t keep up with the modern web. I&#039;m not happy about this realization, but that doesn&#039;t make it any less true.&lt;/p&gt;
-&lt;h2 id=&quot;last-gasp&quot;&gt;Last gasp&lt;/h2&gt;
-&lt;p&gt;If there&#039;s one saving grace, it&#039;s that many netbooks were built with commodity parts that could theoretically be upgraded. In fact, my netbook could accept a solid-state drive and probably at least 4 GB of RAM. In my case, the hard drive and (single) RAM slot could be accessed by removing the plastic shell and the keyboard. Unfortunately, I learned that my particular netbook has a fickle memory slot: it will only accept &amp;quot;full power&amp;quot; DDR3 RAM--multiple &amp;quot;low power&amp;quot; RAM sticks I plugged in failed to work.&lt;/p&gt;
-&lt;p&gt;Sadly, numerous trial-and-error RAM surgeries appear to have loosened the keyboard&#039;s ribbon connection to the point that it seems unstable. It&#039;s a sad day, but I need to lay this netbook to rest.&lt;/p&gt;
-&lt;h1 id=&quot;the-future&quot;&gt;The future&lt;/h1&gt;
-&lt;p&gt;Are my netbook days over? Maybe not! At some unknown point in the past, I had acquired a second netbook: an &lt;a href=&quot;https://en.wikipedia.org/wiki/Asus_EeeBook&quot;&gt;Asus EeeBook X205&lt;/a&gt;. It&#039;s not upgradable, but it&#039;s already equipped with 2 GB of RAM. I&#039;m sure the puny 32 GB hard drive will become a problem at some point, but I&#039;m going to throw Linux on and see what happens--it&#039;s not like there&#039;s enough space to install Windows 10 updates anyway!&lt;/p&gt;
-&lt;p&gt;So there you go: my personal netbook history.&lt;/p&gt;
 </content>
 </entry>
 </feed>
