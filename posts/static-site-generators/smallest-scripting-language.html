@@ -71,14 +71,24 @@
 </ul>
 <p>Obviously, Python and JavaScript are the most popular languages in the list, but both languages are big--and getting bigger every day! Also, it's unclear how helpful their ecosystems would be when I'm planning to pull in smaller and less broadly supported implementations like MicroPython and QuickJS.</p>
 <p>Lua is arguably the king of embedded scripting languages, but I feel like a simpler language in the vein of Lisp or Scheme could be both smaller and more capable.</p>
+<p><strong>Update</strong>: After publishing this, there were <a href="https://lobste.rs/s/hzr1ke/smallest_embeddable_scripting_language">some suggestions on Lobsters</a> for additional languages that might fit the bill:</p>
+<ul>
+<li><a href="https://jim.tcl-lang.org/home/doc/www/www/index.html">Jim</a> (Tcl)</li>
+<li><a href="https://www.compuphase.com/pawn/pawn.htm">Pawn</a></li>
+<li><a href="https://berry-lang.github.io/">Berry</a></li>
+<li><a href="https://craftinginterpreters.com/the-lox-language.html">Lox</a></li>
+<li><a href="https://github.com/zevv/zForth">zForth</a></li>
+</ul>
 <h2 id="others">Others</h2>
-<p>There are also a few languages I like but don't quite fit what I'm looking for right now:</p>
+<p>There are also a few languages that don't quite fit what I'm looking for right now:</p>
 <ul>
 <li><a href="https://beyondloom.com/decker/lil.html">lil</a>: bonus points for sporting an awk implementation, but, without mutable data structures, I struggled to get acceptable performance</li>
 <li><a href="https://github.com/rxi/fe">fe</a>: only supports ~4000 cons cells</li>
+<li><a href="http://www.squirrel-lang.org/">Squirrel</a>: implemented in C++ and I'm only looking at languages that are implemented in C</li>
+<li><a href="https://mruby.org/">mruby</a> (Ruby): uses a build system I wasn't familiar with</li>
 </ul>
 <h1 id="code-size-data">Code size data</h1>
-<p>As a first pass, here are the sizes of size-optimized (<code>-Os</code>) REPL executables:</p>
+<p>As a first pass, here are the sizes of size-optimized (<code>-Os</code> and stripped) REPL executables:</p>
 <table>
 <thead>
 <tr>
@@ -88,6 +98,16 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td align="center">zForth</td>
+<td align="center">Forth</td>
+<td align="right">25 KB</td>
+</tr>
+<tr>
+<td align="center">Lox</td>
+<td align="center">Lox</td>
+<td align="right">40 KB</td>
+</tr>
 <tr>
 <td align="center">TinyScheme</td>
 <td align="center">Scheme</td>
@@ -104,9 +124,24 @@
 <td align="right">175 KB</td>
 </tr>
 <tr>
+<td align="center">Berry</td>
+<td align="center">Berry</td>
+<td align="right">240 KB</td>
+</tr>
+<tr>
+<td align="center">Jim</td>
+<td align="center">Tcl</td>
+<td align="right">325 KB</td>
+</tr>
+<tr>
 <td align="center">Duktape</td>
 <td align="center">JavaScript</td>
 <td align="right">350 KB</td>
+</tr>
+<tr>
+<td align="center">Pawn (<code>pawncc</code>)</td>
+<td align="center">Pawn</td>
+<td align="right">380 KB</td>
 </tr>
 <tr>
 <td align="center">Otus Lisp</td>
@@ -145,11 +180,15 @@
 </tr>
 </tbody>
 </table>
-<p>Note: I didn't actually build MicroPython myself because its source code is &gt; 100 MB (!). The homepage claims a 256 KB binary size, but I can't confirm that figure.</p>
+<p>Note: I didn't actually build MicroPython myself because its source code is &gt; 100 MB (!). The homepage claims a 256 KB binary size, but I can't confirm that figure. I also didn't build mruby since it seemed to require Ruby for bootstrapping.</p>
 <h1 id="analysis">Analysis</h1>
 <h2 id="lua">Lua</h2>
-<p>An impressive showing by Lua! I have numerous complaints with Lua (conflating arrays with dictionaries, verbose syntax, and, yes, one-based indexing), but Lua's tiny code size is amazing! Even throwing in JIT compilation (via <a href="https://luajit.org/">LuaJIT</a>) and parsing expression grammars (via <a href="https://www.inf.puc-rio.br/~roberto/lpeg/">LPeg</a>), the binary is still tiny.</p>
+<p>An impressive showing by Lua, considering this includes the full (albeit still small) standard library! I have numerous complaints with Lua (conflating arrays with dictionaries, verbose syntax, and, yes, one-based indexing), but Lua's tiny code size is amazing! Even throwing in JIT compilation (via <a href="https://luajit.org/">LuaJIT</a>) and parsing expression grammars (via <a href="https://www.inf.puc-rio.br/~roberto/lpeg/">LPeg</a>), the binary is still tiny.</p>
 <p><strong>Honestly, Lua's &quot;bang for your buck&quot; is going to be hard to beat.</strong> No wonder it's so popular!</p>
+<h2 id="zforth">zForth</h2>
+<p>Not surprising (given Forth's minimalist roots), but zForth is the smallest embeddable scripting language. Unfortuantely for me, despite how much I admire Forth's minimalism, I haven't to date been able to rewire my brain to comfortably read and write concatenative languages. <strong>If I was working on a microcontroller with only a few kilobytes of RAM (<a href="../vintage-computing/blazin-forth.html">or a Commodore 64</a>), I would happily use Forth</strong>. But, for now, I'm lucky enough to assume the presence of an operating system, text editor, and (at least) tens of megabytes of RAM, so I will ashamedly pass on zForth.</p>
+<h2 id="lox">Lox</h2>
+<p>Despite knowing about Wren, I didn't think to include Lox (by the same author) in my original research. Somehow it manages to be smaller than even the smallest Scheme! Unfortunately, as far as I can tell, the only reason it manages to be so tiny is that it has essentially no standard library--just a single <code>clock()</code> function. Regardless, the tiny VM is impressive, so if you really need a minimal scripting language and you're comfortable building your own standard library, Lox could be promising.</p>
 <h2 id="tinyscheme">TinyScheme</h2>
 <p>The only embeddable language implementation that handily beats Lua in terms of code size is TinyScheme. Unfortunately, the ecosystem for TinyScheme is practically nonexistent--it's not even mentioned in <a href="https://get.scheme.org/">the big list of Scheme implementations on scheme.org</a>! <strong>There <em>is</em> an interesting runtime for TinyScheme named <a href="http://www.geonius.com/software/tsion/">TSION</a> that is based on an I/O event loop that ends up around 280 KB in total</strong>. Honestly, that's impressive enough that I should try building something with it.</p>
 <h2 id="wren">Wren</h2>
