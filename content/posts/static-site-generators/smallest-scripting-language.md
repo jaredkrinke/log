@@ -43,21 +43,36 @@ Obviously, Python and JavaScript are the most popular languages in the list, but
 
 Lua is arguably the king of embedded scripting languages, but I feel like a simpler language in the vein of Lisp or Scheme could be both smaller and more capable.
 
+**Update**: After publishing this, there were [some suggestions on Lobsters](https://lobste.rs/s/hzr1ke/smallest_embeddable_scripting_language) for additional languages that might fit the bill:
+
+* [Jim](https://jim.tcl-lang.org/home/doc/www/www/index.html) (Tcl)
+* [Pawn](https://www.compuphase.com/pawn/pawn.htm)
+* [Berry](https://berry-lang.github.io/)
+* [Lox](https://craftinginterpreters.com/the-lox-language.html)
+* [zForth](https://github.com/zevv/zForth)
+
 ## Others
-There are also a few languages I like but don't quite fit what I'm looking for right now:
+There are also a few languages that don't quite fit what I'm looking for right now:
 
 * [lil](https://beyondloom.com/decker/lil.html): bonus points for sporting an awk implementation, but, without mutable data structures, I struggled to get acceptable performance
 * [fe](https://github.com/rxi/fe): only supports ~4000 cons cells
+* [Squirrel](http://www.squirrel-lang.org/): implemented in C++ and I'm only looking at languages that are implemented in C
+* [mruby](https://mruby.org/) (Ruby): uses a build system I wasn't familiar with
 
 # Code size data
-As a first pass, here are the sizes of size-optimized (`-Os`) REPL executables:
+As a first pass, here are the sizes of size-optimized (`-Os` and stripped) REPL executables:
 
 | Implementation | Language | Size |
 |:---:|:---:|---:|
+| zForth | Forth | 25 KB |
+| Lox | Lox | 40 KB |
 | TinyScheme | Scheme | 75 KB |
 | Wren | Wren | 160 KB |
 | Lua 5.2 | Lua | 175 KB |
+| Berry | Berry | 240 KB |
+| Jim | Tcl | 325 KB |
 | Duktape | JavaScript | 350 KB |
+| Pawn (`pawncc`) | Pawn | 380 KB |
 | Otus Lisp | Scheme | 500 KB |
 | QuickJS | JavaScript | 700 KB |
 | Owl Lisp | Scheme | 700 KB |
@@ -66,13 +81,19 @@ As a first pass, here are the sizes of size-optimized (`-Os`) REPL executables:
 | Tcl | Tcl | 1700 KB |
 | MicroPython | Python | ? |
 
-Note: I didn't actually build MicroPython myself because its source code is > 100 MB (!). The homepage claims a 256 KB binary size, but I can't confirm that figure.
+Note: I didn't actually build MicroPython myself because its source code is > 100 MB (!). The homepage claims a 256 KB binary size, but I can't confirm that figure. I also didn't build mruby since it seemed to require Ruby for bootstrapping.
 
 # Analysis
 ## Lua
-An impressive showing by Lua! I have numerous complaints with Lua (conflating arrays with dictionaries, verbose syntax, and, yes, one-based indexing), but Lua's tiny code size is amazing! Even throwing in JIT compilation (via [LuaJIT](https://luajit.org/)) and parsing expression grammars (via [LPeg](https://www.inf.puc-rio.br/~roberto/lpeg/)), the binary is still tiny.
+An impressive showing by Lua, considering this includes the full (albeit still small) standard library! I have numerous complaints with Lua (conflating arrays with dictionaries, verbose syntax, and, yes, one-based indexing), but Lua's tiny code size is amazing! Even throwing in JIT compilation (via [LuaJIT](https://luajit.org/)) and parsing expression grammars (via [LPeg](https://www.inf.puc-rio.br/~roberto/lpeg/)), the binary is still tiny.
 
 **Honestly, Lua's "bang for your buck" is going to be hard to beat.** No wonder it's so popular!
+
+## zForth
+Not surprising (given Forth's minimalist roots), but zForth is the smallest embeddable scripting language. Unfortuantely for me, despite how much I admire Forth's minimalism, I haven't to date been able to rewire my brain to comfortably read and write concatenative languages. **If I was working on a microcontroller with only a few kilobytes of RAM ([or a Commodore 64](../vintage-computing/blazin-forth.md)), I would happily use Forth**. But, for now, I'm lucky enough to assume the presence of an operating system, text editor, and (at least) tens of megabytes of RAM, so I will ashamedly pass on zForth.
+
+## Lox
+Despite knowing about Wren, I didn't think to include Lox (by the same author) in my original research. Somehow it manages to be smaller than even the smallest Scheme! Unfortunately, as far as I can tell, the only reason it manages to be so tiny is that it has essentially no standard library--just a single `clock()` function. Regardless, the tiny VM is impressive, so if you really need a minimal scripting language and you're comfortable building your own standard library, Lox could be promising.
 
 ## TinyScheme
 The only embeddable language implementation that handily beats Lua in terms of code size is TinyScheme. Unfortunately, the ecosystem for TinyScheme is practically nonexistent--it's not even mentioned in [the big list of Scheme implementations on scheme.org](https://get.scheme.org/)! **There *is* an interesting runtime for TinyScheme named [TSION](http://www.geonius.com/software/tsion/) that is based on an I/O event loop that ends up around 280 KB in total**. Honestly, that's impressive enough that I should try building something with it.
