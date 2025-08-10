@@ -1,13 +1,13 @@
 ---
-title: A 270 KB static site generator based on Markdown and Lua
-description: Tired of bloat, I made a new static site generator that is 10x faster and 100x smaller than my last effort. And this one runs on NetBSD.
+title: A 450 KB static site generator based on Markdown and Lua
+description: Tired of bloat, I made a new static site generator that is 5x faster and 50x smaller than my last effort. And this one runs on x86 NetBSD.
 date: 2025-04-22
 keywords: [lua]
 ---
 Today, I unveil my most gratuitous static site generator yet: [luasmith](https://github.com/jaredkrinke/luasmith).
 
-* **It's ~~270 KB~~ 450 KB** (static binary + templates for this site, gzip compressed)
-* **It builds my ~140 page site in ~~150 ms~~ 300 ms** (wall clock time, on an 11-year-old old laptop)
+* **It's 450 KB** (static binary + templates for this site, gzip compressed)
+* **It builds my ~140 page site in 300 ms** (wall clock time, on an 11-year-old old laptop)
 * **It performs acceptably on a 28-year-old laptop, running NetBSD** (Pentium 166 MHz)
 * **It's trivial to compile**, requiring only a C compiler, `make`, `sed`, and `sh`
 
@@ -36,7 +36,7 @@ return {
 ```
 
 # Motivation
-Obviously, the world does not need another static site generator--and I don't expect this SSG to become popular. So how did I end up here?
+Obviously, the world does not need another static site generator. So how did I end up here?
 
 In a word, my motivation was: **simplicity**. I wanted an SSG that was:
 
@@ -61,7 +61,7 @@ Instead of creating a bespoke domain-specific language for defining the structur
 Overall, I'd describe the architecture as "**Metalsmith in Lua, with zero runtime dependencies** (beyond libc)".
 
 ## Simple to bootstrap
-Given my [musings about future-proof programming languages](../programming-languages/future-proof-languages.html), it's obvious that I'd like to be able to continue to compile and use my software in the future. That is easier said than done! The problem is that identifying languages that will stick around is hard. Twenty years ago, Perl might have been a reasonable choice for an SSG, but today I don't even remember how to setup a Perl project.
+Given my [musings about future-proof programming languages](../programming-languages/future-proof-languages.html), it's obvious that I'd like to be able to continue to compile and use my software in the future. That is easier said than done! The problem is that identifying languages that will stick around is hard. Twenty years ago, Perl might have been a reasonable choice for an SSG, but today I don't even remember how to import a module into Perl.
 
 [The best static site generator ever made](https://jaredkrinke.github.io/md2blog/) is built on TypeScript/JavaScript and [Deno](https://deno.com/). As much as I like Deno, I'm not sure it will be maintained decades down the road. Given that I'll never know how to get it running on an i586 computer, I have doubts I'd be able to get it running on potential future architectures either.
 
@@ -72,7 +72,7 @@ Aside: ideally, I'd be writing as much native code in Rust as possible, to ensur
 ## Simple to maintain
 One frustration I have with the JavaScript ecosystem is that it's constantly changing. Node, Deno, and Bun do a respectable job of keeping old versions around, but I don't want to have to worry about breaking changes.
 
-On the other hand, C changes very slowly, and previous verisons of Lua are essentially set in stone. Throw in some static linking, and you've even got an artifact that should stay usable for a long time.
+On the other hand, C changes very slowly, and previous versions of Lua are essentially set in stone. Throw in some static linking, and you've even got an artifact that should stay usable for a long time.
 
 I've also minimized the number of (vendored, compile-time) dependencies involved. Here's the full list:
 
@@ -94,10 +94,10 @@ Static binaries are wonderful. *Tiny* static binaries are even wonderful-er. **J
 Of course, there are downsides to the approach I took:
 
 * Writing C code is fraught with peril -- fortunately, the hardest parts were mostly already done by the md4c and Lua authors
-* Syntax highlighting is *not* simple -- so I just cut that feature, at least for now (**update**: syntax highlighting is now supported!)
+* Syntax highlighting is *not* simple -- good news: [someone already solved this problem for me](luasmith-syntax-highlighting.md)!
 * The security model of an SSG that uses Lua scripts for everything is... not ideal -- **only use templates you trust!**
 
-Additionally, I haven't taken the time to setup a proper development and debugging environment for C and Lua. I need to investiage static analysis and debugging tools for Lua, as well as find a tolerable frontend for GDB. This is where I really miss Emacs+SLIME for Common Lisp or VS Code for TypeScript/Python.
+Additionally, I haven't taken the time to set up a proper development and debugging environment for C and Lua. I need to investigate static analysis and debugging tools for Lua, as well as find a tolerable frontend for GDB. This is where I really miss Emacs+SLIME for Common Lisp or VS Code for TypeScript/Python.
 
 # Future areas of exploration
 Now that I've got a static site generator running on a vintage laptop with NetBSD, where am I headed next? I'm not exactly sure, but some ideas follow.
@@ -109,13 +109,13 @@ At some point, I'd like to redesign my site using an even more minimal theme. In
 Distributing native code necessarily requires per-platform packages. Or does it? Can I package and release this minimal static site generator as a multi-OS polyglot binary using [Cosmopolitan libc](https://github.com/jart/cosmopolitan)? Note: sadly, I don't think 32-bit/i386 is supported for now.
 
 ## Simplifying the entire system
-I'd like to see if I can bootstrap my entire web site's workflow from [Oasis Linux](https://github.com/oasislinux/oasis) (a small, statically linked, Linux-based operating system that is simple, but capable). **Oasis sounds like a modern system that a single person can wrap their head around** (minus the Linux kernel--though perhaps a simpler kernel could be substitutded...).
+I'd like to see if I can bootstrap my entire web site's workflow from [Oasis Linux](https://github.com/oasislinux/oasis) (a small, statically linked, Linux-based operating system that is simple, but capable). **Oasis sounds like a modern system that a single person can wrap their head around** (minus the Linux kernel--though perhaps a simpler kernel could be substituted...).
 
 ## Blogging on vintage computers
 I'm curious how far back I can go as far as vintage computing and still be able to build a static site. Can I build my SSG on Windows 98? DOS? Amiga? Inquiring minds want to know!
 
 ## Incremental builds
-Speaking of old, slow computers, I secretly designed this SSG to support incremental rebuilds to ensure that it runs fast even on old hardware. The only issue with this plan is that **md4c is so fast that I'm not sure it's worth optimizing the build process**. I can rebuild my entire site from scratch on a 166 MHz laptop in a few seconds.
+Speaking of old, slow computers, I secretly designed this SSG to support incremental rebuilds to ensure that it runs fast even on old hardware. The only issue with this plan is that **md4c is so fast that I'm not sure it's worth optimizing the build process**. I can rebuild my entire site from scratch on a 166 MHz laptop (with a rotational disk) in under 20 seconds.
 
 # Conclusion
 Creating a *non-bloated* Markdown-based static site generator has been a bucket list item for me--and now it's done!
