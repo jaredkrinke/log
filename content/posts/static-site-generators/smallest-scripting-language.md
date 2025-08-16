@@ -99,7 +99,7 @@ Despite knowing about Wren, I didn't think to include Lox (by the same author) i
 The only embeddable language implementation that handily beats Lua in terms of code size is TinyScheme. Unfortunately, the ecosystem for TinyScheme is practically nonexistent--it's not even mentioned in [the big list of Scheme implementations on scheme.org](https://get.scheme.org/)! **There *is* an interesting runtime for TinyScheme named [TSION](http://www.geonius.com/software/tsion/) that is based on an I/O event loop that ends up around 280 KB in total**. Honestly, that's impressive enough that I should try building something with it.
 
 ## Wren
-**To my surprise, Wren manages to be smaller than Lua!** I don't enjoy the ceremony of it's strict object-oriented nature, but I suspect it might result in more orderly code than classless languages like Lua and (original) JavaScript.
+**To my surprise, Wren manages to be smaller than Lua!** I don't enjoy the ceremony of its strict object-oriented nature, but I suspect it might result in more orderly code than classless languages like Lua and (original) JavaScript.
 
 My main concern with Wren, however, is that the classes that make up pretty much everything are fairly rigid--you can't just add properties whenever you feel like it. This sounds like a great design for something like a game where you have neat and tidy objects and interfaces, but for extensibility, configuration, and prototyping I'm drawn more towards Lua and JavaScript's more flexible data types--despite how messy they can get. Of course, if Wren's rigid types can prevent things from blowing up at run-time as frequently as happens in Lua and JavaScript, it might be a good trade-off.
 
