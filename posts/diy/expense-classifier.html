@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Writing a financial tracker for fun and paranoia</title>
+<meta name="description" content="I wrote both a QFX parser and a naive Bayes classifier from scratch because I have stopped trusting third-party dependencies." />
+<meta name="keywords" content="python" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Writing a financial tracker for fun and paranoia",
+  "abstract": "I wrote both a QFX parser and a naive Bayes classifier from scratch because I have stopped trusting third-party dependencies.",
+  "keywords": "diy,python",
+  "datePublished": "2025-09-03"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/diy/index.html">diy</a></li>
+<li><a href="../../posts/python/index.html">python</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/diy/expense-classifier.html">Writing a financial tracker for fun and paranoia</a></h1>
+<p><time datetime="2025-09-03">September 3, 2025</time></p>
+</header>
+<p>Sometimes I write software for fun (e.g. <a href="https://jaredkrinke.itch.io/sic-1">SIC-1, a single-instruction (subleq) programming game</a>). Sometimes I write software because I have unreasonably specific requirements that existing tools can't satisfy (e.g. <a href="https://github.com/jaredkrinke/luasmith">luasmith, a 450 KB static site generator</a>). Even though it's for my own benefit, I usually hope someone else will find it interesting or useful, so I share the code and maybe write about it.</p>
+<p><strong>It's rare that I write (non-work-related) software, fully expecting no one else to ever see or use it,</strong> but this is one of those times.</p>
+<p>Read on to see how paranoia prompted me to write a financial transaction parser and <del>an AI</del> a statistical classifier from scratch, in Python (<a href="../programming-languages/python-as-a-modern-basic.html">yes, Python</a>).</p>
+<h1 id="goal">Goal</h1>
+<p><strong>I want to know where my hard-earned money is going.</strong></p>
+<h1 id="background">Background</h1>
+<p>For more years than I care to admit, my workflow involved manually reviewing transactions, mentally classifying them, and entering everything into an Excel spreadsheet. Eventually, as a software developer, I realized that <strong>this is one of the few times in my life where I can actually apply my marketable skills directly to my daily existence</strong>. Why did I not automate this sooner!?</p>
+<h1 id="implementation">Implementation</h1>
+<p>What did I actually end up building?</p>
+<ul>
+<li>First, I needed a way to parse lists of transactions from my bank, credit cards, etc.</li>
+<li>Second, I wanted some sort of statistical classifier for transactions, for convenience</li>
+<li>Third, it needed to never leak my financial details</li>
+</ul>
+<p>That last bullet is why I chose to write everything from scratch. <strong>There are numerous tools for downloading and processing financial transactions, but I don't trust any of them</strong>. There's no way I'd ever share my bank password with anything other than my bank's login form (in an up-to-date browser). Frankly, I'm surprised tools even exist that ask to store bank passwords--that's basically painting a huge target on your back for hackers. Users' financial credentials should be treated like radioactive waste!</p>
+<p>In the end, I wrote (from scratch, using only Python's standard library--to avoid any credential-stealing package install scripts):</p>
+<ul>
+<li>A QFX/OFX parser</li>
+<li>A naive Bayes classifier</li>
+<li>A text interface that dumps everything into a comma-separated value (CSV) file (for Excel import)</li>
+</ul>
+<h2 id="qfx-parser">QFX Parser</h2>
+<p>QFX is a file format for financial transactions that is the same as OFX (<a href="https://en.wikipedia.org/wiki/Open_Financial_Exchange">Open Financial Exchange</a>), but digitally signed by Intuit (cue eyeroll). The <a href="https://pypi.org/project/ofxtools/">ofxtools</a> Python package can parse OFX files, but, as noted previously, I'm paranoid, so I decided to write my own parser from scratch.</p>
+<p>Newer revisions of OFX are based on XML, but sadly I needed to be able to parse older, SGML-based versions of OFX. I have come to dislike SGML because, it seems, you can't just parse any old SGML file since <strong>SGML doesn't always require closing tags</strong>. People like to dunk on XML's verbose syntax, but SGML reveals an even worse world where you require the schema for each file in order to know whether or not closing tags are required. This might not be a big deal for an event-based parser, but I wanted a simpler programming interface, using XPath or something like it (because I'm lazy).</p>
+<p>Aggravatingly, <strong>OFX has a lot of &quot;self-closing&quot; tags</strong>. In the end, I got a copy of the <a href="https://github.com/libofx/libofx/blob/master/dtd/ofx160.dtd">OFX 1.6 schema (DTD)</a>, parsed it, and produced a gigantic list of self-closing tags, then I wrote some code to insert the &quot;missing&quot; closing tags, so that I could parse the resulting file as XML, using Python's built-in <code>xml.etree.ElementTree</code> XML parser. By the way, SGML DTDs identify self-closing elements using this un-self-explanatory string: <code>- O</code> -- good luck searching for that!</p>
+<p>Here's the fragile (i.e. it only works on this particular DTD) AWK script for finding self-closing tags:</p>
+<pre><code class="language-awk"><span class="hl-regex">/^&lt;!ELEMENT [A-Z]+.*[ \t][Oo][ \t].*/</span> <span class="hl-operator">{</span> <span class="hl-keyword">printf</span> <span class="hl-string">&quot;\&quot;%s\&quot;, &quot;</span><span class="hl-operator">,</span> <span class="hl-variable">$2</span> <span class="hl-operator">}</span>
+</code></pre>
+<p>The good news is, armed with &quot;XML-ified&quot; (all tags explicitly closed) QFX/OFX, Python can easily parse all the transactions (<code>&lt;stmttrn&gt;</code>'s, as they are called):</p>
+<pre><code class="language-python"><span class="hl-keyword">def</span> <span class="hl-function">parseTransactions</span><span class="hl-operator">(</span><span class="hl-identifier">str</span><span class="hl-operator">)</span><span class="hl-operator">:</span>
+    <span class="hl-comment"># Remove header and convert to XML tree</span>
+    <span class="hl-identifier">str</span> <span class="hl-operator">=</span> <span class="hl-identifier">re</span><span class="hl-operator">.</span><span class="hl-function">sub</span><span class="hl-operator">(</span><span class="hl-string">&quot;^.*?&lt;&quot;</span><span class="hl-operator">,</span> <span class="hl-string">&quot;&lt;&quot;</span><span class="hl-operator">,</span> <span class="hl-identifier">str</span><span class="hl-operator">,</span> <span class="hl-identifier">count</span><span class="hl-operator">=</span><span class="hl-number">1</span><span class="hl-operator">,</span> <span class="hl-identifier">flags</span><span class="hl-operator">=</span><span class="hl-identifier">re</span><span class="hl-operator">.</span><span class="hl-identifier">DOTALL</span><span class="hl-operator">)</span>
+    <span class="hl-identifier">str</span> <span class="hl-operator">=</span> <span class="hl-function">sgml2xml</span><span class="hl-operator">(</span><span class="hl-identifier">str</span><span class="hl-operator">)</span>
+    <span class="hl-identifier">tree</span> <span class="hl-operator">=</span> <span class="hl-identifier">ElementTree</span><span class="hl-operator">.</span><span class="hl-function">fromstring</span><span class="hl-operator">(</span><span class="hl-identifier">str</span><span class="hl-operator">)</span>
+
+    <span class="hl-keyword">return</span> <span class="hl-operator">[</span><span class="hl-function">parseTransaction</span><span class="hl-operator">(</span><span class="hl-identifier">transaction</span><span class="hl-operator">)</span> <span class="hl-keyword">for</span> <span class="hl-identifier">transaction</span> <span class="hl-keyword">in</span> <span class="hl-identifier">tree</span><span class="hl-operator">.</span><span class="hl-function">findall</span><span class="hl-operator">(</span><span class="hl-string">&quot;.//stmttrn&quot;</span><span class="hl-operator">)</span><span class="hl-operator">]</span>
+</code></pre>
+<h2 id="bayes-classifier">Bayes classifier</h2>
+<p>Once I had a list of transactions, including their date, amount, and a terse description, I needed some way to classify transactions as e.g. &quot;food&quot;, &quot;gas&quot;, &quot;entertainment&quot;, etc. Previously, I was just mentally assigning them to groups and typing a corresponding prefix into an Excel sheet. It was very tedious.</p>
+<p>This time, <strong>I'm automatically classifying transactions</strong>, keeping a few aspects in mind:</p>
+<ul>
+<li>I wanted to be able to double-check classifications--and fix them, if needed</li>
+<li>I wanted the classifications to become more accurate over time</li>
+</ul>
+<p>Armed with Wikipedia's description of a <a href="https://en.wikipedia.org/wiki/Naive_Bayes_classifier">naive Bayes classifier</a>, I was able to implement something that worked... at first. Other than an unfortunate typo in one equation, I spent most of my time debugging an issue where it kept misclassifying &quot;food&quot; and &quot;gas&quot; items.</p>
+<h3 id="where-i-buy-food-and-gas">Where I buy food and gas</h3>
+<p>I feel comfortable disclosing that I often buy both food and gas from the same store (in separate transactions). The transactions' description fields look like this:</p>
+<ul>
+<li>Food transaction: <code>&lt;store&gt; &lt;city&gt; ...</code></li>
+<li>Gas transaction: <code>&lt;store&gt; fuel &lt;city&gt; ...</code>.</li>
+</ul>
+<p>As a human, the obvious rule for transactions at that store is &quot;<code>fuel</code> implies 'gas', otherwise 'food'&quot;. But this is cutting-edge AI, so I'm not planning to write any prescriptive rules (also: <a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html">The Bitter Lesson</a>).</p>
+<h3 id="multinomial-naive-bayes">Multinomial naive Bayes</h3>
+<p><strong>I didn't realize the implications of it at the time</strong>, but I initially wrote a regularized <a href="https://en.wikipedia.org/wiki/Naive_Bayes_classifier#Multinomial_naive_Bayes">multinomial naive Bayes model</a> where the input is pairs of words and their frequencies (allegedly often used for document classification). For each pair, the probability that word implies a given class is computed, and then those probabilities are multiplied. I won't explain the &quot;regularization&quot; part because it's not relevant here.</p>
+<p><strong>The problem is that the multinomial model doesn't explicitly account for &quot;absent&quot; words</strong>. My training data included tons of instances of the store's name, but they were split between &quot;food&quot; and &quot;gas&quot; (more &quot;food&quot; than &quot;gas&quot;). The word &quot;fuel&quot; only appeared on &quot;gas&quot; training data, but its effect wasn't strong enough to overpower the &quot;store name implies 'food'!&quot; rule that the classifier learned.</p>
+<p>(I might also argue that the real root of this issue was the &quot;naive&quot; part of &quot;naive Bayes classifier&quot; -- clearly, the rule I, as a human, devised shows that each word is <em>not</em> independent. But I wanted to stick with the simple and well-trodden path of a naive Bayes classifier, since, you know, it seemed popular.)</p>
+<h3 id="bernoulli-naive-bayes">Bernoulli naive Bayes</h3>
+<p>I had figured out the problem, but I didn't have a solution: how do I ensure that the <em>absence</em> of &quot;fuel&quot; implies &quot;food&quot; and the presence of &quot;fuel&quot; implies &quot;gas&quot;? Back on Wikipedia, I found the answer: <strong>for short texts like this, don't worry about frequencies and instead compute a probability for the <em>presence or absence</em> of <em>every</em> word (absence is <code>1 - P(present)</code>)</strong>. This is the <a href="https://en.wikipedia.org/wiki/Naive_Bayes_classifier#Bernoulli_naive_Bayes">Bernoulli naive Bayes model</a>, and it has worked great for my purposes because it provides a clear signal that &quot;fuel&quot; implies a &quot;gas&quot; classification and lack of &quot;fuel&quot; implies something else.</p>
+<h3 id="learning-and-persisting">Learning and persisting</h3>
+<p>With a working classifier, I needed to persist its &quot;learnings&quot; across runs. Python's large standard library is convenient (other than everything having weird names). <strong>Python has a built-in <a href="https://docs.python.org/3/library/shelve.html">shelve</a> library the can serialize and deserialize Python objects to/from a file</strong>. This made persisting and updating my classifier trivial:</p>
+<pre><code class="language-python"><span class="hl-keyword">import</span> <span class="hl-identifier">shelve</span>
+<span class="hl-keyword">from</span> <span class="hl-identifier">classifier</span> <span class="hl-keyword">import</span> <span class="hl-identifier">Classifier</span><span class="hl-operator">,</span> <span class="hl-identifier">parse</span>
+
+<span class="hl-keyword">with</span> <span class="hl-identifier">shelve</span><span class="hl-operator">.</span><span class="hl-function">open</span><span class="hl-operator">(</span><span class="hl-string">&quot;data&quot;</span><span class="hl-operator">)</span> <span class="hl-keyword">as</span> <span class="hl-identifier">shelf</span><span class="hl-operator">:</span>
+    <span class="hl-identifier">classifier</span> <span class="hl-operator">=</span> <span class="hl-identifier">shelf</span><span class="hl-operator">.</span><span class="hl-function">get</span><span class="hl-operator">(</span><span class="hl-string">&quot;classifier&quot;</span><span class="hl-operator">,</span> <span class="hl-function">Classifier</span><span class="hl-operator">(</span><span class="hl-operator">)</span><span class="hl-operator">)</span>
+
+    <span class="hl-comment"># Automaticaly classify transactions</span>
+    <span class="hl-comment"># Allow mis-classifications to be fixed</span>
+
+    <span class="hl-comment"># Persist classifier</span>
+    <span class="hl-identifier">shelf</span><span class="hl-operator">[</span><span class="hl-string">&quot;classifier&quot;</span><span class="hl-operator">]</span> <span class="hl-operator">=</span> <span class="hl-identifier">classifier</span>
+</code></pre>
+<p>This part of the project took much <em>less</em> time than I anticipated. Thanks, Python!</p>
+<h2 id="user-interface">User interface</h2>
+<p>To keep things simple, I implemented a text-based interface, mostly based on Python's <code>prompt()</code> function. All the classified data was written out to a CSV file using Python's <code>csv.writer</code> class, for easy import into Excel (although, annoyingly, I had to deal with line ending nonsense--how is that not handled by default!?).</p>
+<h1 id="result">Result</h1>
+<p>It took longer than I had expected (or hoped), but the final result has been great. I've mostly automated the tedious parts of tracking my expenses, while only trusting Python's standard library.</p>
+<p>In summary, what did I learn?</p>
+<ul>
+<li>I prefer XML over SGML because XML is regular and generally has broader support</li>
+<li>The Bernoulli naive Bayes model works better than multinomial on very short text, especially when some words show up in multiple classes</li>
+<li>Python's <code>shelve</code> library is unbelievably convenient</li>
+<li>The best way to avoid wasting time choosing a GUI framework is to just punt and use a line-based text interface (like the good old days)</li>
+</ul>
+<p>(But mostly this was an excuse to write a piece of software that actually improves my life--while also giving Python another try.)</p>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

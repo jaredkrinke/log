@@ -7,8 +7,101 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-07-29T00:00:00.000Z</updated>
+<updated>2025-09-03T00:00:00.000Z</updated>
 
+<entry>
+<title>Writing a financial tracker for fun and paranoia</title>
+<id>https://log.schemescape.com/posts/diy/expense-classifier.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/diy/expense-classifier.html"/>
+<updated>2025-09-03T00:00:00.000Z</updated>
+<summary type="text">I wrote both a QFX parser and a naive Bayes classifier from scratch because I have stopped trusting third-party dependencies.</summary>
+<content type="html">&lt;p&gt;Sometimes I write software for fun (e.g. &lt;a href=&quot;https://jaredkrinke.itch.io/sic-1&quot;&gt;SIC-1, a single-instruction (subleq) programming game&lt;/a&gt;). Sometimes I write software because I have unreasonably specific requirements that existing tools can&#039;t satisfy (e.g. &lt;a href=&quot;https://github.com/jaredkrinke/luasmith&quot;&gt;luasmith, a 450 KB static site generator&lt;/a&gt;). Even though it&#039;s for my own benefit, I usually hope someone else will find it interesting or useful, so I share the code and maybe write about it.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;It&#039;s rare that I write (non-work-related) software, fully expecting no one else to ever see or use it,&lt;/strong&gt; but this is one of those times.&lt;/p&gt;
+&lt;p&gt;Read on to see how paranoia prompted me to write a financial transaction parser and &lt;del&gt;an AI&lt;/del&gt; a statistical classifier from scratch, in Python (&lt;a href=&quot;https://log.schemescape.com/posts/diy/../programming-languages/python-as-a-modern-basic.html&quot;&gt;yes, Python&lt;/a&gt;).&lt;/p&gt;
+&lt;h1 id=&quot;goal&quot;&gt;Goal&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;I want to know where my hard-earned money is going.&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
+&lt;p&gt;For more years than I care to admit, my workflow involved manually reviewing transactions, mentally classifying them, and entering everything into an Excel spreadsheet. Eventually, as a software developer, I realized that &lt;strong&gt;this is one of the few times in my life where I can actually apply my marketable skills directly to my daily existence&lt;/strong&gt;. Why did I not automate this sooner!?&lt;/p&gt;
+&lt;h1 id=&quot;implementation&quot;&gt;Implementation&lt;/h1&gt;
+&lt;p&gt;What did I actually end up building?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;First, I needed a way to parse lists of transactions from my bank, credit cards, etc.&lt;/li&gt;
+&lt;li&gt;Second, I wanted some sort of statistical classifier for transactions, for convenience&lt;/li&gt;
+&lt;li&gt;Third, it needed to never leak my financial details&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;That last bullet is why I chose to write everything from scratch. &lt;strong&gt;There are numerous tools for downloading and processing financial transactions, but I don&#039;t trust any of them&lt;/strong&gt;. There&#039;s no way I&#039;d ever share my bank password with anything other than my bank&#039;s login form (in an up-to-date browser). Frankly, I&#039;m surprised tools even exist that ask to store bank passwords--that&#039;s basically painting a huge target on your back for hackers. Users&#039; financial credentials should be treated like radioactive waste!&lt;/p&gt;
+&lt;p&gt;In the end, I wrote (from scratch, using only Python&#039;s standard library--to avoid any credential-stealing package install scripts):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A QFX/OFX parser&lt;/li&gt;
+&lt;li&gt;A naive Bayes classifier&lt;/li&gt;
+&lt;li&gt;A text interface that dumps everything into a comma-separated value (CSV) file (for Excel import)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;qfx-parser&quot;&gt;QFX Parser&lt;/h2&gt;
+&lt;p&gt;QFX is a file format for financial transactions that is the same as OFX (&lt;a href=&quot;https://en.wikipedia.org/wiki/Open_Financial_Exchange&quot;&gt;Open Financial Exchange&lt;/a&gt;), but digitally signed by Intuit (cue eyeroll). The &lt;a href=&quot;https://pypi.org/project/ofxtools/&quot;&gt;ofxtools&lt;/a&gt; Python package can parse OFX files, but, as noted previously, I&#039;m paranoid, so I decided to write my own parser from scratch.&lt;/p&gt;
+&lt;p&gt;Newer revisions of OFX are based on XML, but sadly I needed to be able to parse older, SGML-based versions of OFX. I have come to dislike SGML because, it seems, you can&#039;t just parse any old SGML file since &lt;strong&gt;SGML doesn&#039;t always require closing tags&lt;/strong&gt;. People like to dunk on XML&#039;s verbose syntax, but SGML reveals an even worse world where you require the schema for each file in order to know whether or not closing tags are required. This might not be a big deal for an event-based parser, but I wanted a simpler programming interface, using XPath or something like it (because I&#039;m lazy).&lt;/p&gt;
+&lt;p&gt;Aggravatingly, &lt;strong&gt;OFX has a lot of &amp;quot;self-closing&amp;quot; tags&lt;/strong&gt;. In the end, I got a copy of the &lt;a href=&quot;https://github.com/libofx/libofx/blob/master/dtd/ofx160.dtd&quot;&gt;OFX 1.6 schema (DTD)&lt;/a&gt;, parsed it, and produced a gigantic list of self-closing tags, then I wrote some code to insert the &amp;quot;missing&amp;quot; closing tags, so that I could parse the resulting file as XML, using Python&#039;s built-in &lt;code&gt;xml.etree.ElementTree&lt;/code&gt; XML parser. By the way, SGML DTDs identify self-closing elements using this un-self-explanatory string: &lt;code&gt;- O&lt;/code&gt; -- good luck searching for that!&lt;/p&gt;
+&lt;p&gt;Here&#039;s the fragile (i.e. it only works on this particular DTD) AWK script for finding self-closing tags:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-awk&quot;&gt;&lt;span class=&quot;hl-regex&quot;&gt;/^&amp;lt;!ELEMENT [A-Z]+.*[ \t][Oo][ \t].*/&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;hl-keyword&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;hl-string&quot;&gt;&amp;quot;\&amp;quot;%s\&amp;quot;, &amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-variable&quot;&gt;$2&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The good news is, armed with &amp;quot;XML-ified&amp;quot; (all tags explicitly closed) QFX/OFX, Python can easily parse all the transactions (&lt;code&gt;&amp;lt;stmttrn&amp;gt;&lt;/code&gt;&#039;s, as they are called):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;hl-keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;hl-function&quot;&gt;parseTransactions&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;hl-comment&quot;&gt;# Remove header and convert to XML tree&lt;/span&gt;
+    &lt;span class=&quot;hl-identifier&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;quot;^.*?&amp;lt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-string&quot;&gt;&amp;quot;&amp;lt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;hl-number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;flags&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;DOTALL&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;hl-identifier&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-function&quot;&gt;sgml2xml&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;hl-identifier&quot;&gt;tree&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;ElementTree&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;fromstring&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;hl-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;parseTransaction&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-identifier&quot;&gt;transaction&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;hl-keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;transaction&lt;/span&gt; &lt;span class=&quot;hl-keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;findall&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;quot;.//stmttrn&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;bayes-classifier&quot;&gt;Bayes classifier&lt;/h2&gt;
+&lt;p&gt;Once I had a list of transactions, including their date, amount, and a terse description, I needed some way to classify transactions as e.g. &amp;quot;food&amp;quot;, &amp;quot;gas&amp;quot;, &amp;quot;entertainment&amp;quot;, etc. Previously, I was just mentally assigning them to groups and typing a corresponding prefix into an Excel sheet. It was very tedious.&lt;/p&gt;
+&lt;p&gt;This time, &lt;strong&gt;I&#039;m automatically classifying transactions&lt;/strong&gt;, keeping a few aspects in mind:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I wanted to be able to double-check classifications--and fix them, if needed&lt;/li&gt;
+&lt;li&gt;I wanted the classifications to become more accurate over time&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Armed with Wikipedia&#039;s description of a &lt;a href=&quot;https://en.wikipedia.org/wiki/Naive_Bayes_classifier&quot;&gt;naive Bayes classifier&lt;/a&gt;, I was able to implement something that worked... at first. Other than an unfortunate typo in one equation, I spent most of my time debugging an issue where it kept misclassifying &amp;quot;food&amp;quot; and &amp;quot;gas&amp;quot; items.&lt;/p&gt;
+&lt;h3 id=&quot;where-i-buy-food-and-gas&quot;&gt;Where I buy food and gas&lt;/h3&gt;
+&lt;p&gt;I feel comfortable disclosing that I often buy both food and gas from the same store (in separate transactions). The transactions&#039; description fields look like this:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Food transaction: &lt;code&gt;&amp;lt;store&amp;gt; &amp;lt;city&amp;gt; ...&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Gas transaction: &lt;code&gt;&amp;lt;store&amp;gt; fuel &amp;lt;city&amp;gt; ...&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As a human, the obvious rule for transactions at that store is &amp;quot;&lt;code&gt;fuel&lt;/code&gt; implies &#039;gas&#039;, otherwise &#039;food&#039;&amp;quot;. But this is cutting-edge AI, so I&#039;m not planning to write any prescriptive rules (also: &lt;a href=&quot;http://www.incompleteideas.net/IncIdeas/BitterLesson.html&quot;&gt;The Bitter Lesson&lt;/a&gt;).&lt;/p&gt;
+&lt;h3 id=&quot;multinomial-naive-bayes&quot;&gt;Multinomial naive Bayes&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;I didn&#039;t realize the implications of it at the time&lt;/strong&gt;, but I initially wrote a regularized &lt;a href=&quot;https://en.wikipedia.org/wiki/Naive_Bayes_classifier#Multinomial_naive_Bayes&quot;&gt;multinomial naive Bayes model&lt;/a&gt; where the input is pairs of words and their frequencies (allegedly often used for document classification). For each pair, the probability that word implies a given class is computed, and then those probabilities are multiplied. I won&#039;t explain the &amp;quot;regularization&amp;quot; part because it&#039;s not relevant here.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The problem is that the multinomial model doesn&#039;t explicitly account for &amp;quot;absent&amp;quot; words&lt;/strong&gt;. My training data included tons of instances of the store&#039;s name, but they were split between &amp;quot;food&amp;quot; and &amp;quot;gas&amp;quot; (more &amp;quot;food&amp;quot; than &amp;quot;gas&amp;quot;). The word &amp;quot;fuel&amp;quot; only appeared on &amp;quot;gas&amp;quot; training data, but its effect wasn&#039;t strong enough to overpower the &amp;quot;store name implies &#039;food&#039;!&amp;quot; rule that the classifier learned.&lt;/p&gt;
+&lt;p&gt;(I might also argue that the real root of this issue was the &amp;quot;naive&amp;quot; part of &amp;quot;naive Bayes classifier&amp;quot; -- clearly, the rule I, as a human, devised shows that each word is &lt;em&gt;not&lt;/em&gt; independent. But I wanted to stick with the simple and well-trodden path of a naive Bayes classifier, since, you know, it seemed popular.)&lt;/p&gt;
+&lt;h3 id=&quot;bernoulli-naive-bayes&quot;&gt;Bernoulli naive Bayes&lt;/h3&gt;
+&lt;p&gt;I had figured out the problem, but I didn&#039;t have a solution: how do I ensure that the &lt;em&gt;absence&lt;/em&gt; of &amp;quot;fuel&amp;quot; implies &amp;quot;food&amp;quot; and the presence of &amp;quot;fuel&amp;quot; implies &amp;quot;gas&amp;quot;? Back on Wikipedia, I found the answer: &lt;strong&gt;for short texts like this, don&#039;t worry about frequencies and instead compute a probability for the &lt;em&gt;presence or absence&lt;/em&gt; of &lt;em&gt;every&lt;/em&gt; word (absence is &lt;code&gt;1 - P(present)&lt;/code&gt;)&lt;/strong&gt;. This is the &lt;a href=&quot;https://en.wikipedia.org/wiki/Naive_Bayes_classifier#Bernoulli_naive_Bayes&quot;&gt;Bernoulli naive Bayes model&lt;/a&gt;, and it has worked great for my purposes because it provides a clear signal that &amp;quot;fuel&amp;quot; implies a &amp;quot;gas&amp;quot; classification and lack of &amp;quot;fuel&amp;quot; implies something else.&lt;/p&gt;
+&lt;h3 id=&quot;learning-and-persisting&quot;&gt;Learning and persisting&lt;/h3&gt;
+&lt;p&gt;With a working classifier, I needed to persist its &amp;quot;learnings&amp;quot; across runs. Python&#039;s large standard library is convenient (other than everything having weird names). &lt;strong&gt;Python has a built-in &lt;a href=&quot;https://docs.python.org/3/library/shelve.html&quot;&gt;shelve&lt;/a&gt; library the can serialize and deserialize Python objects to/from a file&lt;/strong&gt;. This made persisting and updating my classifier trivial:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;hl-keyword&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;shelve&lt;/span&gt;
+&lt;span class=&quot;hl-keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;classifier&lt;/span&gt; &lt;span class=&quot;hl-keyword&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;Classifier&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;parse&lt;/span&gt;
+
+&lt;span class=&quot;hl-keyword&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;shelve&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;quot;data&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;hl-keyword&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;shelf&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;hl-identifier&quot;&gt;classifier&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;shelf&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;hl-function&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;quot;classifier&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-function&quot;&gt;Classifier&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;hl-comment&quot;&gt;# Automaticaly classify transactions&lt;/span&gt;
+    &lt;span class=&quot;hl-comment&quot;&gt;# Allow mis-classifications to be fixed&lt;/span&gt;
+
+    &lt;span class=&quot;hl-comment&quot;&gt;# Persist classifier&lt;/span&gt;
+    &lt;span class=&quot;hl-identifier&quot;&gt;shelf&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;quot;classifier&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;classifier&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This part of the project took much &lt;em&gt;less&lt;/em&gt; time than I anticipated. Thanks, Python!&lt;/p&gt;
+&lt;h2 id=&quot;user-interface&quot;&gt;User interface&lt;/h2&gt;
+&lt;p&gt;To keep things simple, I implemented a text-based interface, mostly based on Python&#039;s &lt;code&gt;prompt()&lt;/code&gt; function. All the classified data was written out to a CSV file using Python&#039;s &lt;code&gt;csv.writer&lt;/code&gt; class, for easy import into Excel (although, annoyingly, I had to deal with line ending nonsense--how is that not handled by default!?).&lt;/p&gt;
+&lt;h1 id=&quot;result&quot;&gt;Result&lt;/h1&gt;
+&lt;p&gt;It took longer than I had expected (or hoped), but the final result has been great. I&#039;ve mostly automated the tedious parts of tracking my expenses, while only trusting Python&#039;s standard library.&lt;/p&gt;
+&lt;p&gt;In summary, what did I learn?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I prefer XML over SGML because XML is regular and generally has broader support&lt;/li&gt;
+&lt;li&gt;The Bernoulli naive Bayes model works better than multinomial on very short text, especially when some words show up in multiple classes&lt;/li&gt;
+&lt;li&gt;Python&#039;s &lt;code&gt;shelve&lt;/code&gt; library is unbelievably convenient&lt;/li&gt;
+&lt;li&gt;The best way to avoid wasting time choosing a GUI framework is to just punt and use a line-based text interface (like the good old days)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(But mostly this was an excuse to write a piece of software that actually improves my life--while also giving Python another try.)&lt;/p&gt;
+</content>
+</entry>
 <entry>
 <title>The smallest embeddable scripting language, part 1</title>
 <id>https://log.schemescape.com/posts/static-site-generators/smallest-scripting-language.html</id>
@@ -416,56 +509,6 @@ Abort.
 &lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/luasmith&quot;&gt;Repository for luasmith&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md&quot;&gt;Tutorial for luasmith&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-</entry>
-<entry>
-<title>Did the Google Domains sale to Squarespace open my domain up to phishers?</title>
-<id>https://log.schemescape.com/posts/web-development/squarespace-phishing.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/web-development/squarespace-phishing.html"/>
-<updated>2025-03-14T00:00:00.000Z</updated>
-<summary type="text">That time I got phishing mail from my own domain.</summary>
-<content type="html">&lt;p&gt;About 5 weeks ago, I randomly checked my spam mail folder and saw a phishing mail &lt;em&gt;sent from my own domain&lt;/em&gt;, schemescape.com. I assumed it was marked as spam because it couldn&#039;t be validated.&lt;/p&gt;
-&lt;p&gt;To my surprise, &lt;strong&gt;the mail was verified (via &lt;a href=&quot;https://en.wikipedia.org/wiki/Sender_Policy_Framework&quot;&gt;SPF&lt;/a&gt; and &lt;a href=&quot;https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail&quot;&gt;DKIM&lt;/a&gt;) as being from schemescape.com.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;I&#039;m pretty sure I hadn&#039;t tried to phish myself, so... &lt;strong&gt;what happened?&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
-&lt;p&gt;I originally registered schemescape.com using Google Domains and I set up &lt;em&gt;in-bound&lt;/em&gt; email forwarding, so I could receive mail at my domain (but not send it).&lt;/p&gt;
-&lt;p&gt;On June 15th, 2023, &lt;a href=&quot;https://domains.google/&quot;&gt;Google announced it was selling its Google Domains business to Squarespace&lt;/a&gt;. By July 2024, all domains had been migrated to Squarespace.&lt;/p&gt;
-&lt;p&gt;With that context in mind, let&#039;s travel back (forward?) to a few weeks ago.&lt;/p&gt;
-&lt;h1 id=&quot;investigation&quot;&gt;Investigation&lt;/h1&gt;
-&lt;h2 id=&quot;mailgun&quot;&gt;Mailgun&lt;/h2&gt;
-&lt;p&gt;To confirm that I didn&#039;t have a &amp;quot;Jekyll and Hyde&amp;quot; self-phishing situation, I checked the email headers and observed that &lt;strong&gt;the mail was sent from a sever I&#039;d never heard of&lt;/strong&gt;: &lt;code&gt;a168.a94b46b0.use4.send.mailgun.net&lt;/code&gt; (198.244.55.168). So what is Mailgun, and how are they sending mail from &lt;em&gt;my&lt;/em&gt; domain?&lt;/p&gt;
-&lt;p&gt;Mailgun advertises itself as a &amp;quot;transactional email API service for developers&amp;quot;. I think it&#039;s a legitimate business, so I&#039;m assuming some bad actor is abusing their service. I reported the activity to Mailgun, but that only explains that Mailgun is involved.&lt;/p&gt;
-&lt;h2 id=&quot;spfdkim&quot;&gt;SPF/DKIM&lt;/h2&gt;
-&lt;p&gt;I don&#039;t know much about email security, but skimming the Wikipedia articles above indicates:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;SPF ensures the sending mail server is authorized to send mail for the domain&lt;/li&gt;
-&lt;li&gt;DKIM is used to sign (and authenticate) each email from the domain&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Poking around my DNS records, &lt;strong&gt;there are two suspicious TXT records&lt;/strong&gt;:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;SPF (on schemescape.com): &lt;code&gt;v=spf1 include:mailgun.org ~all&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;DKIM (on k1._domainkey.schemescape.com): &lt;code&gt; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXlrH338T643ulCW/ROaqdFhTlU332Av6qpMN69oMhKJeUgPp9RFHIMnRecVJAdLVDM3R6RpAsgNdB8EGv1Xhu3/vPA83H/KtGv8p6s03oVLhDaN3emmPZRi8WHlyDWM/W9VPE0aOvfWB/3ONXLaQrJOT2 /JUZIAnQ7ocfZl74kwIDAQAB&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Where did those come from?&lt;/strong&gt; I certainly never authored those DNS records--I didn&#039;t even know about the &lt;code&gt;_domainkey&lt;/code&gt; part of DKIM! Who created those records?&lt;/p&gt;
-&lt;h2 id=&quot;mailgun-1&quot;&gt;Mailgun&lt;/h2&gt;
-&lt;p&gt;Both records match &lt;a href=&quot;https://help.mailgun.com/hc/en-us/articles/32884702360603-Domain-Verification-Setup-Guide#01GCQE107VSXRWCKSVCHX0XXQQ&quot;&gt;Mailgun&#039;s Domain Verification Setup Guide&lt;/a&gt;, so my domain is setup for Mailgun. &lt;strong&gt;But who set this up?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Aside: why isn&#039;t Mailgun&#039;s setup unique to each domain?&lt;/p&gt;
-&lt;h2 id=&quot;squarespace&quot;&gt;Squarespace?&lt;/h2&gt;
-&lt;p&gt;At first, I wasn&#039;t sure if it was Google or Squarespace that created these records on my behalf. &lt;a href=&quot;https://forum.squarespace.com/topic/296578-squarespace-email-forwarding-defaults-for-ex-google-domains-mailgun/&quot;&gt;A thread on the Squarespace forum&lt;/a&gt; had at least one person noting that their mail forwarding records were modified during the Google Domains -&amp;gt; Squarespace transition, which suggesed it might be Squarespace&#039;s doing.&lt;/p&gt;
-&lt;h2 id=&quot;squarespace-1&quot;&gt;Squarespace!&lt;/h2&gt;
-&lt;p&gt;Fortunately, DNS records are public, and at least one site has been tracking records over time: &lt;a href=&quot;https://dnshistory.org/&quot;&gt;DNS History (dnshistory.org)&lt;/a&gt;. Looking at their history for my domain, I see that &lt;strong&gt;the SPF record from above was added sometime around May 13th, 2024, right around when Squarespace notified me that my domain had been migrated to their service&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Given the info above, my best guess is that the Google Domains -&amp;gt; Squarespace transition (or the subsequent Squarespace flow for enabling email forwarding) somehow caused these records to be added, as some sort of (unnecessary, in my case) Mailgun integration. &lt;strong&gt;At that point, a malicious actor just had to claim (&amp;quot;&lt;a href=&quot;https://help.mailgun.com/hc/en-us/articles/32884702360603-Domain-Verification-Setup-Guide#01GCQE107WHJR205TAGQAERRAG&quot;&gt;verify&lt;/a&gt;&amp;quot;) my domain on Mailgun, and then they could start phishing&lt;/strong&gt;, using SPF- and DKIM-verified, legitimate-looking mail.&lt;/p&gt;
-&lt;h2 id=&quot;squarespace-2&quot;&gt;Squarespace!!!&lt;/h2&gt;
-&lt;p&gt;Annoyingly, &lt;strong&gt;Squarespace seems to &lt;em&gt;require&lt;/em&gt; the Mailgun records for any kind of mail forwarding&lt;/strong&gt;. I don&#039;t see an option for in-bound-only forwarding (like I had on Google Domains). So... I don&#039;t see a way to avoid this problem other than creating a Mailgun account and claiming your domain there.&lt;/p&gt;
-&lt;h1 id=&quot;security-response-or-not&quot;&gt;Security response... or not&lt;/h1&gt;
-&lt;p&gt;I documented my understanding of the issue and reported it to Squarespace, via their Hackerone-based security funnel. Either fortunately (because I misunderstood) or unfortunately (because Squarespace misunderstood), &lt;strong&gt;Squarespace closed my report because it was not a &amp;quot;significant&amp;quot; security issue&lt;/strong&gt;. Obviously, I disagree. I received a &amp;quot;valid&amp;quot; (as far as email security is concerned) phishing mail from my own domain! There&#039;s definitely a problem somewhere!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;My requests for clarification on how email domain hijacking is not a &amp;quot;significant&amp;quot; security issue have, to date, received no response (after roughly 5 weeks)&lt;/strong&gt;. To be fair, I did not attempt to replicate the process outlined above (because everyone I know who used Google Domains had already left Squarespace and hijacking some random person&#039;s domain sounds like actual, illegal hacking).&lt;/p&gt;
-&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
-&lt;p&gt;Disclaimer: I&#039;m not an email security expert (or even any kind of security researcher) and I don&#039;t know how Squarespace and Mailgun are integrated.&lt;/p&gt;
-&lt;p&gt;But &lt;strong&gt;I think any Squarespace domain with email forwarding &lt;em&gt;that is not linked to a Mailgun account&lt;/em&gt; could be ripe for phishing&lt;/strong&gt;. I even found that &lt;a href=&quot;https://www.reddit.com/r/gsuite/comments/1fcya1x/google_domains_squarespace_and_email_forwarding/&quot;&gt;someone else came to the same conclusion on Reddit six months ago&lt;/a&gt;. Squarespace assured me there is no problem, but provided no detail.&lt;/p&gt;
-&lt;p&gt;Regardless, I moved my domain away from Squarespace (to Porkbun). It&#039;s not like I &lt;em&gt;chose&lt;/em&gt; to use Squarespace in the first place--Google chose for me.&lt;/p&gt;
-&lt;h1 id=&quot;corrections&quot;&gt;Corrections?&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;If you &lt;em&gt;are&lt;/em&gt; an email security expert and notice any mistakes in my understanding or logic above, &lt;em&gt;please&lt;/em&gt; email me at &lt;a href=&quot;mailto:log@schemescape.com&quot;&gt;log@schemescape.com&lt;/a&gt;!&lt;/strong&gt; I would love both to be wrong (because then there&#039;s not a problem) and to be corrected (so I can learn).&lt;/p&gt;
 </content>
 </entry>
 </feed>
