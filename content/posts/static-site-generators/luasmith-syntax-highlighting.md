@@ -4,7 +4,7 @@ description: It's not bloat if I actually use it, right?
 date: 2025-06-25
 keywords: [lua]
 ---
-After [creating a (formerly) 270 KB static site generator](smallest-static-site-generator.md) and [adding internal link-checking with minimal bloat](extending-luasmith.md), the feature creep continues: [luasmith](https://github.com/jaredkrinke/luasmith) now supports syntax highlighting for ~150 languages--**and it only increased the gzipped download by about 180 KB**!
+After [creating a (formerly) 270 KB static site generator](smallest-static-site-generator.md) and [adding internal link-checking with minimal bloat](extending-luasmith.md), the feature creep continues: [luasmith](https://github.com/jaredkrinke/luasmith) now supports syntax highlighting for ~150 languages, thanks to [Scintillua](https://orbitalquark.github.io/scintillua/)--**and it only increased the gzipped download by about 180 KB**!
 
 This post describes my path to adding lightweight and customizable syntax highlighting to luasmith.
 
