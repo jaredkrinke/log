@@ -442,15 +442,15 @@ Abort.
 <id>https://log.schemescape.com/posts/static-site-generators/smallest-static-site-generator.html</id>
 <link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/smallest-static-site-generator.html"/>
 <updated>2025-04-22T00:00:00.000Z</updated>
-<summary type="text">Tired of bloat, I made a new static site generator that is 5x faster and 50x smaller than my last effort. And this one runs on x86 NetBSD.</summary>
+<summary type="text">Tired of bloat, I made a new static site generator that is 5x faster and 50x smaller than my last effort. And this one runs on 32-bit NetBSD.</summary>
 <content type="html">&lt;p&gt;Today, I unveil my most gratuitous static site generator yet: &lt;a href=&quot;https://github.com/jaredkrinke/luasmith&quot;&gt;luasmith&lt;/a&gt;.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;It&#039;s 450 KB&lt;/strong&gt; (static binary + templates for this site, gzip compressed)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It&#039;s 450 KB&lt;/strong&gt; (static binary, including templates for this site, gzip compressed)&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;It builds my ~140 page site in 300 ms&lt;/strong&gt; (wall clock time, on an 11-year-old old laptop)&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;It performs acceptably on a 28-year-old laptop, running NetBSD&lt;/strong&gt; (Pentium 166 MHz)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;It&#039;s trivial to compile&lt;/strong&gt;, requiring only a C compiler, &lt;code&gt;make&lt;/code&gt;, &lt;code&gt;sed&lt;/code&gt;, and &lt;code&gt;sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It&#039;s trivial to compile&lt;/strong&gt;, requiring only a C compiler, GNU Make, &lt;code&gt;sed&lt;/code&gt;, and &lt;code&gt;sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Despite the small size, it still includes &lt;strong&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/luasmith-syntax-highlighting.html&quot;&gt;syntax highlighting for ~150 languages&lt;/a&gt; and &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/extending-luasmith.html&quot;&gt;internal link-checking&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: This site is now &lt;a href=&quot;https://github.com/jaredkrinke/luasmith/tree/main/themes/md2blog&quot;&gt;built using luasmith&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;show-me-the-code&quot;&gt;Show me the code!&lt;/h1&gt;
 &lt;p&gt;It&#039;s like &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; in Lua. See &lt;a href=&quot;https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md&quot;&gt;the tutorial&lt;/a&gt; for more, but here&#039;s an example that converts Markdown to HTML and adds the page&#039;s title to the resulting HTML:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-lua&quot;&gt;&lt;span class=&quot;hl-comment&quot;&gt;-- Minimal HTML template (used below)&lt;/span&gt;
@@ -470,6 +470,7 @@ Abort.
   &lt;span class=&quot;hl-function&quot;&gt;writeToDestination&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;quot;out&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt;
 &lt;span class=&quot;hl-operator&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note: templates use a Lua-native templating language called &lt;a href=&quot;https://github.com/leafo/etlua&quot;&gt;etlua&lt;/a&gt; and file matching uses Lua &lt;a href=&quot;https://www.lua.org/manual/5.2/manual.html#6.4.1&quot;&gt;patterns&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&quot;motivation&quot;&gt;Motivation&lt;/h1&gt;
 &lt;p&gt;Obviously, the world does not need another static site generator. So how did I end up here?&lt;/p&gt;
 &lt;p&gt;In a word, my motivation was: &lt;strong&gt;simplicity&lt;/strong&gt;. I wanted an SSG that was:&lt;/p&gt;
@@ -482,7 +483,7 @@ Abort.
 &lt;h1 id=&quot;implementation&quot;&gt;Implementation&lt;/h1&gt;
 &lt;p&gt;Here&#039;s my take on the goals above.&lt;/p&gt;
 &lt;h2 id=&quot;simple-to-understand&quot;&gt;Simple to understand&lt;/h2&gt;
-&lt;p&gt;First, I wanted the architecture to be simple:&lt;/p&gt;
+&lt;p&gt;First, I wanted the architecture to be simple, both in design and use:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;The build pipeline is just a Lua script (similar to &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt;)&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Page templates are constructed using Lua&lt;/strong&gt; (via &lt;a href=&quot;https://github.com/leafo/etlua&quot;&gt;etlua&lt;/a&gt;)&lt;/li&gt;
@@ -490,10 +491,10 @@ Abort.
 &lt;li&gt;&lt;strong&gt;Relative links between Markdown files &amp;quot;just work&amp;quot;&lt;/strong&gt; and are checked at build time (including links to headings)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Instead of creating a bespoke domain-specific language for defining the structure of a generated site or its templates, you just write some Lua code that glues together a few processing nodes and then supply templates that &lt;em&gt;also&lt;/em&gt; use Lua (e.g. for iteration).&lt;/p&gt;
-&lt;p&gt;Overall, I&#039;d describe the architecture as &amp;quot;&lt;strong&gt;Metalsmith in Lua, with zero runtime dependencies&lt;/strong&gt; (beyond libc)&amp;quot;.&lt;/p&gt;
+&lt;p&gt;Overall, I&#039;d describe the architecture as &amp;quot;&lt;strong&gt;minimalist Metalsmith in Lua, with zero runtime dependencies&lt;/strong&gt;&amp;quot;.&lt;/p&gt;
 &lt;h2 id=&quot;simple-to-bootstrap&quot;&gt;Simple to bootstrap&lt;/h2&gt;
-&lt;p&gt;Given my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/future-proof-languages.html&quot;&gt;musings about future-proof programming languages&lt;/a&gt;, it&#039;s obvious that I&#039;d like to be able to continue to compile and use my software in the future. That is easier said than done! The problem is that identifying languages that will stick around is hard. Twenty years ago, Perl might have been a reasonable choice for an SSG, but today I don&#039;t even remember how to import a module into Perl.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;The best static site generator ever made&lt;/a&gt; is built on TypeScript/JavaScript and &lt;a href=&quot;https://deno.com/&quot;&gt;Deno&lt;/a&gt;. As much as I like Deno, I&#039;m not sure it will be maintained decades down the road. Given that I&#039;ll never know how to get it running on an i586 computer, I have doubts I&#039;d be able to get it running on potential future architectures either.&lt;/p&gt;
+&lt;p&gt;Given my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/future-proof-languages.html&quot;&gt;musings about future-proof programming languages&lt;/a&gt;, it&#039;s obvious that I&#039;d like to be able to compile and use my software in the future. That is easier said than done! The problem is that identifying languages that will stick around is hard. Twenty years ago, Perl might have been a reasonable choice for an SSG, but today I don&#039;t even remember how to install Perl modules.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;The (previous) best static site generator ever made&lt;/a&gt; is built on TypeScript/JavaScript and &lt;a href=&quot;https://deno.com/&quot;&gt;Deno&lt;/a&gt;. As much as I like Deno, I&#039;m not confident it will be maintained decades down the road. Given that I&#039;ll never know how to get it running on an i586 computer, I have doubts I&#039;d be able to get it running on potential future architectures (RISC-V?) either.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;To avoid these headaches, I went with the lowest common denominator: C&lt;/strong&gt;. It&#039;s not convenient, it&#039;s not modern, but C works everywhere and I&#039;m certain C will persist (for better or worse).&lt;/p&gt;
 &lt;p&gt;Aside: ideally, I&#039;d be writing as much native code in Rust as possible, to ensure memory safety. Unfortunately, &lt;strong&gt;Rust&#039;s modern approach is at odds with my desire for simplicity&lt;/strong&gt;. The toolchain is huge, the dependency trees are large, and the language is vast. Rust definitely looks like the future of robust low-level software, but &lt;strong&gt;for cozy side projects, I prefer being a simpleton living in the past&lt;/strong&gt;.&lt;/p&gt;
 &lt;h2 id=&quot;simple-to-maintain&quot;&gt;Simple to maintain&lt;/h2&gt;
@@ -504,11 +505,8 @@ Abort.
 &lt;li&gt;&lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; for converting Markdown to HTML&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://www.lua.org/&quot;&gt;Lua&lt;/a&gt; for metadata, scripting, etc.&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/leafo/etlua&quot;&gt;etlua&lt;/a&gt; for templates&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt;: Added in a few more for syntax highlighting:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.inf.puc-rio.br/~roberto/lpeg/&quot;&gt;LPeg&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/orbitalquark/scintillua&quot;&gt;Scintillua&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/orbitalquark/scintillua&quot;&gt;Scintillua&lt;/a&gt; for syntax highlighting&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.inf.puc-rio.br/~roberto/lpeg/&quot;&gt;LPeg&lt;/a&gt; to support Scintillua&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;You&#039;ll note that these libraries are doing all of the heavy lifting&lt;/strong&gt;. I&#039;ve basically only written glue code, an entry point, and some infrastructure. And most of the code I wrote is in Lua (which is much easier to write than C--and fast enough for all but the innermost loops).&lt;/p&gt;
 &lt;h2 id=&quot;simple-to-deploy&quot;&gt;Simple to deploy&lt;/h2&gt;
@@ -517,7 +515,7 @@ Abort.
 &lt;p&gt;Of course, there are downsides to the approach I took:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Writing C code is fraught with peril -- fortunately, the hardest parts were mostly already done by the md4c and Lua authors&lt;/li&gt;
-&lt;li&gt;Syntax highlighting is &lt;em&gt;not&lt;/em&gt; simple -- good news: &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/luasmith-syntax-highlighting.html&quot;&gt;someone already solved this problem for me&lt;/a&gt;!&lt;/li&gt;
+&lt;li&gt;Syntax highlighting is &lt;em&gt;not&lt;/em&gt; simple -- good news: &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/luasmith-syntax-highlighting.html&quot;&gt;Scintillua already solved this problem for me&lt;/a&gt;!&lt;/li&gt;
 &lt;li&gt;The security model of an SSG that uses Lua scripts for everything is... not ideal -- &lt;strong&gt;only use templates you trust!&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Additionally, I haven&#039;t taken the time to set up a proper development and debugging environment for C and Lua. I need to investigate static analysis and debugging tools for Lua, as well as find a tolerable frontend for GDB. This is where I really miss Emacs+SLIME for Common Lisp or VS Code for TypeScript/Python.&lt;/p&gt;
@@ -526,13 +524,11 @@ Abort.
 &lt;h2 id=&quot;designing-for-the-text-mode-web&quot;&gt;Designing for the text-mode web&lt;/h2&gt;
 &lt;p&gt;At some point, I&#039;d like to redesign my site using an even more minimal theme. In fact, &lt;strong&gt;I&#039;d like to optimize my site for text mode browsers&lt;/strong&gt; like &lt;a href=&quot;https://lynx.browser.org/&quot;&gt;lynx&lt;/a&gt; and &lt;a href=&quot;https://w3m.sourceforge.net/&quot;&gt;w3m&lt;/a&gt;. Why? Because I like using w3m and I want my site to be easy to use within w3m. Or maybe it&#039;s because I hate how bloated modern web browsers have become.&lt;/p&gt;
 &lt;h2 id=&quot;further-simplifying-distribution&quot;&gt;Further simplifying distribution&lt;/h2&gt;
-&lt;p&gt;Distributing native code necessarily requires per-platform packages. Or does it? Can I package and release this minimal static site generator as a multi-OS polyglot binary using &lt;a href=&quot;https://github.com/jart/cosmopolitan&quot;&gt;Cosmopolitan libc&lt;/a&gt;? Note: sadly, I don&#039;t think 32-bit/i386 is supported for now.&lt;/p&gt;
+&lt;p&gt;Distributing native code necessarily requires per-platform packages. Or does it? Can I package and release this minimal static site generator as a multi-OS polyglot binary using &lt;a href=&quot;https://github.com/jart/cosmopolitan&quot;&gt;Cosmopolitan libc&lt;/a&gt;? &lt;strong&gt;Update&lt;/strong&gt;: this now exists, but sadly, it is 64-bit only.&lt;/p&gt;
 &lt;h2 id=&quot;simplifying-the-entire-system&quot;&gt;Simplifying the entire system&lt;/h2&gt;
-&lt;p&gt;I&#039;d like to see if I can bootstrap my entire web site&#039;s workflow from &lt;a href=&quot;https://github.com/oasislinux/oasis&quot;&gt;Oasis Linux&lt;/a&gt; (a small, statically linked, Linux-based operating system that is simple, but capable). &lt;strong&gt;Oasis sounds like a modern system that a single person can wrap their head around&lt;/strong&gt; (minus the Linux kernel--though perhaps a simpler kernel could be substituted...).&lt;/p&gt;
+&lt;p&gt;I&#039;d like to see if I can bootstrap my entire web site&#039;s workflow from &lt;a href=&quot;https://github.com/oasislinux/oasis&quot;&gt;Oasis Linux&lt;/a&gt; (a small, statically linked, Linux-based operating system that is simple, but capable). &lt;strong&gt;Oasis sounds like a modern system that a single person can wrap their head around&lt;/strong&gt; (minus the Linux kernel--though perhaps a simpler kernel could be substituted in the future?).&lt;/p&gt;
 &lt;h2 id=&quot;blogging-on-vintage-computers&quot;&gt;Blogging on vintage computers&lt;/h2&gt;
 &lt;p&gt;I&#039;m curious how far back I can go as far as vintage computing and still be able to build a static site. Can I build my SSG on Windows 98? DOS? Amiga? Inquiring minds want to know!&lt;/p&gt;
-&lt;h2 id=&quot;incremental-builds&quot;&gt;Incremental builds&lt;/h2&gt;
-&lt;p&gt;Speaking of old, slow computers, I secretly designed this SSG to support incremental rebuilds to ensure that it runs fast even on old hardware. The only issue with this plan is that &lt;strong&gt;md4c is so fast that I&#039;m not sure it&#039;s worth optimizing the build process&lt;/strong&gt;. I can rebuild my entire site from scratch on a 166 MHz laptop (with a rotational disk) in under 20 seconds.&lt;/p&gt;
 &lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
 &lt;p&gt;Creating a &lt;em&gt;non-bloated&lt;/em&gt; Markdown-based static site generator has been a bucket list item for me--and now it&#039;s done!&lt;/p&gt;
 &lt;p&gt;Beyond personal goals, &lt;strong&gt;I found C+Lua to be a comfortable combination for side projects&lt;/strong&gt;. This came as a surprise! Lua isn&#039;t my favorite language to write (though it&#039;s certainly much simpler to wield than C). Having said that, it&#039;s a beautifully simple language that&#039;s easy to integrate. Despite being primarily driven to Lua by my goal of building a small (in binary size) tool, Lua&#039;s minimalist take on a mostly-normal-looking scripting language won me over because I could literally pick it up and be productive within an hour or two.&lt;/p&gt;
@@ -541,7 +537,9 @@ Abort.
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/luasmith&quot;&gt;Repository for luasmith&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md&quot;&gt;Tutorial for luasmith&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://jaredkrinke.github.io/til/&quot;&gt;Example site: a blog of things I&#039;ve learned&lt;/a&gt; (&lt;a href=&quot;https://github.com/jaredkrinke/til&quot;&gt;source&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
+&lt;p&gt;Note: the example repository contains &lt;a href=&quot;https://github.com/jaredkrinke/til/blob/main/readme.lua&quot;&gt;a simple self-contained luasmith pipeline for generating its README file&lt;/a&gt;.&lt;/p&gt;
 </content>
 </entry>
 </feed>
