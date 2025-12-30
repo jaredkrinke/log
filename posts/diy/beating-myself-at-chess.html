@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Beating myself at chess</title>
+<meta name="description" content="Or: programming a chess AI without any preparation whatsoever." />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="../../css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Beating myself at chess",
+  "abstract": "Or: programming a chess AI without any preparation whatsoever.",
+  "keywords": "diy",
+  "datePublished": "2025-12-29"
+}
+</script>
+</head>
+<body>
+<header>
+<h1><a href="../../index.html">Schemescape</a></h1>
+<p>Development log of a life-long coder</p>
+
+<nav>
+<strong>Topics:&nbsp;</strong>
+<ul>
+<li><a href="../../posts/diy/index.html">diy</a></li>
+</ul>
+</nav>
+</header>
+<main>
+<article>
+<header>
+<h1><a href="../../posts/diy/beating-myself-at-chess.html">Beating myself at chess</a></h1>
+<p><time datetime="2025-12-29">December 29, 2025</time></p>
+</header>
+<p><strong>Programming a chess AI that can beat me is an item that's been on my bucket list for a long time</strong>, believe it or not.</p>
+<p><strong>Spoiler</strong>: I'm terrible at chess, so creating an AI to beat <em>me</em> specifically wasn't too difficult.</p>
+<p>You can play against the AI from the comfort of your browser here: <a href="https://jaredkrinke.github.io/cm-chessboard/">https://jaredkrinke.github.io/cm-chessboard/</a></p>
+<h1 id="motivation">Motivation</h1>
+<p>Similar to <a href="../static-site-generators/smallest-static-site-generator.html">static site generators</a>, no one is clamoring for a new chess engine written by me. My primary motivations were to:</p>
+<ul>
+<li>Experiment with my development environment</li>
+<li>Keep things as simple as possible</li>
+<li>Maybe port the result to an old, slow vintage computer</li>
+</ul>
+<p><strong>I opted to prepare as little as possible</strong>--just start coding!</p>
+<h1 id="development-environment">Development environment</h1>
+<p>I'm nostalgic for the pre-always-on-Internet days--without constant distractions and bloat. I also just revived an <a href="../hardware/farewell-to-a-netbook.html#the-future">Asus EeeBook X205T netbook</a>. So <strong>I settled on revisiting late 90s programming</strong>, using GNU Screen, Vim, entr, and w3m, in terminal mode. <strong>Typing into the console on a tiny, light netbook is peak &quot;cozy coding&quot;</strong>.</p>
+<h1 id="keeping-things-simple">Keeping things simple</h1>
+<p>With an eye toward simplicity, and also portability to old computers, I opted for using C, with as few dependencies as possible.</p>
+<p>In the end, the core of my chess engine and its associated AI (excluding the front end) have exactly <strong>zero</strong> dependencies. It uses a fixed amount of memory, with no dynamic allocations! The full chess engine is under 600 lines and the AI is under 150. <strong>Compiled to WebAssembly, the whole shebang is under 6 KB</strong>. I'd been hoping to run it on my Pentium laptop or Raspberry Pi B, but now I'm wondering if it could run on DOS, or maybe even an Amiga!</p>
+<p>Not everything went perfectly, however. <strong>In an attempt to rush through the project, I put off writing tests until absolutely necessary</strong>--hoping they would never be needed. But eventually I needed to refactor and rewrite the trickiest bits of movement code (en passant and castling), and I had to stop and build up a test framework and tests from scratch, in the middle of a rewrite. For the record: the tests uncovered multiple bugs in my original implementation. <strong>Kids, don't skip writing tests!</strong></p>
+<h1 id="integration">Integration</h1>
+<p>The initial UI used ASCII characters in the terminal, but the non-square VGA font made it hard to imagine piece movements on the board (even after experimenting with ANSI escape codes to invert white squares--a feature I eventually abandoned).</p>
+<p>Rather than create a graphical interface from scratch, I opted to integrate with:</p>
+<ol>
+<li><a href="https://www.gnu.org/software/xboard">XBoard</a> (using <a href="https://www.chessprogramming.org/Chess_Engine_Communication_Protocol">CECP, aka &quot;the XBoard protocol&quot;</a>)</li>
+<li>Web browsers, using <a href="https://shaack.com/projekte/cm-chessboard/">cm-chessboard</a> and WebAssembly</li>
+</ol>
+<h2 id="xboard">XBoard</h2>
+<p>XBoard uses a line-based text protocol (<a href="https://www.gnu.org/software/xboard/engine-intf.html">documented here</a>), so I thought it would be easy to implement. Pro tip: if you want to experiment with the XBoard protocol live, you can use <code>netcat</code>, but you'll need to issue a <code>feature sigint=0 done=1</code> command (otherwise, XBoard will send a <code>SIGINT</code> to &quot;wake up&quot; your process, and <code>netcat</code> will be so startled that it just dies).</p>
+<p><strong>Given that I never learned standard chess notation, XBoard was actually perfect</strong> since it uses consistent and logical syntax like <code>a7a8q</code> (move from <strong>a7</strong> to <strong>a8</strong> and promote to a <strong>q</strong>ueen). Other than disabling features I didn't know or care about, my XBoard client mostly just listened for player moves (e.g. <code>e2e4</code>) and replied with the AI's moves (e.g. <code>move e7e5</code>). The whole thing was under 100 lines of C.</p>
+<h2 id="browsers">Browsers</h2>
+<p>Integrating with browsers was a little more involved since I used C instead of JavaScript. Without any standard library dependencies, compiling to WebAssembly was fairly simple (my <a href="../webassembly/trivial-example.html">trivial WebAssembly research</a> came in handy!). <strong>I encoded moves into integers in order to avoid any complex marshalling of strings</strong> back and forth (3 bits for rank, 3 bits for file, 3 bits for promotion, easily fitting within a <code>Number</code>'s mantissa).</p>
+<p>After more searching than I anticipated, I found a mobile-friendly HTML+JavaScript chessboard that didn't require any exotic build systems (or even NPM!): <strong><a href="https://github.com/shaack/cm-chessboard">cm-chessboard</a></strong>. I had hoped to find a single-file chessboard that worked, but such a thing doesn't appear to exist.</p>
+<h1 id="so-can-it-beat-me">So can it beat me?</h1>
+<p>Was I successful in beating myself at chess? <strong>I'm afraid the answer is yes</strong>. Every time I play against the AI, I seem to make some fatal mistake and lose my queen or a rook. I can generally get ahead early, but then I make a series of increasingly boneheaded mistakes until there's not much point in continuing on.</p>
+<p>I don't yet know if my chess program can beat anyone other than the worst chess player in the world.</p>
+<p><strong>In summary: mission accomplished!</strong> (At least until I stop being terrible at chess.)</p>
+<p>Overall, this project was enjoyable enough that I'd recommend it to anyone wanting to practice programming or wanting to test out a new programming language (or paradigm).</p>
+<h1 id="resources">Resources</h1>
+<ul>
+<li><a href="https://tildegit.org/scms/chess">cchess source code</a></li>
+<li><a href="https://jaredkrinke.github.io/cm-chessboard/">Browser-based demo</a></li>
+<li><a href="https://www.chessprogramming.org/Chess_Engine_Communication_Protocol">XBoard protocol</a></li>
+</ul>
+
+<footer>
+<p>&crarr; <a href="../../index.html">Back to home</a></p>
+</footer>
+</article>
+</main>
+
+</body>
+</html>

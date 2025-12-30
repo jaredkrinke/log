@@ -7,8 +7,57 @@
 <author>
 <name>Schemescape</name>
 </author>
-<updated>2025-09-03T00:00:00.000Z</updated>
+<updated>2025-12-29T00:00:00.000Z</updated>
 
+<entry>
+<title>Beating myself at chess</title>
+<id>https://log.schemescape.com/posts/diy/beating-myself-at-chess.html</id>
+<link rel="alternate" href="https://log.schemescape.com/posts/diy/beating-myself-at-chess.html"/>
+<updated>2025-12-29T00:00:00.000Z</updated>
+<summary type="text">Or: programming a chess AI without any preparation whatsoever.</summary>
+<content type="html">&lt;p&gt;&lt;strong&gt;Programming a chess AI that can beat me is an item that&#039;s been on my bucket list for a long time&lt;/strong&gt;, believe it or not.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Spoiler&lt;/strong&gt;: I&#039;m terrible at chess, so creating an AI to beat &lt;em&gt;me&lt;/em&gt; specifically wasn&#039;t too difficult.&lt;/p&gt;
+&lt;p&gt;You can play against the AI from the comfort of your browser here: &lt;a href=&quot;https://jaredkrinke.github.io/cm-chessboard/&quot;&gt;https://jaredkrinke.github.io/cm-chessboard/&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;motivation&quot;&gt;Motivation&lt;/h1&gt;
+&lt;p&gt;Similar to &lt;a href=&quot;https://log.schemescape.com/posts/diy/../static-site-generators/smallest-static-site-generator.html&quot;&gt;static site generators&lt;/a&gt;, no one is clamoring for a new chess engine written by me. My primary motivations were to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Experiment with my development environment&lt;/li&gt;
+&lt;li&gt;Keep things as simple as possible&lt;/li&gt;
+&lt;li&gt;Maybe port the result to an old, slow vintage computer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;I opted to prepare as little as possible&lt;/strong&gt;--just start coding!&lt;/p&gt;
+&lt;h1 id=&quot;development-environment&quot;&gt;Development environment&lt;/h1&gt;
+&lt;p&gt;I&#039;m nostalgic for the pre-always-on-Internet days--without constant distractions and bloat. I also just revived an &lt;a href=&quot;https://log.schemescape.com/posts/diy/../hardware/farewell-to-a-netbook.html#the-future&quot;&gt;Asus EeeBook X205T netbook&lt;/a&gt;. So &lt;strong&gt;I settled on revisiting late 90s programming&lt;/strong&gt;, using GNU Screen, Vim, entr, and w3m, in terminal mode. &lt;strong&gt;Typing into the console on a tiny, light netbook is peak &amp;quot;cozy coding&amp;quot;&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;keeping-things-simple&quot;&gt;Keeping things simple&lt;/h1&gt;
+&lt;p&gt;With an eye toward simplicity, and also portability to old computers, I opted for using C, with as few dependencies as possible.&lt;/p&gt;
+&lt;p&gt;In the end, the core of my chess engine and its associated AI (excluding the front end) have exactly &lt;strong&gt;zero&lt;/strong&gt; dependencies. It uses a fixed amount of memory, with no dynamic allocations! The full chess engine is under 600 lines and the AI is under 150. &lt;strong&gt;Compiled to WebAssembly, the whole shebang is under 6 KB&lt;/strong&gt;. I&#039;d been hoping to run it on my Pentium laptop or Raspberry Pi B, but now I&#039;m wondering if it could run on DOS, or maybe even an Amiga!&lt;/p&gt;
+&lt;p&gt;Not everything went perfectly, however. &lt;strong&gt;In an attempt to rush through the project, I put off writing tests until absolutely necessary&lt;/strong&gt;--hoping they would never be needed. But eventually I needed to refactor and rewrite the trickiest bits of movement code (en passant and castling), and I had to stop and build up a test framework and tests from scratch, in the middle of a rewrite. For the record: the tests uncovered multiple bugs in my original implementation. &lt;strong&gt;Kids, don&#039;t skip writing tests!&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&quot;integration&quot;&gt;Integration&lt;/h1&gt;
+&lt;p&gt;The initial UI used ASCII characters in the terminal, but the non-square VGA font made it hard to imagine piece movements on the board (even after experimenting with ANSI escape codes to invert white squares--a feature I eventually abandoned).&lt;/p&gt;
+&lt;p&gt;Rather than create a graphical interface from scratch, I opted to integrate with:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.gnu.org/software/xboard&quot;&gt;XBoard&lt;/a&gt; (using &lt;a href=&quot;https://www.chessprogramming.org/Chess_Engine_Communication_Protocol&quot;&gt;CECP, aka &amp;quot;the XBoard protocol&amp;quot;&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Web browsers, using &lt;a href=&quot;https://shaack.com/projekte/cm-chessboard/&quot;&gt;cm-chessboard&lt;/a&gt; and WebAssembly&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;xboard&quot;&gt;XBoard&lt;/h2&gt;
+&lt;p&gt;XBoard uses a line-based text protocol (&lt;a href=&quot;https://www.gnu.org/software/xboard/engine-intf.html&quot;&gt;documented here&lt;/a&gt;), so I thought it would be easy to implement. Pro tip: if you want to experiment with the XBoard protocol live, you can use &lt;code&gt;netcat&lt;/code&gt;, but you&#039;ll need to issue a &lt;code&gt;feature sigint=0 done=1&lt;/code&gt; command (otherwise, XBoard will send a &lt;code&gt;SIGINT&lt;/code&gt; to &amp;quot;wake up&amp;quot; your process, and &lt;code&gt;netcat&lt;/code&gt; will be so startled that it just dies).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Given that I never learned standard chess notation, XBoard was actually perfect&lt;/strong&gt; since it uses consistent and logical syntax like &lt;code&gt;a7a8q&lt;/code&gt; (move from &lt;strong&gt;a7&lt;/strong&gt; to &lt;strong&gt;a8&lt;/strong&gt; and promote to a &lt;strong&gt;q&lt;/strong&gt;ueen). Other than disabling features I didn&#039;t know or care about, my XBoard client mostly just listened for player moves (e.g. &lt;code&gt;e2e4&lt;/code&gt;) and replied with the AI&#039;s moves (e.g. &lt;code&gt;move e7e5&lt;/code&gt;). The whole thing was under 100 lines of C.&lt;/p&gt;
+&lt;h2 id=&quot;browsers&quot;&gt;Browsers&lt;/h2&gt;
+&lt;p&gt;Integrating with browsers was a little more involved since I used C instead of JavaScript. Without any standard library dependencies, compiling to WebAssembly was fairly simple (my &lt;a href=&quot;https://log.schemescape.com/posts/diy/../webassembly/trivial-example.html&quot;&gt;trivial WebAssembly research&lt;/a&gt; came in handy!). &lt;strong&gt;I encoded moves into integers in order to avoid any complex marshalling of strings&lt;/strong&gt; back and forth (3 bits for rank, 3 bits for file, 3 bits for promotion, easily fitting within a &lt;code&gt;Number&lt;/code&gt;&#039;s mantissa).&lt;/p&gt;
+&lt;p&gt;After more searching than I anticipated, I found a mobile-friendly HTML+JavaScript chessboard that didn&#039;t require any exotic build systems (or even NPM!): &lt;strong&gt;&lt;a href=&quot;https://github.com/shaack/cm-chessboard&quot;&gt;cm-chessboard&lt;/a&gt;&lt;/strong&gt;. I had hoped to find a single-file chessboard that worked, but such a thing doesn&#039;t appear to exist.&lt;/p&gt;
+&lt;h1 id=&quot;so-can-it-beat-me&quot;&gt;So can it beat me?&lt;/h1&gt;
+&lt;p&gt;Was I successful in beating myself at chess? &lt;strong&gt;I&#039;m afraid the answer is yes&lt;/strong&gt;. Every time I play against the AI, I seem to make some fatal mistake and lose my queen or a rook. I can generally get ahead early, but then I make a series of increasingly boneheaded mistakes until there&#039;s not much point in continuing on.&lt;/p&gt;
+&lt;p&gt;I don&#039;t yet know if my chess program can beat anyone other than the worst chess player in the world.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;In summary: mission accomplished!&lt;/strong&gt; (At least until I stop being terrible at chess.)&lt;/p&gt;
+&lt;p&gt;Overall, this project was enjoyable enough that I&#039;d recommend it to anyone wanting to practice programming or wanting to test out a new programming language (or paradigm).&lt;/p&gt;
+&lt;h1 id=&quot;resources&quot;&gt;Resources&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://tildegit.org/scms/chess&quot;&gt;cchess source code&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://jaredkrinke.github.io/cm-chessboard/&quot;&gt;Browser-based demo&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.chessprogramming.org/Chess_Engine_Communication_Protocol&quot;&gt;XBoard protocol&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry>
 <entry>
 <title>Writing a financial tracker for fun and paranoia</title>
 <id>https://log.schemescape.com/posts/diy/expense-classifier.html</id>
@@ -435,111 +484,6 @@ Abort.
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;That&#039;s nearly 1.6 GB of disk space for a Tree-sitter CLI&lt;/strong&gt;. I&#039;m speechless. I guess it&#039;s written in JavaScript for Node.js, so that explains ~100 MB of it. But why does it need LLVM? Emscripten?? NumPy???&lt;/p&gt;
 &lt;p&gt;I suspect this is mostly related to Node.js native modules (and perhaps how they&#039;re packaged on Debian, specifically), but... &lt;strong&gt;I just can&#039;t deal with this level of bloat&lt;/strong&gt;.&lt;/p&gt;
-</content>
-</entry>
-<entry>
-<title>A 450 KB static site generator based on Markdown and Lua</title>
-<id>https://log.schemescape.com/posts/static-site-generators/smallest-static-site-generator.html</id>
-<link rel="alternate" href="https://log.schemescape.com/posts/static-site-generators/smallest-static-site-generator.html"/>
-<updated>2025-04-22T00:00:00.000Z</updated>
-<summary type="text">Tired of bloat, I made a new static site generator that is 5x faster and 50x smaller than my last effort. And this one runs on 32-bit NetBSD.</summary>
-<content type="html">&lt;p&gt;Today, I unveil my most gratuitous static site generator yet: &lt;a href=&quot;https://github.com/jaredkrinke/luasmith&quot;&gt;luasmith&lt;/a&gt;.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;It&#039;s 450 KB&lt;/strong&gt; (static binary, including templates for this site, gzip compressed)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;It builds my ~140 page site in 300 ms&lt;/strong&gt; (wall clock time, on an 11-year-old old laptop)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;It performs acceptably on a 28-year-old laptop, running NetBSD&lt;/strong&gt; (Pentium 166 MHz)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;It&#039;s trivial to compile&lt;/strong&gt;, requiring only a C compiler, GNU Make, &lt;code&gt;sed&lt;/code&gt;, and &lt;code&gt;sh&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Despite the small size, it still includes &lt;strong&gt;&lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/luasmith-syntax-highlighting.html&quot;&gt;syntax highlighting for ~150 languages&lt;/a&gt; and &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/extending-luasmith.html&quot;&gt;internal link-checking&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;show-me-the-code&quot;&gt;Show me the code!&lt;/h1&gt;
-&lt;p&gt;It&#039;s like &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt; in Lua. See &lt;a href=&quot;https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md&quot;&gt;the tutorial&lt;/a&gt; for more, but here&#039;s an example that converts Markdown to HTML and adds the page&#039;s title to the resulting HTML:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-lua&quot;&gt;&lt;span class=&quot;hl-comment&quot;&gt;-- Minimal HTML template (used below)&lt;/span&gt;
-&lt;span class=&quot;hl-keyword&quot;&gt;local&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;outer&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;hl-string&quot;&gt;[[
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;&amp;lt;title&amp;gt;&amp;lt;%= title %&amp;gt;&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;
-  &amp;lt;body&amp;gt;&amp;lt;%- content %&amp;gt;&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-]]&lt;/span&gt;
-
-&lt;span class=&quot;hl-comment&quot;&gt;-- Read content/*.md, convert to HTML,&lt;/span&gt;
-&lt;span class=&quot;hl-comment&quot;&gt;-- apply template, write to out/*.html&lt;/span&gt;
-&lt;span class=&quot;hl-keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;hl-function&quot;&gt;readFromSource&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;hl-function&quot;&gt;processMarkdown&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;hl-function&quot;&gt;applyTemplates&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;hl-string&quot;&gt;&amp;quot;%.html$&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;hl-identifier&quot;&gt;outer&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;hl-operator&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;hl-function&quot;&gt;writeToDestination&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;hl-string&quot;&gt;&amp;quot;out&amp;quot;&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;hl-operator&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;hl-operator&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Note: templates use a Lua-native templating language called &lt;a href=&quot;https://github.com/leafo/etlua&quot;&gt;etlua&lt;/a&gt; and file matching uses Lua &lt;a href=&quot;https://www.lua.org/manual/5.2/manual.html#6.4.1&quot;&gt;patterns&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;motivation&quot;&gt;Motivation&lt;/h1&gt;
-&lt;p&gt;Obviously, the world does not need another static site generator. So how did I end up here?&lt;/p&gt;
-&lt;p&gt;In a word, my motivation was: &lt;strong&gt;simplicity&lt;/strong&gt;. I wanted an SSG that was:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Simple to understand&lt;/li&gt;
-&lt;li&gt;Simple to bootstrap&lt;/li&gt;
-&lt;li&gt;Simple to maintain&lt;/li&gt;
-&lt;li&gt;Simple to deploy&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;implementation&quot;&gt;Implementation&lt;/h1&gt;
-&lt;p&gt;Here&#039;s my take on the goals above.&lt;/p&gt;
-&lt;h2 id=&quot;simple-to-understand&quot;&gt;Simple to understand&lt;/h2&gt;
-&lt;p&gt;First, I wanted the architecture to be simple, both in design and use:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The build pipeline is just a Lua script (similar to &lt;a href=&quot;https://metalsmith.io/&quot;&gt;Metalsmith&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Page templates are constructed using Lua&lt;/strong&gt; (via &lt;a href=&quot;https://github.com/leafo/etlua&quot;&gt;etlua&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;Metadata on items can be specified in frontmatter using Lua (or a subset of YAML)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Relative links between Markdown files &amp;quot;just work&amp;quot;&lt;/strong&gt; and are checked at build time (including links to headings)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Instead of creating a bespoke domain-specific language for defining the structure of a generated site or its templates, you just write some Lua code that glues together a few processing nodes and then supply templates that &lt;em&gt;also&lt;/em&gt; use Lua (e.g. for iteration).&lt;/p&gt;
-&lt;p&gt;Overall, I&#039;d describe the architecture as &amp;quot;&lt;strong&gt;minimalist Metalsmith in Lua, with zero runtime dependencies&lt;/strong&gt;&amp;quot;.&lt;/p&gt;
-&lt;h2 id=&quot;simple-to-bootstrap&quot;&gt;Simple to bootstrap&lt;/h2&gt;
-&lt;p&gt;Given my &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/../programming-languages/future-proof-languages.html&quot;&gt;musings about future-proof programming languages&lt;/a&gt;, it&#039;s obvious that I&#039;d like to be able to compile and use my software in the future. That is easier said than done! The problem is that identifying languages that will stick around is hard. Twenty years ago, Perl might have been a reasonable choice for an SSG, but today I don&#039;t even remember how to install Perl modules.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://jaredkrinke.github.io/md2blog/&quot;&gt;The (previous) best static site generator ever made&lt;/a&gt; is built on TypeScript/JavaScript and &lt;a href=&quot;https://deno.com/&quot;&gt;Deno&lt;/a&gt;. As much as I like Deno, I&#039;m not confident it will be maintained decades down the road. Given that I&#039;ll never know how to get it running on an i586 computer, I have doubts I&#039;d be able to get it running on potential future architectures (RISC-V?) either.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;To avoid these headaches, I went with the lowest common denominator: C&lt;/strong&gt;. It&#039;s not convenient, it&#039;s not modern, but C works everywhere and I&#039;m certain C will persist (for better or worse).&lt;/p&gt;
-&lt;p&gt;Aside: ideally, I&#039;d be writing as much native code in Rust as possible, to ensure memory safety. Unfortunately, &lt;strong&gt;Rust&#039;s modern approach is at odds with my desire for simplicity&lt;/strong&gt;. The toolchain is huge, the dependency trees are large, and the language is vast. Rust definitely looks like the future of robust low-level software, but &lt;strong&gt;for cozy side projects, I prefer being a simpleton living in the past&lt;/strong&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;simple-to-maintain&quot;&gt;Simple to maintain&lt;/h2&gt;
-&lt;p&gt;One frustration I have with the JavaScript ecosystem is that it&#039;s constantly changing. Node, Deno, and Bun do a respectable job of keeping old versions around, but I don&#039;t want to have to worry about breaking changes.&lt;/p&gt;
-&lt;p&gt;On the other hand, C changes very slowly, and previous versions of Lua are essentially set in stone. Throw in some static linking, and you&#039;ve even got an artifact that should stay usable for a long time.&lt;/p&gt;
-&lt;p&gt;I&#039;ve also minimized the number of (vendored, compile-time) dependencies involved. Here&#039;s the full list:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; for converting Markdown to HTML&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.lua.org/&quot;&gt;Lua&lt;/a&gt; for metadata, scripting, etc.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/leafo/etlua&quot;&gt;etlua&lt;/a&gt; for templates&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/orbitalquark/scintillua&quot;&gt;Scintillua&lt;/a&gt; for syntax highlighting&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.inf.puc-rio.br/~roberto/lpeg/&quot;&gt;LPeg&lt;/a&gt; to support Scintillua&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;You&#039;ll note that these libraries are doing all of the heavy lifting&lt;/strong&gt;. I&#039;ve basically only written glue code, an entry point, and some infrastructure. And most of the code I wrote is in Lua (which is much easier to write than C--and fast enough for all but the innermost loops).&lt;/p&gt;
-&lt;h2 id=&quot;simple-to-deploy&quot;&gt;Simple to deploy&lt;/h2&gt;
-&lt;p&gt;Static binaries are wonderful. &lt;em&gt;Tiny&lt;/em&gt; static binaries are even wonderful-er. &lt;strong&gt;Just copy over a tiny zip file, unzip it, and you&#039;re done&lt;/strong&gt;. Need I say more?&lt;/p&gt;
-&lt;h1 id=&quot;downsides&quot;&gt;Downsides&lt;/h1&gt;
-&lt;p&gt;Of course, there are downsides to the approach I took:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Writing C code is fraught with peril -- fortunately, the hardest parts were mostly already done by the md4c and Lua authors&lt;/li&gt;
-&lt;li&gt;Syntax highlighting is &lt;em&gt;not&lt;/em&gt; simple -- good news: &lt;a href=&quot;https://log.schemescape.com/posts/static-site-generators/luasmith-syntax-highlighting.html&quot;&gt;Scintillua already solved this problem for me&lt;/a&gt;!&lt;/li&gt;
-&lt;li&gt;The security model of an SSG that uses Lua scripts for everything is... not ideal -- &lt;strong&gt;only use templates you trust!&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Additionally, I haven&#039;t taken the time to set up a proper development and debugging environment for C and Lua. I need to investigate static analysis and debugging tools for Lua, as well as find a tolerable frontend for GDB. This is where I really miss Emacs+SLIME for Common Lisp or VS Code for TypeScript/Python.&lt;/p&gt;
-&lt;h1 id=&quot;future-areas-of-exploration&quot;&gt;Future areas of exploration&lt;/h1&gt;
-&lt;p&gt;Now that I&#039;ve got a static site generator running on a vintage laptop with NetBSD, where am I headed next? I&#039;m not exactly sure, but some ideas follow.&lt;/p&gt;
-&lt;h2 id=&quot;designing-for-the-text-mode-web&quot;&gt;Designing for the text-mode web&lt;/h2&gt;
-&lt;p&gt;At some point, I&#039;d like to redesign my site using an even more minimal theme. In fact, &lt;strong&gt;I&#039;d like to optimize my site for text mode browsers&lt;/strong&gt; like &lt;a href=&quot;https://lynx.browser.org/&quot;&gt;lynx&lt;/a&gt; and &lt;a href=&quot;https://w3m.sourceforge.net/&quot;&gt;w3m&lt;/a&gt;. Why? Because I like using w3m and I want my site to be easy to use within w3m. Or maybe it&#039;s because I hate how bloated modern web browsers have become.&lt;/p&gt;
-&lt;h2 id=&quot;further-simplifying-distribution&quot;&gt;Further simplifying distribution&lt;/h2&gt;
-&lt;p&gt;Distributing native code necessarily requires per-platform packages. Or does it? Can I package and release this minimal static site generator as a multi-OS polyglot binary using &lt;a href=&quot;https://github.com/jart/cosmopolitan&quot;&gt;Cosmopolitan libc&lt;/a&gt;? &lt;strong&gt;Update&lt;/strong&gt;: this now exists, but sadly, it is 64-bit only.&lt;/p&gt;
-&lt;h2 id=&quot;simplifying-the-entire-system&quot;&gt;Simplifying the entire system&lt;/h2&gt;
-&lt;p&gt;I&#039;d like to see if I can bootstrap my entire web site&#039;s workflow from &lt;a href=&quot;https://github.com/oasislinux/oasis&quot;&gt;Oasis Linux&lt;/a&gt; (a small, statically linked, Linux-based operating system that is simple, but capable). &lt;strong&gt;Oasis sounds like a modern system that a single person can wrap their head around&lt;/strong&gt; (minus the Linux kernel--though perhaps a simpler kernel could be substituted in the future?).&lt;/p&gt;
-&lt;h2 id=&quot;blogging-on-vintage-computers&quot;&gt;Blogging on vintage computers&lt;/h2&gt;
-&lt;p&gt;I&#039;m curious how far back I can go as far as vintage computing and still be able to build a static site. Can I build my SSG on Windows 98? DOS? Amiga? Inquiring minds want to know!&lt;/p&gt;
-&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
-&lt;p&gt;Creating a &lt;em&gt;non-bloated&lt;/em&gt; Markdown-based static site generator has been a bucket list item for me--and now it&#039;s done!&lt;/p&gt;
-&lt;p&gt;Beyond personal goals, &lt;strong&gt;I found C+Lua to be a comfortable combination for side projects&lt;/strong&gt;. This came as a surprise! Lua isn&#039;t my favorite language to write (though it&#039;s certainly much simpler to wield than C). Having said that, it&#039;s a beautifully simple language that&#039;s easy to integrate. Despite being primarily driven to Lua by my goal of building a small (in binary size) tool, Lua&#039;s minimalist take on a mostly-normal-looking scripting language won me over because I could literally pick it up and be productive within an hour or two.&lt;/p&gt;
-&lt;p&gt;With that out of the way, &lt;strong&gt;I should probably attend to hobbies other than static site generator performance art&lt;/strong&gt;. Until next time!&lt;/p&gt;
-&lt;h1 id=&quot;resources&quot;&gt;Resources&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/luasmith&quot;&gt;Repository for luasmith&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://github.com/jaredkrinke/luasmith/blob/main/docs/tutorial.md&quot;&gt;Tutorial for luasmith&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://jaredkrinke.github.io/til/&quot;&gt;Example site: a blog of things I&#039;ve learned&lt;/a&gt; (&lt;a href=&quot;https://github.com/jaredkrinke/til&quot;&gt;source&lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Note: the example repository contains &lt;a href=&quot;https://github.com/jaredkrinke/til/blob/main/readme.lua&quot;&gt;a simple self-contained luasmith pipeline for generating its README file&lt;/a&gt;.&lt;/p&gt;
 </content>
 </entry>
 </feed>
