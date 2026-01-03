@@ -18,6 +18,13 @@
 <content type="html">&lt;p&gt;&lt;strong&gt;Programming a chess AI that can beat me is an item that&#039;s been on my bucket list for a long time&lt;/strong&gt;, believe it or not.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Spoiler&lt;/strong&gt;: I&#039;m terrible at chess, so creating an AI to beat &lt;em&gt;me&lt;/em&gt; specifically wasn&#039;t too difficult.&lt;/p&gt;
 &lt;p&gt;You can play against the AI from the comfort of your browser here: &lt;a href=&quot;https://jaredkrinke.github.io/cm-chessboard/&quot;&gt;https://jaredkrinke.github.io/cm-chessboard/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Edits since this ended up getting some unexpected attention:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The demo currently doesn&#039;t announce checkmate/stalemate -- consider it a marginally viable product&lt;/li&gt;
+&lt;li&gt;It sounds like there&#039;s at least one bug, feel free to &lt;a href=&quot;mailto:log@schemescape.com&quot;&gt;email me&lt;/a&gt; if you notice others (or if you just have suggestions)&lt;/li&gt;
+&lt;li&gt;I did eventually manage to stop being terrible at chess and beat the AI twice in a row (even with at least one huge mistake)&lt;/li&gt;
+&lt;li&gt;I haven&#039;t yet decided if I will make further improvements (either to the AI or to my chess play) -- this was a just fun diveresion to &amp;quot;recharge my creative battery&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&quot;motivation&quot;&gt;Motivation&lt;/h1&gt;
 &lt;p&gt;Similar to &lt;a href=&quot;https://log.schemescape.com/posts/diy/../static-site-generators/smallest-static-site-generator.html&quot;&gt;static site generators&lt;/a&gt;, no one is clamoring for a new chess engine written by me. My primary motivations were to:&lt;/p&gt;
 &lt;ul&gt;
