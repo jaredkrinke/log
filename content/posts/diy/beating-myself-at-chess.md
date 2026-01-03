@@ -9,12 +9,12 @@ date: 2025-12-29
 
 You can play against the AI from the comfort of your browser here: https://jaredkrinke.github.io/cm-chessboard/
 
-Edits since this ended up getting some unexpected attention:
+**Edits since this ended up getting some unexpected attention**:
 
 * The demo currently doesn't announce checkmate/stalemate -- consider it a marginally viable product
 * It sounds like there's at least one bug, feel free to [email me](mailto:log@schemescape.com) if you notice others (or if you just have suggestions)
 * I did eventually manage to stop being terrible at chess and beat the AI twice in a row (even with at least one huge mistake)
-* I haven't yet decided if I will make further improvements (either to the AI or to my chess play) -- this was a just fun diveresion to "recharge my creative battery"
+* I haven't yet decided if I will make further improvements (either to the AI or to my chess play) -- this was a just fun diversion to "recharge my creative battery"
 
 # Motivation
 Similar to [static site generators](../static-site-generators/smallest-static-site-generator.md), no one is clamoring for a new chess engine written by me. My primary motivations were to:
